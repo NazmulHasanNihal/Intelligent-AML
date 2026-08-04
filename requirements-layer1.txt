@@ -1,0 +1,14 @@
+# ================================================================
+# Intelligent AML — Layer 1 minimal dependency set
+# Use this (instead of the full requirements.txt) to run ONLY the
+# ingestion engine anywhere: local PC, CI, small VPS, Kaggle, Colab.
+# Layer 1 needs NO torch / torch_geometric / scipy / matplotlib.
+# ================================================================
+polars>=1.5
+pyarrow>=17.0
+duckdb>=1.0
+numpy>=1.26
+pyyaml>=6.0
+fastexcel>=0.9        # only for Excel (.xlsx) loader; optional
+python-dotenv>=1.0.1  # optional, for remote-runner credentials
+kaggle>=1.6           # only for the IDE->Kaggle runner (run_remote.py)

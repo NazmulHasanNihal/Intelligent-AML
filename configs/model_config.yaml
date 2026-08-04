@@ -1,0 +1,26 @@
+# Intelligent AML - Configs
+# Hyperparameters and training arguments for the HT-GNN model.
+
+model:
+  name: "HT-GNN"
+  hidden_channels: 128
+  num_layers: 3
+  heads: 4                    # Multi-head attention heads
+  dropout: 0.3
+  activation: "relu"
+
+graph:
+  node_types:
+    - Account
+    - User
+    - Device
+    - Institution
+  edge_types:
+    - Transaction
+    - IP_Connection
+    - Shared_Ownership
+
+burst_attenuation:
+  window_seconds: 300         # 5-minute sliding window
+  spike_threshold: 10         # Flag if >10 micro-txns in window
+  decay_factor: 0.85

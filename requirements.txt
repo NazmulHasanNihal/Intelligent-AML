@@ -1,0 +1,57 @@
+# ================================================================
+# Intelligent AML — Full Local Control Plane Dependencies
+# Python 3.11.9 | venv
+# ================================================================
+
+# ─── Core ML & Deep Learning ───────────────────────────────────
+tensorflow==2.18.0
+scikit-learn>=1.5
+pyyaml>=6.0
+
+# ─── Graph Neural Networks ─────────────────────────────────────
+# Note: torch & torch_geometric are also used on Kaggle GPU.
+# We install CPU-only versions locally for testing & development.
+torch>=2.4.0
+torch_geometric>=2.6
+
+# ─── Data Processing (Layer 1) ─────────────────────────────────
+polars>=1.5
+duckdb>=1.0
+pyarrow>=17.0
+
+# ─── Federated Learning & Privacy (Layer 3) ────────────────────
+flwr>=1.11                   # Flower
+opacus>=1.5
+
+# ─── Explainability (Layer 4) ──────────────────────────────────
+captum>=0.7
+
+# ─── Agentic SAR Automation (Layer 5) ──────────────────────────
+langchain>=0.2.14
+langchain-community>=0.2.12
+crewai>=0.51.1
+reportlab>=4.2.2
+
+# ─── Human-in-the-Loop UI (Layer 6) ───────────────────────────
+streamlit>=1.37.1
+fastapi>=0.112.0
+uvicorn>=0.30.6
+pyvis>=0.3.2
+
+# ─── Kaggle Orchestration ─────────────────────────────────────
+kaggle>=1.6
+
+# ─── Streaming & Message Broker ───────────────────────────────
+apache-flink>=1.18.0
+confluent-kafka>=2.3.0
+
+# ─── Visualization & Analysis ─────────────────────────────────
+matplotlib>=3.9
+seaborn>=0.13
+plotly>=5.23
+
+# ─── Utilities ─────────────────────────────────────────────────
+python-dotenv>=1.0.1
+tqdm>=4.66
+pandas>=2.2
+numpy>=1.26

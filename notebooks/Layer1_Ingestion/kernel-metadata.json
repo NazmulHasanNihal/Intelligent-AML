@@ -1,0 +1,19 @@
+{
+  "id": "nazmulhasannihal/01-layer1-data-ingestion-v4-complete-remote",
+  "title": "01-layer1-data-ingestion-v4-complete-remote",
+  "code_file": "01_Layer1_Data_Ingestion_v4_COMPLETE.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "nazmulhasannihal/aml-dataset",
+    "ealtman2019/ibm-transactions-for-anti-money-laundering-aml",
+    "berkanoztas/synthetic-transaction-monitoring-dataset-aml",
+    "ellipticco/elliptic2-data-set",
+    "tczplv/xblocketh"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

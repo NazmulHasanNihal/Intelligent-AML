@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Intelligent AML — Detailed System Diagram</title>
+<style>
+  :root{
+    --blue:#2563eb;   --blue-d:#1d4ed8;
+    --violet:#7c3aed; --violet-d:#6d28d9;
+    --emerald:#059669;--emerald-d:#047857;
+    --amber:#d97706;  --amber-d:#b45309;
+    --orange:#ea580c; --orange-d:#c2410c;
+    --cyan:#0891b2;   --cyan-d:#0e7490;
+    --gray:#475569;   --gray-d:#334155;
+    --ink:#0f172a; --sub:#475569; --muted:#64748b; --border:#e2e8f0; --page-bg:#eef1f5;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; padding:44px 20px 70px; background:var(--page-bg); font-family:'Segoe UI', Arial, Helvetica, sans-serif; color:var(--ink);}
+  .page{max-width:1180px; margin:0 auto;}
+
+  /* ---------- Masthead ---------- */
+  .masthead{text-align:center; margin-bottom:40px;}
+  .masthead .kicker{font-size:12px; font-weight:700; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;}
+  .masthead h1{font-size:38px; margin:0 0 10px; letter-spacing:-0.5px;}
+  .masthead p{font-size:15px; color:var(--sub); margin:0; max-width:640px; margin:0 auto;}
+
+  /* ---------- Part container ---------- */
+  .part{background:#fff; border:1px solid var(--border); border-radius:16px; margin-bottom:46px; box-shadow:0 6px 18px rgba(15,23,42,0.07); overflow:hidden;}
+  .part-banner{display:flex; align-items:center; gap:16px; padding:20px 30px; color:#fff;}
+  .part-banner .num{width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,0.22); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; flex-shrink:0;}
+  .part-banner .txt .tag{font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; opacity:0.85; margin-bottom:2px;}
+  .part-banner .txt h2{font-size:22px; margin:0;}
+  .part-body{padding:30px 32px 36px;}
+  .part-desc{font-size:14px; color:var(--sub); margin:0 0 26px; max-width:920px; line-height:1.5;}
+
+  .bg-blue{background:linear-gradient(135deg,var(--blue),var(--blue-d));}
+  .bg-violet{background:linear-gradient(135deg,var(--violet),var(--violet-d));}
+  .bg-emerald{background:linear-gradient(135deg,var(--emerald),var(--emerald-d));}
+  .bg-amber{background:linear-gradient(135deg,var(--amber),var(--amber-d));}
+  .bg-orange{background:linear-gradient(135deg,var(--orange),var(--orange-d));}
+  .bg-cyan{background:linear-gradient(135deg,var(--cyan),var(--cyan-d));}
+  .bg-gray{background:linear-gradient(135deg,var(--gray),var(--gray-d));}
+
+  /* ---------- Entity flow diagram ---------- */
+  .flow-row{display:flex; align-items:stretch; gap:0;}
+  .entity{flex:1 1 0; min-width:0; background:#fff; border:1.5px solid var(--border); border-radius:10px; box-shadow:0 2px 6px rgba(15,23,42,0.05); overflow:hidden; display:flex; flex-direction:column;}
+  .entity-head{padding:11px 15px; color:#fff;}
+  .entity-head .stereo{display:block; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; opacity:0.9; margin-bottom:3px;}
+  .entity-head .name{font-size:14.5px; font-weight:700; line-height:1.25;}
+  .entity-body{padding:13px 15px; flex:1;}
+  .erow{font-size:12.5px; color:#334155; padding:5px 0; border-bottom:1px dashed #eef2f6; display:flex; gap:6px; line-height:1.4;}
+  .erow:last-child{border-bottom:none;}
+  .erow .k{font-weight:800; flex-shrink:0;}
+  .k-blue{color:var(--blue);} .k-violet{color:var(--violet);} .k-emerald{color:var(--emerald);}
+  .k-amber{color:var(--amber);} .k-orange{color:var(--orange);} .k-cyan{color:var(--cyan);} .k-gray{color:var(--gray);}
+  .sub-head{font-size:9.5px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin:12px 0 5px;}
+  .sub-head:first-child{margin-top:0;}
+
+  .arrow{flex:0 0 74px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 6px;}
+  .arrow .lbl{font-size:10px; color:var(--muted); font-style:italic; text-align:center; margin-bottom:8px; line-height:1.25;}
+  .arrow .shaft{width:100%; height:2.5px; background:#cbd5e1; position:relative;}
+  .arrow .shaft::after{content:''; position:absolute; right:-1px; top:50%; transform:translateY(-50%); border-left:9px solid #cbd5e1; border-top:6px solid transparent; border-bottom:6px solid transparent;}
+
+  /* ---------- Overview mini flow (Part 1) ---------- */
+  .mini-row{display:flex; align-items:stretch; gap:0;}
+  .mini{flex:1 1 0; min-width:0; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(15,23,42,0.05); display:flex; flex-direction:column;}
+  .mini .mtop{color:#fff; padding:10px 10px 8px; text-align:center;}
+  .mini .mtop .mnum{font-size:11px; font-weight:800; opacity:0.85;}
+  .mini .mtop .mname{font-size:12.5px; font-weight:700; margin-top:2px; line-height:1.2;}
+  .mini .mbot{background:#fff; border:1.5px solid var(--border); border-top:none; padding:9px 10px; font-size:11px; color:var(--sub); text-align:center; flex:1; line-height:1.35;}
+  .mini-arrow{flex:0 0 30px; display:flex; align-items:center; justify-content:center;}
+  .mini-arrow .shaft{width:100%; height:2px; background:#cbd5e1; position:relative;}
+  .mini-arrow .shaft::after{content:''; position:absolute; right:-1px; top:50%; transform:translateY(-50%); border-left:7px solid #cbd5e1; border-top:5px solid transparent; border-bottom:5px solid transparent;}
+
+  /* ---------- Worked example (Part 8) ---------- */
+  .example-grid{display:flex; gap:26px; align-items:stretch;}
+  .example-col{flex:1; background:#fbfcfd; border:1.5px solid var(--border); border-radius:12px; padding:20px;}
+  .example-col h3{font-size:15px; margin:0 0 4px;}
+  .example-col .ex-sub{font-size:11.5px; color:var(--muted); margin:0 0 16px;}
+  .tx-card{background:#fef2f2; border:1.5px solid #fecaca; border-radius:8px; padding:10px 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;}
+  .tx-card .tlabel{font-size:9px; font-weight:800; color:#b91c1c; text-transform:uppercase; letter-spacing:0.6px; display:block;}
+  .tx-card .tflow{font-size:14.5px; font-weight:700; color:#7f1d1d;}
+  .tx-card .tamt{font-size:13px; color:#7f1d1d; font-weight:600;}
+  .graph-wrap{position:relative; height:220px; margin:6px 0 16px;}
+  .gnode{position:absolute; width:44px; height:44px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; box-shadow:0 3px 8px rgba(0,0,0,0.25); z-index:3;}
+  .cycle-ring{position:absolute; border:2.5px dashed #f59e0b; border-radius:50%; z-index:1;}
+  .edge-lbl{position:absolute; font-size:9.5px; font-weight:700; color:#c2410c; background:#fff; padding:1px 5px; border-radius:4px; z-index:4;}
+  .caption{font-size:12px; font-style:italic; color:var(--muted); text-align:center; line-height:1.4; margin-top:6px;}
+  .quote-box{background:#fbfcfd; border:1.5px solid var(--border); border-radius:12px; padding:18px 22px; margin-top:24px;}
+  .quote-box .qlabel{font-size:10.5px; font-weight:800; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;}
+  .quote-box .qtext{font-size:15px; font-style:italic; color:#1e293b; line-height:1.5;}
+
+  /* ---------- Defensibility cards (Part 9) ---------- */
+  .def-grid{display:flex; gap:20px;}
+  .def-card{flex:1; background:#fff; border:1.5px solid var(--border); border-radius:10px; box-shadow:0 2px 6px rgba(15,23,42,0.05); overflow:hidden;}
+  .def-card .bar{height:6px;}
+  .def-card .inner{padding:16px 16px 18px;}
+  .def-card .tag{font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;}
+  .def-card h4{font-size:15.5px; margin:0 0 8px;}
+  .def-card p{font-size:12.5px; color:var(--sub); margin:0; line-height:1.4;}
+
+  .legend{display:flex; gap:22px; flex-wrap:wrap; margin-top:8px; font-size:11.5px; color:var(--sub);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .legend i{width:10px; height:10px; border-radius:3px; display:inline-block;}
+
+  .footer-note{text-align:center; font-size:12px; color:var(--muted); margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="kicker">Thesis Diagram Set · Intelligent AML</div>
+    <h1>Intelligent AML — System Workflow</h1>
+    <p>A partitioned, entity-relationship style breakdown of the six-layer architecture — from raw transaction ingestion to a regulator-ready Suspicious Activity Report (SAR). Each PART below is self-contained for direct use as a figure in your document.</p>
+  </div>
+
+  <!-- ================= PART 1 — OVERVIEW ================= -->
+  <div class="part">
+    <div class="part-banner bg-gray">
+      <div class="num">1</div>
+      <div class="txt"><div class="tag">Overview</div><h2>End-to-End Pipeline at a Glance</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">The full pipeline in one view. Each stage is expanded into its own detailed entity diagram in Parts 2–7 below.</p>
+      <div class="mini-row">
+        <div class="mini">
+          <div class="mtop bg-blue"><div class="mnum">LAYER 1</div><div class="mname">Data Ingestion &amp; Graph Construction</div></div>
+          <div class="mbot">Raw logs → Heterogeneous Graph Tensors</div>
+        </div>
+        <div class="mini-arrow"><div class="shaft"></div></div>
+        <div class="mini">
+          <div class="mtop bg-violet"><div class="mnum">LAYER 2</div><div class="mname">Detection &amp; Rebalancing</div></div>
+          <div class="mbot">GraphGAN + HT-GNN risk scoring</div>
+        </div>
+        <div class="mini-arrow"><div class="shaft"></div></div>
+        <div class="mini">
+          <div class="mtop bg-emerald"><div class="mnum">LAYER 3</div><div class="mname">Federated Privacy</div></div>
+          <div class="mbot">Flower + Opacus, no raw data moves</div>
+        </div>
+        <div class="mini-arrow"><div class="shaft"></div></div>
+        <div class="mini">
+          <div class="mtop bg-amber"><div class="mnum">LAYER 4</div><div class="mname">Causal Auditing / XAI</div></div>
+          <div class="mbot">GNNExplainer isolates the cause</div>
+        </div>
+        <div class="mini-arrow"><div class="shaft"></div></div>
+        <div class="mini">
+          <div class="mtop bg-orange"><div class="mnum">LAYER 5</div><div class="mname">Agentic SAR Automation</div></div>
+          <div class="mbot">CrewAI agents draft the report</div>
+        </div>
+        <div class="mini-arrow"><div class="shaft"></div></div>
+        <div class="mini">
+          <div class="mtop bg-cyan"><div class="mnum">LAYER 6</div><div class="mname">Human-in-the-Loop UI</div></div>
+          <div class="mbot">Streamlit review &amp; SAR export</div>
+        </div>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--blue)"></i>Ingestion</span>
+        <span><i style="background:var(--violet)"></i>Detection</span>
+        <span><i style="background:var(--emerald)"></i>Privacy</span>
+        <span><i style="background:var(--amber)"></i>Auditing</span>
+        <span><i style="background:var(--orange)"></i>Automation</span>
+        <span><i style="background:var(--cyan)"></i>Interface</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PART 2 — LAYER 1 ================= -->
+  <div class="part">
+    <div class="part-banner bg-blue">
+      <div class="num">2</div>
+      <div class="txt"><div class="tag">Layer 1</div><h2>Data Ingestion &amp; Graph Construction</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">Raw, high-volume transaction logs are streamed — never loaded fully into memory — and transformed into a heterogeneous graph representation that preserves both entities and their relationships.</p>
+      <div class="flow-row">
+        <div class="entity">
+          <div class="entity-head bg-blue"><span class="stereo">«input»</span><span class="name">Raw Data Sources</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-blue">•</span>Bank wire transfer logs</div>
+            <div class="erow"><span class="k k-blue">•</span>Mobile Financial Services (MFS) records</div>
+            <div class="erow"><span class="k k-blue">•</span>Cryptocurrency transaction logs</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">streamed lazily via</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-blue"><span class="stereo">«process»</span><span class="name">Processing Engine</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-blue">•</span>Polars (Rust) — zero-copy, lazy execution</div>
+            <div class="erow"><span class="k k-blue">•</span>DuckDB — in-process SQL analytics</div>
+            <div class="erow"><span class="k k-blue">•</span>Prevents out-of-memory (OOM) crashes at scale</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">constructs</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-blue"><span class="stereo">«output»</span><span class="name">Heterogeneous Graph Tensor</span></div>
+          <div class="entity-body">
+            <div class="sub-head">Node Types (V)</div>
+            <div class="erow"><span class="k k-blue">•</span>Account · User · Device · Institution</div>
+            <div class="sub-head">Edge Types (E)</div>
+            <div class="erow"><span class="k k-blue">•</span>Transaction · IP Connection · Shared Ownership</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PART 3 — LAYER 2 ================= -->
+  <div class="part">
+    <div class="part-banner bg-violet">
+      <div class="num">3</div>
+      <div class="txt"><div class="tag">Layer 2</div><h2>Detection &amp; Data Rebalancing</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">Fraud is rare, so the training set is synthetically rebalanced before the temporal graph model performs inference and risk scoring.</p>
+      <div class="flow-row">
+        <div class="entity">
+          <div class="entity-head bg-violet"><span class="stereo">«input»</span><span class="name">Imbalanced Transaction Set</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-violet">•</span>~97% legitimate transactions</div>
+            <div class="erow"><span class="k k-violet">•</span>~3% fraudulent transactions</div>
+            <div class="erow"><span class="k k-violet">•</span>Severe imbalance limits model recall</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">rebalanced by</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-violet"><span class="stereo">«process»</span><span class="name">Wasserstein GraphGAN</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-violet">•</span>Synthesizes minority-class fraud subgraphs</div>
+            <div class="erow"><span class="k k-violet">•</span>Preserves structural / topological realism</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">scored by</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-violet"><span class="stereo">«process»</span><span class="name">HT-GNN Inference Core</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-violet">•</span>Heterogeneous Temporal Graph Neural Network</div>
+            <div class="erow"><span class="k k-violet">•</span>Burst-Aware Edge Attenuation mechanism</div>
+            <div class="erow"><span class="k k-violet">•</span>Flags rapid micro-transaction spikes (smurfing)</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">produces</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-violet"><span class="stereo">«output»</span><span class="name">Risk-Scored Transactions</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-violet">•</span>Per-node fraud probability</div>
+            <div class="erow"><span class="k k-violet">•</span>Ranked investigation candidates</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PART 4 — LAYER 3 ================= -->
+  <div class="part">
+    <div class="part-banner bg-emerald">
+      <div class="num">4</div>
+      <div class="txt"><div class="tag">Layer 3</div><h2>Federated Privacy</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">Model intelligence is shared across institutions without ever moving the underlying customer data — each bank keeps its data local.</p>
+      <div class="flow-row">
+        <div class="entity">
+          <div class="entity-head bg-emerald"><span class="stereo">«input» (×N)</span><span class="name">Distributed Bank Silos</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-emerald">•</span>Silo A — local institution records</div>
+            <div class="erow"><span class="k k-emerald">•</span>Silo B — local institution records</div>
+            <div class="erow"><span class="k k-emerald">•</span>Silo C — local institution records</div>
+            <div class="erow"><span class="k k-emerald">•</span>Raw data never leaves its silo</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">local training via</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-emerald"><span class="stereo">«process»</span><span class="name">Federated Learning Core</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-emerald">•</span>Flower — orchestrates federated training rounds</div>
+            <div class="erow"><span class="k k-emerald">•</span>Opacus — injects differential-privacy noise into gradients</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">aggregates into</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-emerald"><span class="stereo">«output»</span><span class="name">Global Federated Model</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-emerald">•</span>Shared model weights only — no raw data</div>
+            <div class="erow"><span class="k k-emerald">•</span>Privacy-preserving, cross-institution intelligence</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PART 5 — LAYER 4 ================= -->
+  <div class="part">
+    <div class="part-banner bg-amber">
+      <div class="num">5</div>
+      <div class="txt"><div class="tag">Layer 4</div><h2>Causal Auditing / Explainability (XAI)</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">Every high-risk flag is made auditable: the model must show <em>why</em> it raised the alarm, not just <em>that</em> it did.</p>
+      <div class="flow-row">
+        <div class="entity">
+          <div class="entity-head bg-amber"><span class="stereo">«input»</span><span class="name">High-Risk Node Alert</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-amber">•</span>Emitted when HT-GNN risk score crosses threshold</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">isolated by</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-amber"><span class="stereo">«process»</span><span class="name">GNNExplainer</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-amber">•</span>Computes the minimal causal subgraph behind the alert</div>
+            <div class="erow"><span class="k k-amber">•</span>Ranks contributing nodes &amp; edges by importance</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">rendered as</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-amber"><span class="stereo">«output»</span><span class="name">Visual Heatmap (PyVis)</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-amber">•</span>Interactive graph of the exact transaction chain</div>
+            <div class="erow"><span class="k k-amber">•</span>Investigator-facing, EU AI Act-aligned explanation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PART 6 — LAYER 5 ================= -->
+  <div class="part">
+    <div class="part-banner bg-orange">
+      <div class="num">6</div>
+      <div class="txt"><div class="tag">Layer 5</div><h2>Agentic SAR Automation</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">A two-agent pipeline turns explainable evidence into a structured, regulation-ready Suspicious Activity Report (SAR).</p>
+      <div class="flow-row">
+        <div class="entity">
+          <div class="entity-head bg-orange"><span class="stereo">«input»</span><span class="name">XAI Evidence Package</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-orange">•</span>Causal subgraph + heatmap + risk metadata</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">analyzed by</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-orange"><span class="stereo">«agent»</span><span class="name">Agent 1 — Evidence Analyst</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-orange">•</span>Built on CrewAI + LangChain</div>
+            <div class="erow"><span class="k k-orange">•</span>Cross-references patterns against BFIU / global statutes</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">drafted by</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-orange"><span class="stereo">«agent»</span><span class="name">Agent 2 — Narrative Writer</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-orange">•</span>Compiles findings into a regulatory narrative</div>
+            <div class="erow"><span class="k k-orange">•</span>Formats the structured document via ReportLab</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">outputs</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-orange"><span class="stereo">«output»</span><span class="name">Draft SAR (PDF)</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-orange">•</span>Regulation-ready Suspicious Activity Report</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PART 7 — LAYER 6 ================= -->
+  <div class="part">
+    <div class="part-banner bg-cyan">
+      <div class="num">7</div>
+      <div class="txt"><div class="tag">Layer 6</div><h2>Human-in-the-Loop UI</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">A compliance officer always makes the final call — the system prepares and prioritizes; the human validates and files.</p>
+      <div class="flow-row">
+        <div class="entity">
+          <div class="entity-head bg-cyan"><span class="stereo">«input»</span><span class="name">Investigation Queue</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-cyan">•</span>Prioritized list of flagged accounts / cases</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">displayed on</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-cyan"><span class="stereo">«process»</span><span class="name">Streamlit Dashboard</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-cyan">•</span>3D graph visualization of flagged accounts</div>
+            <div class="erow"><span class="k k-cyan">•</span>Case-by-case review interface</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">reviewed by</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-gray"><span class="stereo">«actor»</span><span class="name">Compliance Officer</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-gray">•</span>Human-in-the-loop legal validation</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="lbl">exports</div><div class="shaft"></div></div>
+        <div class="entity">
+          <div class="entity-head bg-cyan"><span class="stereo">«output»</span><span class="name">Filed SAR</span></div>
+          <div class="entity-body">
+            <div class="erow"><span class="k k-cyan">•</span>One-click validated &amp; submitted report</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PART 8 — WORKED EXAMPLE ================= -->
+  <div class="part">
+    <div class="part-banner bg-gray">
+      <div class="num">8</div>
+      <div class="txt"><div class="tag">Worked Example</div><h2>Detecting a Circular Laundering Pattern</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">Money moves A → B → C → A to obscure its origin. This is where relational memory earns its keep.</p>
+      <div class="example-grid">
+
+        <div class="example-col">
+          <h3 style="color:#b91c1c;">Traditional System</h3>
+          <p class="ex-sub">Row-by-row — no relationships modeled</p>
+          <div class="tx-card"><div><span class="tlabel">«isolated record»</span><span class="tflow">A → B</span></div><span class="tamt">$5,000</span></div>
+          <div class="tx-card"><div><span class="tlabel">«isolated record»</span><span class="tflow">B → C</span></div><span class="tamt">$5,000</span></div>
+          <div class="tx-card"><div><span class="tlabel">«isolated record»</span><span class="tflow">C → A</span></div><span class="tamt">$5,000</span></div>
+          <p class="caption">Three separate rows that each look like normal business activity. No relational memory to connect the dots.</p>
+        </div>
+
+        <div class="example-col">
+          <h3 style="color:#047857;">Intelligent AML</h3>
+          <p class="ex-sub">Graph view — entities linked by transaction edges</p>
+          <div class="graph-wrap">
+            <div class="cycle-ring" style="width:200px; height:170px; left:calc(50% - 100px); top:10px;"></div>
+            <div class="gnode" style="left:calc(50% - 22px); top:14px;">A</div>
+            <div class="gnode" style="left:calc(50% - 110px); top:150px;">B</div>
+            <div class="gnode" style="left:calc(50% + 66px); top:150px;">C</div>
+            <div class="edge-lbl" style="left:calc(50% - 100px); top:80px;">Transaction</div>
+            <div class="edge-lbl" style="left:calc(50% - 24px); top:170px;">Transaction</div>
+            <div class="edge-lbl" style="left:calc(50% + 30px); top:80px;">Transaction</div>
+          </div>
+          <p class="caption">HT-GNN identifies a closed directed cycle; burst-aware attenuation assigns it a high edge weight.</p>
+        </div>
+
+      </div>
+
+      <div class="quote-box">
+        <div class="qlabel">Auto-Drafted SAR Excerpt — Agent 2 (Narrative Writer)</div>
+        <div class="qtext">"Detected circular transaction pattern between Accounts A, B, and C, indicative of account wash-trading or round-tripping."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PART 9 — DEFENSIBILITY ================= -->
+  <div class="part">
+    <div class="part-banner bg-gray">
+      <div class="num">9</div>
+      <div class="txt"><div class="tag">Committee / Supervisor Q&amp;A</div><h2>Why This Workflow Is Defensible</h2></div>
+    </div>
+    <div class="part-body">
+      <p class="part-desc">A direct answer for the question "how does it work?" — each layer maps to one specific evaluation criterion.</p>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="bar bg-blue"></div>
+          <div class="inner">
+            <div class="tag" style="color:var(--blue);">Layer 1</div>
+            <h4>Ingestion → Scale</h4>
+            <p>Handles massive transaction volumes without OOM crashes.</p>
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="bar bg-violet"></div>
+          <div class="inner">
+            <div class="tag" style="color:var(--violet);">Layer 2</div>
+            <h4>HT-GNN → Patterns</h4>
+            <p>Sees relational patterns, not just isolated rows.</p>
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="bar bg-amber"></div>
+          <div class="inner">
+            <div class="tag" style="color:var(--amber);">Layer 4</div>
+            <h4>XAI → Auditability</h4>
+            <p>EU AI Act-aligned explainability for every alert.</p>
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="bar bg-orange"></div>
+          <div class="inner">
+            <div class="tag" style="color:var(--orange);">Layer 5</div>
+            <h4>Agents → Efficiency</h4>
+            <p>Automates SAR drafting, saving investigator hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="footer-note">Intelligent AML — Heterogeneous Temporal Graph Neural Network Framework for AML / CFT · Diagram set for thesis documentation</p>
+
+</div>
+</body>
+</html>

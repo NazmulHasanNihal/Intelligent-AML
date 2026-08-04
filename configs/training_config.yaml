@@ -1,0 +1,41 @@
+# Intelligent AML - Training Configuration
+# All training hyperparameters live here, NOT inside notebooks.
+
+training:
+  epochs: 200
+  batch_size: 512
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "AdamW"
+  scheduler: "CosineAnnealingLR"
+  early_stopping_patience: 15
+
+graphgan:
+  generator_lr: 0.0002
+  discriminator_lr: 0.0002
+  latent_dim: 64
+  wasserstein_clip: 0.01
+  critic_iterations: 5
+
+federated:
+  num_clients: 3              # Simulated bank silos
+  rounds: 50
+  fraction_fit: 1.0
+  local_epochs: 5
+
+differential_privacy:
+  enabled: true
+  max_grad_norm: 1.0
+  noise_multiplier: 0.8
+  target_epsilon: 8.0
+  target_delta: 1e-5
+
+evaluation:
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - auc_roc
+    - auc_pr
+  threshold: 0.5

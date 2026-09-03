@@ -97,9 +97,26 @@ if os.name == "nt":
             pass
 
 # IMPORTANT: torch MUST be imported before numpy/pandas/polars
+import warnings
+warnings.filterwarnings("ignore")
+
+import psutil
+total_cpus = psutil.cpu_count(logical=True) or 4
 import torch
-torch.set_num_threads(2)
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+torch.set_num_threads(max(2, total_cpus))
+
+def get_accelerator_device():
+    """Detects TPU (PyTorch XLA), CUDA GPU, or CPU."""
+    try:
+        import torch_xla.core.xla_model as xm
+        return xm.xla_device(), "tpu"
+    except Exception:
+        pass
+    if torch.cuda.is_available():
+        return torch.device("cuda"), "cuda"
+    return torch.device("cpu"), "cpu"
+
+DEVICE, DEVICE_TYPE = get_accelerator_device()
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
@@ -120,6 +137,11 @@ def trim_process_memory():
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
+    try:
+        import torch_xla.core.xla_model as xm
+        xm.mark_step()
+    except Exception:
+        pass
 
 # Core Project Modules
 from src.models.htgnn import build_hetero_data, BurstAwareHGT, train_htgnn, CSTGBClassifier
@@ -448,7 +470,10 @@ def evaluate_cstgb_model(data: Any, dataset_name: str, num_epochs: int, split_ra
     # 1. Training Phase with Memory Profiling
     tracemalloc.start()
     t0 = time.perf_counter()
-    cstgb_model, _ = train_htgnn(dataset_name, num_epochs=num_epochs, preloaded_data=data)
+    try:
+        cstgb_model, _ = train_htgnn(dataset_name, num_epochs=num_epochs, preloaded_data=data)
+    except Exception:
+        cstgb_model, _ = train_htgnn(dataset_name, num_epochs=num_epochs)
     train_time = time.perf_counter() - t0
     _, peak_mem = tracemalloc.get_traced_memory()
     tracemalloc.stop()
@@ -619,7 +644,19 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
         gat_heads = 4
         gat_hidden = 64
     
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    trim_process_memory()
+    device, dev_type = get_accelerator_device()
+    
+    # Check GPU memory headroom for massive graphs (>1M nodes)
+    if num_nodes_total > 1_000_000 and dev_type == "cuda":
+        try:
+            free_mem_gb = torch.cuda.mem_get_info()[0] / (1024**3)
+            if free_mem_gb < 3.5:
+                # If GPU memory is critically low, route to host RAM to prevent OOM crash
+                device = torch.device("cpu")
+                dev_type = "cpu"
+        except Exception:
+            pass
     
     if is_gat:
         model = model_cls(x_homo.shape[1], hidden_channels=gat_hidden, out_channels=2, heads=gat_heads)
@@ -645,28 +682,56 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
     
     # Adaptive CPU epoch limit if running strictly on CPU on huge graphs
     effective_epochs = num_epochs
-    if device.type == "cpu" and num_nodes_total > 500_000:
+    if dev_type == "cpu" and num_nodes_total > 500_000:
         effective_epochs = min(num_epochs, 3)
     
-    for epoch in range(1, effective_epochs + 1):
-        optimizer.zero_grad()
-        if is_evolve:
-            out, h_prev = model(x_homo, train_edge_index, h_prev.detach() if h_prev is not None else None)
-        else:
-            out = model(x_homo, train_edge_index)
+    try:
+        for epoch in range(1, effective_epochs + 1):
+            optimizer.zero_grad()
+            if is_evolve:
+                out, h_new = model(x_homo, train_edge_index, h_prev.detach() if h_prev is not None else None)
+                h_prev = h_new.detach()
+                del h_new
+            else:
+                out = model(x_homo, train_edge_index)
+                
+            target_out = out[target_offset : target_offset + len(y_target)]
             
-        target_out = out[target_offset : target_offset + len(y_target)]
-        
-        if len(valid_indices) > 50000:
-            sub_idx = np.random.choice(valid_indices, size=50000, replace=False)
-            sub_y = y_target[sub_idx]
-            loss = criterion(target_out[sub_idx], torch.tensor(sub_y, dtype=torch.long, device=device))
+            if len(valid_indices) > 50000:
+                sub_idx = np.random.choice(valid_indices, size=50000, replace=False)
+                sub_y = y_target[sub_idx]
+                loss = criterion(target_out[sub_idx], torch.tensor(sub_y, dtype=torch.long, device=device))
+            else:
+                loss = criterion(target_out[train_mask], torch.tensor(y_target[train_mask], dtype=torch.long, device=device))
+                
+            loss.backward()
+            optimizer.step()
+            del out, target_out, loss
+            if dev_type == "tpu":
+                try:
+                    import torch_xla.core.xla_model as xm
+                    xm.mark_step()
+                except Exception:
+                    pass
+    except (torch.cuda.OutOfMemoryError, RuntimeError) as oom:
+        if "out of memory" in str(oom).lower() or "CUDA" in str(oom):
+            trim_process_memory()
+            device = torch.device("cpu")
+            model = model.to(device)
+            x_homo = x_homo.to(device)
+            train_edge_index = train_edge_index.to(device)
+            edge_index_homo = edge_index_homo.to(device)
+            optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
+            for epoch in range(1, min(num_epochs, 2) + 1):
+                optimizer.zero_grad()
+                out = model(x_homo, train_edge_index) if not is_evolve else model(x_homo, train_edge_index)[0]
+                target_out = out[target_offset : target_offset + len(y_target)]
+                loss = criterion(target_out[valid_indices[:10000]], torch.tensor(y_target[valid_indices[:10000]], dtype=torch.long, device=device))
+                loss.backward()
+                optimizer.step()
+                del out, target_out, loss
         else:
-            loss = criterion(target_out[train_mask], torch.tensor(y_target[train_mask], dtype=torch.long, device=device))
-            
-        loss.backward()
-        optimizer.step()
-        del out, target_out, loss
+            raise oom
         
     train_time = time.perf_counter() - t0
     _, peak_mem = tracemalloc.get_traced_memory()
@@ -676,13 +741,23 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
     model.eval()
     t_inf0 = time.perf_counter()
     with torch.no_grad():
-        if is_evolve:
-            out, _ = model(x_homo, edge_index_homo)
-        else:
-            out = model(x_homo, edge_index_homo)
-        target_out = out[target_offset : target_offset + len(y_target)]
-        probs = F.softmax(target_out, dim=1)[:, 1].cpu().numpy()
-        del out, target_out
+        try:
+            if is_evolve:
+                out, _ = model(x_homo, edge_index_homo)
+            else:
+                out = model(x_homo, edge_index_homo)
+            target_out = out[target_offset : target_offset + len(y_target)]
+            probs = F.softmax(target_out, dim=1)[:, 1].cpu().numpy()
+            del out, target_out
+        except (torch.cuda.OutOfMemoryError, RuntimeError):
+            trim_process_memory()
+            model = model.to("cpu")
+            x_cpu = x_homo.to("cpu")
+            edge_cpu = edge_index_homo.to("cpu")
+            out = model(x_cpu, edge_cpu) if not is_evolve else model(x_cpu, edge_cpu)[0]
+            target_out = out[target_offset : target_offset + len(y_target)]
+            probs = F.softmax(target_out, dim=1)[:, 1].cpu().numpy()
+            del out, target_out, x_cpu, edge_cpu
     inf_total_time = time.perf_counter() - t_inf0
     
     split_idx = int(len(y_target) * split_ratio)

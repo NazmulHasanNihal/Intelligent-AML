@@ -194,16 +194,18 @@ class GCNGRUBaseline(nn.Module):
 
 class TabularXGBoost:
     """Standard Industry Tabular Gradient Boosted Trees (Chen & Guestrin 2016)."""
-    def __init__(self, n_estimators=100, max_depth=6, learning_rate=0.08, random_state=42):
+    def __init__(self, n_estimators=100, max_depth=6, learning_rate=0.08, random_state=42, n_jobs=-1):
         self.model = XGBClassifier(
             n_estimators=n_estimators,
             max_depth=max_depth,
             learning_rate=learning_rate,
             random_state=random_state,
-            n_jobs=-1
+            n_jobs=n_jobs
         )
 
     def fit(self, x, y):
+        x = np.asarray(x, dtype=np.float32)
+        y = np.asarray(y, dtype=np.int32)
         neg_count = (y == 0).sum()
         pos_count = (y == 1).sum()
         scale_pos = max(1.0, neg_count / (pos_count + 1e-6))
@@ -211,23 +213,26 @@ class TabularXGBoost:
         self.model.fit(x, y)
 
     def predict_proba(self, x):
+        x = np.asarray(x, dtype=np.float32)
         return self.model.predict_proba(x)[:, 1]
 
 
 class IndustrialLightGBM:
     """Standard Industry LightGBM Classifier (Microsoft 2017)."""
-    def __init__(self, n_estimators=100, num_leaves=31, learning_rate=0.08, random_state=42):
+    def __init__(self, n_estimators=100, num_leaves=31, learning_rate=0.08, random_state=42, n_jobs=-1):
         import lightgbm as lgb
         self.model = lgb.LGBMClassifier(
             n_estimators=n_estimators,
             num_leaves=num_leaves,
             learning_rate=learning_rate,
             random_state=random_state,
-            n_jobs=-1,
+            n_jobs=n_jobs,
             verbose=-1
         )
 
     def fit(self, x, y):
+        x = np.asarray(x, dtype=np.float32)
+        y = np.asarray(y, dtype=np.int32)
         neg_count = (y == 0).sum()
         pos_count = (y == 1).sum()
         scale_pos = max(1.0, neg_count / (pos_count + 1e-6))
@@ -235,22 +240,26 @@ class IndustrialLightGBM:
         self.model.fit(x, y)
 
     def predict_proba(self, x):
+        x = np.asarray(x, dtype=np.float32)
         return self.model.predict_proba(x)[:, 1]
 
 
 class IndustrialCatBoost:
     """Standard Industry CatBoost Classifier (Yandex 2017)."""
-    def __init__(self, iterations=100, depth=6, learning_rate=0.08, random_seed=42):
+    def __init__(self, iterations=100, depth=6, learning_rate=0.08, random_seed=42, thread_count=-1):
         from catboost import CatBoostClassifier
         self.model = CatBoostClassifier(
             iterations=iterations,
             depth=depth,
             learning_rate=learning_rate,
             random_seed=random_seed,
+            thread_count=thread_count,
             verbose=False
         )
 
     def fit(self, x, y):
+        x = np.asarray(x, dtype=np.float32)
+        y = np.asarray(y, dtype=np.int32)
         neg_count = (y == 0).sum()
         pos_count = (y == 1).sum()
         scale_pos = max(1.0, neg_count / (pos_count + 1e-6))
@@ -258,25 +267,31 @@ class IndustrialCatBoost:
         self.model.fit(x, y)
 
     def predict_proba(self, x):
+        x = np.asarray(x, dtype=np.float32)
         return self.model.predict_proba(x)[:, 1]
 
 
 class IsolationForestBaseline:
     """Unsupervised Isolation Forest Outlier Anomaly Detector (Liu et al. 2008)."""
-    def __init__(self, n_estimators=100, contamination=0.05, random_state=42):
+    def __init__(self, n_estimators=100, contamination=0.05, random_state=42, n_jobs=-1):
         from sklearn.ensemble import IsolationForest
         self.model = IsolationForest(
             n_estimators=n_estimators,
             contamination=contamination,
             random_state=random_state,
-            n_jobs=-1
+            n_jobs=n_jobs
         )
 
     def fit(self, x, y=None):
-        self.model.fit(x)
+        x = np.asarray(x, dtype=np.float32)
+        if len(x) > 200000:
+            idx = np.random.choice(len(x), size=200000, replace=False)
+            self.model.fit(x[idx])
+        else:
+            self.model.fit(x)
 
     def predict_proba(self, x):
-        # Invert anomaly scores: lower score means more anomalous -> map to [0, 1] probability
+        x = np.asarray(x, dtype=np.float32)
         raw_scores = -self.model.decision_function(x)
         probs = (raw_scores - raw_scores.min()) / (raw_scores.max() - raw_scores.min() + 1e-6)
         return probs
@@ -286,22 +301,23 @@ class DeepAutoencoderBaseline:
     """Deep Learning Unsupervised Autoencoder Anomaly Detector (Reconstruction Error)."""
     def __init__(self, in_channels, hidden_dim=64, latent_dim=16, epochs=15):
         self.epochs = epochs
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.encoder = nn.Sequential(
             nn.Linear(in_channels, hidden_dim),
             nn.ReLU(),
             nn.Linear(hidden_dim, latent_dim),
             nn.ReLU()
-        )
+        ).to(self.device)
         self.decoder = nn.Sequential(
             nn.Linear(latent_dim, hidden_dim),
             nn.ReLU(),
             nn.Linear(hidden_dim, in_channels)
-        )
+        ).to(self.device)
         self.optimizer = torch.optim.AdamW(list(self.encoder.parameters()) + list(self.decoder.parameters()), lr=0.005)
         self.criterion = nn.MSELoss()
 
     def fit(self, x, y=None):
-        # Train strictly on normal / licit instances or full training split
+        x = np.asarray(x, dtype=np.float32)
         if len(x) > 200000:
             idx = np.random.choice(len(x), size=200000, replace=False)
             x_fit = x[idx]
@@ -317,6 +333,7 @@ class DeepAutoencoderBaseline:
         self.decoder.train()
         for _ in range(self.epochs):
             for (batch_x,) in loader:
+                batch_x = batch_x.to(self.device)
                 self.optimizer.zero_grad()
                 z = self.encoder(batch_x)
                 rec = self.decoder(z)
@@ -328,13 +345,13 @@ class DeepAutoencoderBaseline:
         self.encoder.eval()
         self.decoder.eval()
         with torch.no_grad():
-            x_tensor = torch.tensor(x, dtype=torch.float)
-            # Batch-wise prediction for memory safety on multi-million rows
+            x_tensor = torch.tensor(np.asarray(x, dtype=np.float32), dtype=torch.float)
             rec_errors_list = []
             pred_loader = torch.utils.data.DataLoader(
                 torch.utils.data.TensorDataset(x_tensor), batch_size=16384, shuffle=False
             )
             for (bx,) in pred_loader:
+                bx = bx.to(self.device)
                 bz = self.encoder(bx)
                 brec = self.decoder(bz)
                 berr = torch.mean((bx - brec) ** 2, dim=-1).cpu().numpy()
@@ -347,18 +364,24 @@ class DeepAutoencoderBaseline:
 
 class BalancedRandomForestBaseline:
     """Balanced Random Forest Ensemble (Chen et al. 2004)."""
-    def __init__(self, n_estimators=100, max_depth=10, random_state=42):
+    def __init__(self, n_estimators=100, max_depth=10, random_state=42, n_jobs=-1):
         from sklearn.ensemble import RandomForestClassifier
         self.model = RandomForestClassifier(
             n_estimators=n_estimators,
             max_depth=max_depth,
             class_weight="balanced",
             random_state=random_state,
-            n_jobs=-1
+            n_jobs=n_jobs
         )
 
     def fit(self, x, y):
-        self.model.fit(x, y)
+        x = np.asarray(x, dtype=np.float32)
+        y = np.asarray(y, dtype=np.int32)
+        if len(x) > 200000:
+            idx = np.random.choice(len(x), size=200000, replace=False)
+            self.model.fit(x[idx], y[idx])
+        else:
+            self.model.fit(x, y)
 
     def predict_proba(self, x):
         return self.model.predict_proba(x)[:, 1]
@@ -366,8 +389,13 @@ class BalancedRandomForestBaseline:
 
 class TopologicalLogisticRegression:
     """Logistic Regression on Node Features + Graph Degree Statistics."""
-    def __init__(self, max_iter=200, random_state=42):
-        self.model = LogisticRegression(max_iter=max_iter, random_state=random_state)
+    def __init__(self, max_iter=1000, random_state=42):
+        from sklearn.preprocessing import StandardScaler
+        from sklearn.pipeline import make_pipeline
+        self.model = make_pipeline(
+            StandardScaler(with_mean=False),
+            LogisticRegression(max_iter=max_iter, random_state=random_state, solver="lbfgs")
+        )
 
     def fit(self, x, y):
         self.model.fit(x, y)

@@ -32,7 +32,8 @@ import argparse
 import threading
 import gc
 import ctypes
-from datetime import datetime
+import psutil
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Set up project root
@@ -40,19 +41,25 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# Low-RAM and CPU throttling guards (Leaves 4 CPU cores free, bounds RAM)
-os.environ["OMP_NUM_THREADS"] = "2"
-os.environ["MKL_NUM_THREADS"] = "2"
-os.environ["OPENBLAS_NUM_THREADS"] = "2"
-os.environ["VECLIB_MAXIMUM_THREADS"] = "2"
-os.environ["NUMEXPR_NUM_THREADS"] = "2"
-os.environ["POLARS_MAX_THREADS"] = "2"
+import warnings
+warnings.filterwarnings("ignore")
+
+# Adaptive Multi-Threading: Utilize all available CPU cores (e.g. 96 vCPUs on Kaggle TPU VM)
+total_cpus = psutil.cpu_count(logical=True) or 4
+n_threads = max(2, total_cpus - 2 if os.name == "nt" and total_cpus > 4 else total_cpus)
+thread_str = str(n_threads)
+os.environ["OMP_NUM_THREADS"] = thread_str
+os.environ["MKL_NUM_THREADS"] = thread_str
+os.environ["OPENBLAS_NUM_THREADS"] = thread_str
+os.environ["VECLIB_MAXIMUM_THREADS"] = thread_str
+os.environ["NUMEXPR_NUM_THREADS"] = thread_str
+os.environ["POLARS_MAX_THREADS"] = thread_str
+os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
 
 # Windows Process Priority: IDLE Priority ensures the operating system, mouse,
 # and all user applications (browsers, editors) always have 100% immediate priority.
 if os.name == "nt":
     try:
-        import psutil
         p = psutil.Process()
         p.nice(psutil.IDLE_PRIORITY_CLASS)
     except Exception:
@@ -132,6 +139,7 @@ from scripts.run_automated_paper_benchmark import (
 # Canonical List of Benchmark Datasets in Paper
 BENCHMARK_DATASETS = [
     "elliptic_v1",
+    "elliptic_v2",
     "ibm_amlsim_hi_small",
     "ibm_amlsim_li_small",
     "mtgox_leaked",
@@ -202,7 +210,7 @@ def update_live_progress_report():
     
     md_content = f"""# 🚀 Live Physical Benchmark Execution Progress
 
-**Last Updated:** `{datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}`  
+**Last Updated:** `{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}`  
 **Overall Completion:** `{total_completed}/{total_possible} Model Runs` (**{pct:.1f}%**)  
 **Resumption Guard:** Atomic per-model JSON checkpoints active (safe against crashes/power loss)
 
@@ -236,6 +244,7 @@ def main():
     parser.add_argument("--splits", type=str, default="0.70", help="Comma-separated splits (default: 0.70)")
     parser.add_argument("--generate-paper-artifacts", action="store_true", help="Auto-generate publication LaTeX tables and 300-DPI IEEE figures")
     parser.add_argument("--skip-phase2", action="store_true", help="Skip the Phase 2 24 empirical tests")
+    parser.add_argument("--force-rerun", action="store_true", help="Force clean slate execution: retrain all models from scratch")
     args = parser.parse_args()
     
     target_datasets = [d.strip() for d in args.datasets.split(",")] if args.datasets else BENCHMARK_DATASETS
@@ -262,6 +271,7 @@ def main():
     print("  STARTING MASTER PHYSICAL BENCHMARK PIPELINE ACROSS DATASETS")
     print(f"  Datasets in Queue: {len(target_datasets)}")
     print(f"  Training Epochs: {args.epochs} | Chronological Splits: {target_splits}")
+    print(f"  Execution Mode: {'CLEAN SLATE (Retraining ALL models from scratch)' if args.force_rerun else 'Incremental Resumption'}")
     print(f"  Strict RAM Ceiling: {args.max_ram_gb:.1f} GB Max (Proactive Trimming Active)")
     print(f"  Checkpoint Directory: {DEFAULT_BENCHMARK_DIR}")
     print(f"  Live Progress Tracker: {PROGRESS_MD}")
@@ -279,7 +289,7 @@ def main():
                 dataset_name=ds,
                 splits_list=target_splits,
                 epochs_list=target_epochs,
-                force_rerun=False,
+                force_rerun=args.force_rerun,
                 dry_run=False,
                 summary_only=False
             )
@@ -298,11 +308,11 @@ def main():
     if not args.skip_phase2:
         print("\n" + "#" * 90)
         print("  PHASE 2: EXECUTING COMPLETE RESEARCH PAPER EMPIRICAL EVALUATIONS")
-        print("  (Fault-Tolerant with Atomic Checkpoints)")
+        print(f"  ({'CLEAN SLATE (from scratch)' if args.force_rerun else 'Fault-Tolerant Resumption'})")
         print("#" * 90)
         try:
             from scripts.run_24_master_empirical_tests import Master24EmpiricalSuite
-            empirical_suite = Master24EmpiricalSuite()
+            empirical_suite = Master24EmpiricalSuite(force_rerun=args.force_rerun)
             empirical_suite.run_all_with_resumption()
         except Exception as ex:
             print(f"\n[Warning] Phase 2 Empirical suite encountered an exception: {ex}")

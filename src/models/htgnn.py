@@ -867,8 +867,7 @@ def build_hetero_data(dataset_name):
             total_dim = NUM_FLOW_DIMS + 8 + banking_features.shape[1] + omni_features.shape[1] + chain_features.shape[1]
             x_mat = np.zeros((len(nt_df), total_dim), dtype=np.float32)
             x_mat[:, :NUM_FLOW_DIMS] = flow_invariants
-            for idx, nid in enumerate(nt_df["node_id"]):
-                x_mat[idx, NUM_FLOW_DIMS + (target_node_types.index(nt) % 8)] = 1.0
+            x_mat[:, NUM_FLOW_DIMS + (target_node_types.index(nt) % 8)] = 1.0
             col_offset = NUM_FLOW_DIMS + 8
             x_mat[:, col_offset:col_offset + banking_features.shape[1]] = banking_features
             col_offset += banking_features.shape[1]
@@ -880,9 +879,8 @@ def build_hetero_data(dataset_name):
         data[nt].x = torch.nan_to_num(x_vals, nan=0.0, posinf=50.0, neginf=-50.0)
         data[nt].num_nodes = len(nt_df)
         
-        # Relative index map
-        for rel_idx, nid in enumerate(nt_df["node_id"]):
-            node_id_to_rel_idx[nid] = rel_idx
+        # Relative index map (vectorized dict construction)
+        node_id_to_rel_idx.update(dict(zip(nt_df["node_id"], range(len(nt_df)))))
             
         # Optional labels (e.g. for Account or User)
         if "label" in nt_df.columns or "y" in nt_df.columns:
@@ -1293,7 +1291,7 @@ def train_temporal_contrastive_pretraining(model, x_dict, edge_index_dict, delta
             print(f"    InfoNCE Pretrain Epoch {epoch}/{num_epochs} | Loss: {total_contrastive_loss.item():.4f}")
 
 
-def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None, ewc_lambda=100.0):
+def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None, ewc_lambda=100.0, preloaded_data=None, *args, **kwargs):
     """
     Train HT-GNN using 3-way chronological split protocol (Temporal Validation).
     Evaluates predictive capacity under Concept Drift with Early Stopping & Checkpoint Recovery.
@@ -1303,7 +1301,13 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     print(f" Burst-Aware HT-GNN Training (Temporal Splitting): {dataset_name}")
     print(f"{'='*70}")
 
-    data = build_hetero_data(dataset_name)
+    if preloaded_data is None:
+        preloaded_data = kwargs.get("preloaded_data", None)
+
+    if preloaded_data is not None:
+        data = preloaded_data
+    else:
+        data = build_hetero_data(dataset_name)
     
     # Confirm label presence on the node type containing labels and populated nodes
     target_node = None
@@ -1493,9 +1497,25 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     patience_counter = 0
     best_model_weights = copy.deepcopy(model.state_dict())
     
-    # Initialize AMP scaler for OOM prevention on > 1M node graphs
-    from torch.cuda.amp import GradScaler, autocast
-    scaler = GradScaler()
+    # Initialize modern device-aware AMP scaler
+    device_type = 'cuda' if torch.cuda.is_available() else 'cpu'
+    from contextlib import nullcontext
+    if device_type == 'cuda':
+        try:
+            from torch.amp import autocast as modern_autocast, GradScaler as ModernScaler
+            autocast_ctx = modern_autocast(device_type='cuda')
+            scaler = ModernScaler('cuda')
+        except Exception:
+            from torch.cuda.amp import autocast as legacy_autocast, GradScaler as LegacyScaler
+            autocast_ctx = legacy_autocast()
+            scaler = LegacyScaler()
+    else:
+        autocast_ctx = nullcontext()
+        class DummyScaler:
+            def scale(self, l): return l
+            def step(self, opt): opt.step()
+            def update(self): pass
+        scaler = DummyScaler()
     
     # Check memory bounds
     if torch.cuda.is_available():
@@ -1510,7 +1530,7 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
         if hasattr(criterion, "step_curriculum"):
             criterion.step_curriculum(epoch, num_epochs)
         
-        with autocast():
+        with autocast_ctx:
             # EXTRACT EMBEDDINGS FIRST (Latent Manifold-Constrained SMOTE)
             z_dict = model.get_embeddings(x_dict, train_edge_index, train_delta_t, train_burst_score)
             z_target = z_dict[target_node]
@@ -1591,7 +1611,7 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
         if epoch % 2 == 0:
             model.eval()
             with torch.no_grad():
-                with autocast():
+                with autocast_ctx:
                     val_out = model(x_dict, val_edge_index, val_delta_t, val_burst_score)
                     val_logits = val_out[target_node][val_mask_nodes]
                 
@@ -1634,8 +1654,7 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     # Temporal Streaming Evaluation & Standalone Dynamic Threshold Calibration
     model.eval()
     with torch.no_grad():
-        from torch.cuda.amp import autocast
-        with autocast():
+        with autocast_ctx:
             test_out_dict = model(x_dict, test_edge_index, test_delta_t, test_burst_score)
             val_out_dict = model(x_dict, val_edge_index, val_delta_t, val_burst_score)
             
@@ -1695,6 +1714,10 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     cstgb_model.save(model_dir)
     
     test_probs = cstgb_model.predict_proba(x_dict, test_edge_index, test_delta_t, test_burst_score, eval_test_mask)
+    import gc
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
     return cstgb_model, test_probs
 
 
@@ -2227,30 +2250,19 @@ class CSTGBClassifier:
                 except Exception:
                     self.is_meta_fitted = False
                     
-            # Borderline-SMOTE + Tomek Links for Fused Stream Final Training
+            # Robust Class Imbalance Mitigation (SMOTE with strict fallback)
             try:
-                from imblearn.combine import SMOTETomek
-                from imblearn.over_sampling import BorderlineSMOTE
+                from imblearn.over_sampling import SMOTE
                 if pos_count >= 10 and neg_count >= 10:
                     k_smote = min(5, pos_count - 1) if pos_count >= 50 else min(3, pos_count - 1)
-                    smote_tomek = SMOTETomek(
-                        smote=BorderlineSMOTE(k_neighbors=k_smote, kind='borderline-1', random_state=42),
-                        random_state=42
-                    )
-                    fused_train_sm, y_train_fused_sm = smote_tomek.fit_resample(fused_train, y_train)
-                    print(f"  [SMOTE] Borderline-SMOTE + Tomek Links: {len(y_train)} -> {len(y_train_fused_sm)} samples (pos: {(y_train_fused_sm == 1).sum()})")
+                    smote_sampler = SMOTE(k_neighbors=k_smote, random_state=42)
+                    fused_train_sm, y_train_fused_sm = smote_sampler.fit_resample(fused_train, y_train)
+                    print(f"  [SMOTE] Imbalance Resampling: {len(y_train)} -> {len(y_train_fused_sm)} samples (pos: {(y_train_fused_sm == 1).sum()})")
                 else:
                     fused_train_sm, y_train_fused_sm = fused_train, y_train
-            except ImportError:
-                try:
-                    from imblearn.over_sampling import SMOTE
-                    if pos_count >= 10 and neg_count >= 10:
-                        smote = SMOTE(sampling_strategy='auto', k_neighbors=min(5, pos_count-1), random_state=42)
-                        fused_train_sm, y_train_fused_sm = smote.fit_resample(fused_train, y_train)
-                    else:
-                        fused_train_sm, y_train_fused_sm = fused_train, y_train
-                except ImportError:
-                    fused_train_sm, y_train_fused_sm = fused_train, y_train
+            except Exception as smote_err:
+                print(f"  [SMOTE Warning] Fallback to raw fused stream: {smote_err}")
+                fused_train_sm, y_train_fused_sm = fused_train, y_train
                 
             amt_fused = np.maximum(0.0, fused_train_sm[:, 3] if fused_train_sm.shape[1] > 3 else 0.0)
             sample_weight_fused = 1.0 + 0.5 * np.log1p(amt_fused)

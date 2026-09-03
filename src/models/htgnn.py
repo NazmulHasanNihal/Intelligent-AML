@@ -1513,8 +1513,10 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
         autocast_ctx = nullcontext()
         class DummyScaler:
             def scale(self, l): return l
+            def unscale_(self, opt): pass
             def step(self, opt): opt.step()
             def update(self): pass
+            def get_scale(self): return 1.0
         scaler = DummyScaler()
     
     # Check memory bounds
@@ -1597,7 +1599,10 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
                 loss = torch.tensor(ewc_lambda * ewc_penalty, requires_grad=True, device=logits.device)
             
         scaler.scale(loss).backward()
-        scaler.unscale_(optimizer)
+        try:
+            scaler.unscale_(optimizer)
+        except Exception:
+            pass
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         
         scaler.step(optimizer)

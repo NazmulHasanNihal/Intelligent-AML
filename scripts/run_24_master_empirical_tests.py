@@ -71,7 +71,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
 import torch
-torch.set_num_threads(2)
+torch.set_num_threads(int(_CPUS))
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -101,7 +101,7 @@ CKPT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 class Master24EmpiricalSuite:
-    def __init__(self, force_rerun: bool = False):
+    def __init__(self, force_rerun: bool = False, *args, **kwargs):
         self.results: Dict[str, Any] = {}
         self.checkpoint_file = CKPT_DIR / "master_24_tests.json"
         if not force_rerun and self.checkpoint_file.exists():

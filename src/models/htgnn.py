@@ -1409,6 +1409,7 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     effective_xgb_depth = profile["xgb_depth"]
     
     # Override hidden, layer depth and epoch schedule for massive graphs
+    patience = 10
     effective_epochs = num_epochs
     effective_patience = patience
     min_epochs_early_stop = 10
@@ -1504,7 +1505,7 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     # Model Training Loop with Mixed Precision & Memory Optimizations
     best_val_loss = float('inf')
     best_val_score = -1e9
-    patience = 10
+    patience = effective_patience
     patience_counter = 0
     best_model_weights = copy.deepcopy(model.state_dict())
     

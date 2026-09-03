@@ -2210,32 +2210,32 @@ class CSTGBClassifier:
                     for tr_idx, val_idx in skf.split(x_meta_train, y_meta):
                         sw_tr = sw_meta[tr_idx]
                         
-                        m_xgb_tab = XGBClassifier(n_estimators=50, max_depth=5, learning_rate=0.08, random_state=42, n_jobs=4)
+                        m_xgb_tab = XGBClassifier(n_estimators=50, max_depth=5, learning_rate=0.08, random_state=42, n_jobs=-1)
                         m_xgb_tab.set_params(scale_pos_weight=scale_pos_tab)
                         m_xgb_tab.fit(x_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
                         oof_p_xgb_t[val_idx] = m_xgb_tab.predict_proba(x_meta_train[val_idx])[:, 1]
                         
-                        m_lgb_tab = lgb.LGBMClassifier(n_estimators=50, num_leaves=31, learning_rate=0.08, random_state=42, n_jobs=4, verbose=-1)
+                        m_lgb_tab = lgb.LGBMClassifier(n_estimators=50, num_leaves=31, learning_rate=0.08, random_state=42, n_jobs=-1, verbose=-1)
                         m_lgb_tab.set_params(scale_pos_weight=scale_pos_tab)
                         m_lgb_tab.fit(x_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
                         oof_p_lgb_t[val_idx] = m_lgb_tab.predict_proba(x_meta_train[val_idx])[:, 1]
                         
-                        m_cat_tab = CatBoostClassifier(iterations=50, depth=5, learning_rate=0.08, random_seed=42, thread_count=4, verbose=False)
+                        m_cat_tab = CatBoostClassifier(iterations=50, depth=5, learning_rate=0.08, random_seed=42, thread_count=-1, verbose=False)
                         m_cat_tab.set_params(scale_pos_weight=scale_pos_tab)
                         m_cat_tab.fit(x_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
                         oof_p_cat_t[val_idx] = m_cat_tab.predict_proba(x_meta_train[val_idx])[:, 1]
                         
-                        m_xgb_fus = XGBClassifier(n_estimators=30, max_depth=4, learning_rate=0.08, random_state=42, n_jobs=4)
+                        m_xgb_fus = XGBClassifier(n_estimators=30, max_depth=4, learning_rate=0.08, random_state=42, n_jobs=-1)
                         m_xgb_fus.set_params(scale_pos_weight=1.0)
                         m_xgb_fus.fit(fused_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
                         oof_p_xgb_f[val_idx] = m_xgb_fus.predict_proba(fused_meta_train[val_idx])[:, 1]
                         
-                        m_lgb_fus = lgb.LGBMClassifier(n_estimators=30, num_leaves=15, learning_rate=0.08, random_state=42, n_jobs=4, verbose=-1)
+                        m_lgb_fus = lgb.LGBMClassifier(n_estimators=30, num_leaves=15, learning_rate=0.08, random_state=42, n_jobs=-1, verbose=-1)
                         m_lgb_fus.set_params(scale_pos_weight=1.0)
                         m_lgb_fus.fit(fused_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
                         oof_p_lgb_f[val_idx] = m_lgb_fus.predict_proba(fused_meta_train[val_idx])[:, 1]
                         
-                        m_cat_fus = CatBoostClassifier(iterations=30, depth=4, learning_rate=0.08, random_seed=42, thread_count=4, verbose=False)
+                        m_cat_fus = CatBoostClassifier(iterations=30, depth=4, learning_rate=0.08, random_seed=42, thread_count=-1, verbose=False)
                         m_cat_fus.set_params(scale_pos_weight=1.0)
                         m_cat_fus.fit(fused_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
                         oof_p_cat_f[val_idx] = m_cat_fus.predict_proba(fused_meta_train[val_idx])[:, 1]

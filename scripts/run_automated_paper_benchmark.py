@@ -879,8 +879,11 @@ def run_paper_benchmark(
     summary_only: bool = False
 ) -> None:
     """
-    Main entry point for automated paper benchmarking with fault tolerance and resumption.
-    """
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+        sys.stderr.reconfigure(line_buffering=True)
+    except Exception:
+        pass
     print("\n" + "=" * 100)
     print(f" [AUTOMATED PAPER BENCHMARK ENGINE] TARGET: {dataset_name.upper()}")
     print("=" * 100)

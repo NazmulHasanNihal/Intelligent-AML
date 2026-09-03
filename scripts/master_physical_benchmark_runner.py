@@ -236,6 +236,11 @@ The script will automatically detect all existing checkpoints and resume instant
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+        sys.stderr.reconfigure(line_buffering=True)
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(description="Master Physical Benchmark Runner with Auto-Resumption")
     parser.add_argument("--datasets", type=str, default=None, help="Comma-separated dataset names")
     parser.add_argument("--status", action="store_true", help="Print current execution status and exit")

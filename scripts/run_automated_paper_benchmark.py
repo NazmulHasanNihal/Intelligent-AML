@@ -878,7 +878,7 @@ def run_paper_benchmark(
     dry_run: bool = False,
     summary_only: bool = False
 ) -> None:
-    """
+    """Main entry point for automated paper benchmarking with fault tolerance and resumption."""
     try:
         sys.stdout.reconfigure(line_buffering=True)
         sys.stderr.reconfigure(line_buffering=True)

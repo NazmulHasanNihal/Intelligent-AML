@@ -1408,17 +1408,26 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     effective_xgb_n = profile["xgb_n"]
     effective_xgb_depth = profile["xgb_depth"]
     
-    # Override hidden and layer depth for extremely large graphs to guarantee < 4 GB RAM bound
+    # Override hidden, layer depth and epoch schedule for massive graphs
+    effective_epochs = num_epochs
+    effective_patience = patience
+    min_epochs_early_stop = 10
     if num_total_nodes > 5_000_000:
         effective_hidden = min(effective_hidden, 32)
         effective_gnn_layers = min(effective_gnn_layers, 3)
+        effective_epochs = min(num_epochs, 6)
+        effective_patience = 2
+        min_epochs_early_stop = 3
     elif num_total_nodes > 2_000_000:
         effective_hidden = min(effective_hidden, 48)
         effective_gnn_layers = min(effective_gnn_layers, 4)
+        effective_epochs = min(num_epochs, 10)
+        effective_patience = 3
+        min_epochs_early_stop = 5
     elif num_total_nodes > 500_000:
         effective_hidden = min(effective_hidden, 64)
     
-    print(f"  [Profile] Dataset '{dataset_name}' -> GNN Layers={effective_gnn_layers}, Hidden={effective_hidden}, LR={effective_lr}, beta={effective_focal_beta}, SMOTE={effective_smote_ratio}")
+    print(f"  [Profile] Dataset '{dataset_name}' -> GNN Layers={effective_gnn_layers}, Hidden={effective_hidden}, LR={effective_lr}, beta={effective_focal_beta}, SMOTE={effective_smote_ratio}, Epochs={effective_epochs}")
     
     model = BurstAwareHGT(
         in_channels_dict=in_channels_dict,
@@ -1431,9 +1440,9 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     optimizer = torch.optim.AdamW(model.parameters(), lr=effective_lr, weight_decay=0.0001)
     from torch.optim.lr_scheduler import OneCycleLR, CosineAnnealingLR
     try:
-        scheduler = OneCycleLR(optimizer, max_lr=max(1e-3, effective_lr * 2.5), total_steps=max(2, num_epochs), pct_start=0.15, anneal_strategy="cos")
+        scheduler = OneCycleLR(optimizer, max_lr=max(1e-3, effective_lr * 2.5), total_steps=max(2, effective_epochs), pct_start=0.15, anneal_strategy="cos")
     except Exception:
-        scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs, eta_min=1e-5)
+        scheduler = CosineAnnealingLR(optimizer, T_max=effective_epochs, eta_min=1e-5)
     
     try:
         from .focal_tversky_loss import CostSensitiveFocalTverskyLoss
@@ -1441,17 +1450,19 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
     except Exception:
         criterion = FocalLoss(alpha=alpha, gamma=2.0, label_smoothing=0.05)
 
-    all_ts = []
+    all_ts_tensors = []
     for rel in metadata[1]:
         if rel in data:
             if hasattr(data[rel], "ts") and data[rel].ts is not None and data[rel].ts.numel() > 0:
-                all_ts.extend(data[rel].ts.tolist())
+                all_ts_tensors.append(data[rel].ts.float().flatten())
             elif hasattr(data[rel], "delta_t") and data[rel].delta_t is not None and data[rel].delta_t.numel() > 0:
-                all_ts.extend(data[rel].delta_t.tolist())
+                all_ts_tensors.append(data[rel].delta_t.float().flatten())
             
-    if all_ts:
-        ts_train_thresh = float(np.percentile(all_ts, 60))
-        ts_val_thresh = float(np.percentile(all_ts, 70))
+    if all_ts_tensors:
+        cat_ts = torch.cat(all_ts_tensors)
+        ts_train_thresh = float(torch.quantile(cat_ts, 0.60).item())
+        ts_val_thresh = float(torch.quantile(cat_ts, 0.70).item())
+        del cat_ts, all_ts_tensors
     else:
         ts_train_thresh, ts_val_thresh = 0.0, 0.0
 
@@ -1524,13 +1535,13 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
         torch.cuda.empty_cache()
     
     model.train()
-    for epoch in range(1, num_epochs + 1):
+    for epoch in range(1, effective_epochs + 1):
         model.train()
         optimizer.zero_grad(set_to_none=True)
         
         # Step curriculum loss (Upgrade F)
         if hasattr(criterion, "step_curriculum"):
-            criterion.step_curriculum(epoch, num_epochs)
+            criterion.step_curriculum(epoch, effective_epochs)
         
         with autocast_ctx:
             # EXTRACT EMBEDDINGS FIRST (Latent Manifold-Constrained SMOTE)
@@ -1641,17 +1652,18 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
                         best_model_weights = copy.deepcopy(model.state_dict())
                     else:
                         patience_counter += 1
-                        if patience_counter >= patience and epoch > 15:
-                            print(f"  [Early Stopping] Triggered at Epoch {epoch} with Best Val Score {best_val_score:.4f} (Loss: {best_val_loss:.4f})")
+                        if patience_counter >= effective_patience and epoch > min_epochs_early_stop:
+                            print(f"  [Early Stopping] Triggered at Epoch {epoch} with Best Val Score {best_val_score:.4f} (Loss: {best_val_loss:.4f})", flush=True)
                             break
         
-        if epoch % 10 == 0 or epoch == 1:
+        print_freq = 1 if (num_total_nodes > 1_000_000 or effective_epochs <= 10) else (5 if effective_epochs <= 20 else 10)
+        if epoch % print_freq == 0 or epoch == 1 or epoch == effective_epochs:
             if len(y_target_valid) > 0:
                 pred = logits_valid.argmax(dim=1)
                 acc = (pred == y_target_valid).float().mean().item()
             else:
                 acc = 0.0
-            print(f"  Epoch {epoch:3d}/{num_epochs} | Loss: {loss.item():.4f} | Train Acc: {acc:.4f}")
+            print(f"    [Training] Epoch {epoch:2d}/{effective_epochs} | Loss: {loss.item():.4f} | Train Acc: {acc:.4f}", flush=True)
 
     # Restore best checkpoint
     model.load_state_dict(best_model_weights)

@@ -459,23 +459,27 @@ def evaluate_cstgb_model(data: Any, dataset_name: str, num_epochs: int, split_ra
     train_split_idx = int(num_target_nodes_orig * split_ratio)
     
     # 1. Training Phase with Memory Profiling
-    tracemalloc.start()
+    ram_before = get_process_ram_mb()
     t0 = time.perf_counter()
     try:
         cstgb_model, _ = train_htgnn(dataset_name, num_epochs=num_epochs, preloaded_data=data)
     except Exception:
         cstgb_model, _ = train_htgnn(dataset_name, num_epochs=num_epochs)
     train_time = time.perf_counter() - t0
-    _, peak_mem = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+    peak_mem = max(0.0, (get_process_ram_mb() - ram_before)) * 1024 * 1024
     
     # 2. Dynamic Temporal Split Subgraph Assembly
     metadata = data.metadata()
     all_ts = []
     for rel in metadata[1]:
-        if rel in data and hasattr(data[rel], "delta_t"):
-            all_ts.extend(data[rel].delta_t.tolist())
-    ts_threshold = np.percentile(all_ts, int(split_ratio * 100)) if all_ts else 0.0
+        if rel in data and hasattr(data[rel], "delta_t") and data[rel].delta_t is not None and data[rel].delta_t.numel() > 0:
+            all_ts.append(data[rel].delta_t.float().flatten())
+    if all_ts:
+        cat_ts = torch.cat(all_ts)
+        ts_threshold = float(torch.quantile(cat_ts, split_ratio).item())
+        del cat_ts, all_ts
+    else:
+        ts_threshold = 0.0
 
     test_edge_index, test_delta_t, test_burst_score = {}, {}, {}
     for rel in metadata[1]:

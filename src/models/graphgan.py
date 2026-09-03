@@ -384,10 +384,42 @@ def train_graphgan(dataset_name, num_epochs=100, lr=0.0002, latent_dim=LATENT_DI
         synth_node_features, synth_edge_probs = model.generator(noise)
         synth_node_features = synth_node_features.squeeze(0)
         synth_edge_probs = synth_edge_probs.squeeze(0)
+        
+        # Evaluate feature distribution fidelity using Maximum Mean Discrepancy (MMD)
+        mmd_score = compute_maximum_mean_discrepancy(real_features, synth_node_features)
         print(f"  Synthetic subgraph generated: {actual_nodes} nodes")
         print(f"  Edge probability range: [{synth_edge_probs.min():.4f}, {synth_edge_probs.max():.4f}]")
+        print(f"  Node Feature MMD Discrepancy: {mmd_score:.4f} (Target < 0.05)")
 
     return model, synth_node_features, synth_edge_probs
+
+
+def compute_maximum_mean_discrepancy(x: torch.Tensor, y: torch.Tensor, gamma: float = 1.0) -> float:
+    """
+    Computes Maximum Mean Discrepancy (MMD) between empirical and synthetic feature distributions
+    using a multi-scale Gaussian RBF kernel.
+    Target: MMD < 0.05 indicates high feature fidelity.
+    """
+    x = x.view(x.size(0), -1)
+    y = y.view(y.size(0), -1)
+    
+    # Pairwise squared Euclidean distances
+    xx = torch.cdist(x, x, p=2) ** 2
+    yy = torch.cdist(y, y, p=2) ** 2
+    xy = torch.cdist(x, y, p=2) ** 2
+    
+    # Multi-scale bandwidths
+    gammas = [gamma * 0.1, gamma * 0.5, gamma * 1.0, gamma * 2.0, gamma * 5.0]
+    mmd2 = 0.0
+    for g in gammas:
+        k_xx = torch.exp(-g * xx)
+        k_yy = torch.exp(-g * yy)
+        k_xy = torch.exp(-g * xy)
+        mmd2 += k_xx.mean() + k_yy.mean() - 2.0 * k_xy.mean()
+        
+    mmd2 = mmd2 / len(gammas)
+    return float(torch.sqrt(torch.clamp(mmd2, min=0.0)).item())
+
 
 
 def run_graphgan_pipeline():

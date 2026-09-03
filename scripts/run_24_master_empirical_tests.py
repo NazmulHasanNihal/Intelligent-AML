@@ -42,7 +42,25 @@ import scipy.stats as stats
 
 # Windows PyTorch DLL guard
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-if sys.platform == "win32":
+try:
+    import psutil
+    _CPUS = str(psutil.cpu_count(logical=True))
+except Exception:
+    _CPUS = str(os.cpu_count() or 4)
+os.environ["OMP_NUM_THREADS"] = _CPUS
+os.environ["MKL_NUM_THREADS"] = _CPUS
+os.environ["OPENBLAS_NUM_THREADS"] = _CPUS
+os.environ["VECLIB_MAXIMUM_THREADS"] = _CPUS
+os.environ["NUMEXPR_NUM_THREADS"] = _CPUS
+
+
+if os.name == "nt":
+    try:
+        import psutil
+        p = psutil.Process()
+        p.nice(psutil.BELOW_NORMAL_PRIORITY_CLASS)
+    except Exception:
+        pass
     try:
         sys.stdout.reconfigure(encoding="utf-8")
         sys.stderr.reconfigure(encoding="utf-8")
@@ -53,6 +71,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
 import torch
+torch.set_num_threads(2)
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -75,16 +94,40 @@ from src.utils import (
 
 REPORT_DIR = BASE_DIR / "data" / "outputs" / "reports"
 DOCS_DIR = BASE_DIR / "docs"
+CKPT_DIR = BASE_DIR / "results" / "checkpoints"
 REPORT_DIR.mkdir(parents=True, exist_ok=True)
 DOCS_DIR.mkdir(parents=True, exist_ok=True)
+CKPT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 class Master24EmpiricalSuite:
-    def __init__(self):
+    def __init__(self, force_rerun: bool = False):
         self.results: Dict[str, Any] = {}
+        self.checkpoint_file = CKPT_DIR / "master_24_tests.json"
+        if not force_rerun and self.checkpoint_file.exists():
+            try:
+                with open(self.checkpoint_file, "r", encoding="utf-8") as f:
+                    self.results = json.load(f)
+                print(f"  [Resumption] Loaded {len(self.results)}/24 previously completed tests from checkpoint.")
+            except Exception:
+                self.results = {}
+        elif force_rerun:
+            print("  [Clean Slate] Force-rerun active: Starting all 24 empirical tests from scratch.")
         print("=" * 80)
         print("  INTELLIGENT-AML: 24-DIMENSIONAL MASTER EMPIRICAL EVALUATION SUITE")
         print("=" * 80)
+
+    def _save_atomic_checkpoint(self, test_name: str, data: Any):
+        self.results[test_name] = data
+        tmp_p = self.checkpoint_file.with_suffix(".tmp")
+        try:
+            with open(tmp_p, "w", encoding="utf-8") as f:
+                json.dump(self.results, f, indent=2)
+            if self.checkpoint_file.exists():
+                self.checkpoint_file.unlink()
+            tmp_p.rename(self.checkpoint_file)
+        except Exception:
+            pass
 
     # 1. Zero-Shot Cross-Dataset Transfer Test
     def run_test_01_cross_dataset_transfer(self) -> Dict[str, Any]:
@@ -617,32 +660,48 @@ class Master24EmpiricalSuite:
                 f.write("\n```\n\n")
         print(f"📁 Saved Markdown Report -> {md_path}")
 
+    def run_all_with_resumption(self):
+        """Runs all 24 empirical tests sequentially with atomic checkpointing and resumption."""
+        tests = [
+            ("test_01_zero_shot_transfer", self.run_test_01_cross_dataset_transfer),
+            ("test_02_leave_one_out_ablation", self.run_test_02_leave_one_out_ablation),
+            ("test_03_calibration_size_sensitivity", self.run_test_03_calibration_size_sensitivity),
+            ("test_04_conformal_coverage_validity", self.run_test_04_conformal_coverage_validity),
+            ("test_05_leakage_and_overlap_audit", self.run_test_05_leakage_and_overlap_audit),
+            ("test_06_cold_start_node_evaluation", self.run_test_06_cold_start_node_evaluation),
+            ("test_07_adversarial_camouflage_robustness", self.run_test_07_adversarial_camouflage_robustness),
+            ("test_08_hyperparameter_sensitivity_sweep", self.run_test_08_hyperparameter_sensitivity_sweep),
+            ("test_09_multi_seed_variance", self.run_test_09_multi_seed_variance),
+            ("test_10_training_convergence", self.run_test_10_training_convergence),
+            ("test_11_compute_cost_benchmark", self.run_test_11_compute_cost_benchmark),
+            ("test_12_scalability_stress_test", self.run_test_12_scalability_stress_test),
+            ("test_13_statistical_significance", self.run_test_13_statistical_significance),
+            ("test_14_holm_bonferroni_correction", self.run_test_14_holm_bonferroni_correction),
+            ("test_15_cost_sensitive_breakdown", self.run_test_15_cost_sensitive_breakdown),
+            ("test_16_threshold_sensitivity", self.run_test_16_threshold_sensitivity),
+            ("test_17_concept_drift_continual_learning", self.run_test_17_concept_drift_continual_learning),
+            ("test_18_synthetic_typology_generalization", self.run_test_18_synthetic_typology_generalization),
+            ("test_19_feature_ablation", self.run_test_19_feature_ablation),
+            ("test_20_noise_missing_data_robustness", self.run_test_20_noise_missing_data_robustness),
+            ("test_21_federated_simulation", self.run_test_21_federated_simulation),
+            ("test_22_explainability_faithfulness", self.run_test_22_explainability_faithfulness),
+            ("test_23_compliance_human_evaluation", self.run_test_23_compliance_human_evaluation),
+            ("test_24_fairness_and_bias_audit", self.run_test_24_fairness_and_bias_audit),
+        ]
+        total = len(tests)
+        print("\n" + "=" * 90)
+        print("  EXECUTING MASTER 24 EMPIRICAL TESTS (WITH AUTO-RESUMPTION GUARD)")
+        print("=" * 90)
+        for idx, (key, func) in enumerate(tests, 1):
+            if key in self.results:
+                print(f"  [{idx:02d}/{total:02d}] {key:<45} ... [RESUMED / CACHED]")
+                continue
+            res = func()
+            self._save_atomic_checkpoint(key, res)
+        self.save_reports()
+        print("\n🎉 ALL 24 MASTER EMPIRICAL TESTS EXECUTED AND LOGGED SUCCESSFULLY!")
+
 
 if __name__ == "__main__":
     suite = Master24EmpiricalSuite()
-    suite.run_test_01_cross_dataset_transfer()
-    suite.run_test_02_leave_one_out_ablation()
-    suite.run_test_03_calibration_size_sensitivity()
-    suite.run_test_04_conformal_coverage_validity()
-    suite.run_test_05_leakage_and_overlap_audit()
-    suite.run_test_06_cold_start_node_evaluation()
-    suite.run_test_07_adversarial_camouflage_robustness()
-    suite.run_test_08_hyperparameter_sensitivity_sweep()
-    suite.run_test_09_multi_seed_variance()
-    suite.run_test_10_training_convergence()
-    suite.run_test_11_compute_cost_benchmark()
-    suite.run_test_12_scalability_stress_test()
-    suite.run_test_13_statistical_significance()
-    suite.run_test_14_holm_bonferroni_correction()
-    suite.run_test_15_cost_sensitive_breakdown()
-    suite.run_test_16_threshold_sensitivity()
-    suite.run_test_17_concept_drift_continual_learning()
-    suite.run_test_18_synthetic_typology_generalization()
-    suite.run_test_19_feature_ablation()
-    suite.run_test_20_noise_missing_data_robustness()
-    suite.run_test_21_federated_simulation()
-    suite.run_test_22_explainability_faithfulness()
-    suite.run_test_23_compliance_human_evaluation()
-    suite.run_test_24_fairness_and_bias_audit()
-    suite.save_reports()
-    print("\n🎉 ALL 24 MASTER EMPIRICAL TESTS EXECUTED AND LOGGED SUCCESSFULLY!")
+    suite.run_all_with_resumption()

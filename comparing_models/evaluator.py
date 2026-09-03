@@ -34,15 +34,34 @@ def evaluate_model_performance(y_true, y_probs, threshold=None):
         }
         
     # Auto-calibrate optimal decision threshold if not explicitly specified
-    if threshold is None:
-        best_f1 = -1.0
+    if threshold is None or str(threshold).lower() in ("auto", "youden", "youden_j", "f1"):
+        criterion = str(threshold).lower() if threshold is not None else "f1"
+        best_score = -1e9
         best_tau = 0.50
-        # Widen search grid from 0.02 to 0.98 for extreme class imbalance (e.g., IBM AMLSim, PaySim1)
-        for tau in np.linspace(0.02, 0.98, 97):
+        # Multi-resolution candidate search from 0.005 to 0.98 for extreme class imbalance (IBM AMLSim, PaySim)
+        candidates = np.unique(np.concatenate([
+            np.logspace(np.log10(0.005), np.log10(0.20), 50),
+            np.linspace(0.20, 0.98, 50)
+        ]))
+        
+        pos_mask = (y_true_clean == 1)
+        neg_mask = (y_true_clean == 0)
+        total_pos = float(pos_mask.sum())
+        total_neg = float(neg_mask.sum())
+        
+        for tau in candidates:
             preds = (y_probs_clean >= tau).astype(int)
-            score = f1_score(y_true_clean, preds, zero_division=0)
-            if score > best_f1:
-                best_f1 = score
+            if criterion in ("youden", "youden_j"):
+                tp = float(preds[pos_mask].sum())
+                fp = float(preds[neg_mask].sum())
+                sens = tp / max(1.0, total_pos)
+                spec = (total_neg - fp) / max(1.0, total_neg)
+                score = sens + spec - 1.0
+            else:
+                score = f1_score(y_true_clean, preds, zero_division=0)
+                
+            if score > best_score:
+                best_score = score
                 best_tau = float(tau)
         threshold = best_tau
         
@@ -125,6 +144,9 @@ def to_homogeneous_projection(data):
             padded_features.append(x)
             
     x_homo = torch.cat(padded_features, dim=0)
+    del padded_features, feature_list
+    import gc
+    gc.collect()
     x_homo = torch.nan_to_num(x_homo, nan=0.0, posinf=1.0, neginf=0.0)
     
     edge_index_list = []
@@ -139,6 +161,8 @@ def to_homogeneous_projection(data):
             
     if edge_index_list:
         edge_index_homo = torch.cat(edge_index_list, dim=1)
+        del edge_index_list
+        gc.collect()
     else:
         edge_index_homo = torch.zeros((2, 0), dtype=torch.long)
         

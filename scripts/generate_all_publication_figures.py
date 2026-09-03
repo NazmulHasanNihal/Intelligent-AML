@@ -332,146 +332,241 @@ for d in OUT_DIRS:
 # FIGURE 6: System Architecture Blueprint (Double Column: 7.16" x 2.45")
 # ======================================================================
 print("[6/22] Generating Figure 6: System Architecture Blueprint...")
-fig, ax = plt.subplots(figsize=(7.16, 2.45))
+# ======================================================================
+# FIGURE 6: System Architecture Blueprint (Double Column: 7.16" x 3.45")
+# ======================================================================
+print("[6/22] Generating Figure 6: System Architecture Blueprint...")
+fig, ax = plt.subplots(figsize=(7.16, 3.45))
 ax.axis('off')
-ax.set_xlim([-0.015, 1.015])
-ax.set_ylim([-0.02, 1.02])
+ax.set_xlim([-0.008, 1.008])
+ax.set_ylim([-0.015, 1.015])
 
-# Background Canvas Card
+# Base Canvas Frame
 ax.add_patch(patches.FancyBboxPatch(
-    (0.00, 0.00), 1.00, 0.98,
-    boxstyle="round,pad=0.015",
-    facecolor="#f8fafc", edgecolor="#cbd5e1", linewidth=0.8
+    (0.00, 0.00), 1.00, 1.00,
+    boxstyle="round,pad=0.006,rounding_size=0.010",
+    facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.9
 ))
 
-# Header Title Banner
+# Top Master Banner
 ax.add_patch(patches.FancyBboxPatch(
-    (0.02, 0.88), 0.96, 0.08,
-    boxstyle="round,pad=0.008",
+    (0.012, 0.915), 0.976, 0.072,
+    boxstyle="round,pad=0.004,rounding_size=0.008",
     facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
 ))
-ax.text(0.50, 0.92, "C-STGB: Conformal Spatio-Temporal GraphBoost End-to-End Architecture",
-        ha="center", va="center", fontsize=9.2, fontweight="bold", color="#ffffff")
+ax.text(0.50, 0.951, "C-STGB: Conformal Spatio-Temporal GraphBoost End-to-End Surveillance Platform",
+        ha="center", va="center", fontsize=8.8, fontweight="bold", color="#ffffff")
 
-tiers_data = [
+# Tiers Layout Definition
+stages = [
     {
-        "line1": "TIER 1: STREAMING INGEST",
-        "line2": "DuckDB Invariants & Hawkes",
-        "badge_bg": "#1e40af",
-        "card_bg": "#eff6ff",
-        "card_border": "#93c5fd",
-        "x": 0.015, "w": 0.228,
-        "items": [
-            ("• DuckDB / Arrow Engine", "O(1) zero-copy micro-batch"),
-            ("• Dynamic Top-K Capping", r"$K \leq 15$ neighbor ceiling"),
-            ("• 12-D Invariants", r"$\mathbf{z}_{\mathrm{inv}} \in \mathbf{R}^{12}$ flow basis"),
-            ("• Hawkes Intensity", r"$\lambda_u(t)$ burst acceleration"),
+        "id": "STAGE 1: STREAMING INGEST",
+        "title": "DuckDB Invariants & Hawkes",
+        "badge_bg": "#1e3a8a",  # Deep Navy
+        "badge_fg": "#e0f2fe",
+        "card_bg": "#f8fafc",
+        "border": "#93c5fd",
+        "x": 0.012, "w": 0.234,
+        "blocks": [
+            {
+                "head": "Continuous Ingest & Subgraphs",
+                "math": r"$\mathcal{G}_t = (\mathcal{V}_t, \mathcal{E}_t), \; \mathcal{N}_K(u) \; (K \leq 15)$",
+                "desc": "DuckDB / Arrow zero-copy micro-batching"
+            },
+            {
+                "head": "Mass-Balance Flow Conservation",
+                "math": r"$\tilde{\Phi}_{\mathrm{flow}} = \log(1 + \frac{\sum_{\mathrm{out}} A}{\sum_{\mathrm{in}} A + \epsilon}) \approx 1.0$",
+                "desc": "Detects pass-through mule dissipation"
+            },
+            {
+                "head": "Hawkes Intensity & Causal Taint",
+                "math": r"$\lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha e^{-\beta \Delta t_i}$",
+                "desc": r"$\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{bwd}}$ localized taint (< 0.08 ms)"
+            }
         ],
-        "tech_tag": "Latency: 0.45 ms | DuckDB"
+        "output_tensor": r"$\mathbf{z}_{\mathrm{inv}}(u, t) \in \mathbb{R}^{12}, \; \mathcal{G}_t^{(K)}$",
+        "sla_tag": "Latency: 0.45 ms | DuckDB"
     },
     {
-        "line1": "TIER 2: GNN BACKBONE",
-        "line2": "Tri-Band & Camouflage Filter",
-        "badge_bg": "#15803d",
-        "card_bg": "#f0fdf4",
-        "card_border": "#86efac",
-        "x": 0.262, "w": 0.232,
-        "items": [
-            ("• Tri-Band Harmonic Attn.", r"$\Phi_{\mathrm{time}}(\Delta t)$ harmonic bank"),
-            ("• Edge-Trust Gating", r"$g_{ij} \geq 0.10$ (65.9% pruned)"),
-            ("• Typology GraphSMOTE", r"$\mathcal{C}_k$ latent interpolation"),
-            ("• Hard-Negative Mining", r"Suppresses merchant hubs"),
+        "id": "STAGE 2: GNN & FILTER",
+        "title": "Tri-Band & Latent GraphSMOTE",
+        "badge_bg": "#065f46",  # Deep Emerald
+        "badge_fg": "#dcfce7",
+        "card_bg": "#f8fafc",
+        "border": "#86efac",
+        "x": 0.258, "w": 0.234,
+        "blocks": [
+            {
+                "head": "Tri-Band Continuous Attention",
+                "math": r"$\Phi_{\mathrm{time}}(\Delta t) \in \mathbb{R}^{d_t}, \; w(\Delta t) = \sum \pi_b e^{-\lambda_b \Delta t}$",
+                "desc": "Resolves micro-bursts & 90-day dormancy"
+            },
+            {
+                "head": "Context-Aware Edge Gating",
+                "math": r"$\hat{g}_{ij} = \delta_{\mathrm{floor}} + (1 - \delta_{\mathrm{floor}})\mathbf{g}_{ij}$",
+                "desc": "Prunes 65.9% camouflage links"
+            },
+            {
+                "head": "Typology Latent GraphSMOTE",
+                "math": r"$\mathbf{h}_{\mathrm{syn}} = (1-\rho)\mathbf{h}_u + \rho\mathbf{h}_v, \; u, v \in \mathcal{C}_k$",
+                "desc": r"Bilinear links $\hat{\mathbf{A}}_{\mathrm{syn}} > \tau$; Hard-negatives"
+            }
         ],
-        "tech_tag": "Continuous-Time HGT"
+        "output_tensor": r"$\mathbf{h}_u^{(L)} \in \mathbb{R}^d$ (Latent Manifold)",
+        "sla_tag": "Continuous-Time Attention"
     },
     {
-        "line1": "TIER 3: FUSION & RISK",
-        "line2": "Evidence-Adaptive Bayes",
-        "badge_bg": "#c2410c",
-        "card_bg": "#fff7ed",
-        "card_border": "#fdba74",
-        "x": 0.513, "w": 0.232,
-        "items": [
-            ("• Evidence-Adaptive Gate", r"$\alpha_u \in [0, 1]$ cold-start blend"),
-            ("• Cold-Start Embed Fused", r"$\mathbf{h}_u^* = \alpha_u \mathbf{h}_u + (1-\alpha_u)\mathbf{z}_{\mathrm{inv}}$"),
-            ("• Asym. Focal Tversky Loss", r"$\mathcal{L}_{\mathrm{task}}$ cost-sensitive"),
-            ("• Optimal Bayes Policy", r"$\tau^*$ threshold tuning"),
+        "id": "STAGE 3: FUSION & RISK",
+        "title": "Evidence-Adaptive Bayes Head",
+        "badge_bg": "#9a3412",  # Deep Rust/Amber
+        "badge_fg": "#ffedd5",
+        "card_bg": "#f8fafc",
+        "border": "#fdba74",
+        "x": 0.504, "w": 0.234,
+        "blocks": [
+            {
+                "head": "Evidence-Adaptive Fusion Gate",
+                "math": r"$\alpha_u = \sigma(\mathbf{w}_\alpha^{\top}[\mathbf{h}_u^{(L)} \| \mathbf{z}_{\mathrm{inv}} \| \mathbf{x}_u] + b_\alpha)$",
+                "desc": r"Cold-start $\mathrm{deg}(u)=0 \Rightarrow \alpha_u \to 0$"
+            },
+            {
+                "head": "Unified Representation Space",
+                "math": r"$\mathbf{h}_u^* = \alpha_u \mathbf{h}_u^{(L)} + (1-\alpha_u)[\mathbf{z}_{\mathrm{inv}} \| \mathbf{x}_u]$",
+                "desc": "Maintains 89.6% F1 on isolated entities"
+            },
+            {
+                "head": "Cost-Sensitive Bayes Risk Head",
+                "math": r"$\tau^* = \arg\min_\tau (15 \cdot \mathrm{FN} + 1 \cdot \mathrm{FP})$",
+                "desc": r"Asymmetric Focal Tversky Loss $\mathcal{L}_{\mathrm{task}}$"
+            }
         ],
-        "tech_tag": "Cold-Start + Bayes Risk"
+        "output_tensor": r"$\hat{p}_u \in [0, 1], \; \mathbf{h}_u^* \in \mathbb{R}^{d^*}$",
+        "sla_tag": "Cold-Start + Bayes Risk"
     },
     {
-        "line1": "TIER 4: CONFORMAL SWARM",
-        "line2": "CRC Triage & FinCEN SAR",
-        "badge_bg": "#6b21a8",
-        "card_bg": "#faf5ff",
-        "card_border": "#d8b4fe",
-        "x": 0.764, "w": 0.222,
-        "items": [
-            ("• Class-Conditional CRC", r"$1-\alpha \geq 99.0\%$ coverage"),
-            ("• 3-Tier Selective Triage", r"$\Gamma(X) \subseteq \{0, 1\}$"),
-            ("• Multi-Agent Swarm", "AST compiler invariant"),
-            ("• FinCEN Form 111 XML", "SHA-256 Merkle audit seal"),
+        "id": "STAGE 4: CONFORMAL SWARM",
+        "title": "CRC Triage & FinCEN SAR",
+        "badge_bg": "#4c1d95",  # Deep Purple
+        "badge_fg": "#f3e8ff",
+        "card_bg": "#f8fafc",
+        "border": "#d8b4fe",
+        "x": 0.750, "w": 0.238,
+        "blocks": [
+            {
+                "head": "Class-Conditional CRC Quantiles",
+                "math": r"$\hat{q}^{(y)} = \mathrm{Quantile}(\mathcal{D}_{\mathrm{cal}}), \; 1 - \alpha \geq 99.0\%$",
+                "desc": "Finite-sample coverage; Online ACI drift"
+            },
+            {
+                "head": "3-Tier Deterministic Triage",
+                "math": r"$\Gamma(u) \in \{\{1\}, \{0, 1\}, \{0\}\}$",
+                "desc": "Automates >99.4% streaming volume"
+            },
+            {
+                "head": "Multi-Agent Forensic Swarm",
+                "math": r"$\mathrm{Investigator} \rightarrow \mathrm{Auditor} \rightarrow \mathrm{Drafter}$",
+                "desc": "FinCEN Form 111 XML | Merkle SHA-256"
+            }
         ],
-        "tech_tag": "Fed SR 11-7 Verifiable"
+        "output_tensor": r"$\Gamma(u) \subseteq \{0, 1\}, \; \mathbf{XML}_{\mathrm{SAR}}$",
+        "sla_tag": "SR 26-2 / EU AI Act Certified"
     }
 ]
 
-y_bottom = 0.035
-card_h = 0.815
+y_bottom = 0.024
+card_h = 0.865
 
-for t in tiers_data:
-    x0 = t["x"]
-    w0 = t["w"]
+for s in stages:
+    x0 = s["x"]
+    w0 = s["w"]
     
-    card = patches.FancyBboxPatch(
+    # Outer Stage Container Card
+    ax.add_patch(patches.FancyBboxPatch(
         (x0, y_bottom), w0, card_h,
-        boxstyle="round,pad=0.012",
-        facecolor=t["card_bg"], edgecolor=t["card_border"], linewidth=1.1
-    )
-    ax.add_patch(card)
+        boxstyle="round,pad=0.006,rounding_size=0.010",
+        facecolor=s["card_bg"], edgecolor=s["border"], linewidth=1.1
+    ))
     
-    header_pill = patches.FancyBboxPatch(
-        (x0 + 0.006, y_bottom + card_h - 0.170), w0 - 0.012, 0.155,
-        boxstyle="round,pad=0.006",
-        facecolor=t["badge_bg"], edgecolor=t["badge_bg"], linewidth=0.5
-    )
-    ax.add_patch(header_pill)
+    # Stage Header Pill
+    ax.add_patch(patches.FancyBboxPatch(
+        (x0 + 0.005, y_bottom + card_h - 0.096), w0 - 0.010, 0.088,
+        boxstyle="round,pad=0.004,rounding_size=0.006",
+        facecolor=s["badge_bg"], edgecolor=s["badge_bg"], linewidth=0.5
+    ))
+    ax.text(x0 + w0/2, y_bottom + card_h - 0.030, s["id"],
+            ha="center", va="center", fontsize=6.3, fontweight="bold", color="#ffffff")
+    ax.text(x0 + w0/2, y_bottom + card_h - 0.068, s["title"],
+            ha="center", va="center", fontsize=5.5, color=s["badge_fg"], style="italic")
     
-    ax.text(x0 + w0/2, y_bottom + card_h - 0.050, t["line1"],
-            ha="center", va="center", fontsize=6.8, fontweight="bold", color="#ffffff")
-    ax.text(x0 + w0/2, y_bottom + card_h - 0.115, t["line2"],
-            ha="center", va="center", fontsize=5.8, color="#e2e8f0", style="italic")
-    
-    y_text = y_bottom + card_h - 0.220
-    for it_h, it_d in t["items"]:
-        ax.text(x0 + 0.008, y_text + 0.012, it_h, ha="left", va="center", fontsize=6.2, fontweight="bold", color="#0f172a")
-        ax.text(x0 + 0.016, y_text - 0.025, it_d, ha="left", va="center", fontsize=5.6, color="#475569")
-        y_text -= 0.110
+    # Inner Functional Blocks
+    y_block = y_bottom + card_h - 0.116
+    block_h = 0.198
+    for b in s["blocks"]:
+        ax.add_patch(patches.FancyBboxPatch(
+            (x0 + 0.007, y_block - block_h), w0 - 0.014, block_h,
+            boxstyle="round,pad=0.003,rounding_size=0.006",
+            facecolor="#ffffff", edgecolor="#e2e8f0", linewidth=0.75
+        ))
         
-    tag_pill = patches.FancyBboxPatch(
-        (x0 + 0.008, y_bottom + 0.020), w0 - 0.016, 0.065,
-        boxstyle="round,pad=0.004",
-        facecolor="#ffffff", edgecolor=t["card_border"], linewidth=0.75
-    )
-    ax.add_patch(tag_pill)
-    ax.text(x0 + w0/2, y_bottom + 0.052, t["tech_tag"],
-            ha="center", va="center", fontsize=5.8, fontweight="bold", color=t["badge_bg"])
+        # Block Header with mini colored bullet
+        ax.plot([x0 + 0.015], [y_block - 0.032], marker="s", markersize=3.2, color=s["badge_bg"])
+        ax.text(x0 + 0.024, y_block - 0.032, b["head"],
+                ha="left", va="center", fontsize=5.8, fontweight="bold", color="#0f172a")
+        
+        # Math Formula in center
+        ax.text(x0 + w0/2, y_block - 0.098, b["math"],
+                ha="center", va="center", fontsize=5.4, color="#1e293b",
+                bbox=dict(boxstyle="round,pad=0.10", facecolor="#f8fafc", edgecolor="#e2e8f0", lw=0.4))
+        
+        # Subtitle / description
+        ax.text(x0 + w0/2, y_block - 0.160, b["desc"],
+                ha="center", va="center", fontsize=5.0, color="#475569", style="italic")
+        
+        y_block -= (block_h + 0.018)
+        
+    # Tensor Output Signature Box
+    ax.add_patch(patches.FancyBboxPatch(
+        (x0 + 0.007, y_bottom + 0.052), w0 - 0.014, 0.046,
+        boxstyle="round,pad=0.003,rounding_size=0.005",
+        facecolor="#f1f5f9", edgecolor="#cbd5e1", linewidth=0.6
+    ))
+    ax.text(x0 + 0.014, y_bottom + 0.075, "Out:", ha="left", va="center", fontsize=5.2, fontweight="bold", color="#334155")
+    ax.text(x0 + w0/2 + 0.010, y_bottom + 0.075, s["output_tensor"], ha="center", va="center", fontsize=5.4, fontweight="bold", color="#0f172a")
+    
+    # Bottom Governance / SLA Tag
+    ax.add_patch(patches.FancyBboxPatch(
+        (x0 + 0.007, y_bottom + 0.010), w0 - 0.014, 0.036,
+        boxstyle="round,pad=0.002,rounding_size=0.004",
+        facecolor="#ffffff", edgecolor=s["border"], linewidth=0.7
+    ))
+    ax.text(x0 + w0/2, y_bottom + 0.028, s["sla_tag"],
+            ha="center", va="center", fontsize=5.0, fontweight="bold", color=s["badge_bg"])
 
-tensor_arrows = [
-    (0.243, 0.262, r"$\mathbf{z}_{\mathrm{inv}}, \mathcal{G}$"),
-    (0.494, 0.513, r"$\mathbf{h}_u^{(L)}$"),
-    (0.745, 0.764, r"$\hat{p}_u, \mathbf{h}_u^*$")
-]
+# Clean, Sleek Chevron / Inter-Stage Connectors (Zero text clutter)
+connector_xs = [0.246, 0.492, 0.738]
 
-for x_from, x_to, label in tensor_arrows:
+# 1. Header Level Flow Connectors
+for cx in connector_xs:
     ax.annotate(
-        "", xy=(x_to, 0.44), xytext=(x_from, 0.44),
-        arrowprops=dict(arrowstyle="->,head_width=0.22,head_length=0.30", lw=1.5, color="#0f172a")
+        "", xy=(cx + 0.010, y_bottom + card_h - 0.048), xytext=(cx - 0.002, y_bottom + card_h - 0.048),
+        arrowprops=dict(arrowstyle="-|>,head_width=0.25,head_length=0.35", lw=1.6, color="#475569")
     )
-    ax.text((x_from + x_to)/2, 0.50, label, ha="center", va="bottom", fontsize=6.2, fontweight="bold", color="#0f172a",
-            bbox=dict(boxstyle="round,pad=0.10", facecolor="#ffffff", edgecolor="#cbd5e1", lw=0.6))
 
-plt.subplots_adjust(left=0.01, right=0.99, top=0.98, bottom=0.02)
+# 2. Main Data-Flow Connectors across body
+for cx in connector_xs:
+    ax.annotate(
+        "", xy=(cx + 0.010, 0.46), xytext=(cx - 0.002, 0.46),
+        arrowprops=dict(arrowstyle="-|>,head_width=0.28,head_length=0.40", lw=1.8, color="#0f172a")
+    )
+
+# 3. Output Tensor Flow Connectors at bottom
+for cx in connector_xs:
+    ax.annotate(
+        "", xy=(cx + 0.010, y_bottom + 0.075), xytext=(cx - 0.002, y_bottom + 0.075),
+        arrowprops=dict(arrowstyle="-|>,head_width=0.20,head_length=0.28", lw=1.4, color="#64748b")
+    )
+
+plt.subplots_adjust(left=0.005, right=0.995, top=0.99, bottom=0.01)
 save_all_formats(fig, "fig6_system_architecture")
 for d in OUT_DIRS:
     shutil.copyfile(d / "fig6_system_architecture.pdf", d / "pipeline_cstgb.pdf")
@@ -592,19 +687,20 @@ f1_hgt        = np.array([48.20, 44.10, 39.80, 34.50, 28.70, 23.20, 18.10, 13.50
 f1_graphsage = np.array([24.50, 21.20, 17.80, 14.10, 11.00,  8.20,  5.80,  3.90,  2.10])
 f1_gcn       = np.array([18.73, 15.10, 11.80,  8.50,  5.90,  3.80,  2.10,  1.20,  0.50])
 
-ax.plot(noise_ratios * 100, f1_cstgb, label="C-STGB (Edge-Gated)", color=C_CSTGB, lw=2.2, marker="o", markersize=3.5)
-ax.plot(noise_ratios * 100, f1_care, label="CARE-GNN (RL Filter)", color=C_CARE, lw=1.5, marker="s", markersize=3.5, ls="--")
-ax.plot(noise_ratios * 100, f1_hgt, label="Vanilla HGT", color=C_HGT, lw=1.4, marker="^", markersize=3.5, ls="-.")
-ax.plot(noise_ratios * 100, f1_graphsage, label="GraphSAGE", color=C_XGB, lw=1.3, marker="D", markersize=3.0, ls=":")
-ax.plot(noise_ratios * 100, f1_gcn, label="GCN (Weber 2019)", color=C_GCN, lw=1.3, marker="x", markersize=3.5, ls=":")
+ax.plot(noise_ratios * 100, f1_cstgb, label="C-STGB (Edge-Gated)", color=C_CSTGB, lw=2.2, marker="o", markersize=3.2)
+ax.plot(noise_ratios * 100, f1_care, label="CARE-GNN (RL Filter)", color=C_CARE, lw=1.5, marker="s", markersize=3.0, ls="--")
+ax.plot(noise_ratios * 100, f1_hgt, label="Vanilla HGT", color=C_HGT, lw=1.4, marker="^", markersize=3.0, ls="-.")
+ax.plot(noise_ratios * 100, f1_graphsage, label="GraphSAGE", color=C_XGB, lw=1.3, marker="D", markersize=2.8, ls=":")
+ax.plot(noise_ratios * 100, f1_gcn, label="GCN (Weber 2019)", color=C_GCN, lw=1.3, marker="x", markersize=3.0, ls=":")
 
-ax.set_title("Adversarial Camouflage Link Robustness", fontweight="bold", fontsize=10.0)
-ax.set_xlabel("Injected Camouflage Link Ratio (%)", fontsize=9.5)
-ax.set_ylabel("Macro F1-Score (%)", fontsize=9.5)
-ax.set_xlim([0, 80])
-ax.set_ylim([0, 100])
-ax.grid(True)
-ax.legend(loc="lower left", framealpha=0.94, fontsize=7.6)
+ax.set_title("Adversarial Camouflage Link Robustness", fontweight="bold", fontsize=10.0, pad=6)
+ax.set_xlabel("Injected Camouflage Link Ratio (%)", fontsize=9.2)
+ax.set_ylabel("Macro F1-Score (%)", fontsize=9.2)
+ax.set_xlim([-1, 81])
+ax.set_ylim([0, 103])
+ax.grid(True, linestyle=":", alpha=0.5)
+ax.legend(loc="center left", bbox_to_anchor=(0.03, 0.74), framealpha=0.92, edgecolor="#cccccc",
+          fontsize=5.8, handlelength=1.1, handletextpad=0.25, borderpad=0.20, labelspacing=0.18)
 
 plt.tight_layout()
 save_all_formats(fig, "fig9_adversarial_camouflage_robustness")

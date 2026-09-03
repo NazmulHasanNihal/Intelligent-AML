@@ -106,12 +106,7 @@ import torch
 torch.set_num_threads(max(2, total_cpus))
 
 def get_accelerator_device():
-    """Detects TPU (PyTorch XLA), CUDA GPU, or CPU."""
-    try:
-        import torch_xla.core.xla_model as xm
-        return xm.xla_device(), "tpu"
-    except Exception:
-        pass
+    """Detects CUDA GPU or high-speed multi-threaded CPU (avoids torch_xla SIGABRT collisions)."""
     if torch.cuda.is_available():
         return torch.device("cuda"), "cuda"
     return torch.device("cpu"), "cpu"
@@ -137,11 +132,7 @@ def trim_process_memory():
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
-    try:
-        import torch_xla.core.xla_model as xm
-        xm.mark_step()
-    except Exception:
-        pass
+
 
 # Core Project Modules
 from src.models.htgnn import build_hetero_data, BurstAwareHGT, train_htgnn, CSTGBClassifier
@@ -707,12 +698,6 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
             loss.backward()
             optimizer.step()
             del out, target_out, loss
-            if dev_type == "tpu":
-                try:
-                    import torch_xla.core.xla_model as xm
-                    xm.mark_step()
-                except Exception:
-                    pass
     except (torch.cuda.OutOfMemoryError, RuntimeError) as oom:
         if "out of memory" in str(oom).lower() or "CUDA" in str(oom):
             trim_process_memory()

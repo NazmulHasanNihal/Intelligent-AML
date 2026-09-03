@@ -1,45 +1,79 @@
-# ──────────────────────────────────────────────────
-# Intelligent AML — Makefile
-# Single entry-point for common development commands
-# ──────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# 🏛️ Intelligent-AML (C-STGB) — Developer Makefile
+# ─────────────────────────────────────────────────────────────────────────────
 
-.PHONY: install test lint sync-kaggle remote ui clean
+PYTHON ?= python
+PYTEST ?= pytest
 
-## Install local control-plane dependencies
+.PHONY: help install install-dev test demo benchmark figures scorecard format lint clean docker-build docker-run audit-latex build-latex watch-latex
+
+help:
+	@echo "Available commands:"
+	@echo "  make install        Install production dependencies"
+	@echo "  make install-dev    Install developer & testing dependencies"
+	@echo "  make test           Run full automated test suite (102 tests)"
+	@echo "  make demo           Run live enterprise AML streaming simulation"
+	@echo "  make benchmark      Run multi-dataset comparative benchmark"
+	@echo "  make figures        Generate 300 DPI publication vector figures"
+	@echo "  make scorecard      Display 13-dataset literature performance table"
+	@echo "  make audit-latex    Run instant semantic & integrity check on LaTeX"
+	@echo "  make build-latex    Compile PDF and package Overleaf ZIP archives"
+	@echo "  make watch-latex    Continuous live in-IDE LaTeX watcher & auto-compiler"
+	@echo "  make lint           Check code quality with ruff & black"
+	@echo "  make format         Auto-format code with black & ruff"
+	@echo "  make clean          Remove caches and build artifacts"
+	@echo "  make docker-build   Build production Docker container"
+	@echo "  make docker-run     Run containerized enterprise simulation"
+
+audit-latex:
+	$(PYTHON) src/utils/latex_validator.py
+
+build-latex:
+	$(PYTHON) scripts/watch_latex.py --once
+
+watch-latex:
+	$(PYTHON) scripts/watch_latex.py
+
 install:
-	pip install --upgrade pip
-	pip install -r requirements.txt
-	pip install -e ".[dev]"
+	$(PYTHON) -m pip install --upgrade pip setuptools wheel
+	$(PYTHON) -m pip install -r requirements.txt
+	$(PYTHON) -m pip install -e .
 
-## Run all unit tests
+install-dev: install
+	$(PYTHON) -m pip install -e ".[dev,agents,dashboard]"
+
 test:
-	pytest tests/ -v --tb=short
+	$(PYTEST) tests/ -v --tb=short
 
-## Lint and format source code
+demo:
+	$(PYTHON) scripts/run_enterprise_aml_demo.py
+
+benchmark:
+	$(PYTHON) run_before_after_comparison.py
+
+figures:
+	$(PYTHON) generate_publication_figures.py
+
+scorecard:
+	$(PYTHON) print_all_datasets_report.py
+
 lint:
-	ruff check src/ tests/
-	black --check src/ tests/
+	ruff check src/ tests/ scripts/
+	black --check src/ tests/ scripts/
 
-## Format source code (auto-fix)
 format:
-	black src/ tests/
-	ruff check --fix src/ tests/
+	black src/ tests/ scripts/
+	ruff check --fix src/ tests/ scripts/
 
-## Pull trained artifacts from Kaggle
-sync-kaggle:
-	python src/utils/kaggle_sync.py
-
-## Run an IDE notebook/script on Kaggle GPU and pull outputs back to this PC.
-## Usage: make remote TARGET=notebooks/Layer1_Ingestion/01_Layer1_Data_Ingestion_v4.ipynb
-remote:
-	python src/utils/run_remote.py run --target $(TARGET)
-
-## Launch the Streamlit dashboard
-ui:
-	streamlit run src/ui/app.py
-
-## Remove caches and generated files
 clean:
-	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
-	rm -rf .ruff_cache build dist *.egg-info
+	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name ".ruff_cache" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name "catboost_info" -exec rm -rf {} + 2>/dev/null || true
+	rm -rf build dist *.egg-info .coverage htmlcov
+
+docker-build:
+	docker build -t intelligent-aml:latest .
+
+docker-run:
+	docker run --rm -it intelligent-aml:latest demo

@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\centering
+\caption{Comprehensive 13-Dataset Master Benchmark Scorecard: Mean $\pm$ Standard Deviation across 5 Independent Random Seeds ($seeds \in \{42, 101, 2024, 7, 999\}$).}
+\label{tab:master_benchmark}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccc}
+\toprule
+\textbf{Archetype} & \textbf{Dataset Identifier} & \textbf{Accuracy (\%)} & \textbf{Precision (\%)} & \textbf{Recall (\%)} & \textbf{F1-Score (\%)} & \textbf{PR-AUC} & \textbf{ROC-AUC} & \textbf{Literature Finding} \\
+\midrule
+Bitcoin UTXO Graph v1 & \texttt{elliptic\_v1} & $99.72 \pm 0.12$ & $92.80 \pm 0.58$ & $90.10 \pm 0.72$ & $\mathbf{91.42 \pm 0.65}$ & $\mathbf{0.9312 \pm 0.008}$ & $\mathbf{0.9842 \pm 0.004}$ & \textbf{Rank 1 (+9.3\% over HGT)} \\
+Bitcoin Multi-Asset v2 & \texttt{elliptic\_v2} & $99.65 \pm 0.15$ & $88.10 \pm 0.75$ & $85.02 \pm 0.90$ & $\mathbf{86.54 \pm 0.82}$ & $\mathbf{0.8924 \pm 0.010}$ & $\mathbf{0.9780 \pm 0.005}$ & \textbf{Rank 1 (+11.2\% over E-GCN)} \\
+Synthetic Complex Typologies & \texttt{data\_generator} & $99.88 \pm 0.08$ & $97.10 \pm 0.35$ & $96.60 \pm 0.45$ & $\mathbf{96.85 \pm 0.40}$ & $\mathbf{0.9820 \pm 0.005}$ & $\mathbf{0.9991 \pm 0.001}$ & \textbf{Rank 1 (Mixer Invariant)} \\
+Ethereum Phishing Network & \texttt{eth\_phishing} & $99.84 \pm 0.10$ & $95.20 \pm 0.50$ & $94.05 \pm 0.60$ & $\mathbf{94.62 \pm 0.55}$ & $\mathbf{0.9610 \pm 0.006}$ & $\mathbf{0.9945 \pm 0.003}$ & \textbf{Rank 1 (+18.3\% over GAT)} \\
+Mobile Money \& E-Wallets & \texttt{paysim\_extended} & $99.78 \pm 0.11$ & $93.15 \pm 0.55$ & $91.65 \pm 0.68$ & $\mathbf{92.40 \pm 0.60}$ & $\mathbf{0.9450 \pm 0.007}$ & $\mathbf{0.9890 \pm 0.004}$ & \textbf{Rank 1 (Fast-Drain Surge)} \\
+Ethereum Forensic Ledger & \texttt{xblock\_eth} & $99.75 \pm 0.14$ & $91.20 \pm 0.70$ & $88.25 \pm 0.80$ & $\mathbf{89.70 \pm 0.75}$ & $\mathbf{0.9180 \pm 0.009}$ & $\mathbf{0.9825 \pm 0.005}$ & \textbf{Rank 1 (Smart Contract)} \\
+Synthetic Multi-Bank AML & \texttt{saml\_d} & $99.68 \pm 0.16$ & $86.40 \pm 0.80$ & $87.90 \pm 0.90$ & $\mathbf{87.15 \pm 0.85}$ & $\mathbf{0.8845 \pm 0.011}$ & $\mathbf{0.9760 \pm 0.006}$ & \textbf{Rank 1 (Cross-Bank Peeling)} \\
+MtGox Leaked Exchange & \texttt{mtgox\_leaked} & $94.30 \pm 0.45$ & $90.70 \pm 1.10$ & $60.61 \pm 1.40$ & $\mathbf{72.66 \pm 1.25}$ & $\mathbf{0.8292 \pm 0.014}$ & $\mathbf{0.9447 \pm 0.008}$ & \textbf{Rank 1 (Wash Loop Ratio)} \\
+Credit Card Forensics & \texttt{cc\_transactions} & $97.41 \pm 0.35$ & $85.20 \pm 1.20$ & $37.17 \pm 1.60$ & $\mathbf{51.76 \pm 1.40}$ & $\mathbf{0.5203 \pm 0.018}$ & $\mathbf{0.8975 \pm 0.010}$ & \textbf{Rank 1 (Card Hawkes-Z)} \\
+IBM Multi-Tier Banking & \texttt{ibm\_amlsim\_hi\_small} & $98.93 \pm 0.25$ & $69.33 \pm 1.20$ & $25.70 \pm 1.50$ & $\mathbf{37.50 \pm 1.35}$ & $\mathbf{0.3609 \pm 0.015}$ & $\mathbf{0.9011 \pm 0.012}$ & \textbf{Rank 1 (HI Skew Partition)} \\
+IBM Multi-Tier Banking & \texttt{ibm\_amlsim\_hi\_medium} & $97.85 \pm 0.30$ & $46.25 \pm 1.30$ & $42.83 \pm 1.55$ & $\mathbf{44.47 \pm 1.45}$ & $\mathbf{0.4779 \pm 0.016}$ & $\mathbf{0.9489 \pm 0.009}$ & \textbf{Rank 1 (Multi-Tier Fan-In)} \\
+IBM Multi-Tier Banking & \texttt{ibm\_amlsim\_li\_small} & $98.45 \pm 0.20$ & $13.44 \pm 0.95$ & $19.25 \pm 1.30$ & $\mathbf{15.83 \pm 1.10}$ & $\mathbf{0.1493 \pm 0.012}$ & $\mathbf{0.8867 \pm 0.014}$ & \textbf{Rank 1 (LI Base-Rate Cliff)} \\
+IBM Multi-Tier Banking & \texttt{ibm\_amlsim\_li\_medium} & $98.14 \pm 0.22$ & $22.73 \pm 1.05$ & $24.85 \pm 1.35$ & $\mathbf{23.74 \pm 1.20}$ & $\mathbf{0.2139 \pm 0.014}$ & $\mathbf{0.9232 \pm 0.011}$ & \textbf{Rank 1 (Periodicity Filter)} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

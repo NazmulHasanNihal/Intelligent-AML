@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\caption{Non-Parametric Statistical Significance of C-STGB vs Baselines across the 13 Benchmark Networks (Two-Sided Wilcoxon Signed-Rank Test).}
+\label{tab:statistical_tests}
+\renewcommand{\arraystretch}{0.90}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Baseline Architecture} & \textbf{Baseline Mean F1} & \textbf{C-STGB Mean F1} & \textbf{Uplift ($\Delta$ pp)} & \textbf{$p$-value} \\
+\midrule
+XGBoost (Tabular) & 56.48\% & 54.78\% & +-1.71 & $0.8438$ \\
+GCN (Spatial) & 12.37\% & 54.78\% & +42.41 & $0.0156$ \\
+EvolveGCN (Dynamic) & 14.47\% & 63.64\% & +49.17 & $0.0312$ \\
+GraphSAGE (Inductive) & 11.75\% & 54.78\% & +43.02 & $0.0156$ \\
+CatBoost (Industrial) & 54.87\% & 54.78\% & +-0.09 & $0.4219$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

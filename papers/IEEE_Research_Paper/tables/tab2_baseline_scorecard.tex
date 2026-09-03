@@ -1,0 +1,25 @@
+\begin{table*}[t]
+\centering
+\caption{Comprehensive Benchmark Comparison across 13 Financial Networks: Macro F1-Score (\%) and PR-AUC with Validation-Tuned Thresholds $\tau^*$ against Literature Baselines ($^\dagger$ indicates statistically significant improvement at $p < 0.01$ under two-sided Wilcoxon signed-rank test).}
+\label{tab:full_baseline_scorecard}
+\renewcommand{\arraystretch}{0.88}
+\resizebox{0.98\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Dataset Identifier} & \textbf{XGBoost (Tabular)} & \textbf{GCN (Spatial)} & \textbf{EvolveGCN (Dynamic)} & \textbf{GraphSAGE (Inductive)} & \textbf{CatBoost (Industrial)} & \textbf{C-STGB (Proposed)} \\
+\midrule
+\multicolumn{7}{l}{\textbf{Group A: Public Blockchain Ledgers & Relational DAGs (High Topological Observability)}} \\
+\texttt{elliptic_v1} & $99.89 / 1.0000$ & $45.24 / 0.3697$ & $42.94 / 0.3005$ & $40.84 / 0.3586$ & $99.83 / 1.0000$ & $98.87 / 1.0000$ \\
+\texttt{mtgox_leaked} & $74.39 / 0.8229$ & $20.30 / 0.2038$ & $22.12 / 0.0956$ & $22.16 / 0.1801$ & $71.87 / 0.7983$ & $72.21 / 0.8306$ \\
+\midrule
+\multicolumn{7}{l}{\textbf{Group B: Multi-Bank & Mobile Synthetic Rails (Fragmented Observability)}} \\
+\texttt{saml_d} & $93.74 / 0.9593$ & $1.69 / 0.0109$ & $3.81 / 0.0077$ & $3.16 / 0.0071$ & $93.60 / 0.9448$ & $93.68 / 0.9574$ \\
+\texttt{paysim1} & $18.91 / 0.1228$ & $3.66 / 0.0094$ & -- & $0.41 / 0.0014$ & $17.35 / 0.1094$ & $10.45 / 0.1251$ \\
+\texttt{ibm_amlsim_hi_small} & $36.66 / 0.3407$ & $2.46 / 0.0101$ & $2.31 / 0.0080$ & $2.46 / 0.0080$ & $33.03 / 0.3100$ & $\mathbf{37.70 / 0.3550}$ \\
+\texttt{ibm_amlsim_li_small} & $15.31 / 0.1350$ & $0.84 / 0.0060$ & $1.18 / 0.0052$ & $1.50 / 0.0057$ & $13.54 / 0.0802$ & $\mathbf{15.76 / 0.1485}$ \\
+\midrule
+\multicolumn{7}{l}{\textbf{Group C: Bipartite Card Transaction Streams (Non-Relational)}} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

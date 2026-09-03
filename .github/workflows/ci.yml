@@ -1,0 +1,48 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    name: Test & Verify (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install pytest pytest-cov ruff black
+
+      - name: Lint with Ruff
+        run: |
+          ruff check src/ tests/
+
+      - name: Check Formatting with Black
+        run: |
+          black --check src/ tests/
+
+      - name: Run Test Suite (102 Tests)
+        run: |
+          python -m pytest tests/ --tb=short
+
+      - name: Run Enterprise AML Simulation Smoke Test
+        run: |
+          python scripts/run_enterprise_aml_demo.py

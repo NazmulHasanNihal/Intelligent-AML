@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+\centering
+\caption{Cumulative 6-Module Stepwise Ablation Study across Three Distinct Financial Archetypes (Mean $\pm$ Std across 5 Seeds).}
+\label{tab:ablation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+\multirow{2}{*}{\textbf{C-STGB Modular Configuration}} & \multicolumn{2}{c}{\textbf{Elliptic-v1 (Bitcoin UTXO)}} & \multicolumn{2}{c}{\textbf{PaySim (Mobile Money)}} & \multicolumn{2}{c}{\textbf{IBM AMLSim HI (Multi-Bank)}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+& \textbf{Recall (\%)} & \textbf{F1-Score (\%)} & \textbf{Recall (\%)} & \textbf{F1-Score (\%)} & \textbf{Recall (\%)} & \textbf{F1-Score (\%)} \\
+\midrule
+(1a) Baseline Static GNN (GCN, default $\tau=0.50$) & $10.33 \pm 0.85$ & $18.73 \pm 1.20$ & $14.20 \pm 1.10$ & $24.80 \pm 1.30$ & $4.10 \pm 0.60$ & $7.85 \pm 0.95$ \\
+(1b) Baseline Static GNN (GCN, validation-tuned $\tau^*$) & $16.50 \pm 0.95$ & $26.40 \pm 1.15$ & $19.80 \pm 1.05$ & $31.20 \pm 1.25$ & $6.80 \pm 0.70$ & $11.50 \pm 0.90$ \\
+(2) + Module 1: Continuous-Time Temporal Encoder & $42.50 \pm 0.95$ & $54.20 \pm 0.85$ & $48.60 \pm 0.90$ & $58.40 \pm 0.80$ & $11.20 \pm 0.75$ & $16.30 \pm 0.85$ \\
+(3) + Module 2: Context-Aware Edge Trust Filter ($g_{ij}$) & $58.40 \pm 0.80$ & $68.10 \pm 0.75$ & $64.10 \pm 0.82$ & $72.50 \pm 0.70$ & $14.80 \pm 0.90$ & $21.40 \pm 0.95$ \\
+(4) + Module 3: Typology GraphSMOTE \& Hard Negatives & $78.20 \pm 0.75$ & $82.40 \pm 0.70$ & $81.50 \pm 0.70$ & $84.20 \pm 0.65$ & $19.50 \pm 1.10$ & $28.60 \pm 1.05$ \\
+(5) + Module 4: Evidence-Adaptive Fusion ($\alpha_u, \mathbf{z}_{\text{inv}}$) & $85.60 \pm 0.70$ & $87.80 \pm 0.65$ & $88.20 \pm 0.68$ & $89.70 \pm 0.60$ & $23.10 \pm 1.25$ & $33.80 \pm 1.15$ \\
+(6) + Module 5 \& 6: Cost-Sensitive Head ($\tau^*$) \& Conformal CRC & $\mathbf{90.10 \pm 0.72}$ & $\mathbf{91.42 \pm 0.65}$ & $\mathbf{91.65 \pm 0.68}$ & $\mathbf{92.40 \pm 0.60}$ & $\mathbf{25.70 \pm 1.50}$ & $\mathbf{37.50 \pm 1.35}$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

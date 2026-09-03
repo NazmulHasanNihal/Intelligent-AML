@@ -1,0 +1,35 @@
+\section{Discussion \& Operational Implications}
+\label{sec:discussion}
+
+The extensive empirical evaluations across 13 financial benchmark networks, encompassing over 8.81 million entities and 11.42 million transactions, reveal critical insights into why graph-based AML systems succeed or fail in enterprise deployment. This section synthesizes the core algorithmic mechanisms, explains cross-domain performance variations, and outlines the regulatory and economic implications of C-STGB.
+
+\subsection{Architectural Synthesis: Why C-STGB Overcomes GNN Failure Modes}
+\label{sec:discussion_architecture}
+Our ablation studies (Tables~\ref{tab:multi_ablation} and~\ref{tab:leave_one_out}) demonstrate that no single architectural modification suffices to solve the multi-faceted AML detection problem; rather, performance gains stem from the tight synergy among the modules:
+\begin{enumerate}
+    \item \textbf{Continuous Temporal Attention vs. Snapshot Discretization:} Discretizing continuous transaction streams into coarse temporal snapshots (e.g., EvolveGCN) loses crucial microsecond smurfing dynamics, capping performance at $61.20\%$ F1 on Elliptic-v1. C-STGB's continuous harmonic temporal bank ($\Phi_{\text{time}}(\Delta t)$) simultaneously captures micro-burst transactions ($\lambda_{\text{burst}}=0.80$) and 90-day dormant holding strategies ($\lambda_{\text{seasonal}}=0.01$), driving temporal baseline utility from $26.40\%$ to $54.20\%$ F1.
+    \item \textbf{Camouflage Filtration Prevents Feature Over-Smoothing:} Adversaries deliberately inject links to legitimate high-degree merchant hubs to dilute their illicit topological signatures. Standard GNNs propagate these spurious connections, suffering catastrophic feature over-smoothing. By dynamically pruning $65.9\%$ of noisy links ($g_{ij} < 0.10$), our learnable edge-trust filter isolates true laundering cycles and preserves an $+5.62$\,pp performance margin.
+    \item \textbf{Latent Typology GraphSMOTE Rescues Standalone GNN Recall:} Under extreme class imbalance ($\pi < 0.05\%$), vanilla GNNs suffer from severe minority collapse ($10.33\%$ standalone recall). Synthesizing virtual nodes within clustered latent typology manifolds ($\mathcal{C}_k$) provides the largest single architectural contribution ($+9.92$\,pp on Elliptic-v1).
+    \item \textbf{Cold-Start Resilience via Evidence-Adaptive Gating:} Standard GNNs collapse to near-zero utility on isolated single-transaction money mules ($d=1, 4.20\%$ F1) due to neighborhood message depletion. C-STGB's Evidence-Adaptive Gate ($\alpha_u \in [0, 1]$) dynamically switches to the 12-D canonical flow invariant space ($\mathbf{z}_{\text{inv}}$), retaining $89.60\%$ F1 on cold-start mules (Supplementary Table~S8).
+\end{enumerate}
+
+\subsection{Cross-Domain Ledger Variance: Observable Ledgers vs. Bank Silos}
+\label{sec:discussion_domain_variance}
+A significant empirical finding in Table~\ref{tab:full_baseline_scorecard} is the performance divergence across ledger archetypes:
+\begin{itemize}
+    \item \textbf{Public Cryptocurrency Blockchains (Group A):} C-STGB achieves high discriminability on Elliptic-v1 ($91.42\%$ F1) and Ethereum Phishing ($94.62\%$ F1) because public distributed ledgers provide complete, global topological observability where entire end-to-end money flows (from darknet seeds to exchange exit hubs) are visible in the graph.
+    \item \textbf{Fragmented Inter-Bank Rails (Group B):} In multi-bank synthetic benchmarks (IBM-AMLSim, SAML-D), performance settles in the $37.50\% - 44.47\%$ F1 regime across all evaluated models. This reflects a fundamental real-world operational constraint: individual financial institutions operate within proprietary data silos, observing only localized incoming and outgoing transfers while remaining blind to multi-hop cross-institutional layering chains.
+\end{itemize}
+This insight underscores that algorithmic advances must be coupled with zero-knowledge cross-institutional information sharing frameworks to achieve crypto-level visibility in fiat banking rails.
+
+\subsection{Economic \& Compliance Impact of Asymmetric Bayes Risk Policy}
+\label{sec:discussion_economic_impact}
+In commercial banking operations, a False Negative (an undetected laundering ring) incurs severe regulatory penalties (e.g., FinCEN, FCA, and FATF enforcement actions exceeding millions of dollars), whereas a False Positive costs approximately 15 minutes of compliance officer review time. Traditional models evaluated under default symmetric thresholds ($\tau=0.50$) impose severe regulatory risk.
+
+As quantified in Supplementary Table~S10, optimizing the decision threshold $\tau^*$ under Asymmetric Focal Tversky Loss ($C_{\text{FN}} / C_{\text{FP}} = 15.0$) reduces total expected operational compliance losses by \textbf{78.4\%} compared to standard thresholding, providing substantial financial and regulatory advantages for adopting institutions.
+
+\subsection{Conformal Prediction as a Model Governance Paradigm}
+\label{sec:discussion_conformal_governance}
+Under strict supervisory guidelines such as \textbf{Federal Reserve SR 11-7} and the European Union AI Act, black-box deep learning models without rigorous certainty bounds face regulatory rejection in critical banking workflows.
+
+Class-Conditional Conformal Risk Control (CRC) bridges this regulatory gap by providing distribution-free, non-asymptotic coverage guarantees ($\mathbb{P}(Y \in \Gamma(X) \mid y) \ge 99.0\%$). Crucially, our conformal set efficiency analysis ($\mathbb{E}[|\Gamma(X)|] = 1.0050$, 0.0\% empty set rate) proves that this safety guarantee is tight and decisive, safely automating over $99.4\%$ of benign and high-confidence illicit transactions while restricting manual human review strictly to the 0.50\% ambiguous boundary queue.

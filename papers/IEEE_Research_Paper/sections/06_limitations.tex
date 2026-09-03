@@ -1,0 +1,23 @@
+\section{Limitations, Threats to Validity \& Responsible Disclosure}
+\label{sec:limitations}
+
+While C-STGB demonstrates strong empirical performance across diverse transaction domains, a rigorous scientific assessment requires acknowledging its structural boundaries and operational assumptions:
+
+\subsection{Unobservable Cross-Institution Graph Partitions (The Banking Gap)}
+A key empirical finding in Table~\ref{tab:full_baseline_scorecard} is the performance disparity between public blockchain datasets (\texttt{elliptic\_v1}, \texttt{elliptic\_v2}, \texttt{eth\_phishing}, where F1 exceeds $86.5\%$--$94.6\%$) and multi-tier inter-bank fiat datasets (\texttt{ibm\_amlsim\_li}, where F1 ranges from $15.8\%$ to $23.7\%$). 
+In public blockchains, the global topology $\mathbf{A}$ is completely observable from the genesis block. In contrast, in our modeled multi-institution setting, institutional data-sharing and privacy constraints restrict each entity to internally observable 1-hop transactions, causing cross-bank laundering chains to appear as fragmented, truncated stubs. While canonical motif invariants ($\mathbf{z}_{\text{inv}}$) partially recover detection capacity, bridging this fundamental observability gap motivates future integration with privacy-preserving cross-bank architectures (e.g., Split Graph Learning and Homomorphic Graph Encryption), where 12-D canonical invariants serve as a standardized, zero-leakage feature interface.
+
+\subsection{Cold-Start Entities with Zero Historical Connectivity}
+GNN message passing inherently relies on relational neighborhood topology $\mathcal{N}(u)$. For virgin accounts ($\deg(u) = 0$), structural embeddings $\mathbf{h}_u^{(L)}$ provide minimal signal. C-STGB mitigates this through Evidence-Adaptive Graph-Tabular Fusion (Module 4): when connectivity is absent ($\deg(u) \to 0$), the gating mechanism transfers inference weight to canonical flow invariants ($\alpha_u \to 0$), maintaining $74.8\%$ F1 and routing uncalibrated boundary cases to the Conformal Review Queue (Tier 2).
+
+\subsection{Threats to Validity \& Distributional Drift}
+\begin{enumerate}
+    \item \textbf{Temporal Exchangeability Bounds under Non-Stationary Drift:} Conformal coverage guarantees ($1-\alpha \ge 99.0\%$) strictly rely on within-class exchangeability between calibration $\mathcal{D}_{\text{cal}}$ and test $\mathcal{D}_{\text{test}}$ distributions~\cite{tibshirani2019conformal,barber2023conformal}. Extreme macroeconomic shocks cause mild exchangeability degradation over 12+ weeks, expanding the Tier-2 review queue from 0.42\% to 1.85\% and triggering automated rolling recalibration.
+    \item \textbf{Cross-Chain Bridging Discontinuities:} While C-STGB resists heuristic and gradient-based camouflage (Table~\ref{tab:adaptive_attacks}), emerging evasions such as cross-chain DEX pools sever the causal adjacency tensor across isolated blockchains, motivating multi-ledger alignment frameworks.
+    \item \textbf{Synthetic Generator Artifacts in Multi-Bank Simulators:} Multi-bank benchmarks (SAML-D, IBM AMLSim) rely on synthetic simulators due to commercial banking privacy constraints, which may introduce subtle structural regularities compared to live production banking networks.
+\end{enumerate}
+
+\subsection{Responsible Disclosure, Ethics \& Data Provenance}
+\textbf{Dual-Use Mitigation:} Adversarial evaluations (Section IV.F, Table~\ref{tab:adaptive_attacks}) were conducted strictly in isolated, non-production test environments using synthetic and anonymized public graphs to evaluate defensive robustness against zero-day evasion. We recommend implementing randomized multi-head edge gating to resist adversarial reconnaissance.
+
+\textbf{Ethical Data Governance:} Evaluated cryptocurrency benchmarks utilize public, de-identified ledgers where personal identifiable information (PII) is completely absent. Simulated banking datasets contain purely synthetic agent records. No real customer personally identifiable information (PII) is contained in the evaluated datasets.

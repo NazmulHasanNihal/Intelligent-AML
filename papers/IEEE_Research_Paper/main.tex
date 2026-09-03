@@ -1,0 +1,102 @@
+\documentclass[journal,twoside]{IEEEtran}
+
+% Typography & Mathematical Fonts
+\usepackage{amsmath,amsfonts,amssymb,bm,mathtools}
+\usepackage{amsthm}
+\let\openbox\relax
+\usepackage{newtxtext,newtxmath}
+
+% Algorithms & Pseudocode
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\providecommand{\REQUIRE}{\Require}
+\providecommand{\ENSURE}{\Ensure}
+
+% Table Formatting
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+
+% Graphics & Float Placement
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+
+% Float layout tuning for clean, uncrowded IEEE 2-column mode
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\renewcommand{\dbltopfraction}{0.95}
+\renewcommand{\dblfloatpagefraction}{0.85}
+\setlength{\textfloatsep}{5pt plus 1pt minus 1pt}
+\setlength{\floatsep}{5pt plus 1pt minus 1pt}
+\setlength{\intextsep}{5pt plus 1pt minus 1pt}
+\setlength{\dbltextfloatsep}{5pt plus 1pt minus 1pt}
+\setlength{\dblfloatsep}{5pt plus 1pt minus 1pt}
+
+% Citations, Hyperlinks & Microtypography
+\usepackage{cite}
+\usepackage[protrusion=true]{microtype}
+\usepackage{balance}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+% Mathematical Theorem Environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+\title{C-STGB: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering under Extreme Imbalance and Topological Camouflage}
+
+\author{Md.~Nazmul,
+       Musrat~Jahan~Gungun,
+       and~Maheli~Ahmed%
+\thanks{Md. Nazmul and Musrat Jahan Gungun are with the Department of Computer Science and Engineering, College of Technology, National University, Gazipur 1704, Bangladesh (e-mail: nazmulhas36@gmail.com, gungunjahan84@gmail.com).}%
+\thanks{Maheli Ahmed (Faculty Supervisor) is with the Department of Computer Science and Engineering, College of Technology, National University, Gazipur 1704, Bangladesh (e-mail: maheli.ahmed.cse.cot@gmail.com).}%
+\thanks{Corresponding author: Md. Nazmul.}%
+}
+
+\markboth{IEEE Transactions on Information Forensics and Security}%
+{Nazmul \MakeLowercase{\textit{et al.}}: C-STGB for Anti-Money Laundering Detection}
+
+\maketitle
+
+\begin{abstract}
+Financial money laundering accounts for an estimated \$800 billion to \$2 trillion annually (2\% to 5\% of global GDP), posing severe threats to international financial stability. Although Graph Neural Networks (GNNs) capture relational transaction structures, their deployment in Anti-Money Laundering (AML) surveillance is hindered by five foundational challenges: (1) long-dwell hibernation evasion; (2) adversarial topological camouflage through high-degree commercial hubs; (3) extreme class imbalance under an illicit-event prevalence below 0.05\% inducing recall collapse; (4) cold-start graph isolation; and (5) uncalibrated decision uncertainty. To address these challenges jointly, we propose \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost), a unified geometric deep learning framework integrating continuous tri-band harmonic temporal attention, learnable context-aware edge-trust gating, typology-clustered latent GraphSMOTE, evidence-adaptive graph-tabular fusion, cost-sensitive Bayes risk optimization, and Class-Conditional Conformal Risk Control (CRC). Evaluated across 13 diverse financial benchmarks comprising over 8.81 million entities and 11.42 million transactions over five random seeds, C-STGB achieves the highest performance among evaluated baselines ($91.42 \pm 0.65\%$ F1 on Elliptic-v1, $86.54 \pm 0.82\%$ F1 on Elliptic-v2, and $94.62 \pm 0.55\%$ F1 on Ethereum Phishing), reduces manual compliance review volume by $>99.4\%$, and delivers a streaming single-event latency of $0.45$\,ms (P99: $0.82$\,ms under Fast-Path mode; $2.10$\,ms under full multi-scale GNN mode), satisfying real-time payment authorization SLAs ($31,200\text{ tx/s}$).
+\end{abstract}
+
+\begin{IEEEkeywords}
+Anti-Money Laundering, Graph Neural Networks, Temporal Graph Learning, Conformal Prediction, Financial Forensics.
+\end{IEEEkeywords}
+
+\IEEEpeerreviewmaketitle
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_methodology}
+\input{sections/04_experiments}
+\input{sections/05_discussion}
+\input{sections/05_xai_case_study}
+\input{sections/06_limitations}
+\input{sections/07_conclusion}
+
+\balance
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\begin{IEEEbiographynophoto}{Md. Nazmul}
+received the B.Sc. degree in Computer Science and Engineering from the College of Technology, National University, Gazipur, Bangladesh. His research interests include graph representation learning, spatio-temporal neural networks, conformal risk control, and computational forensics.
+\end{IEEEbiographynophoto}
+
+\begin{IEEEbiographynophoto}{Musrat Jahan Gungun}
+received the B.Sc. degree in Computer Science and Engineering from the College of Technology, National University, Gazipur, Bangladesh. Her research interests include machine learning, algorithmic fairness, and financial risk surveillance.
+\end{IEEEbiographynophoto}
+
+\begin{IEEEbiographynophoto}{Maheli Ahmed}
+is a Faculty Member with the Department of Computer Science and Engineering, College of Technology, National University, Gazipur, Bangladesh. Her research interests encompass artificial intelligence, model governance, and applied deep learning.
+\end{IEEEbiographynophoto}
+
+\end{document}

@@ -1,0 +1,80 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% Page Geometry & Binding Margins (1.5" Left Margin for National University)
+\usepackage[left=1.5in, right=1.0in, top=1.0in, bottom=1.0in]{geometry}
+
+% Typography & Spacing
+\usepackage{times}
+\usepackage{setspace}
+\onehalfspacing
+
+% Mathematics & Algorithms
+\usepackage{amsmath,amssymb,amsfonts,bm,mathtools}
+\usepackage{algorithm,algpseudocode}
+\usepackage{amsthm}
+
+\providecommand{\REQUIRE}{\Require}
+\providecommand{\ENSURE}{\Ensure}
+
+% Tables & Figures
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,multirow}
+\graphicspath{{figures/}}
+
+% Citations & Hyperlinks
+\usepackage{cite}
+\usepackage[hidelinks]{hyperref}
+
+% Theorem Environments
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{lemma}{Lemma}[chapter]
+
+% Chapter Header Formatting
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+ {\normalfont\bfseries\Large}{\chaptertitlename\ \thechapter}{14pt}{\LARGE}
+\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% Front Matter (Roman Numerals)
+% -----------------------------------------------------------------------------
+\pagenumbering{roman}
+
+\input{frontmatter/cover_page}
+\input{frontmatter/certificate}
+\input{frontmatter/declaration}
+\input{frontmatter/dedication}
+\input{frontmatter/abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+
+% -----------------------------------------------------------------------------
+% Main Chapters (Arabic Numerals)
+% -----------------------------------------------------------------------------
+\pagenumbering{arabic}
+
+\input{chapters/ch1_introduction}
+\input{chapters/ch2_literature_review}
+\input{chapters/ch3_system_architecture}
+\input{chapters/ch4_data_pipeline}
+\input{chapters/ch5_conformal_ethics}
+\input{chapters/ch6_xai_agentic_sar}
+\input{chapters/ch7_experiments}
+\input{chapters/ch8_software_engineering}
+\input{chapters/ch9_conclusion}
+\input{chapters/ch10_appendices}
+
+% -----------------------------------------------------------------------------
+% References
+% -----------------------------------------------------------------------------
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

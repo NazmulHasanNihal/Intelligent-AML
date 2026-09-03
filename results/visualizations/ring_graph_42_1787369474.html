@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-STGB Forensic Ring Visualizer — Suspect 42</title>
+    <style>
+        :root {
+            --bg: #0B0F19;
+            --card-bg: #151D2F;
+            --accent-red: #EF4444;
+            --accent-gold: #F59E0B;
+            --accent-cyan: #06B6D4;
+            --text: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --border: #2D3748;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #sidebar {
+            width: 380px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+        }
+        #graph-container {
+            flex: 1;
+            position: relative;
+            background: radial-gradient(circle at center, #131D33 0%, #0B0F19 100%);
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .badge-critical { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+        h1 { font-size: 20px; margin: 0; color: #FFFFFF; font-weight: 800; }
+        .metric-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+        }
+        .metric-val { font-size: 24px; font-weight: 800; color: var(--accent-red); }
+        .metric-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        svg { width: 100%; height: 100%; }
+        .node { cursor: pointer; transition: all 0.3s ease; }
+        .node-suspect { fill: var(--accent-red); stroke: #FFFFFF; stroke-width: 3px; filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.8)); }
+        .node-mule { fill: var(--accent-gold); stroke: #2D3748; stroke-width: 2px; }
+        .node-counterparty { fill: var(--accent-cyan); stroke: #2D3748; stroke-width: 1.5px; }
+        .link { stroke-opacity: 0.6; transition: stroke-opacity 0.3s; }
+        .link-burst { stroke: #EF4444; stroke-width: 3px; stroke-dasharray: 4; }
+        .link-std { stroke: #4B5563; stroke-width: 1.5px; }
+        text { font-size: 11px; fill: #D1D5DB; font-family: sans-serif; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div>
+            <span class="badge badge-critical">C-STGB AI DETECTED</span>
+            <h1 style="margin-top: 8px;">Forensic Topology Case</h1>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Target: <code>42</code></div>
+        </div>
+
+        <div class="metric-box">
+            <div class="metric-lbl">Spatiotemporal Risk Probability</div>
+            <div class="metric-val">94.50%</div>
+        </div>
+
+        <div style="font-size: 13px; line-height: 1.6; color: #D1D5DB;">
+            <strong>Automated SAR Narrative Summary:</strong><br>
+            Structuring ring detected with 5 rapid sub-$10k transfers across mule accounts.
+        </div>
+
+        <div class="metric-box" style="margin-top: auto;">
+            <div style="font-size: 12px; color: var(--text-muted);">
+                <strong>Interactive Controls:</strong><br>
+                • Drag nodes to inspect graph layers<br>
+                • Red halos indicate primary target<br>
+                • Gold nodes denote mule intermediaries<br>
+                • Dashed red edges show burst spikes
+            </div>
+        </div>
+    </div>
+
+    <div id="graph-container">
+        <svg id="canvas"></svg>
+    </div>
+
+    <script>
+        const nodes = [{"id": "42", "label": "Suspect 42", "is_target": true}, {"id": "101", "label": "Mule 101", "is_mule": true}, {"id": "102", "label": "Mule 102", "is_mule": true}, {"id": "103", "label": "Mule 103", "is_mule": true}, {"id": "104", "label": "Mule 104", "is_mule": true}];
+        const links = [{"source": "42", "target": "101", "burst": 4.8, "amount": 9500.0}, {"source": "42", "target": "102", "burst": 4.8, "amount": 9500.0}, {"source": "42", "target": "103", "burst": 4.8, "amount": 9500.0}, {"source": "42", "target": "104", "burst": 4.8, "amount": 9500.0}];
+
+        const width = document.getElementById('graph-container').clientWidth || 800;
+        const height = document.getElementById('graph-container').clientHeight || 600;
+        const svg = document.getElementById('canvas');
+
+        // Simple procedural circular layout for demonstration
+        const cx = width / 2;
+        const cy = height / 2;
+        const radius = Math.min(width, height) * 0.35;
+
+        // Position nodes
+        nodes.forEach((n, i) => {
+            if (n.id === "42" || n.is_target) {
+                n.x = cx;
+                n.y = cy;
+            } else {
+                const angle = (i / (nodes.length - 1)) * 2 * Math.PI;
+                n.x = cx + radius * Math.cos(angle);
+                n.y = cy + radius * Math.sin(angle);
+            }
+        });
+
+        // Draw Links
+        links.forEach(l => {
+            const src = nodes.find(n => n.id === l.source) || nodes[0];
+            const dst = nodes.find(n => n.id === l.target) || nodes[1];
+            
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', src.x);
+            line.setAttribute('y1', src.y);
+            line.setAttribute('x2', dst.x);
+            line.setAttribute('y2', dst.y);
+            line.setAttribute('class', l.burst > 2.0 ? 'link link-burst' : 'link link-std');
+            svg.appendChild(line);
+        });
+
+        // Draw Nodes
+        nodes.forEach(n => {
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', n.x);
+            circle.setAttribute('cy', n.y);
+            
+            const isTarget = n.id === "42" || n.is_target;
+            circle.setAttribute('r', isTarget ? '16' : '10');
+            circle.setAttribute('class', isTarget ? 'node node-suspect' : (n.is_mule ? 'node node-mule' : 'node node-counterparty'));
+            
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', n.x + 14);
+            label.setAttribute('y', n.y + 4);
+            label.textContent = n.label || n.id;
+
+            g.appendChild(circle);
+            g.appendChild(label);
+            svg.appendChild(g);
+        });
+    </script>
+</body>
+</html>

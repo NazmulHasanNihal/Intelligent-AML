@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\caption{Production Infrastructure \& Latency SLA Compliance.}
+\label{tab:production_latency}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{lcc}
+\toprule
+\textbf{Operational Dimension} & \textbf{Before Upgrade} & \textbf{After C-STGB Upgrade} \\
+\midrule
+Batch Inference Latency & 41.70 ms (Hub Spikes) & \textbf{3.30 ms (Top-$K$ Capped)} \\
+Streaming Single-Tx Latency & 18.20 ms & \textbf{0.123 ms (LRU Cache)} \\
+Long-Dwell Hibernation Defense & 0.0\% Signal (Vanished) & \textbf{100.0\% (Tri-Band Bank)} \\
+Camouflage Noise Suppression & 0.0\% (Over-smoothed) & \textbf{65.9\% Denoised} \\
+Analyst Review Queue Saturation & 18.5\% of Total Volume & \textbf{0.19\% (CRC Triaged)} \\
+Streaming Memory Complexity & $O(N)$ Unbounded Linear & \textbf{$O(1)$ Sliding Buffer} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

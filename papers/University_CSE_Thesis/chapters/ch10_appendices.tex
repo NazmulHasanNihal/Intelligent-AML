@@ -1,0 +1,104 @@
+\appendix
+\chapter{Extended Mathematical Proofs \& Derivations}
+\label{app:proofs}
+
+\section{Proof of DKW Coverage Bounds under Total Variation Drift}
+\label{app:proof_dkw}
+\begin{theorem}[Non-Asymptotic Coverage under Temporal Drift]
+Let $\mathcal{P}_{\text{cal}}$ and $\mathcal{P}_{\text{test}}$ be two probability measures defined on sample space $\mathcal{Z} = \mathcal{X} \times \mathcal{Y}$ such that their Total Variation distance satisfies $\mathrm{TV}(\mathcal{P}_{\text{cal}}, \mathcal{P}_{\text{test}}) = \frac{1}{2} \int |\, d\mathcal{P}_{\text{cal}} - d\mathcal{P}_{\text{test}} \,| \le \epsilon_{\text{drift}}$. Then for any non-conformity score function $S: \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$ with continuous non-atomic marginal CDF $F(s)$, the class-conditional conformal prediction set $\Gamma(X) = \{y \mid S(X, y) \le \hat{q}^{(y)}\}$ calibrated at level $\alpha \in (0, 1)$ on $n$ exchangeable samples from $\mathcal{P}_{\text{cal}}$ satisfies:
+\begin{equation}
+\left| \mathbb{P}_{\mathcal{P}_{\text{test}}}\left( Y \in \Gamma(X) \mid Y=y \right) - (1 - \alpha) \right| \le 2 \epsilon_{\text{drift}} + \sqrt{\frac{\ln(2/\delta)}{2 n(y)}}
+\end{equation}
+with probability at least $1 - \delta$ over the randomness of the calibration split $\mathcal{D}_{\text{cal}}$.
+\end{theorem}
+
+\begin{proof}
+Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{test}}}(S(X, y) \le s \mid Y=y)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{cal}}}(S(X, y) \le s \mid Y=y)$.
+Let $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$ denote the empirical CDF.
+By the triangle inequality on the uniform supremum norm:
+\begin{equation}
+\sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| \le \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| + \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right|
+\end{equation}
+For any event $E \in \sigma(\mathcal{Z})$, $|\mathcal{P}_{\text{test}}(E) - \mathcal{P}_{\text{cal}}(E)| \le \mathrm{TV}(\mathcal{P}_{\text{test}}, \mathcal{P}_{\text{cal}}) \le \epsilon_{\text{drift}}$.
+Conditioning on $Y=y$, since $\mathbb{P}(Y=y) \ge \pi_{\text{min}} > 0$:
+\begin{equation}
+\sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| \le 2 \cdot \mathrm{TV}(\mathcal{P}_{\text{test}}, \mathcal{P}_{\text{cal}}) \le 2 \epsilon_{\text{drift}}
+\end{equation}
+By the classical Dvoretzky-Kiefer-Wolfowitz (DKW) inequality with the optimal Massart constant:
+\begin{equation}
+\mathbb{P}\left( \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| > \epsilon \right) \le 2 \exp\left( -2 n(y) \epsilon^2 \right)
+\end{equation}
+Setting the right-hand side equal to $\delta$ and solving for $\epsilon$:
+\begin{equation}
+\epsilon = \sqrt{\frac{\ln(2/\delta)}{2 n(y)}}
+\end{equation}
+Since $\hat{q}^{(y)}$ is chosen such that $\hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \ge 1 - \alpha$, substituting $\hat{q}^{(y)}$ into the inequality establishes the non-asymptotic bound with confidence $1 - \delta$.
+\end{proof}
+
+\chapter{Extended Benchmark Schemas \& ETL Pipelines}
+\label{app:schemas}
+
+\section{Universal Ingestion Schema Mapping Specification}
+Table~\ref{app_tab:all_schemas} details the full attribute mapping specification across all 13 evaluated benchmark networks into C-STGB's 12-dimensional canonical invariant space.
+
+\begin{table}[htbp]
+\centering
+\caption{Comprehensive Ingestion Schema Mappings across All 13 Datasets.}
+\label{app_tab:all_schemas}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+\textbf{Dataset Identifier} & \textbf{Native Entity Identifier} & \textbf{Native Timestamp} & \textbf{Value Scaling} & \textbf{Target Label Definition} \\
+\midrule
+\texttt{elliptic\_v1} & Bitcoin Tx Hash (Base58) & Timestep ($1\text{--}49$) & Satoshi ($10^{-8}\,\text{BTC}$) & $1=\text{Illicit}, 2=\text{Licit}, 3=\text{Unknown}$ \\
+\texttt{elliptic\_v2} & Multi-Asset Tx Hash & Timestep ($1\text{--}49$) & USD Normalized & $1=\text{Illicit}, 2=\text{Licit}, 3=\text{Unknown}$ \\
+\texttt{eth\_phishing} & Hex Ethereum Address (\texttt{0x...}) & UNIX Timestamp & Wei ($10^{-18}\,\text{ETH}$) & $1=\text{Phishing Mule}, 0=\text{Normal}$ \\
+\texttt{xblock\_eth} & Smart Contract Address & UNIX Timestamp & Wei ($10^{-18}\,\text{ETH}$) & $1=\text{Ponzi/Phishing}, 0=\text{Standard}$ \\
+\texttt{mtgox\_leaked} & MTGOX Account ID & UNIX Timestamp & JPY / USD Scaled & $1=\text{Willy Bot / Markus}, 0=\text{Trader}$ \\
+\texttt{saml\_d} & Bank IBAN (\texttt{DE.../US...}) & ISO 8601 UTC & USD Amount & $1=\text{SAR Confirmed}, 0=\text{Benign}$ \\
+\texttt{paysim\_extended} & e-Wallet Customer ID (\texttt{C.../M...}) & Simulation Step ($1\,\text{h}$) & Local Fiat & $1=\text{Fraudulent}, 0=\text{Benign}$ \\
+\texttt{ibm\_amlsim} & Account Number (\texttt{ACC\_...}) & Epoch Days & USD Amount & $1=\text{SAR Pattern Match}, 0=\text{Normal}$ \\
+\texttt{data\_generator} & Node UUID & Continuous Epoch & USD Normalized & $1=\text{Laundering Subgraph}, 0=\text{Noise}$ \\
+\texttt{cc\_transactions} & Card Transaction Hash & Time Seconds ($0\text{--}172800$) & Euro Amount & $1=\text{Card Fraud}, 0=\text{Legitimate}$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\chapter{Hyperparameter Search Grids \& Optimization Protocols}
+\label{app:hyperparams}
+
+\section{Detailed Hyperparameter Sweeps across 13 Baselines}
+All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator (TPE) over 50 Bayesian optimization trials on the validation split $\mathcal{D}_{\text{val}}$.
+
+\begin{table}[htbp]
+\centering
+\caption{Hyperparameter Search Space and Best Configurations for C-STGB and Key Baselines.}
+\label{app_tab:hyperparam_grid}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcc}
+\toprule
+\textbf{Model} & \textbf{Hyperparameter} & \textbf{Search Space Range} & \textbf{Optimal Setting (Elliptic-v1)} \\
+\midrule
+\multirow{4}{*}{\textbf{C-STGB (Ours)}} & Learning Rate ($\eta$) & $[10^{-4}, 10^{-2}]$ & $1.2 \times 10^{-3}$ \\
+& Edge Trust Threshold ($\tau_{\text{gate}}$) & $[0.05, 0.30]$ & $0.10$ \\
+& Latent Typology Clusters ($K$) & $\{3, 5, 8, 12\}$ & $5$ \\
+& Conformal Significance ($\alpha$) & $[0.005, 0.05]$ & $0.010$ \\
+& Hawkes Base Rate ($\mu_0$) & $[0.1, 5.0]$ & $1.20$ \\
+& Multi-Task Weights ($\gamma_1, \gamma_2$) & $[0.05, 0.50]$ & $\gamma_1=0.20, \gamma_2=0.10$ \\
+\midrule
+\multirow{3}{*}{\textbf{XGBoost}} & Max Tree Depth & $\{4, 6, 8, 10, 12\}$ & $8$ \\
+& Learning Rate & $[0.01, 0.30]$ & $0.05$ \\
+& Subsample Ratio & $[0.5, 1.0]$ & $0.80$ \\
+\midrule
+\multirow{3}{*}{\textbf{TGN}} & Memory Dimension & $\{64, 100, 128, 256\}$ & $100$ \\
+& Time Embedding Dimension & $\{32, 64, 100\}$ & $100$ \\
+& Message Aggregator & $\{\text{last}, \text{mean}\}$ & \text{last} \\
+\midrule
+\multirow{3}{*}{\textbf{HGT}} & Number of Attention Heads & $\{2, 4, 8\}$ & $4$ \\
+& Hidden Channels & $\{64, 128, 256\}$ & $128$ \\
+& Dropout Rate & $[0.1, 0.5]$ & $0.20$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

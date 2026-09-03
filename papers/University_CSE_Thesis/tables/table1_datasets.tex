@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\centering
+\caption{Comprehensive Topological and Statistical Profile of the 13 Investigated Financial Networks.}
+\label{tab:dataset_profiles}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+\textbf{Archetype} & \textbf{Dataset Identifier} & \textbf{Node Count ($|\mathcal{V}|$)} & \textbf{Edge Count ($|\mathcal{E}|$)} & \textbf{Feature Dim ($d$)} & \textbf{Illicit Ratio (\%)} & \textbf{Target Task} \\
+\midrule
+Bitcoin UTXO & \texttt{elliptic\_v1} & 203,769 & 234,355 & 166 & 2.23\% & UTXO Entity Classification \\
+Bitcoin Subgraphs & \texttt{elliptic\_v2} & 122,279 & 148,990 & 166 & 3.01\% & Multi-Hop Entity Clustering \\
+Synthetic Typologies & \texttt{data\_generator} & 100,000 & 185,420 & 12 & 5.00\% & Smurfing/Cycle Detection \\
+Ethereum Phishing & \texttt{eth\_phishing} & 2,973,489 & 13,551,303 & 9 & 0.15\% & Smart Contract Fraud \\
+Mobile Money & \texttt{paysim\_extended} & 1,048,575 & 1,048,575 & 10 & 0.13\% & MFS Account Draining \\
+Ethereum Forensics & \texttt{xblock\_eth} & 2,150,000 & 9,840,000 & 15 & 0.08\% & High-Degree Scams \\
+Synthetic Banking & \texttt{saml\_d} & 980,000 & 4,500,000 & 18 & 0.05\% & Cross-Bank Wire Laundering \\
+MtGox Leaked Ledger & \texttt{mtgox\_leaked} & 145,000 & 620,000 & 8 & 1.20\% & Exchange Liquidity Draining \\
+Credit Card Skew & \texttt{cc\_transactions} & 284,807 & 284,807 & 30 & 0.17\% & Card-Not-Present Fraud \\
+IBM AMLSim (High Imbalance) & \texttt{ibm\_amlsim\_hi\_small} & 100,000 & 240,000 & 14 & 0.23\% & Multi-Tier Smurfing Rings \\
+IBM AMLSim (High Imbalance) & \texttt{ibm\_amlsim\_hi\_medium} & 300,000 & 720,000 & 14 & 0.23\% & Complex Layering Chains \\
+IBM AMLSim (Low Imbalance) & \texttt{ibm\_amlsim\_li\_small} & 100,000 & 240,000 & 14 & 0.75\% & Distributed Mule Networks \\
+IBM AMLSim (Low Imbalance) & \texttt{ibm\_amlsim\_li\_medium} & 300,000 & 720,000 & 14 & 0.75\% & Pass-Through Conduits \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

@@ -1,0 +1,248 @@
+\section{Problem Formulation \& C-STGB Methodology}
+\label{sec:methodology}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig6_system_architecture.pdf}
+\caption{Comprehensive 6-module architecture of C-STGB: (1) Continuous-Time Multi-Scale Temporal Graph Encoder; (2) Adaptive Edge Trust Filter; (3) Typology-Aware Minority Graph Augmentation with Hard-Negative Mining; (4) Evidence-Adaptive Graph-Tabular Fusion for Cold-Start Resolution; (5) Cost-Sensitive Risk Optimization; and (6) Class-Conditional Conformal Risk Control with Selective Abstention Triage.}
+\label{fig:architecture_blueprint}
+\end{figure*}
+
+\subsection{Problem Formulation and Operational Objectives}
+\label{sec:problem_formulation}
+We formulate financial crime surveillance over an evolving continuous-time transaction graph $\mathcal{G}_t = (\mathcal{V}_t, \mathcal{E}_t, \mathbf{X}_t, \mathbf{E}_t)$, where $\mathcal{V}_t$ represents the set of active financial accounts (entities), $\mathcal{E}_t = \{(u, v, t_e, \mathbf{e}_{uv}) : t_e \le t\}$ denotes the chronological stream of directed fund transfers, $\mathbf{X}_t \in \mathbb{R}^{|\mathcal{V}_t| \times d_v}$ comprises entity attribute features, and $\mathbf{E}_t$ comprises transaction-level metadata (e.g., amount, currency rail, fee). Each entity $u \in \mathcal{V}_t$ is associated with a ground-truth regulatory classification label $y_u \in \{0, 1\}$, where $y_u = 1$ denotes an illicit laundering entity and $y_u = 0$ denotes a verified benign entity, subject to an extreme class prevalence skew $\pi = \mathbb{P}(y_u = 1) \ll 0.01$.
+
+The operational surveillance task encompasses two complementary, rigorous objectives:
+\begin{enumerate}
+    \item \textbf{High-Utility Inductive Classification Objective:} Learn an inductive parameterized hypothesis $f_\Theta: \mathcal{V}_t \times \mathcal{G}_t \to [0, 1]$ predicting the posterior laundering probability $\hat{p}_u = f_\Theta(u \mid \mathcal{G}_t)$ while minimizing asymmetric regulatory risk under extreme imbalance and topological camouflage.
+    \item \textbf{Finite-Sample Risk-Controlled Triage Objective:} Construct a class-conditional conformal mapping $\Gamma: \mathcal{V}_t \to 2^{\{0, 1\}}$ routing each streaming entity to an operational decision set $\Gamma(u) \subseteq \{0, 1\}$ that satisfies non-asymptotic coverage guarantees $\mathbb{P}(y_u \in \Gamma(u) \mid y_u = y) \ge 1 - \alpha$ at user-specified error level $\alpha \in (0, 1)$, while maximizing the straight-through automation rate by routing decisive singleton sets ($\Gamma(u) = \{1\}$ to Tier~1 Auto-Quarantine, $\Gamma(u) = \{0\}$ to Tier~3 Auto-Clear) and restricting manual compliance review strictly to the ambiguous abstention set ($\Gamma(u) = \{0, 1\}$ in Tier~2).
+\end{enumerate}
+
+\subsection{Mathematical Notations}
+To ensure clarity across our formulations, Table~\ref{tab:notations} summarizes the primary mathematical symbols and operators employed throughout this paper.
+
+\begin{table}[t]
+\centering
+\caption{Summary of Mathematical Notations and Operators.}
+\label{tab:notations}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lll}
+\toprule
+\textbf{Symbol} & \textbf{Mathematical Definition} & \textbf{Dimension / Type} \\
+\midrule
+$\mathcal{G} = (\mathcal{V}, \mathcal{E})$ & Continuous-time dynamic transaction graph & Graph object \\
+$\mathbf{X} \in \mathbb{R}^{|\mathcal{V}| \times d_v}$ & Node input attribute matrix & Real matrix \\
+$\mathbf{E} \in \mathbb{R}^{|\mathcal{E}| \times d_e}$ & Transaction edge feature matrix & Real matrix \\
+$\Delta t_{uv}$ & Continuous time delta ($t_v - t_u \ge 0$) & Non-negative scalar \\
+$\Phi_{\text{time}}(\Delta t)$ & Harmonic continuous temporal positional embedding & $\mathbb{R}^{d_t}$ vector \\
+$\mathbf{g}_{ij} \in (0, 1)$ & Context-aware adaptive edge trust gate & Scalar gate \\
+$\Phi_{\text{flow}}(u, t)$ & Mass flow conservation ratio & Scalar $\in [0, \infty)$ \\
+$\lambda_u(t)$ & Hawkes process self-exciting transaction intensity & Non-negative scalar \\
+$\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$ & Causal forward and reverse PageRank taint vectors & $\mathbb{R}^{|\mathcal{V}|}$ vectors \\
+$\mathbf{z}_{\text{inv}}(u, t)$ & 12-dimensional canonical representation & $\mathbb{R}^{12}$ vector \\
+$\mathbf{h}_u^{(l)}$ & Hidden state representation of node $u$ at layer $l$ & $\mathbb{R}^d$ vector \\
+$\mathcal{C}_k$ & Latent typology cluster of illicit transactions & Subset $\mathcal{C}_k \subset \mathcal{V}_{\text{illicit}}$ \\
+$\alpha_u \in [0, 1]$ & Evidence-adaptive graph-tabular fusion weight & Scalar weight \\
+$\mathbf{h}_u^*$ & Unified anomaly representation vector & $\mathbb{R}^{d^*}$ vector \\
+$\tau^*$ & Cost-sensitive Bayes risk decision threshold & Optimal scalar $\in (0, 1)$ \\
+$\hat{q}^{(y)}$ & Class-conditional conformal quantile ($y \in \{0, 1\}$) & Calibration scalar \\
+$\Gamma(X)$ & Finite-sample conformal prediction set & Discrete subset $\subseteq \{0, 1\}$ \\
+$\alpha$ & Target significance error level ($1-\alpha$ coverage) & Scalar $\in (0, 1)$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsection{12-Dimensional Spatio-Temporal Canonical Invariants}
+Traditional models treat transactions as isolated tabular rows, remaining blind to multi-hop relational laundering patterns. In contrast, intermediate pass-through mules physically require capital to enter and exit rapidly with minimal retention. C-STGB formalizes domain-informed mass-balance and graph invariant representations:
+\begin{enumerate}
+    \item \textbf{Flow Conservation Ratio:}
+    \begin{equation}
+    \Phi_{\text{flow}}(u, t) = \frac{\sum_{e \in \mathcal{E}_{\text{out}}(u)} \text{Amount}(e)}{\sum_{e \in \mathcal{E}_{\text{in}}(u)} \text{Amount}(e) + \epsilon} \in [0, \infty)
+    \end{equation}
+    where pass-through layering mules operate near unity ($\Phi_{\text{flow}} \approx 1.0$), while legitimate commercial accounts exhibit varying accumulation or disbursement ratios. For numerical stability across extreme distributions, this feature is logarithmically scaled as $\tilde{\Phi}_{\text{flow}}(u, t) = \log(1 + \Phi_{\text{flow}}(u, t))$.
+    \item \textbf{Degree Asymmetry Ratio:}
+    \begin{equation}
+    \Psi_{\text{asym}}(u, t) = \frac{|d_{\text{in}}(u) - d_{\text{out}}(u)|}{d_{\text{in}}(u) + d_{\text{out}}(u) + \epsilon} \in [0, 1]
+    \end{equation}
+    \item \textbf{Hawkes Point Process Arrival Intensity:}
+    \begin{equation}
+    \lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha_{\text{hwk}} \exp\left(-\beta_{\text{hwk}} \frac{t - t_i}{24.0}\right)
+    \end{equation}
+    parameterized over localized sliding historical event horizons $[t - \Delta T, t]$ to capture micro-burst transaction acceleration without assuming infinite-horizon stationarity, where the divisor $24.0$ normalizes inter-arrival intervals $(t - t_i)$ into standardized diurnal units (hours per day) across datasets with heterogeneous timestamp granularities. To eliminate within-layer circular computational dependencies with temporal attention weights $w(\Delta t)$ (Eq.~10), $\lambda_u(t)$ is pre-computed and cached as a detached invariant feature over $[t - \Delta T, t]$ prior to message passing, bounding computational complexity to $O(1)$ lookup per node during graph aggregation.
+    \item \textbf{Temporally Restricted Causal PageRank Taint:}
+    \begin{align}
+    \mathbf{s}_{\text{fwd}} &= (1 - \alpha_{\text{ppr}}) (\mathbf{I} - \alpha_{\text{ppr}} \mathbf{P}^T)^{-1} \mathbf{s}_{\text{seed}} \\
+    \mathbf{s}_{\text{bwd}} &= (1 - \alpha_{\text{ppr}}) (\mathbf{I} - \alpha_{\text{ppr}} \mathbf{P})^{-1} \mathbf{s}_{\text{seed}}
+    \end{align}
+    computed strictly over causal historical subgraphs ($t_e \le t$) where the seed indicator vector is defined as:
+    \begin{equation}
+    \mathbf{s}_{\text{seed}}(u, t) = \begin{cases} 1.0, & \text{if } u \in \mathcal{V}_{\text{illicit}}^{\text{train}} \text{ and } t_u \le t \\ 0.0, & \text{otherwise} \end{cases}
+    \end{equation}
+    \textbf{Streaming Numerical Approximation:} While offline batch training permits sparse Cholesky prefactorization of $(\mathbf{I} - \alpha_{\text{ppr}}\mathbf{P})$, live streaming inference at $0.45$\,ms latency replaces full matrix inversion with a localized forward push algorithm / truncated Power Iteration ($T_{\text{iter}}=3$ iterations, residual tolerance $\epsilon=10^{-4}$) evaluated strictly over the sliding causal window $[t - \Delta T, t]$ and degree-capped graph $\mathcal{G}_t^{(K)}$ ($K \le 15$), ensuring deterministic $O(K \cdot T_{\text{iter}})$ computation with $<0.08$\,ms computational overhead. Crucially, $\mathbf{s}_{\text{seed}}$ contains non-zero entries exclusively for confirmed illicit entities known within the parameter training split $\mathcal{D}_{\text{train}}$ prior to $t$. All validation ($\mathcal{D}_{\text{val}}$), calibration ($\mathcal{D}_{\text{cal}}$), and forward test ($\mathcal{D}_{\text{test}}$) nodes are assigned $\mathbf{s}_{\text{seed}}(u) = 0.0$, strictly preventing label leakage.
+    \item \textbf{Canonical 12-D Spatio-Temporal Representation Space ($\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$):}
+    \begin{equation}
+    \begin{aligned}
+    \mathbf{z}_{\text{inv}}(u, t) = \big[ &\tilde{\Phi}_{\text{flow}}(u, t), \Psi_{\text{asym}}(u, t), \lambda_u(t), \\
+    &\mathbf{s}_{\text{fwd}}(u, t), \mathbf{s}_{\text{bwd}}(u, t), \mu_A, \sigma_A^2, \\
+    &\gamma_A, \kappa_A, v_A, \nu_{\text{io}}, \sigma_{\Delta t} \big]^T
+    \end{aligned}
+    \end{equation}
+    where $\{\mu_A, \sigma_A^2, \gamma_A, \kappa_A, v_A\}$ denote the 5-moment causal ego-statistics of transaction amounts, $\nu_{\text{io}}$ is the velocity ratio, and $\sigma_{\Delta t}$ is the inter-arrival temporal dispersion (Fig.~\ref{fig:canonical_invariants}).
+\end{enumerate}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_canonical_invariants.pdf}
+\caption{Mechanism of Canonical 12-D Spatio-Temporal Feature Projection: Heterogeneous schemas across diverse financial ledgers (Bitcoin UTXO, Ethereum EVM, PaySim e-wallets, SAML-D multi-bank rails) map into a universal 12-dimensional representation space $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$, enabling zero-shot transfer generalization with frozen neural weights ($\eta=0$).}
+\label{fig:canonical_invariants}
+\end{figure*}
+
+\subsection{Module 1: Continuous-Time Multi-Scale Temporal Graph Encoder}
+To distinguish microsecond smurfing bursts from 90-day dormant holding strategies, C-STGB employs continuous harmonic positional features $\Phi_{\text{time}}(\Delta t) \in \mathbb{R}^{d_t}$:
+\begin{align}
+\Phi_{\text{time}}(\Delta t)_{2k} &= \sin\left(\log(1 + \Delta t) \cdot 10000^{-\frac{2k}{d_t}}\right) \\
+\Phi_{\text{time}}(\Delta t)_{2k+1} &= \cos\left(\log(1 + \Delta t) \cdot 10000^{-\frac{2k}{d_t}}\right)
+\end{align}
+Dynamic temporal attention decay synthesizes three distinct velocity regimes:
+\begin{equation}
+\begin{aligned}
+w(\Delta t) = \sum_{b \in \mathcal{B}} \pi_b &\left[ w_{\min} + (1 - w_{\min}) \exp(-\lambda_b \Delta t) \right] \\
+&\times \left( 1 + \tanh(\gamma_b \lambda_u(t)) \right)
+\end{aligned}
+\end{equation}
+where $\mathcal{B} = \{\text{burst}, \text{diurnal}, \text{seasonal}\}$.
+
+\subsection{Module 2: Context-Aware Adaptive Edge Trust Filter \& Unified Attention}
+Adversarial launderers deliberately connect to high-degree legitimate commercial hubs to induce feature over-smoothing. C-STGB learns a context-aware edge trust gate $\mathbf{g}_{ij} \in (0, 1)$:
+\begin{align}
+\mathbf{c}_{ij} &= \left[ \mathbf{q}_i \,\|\, \mathbf{k}_j \,\|\, \mathbf{e}_{ij} \,\|\, \Phi_{\text{time}}(\Delta t) \,\|\, \mathbf{z}_{\text{inv}}(j, t) \right] \\
+\mathbf{z}_{ij} &= \operatorname{LeakyReLU}\left( \mathbf{W}_{g1} \mathbf{c}_{ij} + \mathbf{b}_{g1} \right) \\
+\mathbf{g}_{ij} &= \sigma\left( \mathbf{W}_{g2} \mathbf{z}_{ij} + b_{g2} \right) \\
+\hat{g}_{ij} &= \delta_{\text{floor}} + (1 - \delta_{\text{floor}}) \mathbf{g}_{ij}
+\end{align}
+Setting $\delta_{\text{floor}} = 0.10$ suppresses 65.9\% of spurious camouflage edge weights (Fig.~\ref{fig:edge_gate_distribution}).
+
+\textbf{Unified Spatio-Temporal Attention Decomposition:} Message passing explicitly integrates structural compatibility, continuous temporal decay, and edge trust gating over degree-capped neighborhoods ($\mathcal{N}_K(u), K \le 15$):
+\begin{align}
+\tilde{\alpha}_{uv}^{(t)} &= \frac{\Omega(u, v, t)}{\sum_{w \in \mathcal{N}_K(u)} \Omega(u, w, t)}, \quad \text{where} \\
+\Omega(u, v, t) &= \exp\left(\frac{\mathbf{q}_u^T (\mathbf{k}_v + \mathbf{W}_E \mathbf{e}_{uv})}{\sqrt{d_k}}\right) \cdot w(\Delta t_{uv}) \cdot \hat{g}_{uv} \nonumber
+\end{align}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_edge_gate_distribution.pdf}
+\caption{Empirical probability density distribution of learnable edge-gating weights $\mathbf{g}_{ij} \in (0, 1)$ before vs. after training, demonstrating that $\delta_{\text{floor}} = 0.10$ successfully suppresses 65.9\% of spurious adversarial camouflage edges below the filtering threshold.}
+\label{fig:edge_gate_distribution}
+\end{figure}
+
+\subsection{Module 3: Typology-Clustered Latent GraphSMOTE \& Hard Negatives}
+Under extreme class skew ($\pi < 0.05\%$), naïve oversampling blurs distinct criminal typologies. C-STGB partitions minority illicit nodes strictly within the training split into latent typology clusters $\mathcal{C}_1, \dots, \mathcal{C}_K$:
+\begin{equation}
+\mathcal{C}_k = \left\{ v \in \mathcal{V}_{\text{illicit}}^{\text{train}} \;\middle\vert\; \cos(\mathbf{h}_v, \boldsymbol{\mu}_k) \ge \tau_{\text{sim}} \right\}
+\end{equation}
+Synthetic representations are synthesized via linear interpolation along trajectories within the same latent typology manifold cluster:
+\begin{equation}
+\begin{aligned}
+\mathbf{h}_{\text{syn}} &= (1 - \rho) \mathbf{h}_u + \rho \mathbf{h}_v, \\
+&\quad \rho \sim \mathcal{U}(0, 1), \quad u, v \in \mathcal{C}_k \subseteq \mathcal{V}_{\text{train}}
+\end{aligned}
+\end{equation}
+Bilinear links to candidate training nodes $w \in \mathcal{V}_{\text{train}}$ are generated under topological edge reconstruction supervision:
+\begin{equation}
+\hat{\mathbf{A}}_{\text{syn}, w} = \sigma\left( \mathbf{h}_{\text{syn}}^T \mathbf{W}_{\text{edge}} \mathbf{h}_w \right) > \tau_{\text{edge}}, \quad w \in \mathcal{C}_{\text{cand}}(\mathbf{h}_{\text{syn}})
+\end{equation}
+\textbf{Directionality \& Mass-Flow Conservation Constraints:} For any synthesized representation $\mathbf{h}_{\text{syn}} = (1 - \rho)\mathbf{h}_u + \rho \mathbf{h}_v$, edge directionality is assigned in alignment with parent seed nodes: incoming links are synthesized from candidate sources $w \in \mathcal{N}_{\text{in}}(u) \cup \mathcal{N}_{\text{in}}(v)$ and outgoing links are directed to candidate destinations $w' \in \mathcal{N}_{\text{out}}(u) \cup \mathcal{N}_{\text{out}}(v)$. Furthermore, synthetic transaction amounts are parameterized via linear interpolation: $\text{Amount}_{\text{syn}}(w, \mathbf{h}_{\text{syn}}) = (1-\rho)\text{Amount}(w, u) + \rho \text{Amount}(w, v)$. This enforces strict mass-balance flow conservation $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) \approx 1.0$ across generated conduits, preserving physical domain invariants.
+
+\textbf{Candidate Bounding \& Computational Scalability:} To prevent the intractable $\mathcal{O}(|\mathcal{V}_{\text{syn}}| \cdot |\mathcal{V}_{\text{train}}| \cdot d)$ full-graph Cartesian link evaluation bottleneck on million-node graphs, candidate target nodes $\mathcal{C}_{\text{cand}}(\mathbf{h}_{\text{syn}})$ are strictly constrained to: (i) localized 2-hop topological receptive fields $\mathcal{N}_2(u) \cup \mathcal{N}_2(v)$ of parent seed nodes $u, v \in \mathcal{C}_k$, and (ii) top-$K_{\text{cand}}$ ($K_{\text{cand}}=50$) nearest neighbors indexed via Hierarchical Navigable Small World (HNSW) search in latent embedding space $\mathbb{R}^d$. This reduces candidate evaluation from global $O(|\mathcal{V}_{\text{train}}|)$ to logarithmic $O(\log |\mathcal{V}_{\text{train}}|)$ retrieval and local $O(K_{\text{cand}} \cdot d)$ bilinear scoring per synthetic entity.
+
+\textbf{Zero-Leakage Topological Isolation:} All oversampling operations are strictly confined to the training graph $\mathcal{G}_{\text{train}} = (\mathcal{V}_{\text{train}}, \mathcal{E}_{\text{train}})$. Synthetic nodes $\mathbf{h}_{\text{syn}}$ and edges are strictly barred from connecting to calibration ($\mathcal{D}_{\text{cal}}$) or test ($\mathcal{D}_{\text{test}}$) entities, ensuring 0.0\% cross-split information leakage (Supplementary Fig.~18).
+
+\textbf{Hard-Negative Mining Bank:} To prevent high-volume legitimate merchant accounts from triggering false positives, C-STGB actively mines benign training accounts exhibiting high degree, burstiness, and high volume, over-weighting them during gradient optimization.
+
+\subsection{Module 4: Evidence-Adaptive Graph-Tabular Fusion (Cold-Start Resolution)}
+Newly created accounts and pass-through stubs lack relational graph neighbors ($\deg(u) = 0$). Rather than failing, C-STGB computes an evidence-adaptive gating parameter $\alpha_u \in [0, 1]$:
+\begin{equation}
+\alpha_u = \sigma\left( \mathbf{w}_\alpha^T \left[ \mathbf{h}_u^{(L)} \,\|\, \mathbf{z}_{\text{inv}}(u, t) \,\|\, \mathbf{x}_u \right] + b_\alpha \right)
+\end{equation}
+The unified anomaly representation $\mathbf{h}_u^*$ dynamically fuses graph embeddings with tabular invariants:
+\begin{equation}
+\mathbf{h}_u^* = \alpha_u \mathbf{h}_u^{(L)} + (1 - \alpha_u) \left[ \mathbf{z}_{\text{inv}}(u, t) \,\|\, \mathbf{x}_u \right]
+\end{equation}
+When graph evidence is sparse ($\deg(u) = 0$), $\alpha_u \to 0$, gracefully relying on domain-level transaction invariants; when neighborhood topology is rich, $\alpha_u \to 1$ (Fig.~\ref{fig:triband_coldstart}).
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig22_triband_spectral_coldstart.pdf}
+\caption{(a) Orthogonal continuous-time frequency response of Tri-Band temporal attention kernels separating high-frequency burst smurfing ($>0.8\,\text{h}^{-1}$), diurnal cyclic shifts ($24\,\text{h}$), and slow seasonal drift ($<0.01\,\text{h}^{-1}$). (b) Evidence-adaptive cold-start gating behavior: as node degree $\deg(u) \to 0$, C-STGB dynamically transfers weight to 12-D tabular invariants ($\alpha_u \to 0$), yielding a $+72.2\,\text{pp}$ F1 boost over isolated GNN baselines.}
+\label{fig:triband_coldstart}
+\end{figure*}
+
+\subsection{Module 5: Cost-Sensitive Risk Head \& Complete Loss Objective}
+The network outputs anomaly probabilities $\hat{p}_u = \sigma(\operatorname{MLP}(\mathbf{h}_u^*))$. The complete multi-objective loss is formulated as:
+\begin{equation}
+\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{task}}(y, \hat{p}) + \gamma_1 \mathcal{L}_{\text{recon}}(\mathbf{A}_{\text{train}}, \hat{\mathbf{A}}_{\text{train}}) + \gamma_2 \mathcal{L}_{\text{aux}}
+\end{equation}
+where $\mathcal{L}_{\text{task}}$ is the Cost-Sensitive Asymmetric Focal Tversky Loss. The topological edge reconstruction loss $\mathcal{L}_{\text{recon}}$ is computed over observable positive training edges $\mathcal{E}_{\text{train}}$ and uniformly sampled negative non-edges $\mathcal{E}_{\text{neg}} \sim (\mathcal{V}_{\text{train}} \times \mathcal{V}_{\text{train}}) \setminus \mathcal{E}_{\text{train}}$ using a $1:5$ positive-to-negative sampling ratio per batch:
+\begin{equation}
+\begin{aligned}
+\mathcal{L}_{\text{recon}} = &-\frac{1}{|\mathcal{E}_{\text{train}}|} \sum_{(u, v) \in \mathcal{E}_{\text{train}}} \log \hat{A}_{uv} \\
+&-\frac{1}{|\mathcal{E}_{\text{neg}}|} \sum_{(u, w) \in \mathcal{E}_{\text{neg}}} \log (1 - \hat{A}_{uw})
+\end{aligned}
+\end{equation}
+with $\hat{A}_{uv} = \sigma(\mathbf{h}_u^T \mathbf{W}_{\text{edge}} \mathbf{h}_v)$. This balanced sampling prevents the trivial link collapse $\hat{A}_{uv} \to 0$ in ultra-sparse financial topologies. The auxiliary regularization objective $\mathcal{L}_{\text{aux}}$ enforces edge-trust sparsity and tri-band filter orthogonality:
+\begin{equation}
+\begin{aligned}
+\mathcal{L}_{\text{aux}} = &\frac{1}{|\mathcal{E}_{\text{train}}|} \sum_{(i, j) \in \mathcal{E}_{\text{train}}} \|\mathbf{g}_{ij} - \mathbf{g}_{ij}^{\text{target}}\|_2^2 \\
+&+ \lambda_{\text{ortho}} \|\mathbf{W}_{\text{burst}}^T \mathbf{W}_{\text{seas}}\|_F^2
+\end{aligned}
+\end{equation}
+with $\gamma_1 = 0.50$, $\gamma_2 = 0.10$, and $\lambda_{\text{ortho}} = 0.05$.
+
+\begin{equation}
+\begin{aligned}
+\tau^* = \arg\min_{\tau \in [0, 1]} \mathbb{E}\big[ &C_{\text{FN}} \cdot \mathbb{I}(\hat{p} < \tau, Y=1) \\
+&+ C_{\text{FP}} \cdot \mathbb{I}(\hat{p} \ge \tau, Y=0) \big]
+\end{aligned}
+\end{equation}
+
+\subsection{Module 6: Class-Conditional Conformal Risk Control \& Selective Abstention}
+Over an independent holdout calibration split $\mathcal{D}_{\text{cal}}$, empirical class-conditional quantiles $\hat{q}^{(y)}$ are computed ($y \in \{0, 1\}$):
+\begin{equation}
+\hat{q}^{(y)} = \text{Quantile}\left( s_1^{(y)}, \dots, s_{n(y)}^{(y)} ; \left\lceil \frac{(n(y) + 1)(1 - \alpha)}{n(y)} \right\rceil \right)
+\end{equation}
+where $s_i^{(y)} = 1 - \hat{p}_i(y)$. Under within-class exchangeability, split conformal prediction guarantees:
+\begin{equation}
+\mathbb{P}\left(Y \in \Gamma(X) \mid Y = y\right) \ge 1 - \alpha, \quad \forall y \in \{0, 1\}
+\end{equation}
+
+\textbf{Streaming Exchangeability, Non-Exchangeable Conformal Risk, \& Rolling Calibration:} In production streaming environments where macroeconomic shocks or evolving laundering typologies introduce temporal covariate and concept drift, static exchangeability $\mathcal{P}_{\text{cal}} = \mathcal{P}_{\text{test}}$ is violated. To mathematically ground risk control under non-stationary distributions, C-STGB leverages weighted non-exchangeable conformal prediction principles~\cite{tibshirani2019conformal,barber2023conformal,gibbs2021adaptive}. We maintain an online rolling calibration buffer $\mathcal{D}_{\text{cal}}(t) = \{ (x_i, y_i) \mid t_i \in [t - W_{\text{cal}}, t] \}$ with temporal window $W_{\text{cal}} = 4\,\text{weeks}$. Under the standard regularity condition that the cumulative distribution function (CDF) of non-conformity scores is Lipschitz continuous ($L_s < \infty$) without discrete probability atoms at $\hat{q}^{(y)}$, the non-asymptotic class-conditional coverage error satisfies:
+\begin{equation}
+\begin{aligned}
+\big| \mathbb{P}_{t}(Y \in \Gamma(X) &\mid Y=y) - (1 - \alpha) \big| \\
+&\le 2 \cdot \mathrm{TV}(\mathcal{P}_t, \mathcal{P}_{t - W_{\text{cal}}}) + \frac{C_{\text{score}}}{\sqrt{|\mathcal{D}_{\text{cal}}(t)|}}
+\end{aligned}
+\end{equation}
+where $TV(\cdot, \cdot)$ is the total variation distance and $C_{\text{score}} = \sqrt{\frac{1}{2}\ln(2/\delta)}$ is the Dvoretzky-Kiefer-Wolfowitz empirical process constant at confidence level $1-\delta$. In production deployment, automated rolling recalibration of $\mathcal{D}_{\text{cal}}(t)$ is triggered whenever a two-sample Kolmogorov-Smirnov test on streaming non-conformity scores rejects distributional stationarity ($D_{\text{KS}} > C_{\text{score}} / \sqrt{|\mathcal{D}_{\text{cal}}|}, p < 0.01$) or when empirical class-conditional coverage breaches $(1 - \alpha - \epsilon_{\text{drift}})$, bounding coverage degradation within $[98.83\%, 99.34\%]$ across multi-month evaluation windows (Table~\ref{tab:conformal_triage}). Furthermore, in ultra-dynamic streaming regimes, C-STGB integrates online Adaptive Conformal Inference (ACI)~\cite{gibbs2021adaptive}, adjusting nominal error rates via $\alpha_t \leftarrow \alpha_{t-1} + \gamma (\alpha - \text{err}_t)$ with step-size $\gamma=0.005$ to dynamically track abrupt distribution shifts in real time. Empirical coverage remains highly robust across step sizes $\gamma \in [0.001, 0.05]$, where $\gamma=0.005$ achieves the optimal Pareto balance between rapid drift tracking and minimal prediction set-size variance under severe transaction volatility spikes.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_conformal_triage_flowchart.pdf}
+\caption{Deterministic 3-Tier Conformal Risk Control (CRC) operational decision flow: High-confidence illicit entities are quarantined in Tier 1 ($\Gamma(X)=\{1\}, >99.4\%$ precision), ambiguous boundary predictions ($\Gamma(X)=\{0, 1\} = \bot$) are routed to Tier 2 for human compliance review and multi-agent SAR drafting ($\approx 5$ alerts per 10k transactions), and verified benign entities are straight-through cleared in Tier 3 ($\Gamma(X)=\{0\}$), routing $>99.4\%$ of volume through automated execution tiers.}
+\label{fig:conformal_flowchart}
+\end{figure*}
+
+This operationalizes a deterministic 3-tier triage architecture (Fig.~\ref{fig:conformal_flowchart}):
+\begin{itemize}
+    \item \textbf{Tier 1 (High-Confidence Escalation Tier):} $\Gamma(X) = \{1\}$, quarantined with $>99.4\%$ precision for asset restriction holds and automated SAR draft generation.
+    \item \textbf{Tier 2 (Selective Abstention Queue):} $\Gamma(X) = \{0, 1\} = \bot$, routed to compliance officers with an automated forensic dossier ($\approx 5$ cases per 10k transactions).
+    \item \textbf{Tier 3 (Straight-Through Clear):} $\Gamma(X) = \{0\}$, released instantly ($>99.9\%$ benign precision).
+\end{itemize}
+
+\textbf{Disentangled Evaluation Protocol (Point Prediction vs. Selective Triage):} To eliminate any ambiguity regarding metric computation:
+\begin{enumerate}
+    \item \textbf{Full-Test Point Prediction Mode (Tables~\ref{tab:full_baseline_scorecard}, \ref{tab:multi_ablation}, \ref{tab:leave_one_out}, \ref{tab:adaptive_attacks}):} Evaluated over $100\%$ of test samples without any case exclusion or abstention, using the binary decision rule $\hat{y} = \mathbb{I}(p(y=1|x) \ge \tau^*)$. Standard metrics (Precision, Recall, F1, PR-AUC) reflect true full-dataset performance without selective omission.
+    \item \textbf{Selective Conformal Triage Mode (Table~\ref{tab:conformal_triage}):} Evaluates the selective prediction sets $\Gamma(X) \subseteq \{0, 1\}$, explicitly reporting empirical coverage $\mathbb{P}(Y \in \Gamma(X) \mid Y=y)$, mean set size $\mathbb{E}[|\Gamma(X)|]$, selective risk on automated tiers ($<0.10\%$), and human review workload reduction ($>99.4\%$).
+\end{enumerate}
+
+The complete algorithmic procedures for multi-stage offline training and sub-millisecond streaming online inference are formalized in Algorithms~S1 and S2 of the Supplementary Material, along with the end-to-end execution flowchart.

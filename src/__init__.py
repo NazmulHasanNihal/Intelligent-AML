@@ -6,4 +6,4 @@ Root package initializer.
 """
 
 __version__ = "0.1.0"
-__author__ = "Nazmul Hasan Nihal"
+__author__ = "Md. Nazmul"

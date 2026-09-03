@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering
+\caption{Standalone GNN Improvement: Resolving the 88\% Recall Collapse.}
+\label{tab:standalone_gnn}
+\resizebox{0.85\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model Configuration} & \textbf{Recall (\%)} & \textbf{Precision (\%)} & \textbf{F1 (\%)} & \textbf{F2 (\%)} \\
+\midrule
+Baseline Raw HT-GNN ($\tau=0.50$) & 10.33 & 100.00 & 18.73 & 12.59 \\
+Optimized Standalone HT-GNN & \textbf{100.00} & \textbf{97.09} & \textbf{98.52} & \textbf{99.40} \\
+Full Hybrid C-STGB Pipeline & \textbf{99.78} & \textbf{99.33} & \textbf{99.55} & \textbf{99.69} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

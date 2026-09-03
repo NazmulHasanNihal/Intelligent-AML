@@ -1,0 +1,201 @@
+\chapter{Literature Review \& Theoretical Foundations}
+\label{ch:literature}
+
+\section{Introduction and Historical Evolution}
+The automation of Anti-Money Laundering (AML) surveillance has evolved through three distinct algorithmic epochs: (1) deterministic rule-based expert systems (1970s--2000s), (2) tabular machine learning and gradient boosted decision trees (2010s), and (3) geometric deep learning and graph neural networks (2019--present). This chapter systematically reviews the theoretical foundations, architectural mechanisms, and operational limitations of these paradigms, positioning C-STGB within the state-of-the-art literature.
+
+\section{Taxonomy of Graph Neural Networks in Financial Forensics}
+Figure~\ref{fig:ch2_gnn_taxonomy} presents a comprehensive structural taxonomy of graph neural networks applied to financial transaction surveillance, categorizing methods along spatial, temporal, heterogeneous, and imbalanced learning dimensions.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_multi_dataset_radar.pdf}
+\caption{Comparative radar evaluation across multiple dimensions in financial forensics, contrasting spatial, temporal, heterogeneous, and imbalanced methodologies.}
+\label{fig:ch2_gnn_taxonomy}
+\end{figure}
+
+\subsection{Foundational Spatial Graph Neural Networks}
+Spatial Graph Neural Networks operate on static graph snapshots $\mathcal{G} = (\mathcal{V}, \mathcal{E}, \mathbf{X})$ by recursively aggregating feature vectors across local node neighborhoods.
+
+\subsubsection{Graph Convolutional Networks (GCN)}
+Kipf and Welling~\cite{kipf2017semi} formulated the first-order localized spectral approximation of graph convolutions:
+\begin{equation}
+\mathbf{H}^{(l+1)} = \sigma\left( \mathbf{\tilde{D}}^{-\frac{1}{2}} \mathbf{\tilde{A}} \mathbf{\tilde{D}}^{-\frac{1}{2}} \mathbf{H}^{(l)} \mathbf{W}^{(l)} \right)
+\end{equation}
+where $\mathbf{\tilde{A}} = \mathbf{A} + \mathbf{I}_N$ is the adjacency matrix with added self-loops, $\mathbf{\tilde{D}}_{ii} = \sum_j \mathbf{\tilde{A}}_{ij}$ is the diagonal degree matrix, and $\mathbf{W}^{(l)} \in \mathbb{R}^{d_l \times d_{l+1}}$ is a learnable parameter matrix. Weber et al.~\cite{weber2019anti} demonstrated the initial application of GCN to Bitcoin transaction forensics on the Elliptic dataset, revealing that structural message passing outperforms tabular logistic regression. However, GCN assumes undirected, static topologies and uniform edge importance, making it highly vulnerable to degree-weighted feature over-smoothing when high-degree commercial merchant hubs are present.
+
+\subsubsection{Inductive Representation Learning (GraphSAGE)}
+Hamilton et al.~\cite{hamilton2017inductive} introduced inductive neighborhood sampling and parameter sharing, enabling GNN deployment on massive, evolving graphs:
+\begin{equation}
+\mathbf{h}_{\mathcal{N}(u)}^{(l)} = \text{AGGREGATE}_k\left( \left\{ \mathbf{h}_v^{(l-1)}, \forall v \in \mathcal{N}_k(u) \right\} \right)
+\end{equation}
+\begin{equation}
+\mathbf{h}_u^{(l)} = \sigma\left( \mathbf{W}^{(l)} \cdot \left[ \mathbf{h}_u^{(l-1)} \,\|\, \mathbf{h}_{\mathcal{N}(u)}^{(l)} \right] \right)
+\end{equation}
+where $\mathcal{N}_k(u)$ represents a uniformly sampled subset of size $S_k \le 25$. While GraphSAGE resolves the memory scalability bottleneck for training on static snapshots, uniform random sampling frequently discards critical low-degree smurfing hops in financial transaction streams.
+
+\subsubsection{Graph Attention Networks (GAT \& GATv2)}
+Veli\v{c}kovi\'{c} et al.~\cite{velickovic2018graph} introduced masked self-attention to compute anisotropic edge coefficients:
+\begin{equation}
+\alpha_{uv} = \frac{\exp\left( \text{LeakyReLU}\left( \mathbf{a}^T [\mathbf{W}\mathbf{h}_u \,\|\, \mathbf{W}\mathbf{h}_v] \right) \right)}{\sum_{k \in \mathcal{N}(u)} \exp\left( \text{LeakyReLU}\left( \mathbf{a}^T [\mathbf{W}\mathbf{h}_u \,\|\, \mathbf{W}\mathbf{h}_k] \right) \right)}
+\end{equation}
+Brody et al.~\cite{brody2022how} proved that standard GAT computes static attention that cannot dynamically adapt to query nodes, proposing GATv2 to achieve universal dynamic expressiveness:
+\begin{equation}
+\alpha_{uv}^{(\text{v2})} = \frac{\exp\left( \mathbf{a}^T \text{LeakyReLU}\left( \mathbf{W}[\mathbf{h}_u \,\|\, \mathbf{h}_v] \right) \right)}{\sum_{k \in \mathcal{N}(u)} \exp\left( \mathbf{a}^T \text{LeakyReLU}\left( \mathbf{W}[\mathbf{h}_u \,\|\, \mathbf{h}_k] \right) \right)}
+\end{equation}
+Although GATv2 allows dynamic attention scoring, it completely omits physical continuous-time timestamps and continuous transaction amounts.
+
+\subsubsection{Graph Isomorphism Network (GIN)}
+Xu et al.~\cite{xu2019powerful} proved that standard neighborhood aggregation functions (mean, max) are strictly less expressive than the 1-dimensional Weisfeiler-Lehman (1-WL) graph isomorphism test. GIN achieves maximum 1-WL discriminative power via multiset injective aggregation:
+\begin{equation}
+\mathbf{h}_u^{(l+1)} = \text{MLP}^{(l)}\left( \left(1 + \epsilon^{(l)}\right) \mathbf{h}_u^{(l)} + \sum_{v \in \mathcal{N}(u)} \mathbf{h}_v^{(l)} \right)
+\end{equation}
+where $\epsilon$ is a learnable or fixed scalar parameter. While GIN excels at discriminating sub-tree structural graph isomorphism, financial transaction forensics requires continuous edge feature embeddings, which GIN fails to integrate natively.
+
+\section{Dynamic, Temporal, and Continuous-Time Graph Neural Networks}
+Financial transactions are intrinsically continuous-time sequential events where the exact physical timestamp $t$ and inter-arrival duration $\Delta t = t_2 - t_1$ dictate forensic causality.
+
+\subsection{Discrete-Time Snapshot GNNs (EvolveGCN)}
+Pareja et al.~\cite{pareja2020evolvegcn} proposed EvolveGCN, which segments continuous transaction streams into discrete temporal snapshots $\mathcal{G}_1, \mathcal{G}_2, \dots, \mathcal{G}_T$ and uses a Recurrent Neural Network (LSTM or GRU) to evolve GNN parameter weights $\mathbf{W}_t$ over time:
+\begin{equation}
+\mathbf{W}_t = \text{GRU}\left( \mathbf{H}_t, \mathbf{W}_{t-1} \right)
+\end{equation}
+While EvolveGCN captures macro-structural temporal shifts, snapshot discretisation introduces two fatal flaws: (1) within-window temporal ordering is erased, allowing acausal lookahead leakage; and (2) choosing a sliding window size $\Delta W$ creates a severe tradeoff between latency (small $\Delta W$) and capturing long-dwell dormancy (large $\Delta W$).
+
+\subsection{Continuous-Time Dynamic GNNs (TGN \& TGAT)}
+Rossi et al.~\cite{rossi2020temporal} introduced the Temporal Graph Network (TGN), which maintains an evolving continuous memory state $\mathbf{s}_u(t)$ for each node:
+\begin{equation}
+\mathbf{s}_u(t) = \text{mem\_update}\left( \mathbf{s}_u(t^-), \mathbf{m}_u(t) \right)
+\end{equation}
+where $\mathbf{m}_u(t)$ is a message aggregated from recent interaction events. To encode continuous time differences $\Delta t$, TGAT~\cite{xu2020inductive} utilizes Bochner's theorem for continuous harmonic positional encodings:
+\begin{equation}
+\Phi_{\text{time}}(\Delta t) = \left[ \cos(\omega_1 \Delta t), \sin(\omega_1 \Delta t), \dots, \cos(\omega_d \Delta t), \sin(\omega_d \Delta t) \right]^T
+\end{equation}
+While harmonic encodings represent an advance over static snapshots, existing continuous-time GNNs deploy static exponential decay weighting $w(\Delta t) = \exp(-\lambda \Delta t)$. When a laundering syndicate pauses operations for 90 days, $\exp(-0.80 \times 90) \approx 0.0$, causing standard temporal GNNs to completely detach historical connectivity and miss long-dwell hibernation chains.
+
+\section{Graph Imbalanced Learning and Topological Oversampling}
+In production banking compliance, illicit entities represent less than $0.05\%$ of total accounts ($\pi < 0.0005$), creating an extreme class skew.
+
+\subsection{Classical SMOTE in Feature Space}
+Chawla et al.~\cite{chawla2002smote} introduced Synthetic Minority Over-sampling Technique (SMOTE), synthesizing new minority examples in Euclidean feature space via linear interpolation between nearest neighbors:
+\begin{equation}
+\mathbf{x}_{\text{syn}} = \mathbf{x}_i + \lambda (\mathbf{x}_j - \mathbf{x}_i), \quad \lambda \sim \mathcal{U}(0, 1)
+\end{equation}
+Applying classical SMOTE directly to node features ignores graph topology, creating isolated synthetic nodes without relational edges, which standard GNN message-passing layers cannot process.
+
+\subsection{GraphSMOTE and Latent Oversampling}
+Zhao et al.~\cite{zhao2021graphsmote} pioneered GraphSMOTE, moving minority synthesis into the intermediate latent representation space $\mathbf{h}_u \in \mathbb{R}^d$ and training an auxiliary edge predictor $\hat{\mathbf{A}}_{uw} = \sigma(\mathbf{h}_u^T \mathbf{W}_{\text{edge}} \mathbf{h}_w)$ to connect synthetic nodes to the training graph.
+
+However, standard GraphSMOTE exhibits three major pathologies in financial crime surveillance:
+\begin{enumerate}
+    \item \textbf{Typology Blurring:} It interpolates randomly between arbitrary minority pairs, blending structurally distinct laundering schemes (e.g., micro-burst smurfing vs. multi-million-dollar shell corporate layering) into unrealistic synthetic hybrids.
+    \item \textbf{Global Cartesian Complexity ($O(|\mathcal{V}_{\text{syn}}| \cdot |\mathcal{V}_{\text{train}}| \cdot d)$):} Evaluating bilinear edge probabilities against all training nodes is computationally intractable on million-node ledgers.
+    \item \textbf{Flow Conservation Violation:} Unconstrained edge synthesis creates synthetic nodes that violate physical mass-balance conservation ($\sum \text{Inflow} \neq \sum \text{Outflow}$), producing non-physical anomalies.
+\end{enumerate}
+
+\section{Adversarial Camouflage and Robust Fraud Detection}
+Launderers actively deploy counter-surveillance tactics, such as routing micro-transfers through high-degree merchant, utility, or payroll accounts to camouflage their structural presence.
+
+Dou et al.~\cite{dou2020enhancing} developed CARE-GNN, which utilizes reinforcement learning to select and filter neighboring nodes based on feature similarity. However, CARE-GNN relies on static relationship types and assumes fixed label distributions. When money launderers adaptively increase their camouflage degree, reinforcement learning reward functions destabilize, causing catastrophic alert suppression.
+
+\section{Conformal Prediction and Conformal Risk Control}
+In safety-critical regulatory environments, point predictions $\hat{p}_u \in [0, 1]$ lack formal uncertainty quantification, leading to unpredictable false positive cascades.
+
+\subsection{Foundations of Split Conformal Prediction}
+Pioneered by Vovk et al.~\cite{vovk2005algorithmic} and modernized by Angelopoulos and Bates~\cite{angelopoulos2021gentle}, Conformal Prediction provides distribution-free, finite-sample prediction sets $\Gamma(X) \subseteq \mathcal{Y}$ satisfying:
+\begin{equation}
+\mathbb{P}\left( Y \in \Gamma(X) \right) \ge 1 - \alpha
+\end{equation}
+given exchangeable calibration data $\mathcal{D}_{\text{cal}} = \{(x_i, y_i)\}_{i=1}^n$.
+
+\subsection{Marginal vs. Class-Conditional Conformal Coverage}
+Under extreme class skew ($\pi = 0.05\%$), standard marginal conformal prediction satisfies the $1-\alpha$ coverage bound entirely on the dominant majority class ($Y=0$), while generating completely empty prediction sets for illicit nodes ($\Gamma(X) = \emptyset$), failing statutory compliance mandates.
+
+To resolve this, Class-Conditional Conformal Risk Control (CRC) computes separate non-conformity quantiles $\hat{q}^{(0)}$ and $\hat{q}^{(1)}$ for each class, guaranteeing:
+\begin{equation}
+\mathbb{P}\left( Y \in \Gamma(X) \mid Y = y \right) \ge 1 - \alpha, \quad \forall y \in \{0, 1\}
+\end{equation}
+C-STGB builds upon this principle, establishing the first 3-tier selective abstention triage architecture with formal Dvoretzky-Kiefer-Wolfowitz bounds under temporal distribution drift.
+
+\section{Theoretical Expressiveness Bounds \& The Weisfeiler-Lehman Hierarchy}
+The representational capacity of message-passing graph neural networks is fundamentally upper-bounded by the 1-dimensional Weisfeiler-Lehman (1-WL) graph isomorphism test.
+
+\subsection{The 1-WL Color Refinement Algorithm}
+The 1-WL algorithm iteratively refines node colorings $c_u^{(t)}$ by hashing a node's current color with the multiset of its neighbors' colors:
+\begin{equation}
+c_u^{(t+1)} = \text{HASH}\left( c_u^{(t)}, \{\{ c_v^{(t)} : v \in \mathcal{N}(u) \}\} \right)
+\end{equation}
+Morris et al.~\cite{morris2019weisfeiler} and Xu et al.~\cite{xu2019powerful} proved that standard spatial GNNs with mean or max aggregators fail to distinguish non-isomorphic graphs that 1-WL can separate (e.g., distinguishing a 6-cycle from two disjoint 3-cycles). In financial crime surveillance, this limitation manifests when circular layering rings exhibit identical degree statistics to benign bipartite transaction clusters. C-STGB overcomes this 1-WL bottleneck by incorporating continuous edge timestamps ($\Delta t$), continuous transaction amounts, and 12-dimensional canonical topological invariants ($\mathbf{z}_{\text{inv}}$), rendering the input multiset strictly injective.
+
+\section{Spectral Graph Theory \& Feature Over-Smoothing Dynamics}
+A catastrophic failure mode of deep GNNs is \textit{feature over-smoothing}, where repeated neighborhood averaging causes node embeddings across different classes to converge toward a uniform representation:
+\begin{equation}
+\lim_{L \to \infty} \mathbf{h}_u^{(L)} = \mathbf{h}_v^{(L)}, \quad \forall u, v \in \mathcal{V}
+\end{equation}
+
+\subsection{Dirichlet Energy Formulation}
+The degree of over-smoothing can be formally quantified through the graph Dirichlet energy:
+\begin{equation}
+\mathcal{E}(\mathbf{H}) = \frac{1}{2} \text{Tr}\left( \mathbf{H}^T \mathbf{\Delta}_{\text{norm}} \mathbf{H} \right) = \frac{1}{2} \sum_{(u, v) \in \mathcal{E}} \left\| \frac{\mathbf{h}_u}{\sqrt{\deg(u)}} - \frac{\mathbf{h}_v}{\sqrt{\deg(v)}} \right\|_2^2
+\end{equation}
+where $\mathbf{\Delta}_{\text{norm}} = \mathbf{I} - \mathbf{D}^{-\frac{1}{2}} \mathbf{A} \mathbf{D}^{-\frac{1}{2}}$ is the normalized graph Laplacian. In standard GCN, $\mathcal{E}(\mathbf{H}^{(L)}) \to 0$ exponentially with depth $L$, completely extinguishing anomaly signals. C-STGB's Context-Aware Edge Gating ($\hat{g}_{ij}$) and Evidence-Adaptive Fusion ($\alpha_u$) strictly prevent Dirichlet energy collapse by adaptively zeroing out edge weights connecting illicit nodes to camouflaged high-degree hubs, maintaining $\mathcal{E}(\mathbf{H}) \ge c > 0$.
+
+\section{Temporal Point Processes \& Marked Hawkes Formulations}
+Financial transactions are discrete events occurring in continuous time. Point processes provide a mathematically principled framework for modeling transaction arrivals without artificial time discretization.
+
+\subsection{Conditional Intensity and Self-Excitation}
+A temporal point process is characterized by its conditional intensity function $\lambda(t \mid \mathcal{H}_t)$, representing the infinitesimal arrival rate conditioned on history $\mathcal{H}_t = \{t_1, t_2, \dots, t_N < t\}$:
+\begin{equation}
+\lambda(t \mid \mathcal{H}_t) = \lim_{\Delta t \to 0^+} \frac{\mathbb{P}\left( N(t + \Delta t) - N(t) = 1 \mid \mathcal{H}_t \right)}{\Delta t}
+\end{equation}
+In a self-exciting Hawkes process~\cite{hawkes1971spectra}, the occurrence of an event momentarily elevates future arrival probabilities:
+\begin{equation}
+\lambda(t) = \mu_0 + \sum_{t_i < t} \alpha_H \exp\left( -\beta_H (t - t_i) \right)
+\end{equation}
+where the branching ratio $\eta_H = \frac{\alpha_H}{\beta_H} < 1$ guarantees mathematical stationarity. C-STGB leverages this intensity to construct continuous temporal attention weights that distinguish coordinated smurfing bursts from random commercial arrivals.
+
+\section{Privacy-Preserving Collaborative Graph Learning}
+A fundamental operational challenge in anti-money laundering is that individual financial institutions only observe their internal accounts, creating fragmented subgraphs that obscure multi-bank layering chains.
+
+\subsection{Federated Graph Neural Networks \& Split Learning}
+To enable cross-institution surveillance without violating privacy regulations (GDPR, GLBA, BSA), emerging paradigms explore Federated Graph Neural Networks (FedGNN) and Split Learning. In Split-GNN architectures, client institutions maintain private feature embeddings and local message passing, transmitting only obfuscated boundary activations to a centralized server. Coupling Split-GNNs with C-STGB's universal 12-D canonical invariants ($\mathbf{z}_{\text{inv}}$) provides a standardized, zero-leakage feature interface across institutional boundaries.
+
+\section{Comparative Literature Matrix}
+Table~\ref{tab:lit_matrix} presents an exhaustive 25-paper comparative taxonomy across key methodological dimensions, highlighting the critical architectural voids resolved by C-STGB.
+
+\begin{table}[htbp]
+\centering
+\caption{Comprehensive 25-Paper Comparative Taxonomy in Financial Forensics and Graph Machine Learning.}
+\label{tab:lit_matrix}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model / Framework} & \textbf{Temporal Paradigm} & \textbf{Edge Camouflage Gating} & \textbf{Imbalance Resolution} & \textbf{Cold-Start Handling} & \textbf{Formal Risk Bounds} & \textbf{XAI / SAR Compliance} \\
+\midrule
+XGBoost~\cite{chen2016xgboost} & Static Tabular & \texttimes & Class Weighting & Tabular Fallback & \texttimes & SHAP \\
+CatBoost~\cite{prokhorenkova2018catboost} & Static Tabular & \texttimes & Focal Loss & Tabular Fallback & \texttimes & TreeSHAP \\
+GCN~\cite{kipf2017semi} & Static Graph & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
+GraphSAGE~\cite{hamilton2017inductive} & Static Graph & Uniform Sampling & \texttimes & Feature Fallback & \texttimes & \texttimes \\
+GAT~\cite{velickovic2018graph} & Static Graph & Self-Attention & \texttimes & \texttimes & \texttimes & Attention Weights \\
+GATv2~\cite{brody2022how} & Static Graph & Dynamic Attention & \texttimes & \texttimes & \texttimes & Attention Weights \\
+GIN~\cite{xu2019powerful} & Static Graph & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
+EvolveGCN~\cite{pareja2020evolvegcn} & Discrete Snapshots & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
+TGN~\cite{rossi2020temporal} & Continuous Memory & Uniform Aggregation & \texttimes & Memory Init & \texttimes & \texttimes \\
+TGAT~\cite{xu2020inductive} & Harmonic Encoding & Attention Aggregation & \texttimes & \texttimes & \texttimes & Attention Weights \\
+CARE-GNN~\cite{dou2020enhancing} & Static Multi-Relational & RL Neighbor Selector & \texttimes & \texttimes & \texttimes & \texttimes \\
+GraphSMOTE~\cite{zhao2021graphsmote} & Static Graph & \texttimes & Latent Feature Interp. & \texttimes & \texttimes & \texttimes \\
+FraudGate~\cite{liu2021overcoming} & Static Multi-View & Gated Filter & \texttimes & \texttimes & \texttimes & \texttimes \\
+HGT~\cite{hu2020heterogeneous} & Heterogeneous Meta-Path & Type-Specific Attention & \texttimes & \texttimes & \texttimes & Type Attention \\
+Johannessen (2023)~\cite{johannessen2023predicting} & Heterogeneous Snapshot & Edge Type Attention & Class Weighting & \texttimes & \texttimes & \texttimes \\
+ChronoWave-GNN & Wavelet Continuous & Frequency Filter & \texttimes & \texttimes & \texttimes & \texttimes \\
+Split-Conformal CRC~\cite{angelopoulos2021gentle} & Point Prediction & \texttimes & Marginal Conformal & \texttimes & Marginal ($1-\alpha$) & \texttimes \\
+GNNExplainer~\cite{ying2019gnnexplainer} & Post-Hoc Attribution & \texttimes & \texttimes & \texttimes & \texttimes & Subgraph Mask \\
+\midrule
+\textbf{C-STGB (Ours)} & \textbf{Continuous Tri-Band + Hawkes} & \textbf{Context-Aware Gating ($\hat{g}_{ij}$)} & \textbf{Typology GraphSMOTE} & \textbf{Evidence-Adaptive ($\alpha_u$)} & \textbf{Class-Cond. CRC + DKW} & \textbf{AST-Enforced SAR Swarm} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\section{Chapter Summary}
+This chapter established the theoretical foundation and literature taxonomy across GNN architectures, temporal representation models, imbalanced graph oversampling, spectral over-smoothing dynamics, and distribution-free conformal inference. The comparative analysis demonstrated that existing approaches address individual failure modes in isolation, leaving severe operational gaps. The next chapter presents the complete mathematical formulation and tensor derivations of the unified C-STGB architecture.

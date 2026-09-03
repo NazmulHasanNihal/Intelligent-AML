@@ -7,11 +7,11 @@ topology and feature distributions of real fraud patterns.
 """
 
 import os
+import random
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from pathlib import Path
-
 import pyarrow.parquet as pq
 
 from torch_geometric.data import HeteroData
@@ -51,8 +51,19 @@ def build_hetero_data(dataset_name):
     nodes_df = load_parquet(nodes_path)
     edges_df = load_parquet(edges_path)
 
+    # Standardize nodes columns case-insensitively
+    nodes_df = nodes_df.rename(columns={c: c.strip() for c in nodes_df.columns})
+    edges_df = edges_df.rename(columns={c: c.strip() for c in edges_df.columns})
+
+    # Normalize ID columns: txId/nodeId to node_id
+    for col in ["txId", "nodeId", "txid", "nodeid"]:
+        if col in nodes_df.columns and "node_id" not in nodes_df.columns:
+            nodes_df = nodes_df.rename(columns={col: "node_id"})
+        if col in edges_df.columns and "node_id" not in edges_df.columns:
+            edges_df = edges_df.rename(columns={col: "node_id"})
+
     node_features = nodes_df.drop(columns=[c for c in nodes_df.columns
-                                            if c in ("node_id", "node_type", "label")],
+                                            if c in ("node_id", "node_type", "label", "time_step")],
                                    errors="ignore")
     feature_cols = [c for c in node_features.columns if c.startswith("feat_")]
     if feature_cols:
@@ -80,9 +91,80 @@ def build_hetero_data(dataset_name):
 
     label_col = nodes_df.get("label", None)
     if label_col is not None:
-        data["node"].y = torch.tensor(label_col.values, dtype=torch.long)
+        # Convert class string labels to integer labels if applicable
+        labels = nodes_df["label"]
+        if labels.dtype == object:
+            labels = labels.map({"1": 1, "2": 0, 1: 1, 0: 0}).fillna(-1)
+        data["node"].y = torch.tensor(labels.values, dtype=torch.long)
 
     return data
+
+
+def extract_fraud_subgraph(data, num_nodes=50):
+    """
+    Extracts a subgraph centered around fraud nodes (label == 1)
+    to train GraphGAN without memory exhaustion.
+    """
+    x = data["node"].x
+    edge_index = data["node", "Transaction", "node"].edge_index
+    y = data["node"].y if hasattr(data["node"], "y") else None
+
+    num_total_nodes = x.shape[0]
+
+    # Find fraud seeds
+    if y is not None and (y == 1).sum() > 0:
+        fraud_indices = torch.where(y == 1)[0].tolist()
+    else:
+        # Fallback to random seeds if no labels exist
+        fraud_indices = torch.randperm(num_total_nodes)[:10].tolist()
+
+    # Expand neighborhood starting from seeds until we reach num_nodes
+    selected_nodes = set()
+    random.shuffle(fraud_indices)
+    
+    for seed in fraud_indices:
+        if len(selected_nodes) >= num_nodes:
+            break
+        selected_nodes.add(seed)
+        
+        # 1-hop neighbors
+        neighbors = edge_index[1, edge_index[0] == seed].tolist()
+        neighbors_rev = edge_index[0, edge_index[1] == seed].tolist()
+        for n in neighbors + neighbors_rev:
+            if len(selected_nodes) >= num_nodes:
+                break
+            selected_nodes.add(n)
+
+    # If we still need more nodes, fill with random nodes
+    if len(selected_nodes) < num_nodes:
+        all_nodes = list(range(num_total_nodes))
+        random.shuffle(all_nodes)
+        for n in all_nodes:
+            if len(selected_nodes) >= num_nodes:
+                break
+            selected_nodes.add(n)
+
+    # Create subgraph mapping
+    sub_nodes = sorted(list(selected_nodes))
+    node_map = {old: new for new, old in enumerate(sub_nodes)}
+
+    # Filter features
+    sub_x = x[sub_nodes]
+    if y is not None:
+        sub_y = y[sub_nodes]
+    else:
+        sub_y = None
+
+    # Filter edges
+    mask = torch.isin(edge_index[0], torch.tensor(sub_nodes)) & torch.isin(edge_index[1], torch.tensor(sub_nodes))
+    sub_edges_old = edge_index[:, mask]
+    
+    # Map edges to relative indices
+    src_mapped = torch.tensor([node_map[nid.item()] for nid in sub_edges_old[0]], dtype=torch.long)
+    dst_mapped = torch.tensor([node_map[nid.item()] for nid in sub_edges_old[1]], dtype=torch.long)
+    sub_edge_index = torch.stack([src_mapped, dst_mapped])
+
+    return sub_x, sub_edge_index, sub_y
 
 
 class GraphGANGenerator(nn.Module):
@@ -94,7 +176,7 @@ class GraphGANGenerator(nn.Module):
         self.hidden_dim = hidden_dim
         self.num_nodes = num_nodes
 
-        # Node feature generator
+        # Node feature generator: maps latent noise to individual node features
         self.node_gen = nn.Sequential(
             nn.Linear(latent_dim, hidden_dim),
             nn.LeakyReLU(0.2),
@@ -105,22 +187,13 @@ class GraphGANGenerator(nn.Module):
             nn.Linear(hidden_dim, hidden_dim),
         )
 
-        # Edge topology generator: scores each node pair
-        self.edge_gen = nn.Sequential(
-            nn.Linear(hidden_dim * 2, hidden_dim),
-            nn.LeakyReLU(0.2),
-            nn.LayerNorm(hidden_dim),
-            nn.Linear(hidden_dim, 1),
-            nn.Sigmoid(),
-        )
-
     def forward(self, z):
         """Generate synthetic node features and edge probabilities.
 
         Parameters
         ----------
         z : torch.Tensor
-            Latent noise, shape (batch_size, latent_dim)
+            Latent noise, shape (batch_size, num_nodes, latent_dim)
 
         Returns
         -------
@@ -130,20 +203,16 @@ class GraphGANGenerator(nn.Module):
             Edge existence probabilities, shape (batch_size, num_nodes, num_nodes)
         """
         batch_size = z.shape[0]
+        
+        # Flatten batch and node dimensions to project noise independently
+        z_flat = z.view(-1, self.latent_dim)
+        node_features_flat = self.node_gen(z_flat)
+        node_features = node_features_flat.view(batch_size, self.num_nodes, self.hidden_dim)
 
-        # Generate node features: (batch_size, num_nodes, hidden_dim)
-        node_features = self.node_gen(z)
-        node_features = node_features.unsqueeze(1).expand(-1, self.num_nodes, -1)
-
-        # Generate edge probabilities by scoring each node pair
-        # Use node features directly as edge features
-        z_i = node_features  # (batch_size, num_nodes, hidden_dim)
-        z_j = node_features.unsqueeze(2).expand(-1, -1, self.num_nodes, -1)
-        z_i = z_i.unsqueeze(2).expand(-1, -1, self.num_nodes, -1)
-        z_pair = torch.cat([z_i, z_j], dim=-1)
-        z_pair = z_pair.reshape(-1, self.hidden_dim * 2)
-        edge_probs = self.edge_gen(z_pair).squeeze(-1)
-        edge_probs = edge_probs.reshape(batch_size, self.num_nodes, self.num_nodes)
+        # Bilinear dot product edge decoder: scores each node pair (i, j)
+        # Scaled dot product to prevent gradient saturation before sigmoid
+        scores = torch.matmul(node_features, node_features.transpose(1, 2)) / (self.hidden_dim ** 0.5)
+        edge_probs = torch.sigmoid(scores)
 
         return node_features, edge_probs
 
@@ -195,10 +264,13 @@ class GraphGANDiscriminator(nn.Module):
         """
         node_score = self.node_disc(node_features).squeeze(-1)
 
-        src = edge_index[0]
-        dst = edge_index[1]
-        edge_feat = torch.cat([node_features[src], node_features[dst]], dim=-1)
-        edge_score = self.edge_disc(edge_feat).squeeze(-1)
+        if edge_index.numel() > 0:
+            src = edge_index[0]
+            dst = edge_index[1]
+            edge_feat = torch.cat([node_features[src], node_features[dst]], dim=-1)
+            edge_score = self.edge_disc(edge_feat).squeeze(-1)
+        else:
+            edge_score = torch.zeros(0, device=node_features.device)
 
         return node_score, edge_score
 
@@ -217,60 +289,101 @@ class GraphGAN(nn.Module):
 
 
 def train_graphgan(dataset_name, num_epochs=100, lr=0.0002, latent_dim=LATENT_DIM, num_nodes=50):
-    """Train GraphGAN on a single ingested dataset."""
+    """Train GraphGAN on a single extracted fraud subgraph."""
     print(f"\n{'='*70}")
     print(f" GraphGAN Training: {dataset_name}")
     print(f"{'='*70}")
 
     data = build_hetero_data(dataset_name)
-    actual_nodes = data["node"].num_nodes
-    print(f"  Nodes: {actual_nodes}")
+    
+    # Extract tight fraud subgraph to avoid OOM memory issues
+    real_x, real_edge_index, _ = extract_fraud_subgraph(data, num_nodes=num_nodes)
+    actual_nodes = real_x.shape[0]
+    print(f"  Extracted Subgraph size: {actual_nodes} nodes, {real_edge_index.shape[1]} edges")
 
     device = torch.device("cpu")
     model = GraphGAN(latent_dim=latent_dim, hidden_dim=HIDDEN_DIM, num_nodes=actual_nodes).to(device)
-    optimizer_G = torch.optim.Adam(model.generator.parameters(), lr=lr, betas=(0.5, 0.999))
+    
+    # Feature dimension project to map real_x to GAN's HIDDEN_DIM
+    in_dim = real_x.shape[1]
+    feature_proj = nn.Linear(in_dim, HIDDEN_DIM).to(device)
+    
+    optimizer_G = torch.optim.Adam(list(model.generator.parameters()) + list(feature_proj.parameters()), lr=lr, betas=(0.5, 0.999))
     optimizer_D = torch.optim.Adam(model.discriminator.parameters(), lr=lr, betas=(0.5, 0.999))
 
-    real_node_features = data["node"].x.to(device)
-    real_edge_index = data["node", "Transaction", "node"].edge_index.to(device)
+    real_edge_index = real_edge_index.to(device)
+    
+    # Build target dense adjacency matrix for supervised topology alignment
+    real_adj = torch.zeros(actual_nodes, actual_nodes, device=device)
+    if real_edge_index.numel() > 0:
+        real_adj[real_edge_index[0], real_edge_index[1]] = 1.0
 
     model.train()
     for epoch in range(1, num_epochs + 1):
+        real_node_features = feature_proj(real_x.to(device))
+        
         # Train discriminator
         for _ in range(CRITIC_ITERATIONS):
             optimizer_D.zero_grad()
 
-            noise = torch.randn(actual_nodes, latent_dim, device=device)
-            fake_node_features, fake_edge_probs = model.generator(noise)
+            # Generate batch size = 1 synthetic graph matching real size
+            noise = torch.randn(1, actual_nodes, latent_dim, device=device)
+            fake_node_features_batch, fake_edge_probs_batch = model.generator(noise)
+            fake_node_features = fake_node_features_batch.squeeze(0)
+
+            # Sample fake edge indices from highest probabilities
+            flat_probs = fake_edge_probs_batch.squeeze(0).view(-1)
+            num_edges = real_edge_index.shape[1]
+            topk_vals, topk_indices = torch.topk(flat_probs, k=min(num_edges, flat_probs.numel()))
+            fake_src = topk_indices // actual_nodes
+            fake_dst = topk_indices % actual_nodes
+            fake_edge_index = torch.stack([fake_src, fake_dst])
 
             real_node_score, real_edge_score = model.discriminator(real_node_features, real_edge_index)
-            fake_node_score, fake_edge_score = model.discriminator(fake_node_features.detach(), real_edge_index)
+            fake_node_score, fake_edge_score = model.discriminator(fake_node_features.detach(), fake_edge_index)
 
             d_loss = -(real_node_score.mean() + real_edge_score.mean() -
                        fake_node_score.mean() - fake_edge_score.mean())
             d_loss.backward()
             optimizer_D.step()
 
+            # Soft clamp critic parameters (WGAN constraint)
             for p in model.discriminator.parameters():
                 p.data.clamp_(-WASHERSTEIN_CLIP, WASHERSTEIN_CLIP)
 
         # Train generator
         optimizer_G.zero_grad()
-        noise = torch.randn(actual_nodes, latent_dim, device=device)
-        fake_node_features, fake_edge_probs = model.generator(noise)
-        fake_node_score, fake_edge_score = model.discriminator(fake_node_features, real_edge_index)
+        noise = torch.randn(1, actual_nodes, latent_dim, device=device)
+        fake_node_features_batch, fake_edge_probs_batch = model.generator(noise)
+        fake_node_features = fake_node_features_batch.squeeze(0)
+        fake_edge_probs = fake_edge_probs_batch.squeeze(0)
 
-        g_loss = -(fake_node_score.mean() + fake_edge_score.mean())
+        # Sample fake edges
+        flat_probs = fake_edge_probs.view(-1)
+        topk_vals, topk_indices = torch.topk(flat_probs, k=min(num_edges, flat_probs.numel()))
+        fake_src = topk_indices // actual_nodes
+        fake_dst = topk_indices % actual_nodes
+        fake_edge_index = torch.stack([fake_src, fake_dst])
+
+        fake_node_score, fake_edge_score = model.discriminator(fake_node_features, fake_edge_index)
+
+        # Joint loss: adversarial + reconstruction topology loss
+        adv_loss = -(fake_node_score.mean() + fake_edge_score.mean())
+        topo_loss = F.binary_cross_entropy(fake_edge_probs, real_adj)
+        g_loss = adv_loss + 10.0 * topo_loss
+        
         g_loss.backward()
         optimizer_G.step()
 
         if epoch % 20 == 0 or epoch == 1:
-            print(f"  Epoch {epoch:3d}/{num_epochs} | D loss: {d_loss.item():.4f} | G loss: {g_loss.item():.4f}")
+            print(f"  Epoch {epoch:3d}/{num_epochs} | D loss: {d_loss.item():.4f} | G loss: {g_loss.item():.4f} | Topology Loss: {topo_loss.item():.4f}")
 
     model.eval()
     with torch.no_grad():
-        noise = torch.randn(actual_nodes, latent_dim, device=device)
+        noise = torch.randn(1, actual_nodes, latent_dim, device=device)
         synth_node_features, synth_edge_probs = model.generator(noise)
+        synth_node_features = synth_node_features.squeeze(0)
+        synth_edge_probs = synth_edge_probs.squeeze(0)
         print(f"  Synthetic subgraph generated: {actual_nodes} nodes")
         print(f"  Edge probability range: [{synth_edge_probs.min():.4f}, {synth_edge_probs.max():.4f}]")
 
@@ -280,7 +393,7 @@ def train_graphgan(dataset_name, num_epochs=100, lr=0.0002, latent_dim=LATENT_DI
 def run_graphgan_pipeline():
     """Run GraphGAN training on all ingested datasets."""
     if not OUTPUT_DIR.exists():
-        print("No graph_data directory found. Run Layer 1 ingestion first.")
+        print("No graph_data directory found. Run Layer 1 Ingestion first.")
         return
 
     datasets = sorted([d.name for d in OUTPUT_DIR.iterdir() if d.is_dir()])
@@ -288,8 +401,10 @@ def run_graphgan_pipeline():
 
     results = {}
     for dataset_name in datasets:
+        if dataset_name not in ["elliptic_v1", "paysim1"]:
+            continue
         try:
-            model, node_feat, edge_prob = train_graphgan(dataset_name)
+            model, node_feat, edge_prob = train_graphgan(dataset_name, num_nodes=50)
             results[dataset_name] = "SUCCESS"
         except Exception as e:
             print(f"  ❌ {dataset_name} failed: {type(e).__name__}: {e}")

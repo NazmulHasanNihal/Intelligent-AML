@@ -1002,7 +1002,7 @@ def run_paper_benchmark(
                         continue
 
                 # Run Execution
-                print(f"  [{current_trial:02d}/{total_combinations:02d}] Evaluating {model_name:<36} ... ", end="", flush=True)
+                print(f"  [{current_trial:02d}/{total_combinations:02d}] Evaluating {model_name:<36} ...", flush=True)
                 t_start = time.perf_counter()
                 
                 try:
@@ -1052,17 +1052,18 @@ def run_paper_benchmark(
                     
                     current_ram_mb = get_process_ram_mb()
                     print(
-                        f"DONE ({elapsed:.1f}s) -> "
+                        f"    -> DONE ({elapsed:.1f}s) -> "
                         f"F1: {metrics['f1_score']:.4f} | "
                         f"Rec: {metrics['recall']:.4f} | "
                         f"Prec: {metrics['precision']:.4f} | "
                         f"PR-AUC: {metrics['pr_auc']:.4f} | "
                         f"Lat: {metrics['inference_latency_ms']}ms | "
-                        f"RAM: {current_ram_mb/1024:.2f}GB/5.00GB"
+                        f"RAM: {current_ram_mb/1024:.2f}GB/5.00GB",
+                        flush=True
                     )
                     
                 except Exception as e:
-                    print(f"FAILED: {e}")
+                    print(f"    -> FAILED: {e}", flush=True)
                     
                 trim_process_memory()
 

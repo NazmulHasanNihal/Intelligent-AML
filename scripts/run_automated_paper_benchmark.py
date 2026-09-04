@@ -373,8 +373,22 @@ def save_atomic_checkpoint(checkpoint_path: Path, data: Dict[str, Any]) -> None:
 
 
 def load_checkpoint(checkpoint_path: Path) -> Optional[Dict[str, Any]]:
-    """Loads and validates a previously saved checkpoint JSON."""
+    """Loads and validates a previously saved checkpoint JSON, with cross-epoch fallback."""
     if not checkpoint_path.exists():
+        try:
+            model_slug = checkpoint_path.name
+            parent_dataset = checkpoint_path.parent.parent.parent
+            if parent_dataset.exists():
+                for alt_group in parent_dataset.glob("*_*ep/checkpoints"):
+                    alt_file = alt_group / model_slug
+                    if alt_file.exists() and alt_file != checkpoint_path:
+                        with open(alt_file, "r", encoding="utf-8") as f:
+                            data = json.load(f)
+                        if isinstance(data, dict) and "f1_score" in data and "model" in data:
+                            save_atomic_checkpoint(checkpoint_path, data)
+                            return data
+        except Exception:
+            pass
         return None
     try:
         with open(checkpoint_path, "r", encoding="utf-8") as f:
@@ -550,7 +564,7 @@ def evaluate_tabular_model(model_cls: Any, data: Any, split_ratio: float, is_top
     num_test_samples = int(np.sum(test_mask))
     
     # 1. Training Phase
-    tracemalloc.start()
+    ram_start_mb = get_process_ram_mb()
     t0 = time.perf_counter()
     
     if model_cls == DeepAutoencoderBaseline:
@@ -564,8 +578,7 @@ def evaluate_tabular_model(model_cls: Any, data: Any, split_ratio: float, is_top
         model.fit(x_train[train_mask], y_train[train_mask])
         
     train_time = time.perf_counter() - t0
-    _, peak_mem = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+    peak_mem = max(0, int((get_process_ram_mb() - ram_start_mb) * 1024 * 1024))
     
     # 2. Inference Phase
     t_inf0 = time.perf_counter()
@@ -603,11 +616,12 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
     target_offset = offset_dict[target_node]
     
     metadata = data.metadata()
-    all_ts = []
-    for rel in metadata[1]:
-        if rel in data and hasattr(data[rel], "delta_t"):
-            all_ts.extend(data[rel].delta_t.tolist())
-    ts_threshold = np.percentile(all_ts, int(split_ratio * 100)) if all_ts else 0.0
+    all_ts_tensors = [data[rel].delta_t for rel in metadata[1] if rel in data and hasattr(data[rel], "delta_t")]
+    if all_ts_tensors:
+        concat_ts = torch.cat(all_ts_tensors)
+        ts_threshold = float(torch.quantile(concat_ts.float(), split_ratio).item())
+    else:
+        ts_threshold = 0.0
 
     valid_edge_indices = []
     for rel in metadata[1]:
@@ -667,7 +681,7 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
     criterion = nn.CrossEntropyLoss()
     
     # 1. Training Phase
-    tracemalloc.start()
+    ram_start_mb = get_process_ram_mb()
     t0 = time.perf_counter()
     model.train()
     
@@ -677,7 +691,9 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
     
     # Adaptive CPU epoch limit if running strictly on CPU on huge graphs
     effective_epochs = num_epochs
-    if dev_type == "cpu" and num_nodes_total > 500_000:
+    if dev_type == "cpu" and num_nodes_total > 5_000_000:
+        effective_epochs = 1
+    elif dev_type == "cpu" and num_nodes_total > 500_000:
         effective_epochs = min(num_epochs, 3)
     
     try:
@@ -699,9 +715,12 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
             else:
                 loss = criterion(target_out[train_mask], torch.tensor(y_target[train_mask], dtype=torch.long, device=device))
                 
+            loss_val = float(loss.item())
             loss.backward()
             optimizer.step()
             del out, target_out, loss
+            if epoch == 1 or epoch % 2 == 0 or epoch == effective_epochs:
+                print(f"      [GNN Training] Epoch {epoch:2d}/{effective_epochs} | Loss: {loss_val:.4f}", flush=True)
     except (torch.cuda.OutOfMemoryError, RuntimeError) as oom:
         if "out of memory" in str(oom).lower() or "CUDA" in str(oom):
             trim_process_memory()
@@ -716,15 +735,16 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
                 out = model(x_homo, train_edge_index) if not is_evolve else model(x_homo, train_edge_index)[0]
                 target_out = out[target_offset : target_offset + len(y_target)]
                 loss = criterion(target_out[valid_indices[:10000]], torch.tensor(y_target[valid_indices[:10000]], dtype=torch.long, device=device))
+                loss_val = float(loss.item())
                 loss.backward()
                 optimizer.step()
                 del out, target_out, loss
+                print(f"      [Fallback CPU Training] Epoch {epoch:2d} | Loss: {loss_val:.4f}", flush=True)
         else:
             raise oom
         
     train_time = time.perf_counter() - t0
-    _, peak_mem = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+    peak_mem = max(0, int((get_process_ram_mb() - ram_start_mb) * 1024 * 1024))
     
     # 2. Inference Phase
     model.eval()

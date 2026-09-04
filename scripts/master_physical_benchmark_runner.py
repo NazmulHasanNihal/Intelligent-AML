@@ -158,22 +158,35 @@ PROGRESS_MD = ROOT / "docs" / "Live_Physical_Benchmark_Progress.md"
 
 
 def get_dataset_checkpoint_status(dataset_name: str, split_name: str = "70_30", epochs: int = 10):
-    """Checks how many models are completed for a given dataset."""
+    """Checks how many models are completed for a given dataset, with cross-epoch fallback."""
     ckpt_dir = DEFAULT_BENCHMARK_DIR / dataset_name / f"{split_name}_{epochs}ep" / "checkpoints"
-    if not ckpt_dir.exists():
-        return 0, len(ALL_MODELS_REGISTRY), []
     
-    completed = []
-    for m in ALL_MODELS_REGISTRY:
-        p = ckpt_dir / f"{m['slug']}.json"
-        if p.exists():
-            try:
-                with open(p, "r", encoding="utf-8") as f:
-                    rec = json.load(f)
-                completed.append((m["name"], rec.get("f1_score", 0.0), rec.get("recall", 0.0), rec.get("pr_auc", 0.0)))
-            except Exception:
-                pass
-    return len(completed), len(ALL_MODELS_REGISTRY), completed
+    # Fallback to any sibling checkpoint folder if primary does not exist or has fewer models
+    ds_dir = DEFAULT_BENCHMARK_DIR / dataset_name
+    candidate_dirs = [ckpt_dir]
+    if ds_dir.exists():
+        for alt in ds_dir.glob("*_*ep/checkpoints"):
+            if alt not in candidate_dirs:
+                candidate_dirs.append(alt)
+
+    best_completed = []
+    for cdir in candidate_dirs:
+        if not cdir.exists():
+            continue
+        curr_completed = []
+        for m in ALL_MODELS_REGISTRY:
+            p = cdir / f"{m['slug']}.json"
+            if p.exists():
+                try:
+                    with open(p, "r", encoding="utf-8") as f:
+                        rec = json.load(f)
+                    curr_completed.append((m["name"], rec.get("f1_score", 0.0), rec.get("recall", 0.0), rec.get("pr_auc", 0.0)))
+                except Exception:
+                    pass
+        if len(curr_completed) > len(best_completed):
+            best_completed = curr_completed
+
+    return len(best_completed), len(ALL_MODELS_REGISTRY), best_completed
 
 
 def update_live_progress_report():

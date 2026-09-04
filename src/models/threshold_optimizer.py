@@ -106,100 +106,92 @@ class OptimalThresholdCalibrator:
         total_pos = int(pos_mask.sum())
         total_neg = int(neg_mask.sum())
         
-        if total_pos == 0:
+        if total_pos == 0 or total_neg == 0:
             self.optimal_tau = self.default_tau
             return self.optimal_tau
 
-        # Dense Multi-Scale Log-Linear Candidate Grid (Captures thresholds from 0.0005 to 0.98)
-        log_candidates = np.logspace(np.log10(max(1e-4, self.min_threshold)), np.log10(0.15), self.num_candidates // 2)
-        lin_candidates = np.linspace(0.15, self.max_threshold, self.num_candidates // 2)
+        pos_ratio = total_pos / float(total_pos + total_neg)
+        effective_max_fpr = self.max_allowed_fpr
+        # Dynamically tighten FPR ceiling under extreme class imbalance (<1% positives)
+        if pos_ratio < 0.01:
+            effective_max_fpr = min(effective_max_fpr, max(0.0003, pos_ratio * 4.0))
+
+        # Multi-Scale Log-Linear Candidate Grid (from 0.001 to 0.99)
+        log_candidates = np.logspace(np.log10(max(1e-4, self.min_threshold)), np.log10(0.20), self.num_candidates // 2)
+        lin_candidates = np.linspace(0.20, self.max_threshold, self.num_candidates // 2)
         candidates = np.unique(np.concatenate([log_candidates, lin_candidates]))
         candidates = np.clip(candidates, 1e-4, 0.999)
 
-        best_score = -1e9
-        best_tau = self.default_tau
-        best_metrics: Dict[str, float] = {}
-        
-        best_f1_score = -1e9
-        best_f1_tau = self.default_tau
-        best_util_score = -1e9
-        best_util_tau = self.default_tau
+        # Ultra-fast O(K log N) Vectorized Evaluation via sorted binary search
+        sorted_pos = np.sort(y_probs[pos_mask])
+        sorted_neg = np.sort(y_probs[neg_mask])
 
-        for tau in candidates:
-            preds = (y_probs >= tau).astype(np.int32)
-            
-            tp = float(preds[pos_mask].sum())
-            fp = float(preds[neg_mask].sum())
-            fn = float(total_pos - tp)
-            tn = float(total_neg - fp)
-            
-            precision = tp / max(1.0, tp + fp)
-            recall = tp / max(1.0, total_pos)
-            specificity = tn / max(1.0, total_neg)
-            
-            f1 = (2.0 * precision * recall) / (precision + recall + 1e-6)
-            f2 = (5.0 * precision * recall) / (4.0 * precision + recall + 1e-6)
-            f1_f2 = (f1 + f2) / 2.0
-            youden_j = recall + specificity - 1.0
-            
-            # Neyman-Pearson Lemma: Constrained utility under maximum allowable False Positive Rate (FPR)
-            fpr = fp / max(1.0, total_neg)
-            if fpr <= self.max_allowed_fpr:
-                # Inside admissible Neyman-Pearson operating region: optimize generalized F-beta
-                aml_utility = f2 if self.target_metric == "f2" else f1
-            else:
-                # Outside admissible operating region: penalized by exact false-positive excess
-                aml_utility = -1.0 * (fpr - self.max_allowed_fpr)
-            
-            if f1 > best_f1_score:
-                best_f1_score = f1
-                best_f1_tau = float(tau)
-                
-            if aml_utility > best_util_score:
-                best_util_score = aml_utility
-                best_util_tau = float(tau)
+        # For each candidate tau, calculate TP and FP in 1ms
+        tps = (total_pos - np.searchsorted(sorted_pos, candidates, side='left')).astype(np.float64)
+        fps = (total_neg - np.searchsorted(sorted_neg, candidates, side='left')).astype(np.float64)
+        fns = (total_pos - tps).astype(np.float64)
+        tns = (total_neg - fps).astype(np.float64)
 
-            # Zero-Miss 0.01% Statutory Compliance Objective (Captures >= 99.9% Recall)
-            zero_miss_001 = (10.0 * recall + 2.0 * precision) - 100.0 * max(0.0, 0.99 - recall)
+        precisions = tps / np.maximum(1.0, tps + fps)
+        recalls = tps / max(1.0, total_pos)
+        specificities = tns / max(1.0, total_neg)
+        fprs = fps / max(1.0, total_neg)
 
-            fpr = fp / max(1.0, total_neg)
+        f1s = (2.0 * precisions * recalls) / (precisions + recalls + 1e-6)
+        f2s = (5.0 * precisions * recalls) / (4.0 * precisions + recalls + 1e-6)
+        f1_f2s = (f1s + f2s) / 2.0
+        youden_js = recalls + specificities - 1.0
 
-            if self.target_metric == "f1":
-                score = f1
-            elif self.target_metric == "f2":
-                score = f2
-            elif self.target_metric == "f1_f2_harmonic":
-                score = f1_f2
-            elif self.target_metric == "aml_utility":
-                score = aml_utility
-            elif self.target_metric == "zero_miss_001":
-                score = zero_miss_001
-            elif self.target_metric == "youden_j":
-                score = youden_j
-            elif self.target_metric == "cost_sensitive":
-                cost_fn = 10.0
-                cost_fp = 1.0
-                score = -(cost_fn * fn + cost_fp * fp)
-            else:
-                score = f1
+        # Neyman-Pearson utility constrained by admissible false positive rate
+        admissible = (fprs <= effective_max_fpr)
+        aml_utilities = np.where(
+            admissible,
+            f2s if self.target_metric == "f2" else f1s,
+            -1.0 * (fprs - effective_max_fpr)
+        )
 
-            # Enforce empirical FPR budget constraint to prevent false positive blow-ups
-            if fpr > self.max_allowed_fpr:
-                score = score - 20.0 * (fpr - self.max_allowed_fpr)
+        if self.target_metric == "f1":
+            scores = f1s.copy()
+        elif self.target_metric == "f2":
+            scores = f2s.copy()
+        elif self.target_metric == "f1_f2_harmonic":
+            scores = f1_f2s.copy()
+        elif self.target_metric == "aml_utility":
+            scores = aml_utilities.copy()
+        elif self.target_metric == "youden_j":
+            scores = youden_js.copy()
+        else:
+            scores = f1s.copy()
 
-            if score > best_score:
-                best_score = score
-                best_tau = float(tau)
-                best_metrics = {
-                    "precision": round(float(precision), 4),
-                    "recall": round(float(recall), 4),
-                    "f1_score": round(float(f1), 4),
-                    "f2_score": round(float(f2), 4),
-                    "aml_utility": round(float(aml_utility), 4),
-                    "specificity": round(float(specificity), 4),
-                    "youden_j": round(float(youden_j), 4),
-                    "score": round(float(score), 4)
-                }
+        # Heavily penalize thresholds that violate the FPR budget
+        inadmissible_penalty = 50.0 * np.maximum(0.0, fprs - effective_max_fpr)
+        scores = scores - inadmissible_penalty
+
+        # If any admissible candidate exists, filter to admissible region
+        if np.any(admissible):
+            scores_admissible = np.where(admissible, scores, -1e9)
+            best_idx = int(np.argmax(scores_admissible))
+        else:
+            best_idx = int(np.argmax(scores))
+
+        best_f1_idx = int(np.argmax(f1s))
+        best_util_idx = int(np.argmax(aml_utilities))
+
+        best_tau = float(candidates[best_idx])
+        best_f1_tau = float(candidates[best_f1_idx])
+        best_util_tau = float(candidates[best_util_idx])
+
+        best_metrics = {
+            "precision": round(float(precisions[best_idx]), 4),
+            "recall": round(float(recalls[best_idx]), 4),
+            "f1_score": round(float(f1s[best_idx]), 4),
+            "f2_score": round(float(f2s[best_idx]), 4),
+            "aml_utility": round(float(aml_utilities[best_idx]), 4),
+            "specificity": round(float(specificities[best_idx]), 4),
+            "youden_j": round(float(youden_js[best_idx]), 4),
+            "fpr": round(float(fprs[best_idx]), 6),
+            "score": round(float(scores[best_idx]), 4)
+        }
 
         self.optimal_tau = best_tau
         self.optimal_threshold_f1 = best_f1_tau

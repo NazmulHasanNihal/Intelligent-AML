@@ -37,6 +37,12 @@ from .burst_aware_hgt_conv import BurstAwareHGTConv
 from .graph_smote import LatentGraphSMOTE, DynamicThresholdCalibrator, BilinearEdgeGenerator
 from xgboost import XGBClassifier
 
+try:
+    from tqdm import tqdm
+except ImportError:
+    def tqdm(iterable, *args, **kwargs):
+        return iterable
+
 OUTPUT_DIR = Path("data/outputs/graph_data")
 NODE_TYPES = ["Account", "User", "Device", "Institution"]
 EDGE_TYPES = ["Transaction", "IP_Connection", "Shared_Ownership"]
@@ -1287,8 +1293,9 @@ def train_temporal_contrastive_pretraining(model, x_dict, edge_index_dict, delta
         use_dt = delta_t_dict
         use_burst = burst_score_dict
 
-    print("  [Pipeline] Running Multi-Scale Temporal Contrastive Pretraining (InfoNCE)...")
-    for epoch in range(1, num_epochs + 1):
+    print("  [Pipeline] [1/5] Multi-Scale Contrastive Pretraining (InfoNCE)...")
+    pretrain_bar = tqdm(range(1, num_epochs + 1), desc="  [Pretrain] InfoNCE", unit="ep", dynamic_ncols=True, leave=False)
+    for epoch in pretrain_bar:
         optimizer.zero_grad()
         
         # View 1: Multi-scale log-temporal masking + 10% feature dropout
@@ -1322,8 +1329,8 @@ def train_temporal_contrastive_pretraining(model, x_dict, edge_index_dict, delta
             
         total_contrastive_loss.backward()
         optimizer.step()
-        if epoch % 2 == 0 or epoch == num_epochs:
-            print(f"    InfoNCE Pretrain Epoch {epoch}/{num_epochs} | Loss: {total_contrastive_loss.item():.4f}")
+        pretrain_bar.set_postfix({"Loss": f"{total_contrastive_loss.item():.4f}"})
+    print(f"    -> InfoNCE Pretrain Completed ({num_epochs} epochs) | Final Loss: {total_contrastive_loss.item():.4f}")
 
 
 def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None, ewc_lambda=100.0, preloaded_data=None, *args, **kwargs):
@@ -1605,7 +1612,8 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
         torch.cuda.empty_cache()
     
     model.train()
-    for epoch in range(1, effective_epochs + 1):
+    gnn_pbar = tqdm(range(1, effective_epochs + 1), desc=f"  [Pipeline] [2/5] HT-GNN Epochs", unit="ep", dynamic_ncols=True, leave=False)
+    for epoch in gnn_pbar:
         model.train()
         optimizer.zero_grad(set_to_none=True)
         
@@ -1624,7 +1632,7 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
             
             synthetic_logits = []
             synthetic_y = []
-                        # Latent-Space GraphSMOTE Augmentation Engine
+            # Latent-Space GraphSMOTE Augmentation Engine
             if len(minority_idx) >= 2:
                 graph_smote_engine = LatentGraphSMOTE(hidden_dim=effective_hidden, k_neighbors=min(5, len(minority_idx)-1), oversample_ratio=effective_smote_ratio)
                 z_target_aug, y_target_aug, _ = graph_smote_engine.synthesize_latent_nodes(
@@ -1738,15 +1746,18 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
                         patience_counter += 1
                         if patience_counter >= effective_patience and epoch > min_epochs_early_stop:
                             print(f"  [Early Stopping] Triggered at Epoch {epoch} with Best Val Score {best_val_score:.4f} (Loss: {best_val_loss:.4f})", flush=True)
+                            gnn_pbar.close()
                             break
+        
+        if len(y_target_valid) > 0:
+            pred = logits_valid.argmax(dim=1)
+            acc = (pred == y_target_valid).float().mean().item()
+        else:
+            acc = 0.0
+        gnn_pbar.set_postfix({"Loss": f"{loss.item():.4f}", "Acc": f"{acc:.4f}", "ValScore": f"{best_val_score:.4f}"})
         
         print_freq = 1 if (num_total_nodes > 1_000_000 or effective_epochs <= 10) else (5 if effective_epochs <= 20 else 10)
         if epoch % print_freq == 0 or epoch == 1 or epoch == effective_epochs:
-            if len(y_target_valid) > 0:
-                pred = logits_valid.argmax(dim=1)
-                acc = (pred == y_target_valid).float().mean().item()
-            else:
-                acc = 0.0
             print(f"    [Training] Epoch {epoch:2d}/{effective_epochs} | Loss: {loss.item():.4f} | Train Acc: {acc:.4f}", flush=True)
 
     # Restore best checkpoint
@@ -1764,11 +1775,14 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
         
         val_logits = val_out_dict[target_node]
         val_probs = F.softmax(val_logits[val_mask_nodes], dim=1)[:, 1].cpu().numpy()
-        val_y = y_target[val_mask_nodes].cpu().numpy()
-        
-        # Dynamic Threshold Calibration for Standalone GNN (Beta = 2.0 for Recall optimization)
-        calibrator = DynamicThresholdCalibrator(beta=2.0)
-        optimal_standalone_tau = calibrator.calibrate(val_probs, val_y)
+        # Dynamic Threshold Calibration for Standalone GNN (Balanced F1-Score & FPR bounded)
+        try:
+            from .threshold_optimizer import OptimalThresholdCalibrator
+            opt_cal = OptimalThresholdCalibrator(target_metric="f1", max_allowed_fpr=0.01)
+            optimal_standalone_tau = opt_cal.fit(val_y, val_probs)
+        except Exception:
+            calibrator = DynamicThresholdCalibrator(beta=1.0)
+            optimal_standalone_tau = calibrator.calibrate(val_probs, val_y)
         
         valid_mask = y_target >= 0
         logits_valid = logits[valid_mask]
@@ -1959,8 +1973,10 @@ class ResMLPNet(nn.Module):
         gnn_p = x[:, 3]
         alpha_gate = torch.sigmoid(self.gate(x)).squeeze(-1)
         
-        # Exact equal Bayesian prior weighting on un-gated skip connection
-        blended = alpha_gate * out_mlp + (1.0 - alpha_gate) * (0.50 * tree_p + 0.50 * gnn_p)
+        # Adaptive prior weighting: Tree experts hold 80% baseline authority on tabular/financial data,
+        # GNN provides complementary structural boost (20%), modulated by the learned MLP gate
+        base_expert = 0.80 * tree_p + 0.20 * gnn_p
+        blended = alpha_gate * out_mlp + (1.0 - alpha_gate) * base_expert
         return torch.clamp(blended, 1e-6, 1.0 - 1e-6)
 
 
@@ -1992,8 +2008,9 @@ class ResMLPMetaLearner:
         x_t = torch.tensor(X_arr, dtype=torch.float32, device=device)
         y_t = torch.tensor(y_arr, dtype=torch.float32, device=device)
         
-        pos_weight = max(1.0, float((y_arr == 0).sum()) / max(1.0, float((y_arr == 1).sum())))
-        pos_weight = min(12.0, pos_weight)  # Balanced bounded weight
+        pos_ratio = max(1e-5, float((y_arr == 1).sum()) / max(1.0, float(len(y_arr))))
+        raw_weight = float((y_arr == 0).sum()) / max(1.0, float((y_arr == 1).sum()))
+        pos_weight = min(4.0, max(1.0, float(np.sqrt(raw_weight))))  # Square-root dampened to prevent probability explosion
         
         self.net.train()
         for ep in range(self.epochs):
@@ -2014,7 +2031,7 @@ class ResMLPMetaLearner:
         import numpy as np
         if self.net is None:
             X_arr = np.asarray(X)
-            p = 0.50 * X_arr[:, 13] + 0.30 * X_arr[:, 14] + 0.20 * X_arr[:, 3]
+            p = 0.45 * X_arr[:, 13] + 0.45 * X_arr[:, 14] + 0.10 * X_arr[:, 3]
             return np.column_stack([1.0 - p, p])
             
         X_arr = np.nan_to_num(np.asarray(X, dtype=np.float32), nan=0.0)
@@ -2213,6 +2230,24 @@ class CSTGBClassifier:
             
             return x, fused_feats, p_gnn, deg_centrality, pass_through, burst_velocity, closed_loop_sig
 
+    @staticmethod
+    def _recalibrate_smote_probs(probs, pi_train, pi_true):
+        """
+        Applies Bayes log-odds adjustment to correct for artificial SMOTE prevalence.
+        Maps probabilities trained on 50/50 balance back to true empirical base-rate.
+        """
+        if pi_train is None or pi_true is None:
+            return probs
+        if pi_train <= 0.0 or pi_train >= 1.0 or pi_true <= 0.0 or pi_true >= 1.0:
+            return probs
+        eps = 1e-6
+        p = np.clip(probs, eps, 1.0 - eps)
+        logit_p = np.log(p / (1.0 - p))
+        train_odds = np.log(pi_train / (1.0 - pi_train))
+        true_odds = np.log(pi_true / (1.0 - pi_true))
+        corrected_logit = logit_p - train_odds + true_odds
+        return 1.0 / (1.0 + np.exp(-corrected_logit))
+
     def _predict_ensemble(self, feat_tuple):
         import numpy as np
         if len(feat_tuple) == 7:
@@ -2239,6 +2274,13 @@ class CSTGBClassifier:
         if p_lgb_fused is None: p_lgb_fused = p_xgb_fused
         if p_cat_fused is None: p_cat_fused = p_xgb_fused
         
+        # Recalibrate SMOTE-shifted probabilities for fused stream back to true prior
+        if hasattr(self, "fused_prior_correction") and self.fused_prior_correction is not None:
+            pi_tr, pi_val = self.fused_prior_correction
+            p_lgb_fused = self._recalibrate_smote_probs(p_lgb_fused, pi_tr, pi_val)
+            p_cat_fused = self._recalibrate_smote_probs(p_cat_fused, pi_tr, pi_val)
+            p_xgb_fused = self._recalibrate_smote_probs(p_xgb_fused, pi_tr, pi_val)
+        
         if self.is_meta_fitted:
             meta_input = self._compute_meta_features(
                 p_xgb_tab, p_lgb_tab, p_cat_tab, p_gnn_flat,
@@ -2247,8 +2289,10 @@ class CSTGBClassifier:
             )
             p_ensemble = self.meta_learner.predict_proba(meta_input)[:, 1]
         else:
-            # Unbiased uniform Bayesian prior average across all available model streams
-            p_ensemble = (p_lgb_tab + p_cat_tab + p_xgb_tab + p_lgb_fused + p_cat_fused + p_gnn_flat) / 6.0
+            # High-precision weighted prior: 45% Tabular Tree Expert, 45% Fused Expert, 10% Structural GNN
+            p_tab_mean = (p_lgb_tab + p_cat_tab + p_xgb_tab) / 3.0
+            p_fused_mean = (p_lgb_fused + p_cat_fused + p_xgb_fused) / 3.0
+            p_ensemble = 0.45 * p_tab_mean + 0.45 * p_fused_mean + 0.10 * p_gnn_flat
             
         return p_ensemble
 
@@ -2371,7 +2415,6 @@ class CSTGBClassifier:
                 if pos_count >= 10 and neg_count >= 10:
                     if len(y_train) > 100_000:
                         # For massive datasets (e.g. PaySim1 with 5.4M rows), intelligently subsample negatives
-                        # to prevent multi-million row SMOTE explosion and 15-minute training stalls
                         pos_indices = np.where(y_train == 1)[0]
                         neg_indices = np.where(y_train == 0)[0]
                         max_neg = min(len(neg_indices), max(len(pos_indices) * 10, 50_000))
@@ -2385,12 +2428,18 @@ class CSTGBClassifier:
                     k_smote = min(5, pos_count - 1) if pos_count >= 50 else min(3, pos_count - 1)
                     smote_sampler = SMOTE(k_neighbors=k_smote, random_state=42)
                     fused_train_sm, y_train_fused_sm = smote_sampler.fit_resample(fused_sub, y_sub)
+                    self.fused_prior_correction = (
+                        float((y_train_fused_sm == 1).sum()) / max(1, len(y_train_fused_sm)),
+                        float((y_train == 1).sum()) / max(1, len(y_train))
+                    )
                     print(f"  [SMOTE] Imbalance Resampling: {len(y_train)} -> {len(y_train_fused_sm)} samples (pos: {(y_train_fused_sm == 1).sum()})")
                 else:
                     fused_train_sm, y_train_fused_sm = fused_train, y_train
+                    self.fused_prior_correction = None
             except Exception as smote_err:
                 print(f"  [SMOTE Warning] Fallback to raw fused stream: {smote_err}")
                 fused_train_sm, y_train_fused_sm = fused_train, y_train
+                self.fused_prior_correction = None
                 
             amt_fused = np.maximum(0.0, fused_train_sm[:, 3] if fused_train_sm.shape[1] > 3 else 0.0)
             sample_weight_fused = 1.0 + 0.5 * np.log1p(amt_fused)
@@ -2498,7 +2547,7 @@ class CSTGBClassifier:
         else:
             print("  [Warning] No valid training samples found for C-STGB Boosted Head.")
 
-        # Calibrate Optimal Decision Threshold tau*
+        # Calibrate Optimal Decision Threshold tau* (Strict Empirical Prior Preserved)
         cal_mask = val_mask if (val_mask is not None and val_mask.sum() > 0) else test_mask
         if cal_mask is not None:
             from sklearn.metrics import f1_score, fbeta_score
@@ -2511,11 +2560,16 @@ class CSTGBClassifier:
                 
                 n_cal = len(cal_y)
                 if n_cal > 10 and len(np.unique(cal_y)) > 1:
-                    if n_cal > 50_000:
+                    # Stratified proportional sampling that preserves true empirical class ratio
+                    if n_cal > 250_000:
                         pos_cal_idx = np.where(cal_y == 1)[0]
                         neg_cal_idx = np.where(cal_y == 0)[0]
-                        sampled_neg = np.random.choice(neg_cal_idx, size=min(len(neg_cal_idx), 40_000), replace=False)
-                        sub_cal_idx = np.concatenate([pos_cal_idx, sampled_neg])
+                        ratio = len(neg_cal_idx) / max(1, len(pos_cal_idx))
+                        target_pos = min(len(pos_cal_idx), 2000)
+                        target_neg = min(len(neg_cal_idx), int(target_pos * ratio))
+                        sub_pos = np.random.choice(pos_cal_idx, size=target_pos, replace=False) if len(pos_cal_idx) > target_pos else pos_cal_idx
+                        sub_neg = np.random.choice(neg_cal_idx, size=target_neg, replace=False)
+                        sub_cal_idx = np.concatenate([sub_pos, sub_neg])
                         np.random.shuffle(sub_cal_idx)
                         eval_cal_p = cal_probs[sub_cal_idx]
                         eval_cal_y = cal_y[sub_cal_idx]
@@ -2525,7 +2579,7 @@ class CSTGBClassifier:
                     
                     try:
                         from .threshold_optimizer import OptimalThresholdCalibrator
-                        opt_calibrator = OptimalThresholdCalibrator(target_metric="f1", min_threshold=0.02, max_threshold=0.98, num_candidates=600, max_allowed_fpr=0.01)
+                        opt_calibrator = OptimalThresholdCalibrator(target_metric="f1", min_threshold=0.01, max_threshold=0.98, num_candidates=600, max_allowed_fpr=0.005)
                         best_tau = opt_calibrator.fit(eval_cal_y, eval_cal_p)
                         self.optimal_threshold = float(best_tau)
                         self.optimal_threshold_f1 = float(opt_calibrator.optimal_threshold_f1)
@@ -2715,6 +2769,7 @@ class CSTGBClassifier:
         state = {
             "optimal_threshold": self.optimal_threshold,
             "is_meta_fitted": self.is_meta_fitted,
+            "fused_prior_correction": getattr(self, "fused_prior_correction", None),
             "conformal": self.conformal,
             "mondrian_conformal": self.mondrian_conformal,
             "conformal_threshold_q": self.conformal_threshold_q,
@@ -2736,6 +2791,7 @@ class CSTGBClassifier:
         state = joblib.load(path / "cstgb_state.pkl")
         self.optimal_threshold = state["optimal_threshold"]
         self.is_meta_fitted = state["is_meta_fitted"]
+        self.fused_prior_correction = state.get("fused_prior_correction")
         self.conformal = state.get("conformal")
         self.mondrian_conformal = state.get("mondrian_conformal")
         self.conformal_threshold_q = state.get("conformal_threshold_q")

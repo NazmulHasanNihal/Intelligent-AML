@@ -123,10 +123,13 @@ class TestTargetedEnhancements:
         assert feats[3, 6] > 0.0
 
     def test_04_dashboard_module_loadability(self):
-        """Tests that the dashboard script compiles and has valid syntax."""
-        dash_path = Path(__file__).resolve().parent.parent / "scripts" / "dashboard.py"
-        assert dash_path.exists()
-        with open(dash_path, "r", encoding="utf-8") as f:
+        """Tests that the enterprise API server and frontend configuration load cleanly."""
+        api_path = Path(__file__).resolve().parent.parent / "src" / "engine" / "api.py"
+        assert api_path.exists()
+        with open(api_path, "r", encoding="utf-8") as f:
             code = f.read()
-        compiled = compile(code, str(dash_path), "exec")
+        compiled = compile(code, str(api_path), "exec")
         assert compiled is not None
+        
+        frontend_pkg = Path(__file__).resolve().parent.parent / "frontend" / "package.json"
+        assert frontend_pkg.exists()

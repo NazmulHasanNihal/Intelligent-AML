@@ -2272,9 +2272,22 @@ class CSTGBClassifier:
             try:
                 from imblearn.over_sampling import SMOTE
                 if pos_count >= 10 and neg_count >= 10:
+                    if len(y_train) > 150_000:
+                        # For massive datasets (e.g. PaySim1 with 5.4M rows), intelligently subsample negatives
+                        # to prevent multi-million row SMOTE explosion and 15-minute training stalls
+                        pos_indices = np.where(y_train == 1)[0]
+                        neg_indices = np.where(y_train == 0)[0]
+                        max_neg = min(len(neg_indices), max(len(pos_indices) * 10, 100_000))
+                        sampled_neg = np.random.choice(neg_indices, size=max_neg, replace=False)
+                        sub_indices = np.concatenate([pos_indices, sampled_neg])
+                        np.random.shuffle(sub_indices)
+                        fused_sub, y_sub = fused_train[sub_indices], y_train[sub_indices]
+                    else:
+                        fused_sub, y_sub = fused_train, y_train
+
                     k_smote = min(5, pos_count - 1) if pos_count >= 50 else min(3, pos_count - 1)
                     smote_sampler = SMOTE(k_neighbors=k_smote, random_state=42)
-                    fused_train_sm, y_train_fused_sm = smote_sampler.fit_resample(fused_train, y_train)
+                    fused_train_sm, y_train_fused_sm = smote_sampler.fit_resample(fused_sub, y_sub)
                     print(f"  [SMOTE] Imbalance Resampling: {len(y_train)} -> {len(y_train_fused_sm)} samples (pos: {(y_train_fused_sm == 1).sum()})")
                 else:
                     fused_train_sm, y_train_fused_sm = fused_train, y_train

@@ -116,24 +116,34 @@ class LatentGraphSMOTE(nn.Module):
         if num_pos < 2 or self.oversample_ratio <= 0.0:
             return h, y, edge_index
             
-        # Target number of virtual nodes to synthesize
-        num_syn = max(1, int(num_pos * self.oversample_ratio))
-        h_pos = h[pos_indices]
+        # Target number of virtual nodes to synthesize (bounded to avoid memory bloat)
+        num_syn = max(1, min(int(num_pos * self.oversample_ratio), 5000))
         
+        # Subsample positive nodes for k-NN if pos pool > 2048 to prevent O(N_pos^2) cdist memory spike
+        if num_pos > 2048:
+            knn_pos_perm = torch.randperm(num_pos, device=h.device)[:2048]
+            h_pos = h[pos_indices[knn_pos_perm]]
+            actual_pos_indices = pos_indices[knn_pos_perm]
+            pool_size = 2048
+        else:
+            h_pos = h[pos_indices]
+            actual_pos_indices = pos_indices
+            pool_size = num_pos
+
         # Pairwise distance matrix in latent space
         dist_matrix = torch.cdist(h_pos, h_pos)
         # Exclude self-distance
         dist_matrix.fill_diagonal_(float('inf'))
         
-        k = min(self.k_neighbors, num_pos - 1)
-        knn_indices = torch.topk(dist_matrix, k=k, largest=False, dim=-1).indices  # [num_pos, k]
+        k = min(self.k_neighbors, pool_size - 1)
+        knn_indices = torch.topk(dist_matrix, k=k, largest=False, dim=-1).indices  # [pool_size, k]
         
         syn_embeddings = []
         parent_indices = []
         
         for _ in range(num_syn):
             # Select random anchor illicit node
-            anchor_idx = torch.randint(0, num_pos, (1,)).item()
+            anchor_idx = torch.randint(0, pool_size, (1,)).item()
             # Select random neighbor from k-NN
             neighbor_choice = torch.randint(0, k, (1,)).item()
             neighbor_idx = knn_indices[anchor_idx, neighbor_choice].item()

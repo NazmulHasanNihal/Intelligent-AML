@@ -1651,13 +1651,20 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
             neg_batch_idx = torch.where(valid_mask & (y_target == 0))[0]
             
             if len(pos_batch_idx) >= 2 and len(neg_batch_idx) >= 2:
-                desired_pos = max(len(pos_batch_idx), int(effective_smote_ratio * len(neg_batch_idx)))
-                if desired_pos > len(pos_batch_idx):
-                    oversample_idx = pos_batch_idx[torch.randint(0, len(pos_batch_idx), (desired_pos - len(pos_batch_idx),))]
-                    batch_idx = torch.cat([pos_batch_idx, oversample_idx, neg_batch_idx])
+                # Subsample negatives if pool > 80,000 to keep backward pass ultra fast and VRAM minimal
+                if len(neg_batch_idx) > 80_000:
+                    sub_neg_perm = torch.randperm(len(neg_batch_idx), device=neg_batch_idx.device)[:80_000]
+                    use_neg_idx = neg_batch_idx[sub_neg_perm]
                 else:
-                    batch_idx = torch.cat([pos_batch_idx, neg_batch_idx])
-                batch_idx = batch_idx[torch.randperm(len(batch_idx))]
+                    use_neg_idx = neg_batch_idx
+                    
+                desired_pos = max(len(pos_batch_idx), min(int(effective_smote_ratio * len(use_neg_idx)), 40_000))
+                if desired_pos > len(pos_batch_idx):
+                    oversample_idx = pos_batch_idx[torch.randint(0, len(pos_batch_idx), (desired_pos - len(pos_batch_idx),), device=pos_batch_idx.device)]
+                    batch_idx = torch.cat([pos_batch_idx, oversample_idx, use_neg_idx])
+                else:
+                    batch_idx = torch.cat([pos_batch_idx, use_neg_idx])
+                batch_idx = batch_idx[torch.randperm(len(batch_idx), device=batch_idx.device)]
                 logits_valid = logits[batch_idx]
                 y_target_valid = y_target[batch_idx]
                 z_target_valid = z_target[batch_idx]

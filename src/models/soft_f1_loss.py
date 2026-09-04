@@ -103,6 +103,23 @@ class SupConGraphLoss(nn.Module):
         features = F.normalize(features, dim=1)
         batch_size = features.shape[0]
 
+        # Anchor subsampling to prevent O(N^2) quadratic VRAM explosion on large graphs (>2000 nodes)
+        # Keeps memory under 16 MB while preserving contrastive clustering gradients for fraud rings
+        if batch_size > 2048:
+            pos_idx = torch.where(labels == 1)[0]
+            neg_idx = torch.where(labels == 0)[0]
+            
+            n_pos = min(len(pos_idx), 1024)
+            n_neg = min(len(neg_idx), 2048 - n_pos)
+            
+            p_sub = pos_idx[torch.randperm(len(pos_idx), device=device)[:n_pos]]
+            n_sub = neg_idx[torch.randperm(len(neg_idx), device=device)[:n_neg]]
+            sub_idx = torch.cat([p_sub, n_sub])
+            
+            features = features[sub_idx]
+            labels = labels[sub_idx]
+            batch_size = features.shape[0]
+
         # Pairwise mask: 1 if labels[i] == labels[j], 0 otherwise
         labels_mat = labels.contiguous().view(-1, 1)
         mask = torch.eq(labels_mat, labels_mat.T).float().to(device)

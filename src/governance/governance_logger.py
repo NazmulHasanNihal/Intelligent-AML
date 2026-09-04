@@ -1,5 +1,5 @@
 """
-governance_logger.py — Fed SR 11-7 & OCC 2011-12 Model Governance & Audit Logger.
+governance_logger.py — Model Governance (SR 26-2) & Audit Logger.
 Implements Population Stability Index (PSI) drift monitoring, input characteristic tracking,
 and cryptographically hashed immutable compliance decision audit trails.
 """
@@ -16,7 +16,7 @@ import numpy as np
 class ModelGovernanceLogger:
     """
     Enterprise Model Risk Management (MRM) & Regulatory Audit Logger.
-    Complies with Federal Reserve SR 11-7 and OCC Bulletin 2011-12.
+    Aligned with 2026 Interagency Guidance on Model Risk Management (SR 26-2, superseding SR 11-7).
     """
     def __init__(self, log_dir: Optional[str] = None, 
                  baseline_scores: Optional[np.ndarray] = None):

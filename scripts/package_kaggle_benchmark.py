@@ -27,11 +27,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# 13 Target Benchmark Datasets
+# 16 Target Benchmark Datasets (All datasets in Paper Table 2 + Medium Imbalance Benchmarks)
 TARGET_DATASETS = [
     "elliptic_v1",
+    "elliptic_v2",
     "ibm_amlsim_hi_small",
     "ibm_amlsim_li_small",
+    "ibm_amlsim_hi_medium",
+    "ibm_amlsim_li_medium",
     "mtgox_leaked",
     "saml_d",
     "paysim1",
@@ -109,7 +112,7 @@ def package_benchmark(upload: bool = False):
     # 3. Copy Codebase (src, comparing_models, scripts, configs) for 100% self-contained execution
     print("\n[3/5] Bundling codebase (src, comparing_models, scripts, configs)...")
     code_dst = payload_dir / "code"
-    for item in ["src", "comparing_models", "scripts", "configs"]:
+    for item in ["src", "comparing_models", "scripts", "configs", "notebooks"]:
         src_item = ROOT / item
         if src_item.exists():
             shutil.copytree(src_item, code_dst / item, dirs_exist_ok=True, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))

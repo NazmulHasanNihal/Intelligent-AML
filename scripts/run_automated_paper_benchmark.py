@@ -105,10 +105,12 @@ total_cpus = psutil.cpu_count(logical=True) or 4
 import torch
 torch.set_num_threads(max(2, total_cpus))
 
-def get_accelerator_device():
-    """Detects CUDA GPU or high-speed multi-threaded CPU (avoids torch_xla SIGABRT collisions)."""
+def get_accelerator_device(device_idx: int = 0):
+    """Detects CUDA GPU or high-speed multi-threaded CPU with multi-GPU support."""
     if torch.cuda.is_available():
-        return torch.device("cuda"), "cuda"
+        n_gpus = torch.cuda.device_count()
+        dev_id = device_idx % n_gpus if n_gpus > 0 else 0
+        return torch.device(f"cuda:{dev_id}"), "cuda"
     return torch.device("cpu"), "cpu"
 
 DEVICE, DEVICE_TYPE = get_accelerator_device()
@@ -128,10 +130,15 @@ def get_process_ram_mb() -> float:
 
 
 def trim_process_memory():
-    """Aggressively flushes unreferenced memory back to the OS safely without disk thrashing."""
+    """Aggressively flushes unreferenced memory back to the OS safely across all GPUs."""
     gc.collect()
     if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+        for d in range(torch.cuda.device_count()):
+            try:
+                with torch.cuda.device(d):
+                    torch.cuda.empty_cache()
+            except Exception:
+                pass
 
 
 # Core Project Modules
@@ -608,7 +615,7 @@ def evaluate_tabular_model(model_cls: Any, data: Any, split_ratio: float, is_top
     return metrics
 
 
-def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: float, is_gat: bool = False, is_evolve: bool = False) -> Dict[str, Any]:
+def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: float, is_gat: bool = False, is_evolve: bool = False, device_idx: int = 0) -> Dict[str, Any]:
     """Evaluates homogeneous deep GNN baselines with memory, latency, and throughput tracking."""
     x_homo, edge_index_homo, offset_dict = to_homogeneous_projection(data)
     target_node = resolve_target_node(data)
@@ -654,12 +661,12 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
         gat_hidden = 64
     
     trim_process_memory()
-    device, dev_type = get_accelerator_device()
+    device, dev_type = get_accelerator_device(device_idx=device_idx)
     
     # Check GPU memory headroom for massive graphs (>1M nodes)
     if num_nodes_total > 1_000_000 and dev_type == "cuda":
         try:
-            free_mem_gb = torch.cuda.mem_get_info()[0] / (1024**3)
+            free_mem_gb = torch.cuda.mem_get_info(device)[0] / (1024**3)
             if free_mem_gb < 3.5:
                 # If GPU memory is critically low, route to host RAM to prevent OOM crash
                 device = torch.device("cpu")
@@ -1033,11 +1040,11 @@ def run_paper_benchmark(
                     elif m_type == "tabular_topo":
                         metrics = evaluate_tabular_model(m_cls, data, split_ratio=split_ratio, is_topological=True)
                     elif m_type == "gnn":
-                        metrics = evaluate_gnn_model(m_cls, data, num_epochs=epochs, split_ratio=split_ratio)
+                        metrics = evaluate_gnn_model(m_cls, data, num_epochs=epochs, split_ratio=split_ratio, device_idx=current_trial)
                     elif m_type == "gnn_gat":
-                        metrics = evaluate_gnn_model(m_cls, data, num_epochs=epochs, split_ratio=split_ratio, is_gat=True)
+                        metrics = evaluate_gnn_model(m_cls, data, num_epochs=epochs, split_ratio=split_ratio, is_gat=True, device_idx=current_trial)
                     elif m_type == "gnn_evolve":
-                        metrics = evaluate_gnn_model(m_cls, data, num_epochs=epochs, split_ratio=split_ratio, is_evolve=True)
+                        metrics = evaluate_gnn_model(m_cls, data, num_epochs=epochs, split_ratio=split_ratio, is_evolve=True, device_idx=current_trial)
                     else:
                         print(f"[Unknown Model Type: {m_type}]")
                         continue
@@ -1071,6 +1078,7 @@ def run_paper_benchmark(
                     generate_trial_group_summary(group_dir, dataset_name, split_name, epochs, ds_meta)
                     
                     current_ram_mb = get_process_ram_mb()
+                    total_sys_ram_gb = psutil.virtual_memory().total / (1024**3)
                     print(
                         f"    -> DONE ({elapsed:.1f}s) -> "
                         f"F1: {metrics['f1_score']:.4f} | "
@@ -1078,7 +1086,7 @@ def run_paper_benchmark(
                         f"Prec: {metrics['precision']:.4f} | "
                         f"PR-AUC: {metrics['pr_auc']:.4f} | "
                         f"Lat: {metrics['inference_latency_ms']}ms | "
-                        f"RAM: {current_ram_mb/1024:.2f}GB/5.00GB",
+                        f"RAM: {current_ram_mb/1024:.2f}GB / {total_sys_ram_gb:.1f}GB",
                         flush=True
                     )
                     

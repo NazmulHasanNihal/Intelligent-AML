@@ -149,3 +149,7 @@ class AMLSwarmOrchestrator:
             )
             dossiers.append(d)
         return dossiers
+
+
+# Alias for backward compatibility
+SwarmOrchestrator = AMLSwarmOrchestrator

@@ -85,13 +85,18 @@ def cmd_ingest(args):
 
 
 def cmd_dashboard(args):
-    """Launch the interactive Streamlit enterprise compliance dashboard."""
-    print("🌐 Launching Intelligent-AML Enterprise Compliance Dashboard (Streamlit)...")
-    dashboard_path = os.path.join(REPO_ROOT, "scripts", "dashboard.py")
-    cmd = [sys.executable, "-m", "streamlit", "run", dashboard_path]
-    if args.port:
-        cmd.extend(["--server.port", str(args.port)])
-    sys.exit(subprocess.call(cmd, cwd=REPO_ROOT))
+    """Launch the interactive React 18 + Vite enterprise compliance dashboard."""
+    print("🌐 Launching Intelligent-AML Enterprise Compliance Dashboard (React 18 + Vite)...")
+    frontend_dir = os.path.join(REPO_ROOT, "frontend")
+    cmd = ["npm", "run", "dev"]
+    sys.exit(subprocess.call(cmd, cwd=frontend_dir, shell=True))
+
+
+def cmd_server(args):
+    """Launch the high-throughput FastAPI streaming backend service."""
+    print("🚀 Launching Intelligent-AML FastAPI Streaming Service...")
+    import uvicorn
+    uvicorn.run("src.engine.api:app", host=args.host, port=args.port, reload=args.reload)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -108,9 +113,15 @@ def build_parser() -> argparse.ArgumentParser:
     p_test.set_defaults(func=cmd_test)
 
     # dashboard command
-    p_dash = subparsers.add_parser("dashboard", help="Launch interactive Streamlit enterprise compliance dashboard")
-    p_dash.add_argument("-p", "--port", type=int, default=8501, help="Port to bind dashboard server (default: 8501)")
+    p_dash = subparsers.add_parser("dashboard", aliases=["ui"], help="Launch interactive React 18 + Vite enterprise compliance dashboard")
     p_dash.set_defaults(func=cmd_dashboard)
+
+    # server command
+    p_serv = subparsers.add_parser("server", aliases=["api"], help="Launch high-throughput FastAPI streaming microservice")
+    p_serv.add_argument("--host", default="0.0.0.0", help="Host interface (default: 0.0.0.0)")
+    p_serv.add_argument("-p", "--port", type=int, default=8000, help="Port to bind API service (default: 8000)")
+    p_serv.add_argument("--reload", action="store_true", help="Enable live auto-reload for developers")
+    p_serv.set_defaults(func=cmd_server)
 
     # demo command
     p_demo = subparsers.add_parser("demo", help="Run live enterprise streaming AML simulation")

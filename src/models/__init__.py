@@ -40,6 +40,7 @@ from .graph_guard import AdversarialGraphGuard, HomophilyDenoisingGate
 from .spectral_wavelets import SpectralGraphWaveletConv, ChebyshevSpectralWaveletEngine
 from .optimal_transport import SinkhornDomainAligner, EntropicWassersteinLoss
 from .focal_tversky_loss import CostSensitiveFocalTverskyLoss
+from .soft_f1_loss import DifferentiableSoftF1Loss, SupConGraphLoss, CompositeAMLObjective
 from .threshold_optimizer import OptimalThresholdCalibrator
 from .motif_kernel import DirectedMotifKernel
 from .neuro_symbolic_loss import NeuroSymbolicAMLLoss, KirchhoffMassConservationLoss, PhysicsInformedAMLLoss
@@ -83,6 +84,9 @@ __all__ = [
     "SinkhornDomainAligner",
     "EntropicWassersteinLoss",
     "CostSensitiveFocalTverskyLoss",
+    "DifferentiableSoftF1Loss",
+    "SupConGraphLoss",
+    "CompositeAMLObjective",
     "OptimalThresholdCalibrator",
     "DirectedMotifKernel",
     "NeuroSymbolicAMLLoss",

@@ -5,7 +5,7 @@ src.agents — Autonomous Multi-Agent Forensic Investigation & Compliance Swarm.
 from .investigator_agent import ForensicInvestigatorAgent, ForensicEvidence, TransactionEdge
 from .sar_drafter_agent import SARDrafterAgent
 from .compliance_auditor_agent import ComplianceAuditorAgent, AuditVerdict
-from .swarm_orchestrator import AMLSwarmOrchestrator, InvestigationDossier
+from .swarm_orchestrator import AMLSwarmOrchestrator, InvestigationDossier, SwarmOrchestrator
 
 __all__ = [
     "ForensicInvestigatorAgent",
@@ -15,5 +15,6 @@ __all__ = [
     "ComplianceAuditorAgent",
     "AuditVerdict",
     "AMLSwarmOrchestrator",
+    "SwarmOrchestrator",
     "InvestigationDossier"
 ]

@@ -97,7 +97,12 @@ class MemoryGuard:
                     try:
                         import torch
                         if torch.cuda.is_available():
-                            torch.cuda.empty_cache()
+                            for d in range(torch.cuda.device_count()):
+                                try:
+                                    with torch.cuda.device(d):
+                                        torch.cuda.empty_cache()
+                                except Exception:
+                                    pass
                     except Exception:
                         pass
             except Exception:
@@ -257,17 +262,19 @@ def main():
     parser = argparse.ArgumentParser(description="Master Physical Benchmark Runner with Auto-Resumption")
     parser.add_argument("--datasets", type=str, default=None, help="Comma-separated dataset names")
     parser.add_argument("--status", action="store_true", help="Print current execution status and exit")
-    parser.add_argument("--max-ram-gb", type=float, default=4.0, help="Strict process RAM limit in GB (default: 4.0 GB)")
+    parser.add_argument("--max-ram-gb", type=float, default=26.5, help="Strict process RAM limit in GB (default: 26.5 GB for 30GB host RAM)")
     parser.add_argument("--epochs", type=int, default=10, help="Number of training epochs (default: 10, set 25 for Kaggle GPU)")
     parser.add_argument("--splits", type=str, default="0.70", help="Comma-separated splits (default: 0.70)")
     parser.add_argument("--generate-paper-artifacts", action="store_true", help="Auto-generate publication LaTeX tables and 300-DPI IEEE figures")
     parser.add_argument("--skip-phase2", action="store_true", help="Skip the Phase 2 24 empirical tests")
+    parser.add_argument("--models", type=str, default=None, help="Filter specific model names/slugs (e.g. proposed_c_stgb,xgboost)")
     parser.add_argument("--force-rerun", action="store_true", help="Force clean slate execution: retrain all models from scratch")
     args = parser.parse_args()
     
     target_datasets = [d.strip() for d in args.datasets.split(",")] if args.datasets else BENCHMARK_DATASETS
     target_splits = [float(s.strip()) for s in args.splits.split(",")]
     target_epochs = [args.epochs]
+    target_models = [m.strip() for m in args.models.split(",")] if args.models else None
     
     update_live_progress_report()
     
@@ -289,7 +296,8 @@ def main():
     print("  STARTING MASTER PHYSICAL BENCHMARK PIPELINE ACROSS DATASETS")
     print(f"  Datasets in Queue: {len(target_datasets)}")
     print(f"  Training Epochs: {args.epochs} | Chronological Splits: {target_splits}")
-    print(f"  Execution Mode: {'CLEAN SLATE (Retraining ALL models from scratch)' if args.force_rerun else 'Incremental Resumption'}")
+    print(f"  Target Models: {target_models or 'ALL (13 registered models)'}")
+    print(f"  Execution Mode: {'CLEAN SLATE (Retraining selected models from scratch)' if args.force_rerun else 'Incremental Resumption'}")
     print(f"  Strict RAM Ceiling: {args.max_ram_gb:.1f} GB Max (Proactive Trimming Active)")
     print(f"  Checkpoint Directory: {DEFAULT_BENCHMARK_DIR}")
     print(f"  Live Progress Tracker: {PROGRESS_MD}")
@@ -307,6 +315,7 @@ def main():
                 dataset_name=ds,
                 splits_list=target_splits,
                 epochs_list=target_epochs,
+                selected_models=target_models,
                 force_rerun=args.force_rerun,
                 dry_run=False,
                 summary_only=False

@@ -17,5 +17,5 @@ Total Evaluated Model Runs: `182` across `14` Datasets
 ---
 
 ## LaTeX Source Files Available for Paper:
-- `/kaggle/working/Intelligent-AML/papers/IEEE_Research_Paper/tables/tab2_baseline_scorecard.tex`
-- `/kaggle/working/Intelligent-AML/papers/IEEE_Research_Paper/tables/tab_statistical_tests.tex`
+- `papers/IEEE_Research_Paper/tables/tab2_baseline_scorecard.tex`
+- `papers/IEEE_Research_Paper/tables/tab_statistical_tests.tex`

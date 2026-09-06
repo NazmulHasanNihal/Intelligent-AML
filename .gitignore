@@ -107,6 +107,10 @@ tools/
 *.zip
 Research_Paper/
 
+# Third-party copyrighted literature PDFs
+docs/literature/**/*.pdf
+docs/literature/*.pdf
+
 # OS / Editor specific
 .DS_Store
 Thumbs.db

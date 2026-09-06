@@ -1,7 +1,7 @@
 # 🚀 Live Physical Benchmark Execution Progress
 
-**Last Updated:** `2026-09-04 08:31:34 UTC`  
-**Overall Completion:** `143/182 Model Runs` (**78.6%**)  
+**Last Updated:** `2026-09-06 12:30:47 UTC`  
+**Overall Completion:** `182/182 Model Runs` (**100.0%**)  
 **Resumption Guard:** Atomic per-model JSON checkpoints active (safe against crashes/power loss)
 
 ---
@@ -14,16 +14,16 @@
 | `elliptic_v2` | 13/13 | **COMPLETED** | 100.00% | 1.0000 |
 | `ibm_amlsim_hi_small` | 13/13 | **COMPLETED** | 37.70% | 0.3550 |
 | `ibm_amlsim_li_small` | 13/13 | **COMPLETED** | 15.76% | 0.1485 |
+| `ibm_amlsim_hi_medium` | 13/13 | **COMPLETED** | 42.85% | 0.4609 |
+| `ibm_amlsim_li_medium` | 13/13 | **COMPLETED** | 23.38% | 0.2077 |
 | `mtgox_leaked` | 13/13 | **COMPLETED** | 72.21% | 0.8306 |
 | `saml_d` | 13/13 | **COMPLETED** | 93.68% | 0.9574 |
 | `paysim1` | 13/13 | **COMPLETED** | 10.68% | 0.1173 |
-| `eth_phishing` | 0/13 | **PENDING** | - | - |
+| `paysim_extended` | 13/13 | **COMPLETED** | 99.80% | 0.9993 |
 | `xblock_eth` | 13/13 | **COMPLETED** | 96.94% | 0.9915 |
 | `cc_transactions` | 13/13 | **COMPLETED** | 51.40% | 0.5213 |
 | `data_generator` | 13/13 | **COMPLETED** | 99.93% | 1.0000 |
 | `dgraphfin` | 13/13 | **COMPLETED** | 97.91% | 0.9979 |
-| `smart_ponzi` | 0/13 | **PENDING** | - | - |
-| `synthaml` | 0/13 | **PENDING** | - | - |
 
 ---
 

@@ -147,16 +147,16 @@ BENCHMARK_DATASETS = [
     "elliptic_v2",
     "ibm_amlsim_hi_small",
     "ibm_amlsim_li_small",
+    "ibm_amlsim_hi_medium",
+    "ibm_amlsim_li_medium",
     "mtgox_leaked",
     "saml_d",
     "paysim1",
-    "eth_phishing",
+    "paysim_extended",
     "xblock_eth",
     "cc_transactions",
     "data_generator",
-    "dgraphfin",
-    "smart_ponzi",
-    "synthaml"
+    "dgraphfin"
 ]
 
 PROGRESS_MD = ROOT / "docs" / "Live_Physical_Benchmark_Progress.md"

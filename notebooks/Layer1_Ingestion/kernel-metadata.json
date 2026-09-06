@@ -1,7 +1,7 @@
 {
-  "id": "nazmulhasannihal/01-layer1-data-ingestion-v4-complete-remote",
-  "title": "01-layer1-data-ingestion-v4-complete-remote",
-  "code_file": "01_Layer1_Data_Ingestion_v4_COMPLETE.ipynb",
+  "id": "nazmulhasannihal/01-layer1-data-ingestion-remote",
+  "title": "01-layer1-data-ingestion-remote",
+  "code_file": "01_Layer1_Data_Ingestion.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "is_private": true,

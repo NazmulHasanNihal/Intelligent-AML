@@ -7,7 +7,7 @@ Workflow (you never open kaggle.com):
                  (or run:  python src/utils/run_remote.py setup)
   2. Write your code as a .py script (e.g. src/ingestion/pipeline.py + a runner),
      or point this at a notebook.
-  3. Run:  python src/utils/run_remote.py run --target notebooks/Layer1_Ingestion/01_Layer1_Data_Ingestion_v4.ipynb
+  3. Run:  python src/utils/run_remote.py run --target notebooks/Layer1_Ingestion/01_Layer1_Data_Ingestion.ipynb
      -> pushes to Kaggle, executes on a free T4/P100, then downloads
         graph_data/ + _manifest.json into data/outputs/ on THIS machine.
 

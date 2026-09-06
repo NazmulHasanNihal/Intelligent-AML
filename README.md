@@ -129,6 +129,9 @@ python scripts/compile_all_pdfs.py
 ```
 
 ### 3. Launching the Web Platform & REST API
+
+![Intelligent-AML Web Command Center](docs/assets/screenshots/command_center_preview.png)
+
 ```bash
 # Windows one-click platform launcher
 .\scripts\start_platform.bat

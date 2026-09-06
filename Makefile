@@ -13,14 +13,13 @@ help:
 	@echo "  make install-dev    Install developer & testing dependencies"
 	@echo "  make api            Launch FastAPI production backend microservice"
 	@echo "  make ui             Launch React 18 + Vite enterprise web platform"
-	@echo "  make test           Run full automated test suite (158 tests)"
+	@echo "  make test           Run full automated test suite (144 tests)"
 	@echo "  make demo           Run live enterprise AML streaming simulation"
 	@echo "  make benchmark      Run multi-dataset comparative benchmark"
 	@echo "  make figures        Generate 300 DPI publication vector figures"
-	@echo "  make scorecard      Display 13-dataset literature performance table"
+	@echo "  make scorecard      Display 14-dataset literature performance table"
 	@echo "  make audit-latex    Run instant semantic & integrity check on LaTeX"
-	@echo "  make build-latex    Compile PDF and package Overleaf ZIP archives"
-	@echo "  make watch-latex    Continuous live in-IDE LaTeX watcher & auto-compiler"
+	@echo "  make build-latex    Compile all 4 paper and thesis PDF targets"
 	@echo "  make lint           Check code quality with ruff & black"
 	@echo "  make format         Auto-format code with black & ruff"
 	@echo "  make clean          Remove caches and build artifacts"
@@ -37,10 +36,7 @@ audit-latex:
 	$(PYTHON) src/utils/latex_validator.py
 
 build-latex:
-	$(PYTHON) scripts/watch_latex.py --once
-
-watch-latex:
-	$(PYTHON) scripts/watch_latex.py
+	$(PYTHON) scripts/compile_all_pdfs.py
 
 install:
 	$(PYTHON) -m pip install --upgrade pip setuptools wheel
@@ -57,13 +53,13 @@ demo:
 	$(PYTHON) scripts/run_enterprise_aml_demo.py
 
 benchmark:
-	$(PYTHON) run_before_after_comparison.py
+	$(PYTHON) scripts/benchmark_baselines.py
 
 figures:
-	$(PYTHON) generate_publication_figures.py
+	$(PYTHON) scripts/generate_all_publication_figures.py
 
 scorecard:
-	$(PYTHON) print_all_datasets_report.py
+	$(PYTHON) scripts/master_physical_benchmark_runner.py --status
 
 lint:
 	ruff check src/ tests/ scripts/

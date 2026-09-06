@@ -69,11 +69,11 @@ When you open any paper from `docs/paper_profiles/`, look ONLY for these 4 speci
 *Goal: Understand the financial crime patterns your model must detect.*
 
 1. **[Paper #10] Weber et al. (2019) — Elliptic v1**  
-   - 📄 [paper_10_Anti_Money_Laundering_in_Bitcoin_Ex.md](file:///c:/Research%20and%20Business%20Project/Intelligent%20AML/docs/paper_profiles/paper_10_Anti_Money_Laundering_in_Bitcoin_Ex.md)
+   - 📄 [paper_10_Anti_Money_Laundering_in_Bitcoin_Ex.md](../paper_profiles/paper_10_Anti_Money_Laundering_in_Bitcoin_Ex.md)
    - **Focus on:** How they mapped Bitcoin transactions to nodes/edges, and why standard GCNs struggled with dark market vs legal license labels.
 
 2. **[Paper #04] Johannessen & Jullum (2023) — Heterogeneous Bank GNNs**  
-   - 📄 [paper_04_Finding_Money_Launderers_Using_Hete.md](file:///c:/Research%20and%20Business%20Project/Intelligent%20AML/docs/paper_profiles/paper_04_Finding_Money_Launderers_Using_Hete.md)
+   - 📄 [paper_04_Finding_Money_Launderers_Using_Hete.md](../paper_profiles/paper_04_Finding_Money_Launderers_Using_Hete.md)
    - **Focus on:** Why multi-entity graphs (Accounts + Devices + Users) perform significantly better than single-account graphs in bank transaction monitoring.
 
 ---
@@ -82,15 +82,15 @@ When you open any paper from `docs/paper_profiles/`, look ONLY for these 4 speci
 *Goal: Extract the mathematical equations for heterogeneous attention and temporal decay.*
 
 3. **[Paper #01] Hu et al. (2020) — Heterogeneous Graph Transformer (HGT)**  
-   - 📄 [paper_01_Heterogeneous_Graph_Transformer_HGT.md](file:///c:/Research%20and%20Business%20Project/Intelligent%20AML/docs/paper_profiles/paper_01_Heterogeneous_Graph_Transformer_HGT.md)
+   - 📄 [paper_01_Heterogeneous_Graph_Transformer_HGT.md](../paper_profiles/paper_01_Heterogeneous_Graph_Transformer_HGT.md)
    - **Focus on:** Equation 1 & 2 (Type-specific projection matrices $\mathbf{W}_{\text{node}}$ and $\mathbf{W}_{\text{edge}}$). This is the foundation of your HT-GNN.
 
 4. **[Paper #02] Rossi et al. (2020) — Temporal Graph Networks (TGN)**  
-   - 📄 [paper_02_Temporal_Graph_Networks_for_Deep_Le.md](file:///c:/Research%20and%20Business%20Project/Intelligent%20AML/docs/paper_profiles/paper_02_Temporal_Graph_Networks_for_Deep_Le.md)
+   - 📄 [paper_02_Temporal_Graph_Networks_for_Deep_Le.md](../paper_profiles/paper_02_Temporal_Graph_Networks_for_Deep_Le.md)
    - **Focus on:** How continuous timestamps $t$ are embedded using harmonic Fourier encoding or exponential decay.
 
 5. **[Paper #53] Chen & Yang (2026) — Temporal Attention for Fraud**  
-   - 📄 [paper_53_Real_Time_Dynamic_Graph_Learning_wi.md](file:///c:/Research%20and%20Business%20Project/Intelligent%20AML/docs/paper_profiles/paper_53_Real_Time_Dynamic_Graph_Learning_wi.md)
+   - 📄 [paper_53_Real_Time_Dynamic_Graph_Learning_wi.md](../paper_profiles/paper_53_Real_Time_Dynamic_Graph_Learning_wi.md)
    - **Focus on:** The exact temporal attention decay formula $\exp(-\gamma \Delta t)$.
 
 ---
@@ -99,11 +99,11 @@ When you open any paper from `docs/paper_profiles/`, look ONLY for these 4 speci
 *Goal: Learn how to generate synthetic fraud subgraphs to fix class imbalance.*
 
 6. **[Paper #39] Zhao et al. (2021) — GraphSMOTE**  
-   - 📄 [paper_39_GraphSMOTE_Imbalanced_Node_Classifi.md](file:///c:/Research%20and%20Business%20Project/Intelligent%20AML/docs/paper_profiles/paper_39_GraphSMOTE_Imbalanced_Node_Classifi.md)
+   - 📄 [paper_39_GraphSMOTE_Imbalanced_Node_Classifi.md](../paper_profiles/paper_39_GraphSMOTE_Imbalanced_Node_Classifi.md)
    - **Focus on:** How synthetic node feature interpolation creates new minority class nodes in feature space.
 
 7. **[Paper #12] Bellei et al. (2024) — Subgraph Representation Learning (Elliptic2)**  
-   - 📄 [paper_12_The_Shape_of_Money_Laundering_Subgr.md](file:///c:/Research%20and%20Business%20Project/Intelligent%20AML/docs/paper_profiles/paper_12_The_Shape_of_Money_Laundering_Subgr.md)
+   - 📄 [paper_12_The_Shape_of_Money_Laundering_Subgr.md](../paper_profiles/paper_12_The_Shape_of_Money_Laundering_Subgr.md)
    - **Focus on:** Structural subgraph patterns (peel chains, fan-out/fan-in subgraphs). Your GraphGAN will generate these exact subgraphs.
 
 ---

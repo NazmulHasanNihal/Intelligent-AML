@@ -48,6 +48,13 @@ To strictly eliminate temporal lookahead bias and label contamination, all datas
 \end{enumerate}
 All evaluations are repeated across \textbf{5 independent random seeds} (42, 123, 456, 789, 999), reporting mean and sample standard deviation.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_temporal_split.pdf}
+\caption{Zero-leakage 4-way chronological dataset partitioning timeline: 60\% Training ($\mathcal{D}_{\text{train}}$), 10\% Validation ($\mathcal{D}_{\text{val}}$), 10\% Calibration ($\mathcal{D}_{\text{cal}}$), and 20\% Out-of-Time Forward Testing ($\mathcal{D}_{\text{test}}$).}
+\label{fig:ch7_temporal_split}
+\end{figure}
+
 \section{Master Baseline Comparative Matrix}
 We benchmark C-STGB against 11 representative baseline architectures spanning tabular ensembles, spatial GNNs, heterogeneous GNNs, and dynamic continuous-time models. To ensure complete methodological fairness and transparency, all baselines received an identical hyperparameter tuning budget of $N=50$ trials over $\mathcal{D}_{\text{val}}$ and were evaluated using their optimal validation-tuned Bayes thresholds $\tau^*$.
 
@@ -82,6 +89,20 @@ Table~\ref{tab:master_baseline_results} presents the complete multi-dataset Macr
 }
 \end{table}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_multi_dataset_radar.pdf}
+\caption{Multi-criteria radar benchmark contrasting C-STGB against competitive tabular, spatial, and imbalanced baselines across PR-AUC, Macro F1, Recall, Imbalance Robustness, Camouflage Retention, and Banking SLA Compliance.}
+\label{fig:ch7_radar_benchmark}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_pr_roc_curves.pdf}
+\caption{Comparative Precision-Recall (PR) and Receiver Operating Characteristic (ROC) frontiers on Elliptic-v1, demonstrating C-STGB's superior area under curve under extreme class skew.}
+\label{fig:ch7_pr_roc_curves}
+\end{figure}
+
 \section{Granular Ablation Studies}
 To rigorously evaluate the individual and synergistic contributions of C-STGB's six modules, we execute both a cumulative stepwise progression study and a leave-one-out component removal study.
 
@@ -110,6 +131,13 @@ Table~\ref{tab:stepwise_ablation} tracks the performance evolution starting from
 }
 \end{table}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_ablation_component_study.pdf}
+\caption{Stepwise architectural ablation progression across Elliptic-v1, SAML-D, and IBM-AMLSim benchmarks, illustrating cumulative F1 improvements from baseline GCN ($10.33\%$) to full C-STGB ($91.42\%$).}
+\label{fig:ch7_ablation_progression}
+\end{figure}
+
 \subsection{Leave-One-Out Component Removal Study}
 Table~\ref{tab:leave_one_out} isolates the marginal performance drop when individual components are removed from the full C-STGB model.
 
@@ -134,6 +162,13 @@ Table~\ref{tab:leave_one_out} isolates the marginal performance drop when indivi
 \end{tabular}%
 }
 \end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_leave_one_out_impact.pdf}
+\caption{Leave-one-out component ablation impact on Elliptic-v1, showing marginal degradation in percentage points when individual architectural mechanisms are deactivated.}
+\label{fig:ch7_leave_one_out}
+\end{figure}
 
 \section{Conformal Triage Efficiency \& Workload Reduction}
 Table~\ref{tab:ch7_conformal} evaluates the operational efficiency of the 3-Tier Conformal Risk Control architecture at nominal significance level $\alpha = 0.01$ ($99.0\%$ guaranteed class coverage).
@@ -193,6 +228,20 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 }
 \end{table}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig9_adversarial_camouflage_robustness.pdf}
+\caption{Adversarial camouflage link robustness on Elliptic-v1 across increasing injected camouflage link ratios ($\rho \in [0.0, 0.80]$), demonstrating C-STGB's superior F1-score retention compared to baseline spatial and heterogeneous GNNs.}
+\label{fig:ch7_camouflage_robustness}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_tsne_manifold_separation.pdf}
+\caption{t-SNE latent manifold visualization: (a) Baseline GNN Layer 2 representation suffering from severe feature over-smoothing across high-degree hubs; and (b) C-STGB fused manifold exhibiting clear separation between illicit smurfing clusters and benign merchant traffic.}
+\label{fig:ch7_tsne_separation}
+\end{figure}
+
 \section{Zero-Shot Cross-Domain Transferability on Frozen Weights}
 Table~\ref{tab:zero_shot_transfer} evaluates zero-shot cross-network generalization across eight source-target dataset pairs where neural weights are completely frozen ($\eta = 0$), relying entirely on the 12-D canonical invariant representation space.
 
@@ -221,6 +270,7 @@ Table~\ref{tab:zero_shot_transfer} evaluates zero-shot cross-network generalizat
 \end{table}
 
 \section{Streaming Latency, Memory Profiling \& Production SLAs}
+\label{sec:ch7_latency}
 Figure~\ref{fig:streaming_latency} profiles the empirical latency distribution across Fast-Path (cached) and Full GNN execution paths on the streaming testbed.
 
 \begin{figure}[htbp]

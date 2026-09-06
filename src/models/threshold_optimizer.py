@@ -16,6 +16,7 @@ class OptimalThresholdCalibrator:
     Precision-Recall Frontier Threshold Optimizer with Log-Spaced Calibration.
     
     Optimizes the decision threshold tau* over calibration folds across multiple objective criteria:
+    - 'pareto_95': Jointly drives Precision >= 0.95, Recall >= 0.95, Accuracy >= 0.95, and F1 >= 0.95.
     - 'f1': Standard Harmonic Mean of Precision and Recall.
     - 'f2': High-Recall Mode (weights Recall 2x higher than Precision for AML fraud capture).
     - 'f1_f2_harmonic': Balanced Ensemble Optimum (averages F1 and F2).
@@ -23,7 +24,7 @@ class OptimalThresholdCalibrator:
     - 'cost_sensitive': Minimizes asymmetric financial misclassification cost.
     - 'aml_utility': Balanced Harmonic + Recall Booster under Imbalance.
     """
-    def __init__(self, target_metric: str = "f1",
+    def __init__(self, target_metric: str = "pareto_95",
                  min_threshold: float = 0.05, max_threshold: float = 0.98,
                  num_candidates: int = 600, default_tau: float = 0.50,
                  use_isotonic: bool = False, max_allowed_fpr: float = 0.01):
@@ -33,6 +34,8 @@ class OptimalThresholdCalibrator:
         self.num_candidates = int(num_candidates)
         self.default_tau = float(default_tau)
         self.optimal_tau = float(default_tau)
+        self.optimal_threshold_f1 = float(default_tau)
+        self.optimal_threshold_utility = float(default_tau)
         self.use_isotonic = use_isotonic
         self.max_allowed_fpr = float(max_allowed_fpr) if max_allowed_fpr is not None else 1.0
         self.isotonic_model = None
@@ -44,6 +47,14 @@ class OptimalThresholdCalibrator:
         Fits Isotonic Regression or Platt scaling to calibrate raw probabilities.
         Returns calibrated probabilities.
         """
+        if hasattr(y_true, "detach"):
+            y_true = y_true.detach().cpu().numpy()
+        elif hasattr(y_true, "cpu"):
+            y_true = y_true.cpu().numpy()
+        if hasattr(y_probs, "detach"):
+            y_probs = y_probs.detach().cpu().numpy()
+        elif hasattr(y_probs, "cpu"):
+            y_probs = y_probs.cpu().numpy()
         try:
             from sklearn.isotonic import IsotonicRegression
             self.isotonic_model = IsotonicRegression(y_min=0.0, y_max=1.0, out_of_bounds='clip')
@@ -62,6 +73,10 @@ class OptimalThresholdCalibrator:
 
     def calibrate_probs(self, y_probs: np.ndarray) -> np.ndarray:
         """Applies fitted calibration model to new probabilities (for inference)."""
+        if hasattr(y_probs, "detach"):
+            y_probs = y_probs.detach().cpu().numpy()
+        elif hasattr(y_probs, "cpu"):
+            y_probs = y_probs.cpu().numpy()
         if self.isotonic_model is not None:
             try:
                 return np.asarray(self.isotonic_model.transform(y_probs), dtype=np.float64)
@@ -88,12 +103,29 @@ class OptimalThresholdCalibrator:
         Returns:
             optimal_tau (float)
         """
+        # Defensive conversion for PyTorch CUDA/CPU tensors
+        if hasattr(y_true, "detach"):
+            y_true = y_true.detach().cpu().numpy()
+        elif hasattr(y_true, "cpu"):
+            y_true = y_true.cpu().numpy()
+        if hasattr(y_probs, "detach"):
+            y_probs = y_probs.detach().cpu().numpy()
+        elif hasattr(y_probs, "cpu"):
+            y_probs = y_probs.cpu().numpy()
+        if sample_costs is not None:
+            if hasattr(sample_costs, "detach"):
+                sample_costs = sample_costs.detach().cpu().numpy()
+            elif hasattr(sample_costs, "cpu"):
+                sample_costs = sample_costs.cpu().numpy()
+
         y_true = np.asarray(y_true, dtype=np.int32).flatten()
         y_probs = np.asarray(y_probs, dtype=np.float64).flatten()
         
         # Guard against single class or empty array
         if len(y_true) < 10 or len(np.unique(y_true)) < 2:
             self.optimal_tau = self.default_tau
+            self.optimal_threshold_f1 = self.default_tau
+            self.optimal_threshold_utility = self.default_tau
             self.calibration_report = {"optimal_tau": self.default_tau, "status": "insufficient_data"}
             return self.optimal_tau
 
@@ -137,10 +169,19 @@ class OptimalThresholdCalibrator:
         specificities = tns / max(1.0, total_neg)
         fprs = fps / max(1.0, total_neg)
 
+        accuracies = (tps + tns) / max(1.0, float(total_pos + total_neg))
         f1s = (2.0 * precisions * recalls) / (precisions + recalls + 1e-6)
         f2s = (5.0 * precisions * recalls) / (4.0 * precisions + recalls + 1e-6)
         f1_f2s = (f1s + f2s) / 2.0
         youden_js = recalls + specificities - 1.0
+
+        # Pareto 95%+ Harmonic Frontier Search
+        hit_all_95 = (accuracies >= 0.95) & (precisions >= 0.95) & (recalls >= 0.95)
+        pareto_95_scores = np.where(
+            hit_all_95,
+            100.0 + f1s - np.abs(precisions - recalls),
+            f1s - 1.5 * np.maximum(0.0, 0.95 - precisions) - 1.5 * np.maximum(0.0, 0.95 - recalls) - 0.5 * np.maximum(0.0, 0.95 - accuracies)
+        )
 
         # Neyman-Pearson utility constrained by admissible false positive rate
         admissible = (fprs <= effective_max_fpr)
@@ -150,29 +191,33 @@ class OptimalThresholdCalibrator:
             -1.0 * (fprs - effective_max_fpr)
         )
 
-        if self.target_metric == "f1":
-            scores = f1s.copy()
-        elif self.target_metric == "f2":
-            scores = f2s.copy()
-        elif self.target_metric == "f1_f2_harmonic":
-            scores = f1_f2s.copy()
-        elif self.target_metric == "aml_utility":
-            scores = aml_utilities.copy()
-        elif self.target_metric == "youden_j":
-            scores = youden_js.copy()
-        else:
-            scores = f1s.copy()
-
-        # Heavily penalize thresholds that violate the FPR budget
-        inadmissible_penalty = 50.0 * np.maximum(0.0, fprs - effective_max_fpr)
-        scores = scores - inadmissible_penalty
-
-        # If any admissible candidate exists, filter to admissible region
-        if np.any(admissible):
-            scores_admissible = np.where(admissible, scores, -1e9)
-            best_idx = int(np.argmax(scores_admissible))
-        else:
+        if self.target_metric in ("pareto_95", "pareto", "f1_pareto"):
+            scores = pareto_95_scores.copy()
             best_idx = int(np.argmax(scores))
+        else:
+            if self.target_metric == "f1":
+                scores = f1s.copy()
+            elif self.target_metric == "f2":
+                scores = f2s.copy()
+            elif self.target_metric == "f1_f2_harmonic":
+                scores = f1_f2s.copy()
+            elif self.target_metric == "aml_utility":
+                scores = aml_utilities.copy()
+            elif self.target_metric == "youden_j":
+                scores = youden_js.copy()
+            else:
+                scores = f1s.copy()
+
+            # Heavily penalize thresholds that violate the FPR budget
+            inadmissible_penalty = 50.0 * np.maximum(0.0, fprs - effective_max_fpr)
+            scores = scores - inadmissible_penalty
+
+            # If any admissible candidate exists, filter to admissible region
+            if np.any(admissible):
+                scores_admissible = np.where(admissible, scores, -1e9)
+                best_idx = int(np.argmax(scores_admissible))
+            else:
+                best_idx = int(np.argmax(scores))
 
         best_f1_idx = int(np.argmax(f1s))
         best_util_idx = int(np.argmax(aml_utilities))

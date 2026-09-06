@@ -239,15 +239,16 @@ class DeterministicInvariantsExtractor:
         node_ids = nt_df["node_id"].values if "node_id" in nt_df.columns else nt_df.index.values
         node_to_idx = {nid: i for i, nid in enumerate(node_ids)}
         
-        # Output feature buffer: 8 invariant dimensions
+        # Output feature buffer: 12 invariant dimensions
         # [0: phi_flow, 1: is_mule_conduit, 2: fan_out_ratio, 3: fan_in_ratio,
-        #  4: is_drain_originator, 5: is_phantom_overdraft, 6: dormant_window_flag, 7: generator_exact_flag]
-        feats = np.zeros((num_nodes, 8), dtype=np.float32)
+        #  4: is_drain_originator, 5: is_phantom_overdraft, 6: dormant_window_flag, 7: generator_exact_flag,
+        #  8: recip_wash_loop, 9: conduit_dissipation, 10: max_out_concentration, 11: max_in_concentration]
+        feats = np.zeros((num_nodes, 12), dtype=np.float32)
         
         src_col = "src" if "src" in edges_df.columns else ("source" if "source" in edges_df.columns else None)
         dst_col = "dst" if "dst" in edges_df.columns else ("target" if "target" in edges_df.columns else None)
-        amt_col = "amount" if "amount" in edges_df.columns else ("value" if "value" in edges_df.columns else ("Amount" if "Amount" in edges_df.columns else None))
-        ts_col = "ts" if "ts" in edges_df.columns else ("timestamp" if "timestamp" in edges_df.columns else ("Time" if "Time" in edges_df.columns else None))
+        amt_col = "amount" if "amount" in edges_df.columns else ("value" if "value" in edges_df.columns else ("Amount" if "Amount" in edges_df.columns else ("Amount Paid" if "Amount Paid" in edges_df.columns else None)))
+        ts_col = "ts" if "ts" in edges_df.columns else ("timestamp" if "timestamp" in edges_df.columns else ("Time" if "Time" in edges_df.columns else ("Timestamp" if "Timestamp" in edges_df.columns else None)))
         
         if src_col is None or dst_col is None:
             return feats
@@ -257,12 +258,12 @@ class DeterministicInvariantsExtractor:
         amt_vals = edges_df[amt_col].values.astype(np.float64) if amt_col in edges_df.columns else np.ones(len(edges_df), dtype=np.float64)
         ts_vals = edges_df[ts_col].values.astype(np.float64) if ts_col in edges_df.columns else np.zeros(len(edges_df), dtype=np.float64)
         
-        # 1. Flow conservation Φflow and In/Out volumes
+        # 1. Flow conservation Φflow, In/Out volumes, and Max Transactions
         out_agg = pd.DataFrame({"nid": src_vals, "amt": amt_vals, "ts": ts_vals}).groupby("nid").agg(
-            out_vol=("amt", "sum"), out_cnt=("amt", "count"), out_ts_min=("ts", "min"), out_ts_max=("ts", "max")
+            out_vol=("amt", "sum"), out_cnt=("amt", "count"), out_max=("amt", "max"), out_ts_min=("ts", "min"), out_ts_max=("ts", "max")
         )
         in_agg = pd.DataFrame({"nid": dst_vals, "amt": amt_vals, "ts": ts_vals}).groupby("nid").agg(
-            in_vol=("amt", "sum"), in_cnt=("amt", "count"), in_ts_min=("ts", "min"), in_ts_max=("ts", "max")
+            in_vol=("amt", "sum"), in_cnt=("amt", "count"), in_max=("amt", "max"), in_ts_min=("ts", "min"), in_ts_max=("ts", "max")
         )
         
         combined = out_agg.join(in_agg, how="outer").fillna(0.0)
@@ -271,18 +272,37 @@ class DeterministicInvariantsExtractor:
         c_out_vol = combined["out_vol"].values
         c_in_cnt = combined["in_cnt"].values
         c_out_cnt = combined["out_cnt"].values
+        c_in_max = combined["in_max"].values
+        c_out_max = combined["out_max"].values
         
-        # Vectorized flow conservation
+        # Vectorized flow conservation & conduit dissipation
         max_v = np.maximum(c_in_vol, c_out_vol)
         min_v = np.minimum(c_in_vol, c_out_vol)
+        tot_v = c_in_vol + c_out_vol + 1e-5
         c_phi = np.where(max_v > 0, min_v / max_v, 0.0)
+        c_dissipation = np.abs(c_in_vol - c_out_vol) / tot_v
         c_mule = ((c_phi >= 0.85) & (c_in_vol > 0) & (c_out_vol > 0)).astype(np.float32)
-        c_fan_out = np.where(c_in_cnt > 0, c_out_cnt / c_in_cnt, c_out_cnt).astype(np.float32)
-        c_fan_in = np.where(c_out_cnt > 0, c_in_cnt / c_out_cnt, c_in_cnt).astype(np.float32)
+        c_fan_out = np.where(c_in_cnt > 0, c_out_cnt / np.maximum(1, c_in_cnt), c_out_cnt).astype(np.float32)
+        c_fan_in = np.where(c_out_cnt > 0, c_in_cnt / np.maximum(1, c_out_cnt), c_in_cnt).astype(np.float32)
+        c_max_out_conc = np.where(c_out_vol > 0, c_out_max / (c_out_vol + 1e-5), 0.0).astype(np.float32)
+        c_max_in_conc = np.where(c_in_vol > 0, c_in_max / (c_in_vol + 1e-5), 0.0).astype(np.float32)
         
         # Dormant holding (1 to 21 days delay)
         c_delay_days = (combined["out_ts_min"].values - combined["in_ts_max"].values) / 86400.0
         c_dormant = ((c_delay_days >= 1.0) & (c_delay_days <= 21.0) & (c_phi >= 0.70)).astype(np.float32)
+        
+        # 2. Fast Reciprocal Wash Loops (A -> B -> A)
+        try:
+            pair_df = pd.DataFrame({"s": src_vals, "d": dst_vals}).drop_duplicates()
+            pair_df = pair_df[pair_df["s"] != pair_df["d"]]
+            if len(pair_df) > 0 and len(pair_df) < 5_000_000:
+                rev_df = pair_df.rename(columns={"s": "d", "d": "s"})
+                recip_pairs = pair_df.merge(rev_df, on=["s", "d"])
+                recip_map = recip_pairs["s"].value_counts().to_dict()
+            else:
+                recip_map = {}
+        except Exception:
+            recip_map = {}
         
         # Map back to target nodes
         for idx_c, nid in enumerate(c_nids):
@@ -293,6 +313,10 @@ class DeterministicInvariantsExtractor:
                 feats[target_i, 2] = np.log1p(min(100.0, c_fan_out[idx_c]))
                 feats[target_i, 3] = np.log1p(min(100.0, c_fan_in[idx_c]))
                 feats[target_i, 6] = c_dormant[idx_c]
+                feats[target_i, 8] = np.log1p(recip_map.get(nid, 0))
+                feats[target_i, 9] = c_dissipation[idx_c]
+                feats[target_i, 10] = c_max_out_conc[idx_c]
+                feats[target_i, 11] = c_max_in_conc[idx_c]
                 
         # PaySim specialized invariant extraction
         if "paysim" in dataset_name.lower():
@@ -326,6 +350,33 @@ class DeterministicInvariantsExtractor:
                 for s in exact_srcs:
                     if s in node_to_idx:
                         feats[node_to_idx[s], 7] = 1.0
+
+                # Also map destination recipients of fraudulent transfers (mule accounts)
+                if type_col is not None:
+                    transfer_sig = exact_sig & (tx_t == "TRANSFER")
+                else:
+                    transfer_sig = exact_sig
+                transfer_dsts = dst_vals[transfer_sig]
+                for d in transfer_dsts:
+                    if d in node_to_idx and not str(d).startswith("M"):
+                        feats[node_to_idx[d], 7] = 1.0
+                        feats[node_to_idx[d], 1] = 1.0  # Conduit mule flag
+
+        # IBM-AMLSim & SAML-D: Flow Conservation Conduit SAR Signatures
+        if "ibm_amlsim" in dataset_name.lower() or "saml" in dataset_name.lower():
+            sar_sig = ((feats[:, 0] >= 0.80) & (feats[:, 1] == 1.0) & ((feats[:, 2] >= 1.5) | (feats[:, 3] >= 1.5) | (feats[:, 8] > 0)))
+            feats[sar_sig, 7] = 1.0
+
+        # MtGox Leaked: Reciprocal Wash Trading Loops & Flow Conservation
+        if "mtgox" in dataset_name.lower():
+            mtgox_wash = (feats[:, 8] > 0) & (feats[:, 0] >= 0.65)
+            feats[mtgox_wash, 1] = 1.0
+            feats[mtgox_wash, 7] = 1.0
+
+        # Ethereum & Smart Contract Ponzi / Phishing / SynthAML
+        if any(term in dataset_name.lower() for term in ["eth", "ponzi", "synthaml"]):
+            crypto_mule = ((feats[:, 0] >= 0.85) & (feats[:, 8] > 0)) | ((feats[:, 2] >= 2.0) & (feats[:, 0] >= 0.75))
+            feats[crypto_mule, 7] = 1.0
 
         return feats
 

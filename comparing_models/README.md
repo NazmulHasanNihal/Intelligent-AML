@@ -53,7 +53,8 @@ from comparing_models.base_models import HomogeneousGCN, GraphSAGEBaseline, Tabu
 from comparing_models.evaluator import evaluate_model_performance
 from comparing_models.visualizer import plot_pr_roc_curves
 
-# Evaluate predictions
-metrics = evaluate_model_performance(y_true, y_probs, threshold=0.70)
-print(f"F1-Score: {metrics['f1_score']:.4f} | Recall: {metrics['recall']:.4f}")
+# Evaluate predictions with adaptive validation threshold calibration (Youden's J / Optimal F1)
+metrics = evaluate_model_performance(y_true, y_probs, threshold=None)
+print(f"Optimal Threshold: {metrics['optimal_threshold']:.4f} | F1-Score: {metrics['f1_score']:.4f} | Recall: {metrics['recall']:.4f}")
 ```
+

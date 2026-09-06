@@ -103,7 +103,8 @@ def train_and_eval_proposed(data, dataset_name="elliptic_v1", num_epochs=30, spl
     
     # Stratification safeguard if test slice lacks positive representation
     total_pos = int((y_target == 1).sum())
-    test_pos = int((y_target[test_node_mask.numpy()] == 1).sum())
+    test_mask_np = test_node_mask.detach().cpu().numpy()
+    test_pos = int((y_target[test_mask_np] == 1).sum())
     if test_pos < 2 and total_pos >= 5:
         pos_idx = np.where(y_target == 1)[0]
         neg_idx = np.where(y_target == 0)[0]
@@ -111,9 +112,10 @@ def train_and_eval_proposed(data, dataset_name="elliptic_v1", num_epochs=30, spl
         test_neg_idx = neg_idx[int(len(neg_idx) * split_ratio):]
         test_node_mask = torch.zeros(data[target_node].x.shape[0], dtype=torch.bool)
         test_node_mask[np.concatenate([test_pos_idx, test_neg_idx])] = True
+        test_mask_np = test_node_mask.detach().cpu().numpy()
 
     test_probs = cstgb_model.predict_proba(x_dict, test_edge_index, test_delta_t, test_burst_score, test_node_mask)
-    y_test = y_target[test_node_mask.numpy()]
+    y_test = y_target[test_mask_np]
     
     metrics = evaluate_model_performance(y_test, test_probs, threshold=cstgb_model.optimal_threshold)
     metrics["training_time_sec"] = training_time

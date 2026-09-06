@@ -1,0 +1,447 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ==========================================================================
+     INTELLIGENT AML COMPLIANCE DASHBOARD — SKEUOMORPHISM DESIGN SYSTEM
+     Theme Specification: Money Green & Banknote White
+       - Deep Intaglio Currency Green: #12381E
+       - Federal Reserve Money Green: #1B5E34
+       - Mint Watermark Highlight: #62BD80
+       - Crisp Banknote Optical White: #FFFFFF
+       - Banknote Linen Paper: #F8FBF6
+       - Parchment Tint: #ECF4E9
+       - Treasury Gold Seal: #C5A059
+     ========================================================================== */
+  :root,
+  [data-theme='money-green-skeuo'],
+  [data-theme='botanical-clay'],
+  [data-theme='daylight'] {
+    /* ==========================================================================
+       60-30-10 COLOR SPECIFICATION & PHYSICAL DIRECTIONAL SHADOW PHYSICS
+       Light Source: Top-Left (-45°)
+       ========================================================================== */
+    /* 60% Base Canvas Surface: Soft, tinted pale mint-gray (Never pure #FFFFFF) */
+    --canvas-base: #E9EFEA;
+    --bg-base: #E9EFEA;
+    --bg-surface: #E9EFEA;
+    
+    /* 30% Structure: Pure #FFFFFF Top-Left Bevels & #C5D0C8 Bottom-Right Shadows */
+    --card-surface: #EEF3EE;
+    --bg-card: #EEF3EE;
+    --bg-card-elevated: #F4F8F4;
+    --bg-card-hover: #EBF1EB;
+    
+    --bevel-highlight: #FFFFFF;
+    --bevel-shadow: #C5D0C8;
+    --bevel-shadow-dark: #A9B8AD;
+    --border-subtle: #C8D4CC;
+    --border-card: rgba(255, 255, 255, 0.75);
+    --border-card-hover: #1B4D3E;
+    
+    /* 10% Money Green Accents */
+    --forest-green: #1B4D3E;
+    --sea-green: #2E8B57;
+    --jade-green: #00A86B;
+    --accent-primary: #1B4D3E;
+    --accent-secondary: #00A86B;
+    
+    /* Tactile Typography: Dark Charcoal (WCAG 7:1) & Forest Green */
+    --text-primary: #1F2923;
+    --text-secondary: #33473B;
+    --text-muted: #5C7565;
+    --text-forest: #1B4D3E;
+    
+    /* Alert Status Colors */
+    --color-crimson: #DC2626;
+    --color-amber: #D97706;
+    --color-emerald: #1B4D3E;
+    --color-cyan: #0284C7;
+    --color-indigo: #4338CA;
+    
+    /* Directional -45° Elevation & Shadow Physics */
+    /* Raised Card Surface: Extruded from background */
+    --skeuo-card-shadow: 8px 8px 16px var(--bevel-shadow), -8px -8px 16px var(--bevel-highlight);
+    --skeuo-card-hover: 10px 10px 20px var(--bevel-shadow), -10px -10px 20px var(--bevel-highlight);
+    --skeuo-card-elevated: 12px 12px 24px var(--bevel-shadow), -12px -12px 24px var(--bevel-highlight);
+    
+    /* Inset Input / Graph Cavity: Sunken / Carved into surface */
+    --skeuo-well: inset 4px 4px 8px var(--bevel-shadow), inset -4px -4px 8px var(--bevel-highlight);
+    --skeuo-cavity: inset 4px 4px 8px var(--bevel-shadow), inset -4px -4px 8px var(--bevel-highlight);
+    --skeuo-cavity-deep: inset 6px 6px 12px var(--bevel-shadow), inset -6px -6px 12px var(--bevel-highlight);
+    --skeuo-cavity-sm: inset 2px 2px 4px var(--bevel-shadow), inset -2px -2px 4px var(--bevel-highlight);
+    
+    /* Tactile Bevel Button: Convex physical press */
+    --skeuo-btn: 4px 4px 8px var(--bevel-shadow), -4px -4px 8px var(--bevel-highlight);
+    --skeuo-btn-fill: linear-gradient(135deg, #F9FBF9 0%, #E3EAE4 100%);
+    --skeuo-btn-pressed: inset 3px 3px 6px var(--bevel-shadow), inset -3px -3px 6px var(--bevel-highlight);
+    
+    /* Active Green Pill / LED: Glowing / Embossed status */
+    --skeuo-pill-glow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 168, 107, 0.4);
+    
+    --bg-radial: radial-gradient(ellipse 90% 60% at 50% -25%, rgba(0, 168, 107, 0.05), transparent 75%),
+                 radial-gradient(ellipse 70% 40% at 100% 100%, rgba(197, 208, 200, 0.35), transparent 70%);
+  }
+
+  /* FEDERAL VAULT MIDNIGHT SKEUOMORPHISM (Dark Executive Vault Variant) */
+  [data-theme='vault-midnight-skeuo'],
+  [data-theme='quantum'] {
+    --canvas-base: #0E1611;
+    --bg-base: #0E1611;
+    --bg-surface: #0E1611;
+    --card-surface: #131E17;
+    --bg-card: #131E17;
+    --bg-card-elevated: #17261D;
+    --bg-card-hover: #1B2C22;
+    
+    --bevel-highlight: #1F3025;
+    --bevel-shadow: #060B08;
+    --border-subtle: rgba(78, 171, 104, 0.20);
+    --border-card: rgba(255, 255, 255, 0.08);
+    --border-card-hover: #00A86B;
+    
+    --forest-green: #2E8B57;
+    --sea-green: #3CB371;
+    --jade-green: #00C882;
+    --accent-primary: #00C882;
+    --accent-secondary: #2E8B57;
+    
+    --text-primary: #F0F6F2;
+    --text-secondary: #BDD4C4;
+    --text-muted: #7E9E88;
+    --text-forest: #00C882;
+
+    --skeuo-card-shadow: 8px 8px 16px var(--bevel-shadow), -8px -8px 16px var(--bevel-highlight);
+    --skeuo-card-hover: 10px 10px 20px var(--bevel-shadow), -10px -10px 20px var(--bevel-highlight);
+    --skeuo-card-elevated: 12px 12px 24px var(--bevel-shadow), -12px -12px 24px var(--bevel-highlight);
+
+    --skeuo-well: inset 4px 4px 8px var(--bevel-shadow), inset -4px -4px 8px var(--bevel-highlight);
+    --skeuo-cavity: inset 4px 4px 8px var(--bevel-shadow), inset -4px -4px 8px var(--bevel-highlight);
+    --skeuo-cavity-deep: inset 6px 6px 12px var(--bevel-shadow), inset -6px -6px 12px var(--bevel-highlight);
+    --skeuo-cavity-sm: inset 2px 2px 4px var(--bevel-shadow), inset -2px -2px 4px var(--bevel-highlight);
+
+    --skeuo-btn: 4px 4px 8px var(--bevel-shadow), -4px -4px 8px var(--bevel-highlight);
+    --skeuo-btn-fill: linear-gradient(135deg, #1A281F 0%, #111B15 100%);
+    --skeuo-btn-pressed: inset 3px 3px 6px var(--bevel-shadow), inset -3px -3px 6px var(--bevel-highlight);
+
+    --skeuo-pill-glow: inset 2px 2px 4px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 200, 130, 0.4);
+
+    --bg-radial: radial-gradient(ellipse 90% 60% at 50% -25%, rgba(0, 200, 130, 0.08), transparent 75%),
+                 radial-gradient(ellipse 70% 40% at 100% 100%, rgba(14, 22, 17, 0.60), transparent 70%);
+  }
+
+  body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.015em;
+    -webkit-font-smoothing: antialiased;
+    background-image: var(--bg-radial);
+    background-attachment: fixed;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  }
+}
+
+/* ==========================================================================
+   SKEUOMORPHISM PHYSICAL SYSTEM CLASSES
+   ========================================================================== */
+
+/* 1. Raised Physical Card Surface (Extruded Slabs resting on canvas) */
+.skeuo-card,
+.clay-card,
+.card-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 14px;
+  box-shadow: var(--skeuo-card-shadow);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.skeuo-card:hover,
+.clay-card:hover,
+.card-panel:hover {
+  box-shadow: var(--skeuo-card-hover);
+  transform: translateY(-1px);
+}
+
+/* 2. Elevated Physical Panels (Floating Dialogs, Flyouts) */
+.skeuo-card-elevated,
+.clay-card-elevated,
+.card-panel-elevated {
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+  box-shadow: var(--skeuo-card-elevated);
+}
+
+/* 3. Inset Input / Graph Cavity (Sunken / Carved into surface) */
+.skeuo-well,
+.skeuo-cavity,
+.clay-well,
+.clay-recessed {
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  box-shadow: var(--skeuo-cavity);
+  transition: all 0.2s ease;
+}
+
+.skeuo-cavity-deep {
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  box-shadow: var(--skeuo-cavity-deep);
+}
+
+.skeuo-cavity-sm {
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: var(--skeuo-cavity-sm);
+}
+
+/* 4. Engraved Divider Line (2px chiseled into panel) */
+.engraved-divider,
+.skeuo-divider {
+  border: none;
+  border-top: 1px solid #c8d4cc;
+  border-bottom: 1px solid #ffffff;
+  height: 0;
+  margin: 0.75rem 0;
+}
+
+[data-theme='vault-midnight-skeuo'] .engraved-divider,
+[data-theme='vault-midnight-skeuo'] .skeuo-divider {
+  border-top: 1px solid #060B08;
+  border-bottom: 1px solid #1F3025;
+}
+
+/* 5. Tactile Bevel Button (Convex physical press) */
+.skeuo-btn,
+.clay-btn {
+  background: var(--skeuo-btn-fill);
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #c5d0c8;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: var(--skeuo-btn);
+  color: var(--text-primary);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.skeuo-btn:hover,
+.clay-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+}
+
+.skeuo-btn:active,
+.clay-btn:active {
+  box-shadow: var(--skeuo-btn-pressed) !important;
+  transform: translateY(1px) !important;
+}
+
+/* 6. Primary Money Green Convex Button (Emerald to Forest Gradient) */
+.skeuo-btn-primary,
+.clay-btn-primary {
+  background: linear-gradient(135deg, #00A86B 0%, #1B4D3E 100%);
+  color: #FFFFFF !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.40);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.30);
+  border-radius: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 4px 4px 10px var(--bevel-shadow), -4px -4px 10px var(--bevel-highlight), 0 0 12px rgba(0, 168, 107, 0.35);
+}
+
+.skeuo-btn-primary:hover,
+.clay-btn-primary:hover {
+  filter: brightness(1.05);
+  box-shadow: 6px 6px 14px var(--bevel-shadow), -6px -6px 14px var(--bevel-highlight), 0 0 16px rgba(0, 168, 107, 0.45);
+}
+
+.skeuo-btn-primary:active,
+.clay-btn-primary:active {
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.5), inset -2px -2px 4px rgba(255, 255, 255, 0.2) !important;
+  transform: translateY(1px) !important;
+}
+
+/* 7. Action Queue Green Convex Card (Hero KPI Card 4) */
+.skeuo-card-convex-green {
+  background: linear-gradient(135deg, #00A86B 0%, #1B4D3E 100%);
+  color: #FFFFFF !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 14px;
+  box-shadow: 8px 8px 16px var(--bevel-shadow), -8px -8px 16px var(--bevel-highlight), 0 0 20px rgba(0, 168, 107, 0.30);
+}
+
+/* 8. Active Green Pill / Glowing LED */
+.skeuo-pill-active,
+.led-glow {
+  background: linear-gradient(135deg, #00A86B 0%, #1B4D3E 100%);
+  box-shadow: var(--skeuo-pill-glow);
+  color: #FFFFFF;
+}
+
+/* Secondary Crisp White Hardware Button */
+.skeuo-btn-secondary,
+.clay-btn-secondary {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0F6EE 100%);
+  color: var(--text-primary);
+  border: 1px solid var(--border-card);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.skeuo-btn-secondary:hover,
+.clay-btn-secondary:hover {
+  background: linear-gradient(180deg, #FFFFFF 0%, #E6EFE3 100%);
+  border-color: var(--accent-primary);
+}
+
+/* Red Lacquer Physical Quarantine Button */
+.skeuo-btn-danger,
+.clay-btn-danger {
+  background: linear-gradient(180deg, #DC2626 0%, #991B1B 100%);
+  color: #FFFFFF;
+  border: 1px solid #7F1D1D;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.skeuo-btn-danger:hover,
+.clay-btn-danger:hover {
+  background: linear-gradient(180deg, #EF4444 0%, #B91C1C 100%);
+}
+
+/* Mint Success Button */
+.skeuo-btn-success,
+.clay-btn-success {
+  background: linear-gradient(180deg, #15803D 0%, #14532D 100%);
+  color: #FFFFFF;
+  border: 1px solid #052E16;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.skeuo-btn-success:hover,
+.clay-btn-success:hover {
+  background: linear-gradient(180deg, #16A34A 0%, #166534 100%);
+}
+
+/* 5. Inset Debossed Input Wells */
+.skeuo-input,
+.clay-input {
+  background: var(--banknote-parchment);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  box-shadow: var(--skeuo-well);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.skeuo-input:focus,
+.clay-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(27, 94, 52, 0.20), var(--skeuo-well);
+  outline: none;
+}
+
+/* 6. Stamped Currency Status Badges */
+.skeuo-badge,
+.clay-badge,
+.badge-tier1,
+.badge-tier2,
+.badge-tier3,
+.badge-cyan,
+.badge-indigo {
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.badge-tier1 {
+  background: linear-gradient(180deg, #FEE2E2 0%, #FECACA 100%);
+  color: #991B1B;
+  border: 1px solid rgba(185, 28, 28, 0.35);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.badge-tier2 {
+  background: linear-gradient(180deg, #FEF3C7 0%, #FDE68A 100%);
+  color: #92400E;
+  border: 1px solid rgba(217, 119, 6, 0.40);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.badge-tier3 {
+  background: linear-gradient(180deg, #DCFCE7 0%, #BBF7D0 100%);
+  color: #14532D;
+  border: 1px solid rgba(22, 101, 52, 0.40);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.badge-cyan {
+  background: linear-gradient(180deg, #E0F2FE 0%, #BAE6FD 100%);
+  color: #0369A1;
+  border: 1px solid rgba(2, 132, 199, 0.40);
+}
+
+.badge-indigo {
+  background: linear-gradient(180deg, #EEF2FF 0%, #E0E7FF 100%);
+  color: #3730A3;
+  border: 1px solid rgba(79, 70, 229, 0.40);
+}
+
+/* Custom Intaglio Green Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: #B9D6C0;
+  border: 1px solid rgba(27, 94, 52, 0.25);
+  border-radius: 9999px;
+  box-shadow: inset 0 1px 0 #fff;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #1B5E34;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 6px rgba(27, 94, 52, 0.6)); }
+  50% { opacity: 0.6; filter: drop-shadow(0 0 2px rgba(27, 94, 52, 0.2)); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}

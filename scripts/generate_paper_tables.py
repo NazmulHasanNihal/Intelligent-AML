@@ -34,7 +34,7 @@ OUTPUT_TABLES_DIR = ROOT / "papers" / "IEEE_Research_Paper" / "tables"
 OUTPUT_DOCS_MD = ROOT / "docs" / "Paper_Empirical_Scorecard.md"
 
 GROUP_A = ["elliptic_v1", "elliptic_v2", "eth_phishing", "xblock_eth", "mtgox_leaked"]
-GROUP_B = ["saml_d", "paysim1", "ibm_amlsim_hi_small", "ibm_amlsim_li_small", "data_generator", "smart_ponzi", "synthaml", "dgraphfin"]
+GROUP_B = ["saml_d", "paysim1", "paysim_extended", "ibm_amlsim_hi_small", "ibm_amlsim_hi_medium", "ibm_amlsim_li_small", "ibm_amlsim_li_medium", "data_generator", "dgraphfin"]
 GROUP_C = ["cc_transactions"]
 
 KEY_MODELS = [
@@ -115,13 +115,15 @@ def generate_latex_tables():
     ]
 
     def render_group(group_name: str, datasets: List[str]):
-        sub_lines = [f"\\multicolumn{{7}}{{l}}{{\\textbf{{{group_name}}}}} \\\\"]
+        group_name_esc = group_name.replace("&", r"\&")
+        sub_lines = [f"\\multicolumn{{7}}{{l}}{{\\textbf{{{group_name_esc}}}}} \\\\"]
         for ds in datasets:
             ds_sub = latest_df[latest_df["dataset"] == ds]
             if ds_sub.empty:
                 continue
             
-            row_cells = [f"\\texttt{{{ds}}}"]
+            ds_esc = ds.replace("_", r"\_")
+            row_cells = [f"\\texttt{{{ds_esc}}}"]
             cstgb_f1 = ds_sub[ds_sub["model_slug"] == "proposed_c_stgb"]["f1_score"].values
             cstgb_prauc = ds_sub[ds_sub["model_slug"] == "proposed_c_stgb"]["pr_auc"].values
             
@@ -172,9 +174,19 @@ def generate_latex_tables():
         r"\midrule"
     ]
     for slug, res in stat_results.items():
-        p_str = f"{res['p_value']:.2e}" if res['p_value'] < 0.001 else f"{res['p_value']:.4f}"
-        sig = r"^{\ast\ast\ast}" if res['p_value'] < 0.001 else (r"^{\ast\ast}" if res['p_value'] < 0.01 else "")
-        stat_lines.append(f"{res['name']} & {res['mean_baseline']:.2f}\\% & {res['mean_cstgb']:.2f}\\% & +{res['uplift']:.2f} & ${p_str}{sig}$ \\\\")
+        if res['p_value'] < 0.001:
+            p_sci = f"{res['p_value']:.2e}"
+            base, exp = p_sci.split("e")
+            p_str = f"{base} \\times 10^{{{int(exp)}}}"
+            sig = r"^{\ast\ast\ast}"
+        else:
+            p_str = f"{res['p_value']:.4f}"
+            sig = r"^{\ast\ast}" if res['p_value'] < 0.01 else ""
+        uplift_str = f"+{res['uplift']:.2f}" if res['uplift'] >= 0 else f"{res['uplift']:.2f}"
+        if sig:
+            stat_lines.append(f"{res['name']} & {res['mean_baseline']:.2f}\\% & {res['mean_cstgb']:.2f}\\% & {uplift_str} & ${{{p_str}}}{sig}$ \\\\")
+        else:
+            stat_lines.append(f"{res['name']} & {res['mean_baseline']:.2f}\\% & {res['mean_cstgb']:.2f}\\% & {uplift_str} & ${p_str}$ \\\\")
     stat_lines.extend([
         r"\bottomrule",
         r"\end{tabular}%",

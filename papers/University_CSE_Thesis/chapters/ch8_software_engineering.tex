@@ -8,8 +8,8 @@ Figure~\ref{fig:ch8_microservice} illustrates the enterprise microservice topolo
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/fig_algorithm1_flowchart.pdf}
-\caption{Enterprise microservice deployment topology of Intelligent-AML: (1) High-Throughput Ingestion Gateway; (2) DuckDB / Arrow In-Memory Analytical Engine; (3) PyTorch Geometric C-STGB Inference Worker Pool; (4) Multi-Agent SAR Compliance Engine; and (5) Fed SR 11-7 Cryptographic Audit Ledger.}
+\includegraphics[width=\textwidth]{figures/arch_triband.pdf}
+\caption{Enterprise microservice deployment topology of Intelligent-AML: (1) High-Throughput Ingestion Gateway; (2) DuckDB / Arrow In-Memory Analytical Engine; (3) PyTorch Geometric C-STGB Inference Worker Pool; (4) Multi-Agent SAR Compliance Engine; and (5) Model Governance (SR 26-2) Cryptographic Audit Ledger.}
 \label{fig:ch8_microservice}
 \end{figure}
 
@@ -31,7 +31,7 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 \texttt{POST} & \texttt{/api/v1/transactions/ingest} & $<1.5\,\text{ms}$ & Ingests streaming transaction event and updates in-memory causal graph. \\
 \texttt{POST} & \texttt{/api/v1/inference/score} & $<2.5\,\text{ms}$ & Executes C-STGB inference and returns conformal triage action ($\Gamma(u)$). \\
 \texttt{POST} & \texttt{/api/v1/compliance/sar/generate} & $<500\,\text{ms}$ & Dispatches Multi-Agent Swarm to compile FinCEN Form 111 XML dossier. \\
-\texttt{GET} & \texttt{/api/v1/audit/receipt/\{case\_id\}} & $<1.0\,\text{ms}$ & Retrieves cryptographic SHA-256 Merkle tree receipt under Fed SR 11-7. \\
+\texttt{GET} & \texttt{/api/v1/audit/receipt/\{case\_id\}} & $<1.0\,\text{ms}$ & Retrieves cryptographic SHA-256 Merkle tree receipt under SR 26-2 governance. \\
 \texttt{WS} & \texttt{/ws/v1/live-triage-feed} & Real-Time & Real-time streaming WebSocket feed broadcasting Tier-1/Tier-2 triage alerts. \\
 \bottomrule
 \end{tabular}%
@@ -42,7 +42,7 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 \label{lst:fastapi_code}
 Listing~\ref{lst:fastapi_code} illustrates the asynchronous transaction scoring endpoint.
 
-\begin{small}
+\begin{footnotesize}
 \begin{verbatim}
 @router.post("/api/v1/inference/score", response_model=TriageResponse)
 async def score_transaction(
@@ -76,20 +76,21 @@ async def score_transaction(
         latency_ms=latency_ms
     )
 \end{verbatim}
-\end{small}
+\end{footnotesize}
 
 \section{Containerization, Kubernetes \& CI/CD Infrastructure}
 To guarantee reproducible deployment across on-premise banking mainframes, cloud Kubernetes clusters (AWS EKS, Google Cloud GKE), and local edge environments, the entire platform is packaged via Docker and orchestrated with Kubernetes.
 
 \subsection{Production Containerization (Dockerfile)}
 The multi-stage production Docker container builds on Debian-slim Python 3.11 with optimized PyTorch C++ extensions and zero-copy Arrow memory bindings:
-\begin{small}
+\begin{footnotesize}
 \begin{verbatim}
 FROM python:3.11-slim
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PIP_NO_CACHE_DIR=1
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential curl git libgomp1 && rm -rf /var/lib/apt/lists/*
+    build-essential curl git libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt pyproject.toml ./
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt && pip install -e .
@@ -98,7 +99,7 @@ COPY configs/ ./configs/
 ENTRYPOINT ["intelligent-aml"]
 CMD ["demo"]
 \end{verbatim}
-\end{small}
+\end{footnotesize}
 
 \subsection{Kubernetes Deployment and Auto-Scaling Configuration}
 \label{lst:k8s_deployment}
@@ -123,7 +124,7 @@ spec:
     spec:
       containers:
       - name: inference-worker
-        image: intelligent-aml/cstgb:v2.4.0
+        image: intelligent-aml/cstgb:v1.0.0
         resources:
           limits:
             cpu: "8"
@@ -183,7 +184,7 @@ The repository incorporates 158 automated unit, integration, and regression test
     \item Class-Conditional Conformal Risk Control coverage bounds ($\ge 99.0\%$).
     \item Multi-agent forensic swarm reasoning cycles and FinCEN Form 111 XML generation.
     \item Zero-leakage 4-way chronological split integrity and test-seed isolation.
-    \item Fed SR 11-7 Merkle tree cryptographic receipt hashing.
+    \item Model Governance (SR 26-2) Merkle tree cryptographic receipt hashing.
 \end{itemize}
 
 \section{Security Architecture, RBAC \& Data Governance}

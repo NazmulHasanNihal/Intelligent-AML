@@ -25,6 +25,13 @@ Figure~\ref{fig:ch3_detailed_pipeline} illustrates the six interconnected module
 \label{sec:12d_invariants}
 To enable seamless zero-shot cross-network generalization across heterogeneous financial ledgers (Bitcoin UTXO, Ethereum EVM, PaySim e-wallets, SAML-D multi-bank rails), C-STGB constructs a universal 12-dimensional canonical invariant vector $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$ for every active entity $u \in \mathcal{V}$ at continuous time $t$.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_canonical_invariants.pdf}
+\caption{Universal 12-dimensional canonical invariant representation space, projecting heterogeneous transaction ledgers (Bitcoin UTXO, Ethereum EVM, PaySim, SAML-D) into a standardized feature space for zero-shot cross-network transfer.}
+\label{fig:ch3_canonical_invariants}
+\end{figure}
+
 \subsection{Mathematical Invariant Definitions}
 The 12 invariant features are formulated across five structural groups:
 
@@ -148,6 +155,13 @@ To maintain sub-millisecond streaming SLAs, we enforce a strict top-$K$ degree c
 \section{Module 3: Typology-Clustered Latent GraphSMOTE}
 Under extreme class skew ($\pi < 0.05\%$), naïve SMOTE oversampling blurs distinct criminal typologies. C-STGB partitions minority training nodes into latent typology clusters before synthesis.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig18_graphsmote_synthesis_pipeline.pdf}
+\caption{Three-step Typology-Clustered Latent GraphSMOTE synthesis pipeline: (1) Latent manifold typology clustering; (2) Intra-cluster convex interpolation; and (3) Localized $O(K_{\text{cand}} \cdot d)$ bilinear edge reconstruction preserving mass-balance flow conservation.}
+\label{fig:ch3_graphsmote_pipeline}
+\end{figure}
+
 \subsection{Manifold Typology Partitioning}
 Minority illicit training nodes $\mathcal{V}_{\text{illicit}}^{\text{train}}$ are clustered in latent embedding space into $K$ typology clusters $C_1, \dots, C_K$:
 \begin{equation}
@@ -269,6 +283,13 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 \EndIf
 \end{algorithmic}
 \end{algorithm}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_algorithm1_flowchart.pdf}
+\caption{End-to-end execution flowchart of C-STGB Algorithm~\ref{alg:cstgb_training}, illustrating the unified pipeline: data ingestion and 12-D invariant extraction, continuous temporal encoding, learnable edge-trust gating, typology-aware GraphSMOTE, evidence-adaptive fusion, loss optimization, and class-conditional conformal risk control.}
+\label{fig:ch3_algorithm1_flowchart}
+\end{figure}
 
 \section{Chapter Summary}
 This chapter delivered the complete mathematical formulation of the C-STGB architecture, detailing continuous harmonic time encodings, Hawkes point process intensities, context-aware edge gating, typology-aware latent GraphSMOTE, evidence-adaptive graph-tabular fusion, and multi-task loss optimization. The next chapter presents the vectorized streaming data engineering pipeline.

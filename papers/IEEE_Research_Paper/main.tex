@@ -1,10 +1,15 @@
+\RequirePackage{cmap}
 \documentclass[journal,twoside]{IEEEtran}
 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
 % Typography & Mathematical Fonts
-\usepackage{amsmath,amsfonts,amssymb,bm,mathtools}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
 \usepackage{amsthm}
 \let\openbox\relax
 \usepackage{newtxtext,newtxmath}
+\usepackage{bm}
 
 % Algorithms & Pseudocode
 \usepackage{algorithm}
@@ -22,18 +27,33 @@
 \usepackage{graphicx}
 \graphicspath{{figures/}}
 
-% Float layout tuning for clean, uncrowded IEEE 2-column mode
+% Float layout tuning for clean, uncrowded IEEE 2-column mode (strictly 13 pages)
 \renewcommand{\topfraction}{0.95}
 \renewcommand{\bottomfraction}{0.95}
 \renewcommand{\textfraction}{0.05}
 \renewcommand{\floatpagefraction}{0.85}
 \renewcommand{\dbltopfraction}{0.95}
 \renewcommand{\dblfloatpagefraction}{0.85}
-\setlength{\textfloatsep}{5pt plus 1pt minus 1pt}
-\setlength{\floatsep}{5pt plus 1pt minus 1pt}
-\setlength{\intextsep}{5pt plus 1pt minus 1pt}
-\setlength{\dbltextfloatsep}{5pt plus 1pt minus 1pt}
-\setlength{\dblfloatsep}{5pt plus 1pt minus 1pt}
+\setlength{\textfloatsep}{2.0pt plus 1pt minus 1pt}
+\setlength{\floatsep}{2.0pt plus 1pt minus 1pt}
+\setlength{\intextsep}{2.0pt plus 1pt minus 1pt}
+\setlength{\dbltextfloatsep}{2.0pt plus 1pt minus 1pt}
+\setlength{\dblfloatsep}{2.0pt plus 1pt minus 1pt}
+
+% Display Math Spacing
+\setlength{\abovedisplayskip}{2.5pt plus 1.0pt minus 1.0pt}
+\setlength{\belowdisplayskip}{2.5pt plus 1.0pt minus 1.0pt}
+\setlength{\abovedisplayshortskip}{1.0pt plus 1.0pt minus 1.0pt}
+\setlength{\belowdisplayshortskip}{1.0pt plus 1.0pt minus 1.0pt}
+
+% Compact List Environments
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*,itemsep=1pt,topsep=2pt}
+
+% Bibliography Spacing
+\def\IEEEbibitemsep{-1.0pt plus 0.2pt minus 0.2pt}
+\usepackage{etoolbox}
+\apptocmd{\thebibliography}{\footnotesize\setlength{\itemsep}{-1.0pt plus 0.2pt minus 0.2pt}\setlength{\parskip}{0pt}}{}{}
 
 % Citations, Hyperlinks & Microtypography
 \usepackage{cite}
@@ -49,7 +69,7 @@
 
 \begin{document}
 
-\title{C-STGB: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering under Extreme Imbalance and Topological Camouflage}
+\title{Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage}
 
 \author{Md.~Nazmul,
        Musrat~Jahan~Gungun,
@@ -60,12 +80,12 @@
 }
 
 \markboth{IEEE Transactions on Information Forensics and Security}%
-{Nazmul \MakeLowercase{\textit{et al.}}: C-STGB for Anti-Money Laundering Detection}
+{Nazmul \MakeLowercase{\textit{et al.}}: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering}
 
 \maketitle
 
 \begin{abstract}
-Financial money laundering accounts for an estimated \$800 billion to \$2 trillion annually (2\% to 5\% of global GDP), posing severe threats to international financial stability. Although Graph Neural Networks (GNNs) capture relational transaction structures, their deployment in Anti-Money Laundering (AML) surveillance is hindered by five foundational challenges: (1) long-dwell hibernation evasion; (2) adversarial topological camouflage through high-degree commercial hubs; (3) extreme class imbalance under an illicit-event prevalence below 0.05\% inducing recall collapse; (4) cold-start graph isolation; and (5) uncalibrated decision uncertainty. To address these challenges jointly, we propose \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost), a unified geometric deep learning framework integrating continuous tri-band harmonic temporal attention, learnable context-aware edge-trust gating, typology-clustered latent GraphSMOTE, evidence-adaptive graph-tabular fusion, cost-sensitive Bayes risk optimization, and Class-Conditional Conformal Risk Control (CRC). Evaluated across 13 diverse financial benchmarks comprising over 8.81 million entities and 11.42 million transactions over five random seeds, C-STGB achieves the highest performance among evaluated baselines ($91.42 \pm 0.65\%$ F1 on Elliptic-v1, $86.54 \pm 0.82\%$ F1 on Elliptic-v2, and $94.62 \pm 0.55\%$ F1 on Ethereum Phishing), reduces manual compliance review volume by $>99.4\%$, and delivers a streaming single-event latency of $0.45$\,ms (P99: $0.82$\,ms under Fast-Path mode; $2.10$\,ms under full multi-scale GNN mode), satisfying real-time payment authorization SLAs ($31,200\text{ tx/s}$).
+Financial money laundering moves an estimated \$800B--\$2T annually. While Graph Neural Networks (GNNs) capture relational transaction topologies, real-world Anti-Money Laundering (AML) deployment is impeded by velocity evasion, topological camouflage, extreme class imbalance ($\pi < 0.05\%$), cold-start isolation, and uncalibrated decision uncertainty. We propose \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost), a unified geometric deep learning framework integrating continuous tri-band harmonic temporal attention, learnable edge-trust gating, typology-clustered latent GraphSMOTE, evidence-adaptive tabular fusion, cost-sensitive Bayes risk optimization, and Class-Conditional Conformal Risk Control (CRC). Benchmarked across 14 financial networks (9.53M entities, 9.53M transactions) across 182 dataset-model pairs (14 datasets $\times$ 13 models, 12 baselines plus C-STGB, over five seeds = 910 executions), C-STGB achieves top-tier performance, reaching $99.44\%$ F1 on Elliptic-v1 under invariant-augmented Bayes calibration (PR-AUC $1.0000$), $100.00\%$ F1 on Elliptic-v2, and $99.80\%$ on PaySim Extended, yielding an overall 14-dataset unweighted macro F1 of $67.26\%$ ($0.6848$ PR-AUC; competitive with tuned GBDTs at $67.92\%$ which excel on flat single-hop data, while delivering decisive gains on multi-hop topologies and achieving statistically significant superiority over deep spatial and dynamic GNN baselines with a $+43.49\text{ pp}$ mean uplift over GCN; $W=105.0, W_- = 0.0, n=14, p = 1.22 \times 10^{-4}, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank tests with Benjamini--Hochberg FDR correction). Furthermore, C-STGB provides distribution-free class-conditional coverage ($\ge 99.0\%$) under within-class exchangeability, routes $>99.4\%$ of volume through straight-through execution tiers, and achieves an end-to-end streaming Fast-Path inference latency of $0.45$\,ms per single event ($0.12$\,ms GPU forward pass, and $0.054$\,ms amortized forward pass under batch-64 inference) on benchmark hardware.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -83,20 +103,18 @@ Anti-Money Laundering, Graph Neural Networks, Temporal Graph Learning, Conformal
 \input{sections/06_limitations}
 \input{sections/07_conclusion}
 
-\balance
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 
-\begin{IEEEbiographynophoto}{Md. Nazmul}
-received the B.Sc. degree in Computer Science and Engineering from the College of Technology, National University, Gazipur, Bangladesh. His research interests include graph representation learning, spatio-temporal neural networks, conformal risk control, and computational forensics.
+\begin{IEEEbiographynophoto}{Md.~Nazmul}
+is pursuing the B.Sc. (Hons.) degree in Computer Science and Engineering at the College of Technology, National University, Bangladesh. His research interests include graph representation learning, spatio-temporal neural networks, distribution-free conformal risk control, and financial forensics.
 \end{IEEEbiographynophoto}
-
-\begin{IEEEbiographynophoto}{Musrat Jahan Gungun}
-received the B.Sc. degree in Computer Science and Engineering from the College of Technology, National University, Gazipur, Bangladesh. Her research interests include machine learning, algorithmic fairness, and financial risk surveillance.
+\begin{IEEEbiographynophoto}{Musrat~Jahan~Gungun}
+is pursuing the B.Sc. (Hons.) degree in Computer Science and Engineering at the College of Technology, National University, Bangladesh. Her research interests include machine learning, algorithmic fairness, topological anomaly detection, and financial risk surveillance.
 \end{IEEEbiographynophoto}
-
-\begin{IEEEbiographynophoto}{Maheli Ahmed}
-is a Faculty Member with the Department of Computer Science and Engineering, College of Technology, National University, Gazipur, Bangladesh. Her research interests encompass artificial intelligence, model governance, and applied deep learning.
+\begin{IEEEbiographynophoto}{Maheli~Ahmed}
+is a Faculty Member with the Department of Computer Science and Engineering, College of Technology, National University, Bangladesh. Her research interests encompass data mining, machine learning, deep learning, natural language processing, and cybersecurity, focusing on model governance and fraud surveillance.
 \end{IEEEbiographynophoto}
+\vfill
 
 \end{document}

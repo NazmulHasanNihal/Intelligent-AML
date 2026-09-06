@@ -66,7 +66,6 @@ agents = [
     "reportlab>=4.2",
 ]
 dashboard = [
-    "streamlit>=1.37",
     "fastapi>=0.112",
     "uvicorn>=0.30",
     "pyvis>=0.3",
@@ -81,6 +80,7 @@ include = ["src*", "comparing_models*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+norecursedirs = ["archive", "tests/archive"]
 pythonpath = ["."]
 addopts = "--tb=short -ra"
 

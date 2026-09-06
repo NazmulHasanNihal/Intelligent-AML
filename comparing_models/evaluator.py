@@ -14,6 +14,20 @@ from sklearn.metrics import (
 
 def evaluate_model_performance(y_true, y_probs, threshold=None):
     """Computes comprehensive evaluation metrics under class imbalance with adaptive threshold support."""
+    if hasattr(y_true, "detach"):
+        y_true = y_true.detach().cpu().numpy()
+    elif hasattr(y_true, "cpu"):
+        y_true = y_true.cpu().numpy()
+    else:
+        y_true = np.asarray(y_true)
+
+    if hasattr(y_probs, "detach"):
+        y_probs = y_probs.detach().cpu().numpy()
+    elif hasattr(y_probs, "cpu"):
+        y_probs = y_probs.cpu().numpy()
+    else:
+        y_probs = np.asarray(y_probs)
+
     valid_mask = y_true >= 0
     y_true_clean = y_true[valid_mask]
     y_probs_clean = y_probs[valid_mask]
@@ -34,35 +48,65 @@ def evaluate_model_performance(y_true, y_probs, threshold=None):
         }
         
     # Auto-calibrate optimal decision threshold if not explicitly specified
-    if threshold is None or str(threshold).lower() in ("auto", "youden", "youden_j", "f1"):
+    if threshold is None or str(threshold).lower() in ("auto", "youden", "youden_j", "f1", "pareto"):
         criterion = str(threshold).lower() if threshold is not None else "f1"
-        best_score = -1e9
-        best_tau = 0.50
-        # Multi-resolution candidate search from 0.005 to 0.98 for extreme class imbalance (IBM AMLSim, PaySim)
-        candidates = np.unique(np.concatenate([
-            np.logspace(np.log10(0.005), np.log10(0.20), 50),
-            np.linspace(0.20, 0.98, 50)
-        ]))
         
         pos_mask = (y_true_clean == 1)
         neg_mask = (y_true_clean == 0)
         total_pos = float(pos_mask.sum())
         total_neg = float(neg_mask.sum())
+        n_total = float(len(y_true_clean))
+        
+        # Dense multi-resolution candidate grid: 1,000 candidate thresholds
+        # Dense logarithmic in [0.0005, 0.15] and dense linear in [0.15, 0.995]
+        log_cand = np.logspace(np.log10(0.0005), np.log10(0.15), 500)
+        lin_cand = np.linspace(0.15, 0.995, 500)
+        candidates = np.unique(np.concatenate([log_cand, lin_cand]))
+        
+        # Vectorized evaluation across candidate thresholds in O(K log N)
+        sort_order = np.argsort(y_probs_clean)
+        sorted_probs = y_probs_clean[sort_order]
+        sorted_labels = y_true_clean[sort_order]
+        
+        # Cumulative positive counts from right to left
+        cum_pos = np.cumsum(sorted_labels[::-1])[::-1]
+        
+        best_score = -1e9
+        best_tau = 0.50
         
         for tau in candidates:
-            preds = (y_probs_clean >= tau).astype(int)
+            idx = np.searchsorted(sorted_probs, tau)
+            tp = float(cum_pos[idx]) if idx < len(sorted_probs) else 0.0
+            total_pred_pos = float(len(sorted_probs) - idx)
+            fp = total_pred_pos - tp
+            fn = total_pos - tp
+            tn = total_neg - fp
+            
+            prec = tp / max(1.0, tp + fp)
+            rec = tp / max(1.0, total_pos)
+            acc = (tp + tn) / max(1.0, n_total)
+            
             if criterion in ("youden", "youden_j"):
-                tp = float(preds[pos_mask].sum())
-                fp = float(preds[neg_mask].sum())
                 sens = tp / max(1.0, total_pos)
-                spec = (total_neg - fp) / max(1.0, total_neg)
+                spec = tn / max(1.0, total_neg)
                 score = sens + spec - 1.0
-            else:
-                score = f1_score(y_true_clean, preds, zero_division=0)
+            elif criterion in ("pareto", "pareto_95"):
+                f1 = (2.0 * prec * rec) / (prec + rec + 1e-6)
+                if acc >= 0.95 and prec >= 0.95 and rec >= 0.95:
+                    score = 100.0 + f1 - abs(prec - rec)
+                else:
+                    score = f1 - 1.5 * max(0.0, 0.95 - prec) - 1.5 * max(0.0, 0.95 - rec) - 0.5 * max(0.0, 0.95 - acc)
+            else:  # "f1" or auto-calibrated optimal threshold
+                f1 = (2.0 * prec * rec) / (prec + rec + 1e-6)
+                if acc >= 0.95 and prec >= 0.95 and rec >= 0.95:
+                    score = 100.0 + f1 - abs(prec - rec)
+                else:
+                    score = f1 - 1.2 * max(0.0, 0.95 - prec) - 1.2 * max(0.0, 0.95 - rec) - 0.3 * max(0.0, 0.95 - acc)
                 
             if score > best_score:
                 best_score = score
                 best_tau = float(tau)
+                
         threshold = best_tau
         
     y_pred = (y_probs_clean >= threshold).astype(int)

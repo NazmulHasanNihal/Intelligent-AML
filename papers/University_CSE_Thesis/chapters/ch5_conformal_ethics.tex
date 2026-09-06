@@ -35,6 +35,13 @@ For user-specified target significance level $\alpha \in (0, 1)$ (e.g., $\alpha 
 \end{equation}
 where $n(y) = |\mathcal{D}_{\text{cal}}^{(y)}|$ is the number of calibration samples in class $y$.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig19_conformal_risk_mechanism.pdf}
+\caption{Class-conditional conformal calibration mechanism under extreme class imbalance: (a) Dual calibrated non-conformity quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$; and (b) Empirical non-conformity score distributions demonstrating tight bounded coverage for both benign and illicit classes.}
+\label{fig:ch5_conformal_mechanism}
+\end{figure}
+
 \subsection{Multi-Valued Conformal Prediction Set Construction}
 At test inference time, the class-conditional conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$ for a query entity $u$ is constructed by including all labels whose non-conformity score does not exceed the calibrated threshold:
 \begin{equation}
@@ -127,6 +134,13 @@ The conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$ produces four possib
         \item \textit{Volume Share:} $>99.38\%$ of total transaction traffic.
     \end{itemize}
 \end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_conformal_queue_dynamics.pdf}
+\caption{Empirical verification of 3-Tier Conformal Risk Control: (a) Finite-sample coverage retention across significance levels $\alpha \in [0.01, 0.10]$; and (b) Automated queue clearance dynamics slashing manual review volume by $>99.4\%$.}
+\label{fig:ch5_queue_dynamics}
+\end{figure}
 
 \section{Algorithmic Fairness \& Non-Discrimination Audits}
 To prevent algorithmic bias against protected demographic groups (e.g., nationality, geographic origin, customer age), C-STGB incorporates formal algorithmic fairness auditing.

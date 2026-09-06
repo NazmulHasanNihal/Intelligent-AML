@@ -33,7 +33,6 @@ crewai>=0.51.1
 reportlab>=4.2.2
 
 # ─── Human-in-the-Loop UI (Layer 6) ───────────────────────────
-streamlit>=1.37.1
 fastapi>=0.112.0
 uvicorn>=0.30.6
 pyvis>=0.3.2

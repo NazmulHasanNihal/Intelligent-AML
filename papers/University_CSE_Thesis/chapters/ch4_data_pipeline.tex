@@ -8,7 +8,7 @@ To resolve these challenges, C-STGB incorporates a vectorized, zero-copy streami
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/fig_canonical_invariants.pdf}
+\includegraphics[width=\textwidth]{figures/pipeline_cstgb.pdf}
 \caption{Vectorized streaming data engineering architecture, illustrating zero-copy Arrow ingestion, DuckDB SQL data contracts, dynamic schema discovery, and in-memory LRU causal subgraph caching.}
 \label{fig:ch4_pipeline_architecture}
 \end{figure}
@@ -20,7 +20,7 @@ C-STGB deploys DuckDB as an in-process, columnar analytical execution engine. By
 \label{lst:duckdb_schema}\label{lst:duckdb_entities}
 Every incoming financial transaction payload and reference entity must strictly adhere to the unified streaming relational data contracts formalized in Listings~\ref{lst:duckdb_schema} and~\ref{lst:duckdb_entities}.
 
-\begin{small}
+\begin{footnotesize}
 \begin{verbatim}
 CREATE TABLE streaming_transactions (
     transaction_id VARCHAR(64) PRIMARY KEY,
@@ -57,11 +57,11 @@ CREATE TABLE high_risk_jurisdictions (
     sanction_regime VARCHAR(64) DEFAULT 'None'
 );
 \end{verbatim}
-\end{small}
+\end{footnotesize}
 
 \subsection{Causal Ego-Graph Analytical Query Execution}
 To extract the localized $k$-hop causal ego-graph $\mathcal{N}_k(u, t)$ strictly prior to transaction timestamp $t$, DuckDB executes vectorized columnar filtering:
-\begin{small}
+\begin{footnotesize}
 \begin{verbatim}
 SELECT 
     t.source_entity_id,
@@ -82,7 +82,7 @@ WHERE (t.source_entity_id = ? OR t.target_entity_id = ?)
 ORDER BY t.timestamp_epoch DESC
 LIMIT 50;
 \end{verbatim}
-\end{small}
+\end{footnotesize}
 This analytical query executes in under $0.18\text{ ms}$ on indexed in-memory tables containing 10 million transactions.
 
 \section{Zero-Copy Apache Arrow Columnar Memory Management}
@@ -93,10 +93,7 @@ When a batch of transactions is retrieved from DuckDB:
 \begin{enumerate}
     \item DuckDB produces columnar Arrow \texttt{RecordBatch} structures in contiguous RAM blocks.
     \item PyArrow wraps the memory pointers without allocating new heap memory.
-    \item PyTorch tensors are constructed via zero-copy strided memory pointers:
-    \begin{equation}
-    \mathbf{X}_{\text{tensor}} = \text{torch.from\_numpy}(\text{arrow\_table.to\_numpy()})
-    \end{equation}
+    \item Zero-copy conversion transforms Arrow RecordBatches into PyTorch Geometric edge and node tensors.
 \end{enumerate}
 This zero-copy pipeline reduces end-to-end tensor ingestion latency from $14.2\text{ ms}$ to $0.32\text{ ms}$ per 10,000-edge batch, achieving a $44\times$ throughput speedup.
 
@@ -129,16 +126,7 @@ Hawkes Intensity ($\lambda_u$) & UTXO Spend Arrival Rate & Gas Tx Frequency & Tr
 To eliminate redundant graph reconstruction for recurring financial hubs, C-STGB implements a concurrent Least Recently Used (LRU) in-memory subgraph cache.
 
 \subsection{Cache Architecture and Hit Rates}
-The cache stores pre-computed 2-hop topological ego-graphs and canonical invariant states indexed by entity ID. Figure~\ref{fig:cache_hit_rate} plots empirical cache hit rates as a function of cache capacity on the Elliptic-v1 and SAML-D transaction streams.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/fig5_latency_pareto_frontier.pdf}
-\caption{Empirical LRU subgraph cache hit rate progression as a function of cache entity capacity across Elliptic-v1 and SAML-D streaming datasets.}
-\label{fig:cache_hit_rate}
-\end{figure}
-
-With a modest cache size of 50,000 entities ($\approx 250\,\text{MB}$ RAM), the LRU cache achieves an empirical hit rate of \textbf{88.4\%}, reducing average end-to-end inference latency on cached entities to \textbf{0.45 ms} (Fast-Path mode).
+The cache stores pre-computed 2-hop topological ego-graphs and canonical invariant states indexed by entity ID. With a modest cache size of 50,000 entities ($\approx 250\,\text{MB}$ RAM), the LRU cache achieves an empirical hit rate of \textbf{88.4\%} across the Elliptic-v1 and SAML-D transaction streams, reducing average end-to-end inference latency on cached entities to \textbf{0.45 ms} (Fast-Path mode). Full latency distributions and Pareto trade-offs are evaluated in Section~\ref{sec:ch7_latency}.
 
 \section{Chapter Summary}
 This chapter presented the vectorized data engineering pipeline underpinning C-STGB, detailing DuckDB embedded SQL data contracts, Apache Arrow zero-copy memory management, dynamic heterogeneous schema mapping, and LRU subgraph caching. The next chapter establishes the mathematical foundations of Class-Conditional Conformal Risk Control and ethical compliance audits.

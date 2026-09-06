@@ -2,7 +2,7 @@
 \label{ch:xai}
 
 \section{The Explainability and Regulatory Auditability Imperative}
-In statutory Anti-Money Laundering (AML) enforcement, raw classification scores are legally insufficient for asset seizure or regulatory filings. Regulatory mandates—including Federal Reserve Supervisory Letter SR 11-7 (Guidance on Model Risk Management), the European Union AI Act (High-Risk AI Systems Requirements), and Financial Crimes Enforcement Network (FinCEN) regulations—mandate that every Suspicious Activity Report (SAR) must contain an auditable, human-interpretable narrative detailing the factual transaction chain, typological indicators, and mathematical rationale.
+In statutory Anti-Money Laundering (AML) enforcement, raw classification scores are legally insufficient for asset seizure or regulatory filings. Regulatory mandates—including the 2026 interagency guidance on Model Risk Management (SR 26-2, superseding SR 11-7 and SR 21-8), the European Union AI Act (High-Risk AI Systems Requirements), and Financial Crimes Enforcement Network (FinCEN) regulations—mandate that every Suspicious Activity Report (SAR) must contain an auditable, human-interpretable narrative detailing the factual transaction chain, typological indicators, and mathematical rationale.
 
 To bridge machine learning predictions with statutory legal compliance, C-STGB integrates a post-hoc \textbf{GNNExplainer topological attribution engine} coupled with an \textbf{autonomous Multi-Agent Forensic Swarm} governed by deterministic Abstract Syntax Tree (AST) grammar validators and cryptographic SHA-256 Merkle tree audit trails.
 
@@ -36,7 +36,7 @@ The extracted causal subgraph $\mathcal{G}_{\text{sub}}$ and 12-D invariant vect
     \item \textbf{Lead Forensic Coordinator Agent:} Ingests Tier-1/Tier-2 conformal alerts, initializes forensic case contexts, and coordinates inter-agent task delegation.
     \item \textbf{Subgraph Topology Specialist Agent:} Analyzes graph structural motifs, computes flow conservation ratios ($\Phi_{\text{flow}}$), identifies laundering typology classifications (Smurfing, Layering, Circular Wash, Dormant Mule), and extracts causal hop sequences.
     \item \textbf{FinCEN SAR Drafter Agent:} Synthesizes natural-language executive summaries and structured FinCEN Form 111 XML narratives from verified topological facts.
-    \item \textbf{Compliance Rule Verifier Agent:} Enforces statutory AST grammar specifications, Pydantic schema validation, and Federal Reserve SR 11-7 cryptographic Merkle tree receipt generation.
+    \item \textbf{Compliance Rule Verifier Agent:} Enforces statutory AST grammar specifications, Pydantic schema validation, and SR 26-2-aligned cryptographic Merkle tree receipt generation.
 \end{enumerate}
 
 \section{Abstract Syntax Tree (AST) Grammar \& Schema Specification}
@@ -116,8 +116,8 @@ The Pydantic schema validator executes a deterministic set-membership assertion 
 
 \textbf{Remark (Compiler-Enforced Invariant):} We emphasize that Proposition~6.1 represents a deterministic software compiler and AST schema-enforced verification invariant rather than an analytical mathematical guarantee inherent to unconstrained autoregressive neural language models.
 
-\section{Federal Reserve SR 11-7 Cryptographic Merkle Tree Receipts}
-To satisfy Federal Reserve SR 11-7 model governance and evidentiary legal chain-of-custody standards, every generated SAR payload is committed to a cryptographic Merkle Tree:
+\section{Model Governance (SR 26-2) Cryptographic Merkle Tree Receipts}
+To satisfy interagency model risk management guidance (SR 26-2, superseding SR 11-7) and evidentiary legal chain-of-custody standards, every generated SAR payload is committed to a cryptographic Merkle Tree:
 \begin{equation}
 h_{\text{leaf}} = \text{SHA-256}\left( \text{JSON}(\text{SAR\_Payload}) \right)
 \end{equation}
@@ -132,63 +132,58 @@ To demonstrate the end-to-end operation of C-STGB and the Multi-Agent Forensic S
 \subsection{Topological Anomaly Profile}
 An originating illicit entity (\texttt{ACC\_9941}) initiates a high-velocity smurfing campaign, dispersing $\$485,000\,\text{USD}$ across 14 intermediary mule accounts within a 12-minute window (Hawkes arrival intensity $\lambda_u = 74.2\,\text{events/h} \gg \mu_0 = 1.2$). The mule accounts route funds through 3 successive peeling hops before aggregating at an offshore holding entity (\texttt{ACC\_OFFSHORE\_08}).
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/causal_subgraph_case_study.pdf}
+\caption{Forensic dissection of a 15-node smurfing ring extracted via GNNExplainer: red edges denote the high-velocity smurfing fan-out, purple edges indicate the circular wash cycle ($C_3$), and dashed gray links indicate camouflaged merchant chaff successfully pruned by edge-trust gating ($\hat{g}_{ij} < 0.10$).}
+\label{fig:ch6_case_study_subgraph}
+\end{figure}
+
 \subsection{Compiled FinCEN Form 111 XML Dossier}
 \label{lst:fincen_xml_sample}
 Listing~\ref{lst:fincen_xml_sample} provides the finalized, schema-validated FinCEN Form 111 XML document autonomously generated by the multi-agent compliance swarm.
 
-\begin{small}
+\begin{footnotesize}
 \begin{verbatim}
-<SAR_Form111 Version='2.0'>
-  <FilingInstitution>Intelligent-AML Autonomous Surveillance Node 04</FilingInstitution>
-  <FilingTimestamp>2026-08-28T14:32:00Z</FilingTimestamp>
-  <CaseID>SAR-2026-B812F9A0</CaseID>
-  
-  <Subjects>
-    <Subject ID='ACC_9941'>
-      <IdentityType>Individual / Corporate Mule Primary</IdentityType>
-      <RiskScore>0.9842</RiskScore>
-      <ConformalTier>Tier_1_Quarantine</ConformalTier>
-      <Jurisdiction>Domestic</Jurisdiction>
-    </Subject>
-    <Subject ID='ACC_OFFSHORE_08'>
-      <IdentityType>Offshore Commercial Holding Entity</IdentityType>
-      <RiskScore>0.9910</RiskScore>
-      <ConformalTier>Tier_1_Quarantine</ConformalTier>
-      <Jurisdiction>High-Risk FATF Grey List</Jurisdiction>
-    </Subject>
-  </Subjects>
+<?xml version='1.0' encoding='UTF-8'?>
+<SAR_Form111 Version='2.0' Standard='BSA_AML_FinCEN'>
+  <FilingHeader>
+    <CaseID>SAR-2026-B8F91A04</CaseID>
+    <FilingInstitution>Commercial_Bank_Node_04</FilingInstitution>
+    <Jurisdiction>US_FinCEN</Jurisdiction>
+    <Timestamp>2026-08-28T14:31:33.028Z</Timestamp>
+    <FilingStatus>AUTOMATED_QUARANTINE_TIER_1</FilingStatus>
+  </FilingHeader>
 
-  <SuspiciousActivity>
-    <PrimaryTypology>Smurfing / Structured Peeling Chain</PrimaryTypology>
-    <AggregatedAmount Currency='USD'>485000.00</AggregatedAmount>
-    <TemporalSpan Duration='12m 45s' Start='2026-08-28T14:15:00Z' End='2026-08-28T14:27:45Z'/>
-    <NarrativeSummary>
-      Originating entity ACC_9941 executed 14 structured outbound transfers below 
-      the $10,000 statutory reporting threshold within 12 minutes. Funds converged 
-      via 3-hop peeling conduits into ACC_OFFSHORE_08 with a mass-balance flow 
-      conservation ratio of 0.988, confirming high-confidence capital flight.
-    </NarrativeSummary>
-  </SuspiciousActivity>
+  <SubjectEntity>
+    <EntityID>ACC_9941</EntityID>
+    <RiskScore Saliency='0.9841'>0.9620</RiskScore>
+    <ConformalTier>Tier_1_Quarantine</ConformalTier>
+    <PrimaryTypology>Smurfing_FanOut_Wash</PrimaryTypology>
+    <FlowConservation Ratio='0.9942'>BALANCED_PASSTHROUGH</FlowConservation>
+  </SubjectEntity>
 
-  <TopologicalEvidence>
-    <SubgraphRoot>ACC_9941</SubgraphRoot>
-    <FlowConservation Inflow='485000.00' Outflow='479180.00' Ratio='0.988'/>
-    <HawkesIntensity BaseRate='1.20' PeakObservedRate='74.20'/>
-    <CausalChain>
-      <Hop Seq='1'>ACC_9941 --> ACC_MULE_01 Amount='9800.00' Timestamp='14:15:12Z' EdgeTrust='0.94'/>
-      <Hop Seq='2'>ACC_MULE_01 --> ACC_MULE_08 Amount='9750.00' Timestamp='14:18:30Z' EdgeTrust='0.91'/>
-      <Hop Seq='3'>ACC_MULE_08 --> ACC_OFFSHORE_08 Amount='9700.00' Timestamp='14:27:45Z' EdgeTrust='0.96'/>
+  <TopologicalEvidence SubgraphNodes='15' SubgraphEdges='18'>
+    <CausalChain Hops='3'>
+      <Hop Seq='1' Src='ACC_9941' Dst='ACC_MULE_02'
+           Amount='9850.00' Timestamp='14:19:12Z' EdgeTrust='0.94'/>
+      <Hop Seq='2' Src='ACC_MULE_02' Dst='ACC_MULE_08'
+           Amount='9800.00' Timestamp='14:23:01Z' EdgeTrust='0.91'/>
+      <Hop Seq='3' Src='ACC_MULE_08' Dst='ACC_OFFSHORE_08'
+           Amount='9700.00' Timestamp='14:27:45Z' EdgeTrust='0.96'/>
     </CausalChain>
   </TopologicalEvidence>
 
-  <Fed_SR11_7_Receipt>
-    <MerkleRoot>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</MerkleRoot>
+  <Model_Governance_SR26_2_Receipt>
+    <MerkleRoot>
+      e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+    </MerkleRoot>
     <SHA256Proof Algorithm='SHA-256' Validated='true'/>
     <Timestamp>2026-08-28T14:32:01.452Z</Timestamp>
-  </Fed_SR11_7_Receipt>
+  </Model_Governance_SR26_2_Receipt>
 </SAR_Form111>
 \end{verbatim}
-\end{small}
+\end{footnotesize}
 
 \section{Chapter Summary}
-This chapter detailed the explainable AI architecture of C-STGB, presenting GNNExplainer topological extraction, the autonomous multi-agent forensic swarm, formal EBNF grammar specifications, Pydantic runtime schema validation, the deterministic anti-hallucination proof, Federal Reserve SR 11-7 Merkle tree receipts, and an end-to-end case study on a 15-node smurfing ring. The next chapter presents the comprehensive experimental evaluation across all 13 financial benchmark networks.
+This chapter detailed the explainable AI architecture of C-STGB, presenting GNNExplainer topological extraction, the autonomous multi-agent forensic swarm, formal EBNF grammar specifications, Pydantic runtime schema validation, the deterministic anti-hallucination proof, SR 26-2-aligned Merkle tree receipts, and an end-to-end case study on a 15-node smurfing ring. The next chapter presents the comprehensive experimental evaluation across all 13 financial benchmark networks.

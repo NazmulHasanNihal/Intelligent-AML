@@ -195,12 +195,16 @@ class GCNGRUBaseline(nn.Module):
 class TabularXGBoost:
     """Standard Industry Tabular Gradient Boosted Trees (Chen & Guestrin 2016)."""
     def __init__(self, n_estimators=100, max_depth=6, learning_rate=0.08, random_state=42, n_jobs=-1):
+        import torch
+        xgb_kwargs = {"n_jobs": n_jobs}
+        if torch.cuda.is_available():
+            xgb_kwargs = {"tree_method": "hist", "device": "cuda"}
         self.model = XGBClassifier(
             n_estimators=n_estimators,
             max_depth=max_depth,
             learning_rate=learning_rate,
             random_state=random_state,
-            n_jobs=n_jobs
+            **xgb_kwargs
         )
 
     def fit(self, x, y):
@@ -248,13 +252,22 @@ class IndustrialCatBoost:
     """Standard Industry CatBoost Classifier (Yandex 2017)."""
     def __init__(self, iterations=100, depth=6, learning_rate=0.08, random_seed=42, thread_count=-1):
         from catboost import CatBoostClassifier
+        import torch
+        cb_kwargs = {"thread_count": thread_count}
+        if torch.cuda.is_available():
+            n_gpus = torch.cuda.device_count()
+            cb_kwargs = {"task_type": "GPU"}
+            if n_gpus >= 2:
+                cb_kwargs["devices"] = "0:1"
+            else:
+                cb_kwargs["devices"] = "0"
         self.model = CatBoostClassifier(
             iterations=iterations,
             depth=depth,
             learning_rate=learning_rate,
             random_seed=random_seed,
-            thread_count=thread_count,
-            verbose=False
+            verbose=False,
+            **cb_kwargs
         )
 
     def fit(self, x, y):

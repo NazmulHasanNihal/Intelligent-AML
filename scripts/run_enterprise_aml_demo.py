@@ -1,14 +1,16 @@
 """
 run_enterprise_aml_demo.py — End-to-End Enterprise AML Production Simulation.
-Demonstrates the full commercial lifecycle of C-STGB with all 5 enterprise modules:
+Demonstrates the full commercial lifecycle of C-STGB with all 10 enterprise modules:
 1. Dynamic Subgraph LRU Cache (Sub-10ms Streaming Ingestion)
 2. Deterministic Hard-Rule Guardrails (OFAC / Structuring)
 3. C-STGB Spatiotemporal AI Scoring & Soft Mondrian Conformal Prediction
 4. Hybrid Arbitration Gate
 5. Automated FinCEN Form 111 SAR Narrative Generation
-6. Fed SR 11-7 Model Governance & PSI Drift Auditing
+6. Model Governance (SR 26-2) & PSI Drift Auditing
 7. Interactive D3/SVG Subgraph Ring Visualization
 8. Closed-Loop Streaming Delayed-Feedback Recalibration
+9. Hyperbolic Lorentz Space Embedding
+10. Zero-Knowledge Compliance Proof Generation
 """
 
 import os
@@ -57,7 +59,7 @@ def run_enterprise_simulation():
     print("  ✓ Hard Rule Engine Ready (OFAC, BSA Structuring, Velocity Drains)")
     print("  ✓ FinCEN SAR Drafter & LLM Prompt Engine Ready")
     print("  ✓ PID-ACI Delayed-Feedback Streaming Pipeline Active")
-    print("  ✓ Fed SR 11-7 Model Governance Audit Logger Active")
+    print("  ✓ Model Governance (SR 26-2) Audit Logger Active")
 
     # 2. Simulate Pre-Populated Graph in Cache
     print("\n[2/7] Pre-loading Graph Topology into In-Memory LRU Subgraph Cache...")
@@ -159,8 +161,8 @@ def run_enterprise_simulation():
     print("  ... [truncated 40 lines of complete legal filing] ...")
     print("-" * 70)
 
-    # 6. Immutable Model Governance Logging & Interactive Visualizer
-    print("\n[6/7] Logging Fed SR 11-7 Cryptographic Audit Record & Rendering HTML Graph...")
+    # 6. Fed SR 26-2 Model Governance Audit Logging
+    print("\n[6/7] Logging Model Governance (SR 26-2) Cryptographic Audit Record & Rendering HTML Graph...")
     audit_hash = gov_logger.log_decision_record(
         transaction_id=incoming_tx["tx_id"],
         target_node_id=str(suspect_id),
@@ -255,7 +257,7 @@ def run_enterprise_simulation():
     print("\n" + "=" * 80)
     print(" 🎉 ALL 10 ENTERPRISE MASTER MODULES EXECUTED SUCCESSFULLY!")
     print(" C-STGB is fully equipped with sub-10ms streaming, hard rules, SAR drafting,")
-    print(" Fed SR 11-7 audit logging, interactive visualization, PID feedback calibration,")
+    print(" Model Governance (SR 26-2) audit logging, interactive visualization, PID feedback calibration,")
     print(" Hyperbolic Lorentz GNNs, Causal Counterfactuals, and Zero-Knowledge Compliance Proofs.")
     print("=" * 80 + "\n")
 

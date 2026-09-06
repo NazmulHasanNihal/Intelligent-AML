@@ -213,6 +213,15 @@ class DynamicThresholdCalibrator:
         """
         Sweeps candidate thresholds and selects tau* maximizing F_beta score.
         """
+        if hasattr(probs, "detach"):
+            probs = probs.detach().cpu().numpy()
+        elif hasattr(probs, "cpu"):
+            probs = probs.cpu().numpy()
+        if hasattr(y_true, "detach"):
+            y_true = y_true.detach().cpu().numpy()
+        elif hasattr(y_true, "cpu"):
+            y_true = y_true.cpu().numpy()
+
         valid_mask = np.array(y_true) >= 0
         p = np.array(probs)[valid_mask]
         y = np.array(y_true)[valid_mask]

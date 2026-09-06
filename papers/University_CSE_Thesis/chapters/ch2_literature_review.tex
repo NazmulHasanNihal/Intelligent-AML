@@ -5,14 +5,7 @@
 The automation of Anti-Money Laundering (AML) surveillance has evolved through three distinct algorithmic epochs: (1) deterministic rule-based expert systems (1970s--2000s), (2) tabular machine learning and gradient boosted decision trees (2010s), and (3) geometric deep learning and graph neural networks (2019--present). This chapter systematically reviews the theoretical foundations, architectural mechanisms, and operational limitations of these paradigms, positioning C-STGB within the state-of-the-art literature.
 
 \section{Taxonomy of Graph Neural Networks in Financial Forensics}
-Figure~\ref{fig:ch2_gnn_taxonomy} presents a comprehensive structural taxonomy of graph neural networks applied to financial transaction surveillance, categorizing methods along spatial, temporal, heterogeneous, and imbalanced learning dimensions.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/fig7_multi_dataset_radar.pdf}
-\caption{Comparative radar evaluation across multiple dimensions in financial forensics, contrasting spatial, temporal, heterogeneous, and imbalanced methodologies.}
-\label{fig:ch2_gnn_taxonomy}
-\end{figure}
+To systematically analyze the existing literature, we categorize graph neural architectures in financial transaction surveillance along four foundational axes: (1) spatial neighborhood aggregation, (2) dynamic and continuous-time temporal encoding, (3) heterogeneous multi-relation message passing, and (4) topological imbalance and camouflage mitigation. Table~\ref{tab:lit_matrix} synthesizes these dimensions across 25 benchmark publications.
 
 \subsection{Foundational Spatial Graph Neural Networks}
 Spatial Graph Neural Networks operate on static graph snapshots $\mathcal{G} = (\mathcal{V}, \mathcal{E}, \mathbf{X})$ by recursively aggregating feature vectors across local node neighborhoods.
@@ -186,7 +179,7 @@ CARE-GNN~\cite{dou2020enhancing} & Static Multi-Relational & RL Neighbor Selecto
 GraphSMOTE~\cite{zhao2021graphsmote} & Static Graph & \texttimes & Latent Feature Interp. & \texttimes & \texttimes & \texttimes \\
 FraudGate~\cite{liu2021overcoming} & Static Multi-View & Gated Filter & \texttimes & \texttimes & \texttimes & \texttimes \\
 HGT~\cite{hu2020heterogeneous} & Heterogeneous Meta-Path & Type-Specific Attention & \texttimes & \texttimes & \texttimes & Type Attention \\
-Johannessen (2023)~\cite{johannessen2023predicting} & Heterogeneous Snapshot & Edge Type Attention & Class Weighting & \texttimes & \texttimes & \texttimes \\
+Johannessen \& Jullum (2025)~\cite{johannessen2023predicting} & Heterogeneous Snapshot & Edge Type Attention & Class Weighting & \texttimes & \texttimes & \texttimes \\
 ChronoWave-GNN & Wavelet Continuous & Frequency Filter & \texttimes & \texttimes & \texttimes & \texttimes \\
 Split-Conformal CRC~\cite{angelopoulos2021gentle} & Point Prediction & \texttimes & Marginal Conformal & \texttimes & Marginal ($1-\alpha$) & \texttimes \\
 GNNExplainer~\cite{ying2019gnnexplainer} & Post-Hoc Attribution & \texttimes & \texttimes & \texttimes & \texttimes & Subgraph Mask \\

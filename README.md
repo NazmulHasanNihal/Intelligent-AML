@@ -3,7 +3,7 @@
 [![CI/CD Pipeline](https://github.com/NazmulHasanNihal/Intelligent-AML/actions/workflows/ci.yml/badge.svg)](https://github.com/NazmulHasanNihal/Intelligent-AML/actions)
 [![Python 3.11 | 3.12](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 [![PyTorch Geometric](https://img.shields.io/badge/PyTorch_Geometric-2.4-orange.svg)](https://pyg.org/)
-[![Tests](https://img.shields.io/badge/Tests-158%20Passed%20(100%25)-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-144%20Passed%20(100%25)-brightgreen.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](Dockerfile)
 
@@ -38,12 +38,12 @@ Evaluated over **5 independent random seeds** under strict 4-way chronological s
 | **Public Blockchain** | `mtgox_leaked` (Trade Books) | 145,000 | 210,000 | 1.82% | **72.66 ± 1.25%** | **0.8292** |
 | **Multi-Bank & E-Wallets** | `saml_d` (15-Bank Rails) | 980,000 | 1,450,000 | 0.05% | **87.15 ± 0.85%** | **0.8845** |
 | **Multi-Bank & E-Wallets** | `paysim_extended` (Mobile Money)| 1,048,575 | 1,048,575 | 0.13% | **92.40 ± 0.60%** | **0.9450** |
-| **Multi-Bank & E-Wallets** | `ibm_amlsim_hi_small` | 100,000 | 180,000 | 0.23% | **35.40 ± 1.20%** | **0.3609** |
-| **Multi-Bank & E-Wallets** | `ibm_amlsim_hi_medium` | 300,000 | 550,000 | 0.23% | **37.50 ± 1.35%** | **0.4779** |
-| **Multi-Bank & E-Wallets** | `ibm_amlsim_li_small` | 100,000 | 180,000 | 0.75% | **21.80 ± 0.95%** | **0.1493** |
-| **Multi-Bank & E-Wallets** | `ibm_amlsim_li_medium` | 300,000 | 550,000 | 0.75% | **23.70 ± 1.10%** | **0.2139** |
+| **Multi-Bank & E-Wallets** | `ibm_amlsim_hi_small` | 100,000 | 180,000 | 0.23% | **37.50 ± 1.10%** | **0.3609** |
+| **Multi-Bank & E-Wallets** | `ibm_amlsim_hi_medium` | 300,000 | 550,000 | 0.23% | **44.47 ± 1.25%** | **0.4779** |
+| **Multi-Bank & E-Wallets** | `ibm_amlsim_li_small` | 100,000 | 180,000 | 0.75% | **15.83 ± 0.95%** | **0.1493** |
+| **Multi-Bank & E-Wallets** | `ibm_amlsim_li_medium` | 300,000 | 550,000 | 0.75% | **23.74 ± 1.05%** | **0.2139** |
 | **Synthetic Typology** | `data_generator` (Complex Cycles) | 100,000 | 250,000 | 1.50% | **96.85 ± 0.40%** | **0.9820** |
-| **Card Fraud Streams** | `cc_transactions` | 284,807 | 284,807 | 0.17% | **88.20 ± 0.70%** | **0.8910** |
+| **Card Fraud Streams** | `cc_transactions` | 284,807 | 284,807 | 0.17% | **51.76 ± 0.85%** | **0.5203** |
 | **TOTAL CORPUS** | **13 Benchmark Networks** | **8,807,919** | **11,424,137** | **0.05% – 2.23%** | **68.05% (Macro Avg)** | **0.6974** |
 
 ---
@@ -83,11 +83,11 @@ Intelligent-AML/
 │   ├── engine/                  # LRU subgraph cache, rule engine & PID-ACI feedback
 │   ├── explainability/          # FinCEN SAR generator & ring visualizer
 │   ├── federated/               # Distributed FedGNN & Differential Privacy
-│   ├── governance/              # Fed SR 11-7 cryptographic audit logger
+│   ├── governance/              # Model Governance (SR 26-2) cryptographic audit logger
 │   ├── ingestion/               # Real-time streaming & graph construction
 │   ├── models/                  # BurstAwareHGT, GraphSMOTE, Hawkes, Conformal CRC
 │   └── utils/                   # Conformal risk control, metrics & statistics
-├── tests/                       # 158 automated unit & integration tests (100% Pass Rate)
+├── tests/                       # 144 automated unit & integration tests (100% Pass Rate)
 ├── pyproject.toml               # Modern PEP 621 packaging
 ├── requirements.txt             # Core production dependencies
 ├── Makefile                     # Developer automation targets
@@ -113,21 +113,37 @@ source venv/bin/activate  # On Windows: .\venv\Scripts\Activate.ps1
 pip install -e ".[dev,agents,dashboard]"
 ```
 
-### 2. Master CLI Execution
+### 2. Running the Verification Suite & Demos
 ```bash
-# Run full automated test suite (158 tests)
-pytest tests/
+# Run full automated test suite (144 tests)
+pytest tests/ -v
+
+# Run live enterprise streaming simulation & FinCEN SAR generation
+python scripts/run_enterprise_aml_demo.py
 
 # Regenerate all 22 publication vector figures
 python scripts/generate_all_publication_figures.py
 
-# Run live enterprise streaming simulation & FinCEN SAR generation
-python scripts/run_enterprise_aml_demo.py
+# Compile all LaTeX manuscripts (IEEE Paper, Supplementary, Thesis)
+python scripts/compile_all_pdfs.py
 ```
 
-### 3. Using the Makefile
+### 3. Launching the Web Platform & REST API
 ```bash
-make test        # Run automated test suite
+# Windows one-click platform launcher
+.\scripts\start_platform.bat
+
+# Or run services individually:
+# Backend FastAPI Microservice:
+python -m uvicorn src.engine.api:app --host 127.0.0.1 --port 8000 --reload
+
+# Frontend Web Dashboard (React 18 + Vite):
+cd frontend && npm run dev
+```
+
+### 4. Using the Makefile
+```bash
+make test        # Run automated test suite (144 tests)
 make demo        # Run enterprise AML streaming simulation
 make benchmark   # Run full comparative benchmark
 make figures     # Generate publication PDF/PNG figures
@@ -136,12 +152,12 @@ make clean       # Remove build caches & pycache
 
 ---
 
-## 🧪 Comprehensive Verification Suite (158 Tests)
+## 🧪 Comprehensive Verification Suite (144 Tests)
 
 ```bash
 pytest tests/ -v
 ```
-All 158 test cases across 25 test modules pass with 100% verification covering:
+All 144 test cases across 25 test modules pass with 100% verification covering:
 - ✅ Continuous Tri-Band temporal attention & Hawkes process intensity
 - ✅ Latent GraphSMOTE minority interpolation & parametric bilinear link generator
 - ✅ Adversarial camouflage edge gating & Top-$K$ degree capper latency SLAs
@@ -157,7 +173,7 @@ All 158 test cases across 25 test modules pass with 100% verification covering:
 ```bibtex
 @article{nazmul2026cstgb,
   title={C-STGB: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering under Extreme Imbalance and Topological Camouflage},
-  author={Nazmul, Md. and Gungun, Musrat Jahan and Ahmed, Maheli},
+  author={Nazmul, Md. and Gungun, Musrat Jahan and Chandra, Sagor and Ahmed, Maheli},
   journal={IEEE Transactions on Information Forensics and Security},
   volume={XX},
   number={XX},

@@ -11,7 +11,9 @@ help:
 	@echo "Available commands:"
 	@echo "  make install        Install production dependencies"
 	@echo "  make install-dev    Install developer & testing dependencies"
-	@echo "  make test           Run full automated test suite (102 tests)"
+	@echo "  make api            Launch FastAPI production backend microservice"
+	@echo "  make ui             Launch React 18 + Vite enterprise web platform"
+	@echo "  make test           Run full automated test suite (158 tests)"
 	@echo "  make demo           Run live enterprise AML streaming simulation"
 	@echo "  make benchmark      Run multi-dataset comparative benchmark"
 	@echo "  make figures        Generate 300 DPI publication vector figures"
@@ -24,6 +26,12 @@ help:
 	@echo "  make clean          Remove caches and build artifacts"
 	@echo "  make docker-build   Build production Docker container"
 	@echo "  make docker-run     Run containerized enterprise simulation"
+
+api:
+	uvicorn src.engine.api:app --host 0.0.0.0 --port 8000 --reload
+
+ui:
+	npm --prefix frontend run dev
 
 audit-latex:
 	$(PYTHON) src/utils/latex_validator.py

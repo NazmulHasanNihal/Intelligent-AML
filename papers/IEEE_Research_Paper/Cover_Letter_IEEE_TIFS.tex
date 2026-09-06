@@ -27,34 +27,34 @@ IEEE Signal Processing Society
 \vspace{0.3cm}
 
 \noindent
-\textbf{Subject:} Submission of Original Research Manuscript: \textit{``C-STGB: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering under Extreme Imbalance and Topological Camouflage''}
+\textbf{Subject:} Submission of Original Research Manuscript: \textit{``Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage''}
 
 \vspace{0.3cm}
 
 \noindent
 Dear Editor-in-Chief and Editorial Board,
 
-We are pleased to submit our original research manuscript titled \textbf{``C-STGB: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering under Extreme Imbalance and Topological Camouflage''} for consideration for publication in \textit{IEEE Transactions on Information Forensics and Security (TIFS)}.
+We are pleased to submit our original research manuscript titled \textbf{``Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage''} for consideration for publication in \textit{IEEE Transactions on Information Forensics and Security (TIFS)}.
 
-\paragraph{Research Context \& Problem Formulation:}
-Anti-Money Laundering (AML) surveillance represents a critical application of graph learning in financial forensics. While Graph Neural Networks (GNNs) capture relational transaction topologies, real-world deployment faces five foundational challenges: (1) continuous-time velocity evasion across micro-bursts and multi-month dormant periods; (2) adversarial topological camouflage via high-degree commercial hubs; (3) extreme class imbalance (illicit prevalence below 0.05\%) causing severe recall collapse; (4) cold-start graph isolation for disconnected entities; and (5) uncalibrated decision uncertainty.
+\paragraph{Research Context \& TIFS Alignment:}
+Anti-Money Laundering (AML) surveillance represents a critical domain at the intersection of financial cybersecurity, applied cryptography, and machine learning. This work frames AML detection as an adversarial information-forensics problem involving continuous-time temporal evasion, topological camouflage through commercial transaction hubs, extreme class skew ($\pi < 0.05\%$), cold-start graph isolation, and distribution drift under non-stationary regimes.
 
 \paragraph{Methodological Innovations:}
-To resolve these interconnected bottlenecks, we introduce \textbf{C-STGB (Conformal Spatio-Temporal GraphBoost)}, a unified geometric framework featuring:
+To resolve these interconnected bottlenecks, we introduce \textbf{C-STGB (Conformal Spatio-Temporal GraphBoost)}, a unified geometric deep learning framework featuring:
 \begin{enumerate}
-    \item \textbf{Tri-Band Continuous Harmonic Attention:} Disentangles microsecond smurfing bursts from 90-day dormant holding chains via continuous temporal encodings and localized Hawkes arrival intensities.
-    \item \textbf{Context-Aware Edge Trust Gating ($\hat{g}_{ij}$):} Suppresses spurious camouflage linkages to high-degree commercial hubs, mitigating feature over-smoothing.
-    \item \textbf{Typology-Clustered Latent GraphSMOTE:} Synthesizes virtual minority entities along latent manifolds with bilinear edge generation, recovering minority recall without precision collapse.
-    \item \textbf{Evidence-Adaptive Graph-Tabular Fusion:} Dynamically transfers representation weight to 12-D canonical flow invariants for cold-start entities ($\deg(u)=0$).
-    \item \textbf{Class-Conditional Conformal Risk Control (CRC):} Provides finite-sample coverage guarantees ($1-\alpha \ge 99.0\%$) under stated within-class exchangeability assumptions and routes over 99.4\% of volume through automated clearing/escalation tiers.
-    \item \textbf{Multi-Agent Compliance Verification:} Generates audit-traceable FinCEN Form 111 XML dossiers with formal schema validation preventing unsupported entity references.
+    \item \textbf{Tri-Band Continuous Harmonic Attention:} Disentangles microsecond smurfing bursts from 90-day dormant holding chains via continuous temporal positional encodings and localized Hawkes process arrival intensities.
+    \item \textbf{Context-Aware Edge Trust Gating ($\hat{g}_{ij}$):} Prunes $65.9\%$ of spurious camouflage linkages to high-degree commercial hubs, suppressing severe feature over-smoothing.
+    \item \textbf{Typology-Clustered Latent GraphSMOTE:} Synthesizes virtual minority entities along empirical latent typology manifolds with parametric bilinear edge generation, recovering minority recall from $10.33\%$ to $90.10\%$ without precision collapse.
+    \item \textbf{Evidence-Adaptive Graph-Tabular Fusion:} Dynamically transfers representation weight to 12-D canonical flow invariants for disconnected cold-start entities ($\deg(u)=0$).
+    \item \textbf{Class-Conditional Conformal Risk Control (CRC):} Provides finite-sample coverage guarantees ($1-\alpha \ge 99.0\%$) under within-class exchangeability with explicit theoretical degradation bounds under non-stationary temporal drift, routing over $99.4\%$ of volume through straight-through clearing and high-confidence quarantine tiers.
+    \item \textbf{Multi-Agent Compliance Verification:} Generates audit-traceable research SAR dossiers structured under FinCEN Report 111 guidelines with formal schema and factual graph membership validation, aligned with the 2026 Federal Reserve Supervisory Letter SR 26-2 (superseding SR 11-7 and SR 21-8) and EU AI Act model governance principles.
 \end{enumerate}
 
 \paragraph{Empirical Evaluation \& Findings:}
-Evaluated across 13 diverse financial transaction networks encompassing over 8.81 million entities and 11.42 million transactions across five random seeds, our proposed C-STGB achieves the highest performance among evaluated baselines across the benchmarks ($91.42 \pm 0.65\%$ F1 on Elliptic-v1, $86.54 \pm 0.82\%$ F1 on Elliptic-v2, and $94.62 \pm 0.55\%$ F1 on Ethereum Phishing). In our streaming inference evaluation, C-STGB achieves a single-event latency of $0.45\text{ ms}$ (Fast-Path) and $2.10\text{ ms}$ (Full GNN), well below the 10\,ms target latency.
+Benchmarked across 14 diverse financial transaction networks encompassing over 9.53 million entities and 9.53 million transactions across 182 dataset-model configuration pairs (evaluated over five random seeds = 910 total experimental executions), C-STGB achieves an unweighted macro-average F1 of $67.26\%$ ($0.6848$ PR-AUC; $99.44 \pm 0.10\%$ on Elliptic-v1, $100.00 \pm 0.00\%$ on Elliptic-v2, $96.94 \pm 0.12\%$ on XBlock-ETH, and $99.80 \pm 0.08\%$ on PaySim Extended), demonstrating statistically significant superiority over deep GNNs ($W=105.0, p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ under two-sided Wilcoxon signed-rank tests with Benjamini--Hochberg FDR correction) while performing competitively with tuned gradient boosted trees (CatBoost $67.14\%$, XGBoost $67.92\%$) and delivering marked gains on complex multi-hop relational networks (e.g., $+9.98$\,pp on IBM-AMLSim HI). In our benchmark evaluations, C-STGB achieves a streaming Fast-Path inference latency of $0.45\text{ ms}$ per single transaction event ($0.12\text{ ms}$ GPU forward pass, $0.054\text{ ms}$ batch-64 amortized GPU pass) on our compute testbed.
 
 \paragraph{Declarations \& Supplementary Package:}
-The submission package comprises our main manuscript and an accompanying Supplementary Material document containing formal algorithmic specifications, extended mathematical proofs, and comprehensive reproducibility configurations. We confirm that this manuscript represents our original work that has not been published and is not under consideration elsewhere. All authors have reviewed and approved the submission. We declare no competing financial or personal conflicts of interest. The complete open-source codebase and reproducibility artifacts are maintained at: \url{https://github.com/NazmulHasanNihal/Intelligent-AML}.
+The submission package comprises our complete master manuscript and an accompanying Supplementary Material document containing formal algorithmic specifications, extended mathematical proofs, and comprehensive reproducibility configurations. We confirm that this manuscript represents our original work that has not been published and is not under consideration elsewhere. All authors have reviewed and approved the submission. We declare no competing financial or personal conflicts of interest. The complete open-source codebase and reproducibility artifacts are maintained at: \url{https://github.com/NazmulHasanNihal/Intelligent-AML}.
 
 \vspace{0.35cm}
 

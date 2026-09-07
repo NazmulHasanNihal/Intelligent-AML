@@ -70,8 +70,8 @@ def send_transaction(tx):
         print(f"Connection failed (is the API running?): {e}")
 
 if __name__ == "__main__":
-    print("Starting Realistic Mock Data Generator...")
-    print("Simulating live transactions with built-in AML patterns (structuring, large transfers)...")
+    print("Starting Realistic Synthetic Stream Generator...")
+    print("Press Ctrl+C to stop.")
     
     # Wait a few seconds to let FastAPI spin up
     time.sleep(5)

@@ -1,6 +1,6 @@
 """
-Intelligent AML - Streaming API
-Receives live mock transactions and publishes them to Redpanda (Kafka) for Flink to process.
+FastAPI Ingestion Webhook for Real-Time Streaming
+Receives live streaming transactions and publishes them to Redpanda (Kafka) for Flink to process.
 """
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel

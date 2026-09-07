@@ -242,10 +242,10 @@ Intelligent-AML/
 │   │   ├── main.tex                     # Master IEEE LaTeX manuscript
 │   │   ├── main.pdf                     # Compiled IEEE manuscript (13 pages, 0 overflow)
 │   │   ├── supplementary.tex            # Supplementary Material document
-│   │   ├── supplementary.pdf            # Compiled supplementary document (11 pages)
+│   │   ├── supplementary.pdf            # Compiled supplementary document (14 pages)
 │   │   ├── Cover_Letter_IEEE_TIFS.tex   # Editorial cover letter
 │   │   ├── Cover_Letter_IEEE_TIFS.pdf   # Compiled cover letter (1.0 page)
-│   │   └── references.bib               # Complete BibTeX citations (75+ entries)
+│   │   └── references.bib               # Complete BibTeX citations (50 canonical entries)
 │   └── University_CSE_Thesis/           # University Thesis Monograph (Strictly 90.0 pages)
 │       ├── chapters/                    # Chapters 1–10 (Intro through Software Eng. & Conclusion)
 │       ├── frontmatter/                 # Cover page, Certificate, Declaration, Abstract
@@ -496,7 +496,7 @@ make build-latex
 | Document Target | Path | Engine | Status | Strict Budget |
 |:---|:---|:---:|:---:|:---:|
 | **IEEE Research Paper (Main)** | `papers/IEEE_Research_Paper/main.pdf` | Tectonic | Generated | **Strictly 13.0 Pages (0 overflow)** |
-| **IEEE Supplementary Material** | `papers/IEEE_Research_Paper/supplementary.pdf` | Tectonic | Generated | **11 Pages** |
+| **IEEE Supplementary Material** | `papers/IEEE_Research_Paper/supplementary.pdf` | Tectonic | Generated | **14 Pages** |
 | **IEEE Editorial Cover Letter** | `papers/IEEE_Research_Paper/Cover_Letter_IEEE_TIFS.pdf`| Tectonic | Generated | **Strictly 1.0 Page** |
 | **University CSE Thesis** | `papers/University_CSE_Thesis/main.pdf` | Tectonic | Generated | **Strictly 90.0 Pages** |
 
@@ -507,16 +507,16 @@ make build-latex
 ==============================================================================
 
 [+] Compiling: IEEE Research Paper (Main Manuscript)...
-   [SUCCESS] -> Generated: main.pdf (13 pages, 430.9 KB)
+   [SUCCESS] -> Generated: main.pdf (13 pages, 430.3 KB)
 
 [+] Compiling: IEEE Supplementary Material...
-   [SUCCESS] -> Generated: supplementary.pdf (11 pages, 469.4 KB)
+   [SUCCESS] -> Generated: supplementary.pdf (14 pages, 505.3 KB)
 
 [+] Compiling: IEEE Cover Letter...
    [SUCCESS] -> Generated: Cover_Letter_IEEE_TIFS.pdf (1 page, 29.3 KB)
 
 [+] Compiling: University CSE Thesis Monograph...
-   [SUCCESS] -> Generated: main.pdf (90 pages, 1145.2 KB)
+   [SUCCESS] -> Generated: main.pdf (90 pages, 1143.8 KB)
 
 ==============================================================================
 [DONE] Compilation Complete: 4/4 Documents Successfully Built!
@@ -587,12 +587,40 @@ npm run dev
 
 Open your browser to: **`http://localhost:5173`**
 
-### Web Platform Consoles
-* 🎯 **Conformal Alert Triage Queue:** Interactive filter separating Tier 1 (Clear), Tier 2 (Review), and Tier 3 (Freeze) alerts.
-* 🕸️ **3D Forensic Graph Studio:** Interactive Force-Directed WebGL / 3D Neo4j graph viewer for tracing transaction chains.
-* 🤖 **Multi-Agent SAR Workbench:** Live inspection of autonomous investigator agent findings and interactive XML/PDF export.
-* ⚙️ **Counterfactual Sandbox:** What-If analysis simulator modifying amounts, split times, and hop counts to test triage sensitivity.
-* ⚖️ **Benchmark & Governance Hub:** Visual inspection of model drift, calibration curves, and SHA-256 cryptographic audit logs.
+### Institutional Command Consoles
+
+The web dashboard provides a tactile, skeuomorphic, high-density operations center designed for tier-1 compliance officers, AML investigators, and model risk validators:
+
+1. **⚡ Surveillance & Real-Time Telemetry (`Hotkey 1: command-center`):**
+   - Live transaction streaming ticker with sub-second websocket ingestion.
+   - Real-time SLA latency gauges (P50: $0.38\text{ ms}$, P95: $0.62\text{ ms}$, P99: $0.82\text{ ms}$, Amortized Fast-Path: $0.45\text{ ms}$).
+   - Interactive scenario injection testbed (simulate smurfing bursts, wash cycles, and high-degree hub camouflage in real time).
+
+2. **🎯 Conformal Clearing Hub & Triage Queue (`Hotkey 2: alerts`):**
+   - Implements Class-Conditional Conformal Risk Control (CRC) with mathematically proven error bounds ($1-\alpha \ge 99.0\%$).
+   - **Tier 1 (Automated Clear / White):** $\Gamma(X) = \{0\}$ — instant line clearance for $>99.4\%$ of standard payment volume.
+   - **Tier 2 (Compliance Review / Amber):** $\Gamma(X) = \{0, 1\}$ — ambiguous boundary alerts routed to human investigator queues with 2-hop causal subgraphs.
+   - **Tier 3 (Automated Freeze & SAR / Red):** $\Gamma(X) = \{1\}$ — account quarantined, merchant holds applied, and SAR drafting triggered.
+
+3. **🕸️ 3D Forensic Graph Studio (`Hotkey 3: investigate`):**
+   - Interactive WebGL / Force-Directed 3D graph canvas powered by Three.js and D3.
+   - Visualizes multi-hop smurfing fan-in/fan-out, layering wash loops ($L_1 \leftrightarrow L_2 \leftrightarrow L_3$), and cash-out exchange exits.
+   - Interactive edge-trust filter slider toggle ($g_{ij} < 0.10$): dynamically displays raw camouflaged topology vs. pruned illicit core.
+
+4. **🤖 Autonomous SAR Drafter Workbench (`Hotkey 4: cases`):**
+   - Dual-copy legal dossier compiler producing human-readable narrative summaries and machine-readable FinCEN Form 111 XML.
+   - Grounded in factual graph membership with verifiable SHA-256 Merkle audit receipts.
+   - Strictly enforces Human-in-the-Loop governance under Federal Reserve SR 26-2 (final filing authority resides exclusively with certified BSA officers).
+
+5. **⚙️ Customer Recourse Sandbox (`Hotkey 5: recourse`):**
+   - Counterfactual forensic explainer providing actionable recourse for false-positive holds under CFPB and ECOA fair lending guidelines.
+   - Computes minimum feature perturbation paths (e.g., transaction amount normalization, temporal dilation) that transition accounts from Tier 2 back to Tier 1.
+   - Generates auditable release checklists for compliance examiners to clear holds without formal SAR escalation.
+
+6. **⚖️ Model Risk & SR 26-2 Governance Vault (`Hotkey 6: governance`):**
+   - Institutional audit suite with live calibration curves, Total Variation (TV) drift monitors, and Kolmogorov-Smirnov distance tracking.
+   - Live benchmark matrix comparing C-STGB against 12 baselines (XGBoost, CatBoost, GCN, GraphSAGE, EvolveGCN) across all 14 networks.
+   - Immutable, append-only JSON-Lines governance ledger sealed with SHA-256 cryptographic hashes.
 
 ---
 

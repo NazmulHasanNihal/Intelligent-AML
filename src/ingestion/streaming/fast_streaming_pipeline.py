@@ -30,7 +30,7 @@ class StreamingTransactionProcessor:
             self._init_engine()
 
     def _init_engine(self):
-        """Loads trained weights or initializes mock-trained engine for testing."""
+        """Loads trained weights or initializes baseline streaming engine for testing."""
         metadata = (
             ["Account", "User", "Device", "Institution"],
             [

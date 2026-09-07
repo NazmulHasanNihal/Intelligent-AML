@@ -63,7 +63,7 @@ for t in TARGETS:
     print(f"   Source:    {t['file']}")
     
     cmd = [str(TECTONIC_EXE), t["file"]]
-    res = subprocess.run(cmd, cwd=str(t["cwd"]), capture_output=True, text=True)
+    res = subprocess.run(cmd, cwd=str(t["cwd"]), capture_output=True, text=True, encoding="utf-8", errors="replace")
     
     if res.returncode == 0:
         size_kb = t["out_pdf"].stat().st_size / 1024 if t["out_pdf"].exists() else 0

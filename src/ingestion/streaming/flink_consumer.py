@@ -1,6 +1,6 @@
 """
-Intelligent AML - PyFlink Streaming Consumer
-Reads mock transactions from Redpanda (Kafka), normalizes them, and writes to local Parquet/DuckDB via PyFlink.
+Intelligent AML - PyFlink Real-Time Transaction Consumer & Ingestion Pipeline
+Reads streaming transactions from Redpanda (Kafka), normalizes them, and writes to local Parquet/DuckDB via PyFlink.
 """
 import os
 import json

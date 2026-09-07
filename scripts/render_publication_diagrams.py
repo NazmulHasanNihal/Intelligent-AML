@@ -31,6 +31,8 @@ plt.rcParams.update({
     'axes.titlesize': 9.5,
     'figure.dpi': 300,
     'savefig.dpi': 300,
+    'pdf.fonttype': 42,
+    'ps.fonttype': 42,
 })
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -205,7 +207,7 @@ stages = [
             }
         ],
         "output_tensor": r"$\Gamma(u) \subseteq \{0, 1\}, \; \mathbf{XML}_{\mathrm{SAR}}$",
-        "sla_tag": "SR 26-2 / EU AI Act Certified"
+        "sla_tag": "Model Risk Governance Architecture"
     }
 ]
 

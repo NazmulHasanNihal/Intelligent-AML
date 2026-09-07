@@ -214,10 +214,10 @@ def run_enterprise_simulation():
     import torch
     manifold = LorentzManifold(curvature=1.0)
     hyp_conv = HyperbolicLorentzConv(in_channels=10, out_channels=16, curvature=1.0)
-    dummy_x = torch.tensor(np.array([cache.get_node(n)["x"] for n in [suspect_id] + mule_nodes]), dtype=torch.float32)
+    tree_x = torch.tensor(np.array([cache.get_node(n)["x"] for n in [suspect_id] + mule_nodes]), dtype=torch.float32)
     edge_idx = torch.tensor([[0, 0, 0, 0], [1, 2, 3, 4]], dtype=torch.long)
     with torch.no_grad():
-        hyp_embs = hyp_conv(dummy_x, edge_idx)
+        hyp_embs = hyp_conv(tree_x, edge_idx)
         hyp_dist = manifold.hyperbolic_distance(hyp_embs[0:1], hyp_embs[1:2]).item()
     print(f"  ✓ Lorentz Manifold L^16 Projected: {hyp_embs.shape[0]} nodes embedded with negative curvature (c = 1.0).")
     print(f"  ✓ Geodesic Hyperbolic Distance (Suspect -> Mule 1): {hyp_dist:.4f} (Near-zero distortion for scale-free fanout).")

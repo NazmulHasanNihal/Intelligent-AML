@@ -52,6 +52,8 @@ plt.rcParams.update({
     'lines.linewidth': 1.8,
     'figure.dpi': 300,
     'savefig.dpi': 300,
+    'pdf.fonttype': 42,
+    'ps.fonttype': 42,
 })
 
 # Color palette: IEEE High-Contrast Professional Palette
@@ -506,7 +508,7 @@ stages = [
             }
         ],
         "output_tensor": r"$\Gamma(u) \subseteq \{0, 1\}, \; \mathbf{XML}_{\mathrm{SAR}}$",
-        "sla_tag": "SR 26-2 / EU AI Act Certified"
+        "sla_tag": "Model Risk Governance Architecture"
     }
 ]
 

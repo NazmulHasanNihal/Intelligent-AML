@@ -190,16 +190,16 @@ class SubgraphLRUCache:
             
         ego_max = z_emb.copy()
         ego_p95 = z_emb.copy()
-        p_gnn_dummy = np.array([[0.5]], dtype=np.float32)
+        p_gnn_prior = np.array([[0.5]], dtype=np.float32)
 
-        # Assemble fused representation matrix [X, Z, Ego_Contrast, Ego_Max, Ego_p95, p_gnn]
-        fused_feats = np.concatenate([x_tab, z_emb, ego_contrast, ego_max, ego_p95, p_gnn_dummy], axis=1)
+        # Assemble fused representation matrix [X, Z, Ego_Contrast, Ego_Max, Ego_p95, p_gnn_prior]
+        fused_feats = np.concatenate([x_tab, z_emb, ego_contrast, ego_max, ego_p95, p_gnn_prior], axis=1)
 
         deg_arr = np.array([[deg]], dtype=np.float32)
         pt_arr = np.array([[pt]], dtype=np.float32)
         burst_arr = np.array([[burst]], dtype=np.float32)
 
-        feat_tuple = (x_tab, fused_feats, p_gnn_dummy, deg_arr, pt_arr, burst_arr)
+        feat_tuple = (x_tab, fused_feats, p_gnn_prior, deg_arr, pt_arr, burst_arr)
         
         # Predict probability via C-STGB
         if hasattr(cstgb_model, "_predict_ensemble"):

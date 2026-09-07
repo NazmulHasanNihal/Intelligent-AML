@@ -107,7 +107,7 @@ Pursuant to **MiCA AML screening guidelines** and **FATF Recommendations**, the 
 
 
 if __name__ == "__main__":
-    # Test generation with mock PyG data
+    # Test generation with synthetic PyG data
     from torch_geometric.data import HeteroData
     data = HeteroData()
     data["Account"].x = torch.randn(5, 16)

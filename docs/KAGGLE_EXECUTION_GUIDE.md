@@ -6,8 +6,8 @@
 | **GPU** | Integrated Intel UHD 630 (No CUDA) | **NVIDIA Tesla T4 $\times$ 2 or P100 (16 GB VRAM)** |
 | **System RAM** | 16 GB Total (~4.6 GB Free) | **30 GB High-Speed RAM** |
 | **GNN Speed** | ~1 to 2 hours per model on huge graphs | **1 to 3 minutes per model** (30x–100x speedup) |
-| **PC Impact** | 100% CPU heat, disk paging, freezes UI | **0% PC load** (You can close your PC or play games) |
-| **Cost** | Local hardware wear & tear | **100% Free** |
+| **Workstation Load** | Heavy local CPU and memory utilization | **Zero local overhead** (Cloud execution) |
+| **Availability** | Subject to local power and system limits | **Dedicated cloud compute session** |
 
 ---
 

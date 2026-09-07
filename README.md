@@ -4,7 +4,7 @@
 [![Python 3.11 | 3.12](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 [![PyTorch 2.5](https://img.shields.io/badge/PyTorch-2.5.1-EE4C2C.svg)](https://pytorch.org/)
 [![PyTorch Geometric](https://img.shields.io/badge/PyG-2.4-3C2179.svg)](https://pyg.org/)
-[![Unit & Integration Tests](https://img.shields.io/badge/Tests-144%20Passed%20(100%25)-brightgreen.svg)]()
+[![Unit & Integration Tests](https://img.shields.io/badge/Tests-144%20Passed%20(100%25)-brightgreen.svg)](tests/)
 [![Paper Status: Under Review](https://img.shields.io/badge/IEEE_TIFS-Under_Review_2026-gold.svg)](papers/IEEE_Research_Paper/main.pdf)
 [![Thesis: National University](https://img.shields.io/badge/CSE_Thesis-90_Pages_Completed-darkblue.svg)](papers/University_CSE_Thesis/main.pdf)
 [![Compliance: FinCEN / FATF](https://img.shields.io/badge/Compliance-FinCEN_Form_111_%7C_FATF_Rec_16-purple.svg)](src/agents/sar_drafter_agent.py)
@@ -12,7 +12,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](Dockerfile)
 
 > **C-STGB: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage**  
-> *Official Research & Production Repository — IEEE Transactions on Information Forensics and Security (TIFS) & National University CSE Thesis.*
+> *Official Research & Production Repository — IEEE Transactions on Information Forensics and Security (TIFS) & National University CSE Thesis Monograph.*
 
 ---
 
@@ -25,26 +25,28 @@
 
 ## 📑 Table of Contents
 
-1. [Research Motivation & The Financial Crime Crisis](#-research-motivation--the-financial-crime-crisis)
-2. [Fundamental Failure Modes in Existing AML Systems](#-fundamental-failure-modes-in-existing-aml-systems)
-3. [Methodological Innovations: The C-STGB Architecture](#-methodological-innovations-the-c-stgb-architecture)
-4. [Empirical Benchmark Results (14 Financial Networks)](#-empirical-benchmark-results-14-financial-networks)
-5. [Repository Directory & Component Architecture](#-repository-directory--component-architecture)
-6. [Step-by-Step Local Setup & Installation Guide](#-step-by-step-local-setup--installation-guide)
-7. [Running & Verifying Tests Locally (144 Test Suite)](#-running--verifying-tests-locally-144-test-suite)
-8. [Compiling Research Papers & Thesis Monograph (Tectonic)](#-compiling-research-papers--thesis-monograph-tectonic)
-9. [Reproducing Benchmarks & Training Experiments](#-reproducing-benchmarks--training-experiments)
-10. [Launching the Web Command Center & REST API](#-launching-the-web-command-center--rest-api)
-11. [Multi-Agent Forensic Swarm & Regulatory Compliance](#-multi-agent-forensic-swarm--regulatory-compliance)
-12. [Model Governance & Regulatory Compliance (SR 26-2)](#-model-governance--regulatory-compliance-sr-26-2)
-13. [Academic Citations](#-academic-citations)
-14. [Authors & Contact](#-authors--contact)
+1. [Enterprise Platform Preview](#enterprise-platform-preview)
+2. [Research Motivation & The Financial Crime Crisis](#research-motivation--the-financial-crime-crisis)
+3. [Fundamental Failure Modes in Existing AML Systems](#fundamental-failure-modes-in-existing-aml-systems)
+4. [Methodological Innovations: The C-STGB Architecture](#methodological-innovations-the-c-stgb-architecture)
+5. [Empirical Benchmark Results (14 Financial Networks)](#empirical-benchmark-results-14-financial-networks)
+6. [Repository Directory & Component Architecture](#repository-directory--component-architecture)
+7. [Step-by-Step Local Setup & Installation Guide](#step-by-step-local-setup--installation-guide)
+8. [Running & Verifying Tests Locally (144 Test Suite)](#running--verifying-tests-locally-144-test-suite)
+9. [Compiling Research Papers & Thesis Monograph (Tectonic)](#compiling-research-papers--thesis-monograph-tectonic)
+10. [Reproducing Benchmarks & Training Experiments](#reproducing-benchmarks--training-experiments)
+11. [Launching the Web Command Center & REST API](#launching-the-web-command-center--rest-api)
+12. [Multi-Agent Forensic Swarm & Regulatory Compliance](#multi-agent-forensic-swarm--regulatory-compliance)
+13. [Model Governance & Regulatory Compliance (SR 26-2)](#model-governance--regulatory-compliance-sr-26-2)
+14. [Academic Citations](#academic-citations)
+15. [Authors & Research Team](#authors--research-team)
+16. [License & Open Source](#license--open-source)
 
 ---
 
 ## 🌍 Research Motivation & The Financial Crime Crisis
 
-Global money laundering funnels between **$800 billion and $2 trillion annually** (2% to 5% of global GDP), according to the United Nations Office on Drugs and Crime (UNODC). Illicit capital flows undermine sovereign financial stability, finance transnational trafficking and terror networks, and distort market pricing.
+Global money laundering funnels between **$800 billion and $2 trillion annually** (2% to 5% of global GDP), according to the United Nations Office on Drugs and Crime (UNODC) and Financial Action Task Force (FATF). Illicit capital flows undermine sovereign financial stability, finance transnational trafficking and terror networks, and distort market pricing.
 
 Despite multi-billion-dollar investments in anti-money laundering (AML) software, modern compliance departments face an operational catastrophe:
 
@@ -52,7 +54,8 @@ Despite multi-billion-dollar investments in anti-money laundering (AML) software
 * **Adversarial Typology Evolution:** Sophisticated criminal cartels actively circumvent static rules through **smurfing (structuring)** beneath reporting thresholds (e.g., \$10,000 CTR triggers), multi-hop pass-through layering chains, circular cycle wash trading, and cross-chain bridging across decentralized ledgers.
 * **Black-Box AI Liability:** While deep learning models offer higher raw predictive capacity, regulators (e.g., the Federal Reserve via SR 11-7 / SR 26-2, OCC, and FATF) strictly prohibit black-box systems that lack statistical risk guarantees, auditability, and legal explainability.
 
-**Intelligent-AML** resolves these challenges by introducing **`C-STGB` (Conformal Spatio-Temporal GraphBoost)**: a mathematically grounded, risk-controlled framework that combines continuous-time dynamic graph transformers, adversarial camouflage filtering, minority-class synthesis, ego-neighborhood tabular boosting, and finite-sample conformal risk control.
+> [!IMPORTANT]
+> **Intelligent-AML** resolves these challenges by introducing **`C-STGB` (Conformal Spatio-Temporal GraphBoost)**: a mathematically grounded, risk-controlled framework that combines continuous-time dynamic graph transformers, adversarial camouflage filtering, minority-class synthesis, ego-neighborhood tabular boosting, and finite-sample conformal risk control.
 
 ---
 
@@ -76,7 +79,7 @@ graph TD
 ```
 
 1. **Extreme Class Imbalance ($\pi < 0.05\%$):** Illicit transactions account for less than $0.1\%$ (and often $<0.05\%$) of institutional volume. Under standard cross-entropy loss, deep neural networks collapse to majority-class degeneracy. On the Bitcoin `elliptic_v1` dataset, standard GNN baselines achieve an illicit recall of only **10.33%**.
-2. **Adversarial Topological Camouflage:** Laundering syndicates deliberately generate high-volume benign transactions with legitimate merchants, utilities, and high-degree hubs. Standard message-passing GNNs aggregate this camouflage noise indiscriminately, corrupting node representations.
+2. **Adversarial Topological Camouflage:** Laundering syndicates deliberately generate high-volume benign transactions with legitimate merchants, utilities, and high-degree hubs. Standard message-passing GNNs aggregate this camouflage noise indiscriminately, corrupting node representations via over-smoothing.
 3. **Long-Dwell Hibernation & Velocity Burstiness:** Illicit transactions operate on dual temporal scales: high-velocity burst transactions (seconds to minutes) during initial placement, followed by multi-week or multi-month dormant holding periods to evade 30-day velocity detection windows. Discrete snapshot GNNs (e.g., EvolveGCN) lose temporal continuity and suffer from snapshot quantization errors.
 4. **Graph Neighborhood Explosion & Latency SLAs:** Production payment rails require real-time transaction clearing within **$< 10\text{ ms}$**. As high-degree hub nodes (exchanges, payment processors) are traversed, full $K$-hop neighborhood expansions explode exponentially ($O(d^L)$), causing severe memory out-of-memory (OOM) crashes and latency violations.
 5. **Arbitrary Decision Thresholds & Black-Box Uncertainty:** Deploying models using an arbitrary cutoff ($\hat{y} \ge 0.5$) provides zero rigorous coverage guarantees. In financial intelligence, false negatives expose institutions to catastrophic regulatory enforcement, while false positives overwhelm human analysts.
@@ -84,6 +87,9 @@ graph TD
 ---
 
 ## 🔬 Methodological Innovations: The C-STGB Architecture
+
+![C-STGB System Architecture](papers/IEEE_Research_Paper/figures/fig6_system_architecture.png)
+*Figure 2: End-to-End C-STGB Pipeline — Spatio-temporal continuous harmonic attention with Hawkes point process intensity, learnable context-aware edge-trust gating, typology-clustered latent GraphSMOTE, evidence-adaptive ego-neighborhood residual boosting, and class-conditional conformal risk control.*
 
 C-STGB is formulated as a five-stage hierarchical neuro-symbolic pipeline:
 
@@ -176,12 +182,16 @@ $$\Delta \mathbf{z}_u = \mathbf{h}_u - \frac{1}{|\mathcal{N}(u)|} \sum_{v \in \m
 The augmented feature vector $\mathbf{x}_u^{\text{boost}} = [\mathbf{x}_u^{\text{raw}} \,\|\, \mathbf{h}_u \,\|\, \Delta \mathbf{z}_u \,\|\, \lambda_u(t)]$ is fed into gradient-boosted decision trees (XGBoost / CatBoost / LightGBM), achieving optimal tabular partition boundaries while retaining topological context.
 
 ### 5. Class-Conditional Conformal Risk Control (CRC)
+
+![Class-Conditional Conformal Risk Control Mechanism](papers/IEEE_Research_Paper/figures/fig19_conformal_risk_mechanism.png)
+*Figure 3: Finite-Sample Class-Conditional Conformal Risk Control (CRC) triage mechanism, calibrating separate non-conformity quantiles to ensure $\ge 99.0\%$ label coverage with automated three-tier clearing.*
+
 Under standard validation-calibration splits, C-STGB guarantees finite-sample coverage per class:
 
 $$\mathbb{P}\left(Y \in \Gamma_{\hat{\lambda}}(X) \;\middle|\; Y = y\right) \ge 1 - \alpha_y, \quad \forall y \in \{0, 1\}$$
 
 where non-conformity scores $S_i(y) = 1 - \hat{P}(Y=y \mid X_i)$ define the prediction sets $\Gamma(X) = \{y : \hat{P}(Y=y \mid X) \ge 1 - \hat{q}_y\}$. Transactions are mapped into three deterministic operational tiers:
-* **Tier 1 (Automated Clear / White):** $\Gamma(X) = \{0\}$ — immediate pass-through ($>88\%$ of volume).
+* **Tier 1 (Automated Clear / White):** $\Gamma(X) = \{0\}$ — immediate pass-through ($>99.4\%$ of volume).
 * **Tier 2 (Human-in-the-Loop Review / Amber):** $\Gamma(X) = \{0, 1\}$ — routed to compliance analysts with automated subgraphs.
 * **Tier 3 (Automated Freeze & SAR / Red):** $\Gamma(X) = \{1\}$ — account frozen and SAR filing generated.
 
@@ -190,6 +200,9 @@ where non-conformity scores $S_i(y) = 1 - \hat{P}(Y=y \mid X_i)$ define the pred
 ## 📊 Empirical Benchmark Results (14 Financial Networks)
 
 We conducted an exhaustive benchmark comparing **13 baseline algorithms** against **C-STGB** across **14 distinct financial networks** (9.53M entities, 32M+ transactions). All experiments were executed over **5 independent random seeds** with strict 4-way chronological splitting (60% Train / 10% Validation / 10% Calibration / 20% Test) to prevent temporal data leakage.
+
+![Multi-Dataset Precision-Recall and ROC Curves](papers/IEEE_Research_Paper/figures/fig1_pr_roc_curves.png)
+*Figure 4: Multi-dataset Precision-Recall and ROC performance frontiers comparing C-STGB against deep spatial GNNs, dynamic GNNs, and tuned gradient-boosted decision trees across 14 financial transaction networks.*
 
 ### Master Baseline Performance Scorecard (Macro F1 / PR-AUC)
 
@@ -211,7 +224,8 @@ We conducted an exhaustive benchmark comparing **13 baseline algorithms** agains
 | **C** | `cc_transactions` | Bipartite Card | 284,807 | 284,807 | 0.17% | 51.15 / 0.513 | 48.16 / 0.347 | 4.79 / 0.022 | 49.24 / 0.356 | 52.26 / 0.509 | **51.40 / 0.521** |
 | **TOTAL** | **All 14 Networks** | **Macro-Average** | **9,534,426** | **32,582,147** | **0.05% – 5.0%** | **67.92 / 0.680** | **23.78 / 0.214** | **18.94 / 0.148** | **24.31 / 0.217** | **67.14 / 0.667** | **67.26 / 0.685** |
 
-*Note: Wilcoxon signed-rank test confirms statistical significance of C-STGB over deep GNNs ($W = 105.0, p_{\text{adj}} < 0.001$, Benjamini-Hochberg FDR corrected). Complete multi-baseline results including LightGBM, Balanced Random Forest, Deep Autoencoders, and Isolation Forest are detailed in [docs/benchmarks/multi_dataset_comparative_analysis.md](docs/benchmarks/multi_dataset_comparative_analysis.md).*
+> [!NOTE]
+> Two-sided Wilcoxon signed-rank test confirms statistical significance of C-STGB over deep GNNs ($W = 105.0, p_{\text{adj}} < 0.001$, Benjamini-Hochberg FDR corrected across all 14 datasets). Complete multi-baseline results including LightGBM, Balanced Random Forest, Deep Autoencoders, and Isolation Forest are detailed in [docs/benchmarks/multi_dataset_comparative_analysis.md](docs/benchmarks/multi_dataset_comparative_analysis.md).
 
 ### Standalone GNN Improvement via C-STGB Components (Ablation on Elliptic-v1)
 
@@ -459,7 +473,7 @@ tests\test_temporal_sequence_encoder.py ........                         [ 92%]
 tests\test_wavelet_and_optimal_transport.py .....                        [ 95%]
 tests\test_zero_divergence_arbiter.py ......                             [100%]
 
-====================== 144 passed in 11.54s =======================
+====================== 144 passed in 25.16s =======================
 ```
 
 ### Run Specific Test Modules
@@ -481,7 +495,7 @@ pytest tests/test_latex_integrity.py -v
 
 ## 📄 Compiling Research Papers & Thesis Monograph (Tectonic)
 
-This repository includes a standalone, self-contained **Tectonic** engine located in `tools/tectonic/`. No massive external TeX Live or MiKTeX distribution is required. All packages, fonts, and bibtex parsers resolve automatically.
+This repository includes a standalone, self-contained **Tectonic** engine located in `tools/tectonic/`. No massive external TeX Live or MiKTeX distribution is required. All packages, fonts, and BibTeX parsers resolve automatically.
 
 ### Compile All 4 PDF Documents with One Command
 ```bash
@@ -507,13 +521,13 @@ make build-latex
 ==============================================================================
 
 [+] Compiling: IEEE Research Paper (Main Manuscript)...
-   [SUCCESS] -> Generated: main.pdf (13 pages, 430.3 KB)
+   [SUCCESS] -> Generated: main.pdf (13 pages, 557.8 KB)
 
 [+] Compiling: IEEE Supplementary Material...
-   [SUCCESS] -> Generated: supplementary.pdf (14 pages, 505.3 KB)
+   [SUCCESS] -> Generated: supplementary.pdf (14 pages, 782.1 KB)
 
 [+] Compiling: IEEE Cover Letter...
-   [SUCCESS] -> Generated: Cover_Letter_IEEE_TIFS.pdf (1 page, 29.3 KB)
+   [SUCCESS] -> Generated: Cover_Letter_IEEE_TIFS.pdf (1 page, 29.6 KB)
 
 [+] Compiling: University CSE Thesis Monograph...
    [SUCCESS] -> Generated: main.pdf (90 pages, 1143.8 KB)
@@ -589,7 +603,7 @@ Open your browser to: **`http://localhost:5173`**
 
 ### Institutional Command Consoles
 
-The web dashboard provides a tactile, skeuomorphic, high-density operations center designed for tier-1 compliance officers, AML investigators, and model risk validators:
+The web dashboard provides a tactile, high-density operations center designed for tier-1 compliance officers, AML investigators, and model risk validators:
 
 1. **⚡ Surveillance & Real-Time Telemetry (`Hotkey 1: command-center`):**
    - Live transaction streaming ticker with sub-second websocket ingestion.
@@ -606,6 +620,9 @@ The web dashboard provides a tactile, skeuomorphic, high-density operations cent
    - Interactive WebGL / Force-Directed 3D graph canvas powered by Three.js and D3.
    - Visualizes multi-hop smurfing fan-in/fan-out, layering wash loops ($L_1 \leftrightarrow L_2 \leftrightarrow L_3$), and cash-out exchange exits.
    - Interactive edge-trust filter slider toggle ($g_{ij} < 0.10$): dynamically displays raw camouflaged topology vs. pruned illicit core.
+
+   ![15-Node Forensic Subgraph](papers/IEEE_Research_Paper/figures/15_node_subgraph.png)
+   *Figure 5: Reconstructed 15-node circular smurfing cycle with causal edge-trust attribution ($g_{uv}$ gating scores suppressing benign chaff while highlighting the illicit laundering path).*
 
 4. **🤖 Autonomous SAR Drafter Workbench (`Hotkey 4: cases`):**
    - Dual-copy legal dossier compiler producing human-readable narrative summaries and machine-readable FinCEN Form 111 XML.
@@ -627,6 +644,9 @@ The web dashboard provides a tactile, skeuomorphic, high-density operations cent
 ## 🤖 Multi-Agent Forensic Swarm & Regulatory Compliance
 
 To bridge the gap between machine learning scores and regulatory enforcement, Intelligent-AML implements an autonomous multi-agent forensic swarm built on LangChain and CrewAI:
+
+![Multi-Agent Forensic Swarm Architecture](papers/IEEE_Research_Paper/figures/fig20_multi_agent_forensic_swarm.png)
+*Figure 6: Autonomous Multi-Agent Forensic Swarm with LangChain/CrewAI coordination across Investigator, SAR Drafter, and Compliance Auditor agents.*
 
 ```mermaid
 sequenceDiagram
@@ -659,7 +679,7 @@ Intelligent-AML is engineered to satisfy the rigorous supervisory standards of t
 
 * **Cryptographic Governance Audit Logger (`governance_logger.py`):** Every model decision, hyperparameter configuration, training timestamp, and conformal threshold is recorded in an immutable, append-only JSON-Lines ledger sealed with **SHA-256 cryptographic chaining**.
 * **Zero-Divergence Arbiter (`zero_divergence_arbiter.py`):** Guarantees strict numeric parity ($\epsilon < 10^{-6}$) between streaming feature extraction pipelines (Kafka/Flink) and offline training tables (Polars/Parquet), eliminating online-offline data drift.
-* **Deterministic Topological Invariants (`deterministic_invariants.py`):** Extracts mathematically invariant graph properties (betti numbers, cycle ranks, core numbers) unaffected by node permutation.
+* **Deterministic Topological Invariants (`deterministic_invariants.py`):** Extracts mathematically invariant graph properties (Betti numbers, cycle ranks, core numbers) unaffected by node permutation.
 * **Differential Privacy Federated Learning (`fed_gnn.py`):** Supports cross-institutional collaborative training across independent banks using Rényi Differential Privacy ($\epsilon = 2.4, \delta = 10^{-5}$) via Flower FedAvg, preventing customer transaction leakages.
 
 ---
@@ -694,22 +714,14 @@ If you utilize Intelligent-AML, the C-STGB architecture, or our benchmark scores
 
 ---
 
-## 👥 Authors & Contact
+## 👥 Authors & Research Team
 
-* **Md. Nazmul** — *Lead Researcher & System Architect*  
-  Department of Computer Science and Engineering, College of Technology, National University, Bangladesh  
-  Email: [nazmulhas36@gmail.com](mailto:nazmulhas36@gmail.com) | GitHub: [@NazmulHasanNihal](https://github.com/NazmulHasanNihal)
-
-* **Musrat Jahan Gungun** — *Co-Researcher & Empirical Analysis*  
-  Department of Computer Science and Engineering, College of Technology, National University, Bangladesh  
-  Email: [gungunjahan84@gmail.com](mailto:gungunjahan84@gmail.com)
-
-* **Sagor Chandra** — *Co-Researcher (Thesis Monograph)*  
-  Department of Computer Science and Engineering, College of Technology, National University, Bangladesh  
-
-* **Maheli Ahmed** — *Faculty Supervisor & Research Advisor*  
-  Lecturer, Department of Computer Science and Engineering, College of Technology, National University, Bangladesh  
-  Email: [maheli.ahmed.cse.cot@gmail.com](mailto:maheli.ahmed.cse.cot@gmail.com)
+| Author | Role & CRediT Contribution | Affiliation | Identifiers & Contact |
+|:---|:---|:---|:---|
+| **Md. Nazmul** | **Lead Researcher & System Architect**<br>Conceptualization, Methodology, Software, Formal Analysis, Writing – Original Draft | Department of Computer Science and Engineering,<br>College of Technology, National University, Bangladesh | [![ORCID](https://img.shields.io/badge/ORCID-0009--0001--6115--7023-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0001-6115-7023)<br>Email: [nazmulhas36@gmail.com](mailto:nazmulhas36@gmail.com)<br>GitHub: [@NazmulHasanNihal](https://github.com/NazmulHasanNihal) |
+| **Musrat Jahan Gungun** | **Co-Researcher & Empirical Analysis**<br>Data Curation, Investigation, Validation, Writing – Review & Editing | Department of Computer Science and Engineering,<br>College of Technology, National University, Bangladesh | [![ORCID](https://img.shields.io/badge/ORCID-0009--0006--4249--9198-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0006-4249-9198)<br>Email: [gungunjahan84@gmail.com](mailto:gungunjahan84@gmail.com) |
+| **Sagor Chandra** | **Co-Researcher (Thesis Monograph)**<br>Visualization, Software Validation, Documentation | Department of Computer Science and Engineering,<br>College of Technology, National University, Bangladesh | Email: [contact via Department](mailto:nazmulhas36@gmail.com) |
+| **Maheli Ahmed** | **Faculty Supervisor & Research Advisor**<br>Supervision, Project Administration, Resources, Writing – Review & Editing | Department of Computer Science and Engineering,<br>College of Technology, National University, Bangladesh | [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--5183--7498-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-5183-7498)<br>Email: [maheli.ahmed.cse.cot@gmail.com](mailto:maheli.ahmed.cse.cot@gmail.com) |
 
 ---
 

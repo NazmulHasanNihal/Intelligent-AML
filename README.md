@@ -19,7 +19,7 @@
 ## 📸 Enterprise Platform Preview
 
 <p align="center">
-  <img src="Appendix Images (5).png" alt="Intelligent-AML Enterprise Surveillance Desk & 3D Topological Visualizer" width="100%" />
+  <img src="docs/assets/appendix/Appendix Images (5).png" alt="Intelligent-AML Enterprise Surveillance Desk & 3D Topological Visualizer" width="100%" />
 </p>
 
 *Figure 1: Intelligent-AML Unified Command Center — Live Tier-1 Banking Surveillance Desk featuring real-time transaction streaming ($31.2\text{k tx/s}$, $0.45\text{ ms}$ Fast-Path latency), interactive WebGL 3D Force-Directed Topological Ring Reconstruction with $65.9\%$ camouflage edge pruning, tactile risk KPI telemetry, and deep entity forensic inspection for high-risk layering hubs (Appendix Images 5).*
@@ -836,7 +836,7 @@ The Intelligent-AML Web Command Center provides a bank-grade, tactile institutio
 #### 1. ⚡ Surveillance Desk & 🕸️ 3D Forensic Graph Studio (`Hotkey: 1` & `Hotkey: 3`)
 
 <p align="center">
-  <img src="Appendix Images (5).png" alt="Console 1 & 3: Surveillance Telemetry Desk & 3D Topological Visualizer" width="100%" />
+  <img src="docs/assets/appendix/Appendix Images (5).png" alt="Console 1 & 3: Surveillance Telemetry Desk & 3D Topological Visualizer" width="100%" />
 </p>
 
 *Figure 2: Surveillance & Real-Time Telemetry Desk and 3D Interactive Topological Graph Studio (Appendix Images 5).*
@@ -871,7 +871,7 @@ The Intelligent-AML Web Command Center provides a bank-grade, tactile institutio
 #### 2. 🎯 Conformal Risk Clearing Hub & 3-Tier Triage Queue (`Hotkey: 2`)
 
 <p align="center">
-  <img src="Appendix Images (4).png" alt="Console 2: Conformal Risk Clearing Hub & 3-Tier Triage Queue Matrix" width="100%" />
+  <img src="docs/assets/appendix/Appendix Images (4).png" alt="Console 2: Conformal Risk Clearing Hub & 3-Tier Triage Queue Matrix" width="100%" />
 </p>
 
 *Figure 3: Conformal Risk Clearing Hub & 3-Tier Triage Queue Matrix (Appendix Images 4).*
@@ -900,7 +900,7 @@ The Intelligent-AML Web Command Center provides a bank-grade, tactile institutio
 #### 3. 🤖 Autonomous Multi-Agent SAR & Notice Workbench (`Hotkey: 4`)
 
 <p align="center">
-  <img src="Appendix Images (3).png" alt="Console 4: Autonomous Multi-Agent SAR & Regulatory Notice Workbench" width="100%" />
+  <img src="docs/assets/appendix/Appendix Images (3).png" alt="Console 4: Autonomous Multi-Agent SAR & Regulatory Notice Workbench" width="100%" />
 </p>
 
 *Figure 4: Autonomous Multi-Agent SAR & Regulatory Notice Workbench (Appendix Images 3).*
@@ -926,7 +926,7 @@ The Intelligent-AML Web Command Center provides a bank-grade, tactile institutio
 #### 4. ⚙️ Algorithmic Recourse & Customer Remediation Sandbox (`Hotkey: 5`)
 
 <p align="center">
-  <img src="Appendix Images (2).png" alt="Console 5: Algorithmic Recourse & Customer Remediation Sandbox" width="100%" />
+  <img src="docs/assets/appendix/Appendix Images (2).png" alt="Console 5: Algorithmic Recourse & Customer Remediation Sandbox" width="100%" />
 </p>
 
 *Figure 5: Algorithmic Recourse & Customer Remediation Sandbox (Appendix Images 2).*
@@ -953,7 +953,7 @@ The Intelligent-AML Web Command Center provides a bank-grade, tactile institutio
 #### 5. ⚖️ Model Risk Governance & SR 26-2 Cryptographic Audit Vault (`Hotkey: 6`)
 
 <p align="center">
-  <img src="Appendix Images (1).png" alt="Console 6: Model Risk Governance & SR 26-2 Cryptographic Audit Vault" width="100%" />
+  <img src="docs/assets/appendix/Appendix Images (1).png" alt="Console 6: Model Risk Governance & SR 26-2 Cryptographic Audit Vault" width="100%" />
 </p>
 
 *Figure 6: Model Risk Governance & SR 26-2 Cryptographic Audit Vault (Appendix Images 1).*

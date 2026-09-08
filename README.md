@@ -1,6 +1,6 @@
 # 🏛️ Intelligent-AML: Conformal Spatio-Temporal GraphBoost (C-STGB)
 
-[![CI/CD Pipeline](https://github.com/NazmulHasanNihal/Intelligent-AML/actions/workflows/ci.yml/badge.svg)](https://github.com/NazmulHasanNihal/Intelligent-AML/actions)
+[![Environment](https://img.shields.io/badge/Environment-Local%20Only-blue.svg)](#-step-by-step-local-setup--installation-guide)
 [![Python 3.11 | 3.12](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 [![PyTorch 2.5](https://img.shields.io/badge/PyTorch-2.5.1-EE4C2C.svg)](https://pytorch.org/)
 [![PyTorch Geometric](https://img.shields.io/badge/PyG-2.4-3C2179.svg)](https://pyg.org/)
@@ -589,7 +589,6 @@ Intelligent-AML/
 ├── conftest.py                          # PyTest fixtures & temporary paths
 ├── pyproject.toml                       # PEP 621 packaging metadata
 ├── requirements.txt                     # Production Python dependencies
-├── Makefile                             # Cross-platform developer automation targets
 ├── Dockerfile                           # Containerized production deployment
 └── LICENSE                              # MIT Open Source License
 ```
@@ -654,11 +653,8 @@ Every mathematical module, neural layer, gating function, conformal triager, and
 
 ### Execute All Tests
 ```bash
-# Run the complete test suite with concise output:
+# Run the complete test suite locally:
 pytest tests/ -v
-
-# Or run via Makefile:
-make test
 ```
 
 ### Expected Output
@@ -723,9 +719,6 @@ This repository includes a standalone, self-contained **Tectonic** engine locate
 ### Compile All 4 PDF Documents with One Command
 ```bash
 python scripts/compile_all_pdfs.py
-
-# Or via Makefile:
-make build-latex
 ```
 
 ### Compilation Targets & Verified Page Budgets
@@ -768,9 +761,6 @@ make build-latex
 Simulates streaming transactions, executes conformal risk gating, reconstructs circular smurfing rings, and automatically drafts FinCEN Form 111 XML narratives:
 ```bash
 python scripts/run_enterprise_aml_demo.py
-
-# Or via Makefile:
-make demo
 ```
 
 ### 2. Run Comparative Baseline Evaluation on a Dataset
@@ -793,9 +783,6 @@ Outputs are automatically exported to `data/outputs/comparisons/`:
 ### 3. Regenerate All 22 Publication Vector Figures
 ```bash
 python scripts/generate_all_publication_figures.py
-
-# Or via Makefile:
-make figures
 ```
 Generates 300 DPI vector PDFs and high-resolution PNGs in `papers/IEEE_Research_Paper/figures/` and `papers/University_CSE_Thesis/figures/`.
 

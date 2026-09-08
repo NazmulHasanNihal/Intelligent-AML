@@ -16,7 +16,8 @@ import {
   Shield,
   Activity,
   Download,
-  Play
+  Play,
+  CheckCircle2
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
@@ -24,6 +25,7 @@ import { useAuth } from '../context/AuthContext';
 export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenRecourse, onSimulateAttack }) => {
   const { currentTheme, setTheme, availableThemes } = useTheme();
   const { currentBanker, setIsAuthModalOpen } = useAuth();
+  const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef(null);

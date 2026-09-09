@@ -2,6 +2,7 @@
 
 **Manuscript Title:** *Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage*  
 **Short Running Title:** *Nazmul et al.: Risk-Controlled Spatio-Temporal Graph Learning for AML*  
+**Manuscript ID (Draft):** `T-IFS-28992-2026`  
 **Corresponding Author:** Md. Nazmul (`nazmulhas36@gmail.com`)  
 **Target Journal:** *IEEE Transactions on Information Forensics and Security (TIFS)*  
 *(Alternative High-Impact Venues: IEEE TKDE, Elsevier Expert Systems with Applications, Elsevier Knowledge-Based Systems)*
@@ -56,26 +57,70 @@
   > Financial money laundering moves an estimated $800B–$2T annually across global financial rails. While Graph Neural Networks (GNNs) capture relational topologies, practical Anti-Money Laundering (AML) surveillance is hindered by velocity evasion, topological camouflage, extreme class imbalance (pi < 0.05%), cold-start isolation, and uncalibrated uncertainty. We propose C-STGB (Conformal Spatio-Temporal GraphBoost), an integrated risk-controlled temporal graph learning framework combining continuous harmonic temporal attention, learnable edge-trust gating, typology-clustered latent GraphSMOTE, evidence-adaptive graph-tabular fusion, and Class-Conditional Conformal Risk Control (CRC). Benchmarked across 14 financial transaction networks (9.53M entities, 9.53M transactions, 182 evaluation pairs over five locked seeds), C-STGB achieves an unweighted macro F1 of 67.26% (0.6848 PR-AUC). This establishes parity with tuned gradient-boosted decision trees (XGBoost 67.92%, p=0.8077; CatBoost 67.14%, p=0.4318) which excel on flat transaction streams, alongside statistically significant outperformance over evaluated deep GNNs (+43.49 pp mean uplift over GCN; W=105.0, p_adj < 0.001), with advantages concentrated in graph-rich relational regimes. Furthermore, C-STGB provides finite-sample coverage (>= 99.0%) under within-class exchangeability with Adaptive Conformal Inference (ACI) drift tracking, routing >99.4% of volume into decisive singleton prediction sets while achieving a streaming Fast-Path inference latency of 0.45 ms per event.
 
 ### Step 2: File Upload
-1. **Main Document:** `papers/IEEE_Research_Paper/main.pdf` *(Select File Designation: Main Document / Manuscript)*
-2. **Supplementary Material:** `papers/IEEE_Research_Paper/supplementary.pdf` *(Select File Designation: Supplementary Material for Review)*
-3. **Cover Letter:** `papers/IEEE_Research_Paper/Cover_Letter_IEEE_TIFS.pdf` *(Select File Designation: Cover Letter)*
+1. **Main Document:** `papers/IEEE_Research_Paper/main.pdf` *(File Designation: Main Document / Manuscript)* — strictly 13 pages.
+2. **Supplementary Material:** `papers/IEEE_Research_Paper/supplementary.pdf` *(File Designation: Supplementary Material for Review)* — strictly 5 pages (complies with $\le 6$ page rule).
+3. **Cover Letter:** `papers/IEEE_Research_Paper/Cover_Letter_IEEE_TIFS.pdf` *(File Designation: Cover Letter)*.
 
-### Step 3: Keywords & Categories
-- `Anti-Money Laundering`
-- `Graph Neural Networks`
-- `Temporal Graph Learning`
-- `Conformal Prediction`
-- `Financial Forensics`
+### Step 3: Keywords & EDICS Categories
+- Primary EDICS / Keywords:
+  - `Anti-Money Laundering`
+  - `Graph Neural Networks`
+  - `Temporal Graph Learning`
+  - `Conformal Prediction`
+  - `Financial Forensics`
+  - `Anomaly Detection`
 
 ### Step 4: Author Details & ORCIDs
 - **Author 1 (Corresponding):** Md. Nazmul (`nazmulhas36@gmail.com`) | ORCID: `0009-0001-6115-7023`
 - **Author 2:** Musrat Jahan Gungun (`gungunjahan84@gmail.com`) | ORCID: `0009-0006-4249-9198`
 - **Author 3 (Supervisor):** Maheli Ahmed (`maheli.ahmed.cse.cot@gmail.com`) | ORCID: `0000-0002-5183-7498`
-- **Institution:** Department of Computer Science and Engineering, College of Technology, National University, Gazipur 1704, Bangladesh
+- **Institution:** Department of Computer Science and Engineering, National University, Gazipur 1704, Bangladesh
 
-### Step 5: Details & Disclosures (Preprint & Prior Publication)
-- **Preprint Status (IEEE Policy):** IEEE permits preprint posting on arXiv prior to or concurrent with submission (IEEE PSPB Ops Manual §8.1.9).
-- **If deposited on arXiv:** Select *"Yes, this manuscript has been posted on a preprint server (arXiv)"* and enter the arXiv ID (e.g., `arXiv:2609.xxxxx`).
-- **If not yet on arXiv:** Select *"No"*. (You can update or link it after submission).
-- **Prior Publication:** Select *"No, this manuscript is an original work that has not been published elsewhere and is not under consideration by another venue."*
-- **Overlength Page Charges:** Check acknowledgment (the manuscript is strictly 13.0 pages, fitting within the standard 13-page ceiling).
+---
+
+## 🛠️ 6. Step-by-Step Resolution of Administrative Flags for Draft T-IFS-28992-2026
+
+When logging into ScholarOne / IEEE Publishing Portal (`https://mc.manuscriptcentral.com/tifs-ieee`):
+
+> ⚠️ **CRITICAL WARNING:**  
+> **DO NOT click "Submit New Manuscript"!**  
+> Go to your **Author Dashboard** $\to$ **"Unsubmitted / Draft Manuscripts"** $\to$ find **`T-IFS-28992-2026`** $\to$ click **"Continue Submission"**.
+
+### Field-by-Field Instructions for Step 5 ("Details & Comments" / Disclosures):
+
+1. **Question: "Has this manuscript or substantial portions of it been published, accepted, or submitted for publication elsewhere (e.g., conference or journal)?"**
+   - **Action:** Select **`No`**.
+   - **Explanation text (if box appears):**  
+     `"This manuscript is an entirely original work that has not been submitted, accepted, or published in any conference, workshop, or journal."`
+
+2. **Question: "Has this manuscript (or an earlier version) been deposited on a preprint server (e.g., arXiv)?"**
+   - **Action:** Select **`No`** (unless you already posted it on arXiv; if posted, select `Yes` and input the arXiv ID and link).
+
+3. **Question: "Does this submission include Supplemental Material?"**
+   - **Action:** Select **`Yes`**.
+   - **Explanation text / Justification box:**  
+     `"The accompanying Supplemental Material document has been strictly formatted to 5 double-column pages (10 pt font) using IEEEtran, in full compliance with the IEEE Signal Processing Society policy requiring Supplemental Material not to exceed 6 double-column pages."`
+
+4. **Question: "Confirm agreement with IEEE Overlength Page Charges policy"**
+   - **Action:** Check **`Yes / I Agree`**.  
+     *(Main manuscript is strictly 13.0 pages, fitting within the allowed regular paper ceiling).*
+
+5. **Question: "Funding Disclosure / Research Grant Information"**
+   - **Action:** Select **`No external funding`** or paste:  
+     `"This research received no specific external grant from any funding agency in the public, commercial, or not-for-profit sectors."`
+
+6. **Question: "Conflict of Interest Declaration"**
+   - **Action:** Select **`No conflicts`** or paste:  
+     `"The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper."`
+
+7. **Question: "Data Availability / Open Science Statement"**
+   - **Action:** Paste into text box:  
+     `"All benchmark datasets evaluated in this study (Elliptic-v1, Elliptic-v2, XBlock-ETH, PaySim, PaySim Extended, SAML-D, Mt. Gox, IBM-AMLSim, DGraphFin) are publicly available. Complete preprocessing scripts, pipelines, and synthetic generators are open-sourced at https://github.com/NazmulHasanNihal/Intelligent-AML."`
+
+8. **Question: "Confirm Author Review and Approval"**
+   - **Action:** Check **`Yes`** *(All authors have reviewed and approved the manuscript submission).*
+
+9. **Step 6 ("Review & Submit"):**
+   - Click **"View Proof"** (HTML/PDF proof generated by ScholarOne).
+   - Verify that `main.pdf` (13 pages) and `supplementary.pdf` (5 pages) appear clearly.
+   - Click the final **"Submit"** button.

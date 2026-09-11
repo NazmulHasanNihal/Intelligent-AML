@@ -34,11 +34,15 @@ def verify_submission():
     print(f"\n[2] CITATION & STATE-OF-THE-ART POSITIONING CHECKS:")
     full_main_text = ' '.join([p.extract_text() for p in main_reader.pages])
 
-    flagship_cits = ['MLaD', 'CamFD', 'Cheng']
+    flagship_cits = ['Fu', 'CamFD', 'Cheng', 'Qiao']
     for c in flagship_cits:
         found = c in full_main_text
         print(f"    - Flagship Citation [{c}]: {'FOUND' if found else 'MISSING'}")
         assert found, f"Missing citation for {c} in main text"
+
+    # Ensure no deprecated TIFS citations remain
+    assert 'MLaD' not in full_main_text, "Found deprecated MLaD reference in main text!"
+    print("    - Deprecated TIFS Citation [MLaD]: PURGED COMPLETELY (PASS)")
 
     # 3. Phantom Supplementary Table Reference Audit
     print(f"\n[3] CROSS-REFERENCE INTEGRITY CHECKS:")
@@ -50,13 +54,13 @@ def verify_submission():
     print(f"    - Valid supplementary tables referenced: {valid_tables}")
 
     # 4. Cover Letter Claims Alignment
-    print(f"\n[4] COVER LETTER CLAIMS AUDIT:")
-    cl_text = cl_reader.pages[0].extract_text()
-    claims = ['13.0 pages', '5.0 pages', 'MLaD', 'CamFD', 'Cheng', 'Luisa Verdoliva', 'T-IFS-28992-2026']
-    for claim in claims:
-        found = claim in cl_text
+    print(f"\n[4] COVER LETTER CLAIMS AUDIT (TKDE):")
+    tkde_cl_text = tkde_cl_reader.pages[0].extract_text()
+    tkde_claims = ['13.0 pages', '5.0 pages', 'Fu', 'Cheng', 'Qiao', 'TKDE']
+    for claim in tkde_claims:
+        found = claim in tkde_cl_text
         print(f"    - Claim [{claim}]: {'VERIFIED' if found else 'MISSING'}")
-        assert found, f"Cover letter missing claim: {claim}"
+        assert found, f"TKDE Cover letter missing claim: {claim}"
 
     # 5. Visual Rendering & Vector Graphics Check
     print(f"\n[5] FIGURE GRAPHICS QUALITY CHECKS (main.pdf):")

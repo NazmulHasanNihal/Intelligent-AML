@@ -50,17 +50,6 @@
 \usepackage{enumitem}
 \setlist{nosep,leftmargin=*,itemsep=1.0pt,topsep=1.5pt}
 
-% Clean IEEE Bibliography Spacing
-\let\oldthebibliography\thebibliography
-\let\endoldthebibliography\endthebibliography
-\renewenvironment{thebibliography}[1]{%
-  \begin{oldthebibliography}{#1}%
-    \setlength{\itemsep}{-1.5pt plus 0.3pt minus 0.2pt}%
-    \setlength{\parskip}{0pt}%
-}{%
-  \end{oldthebibliography}%
-}
-
 % Citations, Hyperlinks & Microtypography
 \usepackage{cite}
 \usepackage[protrusion=true]{microtype}
@@ -110,18 +99,15 @@ Data Mining, Graph Neural Networks, Temporal Graph Learning, Class Imbalance, Co
 \input{sections/06_limitations}
 \input{sections/07_conclusion}
 
+\IEEEtriggeratref{8}
 \bibliographystyle{IEEEtran}
-\begingroup
-\let\oldbibitem\bibitem
-\def\bibitem{\vspace{-0.4ex}\oldbibitem}
 \bibliography{references}
-\endgroup
 
-\vspace{0.1ex}
-{\scriptsize
-\noindent\textbf{Md.~Nazmul} is pursuing the B.Sc. (Hons.) degree in CSE at College of Technology, National University, Bangladesh. Research focuses on graph representation learning, spatio-temporal neural networks, and conformal risk control.\par\vspace{0.1ex}
-\noindent\textbf{Musrat~Jahan~Gungun} is pursuing the B.Sc. (Hons.) degree in CSE at College of Technology, National University, Bangladesh. Research focuses on machine learning, algorithmic fairness, and topological anomaly detection.\par\vspace{0.1ex}
-\noindent\textbf{Maheli~Ahmed} is a Faculty Member in CSE at College of Technology, National University, Bangladesh. Research interests include machine learning, deep learning, model governance, and fraud surveillance.\par
+\vspace{1.0ex}
+{\footnotesize
+\noindent\textbf{Md.~Nazmul} is pursuing the B.Sc. (Hons.) degree in Computer Science and Engineering at College of Technology, National University, Gazipur 1704, Bangladesh. His research focuses on graph representation learning, spatio-temporal neural networks, financial forensics, and distribution-free conformal risk control.\par\vspace{1.0ex}
+\noindent\textbf{Musrat~Jahan~Gungun} is pursuing the B.Sc. (Hons.) degree in Computer Science and Engineering at College of Technology, National University, Gazipur 1704, Bangladesh. Her research focuses on machine learning, algorithmic fairness, and topological anomaly detection in transaction networks.\par\vspace{1.0ex}
+\noindent\textbf{Maheli~Ahmed} is a Faculty Member in the Department of Computer Science and Engineering at College of Technology, National University, Gazipur 1704, Bangladesh. Her research interests include machine learning, deep learning, model risk governance, and financial fraud surveillance.\par
 }
 
 \end{document}

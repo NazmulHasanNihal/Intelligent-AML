@@ -5,9 +5,9 @@
 \label{sec:dataset_corpus}
 To evaluate model generalization across diverse financial rails, we benchmark C-STGB across 14 financial transaction networks spanning public cryptocurrency ledgers, multi-bank wire systems, and mobile financial services, summarized in Table~\ref{tab:dataset_corpus}. The corpus comprises $9,534,980$ entities and $9,528,355$ transactions across three distinct topological archetypes:
 \begin{enumerate}[leftmargin=*]
-    \item \textbf{Group A (Public Blockchain Ledgers, 4 Networks):} Directed Acyclic Graphs (DAGs) and smart-contract transaction meshes (Elliptic-v1~\cite{weber2019anti}, Elliptic-v2~\cite{bellei2024elliptic2}, XBlock-ETH~\cite{zheng2020xblock}, MtGox~\cite{gandal2018mtgox}) characterized by global ledger observability and structural transparency.
+    \item \textbf{Group A (Public Blockchain Ledgers, 4 Networks):} Directed Acyclic Graphs (DAGs) and smart-contract transaction meshes (Elliptic-v1~\cite{weber2019anti}, Elliptic-v2~\cite{bellei2024elliptic2}, XBlock-ETH~\cite{zheng2020xblock}, MtGox) characterized by global ledger observability and structural transparency.
     \item \textbf{Group B (Multi-Bank, Mobile Synthetic \& FinTech Rails, 9 Networks):} Inter-bank wire meshes, high-velocity mobile draining trees, and dynamic credit networks (SAML-D~\cite{lorenz2020samld}, PaySim1, PaySim Extended~\cite{lopez2016paysim}, IBM-AMLSim HI/LI Small and Medium (4 datasets)~\cite{suzumura2019amlsim}, the Synthetic Typology Data Generator, and DGraphFin~\cite{dgraphfin}) characterized by extreme class imbalance ($\pi \in [0.05\%, 1.50\%]$) and fragmented organizational visibility. In \texttt{paysim\_extended}, each mobile financial log record is mapped to a dedicated transaction-event vertex connected to its originating account and step context, yielding an exact 1:1 entity-to-edge projection ($|\mathcal{V}| = |\mathcal{E}| = 1,048,575$).
-    \item \textbf{Group C (Classical Tabular \& Card Fraud Streams, 1 Network):} High-throughput card-terminal bipartite transaction streams (\texttt{cc\_transactions}~\cite{dalpozzolo2015calibrating}).
+    \item \textbf{Group C (Classical Tabular \& Card Fraud Streams, 1 Network):} High-throughput card-terminal bipartite transaction streams (\texttt{cc\_transactions}~\cite{dalpozzolo2018credit}).
 \end{enumerate}
 
 \begin{table}[t]
@@ -42,7 +42,7 @@ For discrete UTXO graphs (e.g., Elliptic-v1 with 49 timesteps), Timesteps 1--30 
 
 \subsection{Baseline Architectures \& Fair Optimization Protocol}
 \label{sec:baselines_protocol}
-We benchmark C-STGB against 12 distinct baseline architectures across six canonical model paradigms: (1) \textit{Tabular Tree Ensembles:} XGBoost~\cite{chen2016xgboost}, CatBoost~\cite{prokhorenkova2018catboost}, and LightGBM~\cite{ke2017lightgbm}; (2) \textit{Spatial GNNs:} GCN~\cite{kipf2017semi}, GraphSAGE~\cite{hamilton2017inductive}, GAT~\cite{velickovic2018graph}, and GIN~\cite{xu2019powerful}; (3) \textit{Heterogeneous GNNs:} Vanilla HGT~\cite{hu2020heterogeneous} and Johannessen \& Jullum~\cite{johannessen2023predicting}; (4) \textit{Adversarial Fraud Detectors:} CARE-GNN~\cite{dou2020enhancing}; (5) \textit{Dynamic Snapshot Models:} EvolveGCN~\cite{pareja2020evolvegcn}; and (6) \textit{Continuous Temporal GNNs:} TGN~\cite{rossi2020temporal}. Evaluating these 12 baselines alongside C-STGB across 14 benchmark datasets yields 13 model configurations and exactly 182 dataset $\times$ model evaluation pairs, evaluated over five locked random seeds ($910$ total experimental executions).
+We benchmark C-STGB against 12 distinct baseline architectures across six canonical model paradigms: (1) \textit{Tabular Tree Ensembles:} XGBoost~\cite{chen2016xgboost}, CatBoost~\cite{prokhorenkova2018catboost}, and LightGBM~\cite{ke2017lightgbm}; (2) \textit{Spatial GNNs:} GCN~\cite{kipf2017semi}, GraphSAGE~\cite{hamilton2017inductive}, GAT~\cite{velickovic2018graph}, and GIN~\cite{xu2019powerful}; (3) \textit{Heterogeneous GNNs:} Vanilla HGT~\cite{hu2020heterogeneous}; (4) \textit{Adversarial Fraud Detectors:} CARE-GNN~\cite{dou2020enhancing}; (5) \textit{Dynamic Snapshot Models:} EvolveGCN~\cite{pareja2020evolvegcn}; and (6) \textit{Continuous Temporal GNNs:} TGN~\cite{rossi2020temporal}. Evaluating these 12 baselines alongside C-STGB across 14 benchmark datasets yields 13 model configurations and exactly 182 dataset $\times$ model evaluation pairs, evaluated over five locked random seeds ($910$ total experimental executions).
 
 \textbf{Positioning Against Recent Flagship Literature:} We contextualize C-STGB against three recent flagship works: (1) \textit{H$^2$IDE (Fu \textit{et al.}, IEEE TKDE 2025~\cite{fu2025nowhere})} isolates camouflaged fraudsters over multi-relational graphs via disentangled homophily and heterophily, but operates over static relations and lacks continuous-time streaming edge dynamics ($\Delta t$); (2) \textit{CamFD (Ou \textit{et al.}, IEEE TSMC 2026~\cite{ou2025camfd})} filters camouflaged fraudsters over discrete relational schemas without post-hoc finite-sample risk guarantees ($\ge 99\%$ coverage); and (3) \textit{Group-Aware GNN (Cheng \textit{et al.}, IEEE TKDE 2023~\cite{cheng2023anti})} clusters account groups on static ledgers rather than streaming transaction-level conformal calibration. As demonstrated in Section~\ref{sec:robustness_results} and Supplementary Table~S2, C-STGB uniquely bridges continuous-time edge gating with distribution-free conformal triage.
 
@@ -62,12 +62,12 @@ All experiments were conducted across Kaggle Cloud TPU v3-8 / NVIDIA Tesla T4 GP
 \centering
 \begin{minipage}[t]{0.495\textwidth}
 \centering
-\includegraphics[width=\linewidth,height=1.22in,keepaspectratio]{figures/fig1_pr_roc_curves.pdf}\\[0.5ex]
+\includegraphics[width=\linewidth,height=1.65in,keepaspectratio]{figures/fig1_pr_roc_curves.pdf}\\[0.5ex]
 {\footnotesize (a) Precision-Recall (left) and ROC (right) curves on \texttt{elliptic\_v1}.}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.495\textwidth}
 \centering
-\includegraphics[width=\linewidth,height=1.22in,keepaspectratio]{figures/fig2_tsne_manifold_separation.pdf}\\[0.5ex]
+\includegraphics[width=\linewidth,height=1.65in,keepaspectratio]{figures/fig2_tsne_manifold_separation.pdf}\\[0.5ex]
 {\footnotesize (b) Latent t-SNE: baseline GNN (left) vs. C-STGB (right).}
 \end{minipage}
 \caption{Empirical representation and classification benchmarks: (a) Precision-Recall and ROC curves demonstrating discrimination under extreme class skew; (b) t-SNE projection of the learned latent manifold under Typology GraphSMOTE, showing dense clustering of confirmed illicit topologies ($K=4$) with clear separation from majority commercial hubs.}
@@ -220,12 +220,9 @@ To rigorously validate defense capabilities beyond this heuristic, we evaluate a
 
 \begin{figure}[t]
 \centering
-\vspace{-0.5ex}
-\includegraphics[width=0.96\columnwidth]{figures/fig9_adversarial_camouflage_robustness.pdf}
-\vspace{-1.0ex}
+\includegraphics[width=\columnwidth]{figures/fig9_adversarial_camouflage_robustness.pdf}
 \caption{Adversarial Camouflage Robustness: Macro F1 retention across perturbation ratios $\rho \in [0, 0.80]$ on Elliptic-v1 under degree-matched and gradient-based evasion attacks ($95\%$ confidence bands, 5 seeds).}
 \label{fig:adversarial_robustness}
-\vspace{-1.0ex}
 \end{figure}
 
 \subsection{Hyperparameter Sensitivity \& Stability Analysis}

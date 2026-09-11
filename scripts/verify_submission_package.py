@@ -5,29 +5,25 @@ import sys
 
 def verify_submission():
     print("==============================================================================")
-    print("[*] IEEE TIFS SUBMISSION PACKAGE COMPREHENSIVE VERIFICATION AUDIT")
+    print("[*] IEEE TKDE SUBMISSION PACKAGE COMPREHENSIVE VERIFICATION AUDIT")
     print("==============================================================================")
     
     # 1. Page Count Verification
     main_reader = pypdf.PdfReader('papers/IEEE_Research_Paper/main.pdf')
     supp_reader = pypdf.PdfReader('papers/IEEE_Research_Paper/supplementary.pdf')
-    cl_reader = pypdf.PdfReader('papers/IEEE_Research_Paper/Cover_Letter_IEEE_TIFS.pdf')
+    tkde_cl_reader = pypdf.PdfReader('papers/IEEE_Research_Paper/Cover_Letter_IEEE_TKDE.pdf')
 
     main_pages = len(main_reader.pages)
     supp_pages = len(supp_reader.pages)
-    cl_pages = len(cl_reader.pages)
-    tkde_cl_reader = pypdf.PdfReader('papers/IEEE_Research_Paper/Cover_Letter_IEEE_TKDE.pdf')
     tkde_cl_pages = len(tkde_cl_reader.pages)
 
     print(f"\n[1] PAGE BUDGET CHECKS:")
     print(f"    - main.pdf: {main_pages} pages (Budget: exactly 13.0) -> {'PASS' if main_pages == 13 else 'FAIL'}")
     print(f"    - supplementary.pdf: {supp_pages} pages (Budget: exactly 6.0) -> {'PASS' if supp_pages == 6 else 'FAIL'}")
-    print(f"    - Cover_Letter_IEEE_TIFS.pdf: {cl_pages} page (Budget: 1.0) -> {'PASS' if cl_pages == 1 else 'FAIL'}")
     print(f"    - Cover_Letter_IEEE_TKDE.pdf: {tkde_cl_pages} page (Budget: 1.0) -> {'PASS' if tkde_cl_pages == 1 else 'FAIL'}")
 
     assert main_pages == 13, f"main.pdf must be exactly 13 pages, got {main_pages}"
     assert supp_pages == 6, f"supplementary.pdf must be exactly 6 pages, got {supp_pages}"
-    assert cl_pages == 1, f"TIFS Cover letter must be 1 page, got {cl_pages}"
     assert tkde_cl_pages == 1, f"TKDE Cover letter must be 1 page, got {tkde_cl_pages}"
 
     # 2. Text & Citation Audit

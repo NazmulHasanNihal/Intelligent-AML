@@ -5,14 +5,14 @@
 [![PyTorch 2.5](https://img.shields.io/badge/PyTorch-2.5.1-EE4C2C.svg)](https://pytorch.org/)
 [![PyTorch Geometric](https://img.shields.io/badge/PyG-2.4-3C2179.svg)](https://pyg.org/)
 [![Unit & Integration Tests](https://img.shields.io/badge/Tests-144%20Passed%20(100%25)-brightgreen.svg)](tests/)
-[![Paper Status: Under Review](https://img.shields.io/badge/IEEE_TIFS-Under_Review_2026-gold.svg)](papers/IEEE_Research_Paper/main.pdf)
+[![Paper Status: Under Review](https://img.shields.io/badge/IEEE_TKDE-Under_Review_2026-gold.svg)](papers/IEEE_Research_Paper/main.pdf)
 [![Thesis: National University](https://img.shields.io/badge/CSE_Thesis-90_Pages_Completed-darkblue.svg)](papers/University_CSE_Thesis/main.pdf)
 [![Compliance: FinCEN / FATF](https://img.shields.io/badge/Compliance-FinCEN_Form_111_%7C_FATF_Rec_16-purple.svg)](src/agents/sar_drafter_agent.py)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](Dockerfile)
 
 > **C-STGB: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage**  
-> *Official Research & Production Repository — IEEE Transactions on Information Forensics and Security (TIFS) & National University CSE Thesis Monograph.*
+> *Official Research & Production Repository — IEEE Transactions on Knowledge and Data Engineering (TKDE) & National University CSE Thesis Monograph.*
 
 ---
 
@@ -472,17 +472,17 @@ We conducted an exhaustive benchmark comparing **13 baseline algorithms** agains
 ```
 Intelligent-AML/
 ├── papers/                              # Academic publications & thesis monographs
-│   ├── IEEE_Research_Paper/             # IEEE TIFS publication package (Strictly 13.0 pages)
-│   │   ├── figures/                     # 22 Vector PDF/PNG publication figures
-│   │   ├── sections/                    # Modular LaTeX sections (01 to 08)
+│   ├── IEEE_Research_Paper/             # IEEE TKDE publication package (Strictly 13.0 pages)
+│   │   ├── figures/                     # 22 Vector PDF/PNG/EPS publication figures
+│   │   ├── sections/                    # Modular LaTeX sections (01 to 07)
 │   │   ├── tables/                      # Master scorecard and statistical test tables
 │   │   ├── main.tex                     # Master IEEE LaTeX manuscript
 │   │   ├── main.pdf                     # Compiled IEEE manuscript (13 pages, 0 overflow)
 │   │   ├── supplementary.tex            # Supplementary Material document
-│   │   ├── supplementary.pdf            # Compiled supplementary document (14 pages)
-│   │   ├── Cover_Letter_IEEE_TIFS.tex   # Editorial cover letter
-│   │   ├── Cover_Letter_IEEE_TIFS.pdf   # Compiled cover letter (1.0 page)
-│   │   └── references.bib               # Complete BibTeX citations (50 canonical entries)
+│   │   ├── supplementary.pdf            # Compiled supplementary document (6.0 pages)
+│   │   ├── Cover_Letter_IEEE_TKDE.tex   # Editorial cover letter
+│   │   ├── Cover_Letter_IEEE_TKDE.pdf   # Compiled cover letter (1.0 page)
+│   │   └── references.bib               # Complete BibTeX citations (38 flagship entries)
 │   └── University_CSE_Thesis/           # University Thesis Monograph (Strictly 90.0 pages)
 │       ├── chapters/                    # Chapters 1–10 (Intro through Software Eng. & Conclusion)
 │       ├── frontmatter/                 # Cover page, Certificate, Declaration, Abstract
@@ -726,8 +726,8 @@ python scripts/compile_all_pdfs.py
 | Document Target | Path | Engine | Status | Strict Budget |
 |:---|:---|:---:|:---:|:---:|
 | **IEEE Research Paper (Main)** | `papers/IEEE_Research_Paper/main.pdf` | Tectonic | Generated | **Strictly 13.0 Pages (0 overflow)** |
-| **IEEE Supplementary Material** | `papers/IEEE_Research_Paper/supplementary.pdf` | Tectonic | Generated | **14 Pages** |
-| **IEEE Editorial Cover Letter** | `papers/IEEE_Research_Paper/Cover_Letter_IEEE_TIFS.pdf`| Tectonic | Generated | **Strictly 1.0 Page** |
+| **IEEE Supplementary Material** | `papers/IEEE_Research_Paper/supplementary.pdf` | Tectonic | Generated | **Strictly 6.0 Pages** |
+| **IEEE Editorial Cover Letter** | `papers/IEEE_Research_Paper/Cover_Letter_IEEE_TKDE.pdf`| Tectonic | Generated | **Strictly 1.0 Page** |
 | **University CSE Thesis** | `papers/University_CSE_Thesis/main.pdf` | Tectonic | Generated | **Strictly 90.0 Pages** |
 
 ### Output Verification
@@ -737,13 +737,13 @@ python scripts/compile_all_pdfs.py
 ==============================================================================
 
 [+] Compiling: IEEE Research Paper (Main Manuscript)...
-   [SUCCESS] -> Generated: main.pdf (13 pages, 557.8 KB)
+   [SUCCESS] -> Generated: main.pdf (13 pages, 506.3 KB)
 
 [+] Compiling: IEEE Supplementary Material...
-   [SUCCESS] -> Generated: supplementary.pdf (14 pages, 782.1 KB)
+   [SUCCESS] -> Generated: supplementary.pdf (6 pages, 129.8 KB)
 
 [+] Compiling: IEEE Cover Letter...
-   [SUCCESS] -> Generated: Cover_Letter_IEEE_TIFS.pdf (1 page, 29.6 KB)
+   [SUCCESS] -> Generated: Cover_Letter_IEEE_TKDE.pdf (1 page, 31.2 KB)
 
 [+] Compiling: University CSE Thesis Monograph...
    [SUCCESS] -> Generated: main.pdf (90 pages, 1143.8 KB)
@@ -1017,7 +1017,7 @@ If you utilize Intelligent-AML, the C-STGB architecture, or our benchmark scores
 @article{nazmul2026cstgb,
   title={Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage},
   author={Nazmul, Md. and Gungun, Musrat Jahan and Ahmed, Maheli},
-  journal={IEEE Transactions on Information Forensics and Security},
+  journal={IEEE Transactions on Knowledge and Data Engineering},
   year={2026},
   note={Under Review}
 }

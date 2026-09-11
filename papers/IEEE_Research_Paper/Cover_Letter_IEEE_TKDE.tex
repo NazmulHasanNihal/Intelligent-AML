@@ -1,0 +1,73 @@
+\documentclass[9.5pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.48in,top=0.32in,bottom=0.32in]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathptmx}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\setlist{nosep,leftmargin=1.2em,itemsep=0.5pt}
+\setlength{\parskip}{1.0pt}
+\setlength{\parindent}{0pt}
+\pagestyle{empty}
+
+\begin{document}
+
+\noindent
+\textbf{Md. Nazmul} (Corresponding Author) \\
+Department of Computer Science and Engineering, College of Technology, National University, Gazipur 1704, Bangladesh \\
+Email: \texttt{nazmulhas36@gmail.com} \hfill Date: September 11, 2026
+
+\vspace{0.08cm}
+\hrule
+\vspace{0.10cm}
+
+\noindent
+\textbf{To:} Editor-in-Chief, \textit{IEEE Transactions on Knowledge and Data Engineering (TKDE)} \\
+\textbf{Subject:} Submission of Original Research Manuscript for Review \\
+\textbf{Title:} \textit{``Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage''}
+
+\vspace{0.12cm}
+
+\noindent
+Dear Editor-in-Chief and Editorial Board Members of IEEE TKDE,
+
+\noindent
+We are pleased to submit our original research manuscript entitled \textit{``Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage''} for consideration for publication as a Regular Paper in \textit{IEEE Transactions on Knowledge and Data Engineering (TKDE)}.
+
+Financial anti-money laundering (AML) surveillance represents a critical, high-stakes frontier for large-scale graph data engineering and knowledge discovery. Practical deployment is severely impeded by five fundamental data-centric hurdles: velocity evasion across multi-scale temporal horizons, topological camouflage via adversarial chaff transactions, extreme class imbalance ($\pi < 0.05\%$), cold-start graph isolation, and uncalibrated predictive uncertainty. To resolve these challenges within a unified data-engineering paradigm, we present \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost).
+
+\subsubsection*{Key Scientific \& Data Engineering Contributions}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Continuous-Time Multi-Scale Dynamic Graph Learning:} We formulate a continuous harmonic temporal attention mechanism that computes continuous-time distance projections ($\Delta t$) across three decoupled frequency bands, natively resolving microsecond structuring bursts ($< 22$\,min) while retaining 90-day dormancy patterns.
+    \item \textbf{Camouflage-Resilient Edge-Trust Gating:} We propose a learnable edge gating operator augmented with degree-aware safety floors, filtering $65.9\%$ of adversarial camouflage edges and preventing catastrophic graph over-smoothing into high-degree commercial hubs.
+    \item \textbf{Typology-Clustered Latent GraphSMOTE:} To master extreme class skew without label contamination, C-STGB clusters illicit entities into latent typology manifolds $\mathcal{C}_k$ via Spherical $k$-Means, interpolating virtual nodes and scoring synthetic edges under bounded flow conservation.
+    \item \textbf{Evidence-Adaptive Graph-Tabular Fusion:} A parametric gating mechanism resolves cold-start network boundaries, smoothly reverting isolated entities ($\deg(u) \le 2$) to tabular transaction invariants and securing $89.6\%$ F1 on newly created accounts.
+    \item \textbf{Class-Conditional Conformal Risk Control \& Deterministic Triage:} We introduce distribution-free finite-sample guarantees ($\ge 99.0\%$ coverage) under within-class exchangeability with Adaptive Conformal Inference (ACI) drift tracking, driving an automated 3-tier triage that routes $>99.4\%$ of streaming volume into decisive straight-through singleton prediction sets.
+    \item \textbf{High-Throughput Data Infrastructure ($0.45$\,ms SLA):} We integrate an optimized DuckDB/Arrow zero-copy stream processing kernel that extracts canonical topological invariants in sub-millisecond real-time, satisfying Tier-1 banking throughput SLAs.
+    \item \textbf{Unprecedented Benchmark Scale \& Rigor:} We conduct the most comprehensive empirical evaluation in financial graph mining to date: \textbf{14 real-world and synthetic financial networks} ($9.53\text{M}$ entities, $9.53\text{M}$ transactions across 182 evaluation pairs over 5 locked seeds). C-STGB establishes statistically significant superiority over deep GNNs ($+43.49$\,pp mean F1 uplift, $W=105.0, p_{\text{adj}} < 0.001$) and achieves competitive parity with tuned tree ensembles.
+\end{enumerate}
+
+\subsubsection*{Alignment with IEEE TKDE \& Community Precedent}
+Our investigation directly aligns with IEEE TKDE's mission to publish pioneering breakthroughs in scalable data mining and graph learning. Our work directly builds upon and conceptually advances landmark TKDE literature, notably Cheng \textit{et al.}, \textit{``Anti-Money Laundering by Group-Aware Deep Graph Learning,''} \textbf{IEEE TKDE}, vol.~35, no.~6, pp.~6147--6160, 2023, expanding from static account group clustering to continuous streaming temporal dynamics and distribution-free conformal triage.
+
+\subsubsection*{Compliance, Reproducibility \& Open Science}
+\begin{itemize}
+    \item \textbf{Format \& Length:} The main manuscript is exactly \textbf{13.0 pages} in standard IEEE Transactions two-column format (inclusive of all 53 references and author biographies), and the Supplementary Material is strictly \textbf{5.0 pages}, fully conforming to IEEE guidelines.
+    \item \textbf{Reproducibility:} All source code, Docker deployment environments, pre-processed datasets, locked random seeds, and verification test suites are publicly available: \url{https://github.com/NazmulHasanNihal/Intelligent-AML}.
+    \item \textbf{Originality:} This manuscript represents original research and has not been published or submitted elsewhere. All co-authors have reviewed and approved this submission.
+\end{itemize}
+
+\vspace{0.06cm}
+\noindent
+Sincerely yours,
+
+\vspace{0.06cm}
+\noindent
+\textbf{Md. Nazmul} (Corresponding Author, \texttt{nazmulhas36@gmail.com}, ORCID: \href{https://orcid.org/0009-0001-6115-7023}{0009-0001-6115-7023}) \\
+\textbf{Musrat Jahan Gungun} (ORCID: \href{https://orcid.org/0009-0006-4249-9198}{0009-0006-4249-9198}) \\
+\textbf{Maheli Ahmed} (Faculty Supervisor, ORCID: \href{https://orcid.org/0000-0002-5183-7498}{0000-0002-5183-7498}) \\
+\textit{Department of Computer Science and Engineering, College of Technology, National University, Gazipur 1704, Bangladesh}
+
+\end{document}

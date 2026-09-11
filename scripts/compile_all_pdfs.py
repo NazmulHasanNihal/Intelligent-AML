@@ -39,10 +39,16 @@ TARGETS = [
         "out_pdf": BASE_DIR / "papers" / "IEEE_Research_Paper" / "supplementary.pdf"
     },
     {
-        "name": "IEEE Cover Letter",
+        "name": "IEEE Cover Letter (TIFS)",
         "cwd": BASE_DIR / "papers" / "IEEE_Research_Paper",
         "file": "Cover_Letter_IEEE_TIFS.tex",
         "out_pdf": BASE_DIR / "papers" / "IEEE_Research_Paper" / "Cover_Letter_IEEE_TIFS.pdf"
+    },
+    {
+        "name": "IEEE Cover Letter (TKDE)",
+        "cwd": BASE_DIR / "papers" / "IEEE_Research_Paper",
+        "file": "Cover_Letter_IEEE_TKDE.tex",
+        "out_pdf": BASE_DIR / "papers" / "IEEE_Research_Paper" / "Cover_Letter_IEEE_TKDE.pdf"
     },
     {
         "name": "University CSE Thesis Monograph",

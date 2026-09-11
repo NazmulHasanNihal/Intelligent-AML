@@ -20,13 +20,13 @@ def verify_submission():
     tkde_cl_pages = len(tkde_cl_reader.pages)
 
     print(f"\n[1] PAGE BUDGET CHECKS:")
-    print(f"    - main.pdf: {main_pages} pages (Budget: <= 13.0) -> {'PASS' if main_pages == 13 else 'FAIL'}")
-    print(f"    - supplementary.pdf: {supp_pages} pages (Budget: <= 6.0) -> {'PASS' if supp_pages <= 6 else 'FAIL'}")
+    print(f"    - main.pdf: {main_pages} pages (Budget: exactly 13.0) -> {'PASS' if main_pages == 13 else 'FAIL'}")
+    print(f"    - supplementary.pdf: {supp_pages} pages (Budget: exactly 6.0) -> {'PASS' if supp_pages == 6 else 'FAIL'}")
     print(f"    - Cover_Letter_IEEE_TIFS.pdf: {cl_pages} page (Budget: 1.0) -> {'PASS' if cl_pages == 1 else 'FAIL'}")
     print(f"    - Cover_Letter_IEEE_TKDE.pdf: {tkde_cl_pages} page (Budget: 1.0) -> {'PASS' if tkde_cl_pages == 1 else 'FAIL'}")
 
     assert main_pages == 13, f"main.pdf must be exactly 13 pages, got {main_pages}"
-    assert supp_pages <= 6, f"supplementary.pdf must be <= 6 pages, got {supp_pages}"
+    assert supp_pages == 6, f"supplementary.pdf must be exactly 6 pages, got {supp_pages}"
     assert cl_pages == 1, f"TIFS Cover letter must be 1 page, got {cl_pages}"
     assert tkde_cl_pages == 1, f"TKDE Cover letter must be 1 page, got {tkde_cl_pages}"
 
@@ -46,17 +46,17 @@ def verify_submission():
 
     # 3. Phantom Supplementary Table Reference Audit
     print(f"\n[3] CROSS-REFERENCE INTEGRITY CHECKS:")
-    phantom_tables = re.findall(r'Table\s+S(?:8|9|1[0-9])', full_main_text)
+    phantom_tables = re.findall(r'Table\s+S(?:1[2-9]|[2-9][0-9])', full_main_text)
     print(f"    - Phantom tables detected: {phantom_tables} -> {'PASS (Zero phantoms)' if not phantom_tables else 'FAIL'}")
     assert len(phantom_tables) == 0, f"Found phantom supplementary tables: {phantom_tables}"
 
-    valid_tables = sorted(list(set(re.findall(r'Table\s+S[1-7]', full_main_text))))
+    valid_tables = sorted(list(set(re.findall(r'Table\s+S(?:[1-9]|1[0-1])', full_main_text))))
     print(f"    - Valid supplementary tables referenced: {valid_tables}")
 
     # 4. Cover Letter Claims Alignment
     print(f"\n[4] COVER LETTER CLAIMS AUDIT (TKDE):")
     tkde_cl_text = tkde_cl_reader.pages[0].extract_text()
-    tkde_claims = ['13.0 pages', '5.0 pages', 'Fu', 'Cheng', 'Qiao', 'TKDE']
+    tkde_claims = ['13.0 pages', '6.0 pages', 'Fu', 'Cheng', 'Qiao', 'TKDE']
     for claim in tkde_claims:
         found = claim in tkde_cl_text
         print(f"    - Claim [{claim}]: {'VERIFIED' if found else 'MISSING'}")

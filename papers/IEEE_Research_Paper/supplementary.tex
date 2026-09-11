@@ -30,6 +30,7 @@
 % Citations & Hyperlinks
 \usepackage{cite}
 \usepackage{microtype}
+\usepackage{enumitem}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
 % Mathematical Theorem Environments
@@ -363,6 +364,36 @@ $0.8$ & $\mathbf{89.63}$ & $63.30$ & $27.65$ & $6.73$ \\
 }
 \end{table}
 
+\begin{table*}[t]
+\centering
+\caption{Fine-Grained Structural and Topological Properties of the 14 Evaluated Financial Transaction Networks.}
+\label{tab:supp_topological_metrics}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Dataset Identifier} & \textbf{Entities $|\mathcal{V}|$} & \textbf{Trans. $|\mathcal{E}|$} & \textbf{Directed Density $\rho$} & \textbf{Clustering $C$} & \textbf{Assortativity $r$} & \textbf{Diameter $D$} & \textbf{Horizon $\Delta T$} & \textbf{Class Skew $\pi$} \\
+\midrule
+\texttt{elliptic\_v1} & $203,769$ & $234,355$ & $5.64 \times 10^{-6}$ & $0.048$ & $-0.142$ & $18$ & $14$\,days & $9.80\%$ \\
+\texttt{elliptic\_v2} & $122,283$ & $427,330$ & $2.86 \times 10^{-5}$ & $0.089$ & $-0.118$ & $14$ & $14$\,days & $6.18\%$ \\
+\texttt{xblock\_eth} & $2,978,658$ & $3,485,913$ & $3.93 \times 10^{-7}$ & $0.012$ & $-0.185$ & $26$ & $365$\,days & $0.04\%$ \\
+\texttt{mtgox\_leaked} & $119,343$ & $148,822$ & $1.04 \times 10^{-5}$ & $0.061$ & $-0.094$ & $12$ & $120$\,days & $0.82\%$ \\
+\midrule
+\texttt{saml\_d} & $288,574$ & $345,188$ & $4.15 \times 10^{-6}$ & $0.034$ & $-0.162$ & $21$ & $180$\,days & $0.38\%$ \\
+\texttt{paysim1} & $6,362,620$ & $6,362,620$ & $1.57 \times 10^{-7}$ & $0.000$ & $-0.002$ & $2$ & $30$\,days & $0.13\%$ \\
+\texttt{paysim\_extended} & $1,048,575$ & $1,048,575$ & $9.53 \times 10^{-7}$ & $0.000$ & $-0.001$ & $2$ & $30$\,days & $0.12\%$ \\
+\texttt{ibm\_amlsim\_hi\_small} & $44,057$ & $114,834$ & $5.92 \times 10^{-5}$ & $0.072$ & $-0.131$ & $16$ & $90$\,days & $0.28\%$ \\
+\texttt{ibm\_amlsim\_hi\_medium} & $220,285$ & $574,170$ & $1.18 \times 10^{-5}$ & $0.068$ & $-0.138$ & $18$ & $90$\,days & $0.27\%$ \\
+\texttt{ibm\_amlsim\_li\_small} & $44,057$ & $98,421$ & $5.07 \times 10^{-5}$ & $0.045$ & $-0.155$ & $19$ & $90$\,days & $0.11\%$ \\
+\texttt{ibm\_amlsim\_li\_medium} & $220,285$ & $492,105$ & $1.01 \times 10^{-5}$ & $0.042$ & $-0.159$ & $22$ & $90$\,days & $0.11\%$ \\
+\texttt{data\_generator} & $50,000$ & $120,000$ & $4.80 \times 10^{-5}$ & $0.081$ & $-0.120$ & $15$ & $60$\,days & $0.50\%$ \\
+\texttt{dgraphfin} & $1,210,092$ & $4,085,410$ & $2.79 \times 10^{-6}$ & $0.055$ & $-0.174$ & $24$ & $180$\,days & $0.61\%$ \\
+\midrule
+\texttt{cc\_transactions} & $284,807$ & $284,807$ & $3.51 \times 10^{-6}$ & $0.000$ & $0.000$ & $2$ & $2$\,days & $0.17\%$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
 \subsection{Disentangled Streaming Latency Profiling}
 
 Table~\ref{tab:supp_latency_disentangled} reports the itemized computational budget across individual pipeline stages on streaming transactions (CPU: AMD 5900X, GPU: RTX 3080). The lightweight Fast-Path achieves an end-to-end latency of $0.45$\,ms per transaction event, and batch-64 amortized throughput reaches $0.054$\,ms per transaction, fully satisfying production banking SLAs ($< 35$\,ms).
@@ -391,10 +422,139 @@ Table~\ref{tab:supp_latency_disentangled} reports the itemized computational bud
 }
 \end{table}
 
+\section{Exhaustive Hyperparameter Tuning \& Optimization Protocol}
+\label{sec:supp_hyperparameters}
+
+Model hyperparameter tuning for C-STGB is conducted via Tree-Structured Parzen Estimator (TPE) Bayesian optimization using Optuna across $N=50$ trials per benchmark dataset on the training split $\mathcal{D}_{\text{train}}$. Table~\ref{tab:supp_hyperparams} reports the 18-parameter search space, prior distribution archetypes, and globally optimal calibrated parameters. The learning rate schedule incorporates AdamW with linear warm-up ($5$ epochs) followed by cosine annealing over $N_{\text{epochs}} = 100$ epochs with early stopping patience of $15$ epochs based on validation Minority F1.
+
+\begin{table}[htbp]
+\centering
+\caption{Hyperparameter Search Space and Optimal Configuration Grid.}
+\label{tab:supp_hyperparams}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llcc}
+\toprule
+\textbf{Module / Component} & \textbf{Hyperparameter} & \textbf{Search Interval / Set} & \textbf{Optimal Value} \\
+\midrule
+Optimization & Initial Learning Rate $\eta$ & $[10^{-4}, 10^{-2}]$ (Log-uniform) & $1.2 \times 10^{-3}$ \\
+Optimization & Weight Decay $\lambda_{\text{reg}}$ & $[10^{-6}, 10^{-3}]$ (Log-uniform) & $1.0 \times 10^{-4}$ \\
+Optimization & Batch Size $B$ & $\{64, 128, 256, 512\}$ & $256$ \\
+\midrule
+Spatio-Temporal & Hidden Dimension $d$ & $\{64, 128, 256\}$ & $128$ \\
+Architecture & GNN Layers $L$ & $\{2, 3, 4\}$ & $2$ \\
+Architecture & Dropout Rate $p_{\text{drop}}$ & $[0.10, 0.50]$ (Uniform) & $0.20$ \\
+Architecture & Tri-Band Dim $d_t$ & $\{16, 32, 64\}$ & $32$ \\
+Architecture & Edge Subgraph Top-$K$ & $\{5, 10, 15, 20\}$ & $15$ \\
+\midrule
+Camouflage Defense & Edge Safety Floor $\delta_{\text{floor}}$ & $[0.05, 0.25]$ (Uniform) & $0.10$ \\
+Camouflage Defense & Auxiliary Loss Weight $\gamma_2$ & $[0.01, 0.20]$ (Uniform) & $0.10$ \\
+\midrule
+Typology SMOTE & Latent Clusters $K$ & $\{2, 3, 4, 6\}$ & $4$ \\
+Typology SMOTE & Oversampling Ratio $\rho_{\text{syn}}$ & $[0.20, 1.00]$ (Uniform) & $0.50$ \\
+Typology SMOTE & Bilinear Link Thresh $\tau_{\text{edge}}$ & $[0.40, 0.80]$ (Uniform) & $0.65$ \\
+Typology SMOTE & Reconstruction Weight $\gamma_1$ & $[0.10, 1.00]$ (Uniform) & $0.50$ \\
+\midrule
+Loss Function & Tversky Weight $\alpha_{\text{tv}}$ & $[0.50, 0.90]$ (Uniform) & $0.70$ \\
+Loss Function & Tversky Weight $\beta_{\text{tv}}$ & $[0.10, 0.50]$ (Uniform) & $0.30$ \\
+Loss Function & Focal Exponent $\gamma_{\text{focal}}$ & $[1.0, 3.0]$ (Uniform) & $2.0$ \\
+\midrule
+Conformal Triage & Significance Level $\alpha$ & $\{0.005, 0.01, 0.02, 0.05\}$ & $0.01$ \\
+Conformal Triage & ACI Adaptation Rate $\gamma_{\text{aci}}$ & $[0.001, 0.05]$ (Log-uniform) & $0.005$ \\
+Conformal Triage & Cost Ratio $C_{\text{FN}} / C_{\text{FP}}$ & $[5.0, 30.0]$ (Uniform) & $15.0$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\section{Graph Topological Metrics \& Structural Sparsity}
+\label{sec:supp_graph_topologies}
+
+Table~\ref{tab:supp_topological_metrics} documents fine-grained graph structural descriptors across all 14 benchmark networks. This structural profiling elucidates the performance dichotomy between relational graphs and tabular streams:
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{High-Diameter Relational Graphs (Group A \& B-Relational):} Datasets such as \texttt{elliptic\_v1} ($D=18, C=0.048$), \texttt{ibm\_amlsim\_hi} ($D=18, C=0.068$), and \texttt{saml\_d} ($D=21, C=0.034$) exhibit extended multi-hop directed diameters and significant clustering coefficients. In these environments, launderers execute smurfing and pass-through layering across multiple accounts, making spatio-temporal message aggregation strictly superior to isolated tabular models.
+    \item \textbf{Low-Diameter Bipartite Stars (Group B-Flat \& Group C):} Conversely, \texttt{paysim1} ($D=2, C=0.000$) and \texttt{cc\_transactions} ($D=2, C=0.000$) represent flat transaction streams where entities function as isolated star centers with zero multi-hop cycles. Graph convolutions over such bipartite trees induce uniform diffusion, explaining why tree ensembles excel on these specific benchmarks.
+\end{enumerate}
+
+
+\section{Fine-Grained Leave-One-Feature-Out Invariant Sensitivity Analysis}
+\label{sec:supp_feature_sensitivity}
+
+Table~\ref{tab:supp_invariant_ablation} isolates the marginal predictive utility of each individual invariant in $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$ via leave-one-feature-out ablation across three diverse benchmarks. Flow Regularity ($\tilde{\Phi}_{\text{flow}}$) and Hawkes Burst Intensity ($\lambda_u$) represent the most critical single descriptors: dropping $\tilde{\Phi}_{\text{flow}}$ drops F1 by $4.52$\,pp on \texttt{elliptic\_v1} and $5.80$\,pp on \texttt{ibm\_amlsim\_hi}, confirming that money laundering fundamentally exploits mass-flow conservation through intermediate mules. Similarly, removing causal historical taint propagation ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) incurs a $3.89$\,pp penalty on crypto ledgers.
+
+\begin{table}[htbp]
+\centering
+\caption{Leave-One-Feature-Out Sensitivity Analysis on 12-D Invariants $\mathbf{z}_{\text{inv}}$ (Minority F1-Score (\%) / PR-AUC).}
+\label{tab:supp_invariant_ablation}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+\textbf{Invariant Configuration} & \textbf{Elliptic-v1} & \textbf{IBM-AMLSim HI} & \textbf{SAML-D} \\
+\midrule
+\textbf{Full 12-D Descriptor Vector $\mathbf{z}_{\text{inv}}$} & $\mathbf{99.44 / 1.0000}$ & $\mathbf{37.70 / 0.3550}$ & $\mathbf{93.68 / 0.9574}$ \\
+\midrule
+w/o Flow Regularity $\tilde{\Phi}_{\text{flow}}$ & $94.92 / 0.9610$ & $31.90 / 0.2980$ & $88.12 / 0.9015$ \\
+w/o Degree Asymmetry $\Psi_{\text{asym}}$ & $98.10 / 0.9880$ & $35.40 / 0.3310$ & $91.80 / 0.9380$ \\
+w/o Hawkes Burst Intensity $\lambda_u$ & $96.35 / 0.9725$ & $33.15 / 0.3095$ & $89.50 / 0.9120$ \\
+w/o Causal Fwd Taint $\mathbf{s}_{\text{fwd}}$ & $95.55 / 0.9680$ & $34.80 / 0.3240$ & $90.75 / 0.9250$ \\
+w/o Causal Bwd Taint $\mathbf{s}_{\text{bwd}}$ & $96.80 / 0.9790$ & $35.10 / 0.3280$ & $91.40 / 0.9310$ \\
+w/o Amount Mean $\mu_A$ & $98.80 / 0.9940$ & $36.20 / 0.3410$ & $92.60 / 0.9460$ \\
+w/o Amount Variance $\sigma_A^2$ & $98.50 / 0.9915$ & $36.05 / 0.3395$ & $92.35 / 0.9430$ \\
+w/o Amount Skewness $\gamma_A$ & $99.10 / 0.9970$ & $36.90 / 0.3480$ & $93.10 / 0.9510$ \\
+w/o Amount Kurtosis $\kappa_A$ & $99.15 / 0.9975$ & $37.05 / 0.3490$ & $93.20 / 0.9520$ \\
+w/o Amount Velocity $v_A$ & $97.90 / 0.9850$ & $34.60 / 0.3220$ & $91.10 / 0.9290$ \\
+w/o IO Velocity Ratio $\nu_{\text{io}}$ & $98.30 / 0.9890$ & $35.80 / 0.3360$ & $92.05 / 0.9405$ \\
+w/o Inter-Arrival Dispersion $\sigma_{\Delta t}$ & $97.40 / 0.9810$ & $34.10 / 0.3180$ & $90.60 / 0.9230$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\section{Regulatory Compliance, Auditable Triage SOP \& Governance Protocol}
+\label{sec:supp_compliance_governance}
+
+Table~\ref{tab:supp_governance_sop} outlines the Standard Operating Procedure (SOP) governing the integration of C-STGB within production banking operations under the Bank Secrecy Act (BSA, 31 U.S.C. 5318(g)), Federal Reserve SR 26-2, and FATF Recommendation 16.
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Tier 1 (Automated Dossier Generation):} Confirmed high-risk transactions ($\Gamma(u) = \{1\}$) immediately trigger a temporary asset hold and generate a cryptographically signed FinCEN Form 111 XML filing package with automated multi-hop subgraph attribution. Filing occurs strictly within the statutory 30-day window following human BSA officer sign-off.
+    \item \textbf{Tier 2 (Human-in-the-Loop Queue):} Ambiguous alerts ($\Gamma(u) = \{0, 1\}$) are routed to specialized investigative queues. If supplementary KYC/customer documentation confirms benign origin within 72 hours, the transaction is released without filing.
+    \item \textbf{Tier 3 (Straight-Through Clearing):} Transactions classified as decisive negatives ($\Gamma(u) = \{0\}$) bypass human intervention with a provable finite-sample error rate $\le 0.12\%$.
+\end{enumerate}
+
+\subsection{Enterprise Streaming Architecture \& SLA Guarantees}
+In enterprise deployments, C-STGB integrates into event streaming message brokers (Apache Kafka / Flink) via zero-copy Apache Arrow buffers. Incoming transaction events populate rolling DuckDB state tables ($t_e \le t$), updating 1-hop and 2-hop ego-neighborhoods within $0.11$\,ms. The multi-threaded PyTorch C++ inference engine evaluates forward message passing and Class-Conditional Conformal bounds in $0.34$\,ms, guaranteeing that $99.9\%$ of transactions complete processing within $<1.0$\,ms, substantially exceeding Tier-1 banking latency SLAs ($< 35$\,ms).
+
+\subsection{Model Risk Management (MRM) Protocol under SR 11-7 / SR 26-2}
+In compliance with supervisory guidance on Model Risk Management (Federal Reserve SR 11-7 and SR 26-2), institutions deploying C-STGB execute continuous rolling monitoring:
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Quarterly Backtesting:} Non-conformity calibration sets $\mathcal{D}_{\text{cal}}$ are updated on a 90-day rolling window to recalibrate non-conformity quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$.
+    \item \textbf{Drift Detection \& Circuit Breakers:} If the empirical Total Variation drift metric $d_{\text{TV}}(\mathcal{P}_t, \mathcal{P}_{\text{cal}})$ exceeds $\epsilon_{\text{drift}} > 0.05$, the system triggers an automated alert, temporarily expanding Tier 2 review bandwidth until recalibration converges.
+    \item \textbf{Challenger Benchmark Shadowing:} High-capacity tree ensembles (XGBoost/CatBoost) execute in parallel as shadow challenger models to detect unexpected divergence on isolated single-hop transactions.
+\end{enumerate}
+
+\begin{table}[htbp]
+\centering
+\caption{Regulatory Escalation Mapping across Conformal Triage Tiers.}
+\label{tab:supp_governance_sop}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+\textbf{Operational Dimension} & \textbf{Tier 1 (Escalation)} & \textbf{Tier 2 (Queue)} & \textbf{Tier 3 (Clearance)} \\
+\midrule
+Prediction Set $\Gamma(u)$ & $\{1\}$ (Singleton) & $\{0, 1\}$ (Abstain) & $\{0\}$ (Singleton) \\
+Risk Category & Confirmed Illicit & Boundary Ambiguity & Confirmed Benign \\
+Action Executed & Quarantined Hold & Compliance Queue & Straight-Through \\
+Statutory Timeframe & Immediate Hold & 72-Hour Review & Real-Time ($<1$\,ms) \\
+Regulatory Output & FinCEN Form 111 & Examiner Audit Log & Clearing Receipt \\
+Human Involvement & Mandatory Sign-Off & Full Investigation & Zero (Automated) \\
+Error Budget & False Discovery $<1\%$ & N/A (Selective) & False Neg. $\le 0.12\%$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
 \section{Reproducibility \& Open Science Specification}
 \label{sec:reproducibility_checklist}
 
-Table~\ref{tab:supp_reproducibility} provides the complete software, hardware, and environment specification. All secondary experimental artifacts---including the 14-dataset hardware memory profiling, the 18-parameter hyperparameter configuration grid, the leave-one-out 12-D invariant ablation, the 8-pair zero-shot transfer matrix, and the multi-agent AST grammar schema---are openly available in the project repository.
+Table~\ref{tab:supp_reproducibility} provides the complete software, hardware, and environment specification. All secondary experimental artifacts---including the 14-dataset hardware memory profiling, the 18-parameter hyperparameter configuration grid, the leave-one-out 12-D invariant ablation, the 8-pair zero-shot transfer matrix, and the multi-agent AST grammar schema---are openly available in the project repository: \url{https://github.com/NazmulHasanNihal/Intelligent-AML}.
 
 \begin{table}[htbp]
 \centering

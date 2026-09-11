@@ -191,9 +191,9 @@ def generate_figure_1():
             facecolor=s['badge_bg'], edgecolor=s['badge_bg'], linewidth=0.5
         ))
         ax.text(x0 + w0/2, y_bottom + card_h - 0.028, s['id'],
-                ha='center', va='center', fontsize=6.5, fontweight='bold', color='#ffffff')
+                ha='center', va='center', fontsize=7.0, fontweight='bold', color='#ffffff')
         ax.text(x0 + w0/2, y_bottom + card_h - 0.062, s['title'],
-                ha='center', va='center', fontsize=5.8, color=s['badge_fg'], style='italic')
+                ha='center', va='center', fontsize=6.2, color=s['badge_fg'], style='italic')
 
         # 3 Inner Functional Blocks
         block_h = 0.208
@@ -211,16 +211,16 @@ def generate_figure_1():
             # Block Header
             ax.plot([x0 + 0.014], [y_blk + block_h - 0.032], marker='s', markersize=3.0, color=s['badge_bg'])
             ax.text(x0 + 0.022, y_blk + block_h - 0.032, b['head'],
-                    ha='left', va='center', fontsize=5.8, fontweight='bold', color='#0f172a')
+                    ha='left', va='center', fontsize=6.3, fontweight='bold', color='#0f172a')
 
             # Math Formula (clean STIX math in a soft pill)
             ax.text(x0 + w0/2, y_blk + block_h - 0.104, b['math'],
-                    ha='center', va='center', fontsize=5.7, color='#0f172a',
+                    ha='center', va='center', fontsize=6.2, color='#0f172a',
                     bbox=dict(boxstyle='round,pad=0.12', facecolor='#f8fafc', edgecolor='#e2e8f0', lw=0.4))
 
             # Description (clean plain text)
             ax.text(x0 + w0/2, y_blk + 0.034, b['desc'],
-                    ha='center', va='center', fontsize=5.1, color='#475569')
+                    ha='center', va='center', fontsize=5.6, color='#475569')
 
         # Output Box
         y_out = y_bottom + 0.052
@@ -229,8 +229,8 @@ def generate_figure_1():
             boxstyle='round,pad=0.003,rounding_size=0.004',
             facecolor='#f1f5f9', edgecolor='#cbd5e1', linewidth=0.6
         ))
-        ax.text(x0 + 0.014, y_out + 0.023, 'Out:', ha='left', va='center', fontsize=5.4, fontweight='bold', color='#334155')
-        ax.text(x0 + w0/2 + 0.008, y_out + 0.023, s['output_tensor'], ha='center', va='center', fontsize=5.6, fontweight='bold', color='#0f172a')
+        ax.text(x0 + 0.014, y_out + 0.023, 'Out:', ha='left', va='center', fontsize=6.0, fontweight='bold', color='#334155')
+        ax.text(x0 + w0/2 + 0.008, y_out + 0.023, s['output_tensor'], ha='center', va='center', fontsize=6.0, fontweight='bold', color='#0f172a')
 
         # Bottom SLA / Tag
         y_tag = y_bottom + 0.010
@@ -239,7 +239,7 @@ def generate_figure_1():
             boxstyle='round,pad=0.002,rounding_size=0.004',
             facecolor='#ffffff', edgecolor=s['border'], linewidth=0.7
         ))
-        ax.text(x0 + w0/2, y_tag + 0.018, s['sla_tag'], ha='center', va='center', fontsize=5.1, fontweight='bold', color=s['badge_bg'])
+        ax.text(x0 + w0/2, y_tag + 0.018, s['sla_tag'], ha='center', va='center', fontsize=5.5, fontweight='bold', color=s['badge_bg'])
 
     # Connecting Flow Arrows between stages
     arrow_y = y_bottom + card_h / 2
@@ -249,12 +249,15 @@ def generate_figure_1():
 
     plt.tight_layout()
     for d in OUT_DIRS:
-        fig.savefig(d / "fig6_system_architecture.pdf", bbox_inches='tight', pad_inches=0.02)
-        fig.savefig(d / "fig6_system_architecture.png", dpi=300, bbox_inches='tight', pad_inches=0.02)
+        fig.savefig(d / "fig6_system_architecture.pdf", bbox_inches='tight', pad_inches=0.01)
+        fig.savefig(d / "fig6_system_architecture.eps", format='eps', bbox_inches='tight', pad_inches=0.01)
+        fig.savefig(d / "fig6_system_architecture.png", dpi=300, bbox_inches='tight', pad_inches=0.01)
         shutil.copyfile(d / "fig6_system_architecture.pdf", d / "pipeline_cstgb.pdf")
+        shutil.copyfile(d / "fig6_system_architecture.eps", d / "pipeline_cstgb.eps")
         shutil.copyfile(d / "fig6_system_architecture.pdf", d / "arch_triband.pdf")
+        shutil.copyfile(d / "fig6_system_architecture.eps", d / "arch_triband.eps")
     plt.close(fig)
-    print("   [SUCCESS] Generated ultra-clean fig6_system_architecture.pdf & .png across all target folders!")
+    print("   [SUCCESS] Generated ultra-crisp vector PDF & EPS across all target folders!")
 
 if __name__ == '__main__':
     generate_figure_1()

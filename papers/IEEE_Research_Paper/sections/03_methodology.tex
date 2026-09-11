@@ -98,12 +98,13 @@ where centroids $\boldsymbol{\mu}_k$ ($K=4$) are optimized via latent silhouette
 where $t_{\text{syn}} = \max(t_u, t_v)$ defines the causal birth timestamp, strictly precluding acausal edge formation with future transactions.
 
 \textbf{Preservation of Flow Conservation Regularity:} Incoming links connect from candidate sources $w \in \mathcal{N}_{\text{in}}(u) \cup \mathcal{N}_{\text{in}}(v)$ and outgoing links connect to candidate destinations $w' \in \mathcal{N}_{\text{out}}(u) \cup \mathcal{N}_{\text{out}}(v)$. Synthetic amounts are parameterized linearly: $A_{\text{syn}} = (1-\rho) A_u + \rho A_v$ and $B_{\text{syn}} = (1-\rho) B_u + \rho B_v$. Under strictly positive fund flows ($A_u, A_v, B_u, B_v > 0$), the synthetic flow regularity ratio simplifies to a strict convex combination of parent ratios:
-\begin{equation}
-\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) = \lambda \Phi_{\text{flow}}(u) + (1-\lambda) \Phi_{\text{flow}}(v)
-\end{equation}
-where $\lambda = \frac{(1-\rho) B_u}{(1-\rho) B_u + \rho B_v} \in (0, 1)$. Consequently, $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}})$ is guaranteed to lie within $[\min(\Phi_{\text{flow}}(u), \Phi_{\text{flow}}(v)), \max(\Phi_{\text{flow}}(u), \Phi_{\text{flow}}(v))]$, preserving domain mass-balance regularity without artificial distortion (formal proof in Supplementary Lemma~S2).
+\begin{align}
+\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) &= \lambda \Phi_{\text{flow}}(u) + (1-\lambda) \Phi_{\text{flow}}(v), \label{eq:synthetic_flow} \\
+\text{where } \lambda &= \frac{(1-\rho) B_u}{(1-\rho) B_u + \rho B_v} \in (0, 1). \notag
+\end{align}
+Because $\lambda \in (0, 1)$, $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}})$ lies strictly within parent bounds $[\min(\Phi_u, \Phi_v), \max(\Phi_u, \Phi_v)]$, preserving domain mass-balance regularity without artificial distortion (Supplementary Lemma~S2).
 
-\subsection{Evidence-Adaptive Graph-Tabular Fusion (Cold-Start Safety Valve)}
+\subsection{Evidence-Adaptive Graph-Tabular Fusion for Cold-Starts}
 \label{sec:evidence_fusion}
 \textit{Design Rationale:} In production payment rails, $38.4\%$ of newly activated money mules possess sparse connectivity ($\deg(u) \le 2$). Pure spatial message passing starves on isolated stubs ($18.4\%$ F1). C-STGB resolves this via an evidence-adaptive gating parameter $\alpha_u \in [0, 1]$ acting as a continuous topological confidence estimator:
 \begin{align}
@@ -149,12 +150,10 @@ where non-conformity scores are $s_i^{(y)} = 1 - \hat{p}_i(y)$.
 \begin{enumerate}[leftmargin=*]
     \item \textbf{Guarantee A (Exact Finite-Sample Validity):} Under within-class exchangeability on holdout split $\mathcal{D}_{\text{cal}}$, split conformal prediction guarantees exact class-conditional containment: $\mathbb{P}(Y \in \Gamma(X) \mid Y = y) \ge 1 - \alpha_y$, $\forall y \in \{0, 1\}$.
     \item \textbf{Guarantee B (Non-Asymptotic Bound under Total Variation Drift):} Under streaming distribution shift between calibration $\mathcal{P}_{\text{cal}}^{(y)}$ and test $\mathcal{P}_t^{(y)}$, coverage degradation decomposes via maximal coupling into TV shift and empirical process concentration:
-    \begin{equation}
-    \begin{split}
-    \big| \mathbb{P}_{t}(Y \in \Gamma(X) \mid Y=y) &- (1 - \alpha_y) \big| \\
-    &\le d_{\mathrm{TV}}\big(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}\big) + \sqrt{\frac{\ln(2/\delta)}{2 n_y}} + \frac{1}{n_y}
-    \end{split}
-    \end{equation}
+    \begin{align}
+    &\big| \mathbb{P}_{t}(Y \in \Gamma(X) \mid Y=y) - (1 - \alpha_y) \big| \notag \\
+    &\quad \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) + \sqrt{\tfrac{\ln(2/\delta)}{2 n_y}} + \tfrac{1}{n_y}
+    \end{align}
     with probability $\ge 1 - \delta$, where $n_y = |\mathcal{D}_{\text{cal}}^{(y)}|$ (Proposition~S1).
     \item \textbf{Guarantee C (Long-Run Martingale Convergence under Delay):} Ground-truth confirmation incurs investigative delay $\Delta T_{\text{delay}} \in [30, 90]$\,days. Streaming Adaptive Conformal Inference (ACI) updates online target quantiles over the confirmed observation queue:
     \begin{equation}
@@ -192,8 +191,8 @@ The complete end-to-end execution of C-STGB is formalized in Algorithm~\ref{alg:
 \State Compute class-conditional quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$ on calibration split $\mathcal{D}_{\text{cal}}$ (Eq.~\ref{eq:conformal_quantile}).
 \State \textbf{Phase 5: Streaming Inference \& Operational Triage}
 \State Predict posterior risk $\hat{p}_u = \sigma(\operatorname{MLP}(\mathbf{h}_u^*))$.
-\State Construct conformal prediction set $\Gamma(u) = \{y \in \{0, 1\} : 1 - \hat{p}_u(y) \le \hat{q}^{(y)}\}$.
-\State \textbf{Route:} $\Gamma(u)=\{1\} \to \text{Tier 1}; \Gamma(u)=\{0,1\} \to \text{Tier 2}; \Gamma(u)=\{0\} \to \text{Tier 3}$.
+\State Form prediction set $\Gamma(u) = \{y \in \{0, 1\} : 1 - \hat{p}_u(y) \le \hat{q}^{(y)}\}$.
+\State \textbf{Triage:} $\Gamma=\{1\} \to \text{Tier 1}; \; \Gamma=\{0,1\} \to \text{Tier 2}; \; \Gamma=\{0\} \to \text{Tier 3}$.
 \end{algorithmic}
 \end{algorithm}
 

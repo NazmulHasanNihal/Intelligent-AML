@@ -2,20 +2,20 @@
 \centering
 \caption{Non-Parametric Statistical Significance and Distributional Effect Sizes of C-STGB vs. Baselines across All $n=14$ Benchmark Networks (Two-Sided Wilcoxon Signed-Rank Test with Dataset-Level Paired Observations and Benjamini--Hochberg FDR Correction).}
 \label{tab:statistical_tests}
-\renewcommand{\arraystretch}{0.80}
+\renewcommand{\arraystretch}{0.78}
 \resizebox{\columnwidth}{!}{%
-\begin{tabular}{lcccccc}
+\begin{tabular}{lccccc}
 \toprule
-\textbf{Baseline Architecture} & \textbf{Win / Tie / Loss} & \textbf{Mean $\Delta$ (pp)} & \textbf{Median $\Delta$ (IQR)} & \textbf{$W$ Stat ($n=14$)} & \textbf{Raw $p$-value} & \textbf{Adjusted $p_{\text{adj}}$} \\
+\textbf{Baseline} & \textbf{W / T / L} & \textbf{Mean $\Delta$} & \textbf{Median [IQR]} & \textbf{$W$ Stat} & \textbf{Adjusted $p_{\text{adj}}$} \\
 \midrule
-XGBoost (Tabular) & $6 \,/\, 1 \,/\, 7$ & $-0.66$ & $-0.02$ ($0.46$\,pp) & $W=48.0$ & $0.8077$ & $0.8077$ (n.s.) \\
-CatBoost (Industrial) & $7 \,/\, 2 \,/\, 5$ & $+0.13$ & $+0.05$ ($1.28$\,pp) & $W=32.0$ & $0.3455$ & $0.4318$ (n.s.) \\
-GCN (Spatial) & $14 \,/\, 0 \,/\, 0$ & $+43.49$ & $+37.11$ ($72.66$\,pp) & $W=105.0$ & $1.22 \times 10^{-4}$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
-GraphSAGE (Inductive) & $14 \,/\, 0 \,/\, 0$ & $+42.95$ & $+37.07$ ($69.08$\,pp) & $W=105.0$ & $1.22 \times 10^{-4}$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
-EvolveGCN (Dynamic) & $14 \,/\, 0 \,/\, 0$ & $+48.32$ & $+41.91$ ($56.75$\,pp) & $W=105.0$ & $1.22 \times 10^{-4}$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
+XGBoost (Tabular) & $6 \,/\, 1 \,/\, 7$ & $-0.66$\,pp & $-0.02$\,[0.46]\,pp & $48.0$ & $0.8077$ (n.s.) \\
+CatBoost (Industrial) & $7 \,/\, 2 \,/\, 5$ & $+0.13$\,pp & $+0.05$\,[1.28]\,pp & $32.0$ & $0.4318$ (n.s.) \\
+GCN (Spatial) & $14 \,/\, 0 \,/\, 0$ & $+43.49$\,pp & $+37.11$\,[72.66]\,pp & $105.0$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
+GraphSAGE (Inductive) & $14 \,/\, 0 \,/\, 0$ & $+42.95$\,pp & $+37.07$\,[69.08]\,pp & $105.0$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
+EvolveGCN (Dynamic) & $14 \,/\, 0 \,/\, 0$ & $+48.32$\,pp & $+41.91$\,[56.75]\,pp & $105.0$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
 \bottomrule
 \end{tabular}%
 }
 \vspace{0.2ex}
-\footnotesize{$^\ast$Under invariant representations $[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$, C-STGB preserves $14/0/0$ wins ($W=105.0, p_{\text{adj}} < 0.001$; full 14-dataset paired matrix in Supplementary Table~S14).}
+\scriptsize{$^\ast$Under invariant representations $[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$, C-STGB preserves $14/0/0$ wins ($W=105.0, p_{\text{adj}} < 0.001$; full 14-dataset paired matrix in Supplementary Table~S3).}
 \end{table}

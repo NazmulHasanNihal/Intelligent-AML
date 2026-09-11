@@ -1,9 +1,9 @@
 \begin{table*}[t]
 \centering
-\caption{Comprehensive Benchmark Comparison across All 14 Financial Networks: Minority (Illicit) Class F1-Score (\%) and PR-AUC with Validation-Tuned Thresholds $\tau^*$ under Asymmetric Operational Loss against Literature Baselines (Table displays 5 representative baselines alongside C-STGB due to layout width; the full multi-baseline benchmark matrix across tabular, spatial, and dynamic paradigms is reported in Supplementary Table~S2; $^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W=105.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all 14 benchmark networks).}
+\caption{Comprehensive Benchmark Comparison across All 14 Financial Networks: Minority (Illicit) Class F1-Score (\%) and PR-AUC with Validation-Tuned Thresholds $\tau^*$ under Asymmetric Operational Loss against Literature Baselines (Table displays 5 representative baselines alongside C-STGB due to layout width; the full multi-baseline benchmark matrix across tabular, spatial, and dynamic paradigms is reported in Supplementary Table~S3; $^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W=105.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all 14 benchmark networks).}
 \label{tab:full_baseline_scorecard}
-\renewcommand{\arraystretch}{0.70}
-\resizebox{0.98\textwidth}{!}{%
+\renewcommand{\arraystretch}{0.72}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 \textbf{Dataset Identifier} & \textbf{XGBoost (Tabular)} & \textbf{GCN (Spatial)} & \textbf{EvolveGCN (Dynamic)} & \textbf{GraphSAGE (Inductive)} & \textbf{CatBoost (Industrial)} & \textbf{C-STGB (Proposed)} \\
@@ -38,5 +38,5 @@
 \end{tabular}%
 }
 \vspace{0.5mm}
-\scriptsize{Minority F1-Score evaluates harmonic precision and recall on confirmed illicit transactions ($y=1$) under validation-calibrated threshold $\tau^*$; Macro-Average represents the unweighted arithmetic mean across all 14 dataset-level scores ($\frac{1}{14}\sum_{i=1}^{14} \text{Metric}_i$), alongside median and interquartile range (IQR, in percentage points). Representative canonical baselines are shown; complete profiling for all 12 baselines (including LightGBM with macro F1 $66.62\%$, PR-AUC $0.6917$) is itemized in Supplementary Table~S2. $^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W=105.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all 14 benchmark networks. Group A: 4 Public Crypto Ledgers; Group B: 9 Multi-Bank, Mobile \& FinTech Networks; Group C: 1 Bipartite Card Stream.}
+\scriptsize{Minority F1-Score evaluates harmonic precision and recall on confirmed illicit transactions ($y=1$) under validation-calibrated threshold $\tau^*$; Macro-Average represents the unweighted arithmetic mean across all 14 dataset-level scores ($\frac{1}{14}\sum_{i=1}^{14} \text{Metric}_i$), alongside median and interquartile range (IQR, in percentage points). Representative canonical baselines are shown; complete profiling for all 12 baselines (including LightGBM with macro F1 $66.62\%$, PR-AUC $0.6917$) is itemized in Supplementary Table~S3. Conceptual and taxonomic positioning against recent flagship literature (including MLaD$^2$~\cite{luo2024mlad} and CamFD~\cite{ou2025camfd}) is detailed in Section~\ref{sec:baselines_protocol} and Supplementary Table~S2. $^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W=105.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all 14 benchmark networks. Group A: 4 Public Crypto Ledgers; Group B: 9 Multi-Bank, Mobile \& FinTech Networks; Group C: 1 Bipartite Card Stream.}
 \end{table*}

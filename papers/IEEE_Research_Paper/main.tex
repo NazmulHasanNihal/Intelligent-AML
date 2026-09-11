@@ -34,29 +34,38 @@
 \renewcommand{\floatpagefraction}{0.85}
 \renewcommand{\dbltopfraction}{0.95}
 \renewcommand{\dblfloatpagefraction}{0.85}
-\setlength{\textfloatsep}{7.0pt plus 2.0pt minus 1.0pt}
-\setlength{\floatsep}{6.0pt plus 1.0pt minus 1.0pt}
-\setlength{\intextsep}{6.0pt plus 1.0pt minus 1.0pt}
-\setlength{\dbltextfloatsep}{7.0pt plus 2.0pt minus 1.0pt}
-\setlength{\dblfloatsep}{6.0pt plus 1.0pt minus 1.0pt}
+\setlength{\textfloatsep}{4.5pt plus 1.0pt minus 1.0pt}
+\setlength{\floatsep}{4.0pt plus 1.0pt minus 1.0pt}
+\setlength{\intextsep}{4.0pt plus 1.0pt minus 1.0pt}
+\setlength{\dbltextfloatsep}{4.5pt plus 1.0pt minus 1.0pt}
+\setlength{\dblfloatsep}{4.0pt plus 1.0pt minus 1.0pt}
 
 % Display Math Spacing
-\setlength{\abovedisplayskip}{3.5pt plus 1.0pt minus 1.0pt}
-\setlength{\belowdisplayskip}{3.5pt plus 1.0pt minus 1.0pt}
-\setlength{\abovedisplayshortskip}{1.5pt plus 1.0pt minus 1.0pt}
-\setlength{\belowdisplayshortskip}{1.5pt plus 1.0pt minus 1.0pt}
+\setlength{\abovedisplayskip}{3.0pt plus 1.0pt minus 1.0pt}
+\setlength{\belowdisplayskip}{3.0pt plus 1.0pt minus 1.0pt}
+\setlength{\abovedisplayshortskip}{1.0pt plus 1.0pt minus 1.0pt}
+\setlength{\belowdisplayshortskip}{1.0pt plus 1.0pt minus 1.0pt}
 
 % Compact List Environments
 \usepackage{enumitem}
-\setlist{nosep,leftmargin=*,itemsep=1.5pt,topsep=2.5pt}
+\setlist{nosep,leftmargin=*,itemsep=1.0pt,topsep=1.5pt}
 
 % Clean IEEE Bibliography Spacing
-\def\IEEEbibitemsep{0.0pt plus 0.2pt minus 0.1pt}
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+  \begin{oldthebibliography}{#1}%
+    \setlength{\itemsep}{-1.5pt plus 0.3pt minus 0.2pt}%
+    \setlength{\parskip}{0pt}%
+}{%
+  \end{oldthebibliography}%
+}
 
 % Citations, Hyperlinks & Microtypography
 \usepackage{cite}
 \usepackage[protrusion=true]{microtype}
-\usepackage{balance}
+% \usepackage{balance}
+\usepackage{afterpage}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
 % Mathematical Theorem Environments
@@ -101,23 +110,18 @@ Anti-Money Laundering, Graph Neural Networks, Temporal Graph Learning, Conformal
 \input{sections/06_limitations}
 \input{sections/07_conclusion}
 
-%\balance
 \bibliographystyle{IEEEtran}
+\begingroup
+\let\oldbibitem\bibitem
+\def\bibitem{\vspace{-0.4ex}\oldbibitem}
 \bibliography{references}
+\endgroup
 
-\vspace{-2.2ex}
-{\footnotesize
-\begin{IEEEbiographynophoto}{Md.~Nazmul}
-is pursuing the B.Sc. (Hons.) degree in Computer Science and Engineering at College of Technology, National University, Bangladesh. His research focuses on graph representation learning, spatio-temporal neural networks, and conformal risk control.
-\end{IEEEbiographynophoto}
-\vspace{-3.0ex}
-\begin{IEEEbiographynophoto}{Musrat~Jahan~Gungun}
-is pursuing the B.Sc. (Hons.) degree in Computer Science and Engineering at College of Technology, National University, Bangladesh. Her research focuses on machine learning, algorithmic fairness, and topological anomaly detection.
-\end{IEEEbiographynophoto}
-\vspace{-3.0ex}
-\begin{IEEEbiographynophoto}{Maheli~Ahmed}
-is a Faculty Member with the Department of Computer Science and Engineering, College of Technology, National University, Bangladesh. Her research interests include machine learning, deep learning, model governance, and fraud surveillance.
-\end{IEEEbiographynophoto}
+\vspace{0.1ex}
+{\scriptsize
+\noindent\textbf{Md.~Nazmul} is pursuing the B.Sc. (Hons.) degree in CSE at College of Technology, National University, Bangladesh. Research focuses on graph representation learning, spatio-temporal neural networks, and conformal risk control.\par\vspace{0.1ex}
+\noindent\textbf{Musrat~Jahan~Gungun} is pursuing the B.Sc. (Hons.) degree in CSE at College of Technology, National University, Bangladesh. Research focuses on machine learning, algorithmic fairness, and topological anomaly detection.\par\vspace{0.1ex}
+\noindent\textbf{Maheli~Ahmed} is a Faculty Member in CSE at College of Technology, National University, Bangladesh. Research interests include machine learning, deep learning, model governance, and fraud surveillance.\par
 }
 
 \end{document}

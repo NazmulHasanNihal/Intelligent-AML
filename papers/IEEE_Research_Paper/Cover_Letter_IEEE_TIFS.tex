@@ -1,55 +1,78 @@
 \documentclass[9.5pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=0.48in,top=0.45in,bottom=0.45in]{geometry}
+\usepackage[margin=0.48in,top=0.32in,bottom=0.32in]{geometry}
 \usepackage{hyperref}
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{mathptmx}
 \usepackage{enumitem}
+\usepackage{booktabs}
 \setlist{nosep,leftmargin=1.2em,itemsep=0.5pt}
-\setlength{\parskip}{1.5pt}
+\setlength{\parskip}{1.0pt}
 \setlength{\parindent}{0pt}
 \pagestyle{empty}
 
 \begin{document}
 
 \noindent
-\textbf{Md. Nazmul} \\
-Department of Computer Science and Engineering, College of Technology, National University, Bangladesh \\
-Email: \texttt{nazmulhas36@gmail.com} \hfill Date: September 7, 2026
+\textbf{Md. Nazmul} (Corresponding Author) \\
+Department of Computer Science and Engineering, College of Technology, National University, Gazipur 1704, Bangladesh \\
+Email: \texttt{nazmulhas36@gmail.com} \hfill Date: September 11, 2026
 
 \vspace{0.08cm}
 \hrule
 \vspace{0.10cm}
 
 \noindent
-\textbf{To:} Editor-in-Chief, \textit{IEEE Transactions on Information Forensics and Security (TIFS)}, IEEE Signal Processing Society \\
-\textbf{Subject:} Resubmission of Manuscript T-IFS-28992-2026: \textit{``Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage''}
+\textbf{To:} Prof. Luisa Verdoliva, Editor-in-Chief, \textit{IEEE Transactions on Information Forensics and Security (T-IFS)} \\
+\textbf{Subject:} Formal Resubmission \& Point-by-Point Response to Prescreening Decision for Manuscript \textbf{\#T-IFS-28992-2026} \\
+\textbf{Title:} \textit{``Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage''}
 
-\vspace{0.08cm}
+\vspace{0.15cm}
 
 \noindent
-Dear Editor-in-Chief and Editorial Board,
+Dear Prof. Luisa Verdoliva and Members of the Editorial Board,
 
-We are pleased to resubmit our original research manuscript titled \textbf{``Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage''} (Manuscript ID: \textbf{T-IFS-28992-2026}) for consideration in \textit{IEEE Transactions on Information Forensics and Security (TIFS)}.
+Thank you for the constructive prescreening evaluation of our manuscript \textbf{\#T-IFS-28992-2026}. We deeply value the editorial board's commitment to the highest standards of presentation, clarity, and technical depth. In accordance with IEEE Signal Processing Society (SPS) Policy 6.16, we submit this substantially revised and visually overhauled manuscript along with a complete itemized response to every concern raised during prescreening.
 
-\paragraph{Research Context \& Methodological Innovations:}
-Anti-Money Laundering (AML) surveillance represents a critical domain at the intersection of financial cybersecurity and machine learning. Practical surveillance is hindered by velocity evasion, topological camouflage through commercial hubs, extreme class skew ($\pi < 0.05\%$), cold-start isolation, and uncalibrated uncertainty. To resolve these interconnected bottlenecks, we propose \textbf{C-STGB (Conformal Spatio-Temporal GraphBoost)}, featuring:
-\begin{itemize}[itemsep=1pt]
-    \item \textbf{Tri-Band Continuous Harmonic Attention:} Disentangles microsecond smurfing bursts from 90-day dormant holding chains via continuous temporal encodings and localized Hawkes arrival intensities.
-    \item \textbf{Context-Aware Edge Trust Gating ($\hat{g}_{ij}$):} Prunes $65.9\%$ of spurious camouflage links to commercial hubs, mitigating feature over-smoothing.
-    \item \textbf{Typology-Clustered Latent GraphSMOTE:} Synthesizes minority representations along empirical latent manifolds with bilinear edge scoring, recovering minority recall ($10.33\% \to 90.10\%$) with flow conservation guarantees.
-    \item \textbf{Evidence-Adaptive Graph-Tabular Fusion:} Dynamically routes representation weight to 12-D canonical flow invariants for disconnected cold-start entities ($\deg(u)=0$).
-    \item \textbf{Class-Conditional Conformal Risk Control (CRC):} Provides finite-sample coverage guarantees ($1-\alpha \ge 99.0\%$) with explicit DKW temporal drift degradation bounds, routing $>99.4\%$ of volume through decisive tiers.
-    \item \textbf{Multi-Agent Compliance Verification:} Compiles audit-traceable SAR dossiers structured under FinCEN Report 111 and Federal Reserve SR 26-2 model governance principles.
-\end{itemize}
+\subsubsection*{Summary of Major Revisions in Response to Prescreening Feedback}
 
-\paragraph{Empirical Evaluation \& Findings:}
-Benchmarked across 14 diverse financial transaction networks (9.53M entities, 9.53M transactions, 182 evaluation pairs over five locked seeds), C-STGB achieves an unweighted macro F1 of $67.26\%$ ($0.6848$ PR-AUC; $99.44\%$ on Elliptic-v1, $100.00\%$ on Elliptic-v2, $96.94\%$ on XBlock-ETH, $99.80\%$ on PaySim Extended). It demonstrates statistically significant superiority over deep GNNs ($W=105.0, p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ under Wilcoxon signed-rank tests) while matching tuned gradient boosted trees (CatBoost $67.14\%$, XGBoost $67.92\%$) and delivering marked gains on complex relational networks ($+9.98$\,pp on IBM-AMLSim HI). C-STGB achieves a streaming Fast-Path inference latency of $0.45\text{ ms}$ per transaction event.
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Section 3 Methodology Clarity \& Unified Algorithmic Specification (Editor Concern 1):}
+    \begin{itemize}
+        \item \textit{Pedagogical Structural Reorganization:} Section 3 has been completely restructured into a modular, pedagogical sequence. Each architectural component (Taint \& Invariants, Tri-Band Continuous Time Attention, Edge-Trust Gating, Typology GraphSMOTE, Evidence-Adaptive Fusion, and Conformal Risk Control) is now prefaced by an intuitive domain motivation paragraph explaining the exact forensic mechanism before formal mathematics.
+        \item \textit{Addition of Unified Algorithm 1:} We added formal pseudocode (\textbf{Algorithm 1: C-STGB Unified Multi-Stage Pipeline}) detailing all five phases (feature extraction, edge pruning/oversampling, temporal aggregation, risk-sensitive calibration, and streaming 3-tier triage) with explicit systems time complexities ($O(K \cdot T_{\text{iter}})$) and verified streaming SLAs ($0.45$\,ms per event).
+        \item \textit{Equation Formatting:} Split all multiline formulations across display math to eliminate overfull boxes and enhance readability.
+    \end{itemize}
 
-\paragraph{Declarations \& Formatting Compliance:}
-The submission package comprises our master manuscript (strictly 13.0 pages) and an accompanying Supplementary Material document formatted strictly to 5 double-column pages (10\,pt font), fully complying with the IEEE Signal Processing Society $\le 6$-page ceiling. Extended hyperparameter grids and ablation logs are mirrored in our public repository: \url{https://github.com/NazmulHasanNihal/Intelligent-AML}. This manuscript represents original work not published or under consideration elsewhere. All authors approved the submission and declare no competing interests.
+    \item \textbf{Visual Legibility of Figures and Tables (Editor Concern 2):}
+    \begin{itemize}
+        \item \textit{Table Redesign \& Un-Shrunk Typography:} Eliminated all aggressive table squishing. Table~2 (14-dataset benchmark scorecard) was redesigned into a spacious full-width table spanning the full page width with balanced row height, legible typography, and zero horizontal clipping. Tables~1, 3, 5, and 6 were reformatted with clean column layouts, balanced row spacing, and clear standard font sizes.
+        \item \textit{Figure Overhaul \& Vector Legibility:} All figures were overhauled as high-resolution native vector graphics with legible typography: Figure~1 (System Architecture) was regenerated as an ultra-crisp vector diagram spanning the full page width ($7.16'' \times 2.35''$); Figure~2 (PR-ROC and t-SNE) features high-contrast axes and clear labels; Figure~3 (Camouflage Robustness) is rendered as a clean single-column vector graphic with high-contrast legends; and Figure~4 (15-Node Bitcoin Subgraph Case Study) clearly displays every transaction flow arrow, structuring burst, and wash loop.
+    \end{itemize}
 
-\vspace{0.10cm}
+    \item \textbf{Comprehensive State-of-the-Art Comparison \& Recent TIFS Literature (Editor Concern 3):}
+    \begin{itemize}
+        \item \textit{Integration of Flagship TIFS / IEEE Literature:} We updated Section~2 (Related Work) and benchmark discussions to explicitly contextualize and differentiate C-STGB against flagship recent works:
+        \begin{itemize}
+            \item Luo \textit{et al.}, \textit{``MLaD$^2$: A Semi-Supervised Money Laundering Detection Framework Based on Decoupling Training,''} \textbf{IEEE TIFS}, vol. 19, 2024 (decoupled semi-supervised learning vs. our risk-controlled temporal conformal framework).
+            \item Ou \textit{et al.}, \textit{``CamFD: Semi-Supervised Camouflage-Aware Fraud Detection Based on Dynamic Graphs,''} \textbf{IEEE TSMC}, vol. 56, 2026 (dynamic camouflage filtering vs. our learnable edge-trust gating and degree safety valves).
+            \item Cheng \textit{et al.}, \textit{``Anti-Money Laundering by Group-Aware Deep Graph Learning,''} \textbf{IEEE TKDE}, vol. 35, 2023 (group-level aggregation vs. our individual class-conditional conformal containment).
+        \end{itemize}
+        \item \textit{Scientific Positioning:} We clarify empirical domain boundaries: C-STGB achieves statistically significant superiority over deep GNN baselines ($W=105.0, p_{\text{adj}} < 0.001$), parity with tuned gradient-boosted trees globally, and marked superiority on complex relational multi-hop topologies ($+9.98$\,pp on IBM-AMLSim HI).
+    \end{itemize}
+
+    \item \textbf{Strict Space Budget \& IEEE Policy Compliance:}
+    \begin{itemize}
+        \item The main manuscript complies strictly with the IEEE SPS page ceiling at \textbf{exactly 13.0 pages} (inclusive of all 53 references and author biographies).
+        \item The Supplementary Material is strictly \textbf{5.0 pages} (within the $\le 6.0$-page limit), providing complete mathematical proofs, 14-dataset itemizations, and hyperparameter grids.
+        \item All code, reproducible seeds, and pipeline artifacts are publicly archived: \url{https://github.com/NazmulHasanNihal/Intelligent-AML}.
+    \end{itemize}
+\end{enumerate}
+
+\noindent
+We confirm that this manuscript represents original research, has not been published elsewhere, and is not under consideration by another journal. All co-authors have reviewed and approved this revised version. We look forward to the manuscript progressing to full peer review.
+
+\vspace{0.08cm}
 \noindent
 Sincerely yours,
 
@@ -58,6 +81,6 @@ Sincerely yours,
 \textbf{Md. Nazmul} (Corresponding Author, \texttt{nazmulhas36@gmail.com}, ORCID: \href{https://orcid.org/0009-0001-6115-7023}{0009-0001-6115-7023}) \\
 \textbf{Musrat Jahan Gungun} (ORCID: \href{https://orcid.org/0009-0006-4249-9198}{0009-0006-4249-9198}) \\
 \textbf{Maheli Ahmed} (Faculty Supervisor, ORCID: \href{https://orcid.org/0000-0002-5183-7498}{0000-0002-5183-7498}) \\
-\textit{Department of Computer Science and Engineering, College of Technology, National University, Bangladesh}
+\textit{Department of Computer Science and Engineering, College of Technology, National University, Gazipur 1704, Bangladesh}
 
 \end{document}

@@ -12,19 +12,19 @@ To evaluate model generalization across diverse financial rails, we benchmark C-
 
 \begin{table}[t]
 \centering
-\caption{Structural Overview of the 14 Benchmark Financial Networks (Complete 14-dataset itemization in Supplementary Table~S2).}
+\caption{Structural Overview of the 14 Benchmark Financial Networks (Complete 14-dataset itemization in Supplementary Table~S3).}
 \label{tab:dataset_corpus}
-\renewcommand{\arraystretch}{0.80}
+\renewcommand{\arraystretch}{0.84}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{llrrc}
 \toprule
-\textbf{Archetype Group} & \textbf{Datasets Included} & \textbf{Entities ($|\mathcal{V}|$)} & \textbf{Transactions ($|\mathcal{E}|$)} & \textbf{Illicit ($\pi$)} \\
+\textbf{Archetype Group} & \textbf{Datasets Included} & \textbf{Entities} & \textbf{Txs} & \textbf{Illicit ($\pi$)} \\
 \midrule
-\textbf{Group A (Crypto Ledgers, 4)} & Elliptic-v1/v2, XBlock-ETH, MtGox & 2,621,048 & 3,430,755 & 0.09\% -- 2.23\% \\
-\textbf{Group B (Multi-Bank \& FinTech, 9)} & SAML-D, PaySim (2), IBM-AMLSim (4), Gen, DGraphFin & 6,629,125 & 5,812,793 & 0.05\% -- 1.50\% \\
-\textbf{Group C (Card Streams, 1)} & Credit Card Forensics (Bipartite) & 284,807 & 284,807 & 0.17\% \\
+\textbf{Group A (Crypto, 4)} & Elliptic-v1/2, ETH, MtGox & 2,621,048 & 3,430,755 & 0.09\%--2.23\% \\
+\textbf{Group B (Banking, 9)} & SAML-D, PaySim, AMLSim, Gen, DGraph & 6,629,125 & 5,812,793 & 0.05\%--1.50\% \\
+\textbf{Group C (Card, 1)} & Credit Card Forensics & 284,807 & 284,807 & 0.17\% \\
 \midrule
-\textbf{Total Benchmark Corpus} & \textbf{14 Diverse Financial Networks} & \textbf{9,534,980} & \textbf{9,528,355} & \textbf{0.05\% -- 2.23\%} \\
+\textbf{Total Benchmark Corpus} & \textbf{14 Financial Networks} & \textbf{9,534,980} & \textbf{9,528,355} & \textbf{0.05\%--2.23\%} \\
 \bottomrule
 \end{tabular}%
 }
@@ -44,13 +44,9 @@ For discrete UTXO graphs (e.g., Elliptic-v1 with 49 timesteps), Timesteps 1--30 
 \label{sec:baselines_protocol}
 We benchmark C-STGB against 12 distinct baseline architectures across six canonical model paradigms: (1) \textit{Tabular Tree Ensembles:} XGBoost~\cite{chen2016xgboost}, CatBoost~\cite{prokhorenkova2018catboost}, and LightGBM~\cite{ke2017lightgbm}; (2) \textit{Spatial GNNs:} GCN~\cite{kipf2017semi}, GraphSAGE~\cite{hamilton2017inductive}, GAT~\cite{velickovic2018graph}, and GIN~\cite{xu2019powerful}; (3) \textit{Heterogeneous GNNs:} Vanilla HGT~\cite{hu2020heterogeneous} and Johannessen \& Jullum~\cite{johannessen2023predicting}; (4) \textit{Adversarial Fraud Detectors:} CARE-GNN~\cite{dou2020enhancing}; (5) \textit{Dynamic Snapshot Models:} EvolveGCN~\cite{pareja2020evolvegcn}; and (6) \textit{Continuous Temporal GNNs:} TGN~\cite{rossi2020temporal}. Evaluating these 12 baselines alongside C-STGB across 14 benchmark datasets yields 13 model configurations and exactly 182 dataset $\times$ model evaluation pairs, evaluated over five locked random seeds ($910$ total experimental executions).
 
-\textbf{Controlled Factorial Feature Attribution Protocol (Set A):}
-To isolate whether empirical gains stem from the C-STGB graph architecture, engineered domain features, or threshold optimization, we cross-evaluate models across five controlled feature and threshold regimes:
-(1) \textit{Raw Features Only ($\tau=0.50$):} GCN achieves $43.55 \pm 0.42\%$ F1 on \texttt{elliptic\_v1} (14-dataset macro: $23.78 \pm 0.35\%$);
-(2) \textit{Raw Features ($\tau^*$):} GCN F1 improves to $51.04 \pm 0.38\%$ ($+7.49$\,pp; 14-dataset macro: $28.12 \pm 0.40\%$), confirming threshold calibration is vital under extreme imbalance;
-(3) \textit{Descriptors Only ($\mathbf{z}_{\text{inv}}$):} Tabular models on 12-D descriptors achieve $84.60 \pm 0.85\%$ F1 ($61.40 \pm 0.52\%$ macro), establishing an informative predictive floor;
-(4) \textit{Raw Features Augmented with Descriptors ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$):} Augmenting spatial GNNs yields marginal uplift: $+1.27$\,pp on GCN ($44.82\%$), $+1.38$\,pp on GraphSAGE ($50.45\%$), and $+0.81$\,pp on EvolveGCN ($51.85\%$; 14-dataset macro GCN reaches $24.85\%$, over $42$\,pp behind C-STGB's $67.26\%$; full matrix in Supplementary Table~S12); and
-(5) \textit{Raw Features on Base C-STGB (No Invariants, $\tau=0.50$):} Base C-STGB achieves $79.08 \pm 0.55\%$ F1 on \texttt{elliptic\_v1} ($48.20 \pm 0.50\%$ macro), substantially exceeding raw GCN ($43.55\%$), GraphSAGE ($49.07\%$), and TGN ($64.10\%$).
+\textbf{Positioning Against Recent Flagship Literature:} We contextualize C-STGB against three recent flagship works: (1) \textit{MLaD$^2$ (Luo \textit{et al.}, IEEE TIFS 2024~\cite{luo2024mlad})} employs decoupled contrastive pre-training over static $k\text{NN}$ similarity graphs, but incurs $O(|\mathcal{V}|^2)$ construction costs and lacks continuous streaming edge dynamics ($\Delta t$); (2) \textit{CamFD (Ou \textit{et al.}, IEEE TSMC 2026~\cite{ou2025camfd})} filters camouflaged fraudsters over discrete relational schemas without post-hoc finite-sample risk guarantees ($\ge 99\%$ coverage); and (3) \textit{Group-Aware GNN (Cheng \textit{et al.}, IEEE TKDE 2023~\cite{cheng2023anti})} clusters account groups on static ledgers rather than streaming transaction-level conformal calibration. As demonstrated in Section~\ref{sec:robustness_results} and Supplementary Table~S2, C-STGB uniquely bridges continuous-time edge gating with distribution-free conformal triage.
+
+\textbf{Controlled Factorial Feature Attribution Protocol (Set A):} To isolate whether empirical gains stem from the C-STGB graph architecture, engineered domain features, or threshold optimization, we cross-evaluate models across five controlled feature and threshold regimes: (1) \textit{Raw Features Only ($\tau=0.50$):} GCN achieves $43.55 \pm 0.42\%$ F1 on \texttt{elliptic\_v1} (14-dataset macro: $23.78 \pm 0.35\%$); (2) \textit{Raw Features ($\tau^*$):} GCN F1 improves to $51.04 \pm 0.38\%$ ($+7.49$\,pp; macro: $28.12 \pm 0.40\%$), confirming threshold calibration is vital under extreme imbalance; (3) \textit{Descriptors Only ($\mathbf{z}_{\text{inv}}$):} Tabular models on 12-D descriptors achieve $84.60 \pm 0.85\%$ F1 ($61.40 \pm 0.52\%$ macro), establishing an informative predictive floor; (4) \textit{Raw Features + Descriptors ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$):} Augmenting spatial GNNs yields marginal uplift: $+1.27$\,pp on GCN ($44.82\%$), $+1.38$\,pp on GraphSAGE ($50.45\%$), and $+0.81$\,pp on EvolveGCN ($51.85\%$; 14-dataset macro GCN reaches $24.85\%$, over $42$\,pp behind C-STGB's $67.26\%$; full matrix in Supplementary Table~S3); and (5) \textit{Raw Features on Base C-STGB (No Invariants, $\tau=0.50$):} Base C-STGB achieves $79.08 \pm 0.55\%$ F1 on \texttt{elliptic\_v1} ($48.20 \pm 0.50\%$ macro), substantially exceeding raw GCN ($43.55\%$), GraphSAGE ($49.07\%$), and TGN ($64.10\%$).
 
 \textbf{Mechanistic Divergence Analysis:} This controlled factorial comparison reveals a fundamental mechanistic divergence: isotropic spatial convolutions ($\tilde{\mathbf{D}}^{-1/2}\tilde{\mathbf{A}}\tilde{\mathbf{D}}^{-1/2}\mathbf{X}$) linearly average feature representations across multi-hop neighborhoods. When illicit accounts connect to high-degree commercial hubs ($\deg > 50$), localized scalar signatures in $\mathbf{z}_{\text{inv}}$ (e.g., flow regularity $\Phi_{\text{flow}} \approx 1.0$ and burst intensity $\lambda_u$) are arithmetically diluted by dozens of benign neighbors into the majority mean. Furthermore, lacking edge-trust gating ($\hat{g}_{ij}$) and latent GraphSMOTE, gradients under extreme imbalance ($\pi < 0.05\%$) are swamped by majority benign nodes. In contrast, tree ensembles evaluate axis-aligned splits on unmixed features, isolating $\Phi_{\text{flow}}$ directly. Thus, extracting relational multi-hop patterns without over-smoothing strictly requires C-STGB's integrated architecture. All architectures operate under calibrated parameter budgets ($1.84 \times 10^6$ for C-STGB vs. $1.80 \times 10^6$ for HGT and $2.12 \times 10^6$ for TGN; $N=50$ Bayesian trials with identical tuning grids).
 
@@ -64,14 +60,14 @@ All experiments were conducted across Kaggle Cloud TPU v3-8 / NVIDIA Tesla T4 GP
 
 \begin{figure*}[t]
 \centering
-\begin{minipage}[b]{0.48\textwidth}
+\begin{minipage}[t]{0.495\textwidth}
 \centering
-\includegraphics[width=\linewidth,height=0.96in,keepaspectratio]{figures/fig1_pr_roc_curves.pdf}\\[0.5ex]
-{\footnotesize (a) Precision-Recall and ROC performance frontiers on Elliptic-v1.}
+\includegraphics[width=\linewidth,height=1.22in,keepaspectratio]{figures/fig1_pr_roc_curves.pdf}\\[0.5ex]
+{\footnotesize (a) Precision-Recall (left) and ROC (right) curves on \texttt{elliptic\_v1}.}
 \end{minipage}\hfill
-\begin{minipage}[b]{0.48\textwidth}
+\begin{minipage}[t]{0.495\textwidth}
 \centering
-\includegraphics[width=\linewidth,height=0.96in,keepaspectratio]{figures/fig2_tsne_manifold_separation.pdf}\\[0.5ex]
+\includegraphics[width=\linewidth,height=1.22in,keepaspectratio]{figures/fig2_tsne_manifold_separation.pdf}\\[0.5ex]
 {\footnotesize (b) Latent t-SNE: baseline GNN (left) vs. C-STGB (right).}
 \end{minipage}
 \caption{Empirical representation and classification benchmarks: (a) Precision-Recall and ROC curves demonstrating discrimination under extreme class skew; (b) t-SNE projection of the learned latent manifold under Typology GraphSMOTE, showing dense clustering of confirmed illicit topologies ($K=4$) with clear separation from majority commercial hubs.}
@@ -80,50 +76,47 @@ All experiments were conducted across Kaggle Cloud TPU v3-8 / NVIDIA Tesla T4 GP
 
 \subsection{Comparative Baseline Performance \& Benchmark Scorecard}
 \label{sec:benchmark_results}
-Table~\ref{tab:full_baseline_scorecard} reports benchmark comparisons across all 14 benchmark networks (with the complete multi-metric scorecard and per-baseline profiling detailed in Supplementary Table~S2). Across the corpus, C-STGB achieves $99.44\%$ F1 on Elliptic-v1 (PR-AUC $1.0000$), $100.00\%$ F1 on Elliptic-v2 (PR-AUC $1.0000$), $99.80\%$ on PaySim Extended, $97.91\%$ on DGraphFin, and $96.94\%$ on XBlock-ETH.
+Table~\ref{tab:full_baseline_scorecard} reports benchmark comparisons across all 14 benchmark networks (with the complete multi-metric scorecard and per-baseline profiling detailed in Supplementary Table~S3). Across the corpus, C-STGB achieves $99.44\%$ F1 on Elliptic-v1 (PR-AUC $1.0000$), $100.00\%$ F1 on Elliptic-v2 (PR-AUC $1.0000$), $99.80\%$ on PaySim Extended, $97.91\%$ on DGraphFin, and $96.94\%$ on XBlock-ETH.
 
 \textbf{Statistical Parity with Trees vs. Superiority Over Deep GNNs:}
 Across the 14-dataset benchmark suite, C-STGB yields an unweighted macro F1 of $67.26\%$ ($0.6848$ PR-AUC). Direct comparison against tuned gradient-boosted decision trees reveals statistical parity on the global average: against XGBoost, C-STGB exhibits a $-0.66\text{ pp}$ global difference ($67.26\%$ vs. $67.92\%$) with 6 wins, 1 tie, and 7 losses ($W=48.0, p_{\text{adj}}=0.8077$, n.s.); against CatBoost, C-STGB exhibits a $+0.13\text{ pp}$ global difference ($67.26\%$ vs. $67.14\%$) with 7 wins, 2 ties, and 5 losses ($W=32.0, p_{\text{adj}}=0.4318$, n.s.). Therefore, C-STGB does not claim universal statistical superiority over strong tabular learners globally. Rather, empirical evidence demonstrates that C-STGB delivers statistically significant outperformance over all evaluated deep spatial and dynamic GNN baselines: $+43.49\text{ pp}$ mean uplift over GCN (median $+37.11$\,pp, IQR $72.66$\,pp; 14 wins, 0 losses), $+42.95\text{ pp}$ over GraphSAGE (median $+37.07$\,pp, IQR $69.08$\,pp; 14 wins, 0 losses), and $+48.32\text{ pp}$ over EvolveGCN (median $+41.91$\,pp, IQR $56.75$\,pp; 14 wins, 0 losses) ($W=105.0, W_- = 0.0, n=14, p = 1.22 \times 10^{-4}, p_{\text{adj}} < 0.001$). Group-macro averages reflect this domain divergence: Group A Crypto ($92.15\%$), Group B Banking/FinTech ($58.07\%$), and Group C Card ($51.40\%$), with median dataset F1 of $61.81\%$ (IQR $74.72\text{ pp}$). The wide interquartile range highlights an intrinsic bimodal partition across the benchmark corpus: Cluster 1 comprises publicly indexed cryptocurrency ledgers with dense Darknet market seizures exhibiting high structural separability ($>96\%$ F1 across modern paradigms), whereas Cluster 2 comprises complex multi-bank synthetic laundering simulations (e.g., PaySim1, IBM-AMLSim LI) where performance drops below $45\%$, representing the true open challenge in adversarial financial forensics.
 
-\textbf{When Graph Learning Helps — and When It Does Not:}
-This performance pattern highlights a critical domain boundary:
-(1) \textit{Where Graph Learning Succeeds (Multi-Hop Relational Regimes):} On structurally complex networks with multi-hop laundering chains, high degree variance, and camouflage injection (e.g., IBM-AMLSim HI, SAML-D, Elliptic-v1/v2), C-STGB outperforms both base GNNs ($+9.98$\,pp to $+48.3$\,pp) and tree ensembles ($+1.05$\,pp to $+4.67$\,pp on IBM-AMLSim HI). Spatio-temporal message passing captures coordinated fund movement across account chains that cannot be represented in flat tabular rows.
-(2) \textit{Where Tree Models Excel (Flat Transaction Streams):} Conversely, on \texttt{paysim1}, C-STGB achieves only $10.68\%$ F1, trailing XGBoost ($18.90\%$) and CatBoost ($17.76\%$). \texttt{paysim1} is a synthetic mobile payment simulation where fraud signals reside in localized tabular balance discrepancies within single isolated transactions. Without multi-hop laundering chains, neighborhood graph aggregation provides no structural advantage over axis-aligned decision trees.
+\textbf{When Graph Learning Helps — and When It Does Not:} This performance pattern highlights a critical domain boundary: (1) \textit{Multi-Hop Relational Regimes:} On structurally complex networks with multi-hop laundering chains, high degree variance, and camouflage injection (e.g., IBM-AMLSim HI, SAML-D, Elliptic-v1/v2), C-STGB outperforms both base GNNs ($+9.98$\,pp to $+48.3$\,pp) and tree ensembles ($+1.05$\,pp to $+4.67$\,pp on IBM-AMLSim HI), as spatio-temporal message passing captures coordinated fund movement across account chains that cannot be represented in flat tabular rows. (2) \textit{Flat Transaction Streams:} Conversely, on \texttt{paysim1}, C-STGB achieves only $10.68\%$ F1, trailing XGBoost ($18.90\%$) and CatBoost ($17.76\%$). \texttt{paysim1} is a synthetic mobile payment simulation where fraud signals reside in localized tabular balance discrepancies within single isolated transactions. Without multi-hop laundering chains, neighborhood graph aggregation provides no structural advantage over axis-aligned decision trees.
 
 \textbf{Forensic Investigation of Near-Perfect Benchmark Scores:}
 Multiple model families achieve near-perfect scores on Elliptic-v1 ($99.44\%$ C-STGB, $99.89\%$ XGBoost, $99.78\%$ CatBoost) and Elliptic-v2 ($100.00\%$ C-STGB, $99.81\%$ XGBoost, $100.00\%$ CatBoost). Forensic examination reveals that these scores stem from the underlying structure of public Bitcoin UTXO benchmarks: ground-truth illicit entities originate from law enforcement Darknet market seizures (e.g., Silk Road, AlphaBay), which form dense, topologically segregated connected subgraphs with sharp boundaries and near-perfect label homophily ($h > 0.92$). A linear probe sanity check confirms high intrinsic separability: Topological Logistic Regression achieves $83.1\%$ F1 on Elliptic-v2, verifying that these benchmarks exhibit high structural separability rather than presenting an unconstrained real-world laundering challenge.
 
 \textbf{Statistical Significance Testing:}
-Table~\ref{tab:statistical_tests} summarizes non-parametric hypothesis testing with dataset-level paired observations across all $n=14$ benchmarks: two-sided Wilcoxon signed-rank tests yield maximal positive rank sum $W = 105.0$ ($W_- = 0.0, n=14$), with exact two-sided $p = 1.22 \times 10^{-4}$ and Benjamini--Hochberg adjusted $p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ against GCN, GraphSAGE, and EvolveGCN, reflecting uniform outperformance across all 14 empirical networks. Re-testing against invariant-augmented GNNs ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$) preserves identical significance ($W=105.0, 14\text{ wins, } 0\text{ losses}, p_{\text{adj}} < 0.001$; full 14-dataset paired scores in Supplementary Table~S14).
+Table~\ref{tab:statistical_tests} summarizes non-parametric hypothesis testing with dataset-level paired observations across all $n=14$ benchmarks: two-sided Wilcoxon signed-rank tests yield maximal positive rank sum $W = 105.0$ ($W_- = 0.0, n=14$), with exact two-sided $p = 1.22 \times 10^{-4}$ and Benjamini--Hochberg adjusted $p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ against GCN, GraphSAGE, and EvolveGCN, reflecting uniform outperformance across all 14 empirical networks. Re-testing against invariant-augmented GNNs ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$) preserves identical significance ($W=105.0, 14\text{ wins, } 0\text{ losses}, p_{\text{adj}} < 0.001$; full 14-dataset paired scores in Supplementary Table~S3).
 
 \input{tables/tab2_baseline_scorecard.tex}
 \input{tables/tab_statistical_tests.tex}
 
 \subsection{Class-Conditional Conformal Risk Control \& Queue Triage}
 \label{sec:crc_results}
-Table~\ref{tab:conformal_triage} evaluates Class-Conditional Conformal Risk Control (CRC) across benchmark archetypes at significance level $\alpha = 0.01$ ($99.0\%$ target true label coverage, full 14-benchmark itemization in Supplementary Table~S8, significance-level sensitivity in Supplementary Table~S12, and operational radar comparisons in Supplementary Fig.~S7). Across all datasets, empirical coverage satisfies the nominal $99.0\%$ bound ($99.02\% - 99.28\%$), while routing $>99.4\%$ of transaction volume through straight-through Tier 1 (High-Risk Escalation) and Tier 3 (Straight-Through Low-Risk Screening Tier) channels.
+Table~\ref{tab:conformal_triage} evaluates Class-Conditional Conformal Risk Control (CRC) across benchmark archetypes at significance level $\alpha = 0.01$ ($99.0\%$ target true label coverage, full evaluation across calibration baselines in Supplementary Table~S4). Across all datasets, empirical coverage satisfies the nominal $99.0\%$ bound ($99.02\% - 99.28\%$), while routing $>99.4\%$ of transaction volume through straight-through Tier 1 (High-Risk Escalation) and Tier 3 (Straight-Through Low-Risk Screening Tier) channels.
 
 Crucially, the high coverage guarantee ($99.12\%$ macro-average) is achieved with prediction set efficiency: across all $9.53$ million transactions, singleton decisive prediction sets ($|\Gamma(X)| = 1$) account for $99.50\%$ of volume (Tier 1 + Tier 3), while ambiguous abstention sets ($|\Gamma(X)| = 2$, Tier 2) comprise only $0.50\%$. The empty prediction set rate $\mathbb{P}(\Gamma(X) = \emptyset)$ is verified to be exactly $0.00\%$, yielding an average prediction set size of $\mathbb{E}[|\Gamma(X)|] = 1.0050$, confirming that coverage guarantees are operationally tight.
 \begin{table}[t]
 \centering
-\caption{Class-Conditional Conformal Risk Control: Coverage and Triage Workload at $\alpha = 0.01$ ($99.0\%$ Target Containment, Extended Dynamics in Supplementary Table~S8).}
+\caption{Class-Conditional Conformal Risk Control: Coverage and Triage Workload at $\alpha = 0.01$ ($99.0\%$ Target Containment, Extended Dynamics in Supplementary Table~S4).}
 \label{tab:conformal_triage}
-\renewcommand{\arraystretch}{0.68}
+\renewcommand{\arraystretch}{0.84}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Dataset Identifier} & \textbf{Empirical Coverage} & \textbf{Selective Risk} & \textbf{Review Rate} & \textbf{Efficiency Gain} \\
-& \textbf{($\ge 99.0\%$ Target)} & \textbf{(Tier 3 FN Rate)} & \textbf{(Tier 2 Abstain)} & \textbf{(Workload Red.)} \\
+\textbf{Dataset} & \textbf{Empirical Cov.} & \textbf{Selective Risk} & \textbf{Review Rate} & \textbf{Efficiency} \\
+& \textbf{($\ge 99.0\%$ Target)} & \textbf{(Tier 3 FN)} & \textbf{(Tier 2 Abstain)} & \textbf{(Workload Red.)} \\
 \midrule
-\texttt{elliptic\_v1} & $99.12\%$ & $0.08\%$ & $0.48\%$ (98 alerts) & $\mathbf{-99.52\%}$ \\
-\texttt{elliptic\_v2} & $99.05\%$ & $0.80\%$ & $0.55\%$ (67 alerts) & $\mathbf{-99.45\%}$ \\
-\texttt{dgraphfin} & $99.18\%$ & $0.13\%$ & $0.42\%$ (1,470 alerts) & $\mathbf{-99.58\%}$ \\
-\texttt{paysim\_extended} & $99.22\%$ & $0.12\%$ & $0.38\%$ (797 alerts) & $\mathbf{-99.62\%}$ \\
-\texttt{saml\_d} & $99.15\%$ & $0.05\%$ & $0.45\%$ (653 alerts) & $\mathbf{-99.55\%}$ \\
-\texttt{cc\_transactions} & $99.10\%$ & $0.15\%$ & $0.58\%$ (330 alerts) & $\mathbf{-99.42\%}$ \\
-\texttt{ibm\_amlsim\_hi\_med} & $99.08\%$ & $0.22\%$ & $0.52\%$ (286 alerts) & $\mathbf{-99.48\%}$ \\
+\texttt{elliptic\_v1} & $99.12\%$ & $0.08\%$ & $0.48\%$ (98) & $\mathbf{-99.52\%}$ \\
+\texttt{elliptic\_v2} & $99.05\%$ & $0.80\%$ & $0.55\%$ (67) & $\mathbf{-99.45\%}$ \\
+\texttt{dgraphfin} & $99.18\%$ & $0.13\%$ & $0.42\%$ (1,470) & $\mathbf{-99.58\%}$ \\
+\texttt{paysim\_extended} & $99.22\%$ & $0.12\%$ & $0.38\%$ (797) & $\mathbf{-99.62\%}$ \\
+\texttt{saml\_d} & $99.15\%$ & $0.05\%$ & $0.45\%$ (653) & $\mathbf{-99.55\%}$ \\
+\texttt{cc\_transactions} & $99.10\%$ & $0.15\%$ & $0.58\%$ (330) & $\mathbf{-99.42\%}$ \\
+\texttt{ibm\_amlsim\_hi\_med} & $99.08\%$ & $0.22\%$ & $0.52\%$ (286) & $\mathbf{-99.48\%}$ \\
 \midrule
-\textbf{Macro-Average (All 14 Sets)} & $\mathbf{99.12\%}$ & $\mathbf{0.18\%}$ & $\mathbf{0.50\%}$ & $\mathbf{-99.50\%}$ \\
+\textbf{Macro (All 14 Sets)} & $\mathbf{99.12\%}$ & $\mathbf{0.18\%}$ & $\mathbf{0.50\%}$ & $\mathbf{-99.50\%}$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -137,7 +130,7 @@ To evaluate architectural contributions, Table~\ref{tab:multi_ablation} details 
 \centering
 \caption{Unified Architectural Ablation Study: (a) Cumulative Stepwise Forward Progression; (b) Leave-One-Out Component Removals on Elliptic-v1 (5 Seeds).}
 \label{tab:multi_ablation}
-\renewcommand{\arraystretch}{0.68}
+\renewcommand{\arraystretch}{0.75}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
@@ -184,7 +177,7 @@ Inspection of the learned gating parameter reveals that the gating network assig
 \label{sec:latency_results}
 To avoid confounding model capacity with operational latency, we explicitly distinguish two operational configurations:
 \begin{enumerate}[leftmargin=*]
-    \item \textbf{C-STGB-Fast (Streaming Triage Configuration):} Designed for wire-speed inline transaction scoring. Evaluates degree-capped 1-hop causal neighborhoods ($K \le 15$) with pre-computed cached DuckDB descriptors. Achieves a streaming single-event latency of $0.45$\,ms (P99: $0.82$\,ms) and $428$\,MB peak VRAM ($31,200\text{ tx/s}$, Table~\ref{tab:systems_latency}), itemized into: (i) DuckDB/Arrow descriptor lookup ($0.11$\,ms); (ii) Top-$15$ causal subgraph extraction ($0.18$\,ms); (iii) Temporal GNN forward pass ($0.12$\,ms; $0.054$\,ms amortized under batch-64); and (iv) Conformal triage routing ($0.04$\,ms, Supplementary Table~S10).
+    \item \textbf{C-STGB-Fast (Streaming Triage Configuration):} Designed for wire-speed inline transaction scoring. Evaluates degree-capped 1-hop causal neighborhoods ($K \le 15$) with pre-computed cached DuckDB descriptors. Achieves a streaming single-event latency of $0.45$\,ms (P99: $0.82$\,ms) and $428$\,MB peak VRAM ($31,200\text{ tx/s}$, Table~\ref{tab:systems_latency}), itemized into: (i) DuckDB/Arrow descriptor lookup ($0.11$\,ms); (ii) Top-$15$ causal subgraph extraction ($0.18$\,ms); (iii) Temporal GNN forward pass ($0.12$\,ms; $0.054$\,ms amortized under batch-64); and (iv) Conformal triage routing ($0.04$\,ms, Supplementary Table~S6).
     \item \textbf{C-STGB-Full (Full Forensic Configuration):} Employs the complete multi-scale tri-band attention with 2-hop neighborhood expansion, generating the benchmark accuracy results reported in Table~\ref{tab:full_baseline_scorecard}. Under this configuration, single-event streaming latency is $2.10$\,ms ($3.30$\,ms batch-64) with $894$\,MB peak VRAM and $19,400\text{ tx/s}$ throughput.
 \end{enumerate}
 
@@ -192,17 +185,17 @@ To avoid confounding model capacity with operational latency, we explicitly dist
 \centering
 \caption{Operational Systems Scaling and Latency Profile across Model Configurations on Benchmark Hardware.}
 \label{tab:systems_latency}
-\renewcommand{\arraystretch}{0.70}
+\renewcommand{\arraystretch}{0.84}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Model Configuration} & \textbf{Streaming Single (P99)} & \textbf{Batch-64 (P99)} & \textbf{Throughput (tx/s)} & \textbf{Peak VRAM} \\
+\textbf{Configuration} & \textbf{Streaming (P99)} & \textbf{Batch-64} & \textbf{Throughput} & \textbf{Peak VRAM} \\
 \midrule
-XGBoost (Tabular Baseline) & $0.18$\,ms & $0.95$\,ms & $68,400$ & $112$\,MB \\
-\textbf{C-STGB (Fast-Path)} & $\mathbf{0.45\,\text{ms}~(0.82\,\text{ms})}$ & $\mathbf{2.10\,\text{ms}}$ & $\mathbf{31,200}$ & $\mathbf{428\,\text{MB}}$ \\
-\textbf{C-STGB (Full Tri-Band)} & $\mathbf{2.10\,\text{ms}~(3.30\,\text{ms})}$ & $\mathbf{3.30\,\text{ms}}$ & $\mathbf{19,400}$ & $\mathbf{894\,\text{MB}}$ \\
-Vanilla HGT (Hu \textit{et al.}, 2020) & $8.40$\,ms & $18.20$\,ms & $3,500$ & $1,420$\,MB \\
-TGN (Rossi \textit{et al.}, 2020) & $22.40$\,ms & $41.80$\,ms & $1,520$ & $3,280$\,MB \\
+XGBoost (Tabular) & $0.18$\,ms & $0.95$\,ms & $68,400\text{ tx/s}$ & $112$\,MB \\
+\textbf{C-STGB (Fast-Path)} & $\mathbf{0.45\,\text{ms}~(0.82)}$ & $\mathbf{2.10\,\text{ms}}$ & $\mathbf{31,200\text{ tx/s}}$ & $\mathbf{428\,\text{MB}}$ \\
+\textbf{C-STGB (Full Tri-Band)} & $\mathbf{2.10\,\text{ms}~(3.30)}$ & $\mathbf{3.30\,\text{ms}}$ & $\mathbf{19,400\text{ tx/s}}$ & $\mathbf{894\,\text{MB}}$ \\
+Vanilla HGT (2020) & $8.40$\,ms & $18.20$\,ms & $3,500\text{ tx/s}$ & $1,420$\,MB \\
+TGN (Rossi \textit{et al.}) & $22.40$\,ms & $41.80$\,ms & $1,520\text{ tx/s}$ & $3,280$\,MB \\
 \bottomrule
 \end{tabular}%
 }
@@ -227,9 +220,9 @@ To rigorously validate defense capabilities beyond this heuristic, we evaluate a
 
 \begin{figure}[t]
 \centering
+\vspace{-0.5ex}
+\includegraphics[width=0.96\columnwidth]{figures/fig9_adversarial_camouflage_robustness.pdf}
 \vspace{-1.0ex}
-\includegraphics[width=0.78\columnwidth,height=2.35cm]{figures/fig9_adversarial_camouflage_robustness.pdf}
-\vspace{-1.5ex}
 \caption{Adversarial Camouflage Robustness: Macro F1 retention across perturbation ratios $\rho \in [0, 0.80]$ on Elliptic-v1 under degree-matched and gradient-based evasion attacks ($95\%$ confidence bands, 5 seeds).}
 \label{fig:adversarial_robustness}
 \vspace{-1.0ex}
@@ -237,4 +230,4 @@ To rigorously validate defense capabilities beyond this heuristic, we evaluate a
 
 \subsection{Hyperparameter Sensitivity \& Stability Analysis}
 \label{sec:sensitivity_analysis}
-We evaluate operational stability across four key hyperparameters (Supplementary Table~S12 and Supplementary Fig.~S7): (1) \textit{Edge-Trust Threshold ($\delta_{\text{floor}} \in [0.02, 0.30]$):} Macro F1 remains stable across $\delta_{\text{floor}} \in [0.06, 0.16]$ ($\pm 0.35$\,pp around $99.44\%$). (2) \textit{Operational Cost Ratio ($C_{\text{FN}} / C_{\text{FP}} \in [5, 30]$):} Calibrated decision thresholds adapt monotonically from $\tau^* = 0.42$ ($C_{\text{FN}}/C_{\text{FP}}=5$) to $\tau^* = 0.18$ ($C_{\text{FN}}/C_{\text{FP}}=30$). Expected operational loss remains within $4.2\%$ of optimum across $[10, 20]$. (3) \textit{Degree Cap ($K \in [5, 30]$):} F1 plateaus at $K=15$ ($99.44\%$), capturing $98.6\%$ of multi-hop laundering while bounding retrieval latency to $0.18$\,ms ($2.14$\,ms at $K=50$). (4) \textit{Adaptive Conformal Step Size ($\gamma \in [0.001, 0.05]$):} Coverage remains bounded within $[98.83\%, 99.34\%]$, with $\gamma=0.005$ achieving optimal tracking stability.
+We evaluate operational stability across four key hyperparameters (Supplementary Table~S5 and Supplementary Table~S7): (1) \textit{Edge-Trust Threshold ($\delta_{\text{floor}} \in [0.02, 0.30]$):} Macro F1 remains stable across $\delta_{\text{floor}} \in [0.06, 0.16]$ ($\pm 0.35$\,pp around $99.44\%$). (2) \textit{Operational Cost Ratio ($C_{\text{FN}} / C_{\text{FP}} \in [5, 30]$):} Calibrated decision thresholds adapt monotonically from $\tau^* = 0.42$ ($C_{\text{FN}}/C_{\text{FP}}=5$) to $\tau^* = 0.18$ ($C_{\text{FN}}/C_{\text{FP}}=30$). Expected operational loss remains within $4.2\%$ of optimum across $[10, 20]$. (3) \textit{Degree Cap ($K \in [5, 30]$):} F1 plateaus at $K=15$ ($99.44\%$), capturing $98.6\%$ of multi-hop laundering while bounding retrieval latency to $0.18$\,ms ($2.14$\,ms at $K=50$). (4) \textit{Adaptive Conformal Step Size ($\gamma \in [0.001, 0.05]$):} Coverage remains bounded within $[98.83\%, 99.34\%]$, with $\gamma=0.005$ achieving optimal tracking stability.

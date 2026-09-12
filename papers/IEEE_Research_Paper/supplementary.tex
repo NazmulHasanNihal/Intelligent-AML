@@ -39,6 +39,42 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
 
+% Float Placement & Density Optimization
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\dbltopfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\renewcommand{\dblfloatpagefraction}{0.85}
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{4}
+\setcounter{totalnumber}{8}
+\setcounter{dbltopnumber}{4}
+
+\setlength{\textfloatsep}{4pt plus 1pt minus 1pt}
+\setlength{\floatsep}{3pt plus 1pt minus 1pt}
+\setlength{\intextsep}{3pt plus 1pt minus 1pt}
+\setlength{\dbltextfloatsep}{4pt plus 1pt minus 1pt}
+\setlength{\dblfloatsep}{3pt plus 1pt minus 1pt}
+
+\setlist[enumerate]{topsep=1pt,itemsep=0.2pt,parsep=0pt,partopsep=0pt,leftmargin=*}
+\setlist[itemize]{topsep=1pt,itemsep=0.2pt,parsep=0pt,partopsep=0pt,leftmargin=*}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{0.88}
+
+% Compact Bibliography Environment
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+  \begin{oldthebibliography}{#1}%
+    \fontsize{7.5pt}{8.8pt}\selectfont
+    \def\IEEEbibitemsep{-0.8pt plus 0.2pt}%
+    \setlength{\itemsep}{-0.8pt plus 0.2pt}%
+    \setlength{\parskip}{0pt}%
+}{%
+  \end{oldthebibliography}%
+}
+
 % Unified Supplementary S-Numbering
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
@@ -180,6 +216,13 @@ The multi-stage offline training routine is formalized in Algorithm~\ref{alg:sup
 \end{algorithmic}
 \end{algorithm}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\columnwidth,height=4.8cm,keepaspectratio]{figures/fig_conformal_triage_flowchart.pdf}
+\caption{Operational 3-Tier Queue Mapping and Conformal Risk Control triage workflow under within-class exchangeability. Ambiguous cases ($\Gamma(X) = \{0, 1\}$) route to Tier~2 review, while decisive singletons execute straight-through.}
+\label{fig:supp_s1}
+\end{figure}
+
 \section{Extended Mathematical Proofs \& Derivations}
 \label{sec:extended_proofs}
 
@@ -194,85 +237,47 @@ Calibration non-conformity scores $\mathcal{D}_{\text{cal}}^{(y)}$ are drawn fro
 \label{prop:conformal_tv_bound}
 Under locally bounded total variation drift $d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) \le \epsilon_{\text{drift}}$ and calibration mixing (Definition~\ref{def:cal_mixing}), the non-asymptotic class-conditional coverage error decomposes via maximal coupling into a distribution shift term and an empirical process concentration term:
 \begin{equation}
-\begin{aligned}
-&\left| \mathbb{P}_{t}\left(Y \in \Gamma(X) \mid Y=y\right) - (1 - \alpha_y) \right| \\
-&\quad \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) + \sup_{s} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| + \frac{1}{n(y)}
-\end{aligned}
+\left| \mathbb{P}_{t}\left(Y \in \Gamma(X) \mid Y=y\right) - (1 - \alpha_y) \right| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) + \sup_{s} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| + \frac{1}{n(y)}
 \end{equation}
 where $n(y) = |\mathcal{D}_{\text{cal}}^{(y)}(t)|$ denotes class-conditional calibration sample size.
 \end{proposition}
-
 \begin{proof}
-Let $F_t^{(y)}(s) = \mathbb{P}_t(S^{(y)} \le s)$ denote the true cumulative distribution function (CDF) of class-conditional non-conformity scores under the streaming test distribution $\mathcal{P}_t$, and let $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\text{cal}}(S^{(y)} \le s)$ denote the true CDF under the rolling calibration distribution $\mathcal{P}_{\text{cal}}^{(y)}$. Let $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$ denote the empirical CDF computed over the calibration split $\mathcal{D}_{\text{cal}}(t)$, where $n(y) = |\mathcal{D}_{\text{cal}}^{(y)}(t)|$.
+Let $F_t^{(y)}(s) = \mathbb{P}_t(S^{(y)} \le s)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\text{cal}}(S^{(y)} \le s)$ denote true CDFs under test distribution $\mathcal{P}_t$ and calibration distribution $\mathcal{P}_{\text{cal}}^{(y)}$, with empirical CDF $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$. By definition of quantile $\hat{q}^{(y)}$, test coverage evaluates to $\mathbb{P}_t(Y \in \Gamma(X) \mid Y=y) = F_t^{(y)}(\hat{q}^{(y)})$. Applying the triangle inequality:
+$\big| F_t^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big| \le \big| F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \big| + \big| F_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \big| + \big| \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big|$.
+By maximal coupling of total variation distance, $\big| \mathbb{P}_t(S^{(y)} \in A) - \mathbb{P}_{\text{cal}}(S^{(y)} \in A) \big| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$ for all Borel sets $A$, yielding $|F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)})| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$. Applying the DKW inequality to exchangeable calibration sample $\mathcal{D}_{\text{cal}}^{(y)}$ ensures $\mathbb{P}\left( \sup_{s} \big| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \big| \le \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} \right) \ge 1 - \delta$. Discretization residual satisfies $|\hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y)| \le \frac{1}{n(y)}$, establishing the finite-sample bound with probability $1 - \delta$.
 
-By definition of the conformal quantile $\hat{q}^{(y)}$, the test coverage probability evaluates to $\mathbb{P}_t(Y \in \Gamma(X) \mid Y=y) = \mathbb{P}_t(S^{(y)} \le \hat{q}^{(y)}) = F_t^{(y)}(\hat{q}^{(y)})$. Applying the triangle inequality:
-\begin{align}
-\big| F_t^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big| &\le \big| F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \big| \nonumber \\
-&\quad + \big| F_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \big| \nonumber \\
-&\quad + \big| \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big|
-\end{align}
-By maximal coupling of total variation distance, for any Borel set $A \subseteq \mathbb{R}$:
-\begin{equation}
-\big| \mathbb{P}_t(S^{(y)} \in A) - \mathbb{P}_{\text{cal}}(S^{(y)} \in A) \big| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})
-\end{equation}
-Setting $A = (-\infty, \hat{q}^{(y)}]$ yields $|F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)})| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$. 
-
-Next, applying the Dvoretzky-Kiefer-Wolfowitz (DKW) inequality (Massart, 1990) to the exchangeable calibration sample $\mathcal{D}_{\text{cal}}^{(y)}$ (Definition~\ref{def:cal_mixing}):
-\begin{equation}
-\mathbb{P}\left( \sup_{s \in \mathbb{R}} \big| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \big| \le \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} \;\middle\vert\; Y=y \right) \ge 1 - \delta
-\end{equation}
-Finally, by the definition of the discrete empirical quantile with sample size $n(y)$, the discretization residual satisfies $|\hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y)| \le \frac{1}{n(y)}$. Under non-atomic score continuity, combining these terms establishes the non-asymptotic finite-sample bound with high probability $1 - \delta$.
-
-\textbf{Adaptive Conformal Inference (ACI) Tracking:} Under non-stationary drift without parametric priors, ACI updates the effective target $\alpha_t \leftarrow \alpha_{t-1} + \gamma (\alpha - \text{err}_{t - \tau(t)})$ over confirmed alerts with step size $\gamma > 0$ and confirmation delay $\tau(t) \le \Delta T_{\text{delay}}$. By the Azuma-Hoeffding inequality for delayed Martingale difference sequences~\cite{gibbs2021adaptive}, long-run average coverage satisfies $\lim_{T \to \infty} \frac{1}{T} \sum_{t=1}^T \text{err}_t = \alpha$ almost surely, with finite-horizon tracking error bounded by $\mathcal{O}(\gamma \tau_{\max} + \sqrt{\frac{\ln(1/\delta)}{T}})$.
+\textbf{ACI Tracking:} Under non-stationary drift without parametric priors, ACI updates $\alpha_t \leftarrow \alpha_{t-1} + \gamma (\alpha - \text{err}_{t - \tau(t)})$ over confirmed alerts with step size $\gamma > 0$ and delay $\tau(t) \le \Delta T_{\text{delay}}$. By the Azuma-Hoeffding inequality for delayed Martingale difference sequences~\cite{gibbs2021adaptive}, long-run average coverage satisfies $\lim_{T \to \infty} \frac{1}{T} \sum_{t=1}^T \text{err}_t = \alpha$ almost surely, with tracking error $\mathcal{O}(\gamma \tau_{\max} + \sqrt{\frac{\ln(1/\delta)}{T}})$.
 \end{proof}
 
 \subsection{Chronological Temporal Purity and Zero-Leakage of Latent GraphSMOTE}
 
 \begin{lemma}[Chronological Isolation of Latent Topological Oversampling]
 \label{lem:graphsmote_causality}
-Let $\mathcal{D}_{\text{train}} = \mathcal{G}_{[0, t_{\text{train}}]}$, $\mathcal{D}_{\text{val}} = \mathcal{G}_{(t_{\text{train}}, t_{\text{val}}]}$, $\mathcal{D}_{\text{cal}} = \mathcal{G}_{(t_{\text{val}}, t_{\text{cal}}]}$, and $\mathcal{D}_{\text{test}} = \mathcal{G}_{(t_{\text{cal}}, t_{\text{test}}]}$ denote a strictly chronological 4-way temporal partition. Let $\mathbf{h}_{\text{syn}}$ be any synthetic minority representation generated via convex combination of seed nodes $u, v \in \mathcal{C}_k \subseteq \mathcal{V}_{\text{train}}$ with birth timestamp $t_{\text{syn}} = \max(t_u, t_v) \le t_{\text{train}}$. Under the causal indicator constraint $\hat{\mathbf{A}}_{\text{syn}, w} = \sigma(\mathbf{h}_{\text{syn}}^T \mathbf{W}_{\text{edge}} \mathbf{h}_w) \cdot \mathbb{I}(t_w \le t_{\text{syn}})$, the synthesized graph $\tilde{\mathcal{G}_{\text{train}}}$ satisfies:
-\begin{equation}
-\begin{aligned}
-&\mathcal{V}(\tilde{\mathcal{G}}_{\text{train}}) \cap \big(\mathcal{V}_{\text{val}} \cup \mathcal{V}_{\text{cal}} \cup \mathcal{V}_{\text{test}}\big) = \emptyset, \quad \text{and} \\
-&\forall (i, j) \in \mathcal{E}(\tilde{\mathcal{G}}_{\text{train}}), \quad \max(t_i, t_j) \le t_{\text{train}}
-\end{aligned}
-\end{equation}
-Consequently, synthetic edge formation induces zero forward lookahead bias and zero backpropagation gradient flow into prospective evaluation partitions.
+Let $\mathcal{D}_{\text{train}} = \mathcal{G}_{[0, t_{\text{train}}]}$, $\mathcal{D}_{\text{val}} = \mathcal{G}_{(t_{\text{train}}, t_{\text{val}}]}$, $\mathcal{D}_{\text{cal}} = \mathcal{G}_{(t_{\text{val}}, t_{\text{cal}}]}$, and $\mathcal{D}_{\text{test}} = \mathcal{G}_{(t_{\text{cal}}, t_{\text{test}}]}$. Synthetic representations $\mathbf{h}_{\text{syn}}$ generated via seed nodes $u, v \in \mathcal{C}_k \subseteq \mathcal{V}_{\text{train}}$ with $t_{\text{syn}} = \max(t_u, t_v) \le t_{\text{train}}$ and causal indicator $\hat{\mathbf{A}}_{\text{syn}, w} = \sigma(\mathbf{h}_{\text{syn}}^T \mathbf{W}_{\text{edge}} \mathbf{h}_w) \cdot \mathbb{I}(t_w \le t_{\text{syn}})$ satisfy:
+$\mathcal{V}(\tilde{\mathcal{G}}_{\text{train}}) \cap \big(\mathcal{V}_{\text{val}} \cup \mathcal{V}_{\text{cal}} \cup \mathcal{V}_{\text{test}}\big) = \emptyset$, and $\forall (i, j) \in \mathcal{E}(\tilde{\mathcal{G}}_{\text{train}}), \max(t_i, t_j) \le t_{\text{train}}$. Consequently, synthetic edge formation induces zero forward lookahead bias and zero gradient flow into prospective partitions.
 \end{lemma}
 \begin{proof}
-By construction, parent seed nodes $u, v \in \mathcal{V}_{\text{train}}$, which implies $t_u, t_v \le t_{\text{train}}$ and hence $t_{\text{syn}} \le t_{\text{train}}$. Candidate target nodes $w$ are strictly restricted to $\mathcal{C}_{\text{cand}}(\mathbf{h}_{\text{syn}}) \cap \mathcal{V}_{\text{train}}^{\le t_{\text{syn}}}$. The causal indicator $\mathbb{I}(t_w \le t_{\text{syn}})$ evaluates to 0 for any node with $t_w > t_{\text{syn}}$, enforcing $\hat{\mathbf{A}}_{\text{syn}, w} = 0$. Because $t_{\text{syn}} \le t_{\text{train}} < t_{\text{val}} < t_{\text{cal}} < t_{\text{test}}$, no candidate $w \in \mathcal{V}_{\text{val}} \cup \mathcal{V}_{\text{cal}} \cup \mathcal{V}_{\text{test}}$ can satisfy $t_w \le t_{\text{syn}}$. Furthermore, synthetic node representations $\mathbf{h}_{\text{syn}}$ and virtual edges are discarded prior to evaluation on $\mathcal{D}_{\text{val}}, \mathcal{D}_{\text{cal}}$, and $\mathcal{D}_{\text{test}}$. Hence, mutual information satisfies $I(\tilde{\mathcal{G}}_{\text{train}}; \mathcal{D}_{\text{test}} \mid \mathcal{D}_{\text{train}}) = 0$.
+Parent seed nodes satisfy $t_u, t_v \le t_{\text{train}}$, implying $t_{\text{syn}} \le t_{\text{train}}$. The causal indicator $\mathbb{I}(t_w \le t_{\text{syn}})$ evaluates to 0 for any $t_w > t_{\text{syn}}$, enforcing $\hat{\mathbf{A}}_{\text{syn}, w} = 0$. Because $t_{\text{syn}} \le t_{\text{train}} < t_{\text{val}} < t_{\text{cal}} < t_{\text{test}}$, no candidate $w \in \mathcal{V}_{\text{val}} \cup \mathcal{V}_{\text{cal}} \cup \mathcal{V}_{\text{test}}$ can satisfy $t_w \le t_{\text{syn}}$. Furthermore, synthetic representations and virtual edges are discarded prior to evaluation on $\mathcal{D}_{\text{val}}, \mathcal{D}_{\text{cal}}, \mathcal{D}_{\text{test}}$. Hence, mutual information satisfies $I(\tilde{\mathcal{G}}_{\text{train}}; \mathcal{D}_{\text{test}} \mid \mathcal{D}_{\text{train}}) = 0$.
 \end{proof}
 
 \subsection{Kirchhoff Mass-Balance Flow Conservation Invariant for Layering Cycles}
 
 \begin{lemma}[Conservation of Flow in Pass-Through Conduit Chains]
 \label{lem:flow_conservation}
-Let $\mathcal{P}_{\text{chain}} = (v_0, v_1, \dots, v_K)$ denote an ordered multi-hop fund layering chain with transaction amounts $A(v_{k-1}, v_k)$ and retention loss rate $\epsilon_k \in [0, 1)$ at each hop (representing service fees or commissions). If intermediate nodes $v_k$ ($1 \le k < K$) act strictly as pass-through conduit accounts without capital injection, then the aggregate flow conservation invariant satisfies:
-\begin{equation}
-\Phi_{\text{flow}}(v_k, t) = \frac{\sum_{e \in \mathcal{E}_{\text{out}}(v_k)} A(e)}{\sum_{e \in \mathcal{E}_{\text{in}}(v_k)} A(e) + \epsilon} \in \left[ 1 - \bar{\epsilon}, 1.0 \right]
-\end{equation}
-where $\bar{\epsilon} = \max_k \epsilon_k < 0.15$. Consequently, the 12-D canonical feature $\tilde{\Phi}_{\text{flow}}(v_k, t) = \log(1 + \Phi_{\text{flow}}(v_k, t))$ is strictly bounded within $[\log(2 - \bar{\epsilon}), \log(2)] \approx [0.615, 0.693]$, forming an invariant topological signature invariant to arbitrary graph scale and entity degree.
+Let $\mathcal{P}_{\text{chain}} = (v_0, v_1, \dots, v_K)$ denote an ordered layering chain with amounts $A(v_{k-1}, v_k)$ and retention loss rate $\epsilon_k \in [0, 1)$ at each hop. If intermediate nodes $v_k$ ($1 \le k < K$) act as pass-through conduits, then:
+$\Phi_{\text{flow}}(v_k, t) = \frac{\sum_{e \in \mathcal{E}_{\text{out}}(v_k)} A(e)}{\sum_{e \in \mathcal{E}_{\text{in}}(v_k)} A(e) + \epsilon} \in \left[ 1 - \bar{\epsilon}, 1.0 \right]$,
+where $\bar{\epsilon} = \max_k \epsilon_k < 0.15$. Consequently, $\tilde{\Phi}_{\text{flow}}(v_k, t) = \log(1 + \Phi_{\text{flow}}(v_k, t)) \in [\log(2 - \bar{\epsilon}), \log(2)] \approx [0.615, 0.693]$, forming an invariant topological signature invariant to arbitrary graph scale and entity degree.
 \end{lemma}
 \begin{proof}
-By the definition of intermediate pass-through mules in financial layering (BSA 31 CFR \S 1010.100), net retained capital $R(v_k) = \sum_{\text{in}} A - \sum_{\text{out}} A$ is bounded exclusively by transaction clearing fees $\epsilon_k \sum_{\text{in}} A$. Thus $\sum_{\text{out}} A = (1 - \epsilon_k) \sum_{\text{in}} A$. Dividing by $\sum_{\text{in}} A$ yields $\Phi_{\text{flow}}(v_k, t) = 1 - \epsilon_k \in [1 - \bar{\epsilon}, 1.0]$. The monotonic transformation $\tilde{\Phi}_{\text{flow}} = \log(1 + \Phi_{\text{flow}})$ yields the bounded invariant range.
+By intermediate conduit definition in layering (BSA 31 CFR \S 1010.100), net retained capital $R(v_k) = \sum_{\text{in}} A - \sum_{\text{out}} A \le \epsilon_k \sum_{\text{in}} A$. Thus $\sum_{\text{out}} A = (1 - \epsilon_k) \sum_{\text{in}} A$. Dividing by $\sum_{\text{in}} A$ yields $\Phi_{\text{flow}}(v_k, t) = 1 - \epsilon_k \in [1 - \bar{\epsilon}, 1.0]$. The monotonic log transform yields the bounded invariant range.
 \end{proof}
 
 \begin{proposition}[Convex Combination Flow Invariant Preservation]
 \label{prop:graphsmote_flow_preservation}
-Let $u, v \in \mathcal{C}_k$ be two parent pass-through accounts in the same latent typology cluster with inflows $I_u, I_v > 0$ and outflows $O_u = \Phi_u I_u, O_v = \Phi_v I_v$, where $\Phi_u, \Phi_v \in [1 - \bar{\epsilon}, 1.0]$. Let the synthetic representation $\mathbf{h}_{\text{syn}} = \lambda \mathbf{h}_u + (1 - \lambda) \mathbf{h}_v$ ($\lambda \in [0, 1]$) linearly interpolate parent flow amounts: $I_{\text{syn}} = \lambda I_u + (1 - \lambda) I_v$ and $O_{\text{syn}} = \lambda O_u + (1 - \lambda) O_v$. Then the synthetic flow conservation ratio $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) = \frac{O_{\text{syn}}}{I_{\text{syn}}}$ satisfies:
-\begin{equation}
-\min(\Phi_u, \Phi_v) \le \Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) \le \max(\Phi_u, \Phi_v)
-\end{equation}
-In particular, $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) \in [1 - \bar{\epsilon}, 1.0]$.
+Let $u, v \in \mathcal{C}_k$ be two parent pass-through accounts in the same latent typology cluster with inflows $I_u, I_v > 0$ and outflows $O_u = \Phi_u I_u, O_v = \Phi_v I_v$, where $\Phi_u, \Phi_v \in [1 - \bar{\epsilon}, 1.0]$. Synthetic representation $\mathbf{h}_{\text{syn}} = \lambda \mathbf{h}_u + (1 - \lambda) \mathbf{h}_v$ ($\lambda \in [0, 1]$) linearly interpolates flows: $I_{\text{syn}} = \lambda I_u + (1 - \lambda) I_v$ and $O_{\text{syn}} = \lambda O_u + (1 - \lambda) O_v$. Then the synthetic flow conservation ratio satisfies $\min(\Phi_u, \Phi_v) \le \Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) = \frac{O_{\text{syn}}}{I_{\text{syn}}} \le \max(\Phi_u, \Phi_v)$, and in particular $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) \in [1 - \bar{\epsilon}, 1.0]$.
 \end{proposition}
 \begin{proof}
-Assume $\Phi_u \le \Phi_v$. Since $\lambda \in [0, 1]$ and $I_u, I_v > 0$:
-\begin{align}
-O_{\text{syn}} &= \lambda \Phi_u I_u + (1 - \lambda) \Phi_v I_v \nonumber \\
-&\ge \lambda \Phi_u I_u + (1 - \lambda) \Phi_u I_v = \Phi_u I_{\text{syn}}, \nonumber \\
-O_{\text{syn}} &\le \lambda \Phi_v I_u + (1 - \lambda) \Phi_v I_v = \Phi_v I_{\text{syn}}.
-\end{align}
-Dividing throughout by $I_{\text{syn}} > 0$ yields $\Phi_u \le \frac{O_{\text{syn}}}{I_{\text{syn}}} \le \Phi_v$. Because $\Phi_u, \Phi_v \in [1 - \bar{\epsilon}, 1.0]$, it follows that $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) \in [1 - \bar{\epsilon}, 1.0]$. Hence, convex interpolation strictly preserves the bounded flow conservation property within the parent convex hull without violating monetary mass-balance bounds.
+Assume $\Phi_u \le \Phi_v$. Since $\lambda \in [0, 1]$ and $I_u, I_v > 0$: $\Phi_u I_{\text{syn}} \le O_{\text{syn}} = \lambda \Phi_u I_u + (1 - \lambda) \Phi_v I_v \le \Phi_v I_{\text{syn}}$. Dividing throughout by $I_{\text{syn}} > 0$ yields $\Phi_u \le \frac{O_{\text{syn}}}{I_{\text{syn}}} \le \Phi_v \in [1 - \bar{\epsilon}, 1.0]$, preserving bounded flow conservation without monetary mass-balance violation.
 \end{proof}
 
 \begin{table*}[t]
@@ -312,6 +317,13 @@ Table~\ref{tab:supp_full_baselines} reports the comprehensive multi-dataset F1 a
 
 Crucially, C-STGB demonstrates statistically significant superiority over deep GNN baselines ($W=105.0, p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ with 14 wins and 0 losses) while matching optimized gradient-boosted decision trees (XGBoost $67.92\%$, CatBoost $67.14\%$) across flat transaction streams, and delivering substantial gains on complex multi-hop relational networks ($+9.98$\,pp on IBM-AMLSim HI).
 
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.68\textwidth,height=3.6cm,keepaspectratio]{figures/fig_all_datasets_pr_curves.pdf}
+\caption{Comprehensive Precision-Recall and ROC evaluation curves across the benchmark financial transaction networks over five locked random seeds.}
+\label{fig:supp_s2}
+\end{figure*}
+
 \section{Critical Operational \& Robustness Evaluations}
 \label{sec:operational_evaluations}
 
@@ -319,30 +331,30 @@ Crucially, C-STGB demonstrates statistically significant superiority over deep G
 
 Table~\ref{tab:supp_conformal_comparison} compares Class-Conditional Conformal Risk Control against standard calibration and conformal baselines on \texttt{elliptic\_v1} at target significance $\alpha=0.01$ (nominal coverage: $99.0\%$). Standard uncalibrated, temperature-scaled, and isotonic models lack finite-sample finite-set guarantees, yielding class-conditional coverage deficits on the minority class ($90.10\%$--$94.50\%$). Marginal conformal prediction satisfies aggregate coverage ($99.05\%$) by over-covering majority benign transactions ($99.98\%$) while severely under-covering minority illicit transactions ($82.40\%$, a $16.60$\,pp violation). In contrast, C-STGB guarantees $\ge 99.0\%$ coverage for both classes simultaneously, isolating uncertainty into ambiguous sets ($\Gamma(X)=\{0, 1\}$) for $0.50\%$ of transactions with zero empty sets.
 
-\begin{table*}[t]
+\begin{table}[htbp]
 \centering
-\caption{Comparative Evaluation of Conformal Risk Control against Calibration and Conformal Baselines on Elliptic-v1 (Target Significance $\alpha=0.01$, Nominal Coverage $1-\alpha = 99.0\%$).}
+\caption{Comparative Evaluation of Conformal Risk Control against Calibration and Conformal Baselines on Elliptic-v1 ($\alpha=0.01$, Nominal Coverage $99.0\%$).}
 \label{tab:supp_conformal_comparison}
-\resizebox{\textwidth}{!}{%
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
-\textbf{Calibration / Conformal Method} & \textbf{Overall Cov. (\%)} & \textbf{Benign Cov. (\%)} & \textbf{Illicit Cov. (\%)} & \textbf{Illicit Cov. Error} & \textbf{Mean Set Size $\mathbb{E}[|\Gamma|]$} & \textbf{Empty Sets (\%)} \\
+\textbf{Calibration / Conformal Method} & \textbf{Overall Cov.} & \textbf{Benign Cov.} & \textbf{Illicit Cov.} & \textbf{Illicit Error} & \textbf{Mean $|\Gamma|$} & \textbf{Empty (\%)} \\
 \midrule
-Uncalibrated Cutoff ($\tau=0.50$) & $91.42$ & $99.85$ & $90.10$ & $-8.90$\,pp & $1.000$ & $0.00\%$ \\
-Temperature Scaling~\cite{guo2017calibration} & $94.20$ & $99.70$ & $92.80$ & $-6.20$\,pp & $1.000$ & $0.00\%$ \\
-Isotonic Regression~\cite{zadrozny2002transforming} & $96.10$ & $99.65$ & $94.50$ & $-4.50$\,pp & $1.000$ & $0.00\%$ \\
-Marginal Conformal Prediction (Split CP)~\cite{vovk2005algorithmic} & $99.05$ & $99.98$ & $82.40$ & $-16.60$\,pp & $1.001$ & $0.00\%$ \\
+Uncalibrated Cutoff ($\tau=0.50$) & $91.42\%$ & $99.85\%$ & $90.10\%$ & $-8.90$\,pp & $1.000$ & $0.00\%$ \\
+Temperature Scaling~\cite{guo2017calibration} & $94.20\%$ & $99.70\%$ & $92.80\%$ & $-6.20$\,pp & $1.000$ & $0.00\%$ \\
+Isotonic Regression~\cite{zadrozny2002transforming} & $96.10\%$ & $99.65\%$ & $94.50\%$ & $-4.50$\,pp & $1.000$ & $0.00\%$ \\
+Marginal Conformal Prediction~\cite{vovk2005algorithmic} & $99.05\%$ & $99.98\%$ & $82.40\%$ & $-16.60$\,pp & $1.001$ & $0.00\%$ \\
 \midrule
-\textbf{Class-Conditional CRC (Ours, Guarantee A)} & $\mathbf{99.05}$ & $\mathbf{99.05}$ & $\mathbf{99.12}$ & $\mathbf{+0.12\,\text{pp}}$ & $\mathbf{1.005}$ & $\mathbf{0.00\%}$ \\
-\textbf{Streaming Adaptive Conformal Inference (Ours, Guarantee C)} & $\mathbf{99.04}$ & $\mathbf{99.06}$ & $\mathbf{99.08}$ & $\mathbf{+0.08\,\text{pp}}$ & $\mathbf{1.006}$ & $\mathbf{0.00\%}$ \\
+\textbf{Class-Conditional CRC (Ours)} & $\mathbf{99.05\%}$ & $\mathbf{99.05\%}$ & $\mathbf{99.12\%}$ & $\mathbf{+0.12\,\text{pp}}$ & $\mathbf{1.005}$ & $\mathbf{0.00\%}$ \\
+\textbf{Streaming Adaptive ACI (Ours)} & $\mathbf{99.04\%}$ & $\mathbf{99.06\%}$ & $\mathbf{99.08\%}$ & $\mathbf{+0.08\,\text{pp}}$ & $\mathbf{1.006}$ & $\mathbf{0.00\%}$ \\
 \bottomrule
 \end{tabular}%
 }
-\end{table*}
+\end{table}
 
 \subsection{Adversarial Camouflage Robustness across Perturbation Intensities}
 
-Table~\ref{tab:supp_adversarial_camouflage} reports model Macro F1-score retention on \texttt{elliptic\_v1} under increasing ratios of synthetic merchant camouflage edges ($\rho \in [0.0, 0.80]$). While vanilla HGT degrades by $50.85$\,pp (from $78.50\%$ to $27.65\%$) and CARE-GNN degrades by $18.70$\,pp, C-STGB retains $89.63\%$ F1 (a minimal $-1.79$\,pp drop), confirming that learnable edge-trust gating successfully suppresses adversarial connections.
+Table~\ref{tab:supp_adversarial_camouflage} reports model Macro F1-score retention on \texttt{elliptic\_v1} under increasing ratios of synthetic merchant camouflage edges ($\rho \in [0.0, 0.80]$). While vanilla HGT degrades by $50.85$\,pp (from $78.50\%$ to $27.65\%$) and CARE-GNN degrades by $18.70$\,pp, C-STGB retains $89.63\%$ F1 (a minimal $-1.79$\,pp drop), confirming that learnable edge-trust gating successfully suppresses adversarial connections. Fig.~\ref{fig:supp_s3} details the empirical distribution of learnable edge-trust gating weights $g_{ij}$, illustrating how the calibrated safety floor $\delta_{\text{floor}} = 0.10$ prunes $65.9\%$ of deceptive camouflage connections while retaining authentic transaction ties.
 
 \begin{table}[htbp]
 \centering
@@ -364,35 +376,55 @@ $0.8$ & $\mathbf{89.63}$ & $63.30$ & $27.65$ & $6.73$ \\
 }
 \end{table}
 
-\begin{table*}[t]
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\columnwidth,height=3.4cm,keepaspectratio]{figures/fig_edge_gate_distribution.pdf}
+\caption{Empirical distribution of learnable edge-trust gating weights $g_{ij}$ on \texttt{elliptic\_v1} under adversarial camouflage injection. Spurious camouflage edges are suppressed below the safety floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial connections while preserving authentic high-confidence transaction ties.}
+\label{fig:supp_s3}
+\end{figure}
+
+\subsection{Auxiliary Multi-Agent Compliance Decision-Support Architecture}
+\label{sec:supp_multi_agent_arch}
+
+Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision-support prototype operating downstream of the core spatio-temporal GNN under Federal Reserve SR 11-7 model risk management guidance~\cite{fed2011sr117}. The auxiliary architecture coordinates three specialized, asynchronous micro-agents: (1)~\textbf{Auditor Agent:} Interrogates flagged entities against international sanction databases (OFAC SDN, EU, UN Consolidated lists) and evaluates sanction graph proximities within $0.08$\,s; (2)~\textbf{Investigator Agent:} Traverses directed transaction lineages up to 2 hops via DuckDB, extracting temporal smurfing subgraphs and identifying synthetic cycle topologies ($0.15$\,s); and (3)~\textbf{Drafter Agent:} Compiles structured narrative dossiers conforming to FinCEN Form 111 XML specifications, attaching SHA-256 Merkle tree hashes for immutable evidential provenance ($28.4$\,s). All automated drafts require mandatory human BSA Officer review and sign-off prior to statutory filing; autonomous filing is architecturally prohibited. In a pilot evaluation across $N=200$ audit dossiers (100 manual, 100 prototype-assisted), drafts achieved $99.2\%$ statutory concordance ($\kappa = 1.0$ typology, $\kappa = 0.98$ factual grounding) in $28.4$\,s per case (vs. 45.0 min manual baseline).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\columnwidth,height=3.8cm,keepaspectratio]{figures/fig20_multi_agent_forensic_swarm.pdf}
+\caption{Auxiliary Multi-Agent Compliance Decision-Support Architecture coordinating Auditor, Investigator, and Drafter micro-agents under human-in-the-loop oversight to compile FinCEN Form~111 dossiers.}
+\label{fig:supp_s4}
+\end{figure}
+
+
+\begin{table}[htbp]
 \centering
 \caption{Fine-Grained Structural and Topological Properties of the 14 Evaluated Financial Transaction Networks.}
 \label{tab:supp_topological_metrics}
-\resizebox{\textwidth}{!}{%
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccccccc}
 \toprule
-\textbf{Dataset Identifier} & \textbf{Entities $|\mathcal{V}|$} & \textbf{Trans. $|\mathcal{E}|$} & \textbf{Directed Density $\rho$} & \textbf{Clustering $C$} & \textbf{Assortativity $r$} & \textbf{Diameter $D$} & \textbf{Horizon $\Delta T$} & \textbf{Class Skew $\pi$} \\
+\textbf{Dataset Identifier} & \textbf{Entities $|\mathcal{V}|$} & \textbf{Trans. $|\mathcal{E}|$} & \textbf{Density $\rho$} & \textbf{Clust. $C$} & \textbf{Assort. $r$} & \textbf{Diam. $D$} & \textbf{Horizon} & \textbf{Skew $\pi$} \\
 \midrule
-\texttt{elliptic\_v1} & $203,769$ & $234,355$ & $5.64 \times 10^{-6}$ & $0.048$ & $-0.142$ & $18$ & $14$\,days & $9.80\%$ \\
-\texttt{elliptic\_v2} & $122,283$ & $427,330$ & $2.86 \times 10^{-5}$ & $0.089$ & $-0.118$ & $14$ & $14$\,days & $6.18\%$ \\
-\texttt{xblock\_eth} & $2,978,658$ & $3,485,913$ & $3.93 \times 10^{-7}$ & $0.012$ & $-0.185$ & $26$ & $365$\,days & $0.04\%$ \\
-\texttt{mtgox\_leaked} & $119,343$ & $148,822$ & $1.04 \times 10^{-5}$ & $0.061$ & $-0.094$ & $12$ & $120$\,days & $0.82\%$ \\
+\texttt{elliptic\_v1} & $203,769$ & $234,355$ & $5.64 \times 10^{-6}$ & $0.048$ & $-0.142$ & $18$ & $14$\,d & $9.80\%$ \\
+\texttt{elliptic\_v2} & $122,283$ & $427,330$ & $2.86 \times 10^{-5}$ & $0.089$ & $-0.118$ & $14$ & $14$\,d & $6.18\%$ \\
+\texttt{xblock\_eth} & $2,978,658$ & $3,485,913$ & $3.93 \times 10^{-7}$ & $0.012$ & $-0.185$ & $26$ & $365$\,d & $0.04\%$ \\
+\texttt{mtgox\_leaked} & $119,343$ & $148,822$ & $1.04 \times 10^{-5}$ & $0.061$ & $-0.094$ & $12$ & $120$\,d & $0.82\%$ \\
 \midrule
-\texttt{saml\_d} & $288,574$ & $345,188$ & $4.15 \times 10^{-6}$ & $0.034$ & $-0.162$ & $21$ & $180$\,days & $0.38\%$ \\
-\texttt{paysim1} & $6,362,620$ & $6,362,620$ & $1.57 \times 10^{-7}$ & $0.000$ & $-0.002$ & $2$ & $30$\,days & $0.13\%$ \\
-\texttt{paysim\_extended} & $1,048,575$ & $1,048,575$ & $9.53 \times 10^{-7}$ & $0.000$ & $-0.001$ & $2$ & $30$\,days & $0.12\%$ \\
-\texttt{ibm\_amlsim\_hi\_small} & $44,057$ & $114,834$ & $5.92 \times 10^{-5}$ & $0.072$ & $-0.131$ & $16$ & $90$\,days & $0.28\%$ \\
-\texttt{ibm\_amlsim\_hi\_medium} & $220,285$ & $574,170$ & $1.18 \times 10^{-5}$ & $0.068$ & $-0.138$ & $18$ & $90$\,days & $0.27\%$ \\
-\texttt{ibm\_amlsim\_li\_small} & $44,057$ & $98,421$ & $5.07 \times 10^{-5}$ & $0.045$ & $-0.155$ & $19$ & $90$\,days & $0.11\%$ \\
-\texttt{ibm\_amlsim\_li\_medium} & $220,285$ & $492,105$ & $1.01 \times 10^{-5}$ & $0.042$ & $-0.159$ & $22$ & $90$\,days & $0.11\%$ \\
-\texttt{data\_generator} & $50,000$ & $120,000$ & $4.80 \times 10^{-5}$ & $0.081$ & $-0.120$ & $15$ & $60$\,days & $0.50\%$ \\
-\texttt{dgraphfin} & $1,210,092$ & $4,085,410$ & $2.79 \times 10^{-6}$ & $0.055$ & $-0.174$ & $24$ & $180$\,days & $0.61\%$ \\
+\texttt{saml\_d} & $288,574$ & $345,188$ & $4.15 \times 10^{-6}$ & $0.034$ & $-0.162$ & $21$ & $180$\,d & $0.38\%$ \\
+\texttt{paysim1} & $6,362,620$ & $6,362,620$ & $1.57 \times 10^{-7}$ & $0.000$ & $-0.002$ & $2$ & $30$\,d & $0.13\%$ \\
+\texttt{paysim\_extended} & $1,048,575$ & $1,048,575$ & $9.53 \times 10^{-7}$ & $0.000$ & $-0.001$ & $2$ & $30$\,d & $0.12\%$ \\
+\texttt{ibm\_amlsim\_hi\_small} & $44,057$ & $114,834$ & $5.92 \times 10^{-5}$ & $0.072$ & $-0.131$ & $16$ & $90$\,d & $0.28\%$ \\
+\texttt{ibm\_amlsim\_hi\_medium} & $220,285$ & $574,170$ & $1.18 \times 10^{-5}$ & $0.068$ & $-0.138$ & $18$ & $90$\,d & $0.27\%$ \\
+\texttt{ibm\_amlsim\_li\_small} & $44,057$ & $98,421$ & $5.07 \times 10^{-5}$ & $0.045$ & $-0.155$ & $19$ & $90$\,d & $0.11\%$ \\
+\texttt{ibm\_amlsim\_li\_medium} & $220,285$ & $492,105$ & $1.01 \times 10^{-5}$ & $0.042$ & $-0.159$ & $22$ & $90$\,d & $0.11\%$ \\
+\texttt{data\_generator} & $50,000$ & $120,000$ & $4.80 \times 10^{-5}$ & $0.081$ & $-0.120$ & $15$ & $60$\,d & $0.50\%$ \\
+\texttt{dgraphfin} & $1,210,092$ & $4,085,410$ & $2.79 \times 10^{-6}$ & $0.055$ & $-0.174$ & $24$ & $180$\,d & $0.61\%$ \\
 \midrule
-\texttt{cc\_transactions} & $284,807$ & $284,807$ & $3.51 \times 10^{-6}$ & $0.000$ & $0.000$ & $2$ & $2$\,days & $0.17\%$ \\
+\texttt{cc\_transactions} & $284,807$ & $284,807$ & $3.51 \times 10^{-6}$ & $0.000$ & $0.000$ & $2$ & $2$\,d & $0.17\%$ \\
 \bottomrule
 \end{tabular}%
 }
-\end{table*}
+\end{table}
 
 \subsection{Disentangled Streaming Latency Profiling}
 
@@ -469,17 +501,13 @@ Conformal Triage & Cost Ratio $C_{\text{FN}} / C_{\text{FP}}$ & $[5.0, 30.0]$ (U
 \section{Graph Topological Metrics \& Structural Sparsity}
 \label{sec:supp_graph_topologies}
 
-Table~\ref{tab:supp_topological_metrics} documents fine-grained graph structural descriptors across all 14 benchmark networks. This structural profiling elucidates the performance dichotomy between relational graphs and tabular streams:
-\begin{enumerate}[leftmargin=*]
-    \item \textbf{High-Diameter Relational Graphs (Group A \& B-Relational):} Datasets such as \texttt{elliptic\_v1} ($D=18, C=0.048$), \texttt{ibm\_amlsim\_hi} ($D=18, C=0.068$), and \texttt{saml\_d} ($D=21, C=0.034$) exhibit extended multi-hop directed diameters and significant clustering coefficients. In these environments, launderers execute smurfing and pass-through layering across multiple accounts, making spatio-temporal message aggregation strictly superior to isolated tabular models.
-    \item \textbf{Low-Diameter Bipartite Stars (Group B-Flat \& Group C):} Conversely, \texttt{paysim1} ($D=2, C=0.000$) and \texttt{cc\_transactions} ($D=2, C=0.000$) represent flat transaction streams where entities function as isolated star centers with zero multi-hop cycles. Graph convolutions over such bipartite trees induce uniform diffusion, explaining why tree ensembles excel on these specific benchmarks.
-\end{enumerate}
+Table~\ref{tab:supp_topological_metrics} documents fine-grained graph structural descriptors across all 14 benchmark networks. This structural profiling elucidates the performance dichotomy: (1)~\textbf{High-Diameter Relational Graphs (Group A \& B-Relational):} Datasets such as \texttt{elliptic\_v1} ($D=18, C=0.048$), \texttt{ibm\_amlsim\_hi} ($D=18, C=0.068$), and \texttt{saml\_d} ($D=21, C=0.034$) exhibit extended multi-hop directed diameters and significant clustering coefficients where launderers execute smurfing and pass-through layering across accounts, making spatio-temporal message aggregation strictly superior to isolated tabular models. (2)~\textbf{Low-Diameter Bipartite Stars (Group B-Flat \& Group C):} Conversely, \texttt{paysim1} ($D=2, C=0.000$) and \texttt{cc\_transactions} ($D=2, C=0.000$) represent flat transaction streams where entities function as isolated star centers with zero multi-hop cycles. Graph convolutions over such bipartite trees induce uniform diffusion, explaining why tree ensembles excel on these specific benchmarks.
 
 
 \section{Fine-Grained Leave-One-Feature-Out Invariant Sensitivity Analysis}
 \label{sec:supp_feature_sensitivity}
 
-Table~\ref{tab:supp_invariant_ablation} isolates the marginal predictive utility of each individual invariant in $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$ via leave-one-feature-out ablation across three diverse benchmarks. Flow Regularity ($\tilde{\Phi}_{\text{flow}}$) and Hawkes Burst Intensity ($\lambda_u$) represent the most critical single descriptors: dropping $\tilde{\Phi}_{\text{flow}}$ drops F1 by $4.52$\,pp on \texttt{elliptic\_v1} and $5.80$\,pp on \texttt{ibm\_amlsim\_hi}, confirming that money laundering fundamentally exploits mass-flow conservation through intermediate mules. Similarly, removing causal historical taint propagation ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) incurs a $3.89$\,pp penalty on crypto ledgers.
+Table~\ref{tab:supp_invariant_ablation} isolates the marginal predictive utility of each individual invariant in $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$ via leave-one-feature-out ablation across three diverse benchmarks. Flow Regularity ($\tilde{\Phi}_{\text{flow}}$) and Hawkes Burst Intensity ($\lambda_u$) represent the most critical single descriptors: dropping $\tilde{\Phi}_{\text{flow}}$ drops F1 by $4.52$\,pp on \texttt{elliptic\_v1} and $5.80$\,pp on \texttt{ibm\_amlsim\_hi}, confirming that money laundering fundamentally exploits mass-flow conservation through intermediate mules. Similarly, removing causal historical taint propagation ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) incurs a $3.89$\,pp penalty on crypto ledgers. Fig.~\ref{fig:supp_s5} demonstrates the empirical feature distributions and separability across the 12 canonical invariants between illicit and benign transaction populations.
 
 \begin{table}[htbp]
 \centering
@@ -509,31 +537,42 @@ w/o Inter-Arrival Dispersion $\sigma_{\Delta t}$ & $97.40 / 0.9810$ & $34.10 / 0
 }
 \end{table}
 
+\begin{figure*}[!t]
+\begin{minipage}[b]{0.49\textwidth}
+\centering
+\includegraphics[width=\textwidth,height=2.5cm,keepaspectratio]{figures/fig_canonical_invariants.pdf}
+\caption{Empirical distribution and discriminative separability of the 12-dimensional canonical invariant descriptors $\mathbf{z}_{\text{inv}}(u, t)$ across illicit versus benign entities.}
+\label{fig:supp_s5}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.49\textwidth}
+\centering
+\includegraphics[width=\textwidth,height=2.5cm,keepaspectratio]{figures/fig22_triband_spectral_coldstart.pdf}
+\caption{Evidence-adaptive gating dynamics $\alpha_u$ and spectral cold-start representation analysis across network density regimes.}
+\label{fig:supp_s6}
+\end{minipage}
+\end{figure*}
+
+\subsection{Evidence-Adaptive Fusion and Cold-Start Representation Dynamics}
+\label{sec:supp_adaptive_fusion}
+
+Fig.~\ref{fig:supp_s6} visualizes the evidence-adaptive gating dynamics $\alpha_u \in [0, 1]$ and spectral cold-start representation behavior across network density regimes. When entities possess sparse topological neighborhoods ($\deg(u) \le 1$), the learnable gating mechanism suppresses unreliable message aggregation ($\alpha_u \to 0$, empirically $\alpha_u \in [0.08, 0.12]$), transferring inductive reliance to the 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u, t)$ and securing $89.60\%$ F1 on newly created accounts. As local connectivity expands into dense multi-hop transaction clusters, $\alpha_u \to 1.0$, harnessing high-order spatio-temporal graph structures.
+
 \section{Regulatory Compliance, Auditable Triage SOP \& Governance Protocol}
 \label{sec:supp_compliance_governance}
 
-Table~\ref{tab:supp_governance_sop} outlines the Standard Operating Procedure (SOP) governing the integration of C-STGB within production banking operations under the Bank Secrecy Act (BSA, 31 U.S.C. 5318(g)), Federal Reserve SR 26-2, and FATF Recommendation 16.
-\begin{enumerate}[leftmargin=*]
-    \item \textbf{Tier 1 (Automated Dossier Generation):} Confirmed high-risk transactions ($\Gamma(u) = \{1\}$) immediately trigger a temporary asset hold and generate a cryptographically signed FinCEN Form 111 XML filing package with automated multi-hop subgraph attribution. Filing occurs strictly within the statutory 30-day window following human BSA officer sign-off.
-    \item \textbf{Tier 2 (Human-in-the-Loop Queue):} Ambiguous alerts ($\Gamma(u) = \{0, 1\}$) are routed to specialized investigative queues. If supplementary KYC/customer documentation confirms benign origin within 72 hours, the transaction is released without filing.
-    \item \textbf{Tier 3 (Straight-Through Clearing):} Transactions classified as decisive negatives ($\Gamma(u) = \{0\}$) bypass human intervention with a provable finite-sample error rate $\le 0.12\%$.
-\end{enumerate}
+Table~\ref{tab:supp_governance_sop} outlines the Standard Operating Procedure (SOP) governing C-STGB within production banking operations under the Bank Secrecy Act (BSA, 31 U.S.C. 5318(g)), Federal Reserve SR 11-7, and FATF Recommendation 16: (1)~\textbf{Tier 1 (Automated Dossier Generation):} Confirmed high-risk transactions ($\Gamma(u) = \{1\}$) immediately trigger a temporary asset hold and generate a cryptographically signed FinCEN Form 111 XML filing package with automated multi-hop subgraph attribution, filed within the statutory 30-day window following human BSA officer sign-off. (2)~\textbf{Tier 2 (Human-in-the-Loop Queue):} Ambiguous alerts ($\Gamma(u) = \{0, 1\}$) are routed to specialized investigative queues; if supplementary KYC/customer documentation confirms benign origin within 72 hours, the transaction is released without filing. (3)~\textbf{Tier 3 (Straight-Through Clearing):} Transactions classified as decisive negatives ($\Gamma(u) = \{0\}$) bypass human intervention with a provable finite-sample error rate $\le 0.12\%$.
 
 \subsection{Enterprise Streaming Architecture \& SLA Guarantees}
 In enterprise deployments, C-STGB integrates into event streaming message brokers (Apache Kafka / Flink) via zero-copy Apache Arrow buffers. Incoming transaction events populate rolling DuckDB state tables ($t_e \le t$), updating 1-hop and 2-hop ego-neighborhoods within $0.11$\,ms. The multi-threaded PyTorch C++ inference engine evaluates forward message passing and Class-Conditional Conformal bounds in $0.34$\,ms, guaranteeing that $99.9\%$ of transactions complete processing within $<1.0$\,ms, substantially exceeding Tier-1 banking latency SLAs ($< 35$\,ms).
 
-\subsection{Model Risk Management (MRM) Protocol under SR 11-7 / SR 26-2}
-In compliance with supervisory guidance on Model Risk Management (Federal Reserve SR 11-7 and SR 26-2), institutions deploying C-STGB execute continuous rolling monitoring:
-\begin{enumerate}[leftmargin=*]
-    \item \textbf{Quarterly Backtesting:} Non-conformity calibration sets $\mathcal{D}_{\text{cal}}$ are updated on a 90-day rolling window to recalibrate non-conformity quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$.
-    \item \textbf{Drift Detection \& Circuit Breakers:} If the empirical Total Variation drift metric $d_{\text{TV}}(\mathcal{P}_t, \mathcal{P}_{\text{cal}})$ exceeds $\epsilon_{\text{drift}} > 0.05$, the system triggers an automated alert, temporarily expanding Tier 2 review bandwidth until recalibration converges.
-    \item \textbf{Challenger Benchmark Shadowing:} High-capacity tree ensembles (XGBoost/CatBoost) execute in parallel as shadow challenger models to detect unexpected divergence on isolated single-hop transactions.
-\end{enumerate}
+\subsection{Model Risk Management (MRM) Protocol under Federal Reserve SR 11-7}
+In compliance with supervisory guidance on Model Risk Management (Federal Reserve SR 11-7 / OCC 2011-12), continuous rolling monitoring operates across three controls: (1)~\textbf{Quarterly Backtesting:} Non-conformity calibration sets $\mathcal{D}_{\text{cal}}$ are updated on a 90-day rolling window to recalibrate non-conformity quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$. (2)~\textbf{Drift Detection \& Circuit Breakers:} If the empirical Total Variation drift metric $d_{\text{TV}}(\mathcal{P}_t, \mathcal{P}_{\text{cal}}) > \epsilon_{\text{drift}} = 0.05$, the system triggers an automated alert, temporarily expanding Tier 2 review bandwidth until recalibration converges. (3)~\textbf{Challenger Benchmark Shadowing:} High-capacity tree ensembles (XGBoost/CatBoost) execute in parallel as shadow challenger models to detect unexpected divergence on isolated single-hop transactions.
 
 \begin{table}[htbp]
 \centering
 \caption{Regulatory Escalation Mapping across Conformal Triage Tiers.}
 \label{tab:supp_governance_sop}
+\renewcommand{\arraystretch}{0.84}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
@@ -560,25 +599,18 @@ Table~\ref{tab:supp_reproducibility} provides the complete software, hardware, a
 \centering
 \caption{Reproducibility Environment and Software Stack.}
 \label{tab:supp_reproducibility}
+\renewcommand{\arraystretch}{0.84}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{ll}
 \toprule
 \textbf{Reproducibility Dimension} & \textbf{Specification / Value} \\
 \midrule
-Code Repository & \url{https://github.com/NazmulHasanNihal/Intelligent-AML} \\
-Primary Programming Language & Python 3.10.12 \\
-Deep Learning Framework & PyTorch 2.3.0+cu121, PyTorch Geometric (PyG) 2.5.2 \\
-Graph Kernel Engine & DGL 2.2.1, NetworkX 3.2.1 \\
-Relational Data Engine & DuckDB 0.10.2, Apache Arrow 16.0.0 \\
-Scientific Stack & NumPy 1.26.4, SciPy 1.13.0, Scikit-learn 1.4.2 \\
-Conformal Prediction Library & MAPIE 0.8.0, Custom Class-Conditional CRC Engine \\
-Hardware Environment & Kaggle Cloud TPU v3-8 / NVIDIA Tesla T4 GPU (16GB) \\
-Workstation Environment & AMD Ryzen 9 5900X, 64GB DDR4 RAM, RTX 3080 (10GB) \\
-Operating System & Ubuntu 22.04 LTS / Windows 11 Enterprise (x86\_64) \\
-Random Seeds Evaluated & $seeds \in \{42, 101, 2024, 7, 999\}$ \\
-Master Training Command & \texttt{python scripts/train\_unified\_pipeline.py --dataset all} \\
-Benchmark Evaluation Script & \texttt{python scripts/benchmark\_baselines.py --runs 5} \\
-Figure Generator Script & \texttt{python scripts/generate\_all\_publication\_figures.py} \\
+Code Repository & \url{https://github.com/NazmulHasanNihal/Intelligent-AML} (Python 3.10.12) \\
+Deep Learning \& Graph Engines & PyTorch 2.3.0, PyG 2.5.2, DGL 2.2.1, NetworkX 3.2.1 \\
+Data \& Scientific Stack & DuckDB 0.10.2, Arrow 16.0, NumPy, SciPy, Scikit-learn, MAPIE 0.8, CRC \\
+Compute Infrastructure & Kaggle TPU v3-8, NVIDIA T4 (16GB), AMD 5900X, RTX 3080 \\
+OS \& Seed Initialization & Ubuntu 22.04 LTS / Windows 11; $seeds \in \{42, 101, 2024, 7, 999\}$ \\
+Execution Pipelines & \texttt{train\_unified\_pipeline.py}, \texttt{benchmark\_baselines.py}, \texttt{generate\_all\_publication\_figures.py} \\
 \bottomrule
 \end{tabular}%
 }

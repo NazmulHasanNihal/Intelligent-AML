@@ -61,7 +61,7 @@ Log into IEEE Computer Society ScholarOne Manuscripts:
 
 ### Step 2: File Upload
 1. **Main Document:** `papers/IEEE_Research_Paper/main.pdf` *(File Designation: Main Document / Manuscript)* — strictly 13.0 pages.
-2. **Supplementary Material:** `papers/IEEE_Research_Paper/supplementary.pdf` *(File Designation: Supplementary Material for Review)* — strictly 6.0 pages.
+2. **Supplementary Material:** `papers/IEEE_Research_Paper/supplementary.pdf` *(File Designation: Supplementary Material for Review)* — strictly 6.0 pages (finite-sample proofs, extended 14-dataset benchmark matrices, visual diagnostics Figures S1–S6, and operational compliance SOPs).
 3. **Cover Letter:** `papers/IEEE_Research_Paper/Cover_Letter_IEEE_TKDE.pdf` *(File Designation: Cover Letter)* — strictly 1.0 page.
 
 ### Step 3: Keywords & Categories
@@ -94,7 +94,7 @@ Log into IEEE Computer Society ScholarOne Manuscripts:
 3. **Question: "Does this submission include Supplemental Material?"**
    - **Action:** Select **`Yes`**.
    - **Explanation text:**  
-     `"The accompanying Supplementary Material document is strictly formatted to 6 double-column pages using IEEEtran, in full compliance with IEEE TKDE supplemental guidelines."`
+     `"The accompanying Supplementary Material document provides complete non-asymptotic proofs, extended 14-dataset benchmark matrices, visual diagnostics (Figures S1–S6), and operational compliance SOPs formatted in IEEEtran double-column style, in full compliance with IEEE TKDE supplemental guidelines."`
 
 4. **Question: "Funding Disclosure / Research Grant Information"**
    - **Action:** Paste:  

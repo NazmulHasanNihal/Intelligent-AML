@@ -84,6 +84,7 @@ catboost_info/
 .virtual_documents/
 
 # LaTeX build artifacts
+*.abs
 *.aux
 *.bbl
 *.bcf

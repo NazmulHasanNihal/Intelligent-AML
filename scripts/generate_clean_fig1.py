@@ -17,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 OUT_DIRS = [
     BASE_DIR / "papers" / "IEEE_Research_Paper" / "figures",
     BASE_DIR / "papers" / "University_CSE_Thesis" / "figures",
+    BASE_DIR / "papers" / "ESWA_Research_Paper" / "figures",
     BASE_DIR / "data" / "outputs" / "figures"
 ]
 

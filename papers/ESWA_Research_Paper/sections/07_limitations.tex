@@ -1,0 +1,26 @@
+\section{Limitations, Threats to Validity \& Ethical Considerations}
+\label{sec:limitations}
+
+\subsection{Observability and Banking Silos}
+\label{sec:limitations_observability}
+Fiat banking operates under statutory secrecy frameworks (e.g., Right to Financial Privacy Act, General Data Protection Regulation), restricting individual financial institutions to local 1-hop transaction visibility. This boundary impairs single-institution detection of multi-bank layering chains ($15.8\%$--$44.5\%$ F1 on IBM-AMLSim), highlighting the necessity of privacy-preserving federated graph architectures for cross-institutional intelligence.
+
+\subsection{Ground-Truth Boundaries in Benchmark Ledgers}
+\label{sec:limitations_ground_truth}
+Near-perfect empirical scores on public crypto benchmarks reflect that ground-truth labels originate from law enforcement seizures of Darknet marketplaces (e.g., Silk Road, AlphaBay). These entities form dense, homophilic topological clusters ($h > 0.92$), validating algorithmic robustness under structural transparency rather than unconstrained real-world informal value transfer evasion (such as Hawala or trade-based money laundering).
+
+\subsection{Label Confirmation Latency and Calibration Buffers}
+\label{sec:limitations_label_latency}
+In production surveillance, confirmed illicit labels incur substantial investigation delays ($\Delta T_{\text{delay}} \in [30, 90]$\,d). Assembling calibration buffers ($n_1 \ge 100$) requires pooling historical confirmed alerts. Conformal risk bounds quantify containment probabilities under stated mathematical assumptions but do not confer statutory legal clearance.
+
+\subsection{Cold-Start Dynamics and Domain Invariant Fallback}
+\label{sec:limitations_coldstart}
+On cold-start entities ($\deg(u) \le 2$), C-STGB attenuates graph message passing weights ($\alpha_u \to 0.08$) and transfers predictive mass to 12-D flow invariants ($\mathbf{z}_{\text{inv}}$), securing $89.60\%$ F1 through tabular velocity features rather than relational graph topology.
+
+\subsection{Construct Overlap Disclosures and Demographic Fairness}
+\label{sec:limitations_construct_overlap}
+Edge-trust training uses hub thresholds ($\deg_{\text{out}} \ge 50$) on split $\mathcal{E}_{\text{train}}$, sharing an inductive bias with degree camouflage testing. Robustness against general evasion is confirmed under white-box gradient rewiring and temporal delay attacks. Potential disparate impact on retail customers warrants continuous demographic fairness auditing under Equal Credit Opportunity Act (ECOA) mandates.
+
+\subsection{Model Governance and System Boundaries}
+\label{sec:limitations_governance}
+The auxiliary LLM-assisted SAR drafting module is strictly an experimental decision-support prototype. Autonomous filing is legally prohibited under BSA regulations and Federal Reserve SR 11-7 model risk management guidance \citep{fed2011sr117}. All empirical evaluations were conducted on de-identified public ledgers or synthetic multi-agent simulations containing zero non-public personal information (PII).

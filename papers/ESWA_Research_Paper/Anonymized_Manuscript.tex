@@ -1,0 +1,85 @@
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[authoryear]{natbib}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+\usepackage{amsthm}
+\usepackage{bm}
+
+% Algorithms & Pseudocode
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\providecommand{\REQUIRE}{\Require}
+\providecommand{\ENSURE}{\Ensure}
+
+% Table Formatting
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+
+% Graphics & Float Placement
+\usepackage{graphicx}
+\usepackage{placeins}
+\graphicspath{{figures/}}
+
+% Mathematical Theorem Environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+
+% Line Numbers for Double-Blind Review (Outer Margins)
+\usepackage[switch]{lineno}
+\setlength{\linenumbersep}{6pt}
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-\do\_\do.}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+% Short title & Running Header
+\shorttitle{Risk-Controlled Spatio-Temporal Graph Learning for AML}    
+\shortauthors{Anonymized for Double-Blind Review}  
+
+% Main title
+\title [mode = title]{Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage}  
+
+% Anonymized Author for Double-Blind Review
+\author{Anonymized for Double-Blind Review}
+\affiliation{organization={Department and Institution Withheld for Double-Blind Peer Review}}
+
+% Abstract (Max 250 words, self-contained, no undefined acronyms, no citations)
+\begin{abstract}
+Financial money laundering moves an estimated \$800B--\$2T annually across global financial rails. While Graph Neural Networks (GNNs) capture relational topologies, practical Anti-Money Laundering (AML) surveillance is hindered by velocity evasion, topological camouflage, extreme class imbalance ($\pi < 0.05\%$), cold-start isolation, and uncalibrated uncertainty. We propose \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost), an integrated risk-controlled temporal graph learning framework combining continuous harmonic temporal attention, learnable edge-trust gating, typology-clustered latent GraphSMOTE, evidence-adaptive graph-tabular fusion, and Class-Conditional Conformal Risk Control (CRC). Benchmarked across 14 financial transaction networks ($9.53\text{M}$ entities, $9.53\text{M}$ transactions, 182 evaluation pairs over five locked seeds), C-STGB achieves an unweighted macro F1 of $67.26\%$ ($0.6848$ PR-AUC). This establishes parity with tuned gradient-boosted decision trees (XGBoost $67.92\%, p=0.8077$; CatBoost $67.14\%, p=0.4318$) which excel on flat transaction streams, alongside statistically significant outperformance over evaluated deep GNNs ($+43.49\text{ pp}$ mean uplift over GCN; $W=105.0, p_{\text{adj}} < 0.001$), with advantages concentrated in graph-rich relational regimes. Furthermore, C-STGB provides finite-sample coverage ($\ge 99.0\%$) under within-class exchangeability with Adaptive Conformal Inference (ACI) drift tracking, routing $>99.4\%$ of volume into decisive singleton prediction sets while achieving a streaming Fast-Path inference latency of $0.45$\,ms per event.
+\end{abstract}
+
+% Keywords (1 to 7 terms)
+\begin{keywords}
+Anti-money laundering \sep Expert systems \sep Graph neural networks \sep Temporal graph learning \sep Class imbalance \sep Conformal prediction \sep Financial forensics
+\end{keywords}
+
+\maketitle
+\linenumbers
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_methodology}
+\input{sections/04_experiments}
+\input{sections/05_discussion}
+\input{sections/06_xai_case_study}
+\input{sections/07_limitations}
+\input{sections/08_conclusion}
+
+\FloatBarrier
+\section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
+During the preparation of this work, the authors used large language model assistants solely to improve language clarity and grammatical precision. After using these tools, the authors thoroughly reviewed, verified, and edited the content, and take full responsibility for the entire scientific content of the publication. All mathematical formulations, theoretical derivations, empirical experimental designs, software implementations, and analytical conclusions were independently developed by the authors. In Section~\ref{sec:xai_case_study}, a language model agent is investigated strictly as an experimental object within an auxiliary decision-support prototype under human oversight, rather than as an authorial contributor.
+
+\section*{Data availability statement}
+The 14 benchmark datasets evaluated in this study are derived from publicly accessible repositories and open-source simulators: Elliptic-v1 and Elliptic-v2 \citep{weber2019anti, bellei2024elliptic2}, XBlock-ETH \citep{zheng2020xblock}, Mt. Gox transaction logs, SAML-D \citep{lorenz2020samld}, PaySim and PaySim Extended \citep{lopez2016paysim}, IBM-AMLSim (HI and LI regimes) \citep{suzumura2019amlsim}, DGraphFin \citep{dgraphfin}, and the Credit Card Fraud benchmark \citep{dalpozzolo2018credit}. The synthetic typology data generator is provided with the research code. Complete preprocessing pipelines, environment configuration files, model weights, and reproduction scripts have been deposited in a persistent anonymized repository (\url{https://anonymous.4open.science/r/Intelligent-AML}) and will be archived with a permanent Zenodo DOI upon publication.
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+
+\end{document}

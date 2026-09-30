@@ -5,6 +5,7 @@
 [![PyTorch 2.5](https://img.shields.io/badge/PyTorch-2.5.1-EE4C2C.svg)](https://pytorch.org/)
 [![PyTorch Geometric](https://img.shields.io/badge/PyG-2.4-3C2179.svg)](https://pyg.org/)
 [![Unit & Integration Tests](https://img.shields.io/badge/Tests-144%20Passed%20(100%25)-brightgreen.svg)](tests/)
+[![Elsevier ESWA Status](https://img.shields.io/badge/Elsevier_ESWA-Submission_Suite_Ready-orange.svg)](papers/ESWA_Research_Paper/Anonymized_Manuscript.pdf)
 [![Paper Status: Under Review](https://img.shields.io/badge/IEEE_TKDE-Under_Review_2026-gold.svg)](papers/IEEE_Research_Paper/main.pdf)
 [![Thesis: National University](https://img.shields.io/badge/CSE_Thesis-90_Pages_Completed-darkblue.svg)](papers/University_CSE_Thesis/main.pdf)
 [![Compliance: FinCEN / FATF](https://img.shields.io/badge/Compliance-FinCEN_Form_111_%7C_FATF_Rec_16-purple.svg)](src/agents/sar_drafter_agent.py)
@@ -12,7 +13,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](Dockerfile)
 
 > **C-STGB: Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage**  
-> *Official Research & Production Repository — IEEE Transactions on Knowledge and Data Engineering (TKDE) & National University CSE Thesis Monograph.*
+> *Official Research & Production Repository — Elsevier Expert Systems with Applications (ESWA), IEEE Transactions on Knowledge and Data Engineering (TKDE) & National University CSE Thesis Monograph.*
 
 ---
 
@@ -472,6 +473,22 @@ We conducted an exhaustive benchmark comparing **13 baseline algorithms** agains
 ```
 Intelligent-AML/
 ├── papers/                              # Academic publications & thesis monographs
+│   ├── ESWA_Research_Paper/             # Elsevier ESWA publication package (Double-blind suite)
+│   │   ├── figures/                     # 300 DPI vector PDF/PNG figures & crisp diagrams
+│   │   ├── sections/                    # Modular LaTeX sections (01 to 08 with APA 7th citations)
+│   │   ├── tables/                      # Master scorecard and statistical test tables (booktabs)
+│   │   ├── Anonymized_Manuscript.tex    # Blinded Elsevier CAS double-column manuscript (`cas-dc.cls`)
+│   │   ├── Anonymized_Manuscript.pdf    # Compiled blinded manuscript (15 pages)
+│   │   ├── Anonymized_Supplementary.tex # Blinded supplementary material (7 pages)
+│   │   ├── Anonymized_Supplementary.pdf # Compiled blinded supplementary material
+│   │   ├── Title_Page.tex / .pdf        # Unanonymized title page (Authors, affiliations, CRediT, ORCID)
+│   │   ├── Cover_Letter_ESWA.tex / .pdf # Formal editorial cover letter to Editor-in-Chief
+│   │   ├── Highlights.tex / .pdf / .md  # 5 bullet highlights (strictly <= 85 characters each)
+│   │   ├── Declaration_of_Generative_AI.tex # Mandatory Elsevier GenAI declaration
+│   │   ├── Declaration_of_Competing_Interests.tex # Conflict of interest declaration
+│   │   ├── ORCID_Information.tex / .pdf # Standalone author identification & ORCID verification
+│   │   ├── ESWA_SUBMISSION_CHECKLIST.md # Complete 42-item compliance audit & playbook
+│   │   └── references.bib               # APA 7th edition bibliography with DOIs and [dataset] tags
 │   ├── IEEE_Research_Paper/             # IEEE TKDE publication package (Strictly 13.0 pages)
 │   │   ├── figures/                     # 22 Vector PDF/PNG/EPS publication figures
 │   │   ├── sections/                    # Modular LaTeX sections (01 to 07)
@@ -570,11 +587,14 @@ Intelligent-AML/
 │   └── reports/                         # Dataset-specific deep empirical reports
 │
 ├── scripts/                             # Developer automation & verification tools
-│   ├── compile_all_pdfs.py              # Bundled Tectonic PDF compiler (All 4 targets)
-│   ├── run_automated_paper_benchmark.py # Master 14-dataset automated benchmark
+│   ├── compile_all_pdfs.py              # Bundled Tectonic compiler (IEEE TKDE, ESWA, Thesis)
+│   ├── generate_eswa_crisp_figures.py   # Vector figure exporter for Elsevier ESWA
+│   ├── generate_clean_fig1.py           # Multi-target crisp architecture figure generator
 │   ├── generate_all_publication_figures.py # Regenerates all 22 publication figures
 │   ├── render_publication_diagrams.py   # Flowcharts and architecture visuals
+│   ├── run_automated_paper_benchmark.py # Master 14-dataset automated benchmark
 │   ├── run_enterprise_aml_demo.py       # Live streaming demo + FinCEN SAR drafting
+│   ├── start_platform.bat / .ps1        # One-click operations center launcher
 │   └── master_physical_benchmark_runner.py # Hardware-level physical test runner
 │
 ├── tests/                               # 144 automated unit tests (100% Pass Rate)
@@ -716,40 +736,77 @@ pytest tests/test_latex_integrity.py -v
 
 This repository includes a standalone, self-contained **Tectonic** engine located in `tools/tectonic/`. No massive external TeX Live or MiKTeX distribution is required. All packages, fonts, and BibTeX parsers resolve automatically.
 
-### Compile All 4 PDF Documents with One Command
+### Compile All PDF Documents with One Command
 ```bash
-python scripts/compile_all_pdfs.py
+# Compile everything across all three document suites (ESWA, IEEE TKDE, and Thesis):
+python scripts/compile_all_pdfs.py --suite all
+
+# Or compile a targeted document suite:
+python scripts/compile_all_pdfs.py --suite eswa    # Elsevier ESWA double-blind submission package (8 targets)
+python scripts/compile_all_pdfs.py --suite ieee    # IEEE TKDE publication package (3 targets)
+python scripts/compile_all_pdfs.py --suite thesis  # National University CSE Thesis Monograph (1 target)
 ```
 
 ### Compilation Targets & Verified Page Budgets
 
-| Document Target | Path | Engine | Status | Strict Budget |
-|:---|:---|:---:|:---:|:---:|
-| **IEEE Research Paper (Main)** | `papers/IEEE_Research_Paper/main.pdf` | Tectonic | Generated | **Strictly 13.0 Pages (0 overflow)** |
-| **IEEE Supplementary Material** | `papers/IEEE_Research_Paper/supplementary.pdf` | Tectonic | Generated | **Strictly 6.0 Pages** |
-| **IEEE Editorial Cover Letter** | `papers/IEEE_Research_Paper/Cover_Letter_IEEE_TKDE.pdf`| Tectonic | Generated | **Strictly 1.0 Page** |
-| **University CSE Thesis** | `papers/University_CSE_Thesis/main.pdf` | Tectonic | Generated | **Strictly 90.0 Pages** |
+| Document Suite | Target | Path | Engine | Status | Verified Budget |
+|:---|:---|:---|:---:|:---:|:---:|
+| **Elsevier ESWA** | **Blinded Main Manuscript** | `papers/ESWA_Research_Paper/Anonymized_Manuscript.pdf` | Tectonic | Generated | **15 Pages (`cas-dc`)** |
+| **Elsevier ESWA** | **Blinded Supplementary Material** | `papers/ESWA_Research_Paper/Anonymized_Supplementary.pdf` | Tectonic | Generated | **7 Pages** |
+| **Elsevier ESWA** | **Unanonymized Title Page** | `papers/ESWA_Research_Paper/Title_Page.pdf` | Tectonic | Generated | **2 Pages** |
+| **Elsevier ESWA** | **Editorial Cover Letter** | `papers/ESWA_Research_Paper/Cover_Letter_ESWA.pdf` | Tectonic | Generated | **2 Pages** |
+| **Elsevier ESWA** | **Highlights & Declarations** | `papers/ESWA_Research_Paper/Highlights.pdf` | Tectonic | Generated | **5 Bullets ($\le 85$ chars)** |
+| **Elsevier ESWA** | **Author ORCID Identification** | `papers/ESWA_Research_Paper/ORCID_Information.pdf` | Tectonic | Generated | **1 Page** |
+| **IEEE TKDE** | **IEEE Research Paper (Main)** | `papers/IEEE_Research_Paper/main.pdf` | Tectonic | Generated | **Strictly 13.0 Pages (0 overflow)** |
+| **IEEE TKDE** | **IEEE Supplementary Material** | `papers/IEEE_Research_Paper/supplementary.pdf` | Tectonic | Generated | **Strictly 6.0 Pages** |
+| **IEEE TKDE** | **IEEE Editorial Cover Letter** | `papers/IEEE_Research_Paper/Cover_Letter_IEEE_TKDE.pdf` | Tectonic | Generated | **Strictly 1.0 Page** |
+| **University Thesis** | **CSE Thesis Monograph** | `papers/University_CSE_Thesis/main.pdf` | Tectonic | Generated | **Strictly 90.0 Pages** |
 
 ### Output Verification
 ```
 ==============================================================================
 [*] Starting PDF Compilation with Tectonic (tectonic.exe)
+[*] Selected Suite: ALL (12 targets)
 ==============================================================================
 
-[+] Compiling: IEEE Research Paper (Main Manuscript)...
-   [SUCCESS] -> Generated: main.pdf (13 pages, 506.3 KB)
+[+] Compiling: [IEEE TKDE] IEEE TKDE Main Manuscript...
+   [SUCCESS] -> Generated: main.pdf (13 pages, 474.5 KB)
 
-[+] Compiling: IEEE Supplementary Material...
-   [SUCCESS] -> Generated: supplementary.pdf (6 pages, 129.8 KB)
+[+] Compiling: [IEEE TKDE] IEEE TKDE Supplementary Material...
+   [SUCCESS] -> Generated: supplementary.pdf (6 pages, 492.9 KB)
 
-[+] Compiling: IEEE Cover Letter...
-   [SUCCESS] -> Generated: Cover_Letter_IEEE_TKDE.pdf (1 page, 31.2 KB)
+[+] Compiling: [IEEE TKDE] IEEE TKDE Editorial Cover Letter...
+   [SUCCESS] -> Generated: Cover_Letter_IEEE_TKDE.pdf (1 page, 30.6 KB)
 
-[+] Compiling: University CSE Thesis Monograph...
+[+] Compiling: [Elsevier ESWA] ESWA Blinded Main Manuscript (cas-dc)...
+   [SUCCESS] -> Generated: Anonymized_Manuscript.pdf (15 pages, 487.8 KB)
+
+[+] Compiling: [Elsevier ESWA] ESWA Blinded Supplementary Material...
+   [SUCCESS] -> Generated: Anonymized_Supplementary.pdf (7 pages, 478.9 KB)
+
+[+] Compiling: [Elsevier ESWA] ESWA Unanonymized Title Page...
+   [SUCCESS] -> Generated: Title_Page.pdf (2 pages, 28.1 KB)
+
+[+] Compiling: [Elsevier ESWA] ESWA Editorial Cover Letter...
+   [SUCCESS] -> Generated: Cover_Letter_ESWA.pdf (2 pages, 32.6 KB)
+
+[+] Compiling: [Elsevier ESWA] ESWA Highlights (5 points <= 85 chars)...
+   [SUCCESS] -> Generated: Highlights.pdf (1 page, 19.6 KB)
+
+[+] Compiling: [Elsevier ESWA] ESWA Declaration of Generative AI...
+   [SUCCESS] -> Generated: Declaration_of_Generative_AI.pdf (1 page, 12.5 KB)
+
+[+] Compiling: [Elsevier ESWA] ESWA Declaration of Competing Interests...
+   [SUCCESS] -> Generated: Declaration_of_Competing_Interests.pdf (1 page, 11.1 KB)
+
+[+] Compiling: [Elsevier ESWA] ESWA Author ORCID Verification File...
+   [SUCCESS] -> Generated: ORCID_Information.pdf (1 page, 24.6 KB)
+
+[+] Compiling: [University Thesis] National University CSE Thesis Monograph...
    [SUCCESS] -> Generated: main.pdf (90 pages, 1143.8 KB)
 
 ==============================================================================
-[DONE] Compilation Complete: 4/4 Documents Successfully Built!
+[DONE] Compilation Complete: 12/12 Documents Successfully Built!
 ==============================================================================
 ```
 
@@ -1011,6 +1068,17 @@ Intelligent-AML is engineered to satisfy the rigorous supervisory standards of t
 ## 📚 Academic Citations
 
 If you utilize Intelligent-AML, the C-STGB architecture, or our benchmark scores in your academic research or industrial implementation, please cite our publications:
+
+### Elsevier Expert Systems with Applications (ESWA) Manuscript
+```bibtex
+@article{nazmul2026cstgb_eswa,
+  title={Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage},
+  author={Nazmul, Md. and Gungun, Musrat Jahan and Ahmed, Maheli},
+  journal={Expert Systems with Applications},
+  year={2026},
+  note={Submitted / Under Review}
+}
+```
 
 ### IEEE Transactions Manuscript
 ```bibtex

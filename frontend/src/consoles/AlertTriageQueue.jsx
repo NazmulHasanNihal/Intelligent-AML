@@ -29,9 +29,11 @@ import {
   Lock,
   Unlock,
   SlidersHorizontal,
-  Download
+  Download,
+  UploadCloud
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { BatchCSVIngestModal } from '../components/BatchCSVIngestModal';
 
 const ENTERPRISE_TRANSACTIONS = [
   {
@@ -201,11 +203,22 @@ export const AlertTriageQueue = ({
   sharedStats 
 }) => {
   const { currentBanker, logBankerAction } = useAuth();
+  const [transactions, setTransactions] = useState(ENTERPRISE_TRANSACTIONS);
   const [activeTierFilter, setActiveTierFilter] = useState('ALL'); // 'ALL', 'TIER_1', 'TIER_2', 'TIER_3'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTx, setSelectedTx] = useState(ENTERPRISE_TRANSACTIONS[0]);
   const [selectedTxIds, setSelectedTxIds] = useState(new Set());
   const [batchFeedback, setBatchFeedback] = useState(null);
+  const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
+
+  const handleImportBatch = (newTxs) => {
+    setTransactions(prev => [...newTxs, ...prev]);
+    if (newTxs.length > 0) {
+      setSelectedTx(newTxs[0]);
+    }
+    setBatchFeedback(`✓ Successfully triaged and imported ${newTxs.length} flagged transactions into active queue.`);
+    setTimeout(() => setBatchFeedback(null), 5000);
+  };
 
   const toggleSelectTx = (id, e) => {
     e.stopPropagation();
@@ -261,7 +274,7 @@ export const AlertTriageQueue = ({
     setTimeout(() => setBatchFeedback(null), 4000);
   };
 
-  const filteredTxs = ENTERPRISE_TRANSACTIONS.filter(tx => {
+  const filteredTxs = transactions.filter(tx => {
     const matchesTier = activeTierFilter === 'ALL' || tx.tier === activeTierFilter;
     const matchesSearch = 
       tx.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -332,7 +345,7 @@ export const AlertTriageQueue = ({
                   activeTierFilter === 'ALL' ? 'bg-gradient-to-b from-[#257843] to-[#174E2B] text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                All ({ENTERPRISE_TRANSACTIONS.length})
+                All ({transactions.length})
               </button>
               <button
                 onClick={() => setActiveTierFilter('TIER_1_QUARANTINE')}
@@ -352,15 +365,26 @@ export const AlertTriageQueue = ({
               </button>
             </div>
 
-            <div className="relative w-full sm:w-56">
-              <Search className="w-3 h-3 text-[var(--accent-primary)] absolute left-2.5 top-2.5" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Filter transactions..."
-                className="w-full pl-8 pr-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-card)] focus:border-[var(--accent-primary)] text-[11px] text-[var(--text-primary)] placeholder-[var(--text-muted)] shadow-inner outline-none"
-              />
+            <div className="flex items-center gap-1.5 w-full sm:w-auto">
+              <button
+                onClick={() => setIsBatchModalOpen(true)}
+                className="skeuo-btn skeuo-btn-primary px-2.5 py-1 text-[11px] font-bold flex items-center gap-1.5 shrink-0 cursor-pointer"
+                title="Upload CSV or test pre-bundled batch datasets"
+              >
+                <UploadCloud className="w-3.5 h-3.5" />
+                <span>Batch Ingest</span>
+              </button>
+
+              <div className="relative flex-1 sm:w-56">
+                <Search className="w-3 h-3 text-[var(--accent-primary)] absolute left-2.5 top-2.5" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Filter transactions..."
+                  className="w-full pl-8 pr-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-card)] focus:border-[var(--accent-primary)] text-[11px] text-[var(--text-primary)] placeholder-[var(--text-muted)] shadow-inner outline-none"
+                />
+              </div>
             </div>
           </div>
 
@@ -597,16 +621,16 @@ export const AlertTriageQueue = ({
             </button>
 
             <button
-              onClick={() => onNavigateToGraph && onNavigateToGraph()}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-secondary text-[11px] font-semibold"
+              onClick={() => onNavigateToGraph && onNavigateToGraph(selectedTx)}
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-secondary text-[11px] font-semibold cursor-pointer"
             >
               <Share2 className="w-3 h-3 text-[var(--accent-primary)]" />
               <span>Inspect in 3D Forensic Studio</span>
             </button>
 
             <button
-              onClick={() => onNavigateToSAR && onNavigateToSAR()}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-[11px] font-semibold"
+              onClick={() => onNavigateToSAR && onNavigateToSAR(selectedTx)}
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-[11px] font-semibold cursor-pointer"
             >
               <FileText className="w-3 h-3" />
               <span>Draft Official SAR Dossier</span>
@@ -614,6 +638,13 @@ export const AlertTriageQueue = ({
           </div>
         </div>
       </div>
+
+      {/* Batch CSV Ingest Modal */}
+      <BatchCSVIngestModal
+        isOpen={isBatchModalOpen}
+        onClose={() => setIsBatchModalOpen(false)}
+        onImportToQueue={handleImportBatch}
+      />
     </div>
   );
 };

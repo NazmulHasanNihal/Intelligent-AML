@@ -12,6 +12,7 @@ import { CustomerNoticeModal } from './components/CustomerNoticeModal';
 import { BankerActionModal } from './components/BankerActionModal';
 import { BankerAuthModal } from './components/BankerAuthModal';
 import { CommandPalette } from './components/CommandPalette';
+import { QuickStartBar } from './components/QuickStartBar';
 import { checkHealth } from './api/client';
 
 // Dynamic Code-Splitting: Lazy-load heavy consoles with Suspense
@@ -67,6 +68,7 @@ function MainAppShell() {
   const [tourStep, setTourStep] = useState(0);
   const [isLiveStreamActive, setIsLiveStreamActive] = useState(true);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [activeCase, setActiveCase] = useState(null);
 
   // Modal State Controllers
   const [drawerAccount, setDrawerAccount] = useState(null);
@@ -217,25 +219,21 @@ function MainAppShell() {
           isSidebarCollapsed={isSidebarCollapsed}
           onToggleSidebar={() => setIsSidebarCollapsed(prev => !prev)}
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          health={health}
+          onRefreshHealth={async () => setHealth(await checkHealth())}
+          onSelectScenario={(sc) => setActiveCase(sc)}
         />
 
         {/* Central Consoles Workspace */}
-        <main className="flex-1 p-2 sm:p-3 lg:p-3.5 space-y-2 sm:space-y-2.5 min-w-0">
-          {/* Live Telemetry Ticker */}
-          <LiveStreamTicker
-            isActive={isLiveStreamActive}
-            onSelectTx={() => setActiveTab('command-center')}
-            sharedStats={globalStats}
-            onStatsUpdate={setGlobalStats}
-          />
-
+        <main className="flex-1 p-3 sm:p-4 lg:p-5 space-y-3 min-w-0">
           {/* Dynamic Console Switcher with Suspense Fallback */}
           <React.Suspense fallback={<TactileConsoleSkeleton />}>
             <div className="transition-opacity duration-200">
               {activeTab === 'command-center' && (
                 <UnifiedCommandCenter
-                  onNavigateToSAR={() => setActiveTab('cases')}
-                  onNavigateToRecourse={() => setActiveTab('recourse')}
+                  activeCase={activeCase}
+                  onNavigateToSAR={(tx) => { if (tx) setActiveCase(tx); setActiveTab('cases'); }}
+                  onNavigateToRecourse={(tx) => { if (tx) setActiveCase(tx); setActiveTab('recourse'); }}
                   onOpenAccountProfile={handleOpenAccountProfile}
                   onOpenNoticeModal={handleOpenNoticeModal}
                   onOpenActionModal={handleOpenActionModal}
@@ -243,8 +241,8 @@ function MainAppShell() {
               )}
               {activeTab === 'alerts' && (
                 <AlertTriageQueue
-                  onNavigateToGraph={() => setActiveTab('investigate')}
-                  onNavigateToSAR={() => setActiveTab('cases')}
+                  onNavigateToGraph={(tx) => { if (tx) setActiveCase(tx); setActiveTab('investigate'); }}
+                  onNavigateToSAR={(tx) => { if (tx) setActiveCase(tx); setActiveTab('cases'); }}
                   onOpenAccountProfile={handleOpenAccountProfile}
                   onOpenNoticeModal={handleOpenNoticeModal}
                   onOpenActionModal={handleOpenActionModal}
@@ -253,27 +251,27 @@ function MainAppShell() {
               )}
               {activeTab === 'investigate' && (
                 <ForensicGraphStudio
-                  onNavigateToSAR={() => setActiveTab('cases')}
+                  activeCase={activeCase}
+                  onNavigateToSAR={(tx) => { if (tx) setActiveCase(tx); setActiveTab('cases'); }}
                   onOpenAccountProfile={handleOpenAccountProfile}
                 />
               )}
               {activeTab === 'cases' && (
                 <MultiAgentSARWorkbench
+                  activeCase={activeCase}
                   onOpenNoticeModal={handleOpenNoticeModal}
                   onOpenActionModal={handleOpenActionModal}
                 />
               )}
               {activeTab === 'recourse' && (
                 <CounterfactualSandbox
+                  activeCase={activeCase}
                   onOpenNoticeModal={handleOpenNoticeModal}
                 />
               )}
               {activeTab === 'governance' && <BenchmarkGovernanceHub />}
             </div>
           </React.Suspense>
-
-          {/* Workflow Stage Footer Navigation */}
-          <WorkflowStageFooter activeTab={activeTab} setActiveTab={setActiveTab} />
         </main>
       </div>
 

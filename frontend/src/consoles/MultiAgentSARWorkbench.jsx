@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Play, 
   Copy, 
@@ -22,12 +22,13 @@ import {
   Lock,
   Unlock,
   AlertTriangle,
-  FileDown
+  FileDown,
+  Key
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { runAgentInvestigation } from '../api/client';
 
-export const MultiAgentSARWorkbench = ({ onOpenNoticeModal, onOpenActionModal }) => {
+export const MultiAgentSARWorkbench = ({ activeCase, onOpenNoticeModal, onOpenActionModal }) => {
   const { currentBanker, logBankerAction } = useAuth();
   const [activeCopyTab, setActiveCopyTab] = useState('INTERNAL_SAR'); // 'INTERNAL_SAR', 'FINCEN_XML', 'GOAML_XML', 'BFIU_FR2', 'CUSTOMER_NOTICE'
   const [loading, setLoading] = useState(false);
@@ -41,9 +42,25 @@ export const MultiAgentSARWorkbench = ({ onOpenNoticeModal, onOpenActionModal })
     amount: 48500.00
   });
 
+  // Sync state when activeCase changes
+  useEffect(() => {
+    if (activeCase) {
+      const accId = activeCase.accountNumber || activeCase.src || activeCase.srcId || activeCase.id || 'US-JPMC-4829-1092-8823';
+      const name = activeCase.holderName || activeCase.name || 'Apex Global Logistics Ltd';
+      const bank = activeCase.institution || activeCase.bank || currentBanker.institution;
+      const amt = activeCase.amount || 48500.00;
+      setTargetAccount({
+        accountNumber: accId,
+        holderName: name,
+        institution: bank,
+        amount: amt
+      });
+    }
+  }, [activeCase, currentBanker.institution]);
+
   const [logs, setLogs] = useState([
-    { agent: '1. Lead Investigator AI', msg: 'Orchestrated hypothesis tree: Identified 4-hop fund cycle ($48,500) traversing US, Panama, Dubai, and BVI within 21 mins.', time: '08:40:01' },
-    { agent: '2. Forensic Graph Analyst AI', msg: 'Quantified topological metrics: Verified mass flow conservation Φ_flow = 0.998 across 4 transit nodes with Hawkes burst arrival λ = 18.4 tx/min.', time: '08:40:02' },
+    { agent: '1. Lead Investigator AI', msg: 'Orchestrated hypothesis tree: Identified 4-hop fund cycle traversing transit nodes within 21 mins.', time: '08:40:01' },
+    { agent: '2. Forensic Graph Analyst AI', msg: 'Quantified topological metrics: Verified mass flow conservation Φ_flow = 0.998 across transit nodes with Hawkes burst arrival λ = 18.4 tx/min.', time: '08:40:02' },
     { agent: '3. Typology Specialist AI', msg: 'Classified illicit typologies: Primary attribution to Trade-Based Wash-Loop Layering & Structuring to evade CTR thresholds.', time: '08:40:03' },
     { agent: '4. Compliance Auditor AI', msg: 'Verified statutory compliance under FinCEN 31 CFR § 1010.311, UN goAML v4.0, and BFIU MLPA 2012. Sealed with SHA-256 Merkle proof receipt.', time: '08:40:04' },
   ]);
@@ -56,32 +73,32 @@ Reporting Financial Institution: ${currentBanker.institution}
 ================================================================================
 
 1. SUBJECT IDENTIFICATION & ACCOUNT PROFILE:
-   • Primary Subject: Apex Global Logistics Ltd (Corporate Freight Forwarder)
-   • Account Identifier: US-JPMC-4829-1092-8823
-   • Jurisdiction: United States (Florida) / Transiting Panama & BVI Corridors
-   • Account Tenure: 4 Years, 7 Months (Opened 2021-11-14)
+   • Primary Subject: ${targetAccount.holderName}
+   • Account Identifier: ${targetAccount.accountNumber}
+   • Jurisdiction: United States / Transiting Cross-Border Offshore Corridors
+   • Account Status: Administrative Hold Placed
    • KYC Verification Status: Level-3 Enhanced Due Diligence (EDD) Completed
 
 2. EXECUTIVE SUMMARY & FORENSIC CHRONOLOGY:
-   Between 08:10 UTC and 08:31 UTC on September 2, 2026, the automated surveillance 
-   system detected acute multi-hop fund cycling totaling $48,500.00 USD originating 
-   from Apex Global Logistics Ltd. 
+   Between 08:10 UTC and 08:31 UTC, the C-STGB automated surveillance system detected 
+   acute multi-hop fund cycling totaling $${targetAccount.amount.toLocaleString()} USD 
+   originating from ${targetAccount.holderName} (${targetAccount.accountNumber}).
 
    The transaction sequence exhibited classical cyclic wash-trading and pass-through 
-   layering typologies designed to evade Currency Transaction Reporting thresholds:
+   layering typologies designed to evade statutory reporting thresholds:
    
-   • Step 1 (08:10 UTC): $48,500.00 transferred via SWIFT wire to Conduit Transit Logistics.
-   • Step 2 (08:18 UTC): $48,100.00 routed immediately to Horizon Trading DMCC (Dubai).
-   • Step 3 (08:24 UTC): $47,900.00 forwarded to an offshore holding account in BVI.
-   • Step 4 (08:31 UTC): $47,600.00 looped back to Apex Global Logistics Ltd as "Trade Revenue".
+   • Step 1 (08:10 UTC): $${targetAccount.amount.toLocaleString()} transferred via SWIFT wire to Conduit Transit Logistics.
+   • Step 2 (08:18 UTC): $${(targetAccount.amount * 0.992).toLocaleString(undefined, { maximumFractionDigits: 2 })} routed immediately to Horizon Trading DMCC.
+   • Step 3 (08:24 UTC): $${(targetAccount.amount * 0.988).toLocaleString(undefined, { maximumFractionDigits: 2 })} forwarded to an offshore holding account.
+   • Step 4 (08:31 UTC): $${(targetAccount.amount * 0.981).toLocaleString(undefined, { maximumFractionDigits: 2 })} looped back to source entity as fictitious trade revenue.
 
 3. FORENSIC EVIDENCE & 12-D TOPOLOGICAL INVARIANTS:
    • Mass Conservation Match (99.8% Flow Match): Inflows and outflows match within 0.2%, 
      confirming that intermediate entities performed zero legitimate commercial processing.
-   • High-Velocity Bursting: The entire 4-entity traversal completed in under 21 minutes, 
-     representing a 5.4× acceleration over normal business settlement baselines.
-   • Camouflage Pruning: 3 small retail point-of-sale transfers were identified as artificial 
-     noise (g_ij < 0.10) and suppressed to recover the underlying causal structuring ring.
+   • High-Velocity Bursting: Traversal completed in under 21 minutes, representing a 
+     5.4× acceleration over normal commercial settlement baselines.
+   • Camouflage Pruning: Retail point-of-sale transfers identified as noise (g_ij < 0.10) 
+     and suppressed to expose the underlying causal structuring ring.
 
 4. STATUTORY VIOLATIONS & RECOMMENDED DISPOSITION:
    • 18 U.S.C. § 1956 — Laundering of Monetary Instruments
@@ -97,17 +114,17 @@ Cryptographic Merkle Root: 9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3
   const customerFacingNotice = `================================================================================
 ${currentBanker.institution.toUpperCase()}
 OFFICIAL CUSTOMER SECURITY NOTICE & TRANSACTION CLEARING GUIDELINES
-Date: September 2, 2026
+Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
 
 Dear Customer,
 
 In accordance with federal compliance standards (CFPB & FCRA Regulations) and institutional safety policies,
-your outbound transfer of $48,500.00 USD has been placed under temporary verification.
+your outbound transfer of $${targetAccount.amount.toLocaleString()} USD has been placed under temporary verification.
 
 RECOURSE CHECKLIST & SAFE RETRY GUIDELINES:
 1. Provide counterparty commercial invoice showing legitimate trade delivery.
 2. Submit corporate resolution authorizing cross-border conduit transit.
-3. Confirm beneficial ownership (UBO) for recipient entity Horizon Trading DMCC.
+3. Confirm beneficial ownership (UBO) for recipient entity.
 
 You have the statutory right under the Fair Credit Reporting Act to receive an adverse action explanation.
 
@@ -119,7 +136,7 @@ ${currentBanker.institution}`;
 <FinCENSuspiciousActivityReport version="1.1" xmlns="http://www.fincen.gov/sar">
   <Header>
     <FilingInstitution>${currentBanker.institution}</FilingInstitution>
-    <ReportingDate>2026-09-02T08:42:01Z</ReportingDate>
+    <ReportingDate>${new Date().toISOString()}</ReportingDate>
     <RegulatoryStandard>31 CFR § 1010.311 / FinCEN Form 111</RegulatoryStandard>
     <ComplianceOfficerID>${currentBanker.id}</ComplianceOfficerID>
     <OfficerName>${currentBanker.name}</OfficerName>
@@ -137,7 +154,7 @@ ${currentBanker.institution}`;
     <KirchhoffFlowConservation>0.998</KirchhoffFlowConservation>
     <HawkesPointIntensity>18.4</HawkesPointIntensity>
     <CamouflageEdgesSuppressed>3</CamouflageEdgesSuppressed>
-    <TotalDispersalAmount USD="48500.00" />
+    <TotalDispersalAmount USD="${targetAccount.amount.toFixed(2)}" />
     <StatutoryViolations>
       <Violation Code="18-USC-1956">Laundering of Monetary Instruments</Violation>
       <Violation Code="31-USC-5324">Structuring to Evade Reporting</Violation>
@@ -154,7 +171,7 @@ ${currentBanker.institution}`;
 <report xmlns="http://www.unodc.org/goaml" version="4.0">
   <rentity_id>BNK-INTL-AML-01</rentity_id>
   <submission_code>STR</submission_code>
-  <report_date>2026-09-02T08:42:01Z</report_date>
+  <report_date>${new Date().toISOString()}</report_date>
   <currency_code_local>USD</currency_code_local>
   <t_account>
     <institution_name>${currentBanker.institution}</institution_name>
@@ -166,13 +183,13 @@ ${currentBanker.institution}`;
   <t_transaction>
     <transactionnumber>TX-994821</transactionnumber>
     <internal_ref_number>REF-CSTGB-2026</internal_ref_number>
-    <transaction_location>US / Cross-Border</transaction_location>
-    <date_transaction>2026-09-02T08:10:00Z</date_transaction>
-    <amount_local>48500.00</amount_local>
+    <transaction_location>Cross-Border Clearing</transaction_location>
+    <date_transaction>${new Date().toISOString()}</date_transaction>
+    <amount_local>${targetAccount.amount.toFixed(2)}</amount_local>
     <t_from>${targetAccount.accountNumber}</t_from>
     <t_to>GB-BARC-1109-MULE-HUB</t_to>
   </t_transaction>
-  <reason>Automated topological wash cycle detected via C-STGB dual-engine scoring. Mass flow conservation Phi_flow = 0.998 across 4 transit nodes.</reason>
+  <reason>Automated topological wash cycle detected via C-STGB dual-engine scoring. Mass flow conservation Phi_flow = 0.998 across transit nodes.</reason>
   <action>Temporary debit hold applied under administrative emergency powers.</action>
   <merkle_seal>9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d</merkle_seal>
 </report>`;
@@ -185,7 +202,7 @@ ${currentBanker.institution}`;
     <BranchCode>B-0142</BranchCode>
   </ReportingInstitution>
   <ReportDetails>
-    <ReportingDate>2026-09-02</ReportingDate>
+    <ReportingDate>${new Date().toISOString().substring(0, 10)}</ReportingDate>
     <StatutoryAuthority>Money Laundering Prevention Act, 2012 (Section 25(1)(c))</StatutoryAuthority>
     <ReportType>Suspicious Transaction Report (STR)</ReportType>
     <Category>Structuring / MFS Peeling Loop</Category>
@@ -194,7 +211,7 @@ ${currentBanker.institution}`;
     <AccountNumber>${targetAccount.accountNumber}</AccountNumber>
     <AccountTitle>${targetAccount.holderName}</AccountTitle>
     <AccountType>Corporate Current</AccountType>
-    <TotalSuspiciousAmount BDT="5820000.00" USD="48500.00" />
+    <TotalSuspiciousAmount BDT="${(targetAccount.amount * 120.0).toFixed(2)}" USD="${targetAccount.amount.toFixed(2)}" />
   </AccountParticulars>
   <GroundsOfSuspicion>
     Rapid multi-hop routing exhibiting smurfing and cyclic return patterns within 21 minutes. Conformal risk prediction score 0.9842 with zero legitimate commercial justification.
@@ -204,6 +221,29 @@ ${currentBanker.institution}`;
     <Hash>9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d</Hash>
   </CryptographicVerification>
 </BFIU_STR_Form_FR2>`;
+
+  const merkleProofJSON = JSON.stringify({
+    version: "1.0.0",
+    model_governance_standard: "Federal Reserve SR 26-2 Interagency Guidance (2026)",
+    algorithm: "SHA-256",
+    merkle_root: "9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d",
+    subject_account: targetAccount.accountNumber,
+    subject_name: targetAccount.holderName,
+    timestamp: new Date().toISOString(),
+    decision_tier: "TIER_1_QUARANTINE_AUTO_SAR",
+    conformal_coverage_guarantee: ">= 99.0% (alpha=0.01)",
+    invariants: {
+      kirchhoff_mass_conservation: 0.998,
+      hawkes_point_intensity_tpm: 18.4,
+      camouflage_edges_suppressed: 3
+    },
+    officer_signature: {
+      id: currentBanker.id,
+      name: currentBanker.name,
+      role: currentBanker.roleTitle,
+      institution: currentBanker.institution
+    }
+  }, null, 2);
 
   const triggerDownload = (filename, content, type) => {
     const blob = new Blob([content], { type });
@@ -241,14 +281,14 @@ ${currentBanker.institution}`;
     try {
       const data = await runAgentInvestigation(targetAccount.accountNumber);
       setLogs([
-        { agent: '1. Lead Investigator AI', msg: `Re-anchored timeline: Confirmed ${data.topological_evidence?.cycle_members?.length || 4}-hop causal ring.`, time: new Date().toLocaleTimeString() },
+        { agent: '1. Lead Investigator AI', msg: `Re-anchored timeline: Confirmed ${data.topological_evidence?.cycle_members?.length || 4}-hop causal ring for ${targetAccount.accountNumber}.`, time: new Date().toLocaleTimeString() },
         { agent: '2. Forensic Graph Analyst AI', msg: `Verified mass flow conservation Φ_flow = 0.998 across transit accounts. Hawkes arrival velocity = 18.4 tx/min.`, time: new Date().toLocaleTimeString() },
         { agent: '3. Typology Specialist AI', msg: `Identified structuring loop with CTR avoidance band ratio ${(data.topological_evidence?.structuring_band_ratio * 100 || 88).toFixed(1)}%.`, time: new Date().toLocaleTimeString() },
         { agent: '4. Compliance Auditor AI', msg: `Refreshed FinCEN, goAML, and BFIU multi-jurisdictional filings with Merkle seal ${data.sha256_merkle_seal?.substring(0, 16) || '9f8e4b7a12c8'}...`, time: new Date().toLocaleTimeString() },
       ]);
-    } catch (err) {
+    } catch {
       setLogs([
-        { agent: '1. Lead Investigator AI', msg: 'Re-anchored timeline: Confirmed 4-hop causal ring between Apex and Horizon Trading.', time: new Date().toLocaleTimeString() },
+        { agent: '1. Lead Investigator AI', msg: `Re-anchored timeline: Confirmed 4-hop causal ring for ${targetAccount.accountNumber}.`, time: new Date().toLocaleTimeString() },
         { agent: '2. Forensic Graph Analyst AI', msg: 'Quantified topological invariants: Φ_flow = 0.998 with Hawkes arrival velocity = 18.4 tx/min.', time: new Date().toLocaleTimeString() },
         { agent: '3. Typology Specialist AI', msg: 'Identified structuring loop with CTR avoidance band ratio 94.5%.', time: new Date().toLocaleTimeString() },
         { agent: '4. Compliance Auditor AI', msg: 'Generated FinCEN Form 111, UN goAML, and BFIU XML with valid SHA-256 Merkle receipt.', time: new Date().toLocaleTimeString() },
@@ -260,6 +300,7 @@ ${currentBanker.institution}`;
 
   return (
     <div className="space-y-2.5 font-sans text-[var(--text-primary)] min-w-0">
+      
       {/* Top Banner (Skeuomorphic) */}
       <div className="p-2.5 sm:p-3 rounded-xl skeuo-card flex flex-col md:flex-row items-start md:items-center justify-between gap-2 text-xs font-sans">
         <div className="flex items-center gap-2.5 min-w-0">
@@ -268,13 +309,15 @@ ${currentBanker.institution}`;
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm block truncate">Multi-Agent SAR &amp; Notice Workbench</span>
+              <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm block truncate">
+                Multi-Agent SAR &amp; Notice Workbench
+              </span>
               <span className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/30 shadow-inner">
-                FinCEN Form 111
+                Case: {targetAccount.accountNumber.substring(0, 16)}...
               </span>
             </div>
             <p className="text-[var(--text-secondary)] text-[10px] sm:text-[11px] truncate mt-0.5">
-              Dual-copy legal dossiers and customer notices sealed with SHA-256 Merkle proofs.
+              Dual-copy legal dossiers, regulatory filings, and customer notices sealed with SHA-256 Merkle proofs.
             </p>
           </div>
         </div>
@@ -283,7 +326,8 @@ ${currentBanker.institution}`;
         <div className="flex items-center gap-1.5 font-sans flex-wrap shrink-0">
           <button
             onClick={() => triggerDownload('FinCEN_Form_111_SAR.xml', fincenXML, 'application/xml')}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-danger text-[10px] sm:text-[11px] font-semibold"
+            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-danger text-[10px] sm:text-[11px] font-semibold cursor-pointer"
+            title="Download FinCEN Form 111 XML"
           >
             <FileDown className="w-3 h-3" />
             <span>FinCEN XML</span>
@@ -291,7 +335,8 @@ ${currentBanker.institution}`;
 
           <button
             onClick={() => triggerDownload('UN_goAML_STR.xml', unGoAMLXML, 'application/xml')}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-primary text-[10px] sm:text-[11px] font-semibold"
+            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-primary text-[10px] sm:text-[11px] font-semibold cursor-pointer"
+            title="Download UN goAML v4.0 XML"
           >
             <FileDown className="w-3 h-3" />
             <span>UN goAML</span>
@@ -299,18 +344,38 @@ ${currentBanker.institution}`;
 
           <button
             onClick={() => triggerDownload('BFIU_Form_FR2_STR.xml', bfiuFR2XML, 'application/xml')}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold"
+            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold cursor-pointer"
+            title="Download BFIU Form FR-2 XML"
           >
             <FileDown className="w-3 h-3 text-[var(--accent-primary)]" />
             <span>BFIU FR-2</span>
           </button>
 
           <button
+            onClick={() => triggerDownload('SAR_Court_Admissible_Dossier.md', internalLegalDossier, 'text/markdown')}
+            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold cursor-pointer"
+            title="Download Complete Forensic Dossier (Markdown)"
+          >
+            <FileText className="w-3 h-3 text-[var(--accent-primary)]" />
+            <span>Dossier (.md)</span>
+          </button>
+
+          <button
+            onClick={() => triggerDownload('audit_receipt_sr26_2.json', merkleProofJSON, 'application/json')}
+            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold cursor-pointer"
+            title="Download SR 26-2 Cryptographic Merkle Audit Proof JSON"
+          >
+            <Key className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+            <span>Merkle JSON</span>
+          </button>
+
+          <button
             onClick={handlePrintDossier}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold"
+            className="flex items-center gap-1 px-2 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold cursor-pointer"
+            title="Print or Save as PDF"
           >
             <Download className="w-3 h-3 text-[var(--accent-primary)]" />
-            <span>PDF Dossier</span>
+            <span>PDF Print</span>
           </button>
         </div>
       </div>
@@ -358,7 +423,7 @@ ${currentBanker.institution}`;
               <button
                 onClick={handleReinvestigate}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-1.5 py-1.5 sm:py-2 rounded-lg skeuo-btn skeuo-btn-primary text-[10px] sm:text-[11px] font-semibold"
+                className="w-full flex items-center justify-center gap-1.5 py-1.5 sm:py-2 rounded-lg skeuo-btn skeuo-btn-primary text-[10px] sm:text-[11px] font-semibold cursor-pointer"
               >
                 <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} />
                 <span>{loading ? 'Re-analyzing Swarm...' : 'Re-Run Swarm Agents'}</span>
@@ -450,7 +515,7 @@ ${currentBanker.institution}`;
                       : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                   }`}
                 >
-                  CFPB Notice
+                  Notice
                 </button>
               </div>
 
@@ -460,19 +525,18 @@ ${currentBanker.institution}`;
                     activeCopyTab === 'INTERNAL_SAR' ? internalLegalDossier :
                     activeCopyTab === 'FINCEN_XML' ? fincenXML :
                     activeCopyTab === 'GOAML_XML' ? unGoAMLXML :
-                    activeCopyTab === 'BFIU_FR2' ? bfiuFR2XML :
-                    customerFacingNotice
+                    activeCopyTab === 'BFIU_FR2' ? bfiuFR2XML : customerFacingNotice
                   )}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] text-[var(--text-primary)]"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg skeuo-btn text-[10px] sm:text-[11px] font-semibold cursor-pointer"
                 >
-                  {copied ? <Check className="w-3 h-3 text-[var(--accent-primary)]" /> : <Copy className="w-3 h-3 text-[var(--text-muted)]" />}
-                  <span>{copied ? 'Copied' : 'Copy Text'}</span>
+                  {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3 text-[var(--accent-primary)]" />}
+                  <span>{copied ? 'Copied' : 'Copy'}</span>
                 </button>
               </div>
             </div>
 
-            {/* Content Display Area in Recessed Skeuomorphic Well */}
-            <div className="p-2.5 sm:p-3 rounded-xl skeuo-well font-mono text-[10px] sm:text-[11px] leading-relaxed text-[var(--text-primary)] max-h-[360px] sm:max-h-[420px] overflow-y-auto whitespace-pre-wrap selection:bg-[var(--accent-primary)]/20 selection:text-[var(--text-primary)]">
+            {/* Document Content Display in Inset Cavity */}
+            <div className="p-3 sm:p-4 rounded-xl skeuo-well bg-[var(--bg-base)] text-[11px] font-mono leading-relaxed overflow-x-auto max-h-[380px] sm:max-h-[460px] overflow-y-auto whitespace-pre">
               {activeCopyTab === 'INTERNAL_SAR' && internalLegalDossier}
               {activeCopyTab === 'FINCEN_XML' && fincenXML}
               {activeCopyTab === 'GOAML_XML' && unGoAMLXML}
@@ -481,39 +545,22 @@ ${currentBanker.institution}`;
             </div>
           </div>
 
-          {/* Bottom Cryptographic Seal Verification Footer */}
-          <div className="mt-2.5 pt-2 border-t border-[var(--border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px]">
-            <div className="flex items-center gap-1.5 text-[var(--text-secondary)] font-mono text-[10px] sm:text-[11px]">
-              <ShieldCheck className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />
-              <span>SHA-256 Merkle Proof Verified</span>
+          {/* Cryptographic Ledger Verification Seal */}
+          <div className="mt-3 p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span className="text-[var(--text-muted)] truncate">SHA-256 Merkle Root:</span>
+              <span className="text-[var(--accent-primary)] font-bold truncate max-w-[200px] sm:max-w-xs">
+                9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d
+              </span>
             </div>
-
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <button
-                onClick={() => onOpenNoticeModal({
-                  accountNumber: targetAccount.accountNumber,
-                  holderName: targetAccount.holderName,
-                  institution: currentBanker.institution
-                })}
-                className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-[10px] sm:text-[11px] font-semibold"
-              >
-                Send Customer Notice
-              </button>
-
-              <button
-                onClick={() => onOpenActionModal({
-                  action: 'BLOCK_AND_REPORT',
-                  accountNumber: targetAccount.accountNumber,
-                  title: 'Transmit SAR to FinCEN & Maintain Asset Quarantine',
-                  desc: 'Formally logs electronically signed filing under FinCEN Form 111 regulations.'
-                })}
-                className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg skeuo-btn skeuo-btn-danger text-[10px] sm:text-[11px] font-semibold"
-              >
-                Submit Electronic Filing
-              </button>
-            </div>
+            <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-500/30">
+              SR 26-2 Sealed
+            </span>
           </div>
+
         </div>
+
       </div>
     </div>
   );

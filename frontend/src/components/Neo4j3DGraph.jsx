@@ -38,9 +38,9 @@ export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-88
     type: 'CORPORATE',
     risk: 0.94,
     tier: 'TIER_1_QUARANTINE',
-    val: 28,
-    color: '#F43F5E',
-    glowColor: '#FF2E63',
+    val: 30,
+    color: '#00F2FE', // Quantum Electric Cyan Core
+    glowColor: '#8B5CF6', // Ultraviolet Prismatic Halo
     balance: '$1,248,920.45',
     isOriginator: true
   });
@@ -60,8 +60,10 @@ export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-88
   coreMules.forEach((m) => {
     const isHighRisk = m.risk >= 0.85;
     const isMed = m.risk >= 0.40;
-    const color = isHighRisk ? '#F43F5E' : isMed ? '#F59E0B' : '#10B981';
-    const glow = isHighRisk ? '#FF2E63' : isMed ? '#FFAA00' : '#00FFA3';
+    const color = isHighRisk 
+      ? (m.type === 'CRYPTO_MIXER' ? '#D946EF' : '#FF0055') 
+      : isMed ? '#F59E0B' : '#00F2FE';
+    const glow = isHighRisk ? '#EC4899' : isMed ? '#FBBF24' : '#38BDF8';
 
     nodes.push({
       id: m.id,
@@ -76,23 +78,23 @@ export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-88
       balance: `$${(Math.random() * 450000 + 20000).toLocaleString('en-US', { maximumFractionDigits: 2 })}`
     });
 
-    // Connect to central
+    // Connect to central with Prismatic Laser Link
     links.push({
       source: baseOriginator,
       target: m.id,
       amount: Math.floor(Math.random() * 45000 + 4000),
       gate: isHighRisk ? 0.98 : 0.72,
-      color: isHighRisk ? 'rgba(244, 63, 94, 0.85)' : 'rgba(245, 158, 11, 0.7)',
-      particleSpeed: isHighRisk ? 0.008 : 0.004,
-      particles: isHighRisk ? 4 : 2,
+      color: isHighRisk ? 'rgba(255, 0, 85, 0.9)' : 'rgba(245, 158, 11, 0.8)',
+      particleSpeed: isHighRisk ? 0.010 : 0.005,
+      particles: isHighRisk ? 5 : 2,
       isLaunderingLoop: isHighRisk
     });
   });
 
-  // Closed Circular Wash Loop
-  links.push({ source: 'GB-BARC-1109-MULE-HUB', target: 'AE-SCBL-5512-HORIZON', amount: 48100, gate: 0.98, color: '#F43F5E', particleSpeed: 0.01, particles: 5, isLaunderingLoop: true });
-  links.push({ source: 'AE-SCBL-5512-HORIZON', target: 'BVI-ESCROW-SOVEREIGN', amount: 47900, gate: 0.99, color: '#F43F5E', particleSpeed: 0.01, particles: 5, isLaunderingLoop: true });
-  links.push({ source: 'BVI-ESCROW-SOVEREIGN', target: baseOriginator, amount: 47600, gate: 0.99, color: '#F43F5E', particleSpeed: 0.012, particles: 6, isLaunderingLoop: true });
+  // Closed Circular Wash Loop (Hyper-Luminescent Neon Pink Laser)
+  links.push({ source: 'GB-BARC-1109-MULE-HUB', target: 'AE-SCBL-5512-HORIZON', amount: 48100, gate: 0.98, color: '#FF007F', particleSpeed: 0.012, particles: 6, isLaunderingLoop: true });
+  links.push({ source: 'AE-SCBL-5512-HORIZON', target: 'BVI-ESCROW-SOVEREIGN', amount: 47900, gate: 0.99, color: '#FF007F', particleSpeed: 0.012, particles: 6, isLaunderingLoop: true });
+  links.push({ source: 'BVI-ESCROW-SOVEREIGN', target: baseOriginator, amount: 47600, gate: 0.99, color: '#FF007F', particleSpeed: 0.014, particles: 7, isLaunderingLoop: true });
 
   // Generate extended background counterparties
   for (let i = 0; i < nodeCount; i++) {
@@ -102,8 +104,8 @@ export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-88
     const isRisk = !isClean && !isReview;
 
     const riskScore = isRisk ? (0.85 + Math.random() * 0.14) : isReview ? (0.35 + Math.random() * 0.40) : (0.01 + Math.random() * 0.15);
-    const color = isRisk ? '#F43F5E' : isReview ? '#F59E0B' : '#10B981';
-    const glowColor = isRisk ? '#FF2E63' : isReview ? '#FFAA00' : '#00FFA3';
+    const color = isRisk ? '#FF0055' : isReview ? '#F59E0B' : '#00F2FE';
+    const glowColor = isRisk ? '#EC4899' : isReview ? '#FBBF24' : '#38BDF8';
     const tier = isRisk ? 'TIER_1_QUARANTINE' : isReview ? 'TIER_2_REVIEW_QUEUE' : 'TIER_3_STRAIGHT_THROUGH_CLEAR';
     const type = isClean ? (Math.random() > 0.6 ? 'MERCHANT_CHAFF' : 'RETAIL') : (Math.random() > 0.5 ? 'CORPORATE' : 'OFFSHORE_SHELL');
     const bank = banks[Math.floor(Math.random() * banks.length)];
@@ -117,7 +119,7 @@ export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-88
       risk: Number(riskScore.toFixed(3)),
       tier,
       val: isRisk ? 14 : isReview ? 10 : 7,
-      color,
+      color: type === 'MERCHANT_CHAFF' ? 'rgba(148, 163, 184, 0.45)' : color,
       glowColor,
       balance: `$${Math.floor(Math.random() * 80000 + 500).toLocaleString()}`
     });
@@ -132,8 +134,8 @@ export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-88
       target: id,
       amount: Math.floor(Math.random() * 15000 + 100),
       gate: gateWeight,
-      color: isCamouflage ? 'rgba(100, 116, 139, 0.25)' : isRisk ? 'rgba(244, 63, 94, 0.75)' : 'rgba(16, 185, 129, 0.4)',
-      particleSpeed: isRisk ? 0.006 : 0.002,
+      color: isCamouflage ? 'rgba(99, 102, 241, 0.18)' : isRisk ? 'rgba(255, 0, 85, 0.75)' : 'rgba(6, 182, 212, 0.45)',
+      particleSpeed: isRisk ? 0.008 : 0.003,
       particles: isRisk ? 3 : 1,
       isLaunderingLoop: isRisk
     });
@@ -227,38 +229,67 @@ export const Neo4j3DGraph = ({
       .height(initialHeight)
       .graphData(filteredData)
       .nodeLabel((node) => `
-        <div style="background: rgba(16, 29, 21, 0.96); border: 1px solid rgba(0, 168, 107, 0.4); border-radius: 8px; padding: 8px 12px; color: #fff; font-family: Inter, sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,0.8); font-size: 11px;">
-          <strong style="color: #6EE7B7; font-size: 12px;">${node.name}</strong><br/>
-          <span style="color: #94A3B8;">ID:</span> <span style="font-family: monospace;">${node.id}</span><br/>
-          <span style="color: #94A3B8;">Bank:</span> ${node.bank}<br/>
-          <span style="color: #94A3B8;">Balance:</span> <strong style="color: #34D399;">${node.balance}</strong><br/>
-          <span style="color: #94A3B8;">ML Risk:</span> <strong style="color: ${node.risk >= 0.8 ? '#FB7185' : node.risk >= 0.3 ? '#FBBF24' : '#34D399'};">${(node.risk * 100).toFixed(1)}%</strong>
+        <div style="background: rgba(8, 12, 32, 0.96); backdrop-filter: blur(16px); border: 1px solid rgba(6, 182, 212, 0.5); box-shadow: 0 0 24px rgba(6, 182, 212, 0.3), 0 0 40px rgba(139, 92, 246, 0.2); border-radius: 10px; padding: 10px 14px; color: #fff; font-family: Inter, sans-serif; font-size: 11px; min-width: 210px;">
+          <div style="height: 2px; background: linear-gradient(90deg, #00F2FE, #8B5CF6, #EC4899); margin-bottom: 8px; border-radius: 2px;"></div>
+          <strong style="color: #00F2FE; font-size: 12px; display: block; margin-bottom: 4px;">${node.name}</strong>
+          <div style="font-family: monospace; font-size: 10px; color: #94A3B8; margin-bottom: 6px;">ID: <span style="color: #E2E8F0;">${node.id}</span></div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span style="color: #94A3B8;">Rail/Bank:</span> <span style="color: #E2E8F0;">${node.bank}</span></div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span style="color: #94A3B8;">Ledger:</span> <strong style="color: #00F2FE;">${node.balance}</strong></div>
+          <div style="display: flex; justify-content: space-between; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <span style="color: #94A3B8;">C-STGB Risk:</span> 
+            <strong style="color: ${node.risk >= 0.8 ? '#FF0055' : node.risk >= 0.3 ? '#F59E0B' : '#00F2FE'}; font-weight: bold;">
+              ${(node.risk * 100).toFixed(1)}% (${node.tier ? node.tier.replace(/_/g, ' ') : 'TIER'})
+            </strong>
+          </div>
         </div>
       `)
       .nodeColor((node) => node.color)
       .nodeVal((node) => node.val)
       .nodeResolution(24)
-      .linkWidth((link) => (link.isLaunderingLoop ? 2.5 : 1.0))
+      .linkWidth((link) => (link.isLaunderingLoop ? 2.8 : 1.0))
       .linkColor((link) => link.color)
       .linkDirectionalParticles((link) => (link.particles || 1))
       .linkDirectionalParticleSpeed((link) => (link.particleSpeed || 0.003))
-      .linkDirectionalParticleWidth((link) => (link.isLaunderingLoop ? 3.5 : 1.5))
-      .backgroundColor('#0A140D')
+      .linkDirectionalParticleWidth((link) => (link.isLaunderingLoop ? 3.8 : 1.5))
+      .backgroundColor('#050816')
       .showNavInfo(false)
       .onNodeClick((node) => {
         if (onSelectNodeRef.current) onSelectNodeRef.current(node);
       });
 
-    // Custom Glowing Halo Mesh on Central Originator and High-Risk Nodes
+    // Custom Prismatic Glowing Halo Mesh on Central Originator and High-Risk Nodes
     Graph.nodeThreeObjectExtend(true);
     Graph.nodeThreeObject((node) => {
-      if (node.isOriginator || node.risk >= 0.90) {
-        const sphereRadius = node.isOriginator ? 7 : 4.5;
+      if (node.isOriginator) {
+        // Dual Prismatic Three.js Halo for Subject Core
+        const group = new THREE.Group();
+        const innerGeo = new THREE.IcosahedronGeometry(7.5, 2);
+        const innerMat = new THREE.MeshBasicMaterial({
+          color: 0x00f2fe,
+          transparent: true,
+          opacity: 0.5,
+          wireframe: true
+        });
+        group.add(new THREE.Mesh(innerGeo, innerMat));
+
+        const outerGeo = new THREE.IcosahedronGeometry(11, 1);
+        const outerMat = new THREE.MeshBasicMaterial({
+          color: 0x8b5cf6,
+          transparent: true,
+          opacity: 0.25,
+          wireframe: true
+        });
+        group.add(new THREE.Mesh(outerGeo, outerMat));
+        return group;
+      }
+      if (node.risk >= 0.85) {
+        // Pulsing Neon Crimson Halo for Laundering Nodes
+        const sphereRadius = 5.0;
         const geometry = new THREE.SphereGeometry(sphereRadius, 16, 16);
         const material = new THREE.MeshBasicMaterial({
-          color: node.glowColor || '#FF2E63',
+          color: 0xff0055,
           transparent: true,
-          opacity: 0.35,
+          opacity: 0.4,
           wireframe: true
         });
         return new THREE.Mesh(geometry, material);

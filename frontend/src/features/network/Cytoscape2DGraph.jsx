@@ -21,7 +21,12 @@ import {
   Eye,
   EyeOff,
   Clock,
-  Sparkles
+  Sparkles,
+  Zap,
+  Repeat,
+  Crosshair,
+  Activity,
+  AlertTriangle
 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { evaluateEdgeTrust } from '../../lib/scoringEngine';
@@ -30,6 +35,8 @@ import { Badge } from '../../components/ui/Badge';
 
 export const Cytoscape2DGraph = ({ onNodeSelect }) => {
   const containerRef = useRef(null);
+  const animCanvasRef = useRef(null);
+  const animFrameRef = useRef(null);
   const cyRef = useRef(null);
   const { 
     openDrawer, 
@@ -50,6 +57,10 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
   const [pathTarget, setPathTarget] = useState('BD04-BRAC-1109-8421-4402');
   const [isPathFound, setIsPathFound] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1); // 0.5x, 1x, 2x
+  const [playbackMode, setPlaybackMode] = useState('cumulative'); // 'cumulative' | 'single'
+  const [autoLoop, setAutoLoop] = useState(true);
+  const [trackCamera, setTrackCamera] = useState(false);
   const playTimerRef = useRef(null);
 
   // Initial Seeded Ego-Network with Authentic Bangladeshi & Cross-Border Entities
@@ -123,13 +134,95 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
     return [...cappedNodes, ...edges];
   }, [egoHopDistance, maxVisibleNodes]);
 
-  // Timeline Step Metadata
+  // Timeline Step Metadata with Full Forensic Flow Profiles
   const TIMELINE_STEPS = [
-    { step: 0, label: '08:00 UTC', title: 'Quiescent Baseline', desc: 'Pre-event interbank corridor status' },
-    { step: 1, label: '08:14 UTC', title: 'Phase 1: MFS Smurfing', desc: 'bKash micro-transfers aggregated into Tanvir mule account' },
-    { step: 2, label: '08:16 UTC', title: 'Phase 2: RTGS Layering', desc: 'Interbank layering burst: $47,600 RTGS into Meghna Industrial' },
-    { step: 3, label: '08:22 UTC', title: 'Phase 3: Cross-Border Outflow', desc: 'SWIFT wire transferred to Gulf Star Commodities (Dubai JAFZA)' },
-    { step: 4, label: '08:35 UTC', title: 'Phase 4: Cycle-3 Wash Return', desc: 'Documentary LC over-invoiced round-trip completes full wash ring' }
+    { 
+      step: 0, 
+      label: '08:00 UTC', 
+      title: 'Quiescent Baseline', 
+      desc: 'All interbank corridors operating within normal Poisson intensity baseline. Zero invariant alerts.',
+      activeTx: null
+    },
+    { 
+      step: 1, 
+      label: '08:14 UTC', 
+      title: 'Phase 1: MFS Smurfing Inflow', 
+      desc: 'bKash micro-transfers aggregated from MFS retail agents into Tanvir mule account to evade single-ticket CTR thresholds.',
+      activeTx: {
+        edgeId: 'e6',
+        sourceId: 'MFS-BKASH-0171-8840',
+        targetId: 'BD04-BRAC-1109-8421-4402',
+        sourceName: 'Mohammad Rafiqul Islam (MFS)',
+        targetName: 'Tanvir Ahmed Rahman (Conduit)',
+        amount: '$4,800.00 USD',
+        amountBdt: '৳576,000 BDT',
+        rail: 'bKash MFS',
+        typology: 'Sub-CTR Smurfing',
+        conformalSet: 'Γ = {1}',
+        hawkes: 'λ = 4.82 tx/min (Spike)',
+        color: '#F59E0B'
+      }
+    },
+    { 
+      step: 2, 
+      label: '08:16 UTC', 
+      title: 'Phase 2: RTGS Layering Injection', 
+      desc: 'Corporate treasury executes $47,600 high-speed interbank RTGS transfer into conduit aggregator within 120 seconds.',
+      activeTx: {
+        edgeId: 'e3',
+        sourceId: 'BD22-EBLB-4829-1092-8823',
+        targetId: 'BD04-BRAC-1109-8421-4402',
+        sourceName: 'Meghna Industrial & Agro (Hub)',
+        targetName: 'Tanvir Ahmed Rahman (Conduit)',
+        amount: '$47,600.00 USD',
+        amountBdt: '৳5,712,000 BDT',
+        rail: 'RTGS (BD Bank)',
+        typology: 'Interbank Rapid Layering',
+        conformalSet: 'Γ = {1}',
+        hawkes: 'λ = 9.14 tx/min (Critical)',
+        color: '#EF4444'
+      }
+    },
+    { 
+      step: 3, 
+      label: '08:22 UTC', 
+      title: 'Phase 3: Cross-Border SWIFT Outflow', 
+      desc: 'Layered funds wired to JAFZA Free Zone shell entity in Dubai via international telegraphic wire to obscure ownership.',
+      activeTx: {
+        edgeId: 'e4',
+        sourceId: 'BD04-BRAC-1109-8421-4402',
+        targetId: 'AE-EBIL-4412-8819-3301',
+        sourceName: 'Tanvir Ahmed Rahman (Conduit)',
+        targetName: 'Gulf Star Commodities (Dubai)',
+        amount: '$47,600.00 USD',
+        amountBdt: '৳5,712,000 BDT',
+        rail: 'SWIFT MT103',
+        typology: 'Offshore Capital Flight',
+        conformalSet: 'Γ = {1}',
+        hawkes: 'λ = 11.2 tx/min',
+        color: '#EC4899'
+      }
+    },
+    { 
+      step: 4, 
+      label: '08:35 UTC', 
+      title: 'Phase 4: Cycle-3 Trade Wash Return', 
+      desc: 'Documentary credit import settlement under over-invoiced trade bills completes full circular wash ring back to origin hub.',
+      activeTx: {
+        edgeId: 'e5',
+        sourceId: 'AE-EBIL-4412-8819-3301',
+        targetId: 'BD22-EBLB-4829-1092-8823',
+        sourceName: 'Gulf Star Commodities (Dubai)',
+        targetName: 'Meghna Industrial & Agro (Hub)',
+        amount: '$47,600.00 USD',
+        amountBdt: '৳5,712,000 BDT',
+        rail: 'SWIFT MT700 (LC)',
+        typology: 'TBML Circular Wash Loop',
+        conformalSet: 'Γ = {1}',
+        hawkes: 'λ = 14.8 tx/min (Ring Closed)',
+        color: '#8B5CF6'
+      }
+    }
   ];
 
   // Initialize and Update Cytoscape Instance
@@ -285,16 +378,57 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
           }
         },
         {
+          selector: '.completed-temporal-edge',
+          style: {
+            'line-color': '#F87171',
+            'target-arrow-color': '#EF4444',
+            'width': 3.2,
+            'opacity': 0.88,
+            'font-weight': 700,
+            'color': '#B91C1C',
+            'text-background-opacity': 0.95,
+            'text-background-color': '#FEF2F2',
+            'text-border-color': '#FCA5A5',
+            'text-border-width': 1
+          }
+        },
+        {
           selector: '.active-temporal-edge',
           style: {
             'line-color': '#EF4444',
             'target-arrow-color': '#EF4444',
-            'width': 4.0,
+            'width': 4.5,
             'opacity': 1.0,
             'font-weight': 800,
             'color': '#DC2626',
             'text-background-color': '#FEF2F2',
-            'text-border-color': '#EF4444'
+            'text-border-color': '#EF4444',
+            'text-border-width': 1.5,
+            'line-style': 'dashed',
+            'line-dash-pattern': [8, 4],
+            'z-index': 99
+          }
+        },
+        {
+          selector: '.active-sender-node',
+          style: {
+            'border-width': 4,
+            'border-color': '#F59E0B',
+            'underlay-color': '#F59E0B',
+            'underlay-padding': 8,
+            'underlay-opacity': 0.35,
+            'z-index': 100
+          }
+        },
+        {
+          selector: '.active-receiver-node',
+          style: {
+            'border-width': 4,
+            'border-color': '#EF4444',
+            'underlay-color': '#EF4444',
+            'underlay-padding': 10,
+            'underlay-opacity': 0.45,
+            'z-index': 100
           }
         },
         {
@@ -395,53 +529,254 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
   useEffect(() => {
     if (!cyRef.current) return;
     const cy = cyRef.current;
+    const activeTx = currentStepMeta?.activeTx;
 
     if (timelineStep === 0) {
       // Show full baseline
-      cy.elements().removeClass('dimmed-temporal active-temporal-node dimmed-temporal-edge active-temporal-edge');
+      cy.elements().removeClass('dimmed-temporal active-temporal-node dimmed-temporal-edge active-temporal-edge completed-temporal-edge active-sender-node active-receiver-node');
     } else {
-      // Step-by-step sequential animation
+      // Step-by-step or cumulative sequential animation
       cy.edges().forEach((edge) => {
         const edgeStep = edge.data('timeStep');
+        edge.removeClass('active-temporal-edge dimmed-temporal-edge completed-temporal-edge');
+
         if (edgeStep === timelineStep) {
           edge.addClass('active-temporal-edge');
-          edge.removeClass('dimmed-temporal-edge');
-        } else if (edgeStep < timelineStep) {
-          edge.removeClass('active-temporal-edge dimmed-temporal-edge');
+        } else if (edgeStep < timelineStep && edgeStep > 0) {
+          if (playbackMode === 'cumulative') {
+            edge.addClass('completed-temporal-edge');
+          } else {
+            edge.addClass('dimmed-temporal-edge');
+          }
         } else {
           edge.addClass('dimmed-temporal-edge');
-          edge.removeClass('active-temporal-edge');
         }
       });
 
       cy.nodes().forEach((node) => {
-        const nodeStep = node.data('timeStep');
-        if (nodeStep === timelineStep) {
-          node.addClass('active-temporal-node');
-          node.removeClass('dimmed-temporal');
-        } else if (nodeStep <= timelineStep) {
-          node.removeClass('active-temporal-node dimmed-temporal');
+        const nodeId = node.data('id');
+        const isActiveSender = activeTx && activeTx.sourceId === nodeId;
+        const isActiveReceiver = activeTx && activeTx.targetId === nodeId;
+
+        node.removeClass('dimmed-temporal active-temporal-node active-sender-node active-receiver-node');
+
+        if (isActiveSender) {
+          node.addClass('active-sender-node active-temporal-node');
+        } else if (isActiveReceiver) {
+          node.addClass('active-receiver-node active-temporal-node');
         } else {
-          node.addClass('dimmed-temporal');
-          node.removeClass('active-temporal-node');
+          const nodeStep = node.data('timeStep');
+          if (playbackMode === 'cumulative' && nodeStep !== undefined && nodeStep <= timelineStep && nodeStep > 0) {
+            // Keep completed nodes illuminated in cumulative mode
+          } else if (nodeStep !== timelineStep) {
+            node.addClass('dimmed-temporal');
+          }
         }
       });
-    }
-  }, [timelineStep]);
 
-  // Continuous Timeline Playback Timer
+      // Camera auto-tracking if enabled
+      if (trackCamera && activeTx) {
+        const activeNodes = cy.$(`node[id = "${activeTx.sourceId}"], node[id = "${activeTx.targetId}"]`);
+        if (activeNodes.length > 0) {
+          cy.animate({
+            fit: { eles: activeNodes, padding: 100 },
+            duration: 400
+          });
+        }
+      }
+    }
+  }, [timelineStep, playbackMode, currentStepMeta, trackCamera]);
+
+  // Continuous Timeline Playback Timer with Speed & Auto-Loop Controls
   useEffect(() => {
     if (isPlaying) {
+      const stepDuration = Math.round(2600 / playbackSpeed);
       playTimerRef.current = setInterval(() => {
-        setTimelineStep(prev => (prev >= 4 ? 0 : prev + 1));
-      }, 1600);
+        setTimelineStep(prev => {
+          if (prev >= 4) {
+            if (!autoLoop) {
+              setIsPlaying(false);
+              return 4;
+            }
+            return 1; // Smoothly loop back to Phase 1 (Smurfing Inflow)
+          }
+          return prev + 1;
+        });
+      }, stepDuration);
     } else {
       if (playTimerRef.current) clearInterval(playTimerRef.current);
     }
     return () => {
       if (playTimerRef.current) clearInterval(playTimerRef.current);
     };
-  }, [isPlaying, setTimelineStep]);
+  }, [isPlaying, playbackSpeed, autoLoop, setTimelineStep]);
+
+  // 60FPS High-Definition Canvas Particle Flow & Packet Animation Engine
+  useEffect(() => {
+    const canvas = animCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let isRunning = true;
+    const startTime = performance.now();
+
+    const handleResize = () => {
+      if (!canvas || !containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    const renderAnim = (now) => {
+      if (!isRunning) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const width = canvas.width / dpr;
+      const height = canvas.height / dpr;
+
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, width, height);
+
+      const cy = cyRef.current;
+      const activeTx = currentStepMeta?.activeTx;
+
+      if (cy && activeTx && timelineStep > 0) {
+        const srcNode = cy.$(`node[id = "${activeTx.sourceId}"]`);
+        const tgtNode = cy.$(`node[id = "${activeTx.targetId}"]`);
+
+        if (srcNode.length > 0 && tgtNode.length > 0 && srcNode.visible() && tgtNode.visible()) {
+          const srcPos = srcNode.renderedPosition();
+          const tgtPos = tgtNode.renderedPosition();
+
+          const dx = tgtPos.x - srcPos.x;
+          const dy = tgtPos.y - srcPos.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist > 5) {
+            const nx = -dy / dist;
+            const ny = dx / dist;
+
+            // Travel speed: cycle repeats smoothly
+            const cycleDuration = 1200 / playbackSpeed;
+            const elapsed = now - startTime;
+            const cycleProgress = (elapsed % cycleDuration) / cycleDuration;
+
+            // 1. Source Node Emitting Shockwave
+            const srcPulse = (elapsed % 1500) / 1500;
+            ctx.beginPath();
+            ctx.arc(srcPos.x, srcPos.y, 16 + srcPulse * 26, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(245, 158, 11, ${Math.max(0, 0.7 - srcPulse)})`;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 2. Target Node Arrival Shockwave
+            const tgtPulse = ((elapsed + 750) % 1500) / 1500;
+            ctx.beginPath();
+            ctx.arc(tgtPos.x, tgtPos.y, 18 + tgtPulse * 30, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(239, 68, 68, ${Math.max(0, 0.8 - tgtPulse)})`;
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // 3. Animated Travelling Monetary Packets (3 staggered packets with comet tails)
+            const packetOffsets = [0, 0.35, 0.70];
+            packetOffsets.forEach((offset, idx) => {
+              const p = (cycleProgress + offset) % 1;
+              const curX = srcPos.x + dx * p;
+              const curY = srcPos.y + dy * p;
+
+              // Arc deflection along curved edge
+              const arcOffset = Math.sin(p * Math.PI) * (dist * 0.12);
+              const px = curX + nx * arcOffset;
+              const py = curY + ny * arcOffset;
+
+              // Comet particle tail (4 trailing points)
+              for (let t = 1; t <= 4; t++) {
+                const tailP = Math.max(0, p - t * 0.03);
+                const tailCurX = srcPos.x + dx * tailP;
+                const tailCurY = srcPos.y + dy * tailP;
+                const tailArc = Math.sin(tailP * Math.PI) * (dist * 0.12);
+                const txX = tailCurX + nx * tailArc;
+                const txY = tailCurY + ny * tailArc;
+
+                ctx.beginPath();
+                ctx.arc(txX, txY, Math.max(1, 4.5 - t), 0, Math.PI * 2);
+                ctx.fillStyle = activeTx.color 
+                  ? `${activeTx.color}${Math.floor((0.35 / t) * 255).toString(16).padStart(2, '0')}` 
+                  : 'rgba(239, 68, 68, 0.2)';
+                ctx.fill();
+              }
+
+              // Glowing outer halo
+              const halo = ctx.createRadialGradient(px, py, 1, px, py, 11);
+              halo.addColorStop(0, '#FFFFFF');
+              halo.addColorStop(0.3, activeTx.color || '#EF4444');
+              halo.addColorStop(1, 'rgba(0,0,0,0)');
+
+              ctx.beginPath();
+              ctx.arc(px, py, 11, 0, Math.PI * 2);
+              ctx.fillStyle = halo;
+              ctx.fill();
+
+              // Central high-energy packet core
+              ctx.beginPath();
+              ctx.arc(px, py, 4.5, 0, Math.PI * 2);
+              ctx.fillStyle = '#FFFFFF';
+              ctx.shadowColor = activeTx.color || '#EF4444';
+              ctx.shadowBlur = 10;
+              ctx.fill();
+              ctx.shadowBlur = 0;
+
+              // Floating amount badge above lead packet
+              if (idx === 0) {
+                const badgeText = activeTx.amount;
+                ctx.font = 'bold 9.5px "JetBrains Mono", monospace';
+                const metrics = ctx.measureText(badgeText);
+                const padX = 6;
+                const badgeW = metrics.width + padX * 2;
+                const badgeH = 17;
+                const badgeX = px - badgeW / 2;
+                const badgeY = py - 24;
+
+                ctx.beginPath();
+                if (typeof ctx.roundRect === 'function') {
+                  ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 4);
+                } else {
+                  ctx.rect(badgeX, badgeY, badgeW, badgeH);
+                }
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+                ctx.fill();
+                ctx.strokeStyle = activeTx.color || '#EF4444';
+                ctx.lineWidth = 1.2;
+                ctx.stroke();
+
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText(badgeText, badgeX + padX, badgeY + 12);
+              }
+            });
+          }
+        }
+      }
+
+      ctx.restore();
+      animFrameRef.current = requestAnimationFrame(renderAnim);
+    };
+
+    animFrameRef.current = requestAnimationFrame(renderAnim);
+
+    return () => {
+      isRunning = false;
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [currentStepMeta, timelineStep, playbackSpeed]);
 
   const handleFit = () => cyRef.current?.fit(undefined, 35);
   const handleZoomIn = () => cyRef.current?.zoom(cyRef.current.zoom() * 1.2);
@@ -578,13 +913,121 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         </div>
       </div>
 
-      {/* Main Graph Viewport */}
-      <div ref={containerRef} className="w-full flex-1 relative cursor-grab active:cursor-grabbing bg-bg" />
+      {/* Main Graph Viewport with 60FPS Canvas Animation Overlay */}
+      <div className="w-full flex-1 relative bg-bg overflow-hidden">
+        <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing bg-bg" />
+        <canvas 
+          ref={animCanvasRef} 
+          className="absolute inset-0 pointer-events-none z-10 w-full h-full" 
+        />
+
+        {/* Live Transaction HUD Card */}
+        {currentStepMeta && (
+          <div className="absolute top-3 left-3 max-w-sm sm:max-w-md w-full z-20 pointer-events-auto transition-all duration-300">
+            {timelineStep === 0 ? (
+              <div className="p-3 rounded-lg bg-surface/90 backdrop-blur-md border border-border shadow-sm flex items-center justify-between gap-3 text-xs font-mono">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-cleared animate-pulse" />
+                  <div>
+                    <span className="text-text font-semibold block">Baseline Topology (08:00 UTC)</span>
+                    <span className="text-[10px] text-text-muted">Interbank settlement corridors quiescent</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => { setIsPlaying(true); setTimelineStep(1); }}
+                  className="px-2.5 py-1 rounded bg-accent text-white text-[11px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
+                >
+                  <Play className="w-3 h-3" />
+                  <span>Start Flow</span>
+                </button>
+              </div>
+            ) : (
+              <div className="p-3.5 rounded-lg bg-surface/95 backdrop-blur-md border border-border shadow-lg space-y-2.5 text-xs font-mono">
+                {/* Header: Phase badge & timestamp */}
+                <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span 
+                      className="w-2.5 h-2.5 rounded-full animate-ping" 
+                      style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }} 
+                    />
+                    <span className="font-bold text-text uppercase tracking-wider text-[11px]">
+                      {currentStepMeta.title}
+                    </span>
+                  </div>
+                  <Badge variant="accent" size="sm" className="font-mono">
+                    {currentStepMeta.label}
+                  </Badge>
+                </div>
+
+                {/* Active Transfer Pair */}
+                {currentStepMeta.activeTx && (
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-[11px] gap-2">
+                      <div className="min-w-0">
+                        <span className="text-text-muted block text-[10px]">ORIGINATOR (SENDER)</span>
+                        <span className="font-semibold text-text truncate block">{currentStepMeta.activeTx.sourceName}</span>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-accent shrink-0 animate-pulse" />
+                      <div className="min-w-0 text-right">
+                        <span className="text-text-muted block text-[10px]">BENEFICIARY (RECEIVER)</span>
+                        <span className="font-semibold text-text truncate block">{currentStepMeta.activeTx.targetName}</span>
+                      </div>
+                    </div>
+
+                    {/* Amount & Rail */}
+                    <div className="p-2 rounded bg-bg border border-border flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] text-text-muted block">TRANSACTION VOLUME</span>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-sm font-bold text-text">{currentStepMeta.activeTx.amount}</span>
+                          <span className="text-[10px] text-text-muted font-normal">({currentStepMeta.activeTx.amountBdt})</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] text-text-muted block">PAYMENT RAIL</span>
+                        <Badge variant="neutral" size="sm" className="font-bold">
+                          {currentStepMeta.activeTx.rail}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* Metrics Row: Hawkes Intensity & Typology */}
+                    <div className="grid grid-cols-2 gap-2 text-[10px]">
+                      <div className="p-1.5 rounded bg-bg/50 border border-border/50">
+                        <span className="text-text-muted block">TYPOLOGY</span>
+                        <span className="font-semibold text-critical truncate block">
+                          {currentStepMeta.activeTx.typology}
+                        </span>
+                      </div>
+                      <div className="p-1.5 rounded bg-bg/50 border border-border/50">
+                        <span className="text-text-muted block">BURST INTENSITY</span>
+                        <span className="font-semibold text-text truncate block">
+                          {currentStepMeta.activeTx.hawkes}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Closed Laundering Loop Detected Banner on Step 4 */}
+        {timelineStep === 4 && (
+          <div className="absolute bottom-4 right-4 z-20 pointer-events-none animate-in fade-in slide-in-from-bottom duration-300">
+            <div className="px-3.5 py-2 rounded-lg bg-critical/15 backdrop-blur-md border border-critical text-critical text-xs font-mono font-bold flex items-center gap-2 shadow-lg">
+              <span className="w-2.5 h-2.5 rounded-full bg-critical animate-ping" />
+              <span>🚨 3-Hop Wash Loop Closed • 100% Flow Conservation Ring</span>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Temporal Timeline Scrubber Playback Bar */}
-      <div className="p-3 border-t border-border bg-surfaceRaised/95 backdrop-blur-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 z-10">
-        {/* Playback Controls & Slider */}
-        <div className="flex items-center gap-3 flex-1 min-w-0">
+      <div className="p-3 border-t border-border bg-surfaceRaised/95 backdrop-blur-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 z-10">
+        {/* Left: Playback Controls & Speed */}
+        <div className="flex items-center gap-2 flex-wrap">
           {/* Play/Pause & Step Buttons */}
           <div className="flex items-center gap-1 shrink-0">
             <button
@@ -596,10 +1039,15 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
             </button>
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="p-1.5 rounded bg-accent text-white hover:bg-accent/90 cursor-pointer transition-colors shadow-xs"
+              className={`px-3 py-1.5 rounded font-mono text-xs font-semibold cursor-pointer transition-all shadow-xs flex items-center gap-1.5 ${
+                isPlaying 
+                  ? 'bg-amber-600 text-white hover:bg-amber-500 animate-pulse' 
+                  : 'bg-accent text-white hover:bg-accent/90'
+              }`}
               title={isPlaying ? 'Pause Playback' : 'Play Transaction Flow Sequence'}
             >
               {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              <span>{isPlaying ? 'PAUSE' : 'PLAY FLOW'}</span>
             </button>
             <button
               onClick={() => setTimelineStep(prev => Math.min(4, prev + 1))}
@@ -617,51 +1065,99 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
             </button>
           </div>
 
-          {/* Continuous-Time Range Slider */}
-          <div className="flex-1 flex flex-col gap-1 min-w-[140px]">
-            <input
-              id="graph-timeline-playback-slider"
-              name="graph-timeline-playback-slider"
-              aria-label="Transaction playback timeline scrubber"
-              type="range"
-              min="0"
-              max="4"
-              step="1"
-              value={timelineStep}
-              onChange={(e) => {
-                setIsPlaying(false);
-                setTimelineStep(Number(e.target.value));
-              }}
-              className="w-full h-1.5 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
-            />
-            {/* Step Markers */}
-            <div className="flex justify-between text-[9px] font-mono text-text-muted">
-              <span>t=0</span>
-              <span>t₁ (Smurf)</span>
-              <span>t₂ (Layer)</span>
-              <span>t₃ (Outflow)</span>
-              <span>t₄ (Loop)</span>
-            </div>
+          <div className="w-px h-4 bg-border mx-0.5" />
+
+          {/* Speed Selector (0.5x, 1x, 2x) */}
+          <div className="flex items-center gap-0.5 p-0.5 bg-bg rounded border border-border font-mono text-[10px]">
+            {[
+              { speed: 0.5, label: '0.5x' },
+              { speed: 1, label: '1x' },
+              { speed: 2, label: '2x' }
+            ].map(s => (
+              <button
+                key={s.speed}
+                onClick={() => setPlaybackSpeed(s.speed)}
+                className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                  playbackSpeed === s.speed 
+                    ? 'bg-surface font-bold text-accent shadow-xs' 
+                    : 'text-text-muted hover:text-text'
+                }`}
+                title={`Playback Speed: ${s.label}`}
+              >
+                {s.label}
+              </button>
+            ))}
           </div>
+
+          {/* Playback Mode: Cumulative vs Step Focus */}
+          <button
+            onClick={() => setPlaybackMode(prev => prev === 'cumulative' ? 'single' : 'cumulative')}
+            className={`px-2 py-1 rounded border text-[10px] font-mono transition-colors cursor-pointer flex items-center gap-1 ${
+              playbackMode === 'cumulative'
+                ? 'bg-accent/10 border-accent/40 text-accent font-semibold'
+                : 'bg-bg border-border text-text-muted hover:text-text'
+            }`}
+            title={playbackMode === 'cumulative' ? 'Accumulate completed money trail' : 'Focus only on current transaction'}
+          >
+            <Layers className="w-3 h-3" />
+            <span>{playbackMode === 'cumulative' ? 'Cumulative Trail' : 'Step Focus'}</span>
+          </button>
+
+          {/* Auto-Loop Toggle */}
+          <button
+            onClick={() => setAutoLoop(!autoLoop)}
+            className={`p-1.5 rounded border text-[10px] font-mono transition-colors cursor-pointer ${
+              autoLoop 
+                ? 'bg-accent/10 border-accent/40 text-accent' 
+                : 'bg-bg border-border text-text-muted hover:text-text'
+            }`}
+            title={autoLoop ? 'Auto-looping active' : 'Auto-loop disabled'}
+          >
+            <Repeat className="w-3.5 h-3.5" />
+          </button>
         </div>
 
-        {/* Current Stage Indicator Banner */}
-        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded bg-bg border border-borderSubtle text-xs shrink-0 font-mono">
-          <Clock className="w-3.5 h-3.5 text-accent animate-pulse" />
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-text">{currentStepMeta.label}:</span>
-              <span className="text-accent font-semibold">{currentStepMeta.title}</span>
-            </div>
-            <span className="text-[10px] text-text-muted truncate max-w-[260px] block">
-              {currentStepMeta.desc}
-            </span>
-          </div>
+        {/* Right: Clickable Timeline Phase Stepper Beads */}
+        <div className="flex items-center justify-between gap-1.5 flex-1 max-w-md min-w-[240px]">
+          {TIMELINE_STEPS.map((st) => {
+            const isCurrent = timelineStep === st.step;
+            const isPast = timelineStep > st.step;
+            return (
+              <button
+                key={st.step}
+                onClick={() => { setIsPlaying(false); setTimelineStep(st.step); }}
+                className={`flex-1 flex flex-col items-center gap-1 py-1 px-1.5 rounded transition-all cursor-pointer border ${
+                  isCurrent 
+                    ? 'bg-surface border-accent shadow-xs' 
+                    : isPast 
+                      ? 'bg-surfaceRaised border-borderSubtle hover:border-border' 
+                      : 'border-transparent hover:bg-surface/50 text-text-muted'
+                }`}
+                title={`${st.label}: ${st.title}`}
+              >
+                <div className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  isCurrent 
+                    ? 'bg-accent scale-125 ring-2 ring-accent/30' 
+                    : isPast 
+                      ? 'bg-accent/70' 
+                      : 'bg-border'
+                }`} />
+                <span className={`text-[9.5px] font-mono leading-none ${
+                  isCurrent ? 'font-bold text-accent' : isPast ? 'text-text' : 'text-text-muted'
+                }`}>
+                  {st.step === 0 ? 't₀' : `t${st.step}`}
+                </span>
+                <span className="text-[8px] text-text-muted font-mono truncate max-w-[55px] hidden sm:inline">
+                  {st.step === 0 ? 'Baseline' : st.step === 1 ? 'Smurf' : st.step === 2 ? 'Layer' : st.step === 3 ? 'Wire' : 'Wash'}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {/* Floating Canvas Action Bar (Zoom, Fit, Export) */}
-      <div className="absolute top-16 right-3 flex items-center gap-1.5 bg-surface border border-border shadow-md rounded p-1 z-10">
+      <div className="absolute top-16 right-3 flex items-center gap-1.5 bg-surface border border-border shadow-md rounded p-1 z-20">
         <Button variant="ghost" size="icon" onClick={handleZoomIn} title="Zoom In">
           <ZoomIn className="w-4 h-4 text-text-2" />
         </Button>
@@ -672,13 +1168,22 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
           <Maximize2 className="w-4 h-4 text-text-2" />
         </Button>
         <div className="w-px h-4 bg-border mx-0.5" />
+        <Button 
+          variant={trackCamera ? "secondary" : "ghost"} 
+          size="icon" 
+          onClick={() => setTrackCamera(!trackCamera)} 
+          title={trackCamera ? "Auto-Track Camera Active" : "Enable Auto-Track Camera"}
+        >
+          <Crosshair className={`w-4 h-4 ${trackCamera ? 'text-accent' : 'text-text-2'}`} />
+        </Button>
+        <div className="w-px h-4 bg-border mx-0.5" />
         <Button variant="ghost" size="icon" onClick={handleExportPNG} title="Export PNG">
           <Download className="w-4 h-4 text-text-2" />
         </Button>
       </div>
 
       {/* Floating Minimal Legend */}
-      <div className="absolute bottom-20 left-3 bg-surface/95 backdrop-blur-xs border border-border shadow-sm rounded p-2 z-10 text-[10px] space-y-1 font-mono">
+      <div className="absolute bottom-20 left-3 bg-surface/95 backdrop-blur-xs border border-border shadow-sm rounded p-2 z-20 text-[10px] space-y-1 font-mono">
         <span className="font-semibold text-text text-[9px] uppercase tracking-wider block">Topology Tiers</span>
         <div className="flex items-center gap-2 text-text-2">
           <span className="w-2 h-2 rounded-full bg-critical border border-critical inline-block" />

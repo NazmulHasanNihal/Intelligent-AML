@@ -34,7 +34,26 @@ export const FilingsView = () => {
   const [copied, setCopied] = useState(false);
   const [isDiffModalOpen, setIsDiffModalOpen] = useState(false);
 
-  const activeCase = cases.find(c => c.id === selectedCaseIdState) || cases[0];
+  const defaultFallbackCase = {
+    id: 'CASE-2026-0881',
+    subjectEntity: 'Meghna Industrial & Agro Processing Ltd',
+    subjectAccount: 'BD22-EBLB-4829-1092-8823',
+    subjectBic: 'EBLBBDDH',
+    totalExposure: 48500,
+    riskScore: 0.982,
+    fourEyesApproved: false,
+    fourEyesInitiator: 'Sarah Jenkins',
+    tbmlDetails: {
+      lcNumber: 'LC-2026-CTG-88912',
+      hsCode: 'HS 5201.00',
+      priceDeviation: '+333.7% Over-Invoiced',
+      declaredPrice: '$42.50/kg',
+      benchmarkPrice: '$9.80/kg',
+      ports: 'Chittagong Port (BDCGP) to Jebel Ali, Dubai (AEJEA)'
+    }
+  };
+
+  const activeCase = cases.find(c => c.id === selectedCaseIdState) || cases[0] || defaultFallbackCase;
 
   const JURISDICTIONS = {
     BFIU_STR: {

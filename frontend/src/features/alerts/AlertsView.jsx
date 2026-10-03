@@ -71,7 +71,7 @@ export const AlertsView = () => {
 
       // Rail filter
       if (alertFilters.rail !== 'ALL') {
-        if (!alert.rail.toLowerCase().includes(alertFilters.rail.toLowerCase())) return false;
+        if (!(alert.rail || '').toLowerCase().includes((alertFilters.rail || '').toLowerCase())) return false;
       }
 
       // Decision Set Filter (CRC)

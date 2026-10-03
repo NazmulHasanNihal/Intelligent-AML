@@ -499,3 +499,6 @@ export const Neo4j3DGraph = ({
     </div>
   );
 };
+
+export default Neo4j3DGraph;
+

@@ -31,10 +31,10 @@ export const CasesView = () => {
     if (filterStatus !== 'ALL' && c.status !== filterStatus) return false;
     if (search) {
       const q = search.toLowerCase();
-      return c.id.toLowerCase().includes(q) ||
-             c.title.toLowerCase().includes(q) ||
-             c.subjectEntity.toLowerCase().includes(q) ||
-             c.subjectAccount.toLowerCase().includes(q);
+      return (c.id || '').toLowerCase().includes(q) ||
+             (c.title || '').toLowerCase().includes(q) ||
+             (c.subjectEntity || '').toLowerCase().includes(q) ||
+             (c.subjectAccount || '').toLowerCase().includes(q);
     }
     return true;
   });

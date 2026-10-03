@@ -15,9 +15,14 @@ except ImportError:
     def tqdm(iterable, *args, **kwargs):
         return iterable
 
-from .profiles import get_dataset_profile
+from .profiles import get_dataset_profile, DROPOUT
 from .model import BurstAwareHGT, FocalLoss, EWC
 from .builder import build_hetero_data, get_neighbor_loader
+
+try:
+    from src.models.graph_smote import LatentGraphSMOTE, DynamicThresholdCalibrator
+except ImportError:
+    from ..graph_smote import LatentGraphSMOTE, DynamicThresholdCalibrator
 
 def train_temporal_contrastive_pretraining(model, x_dict, edge_index_dict, delta_t_dict, burst_score_dict, num_epochs=5, temperature=0.1):
     """
@@ -591,6 +596,7 @@ def train_htgnn(dataset_name, num_epochs=50, learning_rate=0.001, prev_ewc=None,
 
     # Fit Unified C-STGB Master Algorithm
     print("  [Pipeline] Training Unified C-STGB (Conformal Spatio-Temporal GraphBoost) Classifier...")
+    from .cstgb import CSTGBClassifier
     cstgb_model = CSTGBClassifier(model, target_node=target_node, hidden_channels=effective_hidden, alpha=0.10)
     
     # Pass train mask, val mask, and test mask

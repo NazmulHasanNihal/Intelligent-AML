@@ -17,11 +17,13 @@ from .features import (
     load_parquet, compute_temporal_features, compute_personalized_pagerank_taint, compute_graphlet_motifs
 )
 
-def get_neighbor_loader(data, input_node_type="Account", input_nodes=None, batch_size=2048, num_neighbors=[15, 10], num_workers=0):
+def get_neighbor_loader(data, input_node_type="Account", input_nodes=None, batch_size=2048, num_neighbors=None, num_workers=0):
     """
     Constructs a PyTorch Geometric NeighborLoader for billion-node graph mini-batch streaming.
     Binds RAM footprint to < 4 GB regardless of graph size.
     """
+    if num_neighbors is None:
+        num_neighbors = [15, 10]
     try:
         from torch_geometric.loader import NeighborLoader
         loader = NeighborLoader(

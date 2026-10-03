@@ -8,6 +8,7 @@ Includes embedded forensic agent narratives, topological risk metrics, and SHA-2
 from io import BytesIO
 from datetime import datetime, timezone
 import hashlib
+import html
 from typing import Dict, Any, List, Optional
 
 try:
@@ -21,6 +22,13 @@ try:
     REPORTLAB_AVAILABLE = True
 except ImportError:
     REPORTLAB_AVAILABLE = False
+
+
+def safe_text(val: Any) -> str:
+    """Safely converts and XML-escapes text for ReportLab Paragraph rendering."""
+    if val is None:
+        return "N/A"
+    return html.escape(str(val))
 
 
 class RegulatorySARPDFGenerator:
@@ -119,19 +127,19 @@ class RegulatorySARPDFGenerator:
         meta_table_data = [
             [
                 Paragraph("<b>CASE REFERENCE:</b>", body_style),
-                Paragraph(f"<b>{case_id}</b>", body_style),
+                Paragraph(f"<b>{safe_text(case_id)}</b>", body_style),
                 Paragraph("<b>FILING DATE:</b>", body_style),
-                Paragraph(filing_date, body_style)
+                Paragraph(safe_text(filing_date), body_style)
             ],
             [
                 Paragraph("<b>PRIMARY SUBJECT:</b>", body_style),
-                Paragraph(f"<font color='#b91c1c'><b>{target_entity}</b></font>", body_style),
+                Paragraph(f"<font color='#b91c1c'><b>{safe_text(target_entity)}</b></font>", body_style),
                 Paragraph("<b>COMPOSITE RISK:</b>", body_style),
                 Paragraph(f"<b>{risk_score:.4f} / 1.0000 (HIGH RISK)</b>", body_style)
             ],
             [
                 Paragraph("<b>CONFORMAL BOUND:</b>", body_style),
-                Paragraph(f"<b>{case_data.get('conformal_bound', '[0.912, 0.988] (95% Coverage)')}</b>", body_style),
+                Paragraph(f"<b>{safe_text(case_data.get('conformal_bound', '[0.912, 0.988] (95% Coverage)'))}</b>", body_style),
                 Paragraph("<b>RECOMMENDED ACTION:</b>", body_style),
                 Paragraph("<b>MANDATORY SAR FILING & ASSET FREEZE</b>", body_style)
             ]
@@ -163,9 +171,9 @@ class RegulatorySARPDFGenerator:
         ]]
         for t in typologies:
             typo_data.append([
-                Paragraph(t.get("typology", ""), body_style),
-                Paragraph(f"<b>{t.get('confidence', '')}</b>", body_style),
-                Paragraph(t.get("statute", ""), body_style)
+                Paragraph(safe_text(t.get("typology", "")), body_style),
+                Paragraph(f"<b>{safe_text(t.get('confidence', ''))}</b>", body_style),
+                Paragraph(safe_text(t.get("statute", "")), body_style)
             ])
             
         typo_table = Table(typo_data, colWidths=[2.6*inch, 1.3*inch, 3.4*inch])
@@ -207,8 +215,8 @@ class RegulatorySARPDFGenerator:
         ]]
         for a in agent_narratives:
             agent_table_data.append([
-                Paragraph(f"<b>{a.get('agent', '')}</b>", body_style),
-                Paragraph(a.get('finding', ''), body_style)
+                Paragraph(f"<b>{safe_text(a.get('agent', ''))}</b>", body_style),
+                Paragraph(safe_text(a.get('finding', '')), body_style)
             ])
             
         agent_table = Table(agent_table_data, colWidths=[2.0*inch, 5.3*inch])
@@ -240,12 +248,12 @@ class RegulatorySARPDFGenerator:
         ]]
         for tx in raw_txs:
             tx_data.append([
-                Paragraph(tx.get("tx_id", ""), mono_style),
-                Paragraph(tx.get("from", ""), mono_style),
-                Paragraph(tx.get("to", ""), mono_style),
-                Paragraph(f"<b>{tx.get('amount', '')}</b>", body_style),
-                Paragraph(tx.get("time", ""), mono_style),
-                Paragraph(f"<font color='#b91c1c'><b>{tx.get('risk', '')}</b></font>", body_style)
+                Paragraph(safe_text(tx.get("tx_id", "")), mono_style),
+                Paragraph(safe_text(tx.get("from", "")), mono_style),
+                Paragraph(safe_text(tx.get("to", "")), mono_style),
+                Paragraph(f"<b>{safe_text(tx.get('amount', ''))}</b>", body_style),
+                Paragraph(safe_text(tx.get("time", "")), mono_style),
+                Paragraph(f"<font color='#b91c1c'><b>{safe_text(tx.get('risk', ''))}</b></font>", body_style)
             ])
             
         tx_table = Table(tx_data, colWidths=[1.1*inch, 1.4*inch, 1.4*inch, 1.1*inch, 1.6*inch, 0.7*inch])

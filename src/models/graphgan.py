@@ -386,7 +386,8 @@ def train_graphgan(dataset_name, num_epochs=100, lr=0.0002, latent_dim=LATENT_DI
         synth_edge_probs = synth_edge_probs.squeeze(0)
         
         # Evaluate feature distribution fidelity using Maximum Mean Discrepancy (MMD)
-        mmd_score = compute_maximum_mean_discrepancy(real_features, synth_node_features)
+        real_projected_features = feature_proj(real_x.to(device))
+        mmd_score = compute_maximum_mean_discrepancy(real_projected_features, synth_node_features)
         print(f"  Synthetic subgraph generated: {actual_nodes} nodes")
         print(f"  Edge probability range: [{synth_edge_probs.min():.4f}, {synth_edge_probs.max():.4f}]")
         print(f"  Node Feature MMD Discrepancy: {mmd_score:.4f} (Target < 0.05)")

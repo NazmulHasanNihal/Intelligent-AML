@@ -42,6 +42,14 @@ class ModelDriftDetector:
         # Create quantile bins from expected distribution
         percentiles = np.linspace(0, 100, num_buckets + 1)
         bins = np.percentile(expected, percentiles)
+        bins = np.unique(bins)
+        if len(bins) < 2:
+            min_v = float(np.min(expected))
+            max_v = float(np.max(expected))
+            if min_v == max_v:
+                bins = np.array([min_v - 1.0, min_v + 1.0])
+            else:
+                bins = np.linspace(min_v, max_v, num_buckets + 1)
         bins[0] = -np.inf
         bins[-1] = np.inf
 

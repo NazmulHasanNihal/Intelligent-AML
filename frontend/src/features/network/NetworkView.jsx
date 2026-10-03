@@ -5,7 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 
 // Lazy-load the heavy 3D WebGL engine so it doesn't slow down first load
-const Neo4j3DGraph = React.lazy(() => import('../../components/Neo4j3DGraph').then(m => ({ default: m.Neo4j3DGraph })));
+const Neo4j3DGraph = React.lazy(() => import('../../components/Neo4j3DGraph'));
 
 export const NetworkView = () => {
   const [engineMode, setEngineMode] = useState('2D'); // '2D' (default Cytoscape) | '3D' (WebGL Force Graph)

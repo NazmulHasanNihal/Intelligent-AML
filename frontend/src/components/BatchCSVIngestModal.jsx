@@ -43,7 +43,7 @@ const SAMPLE_PRESETS = [
     title: 'Clean Corporate Payroll & Clearing',
     scale: '80 Transactions • Fortune 500 Treasury',
     domain: 'ACH / SEPA Direct',
-    desc: 'Demonstrates 99.4% straight-through clearing and zero false-alarm disruption.',
+    desc: 'Demonstrates 98.6% straight-through clearing and zero false-alarm disruption.',
     sampleCount: 80,
     illicitRatio: 0.00,
     reviewRatio: 0.02,

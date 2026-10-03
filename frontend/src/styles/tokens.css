@@ -1,0 +1,203 @@
+/* ==========================================================================
+   INTELLIGENT AML DESIGN TOKENS
+   Minimalist Enterprise Fintech Design System
+   RGB Channels for Tailwind Opacity Modifiers & Solid Surfaces
+   ========================================================================== */
+
+:root {
+  /* RGB channel definitions for Tailwind opacity modifier support */
+  --background: 247 248 250;
+  --surface: 255 255 255;
+  --popover: 255 255 255;
+  --border: 228 231 236;
+  --foreground: 16 24 40;
+  --muted-foreground: 71 84 103;
+  --accent: 37 99 235;
+
+  --surface-raised: 249 250 251;
+  --surface-hover: 243 244 246;
+  --border-subtle: 238 242 246;
+  --border-strong: 208 213 221;
+  --critical: 229 72 77;
+  --review: 232 162 59;
+  --cleared: 63 178 127;
+
+  /* Direct CSS fallbacks for non-Tailwind rules */
+  --bg: rgb(var(--background));
+  --text: rgb(var(--foreground));
+  --text-2: rgb(var(--muted-foreground));
+  --text-muted: #667085;
+
+  --accent-hover: #1D4ED8;
+  --accent-subtle: rgba(37, 99, 235, 0.12);
+  --accent-text: #1E40AF;
+
+  --critical-bg: #FDF2F2;
+  --critical-border: #FECDCA;
+  --critical-text: #B42318;
+
+  --review-bg: #FFFAEB;
+  --review-border: #FEDF89;
+  --review-text: #B54708;
+
+  --cleared-bg: #ECFDF3;
+  --cleared-border: #A6F4C5;
+  --cleared-text: #027A48;
+
+  /* Geometry & Elevation */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
+  --shadow: 0 1px 3px 0 rgba(16, 24, 40, 0.1), 0 1px 2px -1px rgba(16, 24, 40, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(16, 24, 40, 0.1), 0 2px 4px -2px rgba(16, 24, 40, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(16, 24, 40, 0.1), 0 4px 6px -4px rgba(16, 24, 40, 0.1);
+  --shadow-drawer: -4px 0 24px 0 rgba(16, 24, 40, 0.12);
+
+  /* Density Defaults (Comfortable) */
+  --table-py: 0.75rem;
+  --table-px: 1rem;
+  --card-p: 1.25rem;
+  --row-h: 2.75rem;
+}
+
+[data-theme="dark"] {
+  /* Slate Obsidian Dark Mode (#0F1115 / #151820 / #1B1F29) */
+  --background: 15 17 21;
+  --surface: 21 24 32;
+  --popover: 27 31 41;
+  --border: 38 43 54;
+  --foreground: 230 232 236;
+  --muted-foreground: 163 170 183;
+  --accent: 76 141 246;
+
+  --surface-raised: 28 32 43;
+  --surface-hover: 35 40 54;
+  --border-subtle: 30 34 43;
+  --border-strong: 54 61 77;
+  --critical: 242 85 90;
+  --review: 245 158 11;
+  --cleared: 52 211 153;
+
+  --bg: rgb(var(--background));
+  --text: rgb(var(--foreground));
+  --text-2: rgb(var(--muted-foreground));
+  --text-muted: #717A8C;
+
+  --accent-hover: #6BA1F8;
+  --accent-subtle: rgba(76, 141, 246, 0.12);
+  --accent-text: #93C5FD;
+
+  --critical-bg: rgba(242, 85, 90, 0.12);
+  --critical-border: rgba(242, 85, 90, 0.28);
+  --critical-text: #FCA5A5;
+
+  --review-bg: rgba(245, 158, 11, 0.12);
+  --review-border: rgba(245, 158, 11, 0.28);
+  --review-text: #FCD34D;
+
+  --cleared-bg: rgba(52, 211, 153, 0.12);
+  --cleared-border: rgba(52, 211, 153, 0.28);
+  --cleared-text: #86EFAC;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-drawer: -4px 0 24px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* High Contrast Mode for Accessibility (WCAG 2.1 AAA) */
+[data-theme="high-contrast"] {
+  --background: 0 0 0;
+  --surface: 10 10 10;
+  --popover: 15 15 15;
+  --border: 77 77 77;
+  --foreground: 255 255 255;
+  --muted-foreground: 212 212 212;
+  --accent: 59 130 246;
+
+  --surface-raised: 18 18 18;
+  --surface-hover: 31 31 31;
+  --border-subtle: 51 51 51;
+  --border-strong: 115 115 115;
+  --critical: 255 77 79;
+  --review: 251 191 36;
+  --cleared: 74 222 128;
+
+  --bg: rgb(var(--background));
+  --text: rgb(var(--foreground));
+  --text-2: rgb(var(--muted-foreground));
+  --text-muted: #A3A3A3;
+
+  --accent-hover: #60A5FA;
+  --accent-subtle: #1E3A8A;
+  --accent-text: #BFDBFE;
+
+  --critical-bg: #450A0A;
+  --critical-border: #FF4D4F;
+  --critical-text: #FECACA;
+
+  --review-bg: #451A03;
+  --review-border: #FBBF24;
+  --review-text: #FDE68A;
+
+  --cleared-bg: #052E16;
+  --cleared-border: #4ADE80;
+  --cleared-text: #BBF7D0;
+}
+
+/* Density: Compact Mode */
+[data-density="compact"] {
+  --table-py: 0.375rem;
+  --table-px: 0.75rem;
+  --card-p: 0.875rem;
+  --row-h: 2.25rem;
+}
+
+/* cmdk & Popover Styles */
+[cmdk-root] {
+  width: 100%;
+}
+
+[cmdk-group-heading] {
+  padding: 8px 8px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgb(var(--muted-foreground));
+  font-family: 'JetBrains Mono', monospace;
+}
+
+[cmdk-item] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  color: rgb(var(--foreground));
+  user-select: none;
+  transition: background-color 100ms ease, color 100ms ease;
+}
+
+[cmdk-item][data-selected="true"] {
+  background: rgb(var(--accent) / 0.12);
+  color: rgb(var(--accent));
+}
+
+[cmdk-item][data-selected="true"] svg {
+  color: rgb(var(--accent));
+}
+
+[cmdk-empty] {
+  padding: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: rgb(var(--muted-foreground));
+}

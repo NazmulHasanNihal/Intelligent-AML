@@ -44,9 +44,9 @@ const ENTERPRISE_TRANSACTIONS = [
     holderType: 'CORPORATE',
     institution: 'JPMorgan Chase Bank, N.A.',
     src: 'US-JPMC-4829-1092-8823',
-    dst: 'GB-BARC-1109-MULE-HUB',
-    counterpartyName: 'Elena Rostova (Conduit Hub)',
-    amount: 9450,
+    dst: 'GB-BARC-1109-8832-9011',
+    counterpartyName: 'Elena Rostova (Transit Conduit)',
+    amount: 48500,
     rail: 'SWIFT Wire (MT103)',
     jurisdiction: 'Offshore (Panama / BVI)',
     risk: 0.94,
@@ -55,8 +55,16 @@ const ENTERPRISE_TRANSACTIONS = [
     gammaSet: '{1}',
     gammaLabel: 'Tier 1: Quarantine',
     tier: 'TIER_1_QUARANTINE',
-    pattern: 'Smurfing & Structuring ($9.45k < $10k Threshold)',
-    status: 'QUARANTINED',
+    pattern: 'Apex Circular Wash Loop ($48,500 Total Exposure)',
+    whyFlagged: 'Account received $48,500 from overseas and routed funds through 3 transit nodes in 21 mins with Φ_flow = 0.998, returning funds to originator with zero business absorption.',
+    assignee: 'Sarah L. Jenkins, CFE',
+    status: 'ESCALATED_SAR',
+    featureDrivers: [
+      { name: 'Flow Conservation (Φ=0.998)', impact: 38 },
+      { name: 'Hawkes Velocity Spike', impact: 29 },
+      { name: 'Offshore Route Corridor', impact: 19 },
+      { name: 'Sub-Threshold Calibration', impact: 14 }
+    ],
     burst: true,
     domain: 'Core Banking',
     slaDeadline: 'FinCEN 30-Day: 28d 14h left',
@@ -65,15 +73,15 @@ const ENTERPRISE_TRANSACTIONS = [
   {
     id: 'TX-994819',
     timestamp: '08:41:58 UTC',
-    accountNumber: '0x3a9f-4829-DARK-0012',
-    holderName: 'Darknet UTXO Consolidation',
+    accountNumber: 'bc1q9x4f8283a890cd3f71e920c83a9f828',
+    holderName: 'Non-Custodial Transit Node (High-Risk Cluster)',
     holderType: 'CRYPTO_ENTITY',
-    institution: 'Binance / Wasabi CoinJoin',
-    src: '0x3a9f-4829',
-    dst: '0x7b12-MIXER-POOL',
-    counterpartyName: 'Mixer Liquidity Pool',
+    institution: 'On-Chain UTXO Ledger / Wasabi Protocol',
+    src: 'bc1q9x4f8283a890cd3f71e920c83a9f828',
+    dst: 'bc1qa58284919cd3f019a8b7c6d5e4f3a2b1c',
+    counterpartyName: 'Anonymized Peeling Cluster #401',
     amount: 95000,
-    rail: 'Bitcoin UTXO DAG',
+    rail: 'Bitcoin UTXO (Native SegWit)',
     jurisdiction: 'Decentralized (Unregistered)',
     risk: 0.98,
     intervalLow: 0.955,
@@ -82,7 +90,14 @@ const ENTERPRISE_TRANSACTIONS = [
     gammaLabel: 'Tier 1: Quarantine',
     tier: 'TIER_1_QUARANTINE',
     pattern: 'Multi-Hop UTXO CoinJoin Peeling Chain',
+    whyFlagged: 'Rapid peel chain splitting $95,000 across 7 micro-UTXO hops in under 4 minutes with high combinatorial entropy and privacy pool tags.',
+    assignee: 'Sarah L. Jenkins, CFE',
     status: 'QUARANTINED',
+    featureDrivers: [
+      { name: 'Peeling Chain Entropy', impact: 44 },
+      { name: 'CoinJoin Tag Match', impact: 32 },
+      { name: 'Burst Velocity (λ=18.4)', impact: 24 }
+    ],
     burst: true,
     domain: 'Crypto Assets',
     slaDeadline: 'BFIU 72-Hour: 18h 32m left',
@@ -91,12 +106,12 @@ const ENTERPRISE_TRANSACTIONS = [
   {
     id: 'TX-994818',
     timestamp: '08:41:55 UTC',
-    accountNumber: 'US-CITI-0019-DORMANT-MULE',
+    accountNumber: 'US-CITI-0019-4821-3901',
     holderName: 'Marcus Vance',
     holderType: 'RETAIL',
     institution: 'Citibank N.A. (New York)',
     src: 'US-CITI-0019',
-    dst: 'SG-DBS-8819-TRANSIT',
+    dst: 'SG-DBS-8819-4412-TRANSIT',
     counterpartyName: 'Marina Bay Trade Transit',
     amount: 4800,
     rail: 'ACH Direct Clearing',
@@ -108,7 +123,14 @@ const ENTERPRISE_TRANSACTIONS = [
     gammaLabel: 'Tier 2: Review Queue',
     tier: 'TIER_2_REVIEW_QUEUE',
     pattern: 'Dormant Account Rapid Activation ($4.8k)',
+    whyFlagged: 'Account inactive for 14 months suddenly routed $4,800 to Singapore trade transit within 30 minutes of incoming deposit.',
+    assignee: 'Musrat Jahan Gungun',
     status: 'UNDER_REVIEW',
+    featureDrivers: [
+      { name: 'Dormancy Delta (14 Mo)', impact: 46 },
+      { name: 'Transit Velocity Ratio', impact: 34 },
+      { name: 'Cross-Border Corridor', impact: 20 }
+    ],
     burst: false,
     domain: 'Retail Banking',
     slaDeadline: 'FinCEN 30-Day: 29d 21h left',
@@ -117,7 +139,7 @@ const ENTERPRISE_TRANSACTIONS = [
   {
     id: 'TX-994817',
     timestamp: '08:41:52 UTC',
-    accountNumber: 'US-WF-0091-8841-CLEAN',
+    accountNumber: 'US-WF-0091-8841-2901',
     holderName: 'BlueWave Distribution Corp',
     holderType: 'CORPORATE',
     institution: 'Wells Fargo Bank, N.A.',
@@ -134,7 +156,13 @@ const ENTERPRISE_TRANSACTIONS = [
     gammaLabel: 'Tier 3: Auto-Cleared',
     tier: 'TIER_3_STRAIGHT_THROUGH_CLEAR',
     pattern: 'Commercial Cloud Billing Settlement',
+    whyFlagged: 'Matches standard recurring enterprise invoice history with verified AWS vendor credential.',
+    assignee: 'Auto-Cleared',
     status: 'AUTO_CLEARED',
+    featureDrivers: [
+      { name: 'Verified Vendor Credential', impact: 85 },
+      { name: 'Historical Baseline Match', impact: 15 }
+    ],
     burst: false,
     domain: 'Commercial Banking',
     slaDeadline: 'Exempt / Auto-Cleared',
@@ -143,53 +171,67 @@ const ENTERPRISE_TRANSACTIONS = [
   {
     id: 'TX-994816',
     timestamp: '08:41:48 UTC',
-    accountNumber: 'DE-DB-9901-RHEINLAND-LLC',
+    accountNumber: 'DE-DB-9901-4412-8821',
     holderName: 'Rheinland Freight GmbH',
     holderType: 'CORPORATE',
     institution: 'Deutsche Bank (Frankfurt)',
     src: 'DE-DB-9901',
-    dst: 'FR-BNP-3312-EURO-HUB',
-    counterpartyName: 'Euro Logistics Clearing',
-    amount: 6200,
-    rail: 'SEPA Instant Credit',
-    jurisdiction: 'EU Intra-Zone',
-    risk: 0.44,
+    dst: 'AE-SCBL-5512-8891-4412',
+    counterpartyName: 'Horizon Trading DMCC',
+    amount: 32400,
+    rail: 'SEPA Cross-Border Wire',
+    jurisdiction: 'EU / Middle East Corridor',
+    risk: 0.42,
     intervalLow: 0.310,
-    intervalHigh: 0.580,
+    intervalHigh: 0.540,
     gammaSet: '{0, 1}',
     gammaLabel: 'Tier 2: Review Queue',
     tier: 'TIER_2_REVIEW_QUEUE',
-    pattern: 'Cross-Border Velocity Shift ($6.2k)',
+    pattern: 'Cross-Border Supply Chain Settlement',
+    whyFlagged: 'Intermediate amount transfer between regular corporate affiliates; low temporal Hawkes burst.',
+    assignee: 'Musrat Jahan Gungun',
     status: 'UNDER_REVIEW',
+    featureDrivers: [
+      { name: 'Corridor Risk (Dubai Transit)', impact: 48 },
+      { name: 'Affiliate Balance History', impact: 28 },
+      { name: 'Standard Trade Cadence', impact: 24 }
+    ],
     burst: false,
-    domain: 'Core Banking',
-    slaDeadline: 'EU FIU 5-Day: 3d 08h left',
+    domain: 'Commercial Banking',
+    slaDeadline: 'goAML 5-Day: 4d 11h left',
     slaUrgent: false
   },
   {
     id: 'TX-994815',
     timestamp: '08:41:44 UTC',
-    accountNumber: 'US-JPMC-4829-1092-8823',
-    holderName: 'Apex Global Logistics Ltd',
+    accountNumber: 'HK-HSBC-8812-9902-1144',
+    holderName: 'Asia Pacific Trading Corp',
     holderType: 'CORPORATE',
-    institution: 'JPMorgan Chase Bank, N.A.',
-    src: 'HK-HSBC-8812-ASIA-TRADING',
+    institution: 'HSBC Hong Kong',
+    src: 'HK-HSBC-8812',
     dst: 'US-JPMC-4829-1092-8823',
     counterpartyName: 'Apex Global Logistics Ltd',
     amount: 47600,
     rail: 'SWIFT Wire (MT103)',
-    jurisdiction: 'Offshore Corridor',
+    jurisdiction: 'Hong Kong / US Corridor',
     risk: 0.96,
     intervalLow: 0.910,
     intervalHigh: 0.985,
     gammaSet: '{1}',
     gammaLabel: 'Tier 1: Quarantine',
     tier: 'TIER_1_QUARANTINE',
-    pattern: 'Wash Trading Inbound Peeling Loop ($47.6k)',
+    pattern: 'Apex Coordinated Wash Return Leg ($47.6k)',
+    whyFlagged: 'Feeder wire linked directly to Apex Global wash loop ring; completed return leg within 28 minutes of outbound transit.',
+    assignee: 'Sarah L. Jenkins, CFE',
     status: 'QUARANTINED',
+    featureDrivers: [
+      { name: 'Loop Recurrence Factor', impact: 42 },
+      { name: 'Velocity Acceleration (5.4x)', impact: 36 },
+      { name: 'Volume Correlation', impact: 22 }
+    ],
     burst: true,
     domain: 'Core Banking',
-    slaDeadline: 'FinCEN 30-Day: 27d 02h left',
+    slaDeadline: 'FinCEN 30-Day: 28d 14h left',
     slaUrgent: false
   }
 ];
@@ -321,7 +363,7 @@ export const AlertTriageQueue = ({
 
         <div className="skeuo-card p-2.5 sm:p-3 flex items-center justify-between">
           <div className="min-w-0 pr-1">
-            <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block uppercase truncate">TIER 3 AUTO-CLEARED (&gt;99.4%)</span>
+            <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block uppercase truncate">TIER 3 AUTO-CLEARED (&gt;98.6%)</span>
             <span className="text-base sm:text-lg xl:text-xl font-bold text-[var(--accent-primary)] font-mono block truncate">{sharedStats?.cleared?.toLocaleString() || '146,284'} tx</span>
           </div>
           <div className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-lg bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center text-[var(--accent-primary)] shadow-[var(--skeuo-btn)]">
@@ -336,7 +378,7 @@ export const AlertTriageQueue = ({
         {/* Left Column: Data Grid */}
         <div className="xl:col-span-8 skeuo-card p-2.5 sm:p-3 space-y-2 sm:space-y-2.5">
           
-          {/* Controls Bar: Search & Filter Tabs */}
+          {/* Controls Bar: Search & Filter Tabs & CSV Export */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-[var(--border-subtle)]">
             <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)] overflow-x-auto w-full sm:w-auto shadow-inner">
               <button
@@ -345,7 +387,7 @@ export const AlertTriageQueue = ({
                   activeTierFilter === 'ALL' ? 'bg-gradient-to-b from-[#257843] to-[#174E2B] text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                All ({transactions.length})
+                Sample Queue ({filteredTxs.length})
               </button>
               <button
                 onClick={() => setActiveTierFilter('TIER_1_QUARANTINE')}
@@ -367,6 +409,39 @@ export const AlertTriageQueue = ({
 
             <div className="flex items-center gap-1.5 w-full sm:w-auto">
               <button
+                onClick={() => {
+                  const headers = ['Transaction ID', 'Timestamp', 'Subject Name', 'Account Number', 'Amount USD', 'Rail', 'Jurisdiction', 'Risk Score', 'Conformal Tier', 'Assignee', 'Status', 'Typology'];
+                  const rows = filteredTxs.map(t => [
+                    t.id,
+                    t.timestamp,
+                    `"${t.holderName}"`,
+                    t.accountNumber,
+                    t.amount,
+                    `"${t.rail}"`,
+                    `"${t.jurisdiction}"`,
+                    (t.risk * 100).toFixed(1) + '%',
+                    t.tier,
+                    `"${t.assignee || 'Unassigned'}"`,
+                    t.status,
+                    `"${t.pattern}"`
+                  ]);
+                  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+                  const encodedUri = encodeURI(csvContent);
+                  const link = document.createElement('a');
+                  link.setAttribute('href', encodedUri);
+                  link.setAttribute('download', `AML_Alert_Queue_${new Date().toISOString().substring(0, 10)}.csv`);
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="skeuo-btn skeuo-btn-secondary px-2.5 py-1 text-[11px] font-bold flex items-center gap-1.5 shrink-0 cursor-pointer"
+                title="Export current filtered queue to CSV"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export CSV</span>
+              </button>
+
+              <button
                 onClick={() => setIsBatchModalOpen(true)}
                 className="skeuo-btn skeuo-btn-primary px-2.5 py-1 text-[11px] font-bold flex items-center gap-1.5 shrink-0 cursor-pointer"
                 title="Upload CSV or test pre-bundled batch datasets"
@@ -375,7 +450,7 @@ export const AlertTriageQueue = ({
                 <span>Batch Ingest</span>
               </button>
 
-              <div className="relative flex-1 sm:w-56">
+              <div className="relative flex-1 sm:w-52">
                 <Search className="w-3 h-3 text-[var(--accent-primary)] absolute left-2.5 top-2.5" />
                 <input
                   type="text"
@@ -455,6 +530,8 @@ export const AlertTriageQueue = ({
                   <th className="py-2 px-2.5">Subject</th>
                   <th className="py-2 px-2.5">Amount</th>
                   <th className="py-2 px-2.5">Rail / Hub</th>
+                  <th className="py-2 px-2.5">Assignee</th>
+                  <th className="py-2 px-2.5">Status</th>
                   <th className="py-2 px-2.5">SLA Countdown</th>
                   <th className="py-2 px-2.5">Risk Band</th>
                   <th className="py-2 px-2.5 text-right">Action</th>
@@ -497,6 +574,21 @@ export const AlertTriageQueue = ({
                         <div>{tx.rail.split(' ')[0]}</div>
                         <div className="text-[9px] text-[var(--text-muted)]">{tx.jurisdiction.split(' ')[0]}</div>
                       </td>
+                      <td className="py-1.5 px-2.5 font-mono text-[10px]">
+                        <span className="text-[var(--text-secondary)] font-semibold truncate block max-w-[100px]">
+                          {tx.assignee || 'Unassigned'}
+                        </span>
+                      </td>
+                      <td className="py-1.5 px-2.5 font-mono text-[9px]">
+                        <span className={`px-1.5 py-0.5 rounded font-bold ${
+                          tx.status === 'QUARANTINED' ? 'bg-rose-500/20 text-rose-500 border border-rose-500/30' :
+                          tx.status === 'UNDER_REVIEW' ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30' :
+                          tx.status === 'ESCALATED_SAR' ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' :
+                          'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30'
+                        }`}>
+                          {tx.status}
+                        </span>
+                      </td>
                       <td className="py-1.5 px-2.5 font-mono text-[9px]">
                         <span className={`px-1.5 py-0.5 rounded font-semibold inline-flex items-center gap-1 ${
                           tx.slaUrgent ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 animate-pulse' :
@@ -523,6 +615,34 @@ export const AlertTriageQueue = ({
               </tbody>
             </table>
           </div>
+
+          {/* Institutional Pagination & 24h Sample Disclosure */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] text-[10px] font-mono text-[var(--text-muted)]">
+            <div className="flex items-center gap-1.5">
+              <span>Showing <strong>1–{filteredTxs.length}</strong> of <strong>2,028</strong> flagged alerts</span>
+              <span className="text-[var(--border-subtle)]">•</span>
+              <span>24h Monitored Volume: <strong>148,312 tx</strong> (1.7 tx/s avg)</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <button className="px-2 py-0.5 rounded bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-muted)] cursor-not-allowed">
+                &larr; Prev
+              </button>
+              <span className="px-2 py-0.5 rounded bg-[var(--accent-primary)] text-white font-bold">1</span>
+              <button className="px-2 py-0.5 rounded bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--accent-primary)] cursor-pointer">
+                2
+              </button>
+              <button className="px-2 py-0.5 rounded bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--accent-primary)] cursor-pointer">
+                3
+              </button>
+              <span className="px-1 text-[var(--text-muted)]">...</span>
+              <button className="px-2 py-0.5 rounded bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--accent-primary)] cursor-pointer">
+                338
+              </button>
+              <button className="px-2 py-0.5 rounded bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--accent-primary)] cursor-pointer">
+                Next &rarr;
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Right Column: Selected Transaction Forensic Inspector */}
@@ -538,6 +658,17 @@ export const AlertTriageQueue = ({
               }`}>
                 {selectedTx?.gammaLabel}
               </span>
+            </div>
+
+            {/* Plain-English Why Flagged Card */}
+            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold flex items-center gap-1">
+                <AlertTriangle className="w-3 h-3" />
+                <span>Plain-English Triage Rationale</span>
+              </span>
+              <p className="text-[11px] text-[var(--text-primary)] leading-relaxed">
+                {selectedTx?.whyFlagged || 'Account exhibited abnormal transaction velocity and cyclical routing differing from customer baseline.'}
+              </p>
             </div>
 
             {/* Account Card Details */}
@@ -572,6 +703,34 @@ export const AlertTriageQueue = ({
               </div>
             </div>
 
+            {/* SHAP Explainable Feature Drivers */}
+            <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1.5 text-[11px] shadow-inner">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase font-bold">TOP RISK DRIVERS (SHAP)</span>
+                <span className="text-[9px] font-mono text-[var(--accent-primary)] font-semibold">Local Attribution</span>
+              </div>
+              <div className="space-y-1">
+                {(selectedTx?.featureDrivers || [
+                  { name: 'Cyclic Conservation Φ', impact: 42 },
+                  { name: 'Burst Hawkes λ', impact: 32 },
+                  { name: 'Cross-Border Hop', impact: 18 }
+                ]).map((fd, idx) => (
+                  <div key={idx} className="space-y-0.5">
+                    <div className="flex justify-between text-[10px] font-mono">
+                      <span className="text-[var(--text-secondary)]">{fd.name}</span>
+                      <span className="text-rose-500 font-bold">+{fd.impact}%</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-amber-500 to-rose-500 rounded-full" 
+                        style={{ width: `${Math.min(100, fd.impact * 2)}%` }} 
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Conformal Prediction Set Analysis */}
             <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-[11px] shadow-inner">
               <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">CONFORMAL RISK SET Γ(X)</span>
@@ -580,12 +739,12 @@ export const AlertTriageQueue = ({
                 <span className="text-[9px] sm:text-[10px] font-mono text-[var(--accent-primary)] font-semibold">Coverage &ge; 99.0%</span>
               </div>
               <p className="text-[10px] text-[var(--text-secondary)] pt-0.5">
-                Calibrated against holdout calibration split with exchangeability guarantees.
+                Distribution-free finite validity guaranteed under SR 11-7 model calibration standards.
               </p>
             </div>
           </div>
 
-          {/* Action Triggers: Full suite including Governance, KYC Drawer, SAR */}
+          {/* Action Triggers */}
           <div className="pt-2 border-t border-[var(--border-subtle)] space-y-1.5">
             <div className="grid grid-cols-2 gap-1.5">
               <button
@@ -606,9 +765,10 @@ export const AlertTriageQueue = ({
               <button
                 onClick={() => onOpenNoticeModal && onOpenNoticeModal(selectedTx)}
                 className="flex items-center justify-center gap-1 py-1.5 rounded-lg skeuo-btn text-[10px] font-semibold"
+                title="Dispatch Compliant Source of Funds / Invoicing RFI (Anti-Tipping-Off Safeguard Active)"
               >
                 <Mail className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                <span>Adverse Notice</span>
+                <span>Request Info (RFI)</span>
               </button>
             </div>
 

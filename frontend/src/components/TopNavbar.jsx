@@ -402,7 +402,7 @@ export const TopNavbar = ({
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--text-muted)]">MODEL GOVERNANCE:</span>
-                  <span className="font-bold text-[var(--accent-primary)]">SR 26-2 Cryptographic Ledger</span>
+                  <span className="font-bold text-[var(--accent-primary)]">Federal Reserve SR 11-7 / OCC 2011-12 WORM Ledger</span>
                 </div>
               </div>
 

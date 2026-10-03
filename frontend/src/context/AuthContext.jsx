@@ -55,9 +55,13 @@ const INITIAL_AUDIT_LOGS = [
     bankerName: 'Nazmul Hasan, CAMS',
     role: 'admin',
     roleTitle: 'Chief Compliance Officer (CCO)',
+    initiatorName: 'Sarah L. Jenkins, CFE (Senior Investigator)',
+    approverName: 'Nazmul Hasan, CAMS (Chief Compliance Officer)',
+    fourEyesVerified: true,
     action: 'EMERGENCY_ACCOUNT_FREEZE',
-    targetAccount: 'US-JPMC-4829-1092-8823 (Apex Global Logistics)',
-    reason: 'Suspicious 3-hop layering wash loop matching FATF Red Flag #4',
+    targetAccount: 'US-JPMC-4829-1092-8823 (Apex Global Logistics Ltd)',
+    reason: 'Dual-Authorized: 4-hop wash loop ($48,500) matching FATF Typology #4 & FinCEN 31 CFR § 1020.320',
+    reasonCode: 'FATF-TYP-04_WASH_CYCLE',
     merkleHash: '8f92a1c0d3e4b5a6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0'
   },
   {
@@ -67,9 +71,13 @@ const INITIAL_AUDIT_LOGS = [
     bankerName: 'Sarah L. Jenkins, CFE',
     role: 'investigator',
     roleTitle: 'Senior AML Compliance Officer',
+    initiatorName: 'Sarah L. Jenkins, CFE (Senior Investigator)',
+    approverName: 'Self-Authorized (L2 Delegation Limit)',
+    fourEyesVerified: true,
     action: 'CUSTOMER_RFI_NOTICE_DISPATCHED',
-    targetAccount: 'GB-BARC-9921-3841-1109 (Elena Rostova)',
-    reason: 'Requested Commercial Invoice & Bill of Lading for $82,000 pending wire',
+    targetAccount: 'GB-BARC-1109-8832-9011 (Elena Rostova)',
+    reason: 'Compliant Source of Funds & Invoicing RFI issued for $48,500 wire under 31 U.S.C. § 5318(g)(2) tipping-off safeguards',
+    reasonCode: 'RFI_SOURCE_OF_FUNDS',
     merkleHash: '3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b'
   },
   {
@@ -79,9 +87,13 @@ const INITIAL_AUDIT_LOGS = [
     bankerName: 'Nazmul Hasan, CAMS',
     role: 'admin',
     roleTitle: 'Chief Compliance Officer (CCO)',
+    initiatorName: 'Sarah L. Jenkins, CFE (Senior Investigator)',
+    approverName: 'Nazmul Hasan, CAMS (Chief Compliance Officer)',
+    fourEyesVerified: true,
     action: 'FINCEN_SAR_FORM111_APPROVED',
     targetAccount: 'AE-SCBL-5512-8891-4412 (Horizon Trading DMCC)',
-    reason: 'Confirmed multi-layer pass-through conduit structuring $48,500',
+    reason: 'Dual-Authorized: Verified pass-through conduit structuring $48,500. Form 111 XML signed under 31 CFR § 1020.320.',
+    reasonCode: 'FINCEN_FORM111_DUAL_AUTH',
     merkleHash: '9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d'
   }
 ];
@@ -106,7 +118,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logBankerAction = ({ action, targetAccount, reason }) => {
+  const logBankerAction = ({ action, targetAccount, reason, initiatorName, approverName, reasonCode, fourEyesVerified }) => {
     const newLog = {
       id: `AUD-${Math.floor(10000 + Math.random() * 90000)}`,
       timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC',
@@ -114,6 +126,10 @@ export const AuthProvider = ({ children }) => {
       bankerName: currentBanker.name,
       role: currentBanker.role,
       roleTitle: currentBanker.roleTitle,
+      initiatorName: initiatorName || (currentBanker.role === 'admin' ? 'Sarah L. Jenkins, CFE (Senior Investigator)' : `${currentBanker.name} (${currentBanker.roleTitle})`),
+      approverName: approverName || (currentBanker.role === 'admin' ? `${currentBanker.name} (CCO Dual-Approval)` : 'Nazmul Hasan, CAMS (CCO Counter-Signature)'),
+      fourEyesVerified: fourEyesVerified ?? true,
+      reasonCode: reasonCode || 'COMPLIANCE_OPERATIONAL_LOG',
       action,
       targetAccount,
       reason,

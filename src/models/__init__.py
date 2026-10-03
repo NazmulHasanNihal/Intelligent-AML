@@ -20,9 +20,23 @@ if _venv_torch_lib.exists():
 
 import torch
 
-from .htgnn import BurstAwareHGT, CSTGBClassifier, train_htgnn, run_htgnn_pipeline, build_hetero_data as htgnn_build_data
-from .burst_aware_hgt_conv import BurstAwareHGTConv
-from .graphgan import GraphGAN, GraphGANGenerator, GraphGANDiscriminator, train_graphgan, run_graphgan_pipeline, build_hetero_data as graphgan_build_data
+try:
+    from .htgnn import BurstAwareHGT, CSTGBClassifier, train_htgnn, run_htgnn_pipeline, build_hetero_data as htgnn_build_data
+    from .burst_aware_hgt_conv import BurstAwareHGTConv
+    from .graphgan import GraphGAN, GraphGANGenerator, GraphGANDiscriminator, train_graphgan, run_graphgan_pipeline, build_hetero_data as graphgan_build_data
+except (ImportError, ModuleNotFoundError):
+    BurstAwareHGT = None
+    CSTGBClassifier = None
+    train_htgnn = None
+    run_htgnn_pipeline = None
+    htgnn_build_data = None
+    BurstAwareHGTConv = None
+    GraphGAN = None
+    GraphGANGenerator = None
+    GraphGANDiscriminator = None
+    train_graphgan = None
+    run_graphgan_pipeline = None
+    graphgan_build_data = None
 from .adversarial_defense import (
     AdversarialTopologyDefense,
     AdversarialCamouflageGenerator,
@@ -45,7 +59,11 @@ from .threshold_optimizer import OptimalThresholdCalibrator
 from .motif_kernel import DirectedMotifKernel
 from .neuro_symbolic_loss import NeuroSymbolicAMLLoss, KirchhoffMassConservationLoss, PhysicsInformedAMLLoss
 from .sam_optimizer import SAMOptimizer
-from .hawkes_process import HawkesIntensityEngine, HawkesTemporalEncoder
+try:
+    from .hawkes_process import HawkesIntensityEngine, HawkesTemporalEncoder
+except Exception:
+    HawkesIntensityEngine = None
+    HawkesTemporalEncoder = None
 from .inference_accelerator import (
     CSTGBHierarchicalAccelerator,
     InMemGraphEmbeddingRingBuffer,

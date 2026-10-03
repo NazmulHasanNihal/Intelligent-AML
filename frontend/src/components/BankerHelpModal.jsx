@@ -30,7 +30,7 @@ const HELP_TOPICS = [
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.08] space-y-2">
           <span className="font-semibold text-white block">How this platform helps you:</span>
           <ul className="space-y-1.5 list-disc list-inside text-slate-300">
-            <li><b>Auto-Clears 99.4% of Safe Transfers:</b> Automatically clears normal customer transactions in less than 1 millisecond so real customers never experience delays.</li>
+            <li><b>Auto-Clears 98.6% of Safe Transfers:</b> Automatically clears normal customer transactions in less than 1 millisecond so real customers never experience delays.</li>
             <li><b>Catches Hidden Criminal Rings:</b> Traces multi-hop hidden transfer chains where criminals split money into small amounts (under $10,000) or bounce funds between accounts.</li>
             <li><b>Drafts Government SAR Reports in 25 Seconds:</b> Writes the complete legal Suspicious Activity Report (SAR) ready for official FinCEN PDF download.</li>
           </ul>
@@ -51,7 +51,7 @@ const HELP_TOPICS = [
             <div>
               <span className="font-bold text-emerald-300 block text-xs">🟢 GREEN — Tier 3: Straight-Through Clear (Safe)</span>
               <p className="text-slate-300 mt-0.5">
-                The transaction is verified clean (e.g. regular corporate payroll, utility bills). Funds are instantly released without requiring human officer review. Over <b>99.4%</b> of your bank's volume falls here.
+                The transaction is verified clean (e.g. regular corporate payroll, utility bills). Funds are instantly released without requiring human officer review. Over <b>98.6%</b> of your bank's volume falls here.
               </p>
             </div>
           </div>
@@ -167,21 +167,21 @@ const HELP_TOPICS = [
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.06]">
           <span className="font-bold text-white block">Q: Does the AI block normal customer transactions by accident?</span>
           <p className="text-slate-300 text-[11px] mt-1">
-            <b>No.</b> The system uses mathematical Conformal Safety Guarantees that ensure over 99.45% of safe transactions are cleared straight-through in 0.45 milliseconds. Only genuine anomalies are flagged for your review.
+            <b>No.</b> The system uses mathematical Conformal Safety Guarantees that ensure over 98.6% of safe transactions are cleared straight-through in 0.45 milliseconds. Only genuine anomalies are flagged for your review.
           </p>
         </div>
 
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.06]">
           <span className="font-bold text-white block">Q: What should I tell a customer if their transaction is held?</span>
           <p className="text-slate-300 text-[11px] mt-1">
-            Open <b>Workspace 4 (Customer Recourse Hub)</b>. It generates a plain-English explanation notice telling the customer exactly what documentation or KYC verification is needed to release their funds.
+            Open <b>Console 5 (Remediation &amp; RFI Hub)</b>. It generates a compliant <b>Request for Information (RFI)</b> document notice (commercial invoice, Bill of Lading, UBO verification). Under 31 U.S.C. § 5318(g)(2), tipping off internal AML thresholds or algorithmic flags is strictly prohibited.
           </p>
         </div>
 
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.06]">
-          <span className="font-bold text-white block">Q: Is this system compliant with banking regulators (Federal Reserve & FinCEN)?</span>
+          <span className="font-bold text-white block">Q: Is this system compliant with banking regulators (Federal Reserve &amp; FinCEN)?</span>
           <p className="text-slate-300 text-[11px] mt-1">
-            <b>Yes.</b> It fully complies with the Bank Secrecy Act (31 U.S.C. 5318(g)), FinCEN Form 111 standards, and Federal Reserve SR 26-2 model risk governance principles with cryptographic tamper-proof audit seals.
+            <b>Yes.</b> It fully complies with the Bank Secrecy Act (31 U.S.C. 5318(g)), FinCEN Form 111 standards, and Federal Reserve SR 11-7 / OCC 2011-12 model risk governance principles with tamper-evident WORM audit seals under Federal Rules of Evidence 902(11).
           </p>
         </div>
       </div>

@@ -10,9 +10,15 @@ class LaTeXProjectValidator:
     environments, and math modes.
     """
 
-    def __init__(self, project_dir: Path):
+    def __init__(self, project_dir: Path, main_tex_name: str = "main.tex"):
         self.project_dir = Path(project_dir)
-        self.main_tex = self.project_dir / "main.tex"
+        self.main_tex = self.project_dir / main_tex_name
+        if not self.main_tex.exists():
+            for alt in ["Anonymized_Manuscript.tex", "manuscript.tex", "paper.tex"]:
+                alt_path = self.project_dir / alt
+                if alt_path.exists():
+                    self.main_tex = alt_path
+                    break
         self.references_bib = self.project_dir / "references.bib"
         self.figures_dir = self.project_dir / "figures"
         self.errors: List[str] = []

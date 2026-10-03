@@ -4,11 +4,11 @@ import { Play, Zap, Clock, Shield, CheckCircle2, AlertTriangle, XCircle, ArrowRi
 import { scoreTransaction } from '../api/client';
 
 export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNavigateToSAR }) => {
-  const [srcId, setSrcId] = useState('ACC_8823_SUSPECT_MULE');
-  const [dstId, setDstId] = useState('ACC_1109_MULE_HUB');
+  const [srcId, setSrcId] = useState('BD22-EBLB-4829-1092-8823');
+  const [dstId, setDstId] = useState('AE-EBIL-4412-8819-3301');
   const [amount, setAmount] = useState(9450);
-  const [paymentRail, setPaymentRail] = useState('Wire (SWIFT)');
-  const [jurisdiction, setJurisdiction] = useState('Offshore Haven (BVI/Panama)');
+  const [paymentRail, setPaymentRail] = useState('SWIFT MT700 (LC)');
+  const [jurisdiction, setJurisdiction] = useState('Offshore Trade Hub (Dubai JAFZA)');
   const [burstVelocity, setBurstVelocity] = useState(true);
   const [fastPath, setFastPath] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -36,10 +36,10 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
 
   useEffect(() => {
     if (!presetScenario) return;
-    setSrcId(presetScenario.srcId || 'ACC_8823_MULE');
-    setDstId(presetScenario.dstId || 'ACC_1109_HUB');
+    setSrcId(presetScenario.srcId || 'BD22-EBLB-4829-1092-8823');
+    setDstId(presetScenario.dstId || 'BD04-BRAC-1109-8421-4402');
     setAmount(presetScenario.amount || 9450);
-    setPaymentRail(presetScenario.paymentRail || 'Wire (SWIFT)');
+    setPaymentRail(presetScenario.paymentRail || 'SWIFT MT700 (LC)');
     setJurisdiction(presetScenario.jurisdiction || 'Domestic (Clean)');
     setBurstVelocity(presetScenario.burstVelocity ?? true);
     setFastPath(presetScenario.fastPath ?? true);

@@ -30,7 +30,7 @@ export const Header = ({ healthStatus }) => {
 
           <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/30 text-[11px]">
             <Lock className="w-3.5 h-3.5" />
-            <span>SR 26-2 & FinCEN Form 111</span>
+            <span>SR 11-7 &amp; FinCEN Form 111</span>
           </div>
         </div>
       </div>

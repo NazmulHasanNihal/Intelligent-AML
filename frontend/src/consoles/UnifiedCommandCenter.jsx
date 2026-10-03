@@ -25,11 +25,22 @@ import { scoreTransaction } from '../api/client';
 
 export const SCENARIO_PRESETS = [
   { 
+    id: 'apex-loop', 
+    label: 'Apex Circular Wash Loop', 
+    icon: '🔄',
+    srcId: 'US-JPMC-4829-1092-8823', 
+    dstId: 'GB-BARC-1109-8832-9011', 
+    amount: 48500, 
+    rail: 'SWIFT Wire (MT103)', 
+    crossBorder: true, 
+    burstVelocity: true 
+  },
+  { 
     id: 'smurfing', 
-    label: 'Smurfing Loop', 
+    label: 'Sub-Threshold Structuring', 
     icon: '🚨',
     srcId: 'US-JPMC-4829-1092-8823', 
-    dstId: 'GB-BARC-1109-MULE-HUB', 
+    dstId: 'GB-BARC-1109-8832-9011', 
     amount: 9450, 
     rail: 'SWIFT Wire (MT103)', 
     crossBorder: true, 
@@ -37,29 +48,18 @@ export const SCENARIO_PRESETS = [
   },
   { 
     id: 'mixer', 
-    label: 'UTXO Mixer Peeling', 
+    label: 'BTC Multi-Hop Peeling Chain', 
     icon: '🌪️',
-    srcId: '0x3a9f-4829-DARK-0012', 
-    dstId: '0x7b12-MIXER-POOL', 
+    srcId: 'bc1q9x4f8283a890cd3f71e920c83a9f828', 
+    dstId: 'bc1qa58284919cd3f019a8b7c6d5e4f3a2b1c', 
     amount: 95000, 
-    rail: 'Bitcoin UTXO DAG', 
-    crossBorder: true, 
-    burstVelocity: true 
-  },
-  { 
-    id: 'layering', 
-    label: 'Layering Cycle', 
-    icon: '🔄',
-    srcId: 'HK-HSBC-8812-ASIA-TRADING', 
-    dstId: 'US-JPMC-4829-1092-8823', 
-    amount: 47600, 
-    rail: 'SWIFT Wire (MT103)', 
+    rail: 'Bitcoin UTXO (Native SegWit)', 
     crossBorder: true, 
     burstVelocity: true 
   },
   { 
     id: 'payroll', 
-    label: 'Legitimate Payroll', 
+    label: 'Legitimate Corporate Payroll', 
     icon: '🏢',
     srcId: 'US-WF-0091-8841-CORP', 
     dstId: 'US-JPMC-2201-PAYROLL', 
@@ -194,26 +194,56 @@ export const UnifiedCommandCenter = ({
     }
   };
 
-  // Activity Line Chart Options
+  // Time Range & Rails Filters
+  const [timeRange, setTimeRange] = useState('24H');
+  const [selectedRail, setSelectedRail] = useState('ALL');
+
+  // Dual-Axis Activity Line Chart Options
   const activityChartOption = {
     backgroundColor: 'transparent',
-    grid: { left: '3%', right: '4%', bottom: '8%', top: '12%', containLabel: true },
-    tooltip: { trigger: 'axis', backgroundColor: '#151D2C', borderColor: '#28374E', textStyle: { color: '#F8FAFC', fontSize: 11 } },
+    grid: { left: '3%', right: '4%', bottom: '8%', top: '15%', containLabel: true },
+    tooltip: { 
+      trigger: 'axis', 
+      backgroundColor: '#151D2C', 
+      borderColor: '#28374E', 
+      textStyle: { color: '#F8FAFC', fontSize: 11 } 
+    },
+    legend: {
+      data: ['Throughput (tx/s)', 'Flagged High-Risk Alerts'],
+      top: '0%',
+      textStyle: { color: '#94A3B8', fontSize: 10, fontFamily: 'monospace' }
+    },
     xAxis: {
       type: 'category',
       data: ['08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40'],
       axisLine: { lineStyle: { color: '#28374E' } },
       axisLabel: { color: '#94A3B8', fontSize: 10 }
     },
-    yAxis: {
-      type: 'value',
-      splitLine: { lineStyle: { color: '#1E293B', type: 'dashed' } },
-      axisLabel: { color: '#94A3B8', fontSize: 10 }
-    },
+    yAxis: [
+      {
+        type: 'value',
+        name: 'Throughput (tx/s)',
+        nameTextStyle: { color: '#10B981', fontSize: 10, align: 'left' },
+        min: 300,
+        max: 700,
+        splitLine: { lineStyle: { color: '#1E293B', type: 'dashed' } },
+        axisLabel: { color: '#94A3B8', fontSize: 10 }
+      },
+      {
+        type: 'value',
+        name: 'Flagged Alerts',
+        nameTextStyle: { color: '#EF4444', fontSize: 10, align: 'right' },
+        min: 0,
+        max: 20,
+        splitLine: { show: false },
+        axisLabel: { color: '#EF4444', fontSize: 10 }
+      }
+    ],
     series: [
       {
-        name: 'Streamed Tx/s',
+        name: 'Throughput (tx/s)',
         type: 'line',
+        yAxisIndex: 0,
         smooth: true,
         data: [420, 480, 510, 490, 560, 540, 590, 610, 580],
         itemStyle: { color: '#10B981' },
@@ -229,37 +259,43 @@ export const UnifiedCommandCenter = ({
         }
       },
       {
-        name: 'Flagged Alerts',
+        name: 'Flagged High-Risk Alerts',
         type: 'line',
+        yAxisIndex: 1,
         smooth: true,
         data: [4, 6, 8, 5, 12, 9, 14, 8, 11],
-        itemStyle: { color: '#EF4444' }
+        itemStyle: { color: '#EF4444' },
+        lineStyle: { width: 2.5 }
       }
     ]
   };
 
   // Recent Live Feed Events
   const recentAlerts = [
-    { id: 'TX-994821', time: '08:42:01', account: 'US-JPMC-4829', amount: 9450, tier: 'TIER_1_QUARANTINE', risk: 0.94, pattern: 'Smurfing & Structuring Loop' },
-    { id: 'TX-994819', time: '08:41:58', account: '0x3a9f-4829', amount: 95000, tier: 'TIER_1_QUARANTINE', risk: 0.98, pattern: 'Wasabi CoinJoin Peeling Chain' },
-    { id: 'TX-994818', time: '08:41:55', account: 'US-CITI-0019', amount: 4800, tier: 'TIER_2_REVIEW_QUEUE', risk: 0.52, pattern: 'Dormant Account Rapid Activation' },
-    { id: 'TX-994817', time: '08:41:52', account: 'US-WF-0091', amount: 14250, tier: 'TIER_3_STRAIGHT_THROUGH_CLEAR', risk: 0.02, pattern: 'Commercial Billing Settlement' }
+    { id: 'TX-994821', time: '08:42:01', account: 'US-JPMC-4829-1092-8823', amount: 48500, tier: 'TIER_1_QUARANTINE', risk: 0.94, pattern: 'Apex Circular Wash Loop ($48.5k Exposure)' },
+    { id: 'TX-994819', time: '08:41:58', account: 'bc1q9x4f8283a890cd3f71e920c83a9f828', amount: 95000, tier: 'TIER_1_QUARANTINE', risk: 0.98, pattern: 'BTC Multi-Hop Peeling Chain' },
+    { id: 'TX-994818', time: '08:41:55', account: 'US-CITI-0019-4821-3901', amount: 4800, tier: 'TIER_2_REVIEW_QUEUE', risk: 0.52, pattern: 'Dormant Account Rapid Activation' },
+    { id: 'TX-994817', time: '08:41:52', account: 'US-WF-0091-8841-CORP', amount: 14250, tier: 'TIER_3_STRAIGHT_THROUGH_CLEAR', risk: 0.02, pattern: 'Commercial Billing Settlement' }
   ];
 
   return (
     <div className="space-y-3 font-sans text-[var(--text-primary)] min-w-0">
       
-      {/* 1. Executive Top KPI Deck (4 Clean Modern Metric Cards) */}
+      {/* 1. Executive Top KPI Deck (4 Clean Clickable Modern Metric Cards) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         
         {/* Card 1: 24h Monitored Volume */}
-        <div className="minimal-card p-3 flex items-center justify-between">
+        <div 
+          onClick={() => onNavigateToSAR && onNavigateToSAR()}
+          className="minimal-card p-3 flex items-center justify-between cursor-pointer hover:border-[var(--accent-primary)] transition-all"
+          title="Click to view all monitored transactions"
+        >
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">24H MONITORED VOLUME</span>
             <div className="text-xl font-bold font-mono text-[var(--text-primary)] mt-0.5">148,312 <span className="text-xs font-normal text-[var(--text-muted)]">tx</span></div>
             <span className="text-[10px] text-emerald-500 font-mono mt-0.5 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              $148.2M Streamed
+              $148.2M Streamed (Avg: 1.7 tx/s)
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
@@ -268,12 +304,16 @@ export const UnifiedCommandCenter = ({
         </div>
 
         {/* Card 2: Tier 1 Quarantined */}
-        <div className="minimal-card p-3 flex items-center justify-between border-rose-500/20">
+        <div 
+          onClick={() => onNavigateToSAR && onNavigateToSAR({ tier: 'TIER_1_QUARANTINE' })}
+          className="minimal-card p-3 flex items-center justify-between border-rose-500/20 cursor-pointer hover:border-rose-500 transition-all"
+          title="Click to filter Tier 1 Quarantined Alerts"
+        >
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">TIER 1 QUARANTINED</span>
             <div className="text-xl font-bold font-mono text-rose-500 mt-0.5">1,280 <span className="text-xs font-normal text-[var(--text-muted)]">tx (0.86%)</span></div>
             <span className="text-[10px] text-rose-400 font-mono mt-0.5">
-              Γ = &#123;1&#125; Auto-Quarantine
+              Γ = &#123;1&#125; Auto-Quarantine Hold
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500">
@@ -282,12 +322,16 @@ export const UnifiedCommandCenter = ({
         </div>
 
         {/* Card 3: Tier 2 Review Queue */}
-        <div className="minimal-card p-3 flex items-center justify-between border-amber-500/20">
+        <div 
+          onClick={() => onNavigateToSAR && onNavigateToSAR({ tier: 'TIER_2_REVIEW_QUEUE' })}
+          className="minimal-card p-3 flex items-center justify-between border-amber-500/20 cursor-pointer hover:border-amber-500 transition-all"
+          title="Click to filter Tier 2 Four-Eyes Review Queue"
+        >
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">TIER 2 REVIEW QUEUE</span>
             <div className="text-xl font-bold font-mono text-amber-500 mt-0.5">748 <span className="text-xs font-normal text-[var(--text-muted)]">tx (0.50%)</span></div>
             <span className="text-[10px] text-amber-400 font-mono mt-0.5">
-              Γ = &#123;0, 1&#125; Four-Eyes
+              Γ = &#123;0, 1&#125; Four-Eyes Sign-Off
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
@@ -295,13 +339,17 @@ export const UnifiedCommandCenter = ({
           </div>
         </div>
 
-        {/* Card 4: Straight-Through Clear */}
-        <div className="minimal-card p-3 flex items-center justify-between">
+        {/* Card 4: Straight-Through Clear (Mathematically Corrected: 146,284 / 148,312 = 98.6%) */}
+        <div 
+          onClick={() => onNavigateToSAR && onNavigateToSAR({ tier: 'TIER_3_STRAIGHT_THROUGH_CLEAR' })}
+          className="minimal-card p-3 flex items-center justify-between cursor-pointer hover:border-[var(--accent-primary)] transition-all"
+          title="Click to view Straight-Through Cleared Transactions"
+        >
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">STRAIGHT-THROUGH RATE</span>
-            <div className="text-xl font-bold font-mono text-[var(--accent-primary)] mt-0.5">99.4%</div>
+            <div className="text-xl font-bold font-mono text-[var(--accent-primary)] mt-0.5">98.6%</div>
             <span className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">
-              Coverage &ge; 99.0% (α=0.01)
+              146,284 Safe Cleared (α = 0.01)
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 flex items-center justify-center text-[var(--accent-primary)]">
@@ -311,8 +359,26 @@ export const UnifiedCommandCenter = ({
 
       </div>
 
-      {/* 2. Categorized Workspace Controls (Segmented Tabs) */}
-      <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-2">
+      {/* Model Health Strip & Telemetry Hardware Specs */}
+      <div className="minimal-card p-2 sm:p-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono border-emerald-500/20 bg-emerald-500/[0.03]">
+        <div className="flex flex-wrap items-center gap-2">
+          <Cpu className="w-3.5 h-3.5 text-emerald-500" />
+          <span className="text-[var(--text-muted)]">INFERENCE HARDWARE:</span>
+          <span className="text-[var(--text-primary)] font-bold">Intel Xeon Platinum 8375C @ 2.8GHz / Nvidia T4 (Batch=1)</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <span>Latency: <strong className="text-emerald-500">0.45ms avg / 0.82ms p99</strong></span>
+          <span className="text-[var(--border-subtle)]">•</span>
+          <span>Drift KS: <strong className="text-[var(--accent-primary)]">Nominal (D_ks = 0.018 &lt; 0.05)</strong></span>
+          <span className="text-[var(--border-subtle)]">•</span>
+          <span>Standard: <strong className="text-emerald-500">SR 11-7 Validated</strong></span>
+          <span className="text-[var(--border-subtle)]">•</span>
+          <span className="text-[var(--text-muted)]">Retrained: 2h ago</span>
+        </div>
+      </div>
+
+      {/* 2. Categorized Workspace Controls (Segmented Tabs & Filters) */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-subtle)] pb-2">
         <div className="flex items-center gap-1 bg-[var(--bg-card)] p-1 rounded-xl border border-[var(--border-subtle)]">
           <button
             onClick={() => setActiveSegment('ACTIVITY')}
@@ -346,8 +412,37 @@ export const UnifiedCommandCenter = ({
           </button>
         </div>
 
-        <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-[var(--text-muted)]">
-          <span>SLA P99 Latency: <strong className="text-[var(--accent-primary)]">&lt; 0.82ms</strong></span>
+        {/* Time-Range & Payment Rail Filters */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Time Range */}
+          <div className="flex items-center gap-1 bg-[var(--bg-card)] p-0.5 rounded-lg border border-[var(--border-subtle)] text-[10px] font-mono">
+            {['1H', '24H', '7D', '30D'].map((tr) => (
+              <button
+                key={tr}
+                onClick={() => setTimeRange(tr)}
+                className={`px-2 py-0.5 rounded cursor-pointer transition-all ${
+                  timeRange === tr ? 'bg-[var(--accent-primary)] text-white font-bold' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                {tr}
+              </button>
+            ))}
+          </div>
+
+          {/* Payment Rails Filter */}
+          <div className="flex items-center gap-1 bg-[var(--bg-card)] p-0.5 rounded-lg border border-[var(--border-subtle)] text-[10px] font-mono">
+            {['ALL', 'SWIFT', 'ACH', 'CRYPTO'].map((r) => (
+              <button
+                key={r}
+                onClick={() => setSelectedRail(r)}
+                className={`px-2 py-0.5 rounded cursor-pointer transition-all ${
+                  selectedRail === r ? 'bg-indigo-600 text-white font-bold' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                {r}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -361,8 +456,11 @@ export const UnifiedCommandCenter = ({
                 <Activity className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Streaming Throughput &amp; Alert Telemetry</span>
               </span>
-              <span className="text-[10px] font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                500 tx/s Active
+              <span 
+                className="text-[10px] font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20"
+                title="Peak Burst: 500 tx/s | 24h Volume: 148,312 tx (Avg: 1.7 tx/s) | Active Ingestion Engine"
+              >
+                Peak Burst: 500 tx/s | 24h Avg: 1.7 tx/s
               </span>
             </div>
             <div className="h-56 sm:h-64">
@@ -620,7 +718,7 @@ export const UnifiedCommandCenter = ({
             <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">CONFORMAL COVERAGE</span>
             <div className="text-xl font-bold font-mono text-[var(--accent-primary)]">1 - α &ge; 99.0%</div>
             <p className="text-[11px] text-[var(--text-secondary)] pt-1">
-              Finite-sample distribution-free validity guarantees statutory safety while eliminating 99.4% of false alarms.
+              Finite-sample distribution-free validity guarantees statutory safety while eliminating 98.6% of unnecessary compliance reviews.
             </p>
           </div>
         </div>

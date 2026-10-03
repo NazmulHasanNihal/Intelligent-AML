@@ -110,15 +110,15 @@ const BANKER_STEPS = [
     stepNumber: 6,
     targetTab: 'governance',
     title: '6. Bank Examiner & Audit Verification',
-    subtitle: 'Tamper-proof cryptographic seals for Federal Reserve compliance',
+    subtitle: 'Tamper-evident WORM cryptographic seals for Federal Reserve compliance',
     icon: BarChart3,
     content: (
       <div className="space-y-2.5 text-xs text-slate-300">
         <p>
-          Every decision made by the AI receives an immutable <b>cryptographic Merkle audit seal</b>.
+          Every decision made by the AI receives an immutable <b>cryptographic Merkle audit seal</b> stored under SEC 17a-4 WORM retention standards.
         </p>
         <p>
-          When bank regulators or auditors examine your systems, you have complete proof that your bank complied with <b>Federal Reserve SR 26-2</b> safety standards.
+          When bank regulators or auditors examine your systems, you have verifiable proof that your bank complied with <b>Federal Reserve SR 11-7 / OCC 2011-12</b> safety standards under Federal Rules of Evidence 902(11).
         </p>
       </div>
     ),

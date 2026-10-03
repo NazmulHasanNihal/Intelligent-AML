@@ -23,9 +23,9 @@ import {
 } from 'lucide-react';
 
 // Generates synthetic high-scale real-world banking graph (up to thousands of transactions)
-export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-8823', nodeCount = 450) {
-  const banks = ['JPMorgan Chase', 'Citibank', 'Standard Chartered', 'Barclays', 'Wells Fargo', 'HSBC', 'Deutsche Bank'];
-  const nodeTypes = ['CORPORATE', 'RETAIL', 'OFFSHORE_SHELL', 'ATM_CASHOUT', 'CRYPTO_MIXER', 'MERCHANT_CHAFF'];
+export function generateLargeBankingGraph(baseOriginator = 'BD22-EBLB-4829-1092-8823', nodeCount = 450) {
+  const banks = ['Eastern Bank PLC', 'BRAC Bank PLC', 'Emirates NBD Dubai', 'Dutch-Bangla Bank', 'Barclays Bank UK', 'DBS Bank Singapore', 'Islami Bank Bangladesh'];
+  const nodeTypes = ['CORPORATE', 'RETAIL', 'OFFSHORE_SHELL', 'MFS_AGENT', 'COMMERCIAL_CONDUIT', 'MERCHANT_CHAFF'];
   
   const nodes = [];
   const links = [];
@@ -33,35 +33,35 @@ export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-88
   // Seed Central Node (Account Holder)
   nodes.push({
     id: baseOriginator,
-    name: 'Apex Global Logistics Ltd (Subject)',
-    bank: 'JPMorgan Chase Bank, N.A.',
+    name: 'Meghna Industrial & Agro Processing Ltd (Subject)',
+    bank: 'Eastern Bank PLC (EBL)',
     type: 'CORPORATE',
-    risk: 0.94,
+    risk: 0.984,
     tier: 'TIER_1_QUARANTINE',
     val: 30,
     color: '#00F2FE', // Quantum Electric Cyan Core
     glowColor: '#8B5CF6', // Ultraviolet Prismatic Halo
-    balance: '$1,248,920.45',
+    balance: '$1,248,920.45 (৳149.8M)',
     isOriginator: true
   });
 
-  // Layer 1: Core Mules & Laundering Conduits (8 nodes)
+  // Layer 1: Core Conduits & Laundering Ring (8 nodes)
   const coreMules = [
-    { id: 'GB-BARC-1109-MULE-HUB', name: 'Elena Rostova (Conduit Hub)', bank: 'Barclays Bank PLC', risk: 0.96, tier: 'TIER_1_QUARANTINE', type: 'RETAIL' },
-    { id: 'AE-SCBL-5512-HORIZON', name: 'Horizon Trading DMCC', bank: 'Standard Chartered Dubai', risk: 0.95, tier: 'TIER_1_QUARANTINE', type: 'CORPORATE' },
-    { id: 'BVI-ESCROW-SOVEREIGN', name: 'BVI Sovereign Vault LP', bank: 'BVI Offshore Clearing', risk: 0.98, tier: 'TIER_1_QUARANTINE', type: 'OFFSHORE_SHELL' },
-    { id: 'US-WF-4412-FEEDER-LLC', name: 'Pacific Coast Feeder LLC', bank: 'Wells Fargo N.A.', risk: 0.88, tier: 'TIER_1_QUARANTINE', type: 'CORPORATE' },
-    { id: '0x3a9f-DARKNET-UTXO', name: 'Quantum Digital Mixer Gateway', bank: 'Tornado Anonymity Pool', risk: 0.99, tier: 'TIER_1_QUARANTINE', type: 'CRYPTO_MIXER' },
-    { id: 'US-CITI-0019-DORMANT', name: 'Marcus Vance (Dormant Mule)', bank: 'Citibank N.A.', risk: 0.65, tier: 'TIER_2_REVIEW_QUEUE', type: 'RETAIL' },
-    { id: 'SG-DBS-8819-TRANSIT', name: 'Marina Bay Trade Transit', bank: 'DBS Bank Singapore', risk: 0.58, tier: 'TIER_2_REVIEW_QUEUE', type: 'CORPORATE' },
-    { id: 'DE-DB-9901-RHEINLAND', name: 'Rheinland Freight GmbH', bank: 'Deutsche Bank Frankfurt', risk: 0.42, tier: 'TIER_2_REVIEW_QUEUE', type: 'CORPORATE' },
+    { id: 'BD04-BRAC-1109-8421-4402', name: 'Tanvir Ahmed Rahman (Trade Conduit)', bank: 'BRAC Bank PLC', risk: 0.96, tier: 'TIER_1_QUARANTINE', type: 'COMMERCIAL_CONDUIT' },
+    { id: 'AE-EBIL-4412-8819-3301', name: 'Gulf Star Commodities FZE (JAFZA Dubai)', bank: 'Emirates NBD Dubai', risk: 0.95, tier: 'TIER_1_QUARANTINE', type: 'OFFSHORE_SHELL' },
+    { id: 'SG-DBS-8819-3301', name: 'Pacific Commodities Escrow Pte', bank: 'DBS Bank Singapore', risk: 0.98, tier: 'TIER_1_QUARANTINE', type: 'OFFSHORE_SHELL' },
+    { id: 'GB-BARC-1109-8421-4402', name: 'Anglo-Bengal Textiles Ltd (Manchester)', bank: 'Barclays Bank UK', risk: 0.88, tier: 'TIER_1_QUARANTINE', type: 'CORPORATE' },
+    { id: 'MFS-BKASH-0171-8840', name: 'Mohammad Rafiqul Islam (bKash Agent)', bank: 'bKash Limited', risk: 0.78, tier: 'TIER_1_QUARANTINE', type: 'MFS_AGENT' },
+    { id: 'BD91-DBBL-4401-2299-1184', name: 'Sadia Sultana (Dormant Payroll)', bank: 'Dutch-Bangla Bank PLC', risk: 0.65, tier: 'TIER_2_REVIEW_QUEUE', type: 'RETAIL' },
+    { id: 'BD18-CIBL-3312-8804-1290', name: 'Square Fashion & Apparels Ltd', bank: 'City Bank PLC', risk: 0.03, tier: 'TIER_3_CLEARED', type: 'CORPORATE' },
+    { id: 'BD04-BRAC-0192-8821-4401', name: 'Beximco Pharmaceuticals Ltd', bank: 'BRAC Bank PLC', risk: 0.02, tier: 'TIER_3_CLEARED', type: 'CORPORATE' },
   ];
 
   coreMules.forEach((m) => {
     const isHighRisk = m.risk >= 0.85;
     const isMed = m.risk >= 0.40;
     const color = isHighRisk 
-      ? (m.type === 'CRYPTO_MIXER' ? '#D946EF' : '#FF0055') 
+      ? (m.type === 'OFFSHORE_SHELL' ? '#D946EF' : '#FF0055') 
       : isMed ? '#F59E0B' : '#00F2FE';
     const glow = isHighRisk ? '#EC4899' : isMed ? '#FBBF24' : '#38BDF8';
 
@@ -92,9 +92,9 @@ export function generateLargeBankingGraph(baseOriginator = 'US-JPMC-4829-1092-88
   });
 
   // Closed Circular Wash Loop (Hyper-Luminescent Neon Pink Laser)
-  links.push({ source: 'GB-BARC-1109-MULE-HUB', target: 'AE-SCBL-5512-HORIZON', amount: 48100, gate: 0.98, color: '#FF007F', particleSpeed: 0.012, particles: 6, isLaunderingLoop: true });
-  links.push({ source: 'AE-SCBL-5512-HORIZON', target: 'BVI-ESCROW-SOVEREIGN', amount: 47900, gate: 0.99, color: '#FF007F', particleSpeed: 0.012, particles: 6, isLaunderingLoop: true });
-  links.push({ source: 'BVI-ESCROW-SOVEREIGN', target: baseOriginator, amount: 47600, gate: 0.99, color: '#FF007F', particleSpeed: 0.014, particles: 7, isLaunderingLoop: true });
+  links.push({ source: baseOriginator, target: 'BD04-BRAC-1109-8421-4402', amount: 47600, gate: 0.98, color: '#FF007F', particleSpeed: 0.012, particles: 6, isLaunderingLoop: true });
+  links.push({ source: 'BD04-BRAC-1109-8421-4402', target: 'AE-EBIL-4412-8819-3301', amount: 47600, gate: 0.99, color: '#FF007F', particleSpeed: 0.012, particles: 6, isLaunderingLoop: true });
+  links.push({ source: 'AE-EBIL-4412-8819-3301', target: baseOriginator, amount: 47600, gate: 0.99, color: '#FF007F', particleSpeed: 0.014, particles: 7, isLaunderingLoop: true });
 
   // Generate extended background counterparties
   for (let i = 0; i < nodeCount; i++) {
@@ -150,7 +150,7 @@ export const Neo4j3DGraph = ({
   initialScale = 450,
   minGateFloor = 0.00,
   height = '100%',
-  showDenoiseSlider = true,
+  showDenoiseSlider = false,
   resetTrigger = 0
 }) => {
   const containerRef = useRef(null);
@@ -400,8 +400,8 @@ export const Neo4j3DGraph = ({
       {/* 3D Canvas Viewport */}
       <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing overflow-hidden" />
 
-      {/* Top Overlay Controls Bar */}
-      <div className="absolute top-2 left-2 right-2 flex flex-wrap items-center justify-between gap-1.5 pointer-events-none z-10">
+      {/* Top Overlay Controls Bar (Anchored Right to prevent HUD badge overlap) */}
+      <div className="absolute top-2 right-2 flex flex-wrap items-center justify-end gap-1.5 pointer-events-none z-10">
         
         {/* Left: Active Filter Buttons */}
         <div className="flex items-center gap-1 p-1 rounded-lg skeuo-card bg-[var(--bg-surface)]/95 border border-[var(--border-card)] pointer-events-auto shadow-sm">

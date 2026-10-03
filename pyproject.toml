@@ -34,41 +34,49 @@ classifiers = [
 ]
 
 dependencies = [
-    "torch>=2.0",
-    "polars>=1.5",
+    "fastapi>=0.112",
+    "uvicorn>=0.30",
+    "pydantic>=2.0",
     "duckdb>=1.0",
+    "polars>=1.5",
     "pyarrow>=17.0",
     "numpy>=1.26",
     "pandas>=2.0",
-    "scipy>=1.11",
-    "scikit-learn>=1.4",
-    "xgboost>=2.0",
-    "lightgbm>=4.0",
-    "catboost>=1.2",
-    "networkx>=3.0",
-    "matplotlib>=3.8",
-    "seaborn>=0.13",
     "pyyaml>=6.0",
     "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=8.0",
-    "pytest-cov>=5.0",
-    "black>=24.0",
-    "ruff>=0.5",
-    "mypy>=1.10",
+ml = [
+    "torch>=2.0",
+    "networkx>=3.0",
+    "scikit-learn>=1.4",
+    "scipy>=1.11",
+    "matplotlib>=3.8",
 ]
 agents = [
     "langchain>=0.2",
     "crewai>=0.51",
     "reportlab>=4.2",
 ]
-dashboard = [
-    "fastapi>=0.112",
-    "uvicorn>=0.30",
-    "pyvis>=0.3",
+streaming = [
+    "confluent-kafka>=2.3",
+]
+federated = [
+    "flwr>=1.11",
+    "opacus>=1.5",
+]
+benchmarks = [
+    "xgboost>=2.0",
+    "lightgbm>=4.0",
+    "catboost>=1.2",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "black>=24.0",
+    "ruff>=0.5",
+    "mypy>=1.10",
 ]
 
 [project.scripts]

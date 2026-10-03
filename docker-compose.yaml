@@ -1,8 +1,71 @@
+version: '3.8'
 
 services:
+  # ===========================================================================
+  # Core Relational & Audit Persistence (Postgres 16)
+  # ===========================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: aml-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: intelligent_aml
+      POSTGRES_USER: aml_admin
+      POSTGRES_PASSWORD: aml_secure_password_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aml_admin -d intelligent_aml"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================================================
+  # Core API & C-STGB Engine Backend
+  # ===========================================================================
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aml-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://aml_admin:aml_secure_password_2026@postgres:5432/intelligent_aml
+      PORT: 8000
+      ENVIRONMENT: production
+    volumes:
+      - ./results:/app/results
+      - ./data:/app/data
+
+  # ===========================================================================
+  # Modern Minimalist Frontend (React + Vite + Tailwind)
+  # ===========================================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aml-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+  # ===========================================================================
+  # Optional Streaming Infrastructure (Kafka/Redpanda & Apache Flink)
+  # Activated with: docker compose --profile streaming up
+  # ===========================================================================
   redpanda:
     image: docker.redpanda.com/redpandadata/redpanda:latest
     container_name: aml-redpanda
+    profiles: ["streaming"]
     command:
       - redpanda
       - start
@@ -23,10 +86,10 @@ services:
     volumes:
       - redpanda-data:/var/lib/redpanda/data
 
-  # Flink JobManager
   jobmanager:
     image: flink:latest
     container_name: aml-flink-jobmanager
+    profiles: ["streaming"]
     ports:
       - "8083:8081"
     command: jobmanager
@@ -35,10 +98,10 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
 
-  # Flink TaskManager
   taskmanager:
     image: flink:latest
     container_name: aml-flink-taskmanager
+    profiles: ["streaming"]
     depends_on:
       - jobmanager
     command: taskmanager
@@ -50,4 +113,5 @@ services:
         taskmanager.numberOfTaskSlots: 2
 
 volumes:
+  postgres-data:
   redpanda-data:

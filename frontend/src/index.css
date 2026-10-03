@@ -1,355 +1,278 @@
+@import './styles/tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  /* ==========================================================================
-     INTELLIGENT AML ENTERPRISE DESIGN SYSTEM — MINIMALIST FINTECH SPECIFICATION
-     Aesthetic Direction: High-Precision Modern Fintech (Linear / Stripe / Vercel)
-     - Clean, neutral dark slate (#0B0F17) with refined emerald / cyan accents
-     - Crisp 1px hairline borders
-     - Clean typography and generous whitespace
-     ========================================================================== */
-
-  :root,
-  [data-theme='minimal-dark'],
-  [data-theme='vault-midnight-skeuo'] {
-    --canvas-base: #0B0F17;
-    --bg-base: #0B0F17;
-    --bg-surface: #101622;
-    --card-surface: #151D2C;
-    --bg-card: #151D2C;
-    --bg-card-elevated: #1B2538;
-    --bg-card-hover: #202D44;
-    
-    --border-subtle: #202B3D;
-    --border-card: #28374E;
-    --border-card-hover: #10B981;
-    
-    --accent-primary: #10B981;
-    --accent-secondary: #059669;
-    --accent-cyan: #06B6D4;
-    
-    --text-primary: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --text-muted: #64748B;
-    --text-forest: #10B981;
-    
-    --color-crimson: #EF4444;
-    --color-amber: #F59E0B;
-    --color-emerald: #10B981;
-    --color-cyan: #06B6D4;
-    
-    --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.25), 0 1px 2px -1px rgba(0, 0, 0, 0.2);
-    --card-shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.25);
-    
-    --btn-bg: #1B2538;
-    --btn-hover: #223049;
-    --btn-border: #28374E;
+  * {
+    border-color: rgb(var(--border));
   }
 
-  /* Light Theme Variant (Daylight Clean) */
-  [data-theme='money-green-skeuo'],
-  [data-theme='minimal-light'],
-  [data-theme='daylight'],
-  [data-theme='botanical-clay'] {
-    --canvas-base: #F8FAFC;
-    --bg-base: #F8FAFC;
-    --bg-surface: #FFFFFF;
-    --card-surface: #FFFFFF;
-    --bg-card: #FFFFFF;
-    --bg-card-elevated: #F1F5F9;
-    --bg-card-hover: #E2E8F0;
-    
-    --border-subtle: #E2E8F0;
-    --border-card: #CBD5E1;
-    --border-card-hover: #059669;
-    
-    --accent-primary: #059669;
-    --accent-secondary: #047857;
-    --accent-cyan: #0284C7;
-    
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --text-muted: #64748B;
-    --text-forest: #059669;
-    
-    --color-crimson: #DC2626;
-    --color-amber: #D97706;
-    --color-emerald: #059669;
-    --color-cyan: #0284C7;
-    
-    --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-    --card-shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    
-    --btn-bg: #FFFFFF;
-    --btn-hover: #F1F5F9;
-    --btn-border: #E2E8F0;
-  }
-
-  /* Quantum Prism Theme (Cosmic Void, Prismatic Dispersion & Laser Topology) */
-  [data-theme='quantum'] {
-    --canvas-base: #050816;
-    --bg-base: #050816;
-    --bg-surface: #0B0F24;
-    --card-surface: #0F1633;
-    --bg-card: #0F1633;
-    --bg-card-elevated: #151F45;
-    --bg-card-hover: #1C295A;
-    
-    --border-subtle: rgba(99, 102, 241, 0.22);
-    --border-card: rgba(6, 182, 212, 0.35);
-    --border-card-hover: rgba(217, 70, 239, 0.65);
-    
-    --accent-primary: #06B6D4;
-    --accent-secondary: #8B5CF6;
-    --accent-cyan: #00F2FE;
-    --accent-magenta: #EC4899;
-    
-    --text-primary: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --text-muted: #64748B;
-    --text-forest: #00F2FE;
-    
-    --color-crimson: #FF0055;
-    --color-amber: #F59E0B;
-    --color-emerald: #00F2FE;
-    --color-cyan: #06B6D4;
-    
-    --card-shadow: 0 4px 20px -2px rgba(6, 182, 212, 0.15), 0 2px 10px -2px rgba(139, 92, 246, 0.15);
-    --card-shadow-elevated: 0 8px 30px -4px rgba(6, 182, 212, 0.25), 0 4px 15px -2px rgba(217, 70, 239, 0.2);
-    
-    --btn-bg: #151F45;
-    --btn-hover: #1C295A;
-    --btn-border: rgba(99, 102, 241, 0.35);
+  html {
+    color-scheme: light dark;
   }
 
   body {
-    background-color: var(--bg-base);
-    color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
-    letter-spacing: -0.012em;
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    letter-spacing: -0.011em;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  /* Monospace figures always tabular for financial clarity */
+  .font-mono,
+  code,
+  kbd,
+  samp {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-feature-settings: 'tnum' 1;
+    font-variant-numeric: tabular-nums;
   }
 }
 
 /* ==========================================================================
-   MINIMALIST COMPONENT UTILITIES (Replacing bulky skeuomorphism)
+   MINIMALIST UI PRIMITIVES
+   Clean, quiet enterprise fintech aesthetic (Linear / Stripe / Vercel)
    ========================================================================== */
 
-/* Modern Clean Card */
+/* Clean Card: Flat surface with hairline 1px border and subtle elevation */
+.ui-card,
 .skeuo-card,
 .clay-card,
 .minimal-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  box-shadow: var(--card-shadow);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background-color: rgb(var(--surface));
+  border: 1px solid rgb(var(--border));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
+.ui-card:hover,
 .skeuo-card:hover,
 .minimal-card:hover {
-  border-color: var(--border-card);
+  border-color: rgb(var(--border-strong));
 }
 
-/* Recessed Display / Input Well */
+/* Recessed Well / Sub-container */
+.ui-well,
 .skeuo-well,
 .clay-well,
 .minimal-well {
-  background: var(--bg-base);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
+  background-color: rgb(var(--background));
+  border: 1px solid rgb(var(--border-subtle));
+  border-radius: var(--radius);
 }
 
-/* Modern Clean Button */
+/* Standard Button */
+.ui-btn,
 .skeuo-btn,
 .clay-btn,
 .minimal-btn {
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-border);
-  color: var(--text-primary);
-  border-radius: 8px;
-  font-weight: 500;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid rgb(var(--border));
+  background-color: rgb(var(--surface));
+  color: rgb(var(--foreground));
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+  transition: all 150ms ease;
 }
 
+.ui-btn:hover,
 .skeuo-btn:hover,
 .minimal-btn:hover {
-  background: var(--btn-hover);
-  border-color: var(--border-card);
+  background-color: rgb(var(--surface-hover));
+  border-color: rgb(var(--border-strong));
 }
 
+.ui-btn:active,
 .skeuo-btn:active,
 .minimal-btn:active {
   transform: translateY(1px);
 }
 
-/* Primary Accent Button (Minimalist Emerald) */
-.skeuo-btn-primary,
-.clay-btn-primary {
-  background: var(--accent-primary) !important;
-  color: #FFFFFF !important;
-  border: 1px solid var(--accent-secondary) !important;
+.ui-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
+/* Primary Button */
+.ui-btn-primary,
+.skeuo-btn-primary,
+.clay-btn-primary {
+  background-color: var(--accent) !important;
+  color: #FFFFFF !important;
+  border: 1px solid var(--accent-hover) !important;
+}
+
+.ui-btn-primary:hover,
 .skeuo-btn-primary:hover,
 .clay-btn-primary:hover {
-  filter: brightness(1.08);
+  background-color: var(--accent-hover) !important;
 }
 
 /* Secondary Button */
+.ui-btn-secondary,
 .skeuo-btn-secondary,
 .clay-btn-secondary {
-  background: var(--bg-card-elevated);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
+  background-color: rgb(var(--surface-raised));
+  border: 1px solid rgb(var(--border));
+  color: rgb(var(--foreground));
 }
 
+.ui-btn-secondary:hover,
 .skeuo-btn-secondary:hover,
 .clay-btn-secondary:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-card);
+  background-color: rgb(var(--surface-hover));
 }
 
-/* Danger / Action Button */
+/* Danger Button */
+.ui-btn-danger,
 .skeuo-btn-danger,
 .clay-btn-danger {
-  background: #DC2626 !important;
+  background-color: var(--critical) !important;
   color: #FFFFFF !important;
-  border: 1px solid #B91C1C !important;
+  border: 1px solid var(--critical-text) !important;
 }
 
+.ui-btn-danger:hover,
 .skeuo-btn-danger:hover,
 .clay-btn-danger:hover {
-  background: #EF4444 !important;
+  filter: brightness(0.92);
 }
 
-/* Status Badges */
+/* Semantic Badges */
 .badge-tier1 {
-  background: rgba(239, 68, 68, 0.12);
-  color: #F87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: 9999px;
-  padding: 0.15rem 0.5rem;
-  font-size: 0.68rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--critical-bg);
+  color: var(--critical-text);
+  border: 1px solid var(--critical-border);
+  border-radius: var(--radius-full);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .badge-tier2 {
-  background: rgba(245, 158, 11, 0.12);
-  color: #FBBF24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  border-radius: 9999px;
-  padding: 0.15rem 0.5rem;
-  font-size: 0.68rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--review-bg);
+  color: var(--review-text);
+  border: 1px solid var(--review-border);
+  border-radius: var(--radius-full);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .badge-tier3 {
-  background: rgba(16, 185, 129, 0.12);
-  color: #34D399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  border-radius: 9999px;
-  padding: 0.15rem 0.5rem;
-  font-size: 0.68rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--cleared-bg);
+  color: var(--cleared-text);
+  border: 1px solid var(--cleared-border);
+  border-radius: var(--radius-full);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'JetBrains Mono', monospace;
 }
 
-/* Clean Minimal Scrollbars */
+/* Form Inputs */
+.ui-input {
+  background-color: rgb(var(--surface));
+  border: 1px solid rgb(var(--border));
+  border-radius: var(--radius);
+  color: rgb(var(--foreground));
+  font-size: 0.8125rem;
+  padding: 0.4375rem 0.625rem;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.ui-input:focus {
+  border-color: rgb(var(--accent));
+  box-shadow: 0 0 0 1px rgb(var(--accent));
+}
+
+.ui-input::placeholder {
+  color: rgb(var(--muted-foreground));
+}
+
+/* Minimalist Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
-  border-radius: 9999px;
+  background: rgb(var(--border));
+  border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-card);
+  background: rgb(var(--border-strong));
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Explicit Solid Token Utilities for Overlays and Surfaces */
+.bg-popover {
+  background-color: rgb(var(--popover)) !important;
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.bg-surface {
+  background-color: rgb(var(--surface)) !important;
 }
 
-/* ==========================================================================
-   QUANTUM PRISM SPECIALIZED UTILITIES
-   ========================================================================== */
-.quantum-prism-card {
-  background: radial-gradient(circle at top left, rgba(6, 182, 212, 0.12), transparent 60%),
-              radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.10), transparent 60%),
-              rgba(11, 15, 36, 0.85);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(6, 182, 212, 0.3);
-  box-shadow: 0 4px 24px -2px rgba(6, 182, 212, 0.2), 0 0 1px 1px rgba(139, 92, 246, 0.2);
+.bg-surface-raised,
+.bg-surfaceRaised {
+  background-color: rgb(var(--surface-raised)) !important;
 }
 
-.quantum-prism-well {
-  background: rgba(5, 8, 22, 0.9);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+.bg-background,
+.bg-bg {
+  background-color: rgb(var(--background)) !important;
 }
 
-.quantum-prism-border {
-  border: 1px solid transparent;
-  background-image: linear-gradient(rgba(15, 22, 51, 0.95), rgba(15, 22, 51, 0.95)), 
-                    linear-gradient(135deg, #00F2FE 0%, #8B5CF6 50%, #EC4899 100%);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+.text-foreground {
+  color: rgb(var(--foreground)) !important;
 }
 
-.quantum-badge-cyan {
-  background: rgba(6, 182, 212, 0.15);
-  color: #00F2FE;
-  border: 1px solid rgba(6, 182, 212, 0.45);
-  box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+.text-muted {
+  color: rgb(var(--muted-foreground)) !important;
 }
 
-.quantum-badge-magenta {
-  background: rgba(236, 72, 153, 0.15);
-  color: #F472B6;
-  border: 1px solid rgba(236, 72, 153, 0.45);
-  box-shadow: 0 0 12px rgba(236, 72, 153, 0.3);
+.border-border {
+  border-color: rgb(var(--border)) !important;
 }
 
-.quantum-badge-amber {
-  background: rgba(245, 158, 11, 0.15);
-  color: #FBBF24;
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+/* Reduced Motion Respect */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
-
-.quantum-btn-prism {
-  background: linear-gradient(135deg, #06B6D4 0%, #6366F1 50%, #EC4899 100%);
-  color: #FFFFFF;
-  border: none;
-  font-weight: 600;
-  box-shadow: 0 0 18px rgba(6, 182, 212, 0.4), 0 0 25px rgba(236, 72, 153, 0.25);
-  transition: all 0.2s ease;
-}
-
-.quantum-btn-prism:hover {
-  box-shadow: 0 0 24px rgba(6, 182, 212, 0.6), 0 0 32px rgba(236, 72, 153, 0.45);
-  transform: translateY(-1px);
-}
-

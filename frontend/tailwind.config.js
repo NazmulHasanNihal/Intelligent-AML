@@ -1,65 +1,86 @@
 /** @type {import('tailwindcss').Config} */
+const token = (name) => `rgb(var(--${name}) / <alpha-value>)`;
+
 export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
-        surfaceMint: "#E9EFEA",
-        darkCharcoal: "#1F2923",
-        forestGreen: "#1B4D3E",
-        seaGreen: "#2E8B57",
-        jadeGreen: "#00A86B",
-        silverSage: "#C5D0C8",
-        moneyDark: "#12381E",
-        moneyPrimary: "#1B5E34",
-        moneyLight: "#2E8B4E",
-        moneyMint: "#62BD80",
-        banknoteWhite: "#FFFFFF",
-        banknotePaper: "#F8FBF6",
-        banknoteParchment: "#ECF4E9",
-        treasuryGold: "#C5A059",
-        brandDeep: "#1B5E34",
-        brandLeaf: "#2E8B4E",
-        brandCream: "#F8FBF6",
-        brandBiscuit: "#ECF4E9",
-        background: "var(--bg-base)",
-        surface: "var(--bg-surface)",
-        card: "var(--bg-card)",
-        cardElevated: "var(--bg-card-elevated)",
-        cardBorder: "var(--border-card)",
-        neonGreen: "#1B5E34",
-        neonRed: "#ef4444",
-        neonAmber: "#f59e0b",
-        neonBlue: "#0284c7",
+        background: token('background'),
+        bg: token('background'),
+        surface: token('surface'),
+        surfaceRaised: token('surface-raised'),
+        surfaceHover: token('surface-hover'),
+        popover: token('popover'),
+        border: token('border'),
+        borderSubtle: token('border-subtle'),
+        borderStrong: token('border-strong'),
+        foreground: token('foreground'),
+        
+        text: {
+          DEFAULT: token('foreground'),
+          2: token('muted-foreground'),
+          muted: token('muted-foreground'),
+        },
+
+        muted: {
+          DEFAULT: token('muted-foreground'),
+          foreground: token('muted-foreground'),
+        },
+        
+        accent: {
+          DEFAULT: token('accent'),
+          hover: "var(--accent-hover)",
+          subtle: "var(--accent-subtle)",
+          text: token('accent'),
+        },
+        
+        critical: {
+          DEFAULT: token('critical'),
+          bg: "var(--critical-bg)",
+          border: "var(--critical-border)",
+          text: token('critical'),
+        },
+        
+        review: {
+          DEFAULT: token('review'),
+          bg: "var(--review-bg)",
+          border: "var(--review-border)",
+          text: token('review'),
+        },
+        
+        cleared: {
+          DEFAULT: token('cleared'),
+          bg: "var(--cleared-bg)",
+          border: "var(--cleared-border)",
+          text: token('cleared'),
+        },
       },
       fontFamily: {
-        sans: ['"Segoe UI"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Inter', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
-        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Courier New"', 'monospace'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
       borderRadius: {
-        'skeuo': '14px',
-        'skeuo-lg': '18px',
-        'skeuo-sm': '10px',
-        'clay': '14px',
-        'clay-lg': '18px',
-        'clay-sm': '10px',
+        DEFAULT: "var(--radius)",
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        full: "var(--radius-full)",
       },
       boxShadow: {
-        glow: "0 0 25px -5px rgba(27, 94, 52, 0.35)",
-        glowRed: "0 0 25px -5px rgba(239, 68, 68, 0.35)",
-        glowAmber: "0 0 25px -5px rgba(245, 158, 11, 0.35)",
-        skeuoCard: "var(--skeuo-card-shadow)",
-        skeuoElevated: "var(--skeuo-card-elevated)",
-        skeuoWell: "var(--skeuo-well)",
-        skeuoBtn: "var(--skeuo-btn)",
-        clay: "var(--skeuo-card-shadow)",
-        clayElevated: "var(--skeuo-card-elevated)",
-        clayWell: "var(--skeuo-well)",
-        clayBtn: "var(--skeuo-btn)",
-      }
+        sm: "var(--shadow-sm)",
+        DEFAULT: "var(--shadow)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+        drawer: "var(--shadow-drawer)",
+      },
+      transitionDuration: {
+        DEFAULT: "150ms",
+      },
     },
   },
   plugins: [],

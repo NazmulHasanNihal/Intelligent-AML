@@ -28,7 +28,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
 
   const { type, target } = actionData;
   const targetLabel = target?.holderName || target?.src || target?.accountNumber || 'Account Target';
-  const targetId = target?.accountNumber || target?.src || target?.id || 'ACC_8823';
+  const targetId = target?.accountNumber || target?.src || target?.id || 'BD22-EBLB-4829-1092-8823';
 
   const REASON_CODES = [
     { code: 'STRUCTURING_CTR_EVASION', label: 'Structuring to Evade CTR (31 U.S.C. § 5324)' },

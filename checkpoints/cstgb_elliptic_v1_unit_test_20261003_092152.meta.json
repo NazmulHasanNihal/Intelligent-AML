@@ -1,0 +1,11 @@
+{
+  "checkpoint_file": "cstgb_elliptic_v1_unit_test_20261003_092152.pt",
+  "sha256_digest": "d0f85e57bfb5b2a553d46aa9214d6c29c28494732d5948d6139bdee6bc914192",
+  "dataset_name": "elliptic_v1",
+  "architecture": "Linear",
+  "epoch": 0,
+  "created_at": "2026-10-03T03:21:52Z",
+  "conformal_quantiles": {},
+  "metrics": {},
+  "hyperparameters": {}
+}

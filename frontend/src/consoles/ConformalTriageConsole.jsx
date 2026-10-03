@@ -5,9 +5,9 @@ import { ShieldCheck, ArrowRight, CheckCircle2, AlertTriangle, Users, Check, X }
 export const ConformalTriageConsole = () => {
   const [alpha, setAlpha] = useState(0.01);
   const [inbox, setInbox] = useState([
-    { id: 'ALERT-9941', entity: 'ACC_VIRGIN_0019', amount: '$9,400.00', pIllicit: 0.62, ambiguity: 'High (Pass-Through)', status: 'PENDING' },
-    { id: 'ALERT-9942', entity: 'CORP_OFFSHORE_04', amount: '$49,500.00', pIllicit: 0.58, ambiguity: 'BVI Shell Velocity', status: 'PENDING' },
-    { id: 'ALERT-9943', entity: 'MULE_CONDUIT_77', amount: '$8,950.00', pIllicit: 0.49, ambiguity: 'Rapid Micro-Burst', status: 'PENDING' },
+    { id: 'ALERT-9941', entity: 'Sadia Sultana (BD91-DBBL-4401)', amount: '$9,400.00', pIllicit: 0.62, ambiguity: 'High (Pass-Through Flare)', status: 'PENDING' },
+    { id: 'ALERT-9942', entity: 'Gulf Star Commodities (AE-EBIL-4412)', amount: '$49,500.00', pIllicit: 0.58, ambiguity: 'JAFZA Free Zone Velocity', status: 'PENDING' },
+    { id: 'ALERT-9943', entity: 'Mohammad Rafiqul Islam (MFS-BKASH)', amount: '$8,950.00', pIllicit: 0.49, ambiguity: 'Rapid Micro-Burst Agent', status: 'PENDING' },
   ]);
 
   const coveragePct = ((1 - alpha) * 100).toFixed(1);
@@ -27,7 +27,7 @@ export const ConformalTriageConsole = () => {
         itemStyle: { borderRadius: 6, borderColor: '#0B0E17', borderWidth: 3 },
         label: { show: false },
         data: [
-          { value: Number(autoClearPct), name: 'Auto-Cleared (>99.4%)', itemStyle: { color: '#10B981' } },
+          { value: Number(autoClearPct), name: 'Auto-Cleared (>98.6%)', itemStyle: { color: '#10B981' } },
           { value: Number(queuePct), name: 'Tier 2 Review Queue (<0.6%)', itemStyle: { color: '#F59E0B' } },
           { value: 0.05, name: 'Tier 1 Auto-Quarantine', itemStyle: { color: '#F43F5E' } },
         ],

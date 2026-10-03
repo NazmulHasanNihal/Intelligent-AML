@@ -6,18 +6,26 @@ Provides IEEE TIFS / SOC-2 compliant structured audit logging with contextual me
 import os
 import sys
 import logging
-import structlog
 from typing import Any, Dict
+
+try:
+    import structlog
+    STRUCTLOG_AVAILABLE = True
+except ImportError:
+    STRUCTLOG_AVAILABLE = False
 
 
 def setup_structured_logging(log_level: str = "INFO"):
     """Configures structlog with standard library logging integration."""
     level = getattr(logging, log_level.upper(), logging.INFO)
     logging.basicConfig(
-        format="%(message)s",
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
         stream=sys.stdout,
         level=level,
     )
+
+    if not STRUCTLOG_AVAILABLE:
+        return
 
     processors = [
         structlog.contextvars.merge_contextvars,
@@ -45,6 +53,8 @@ def setup_structured_logging(log_level: str = "INFO"):
 setup_structured_logging()
 
 
-def get_logger(name: str = "intelligent_aml") -> structlog.stdlib.BoundLogger:
-    """Returns a structured logger with component binding."""
-    return structlog.get_logger(name)
+def get_logger(name: str = "intelligent_aml") -> Any:
+    """Returns a structured logger with component binding or standard logger fallback."""
+    if STRUCTLOG_AVAILABLE:
+        return structlog.get_logger(name)
+    return logging.getLogger(name)

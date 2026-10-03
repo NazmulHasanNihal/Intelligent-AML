@@ -17,9 +17,26 @@ from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnec
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Response
 from pydantic import BaseModel, Field
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
+try:
+    from slowapi import Limiter, _rate_limit_exceeded_handler
+    from slowapi.util import get_remote_address
+    from slowapi.errors import RateLimitExceeded
+    SLOWAPI_AVAILABLE = True
+except ImportError:
+    SLOWAPI_AVAILABLE = False
+    class RateLimitExceeded(Exception):
+        pass
+    def _rate_limit_exceeded_handler(request, exc):
+        return JSONResponse(status_code=429, content={"detail": "Rate limit exceeded"})
+    def get_remote_address(request):
+        return "127.0.0.1"
+    class Limiter:
+        def __init__(self, *args, **kwargs):
+            pass
+        def limit(self, *args, **kwargs):
+            def decorator(func):
+                return func
+            return decorator
 
 # Core Intelligent-AML Engine Modules
 from src.engine.subgraph_cache import SubgraphLRUCache
@@ -56,7 +73,7 @@ limiter = Limiter(key_func=get_remote_address, default_limits=["180/minute"])
 
 # Initialize FastAPI Application
 app = FastAPI(
-    title="🏛️ Intelligent-AML C-STGB Production API",
+    title="Intelligent-AML C-STGB Production API",
     description="Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering (IEEE TIFS)",
     version="1.0.0",
     docs_url="/docs",

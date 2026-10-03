@@ -14,11 +14,21 @@ import {
   PanelLeft,
   ChevronRight
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
 import { Badge } from '../ui/Badge';
 
 export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
-  const { activeRoute, navigate, alerts, cases } = useAppStore();
+  const routerNavigate = useNavigate();
+  const activeRoute = useAppStore(state => state.activeRoute);
+  const alerts = useAppStore(state => state.alerts);
+  const cases = useAppStore(state => state.cases);
+
+  const handleNavClick = (id) => {
+    const targetUrl = id === 'overview' ? '/' : `/${id}`;
+    useAppStore.setState({ activeRoute: id, activeRouteParams: {} });
+    routerNavigate(targetUrl);
+  };
 
   const primaryNav = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -94,7 +104,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
             return (
               <button
                 key={item.id}
-                onClick={() => navigate(item.id)}
+                onClick={() => handleNavClick(item.id)}
                 className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs transition-colors cursor-pointer ${
                   isActive 
                     ? 'bg-accent-subtle text-accent-text font-semibold' 
@@ -133,7 +143,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
           return (
             <button
               key={item.id}
-              onClick={() => navigate(item.id)}
+              onClick={() => handleNavClick(item.id)}
               className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded text-xs transition-colors cursor-pointer ${
                 isActive 
                   ? 'bg-accent-subtle text-accent-text font-semibold' 

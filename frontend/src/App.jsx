@@ -33,31 +33,32 @@ import { ModelsView } from './features/models/ModelsView';
 import { SettingsView } from './features/settings/SettingsView';
 
 function MainAppShell() {
-  const { activeRoute, navigate } = useAppStore();
   const routerNavigate = useNavigate();
   const location = useLocation();
+  const activeRoute = useAppStore(state => state.activeRoute);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
     return typeof window !== 'undefined' && window.innerWidth < 1024;
   });
   const [isCommandOpen, setIsCommandOpen] = useState(false);
 
-  // Synchronize React Router pathname with Zustand activeRoute
-  useEffect(() => {
-    const rawPath = location.pathname.replace(/^\//, '');
-    const validRoutes = ['overview', 'alerts', 'cases', 'case-detail', 'network', 'filings', 'requests', 'audit', 'models', 'settings'];
-    if (rawPath === '' || rawPath === 'overview') {
-      if (activeRoute !== 'overview') navigate('overview');
-    } else if (validRoutes.includes(rawPath)) {
-      if (activeRoute !== rawPath) navigate(rawPath);
-    }
-  }, [location.pathname, navigate, activeRoute]);
+  const validRoutes = ['overview', 'alerts', 'cases', 'case-detail', 'network', 'filings', 'requests', 'audit', 'models', 'settings'];
+  const rawPath = location.pathname.replace(/^\//, '') || 'overview';
+  const resolvedRoute = validRoutes.includes(rawPath) ? rawPath : 'overview';
 
-  // Synchronize Zustand state transitions to React Router URL
+  // 1. Sync Browser URL changes (direct load, back/forward buttons) into Zustand
+  // Runs ONLY when the resolved URL changes, preventing ping-pong oscillation
+  useEffect(() => {
+    if (useAppStore.getState().activeRoute !== resolvedRoute) {
+      useAppStore.setState({ activeRoute: resolvedRoute, activeRouteParams: {} });
+    }
+  }, [resolvedRoute]);
+
+  // 2. Sync programmatic Zustand updates (from modals, drawer buttons) to the Browser URL
   useEffect(() => {
     const currentPath = location.pathname.replace(/^\//, '') || 'overview';
     if (activeRoute && activeRoute !== currentPath) {
       const targetUrl = activeRoute === 'overview' ? '/' : `/${activeRoute}`;
-      routerNavigate(targetUrl);
+      routerNavigate(targetUrl, { replace: true });
     }
   }, [activeRoute, location.pathname, routerNavigate]);
 
@@ -86,14 +87,17 @@ function MainAppShell() {
         };
         if (routeKeys[e.key]) {
           e.preventDefault();
-          navigate(routeKeys[e.key]);
+          const target = routeKeys[e.key];
+          const targetUrl = target === 'overview' ? '/' : `/${target}`;
+          useAppStore.setState({ activeRoute: target, activeRouteParams: {} });
+          routerNavigate(targetUrl);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [navigate]);
+  }, [routerNavigate]);
 
   return (
     <div className="flex h-screen bg-bg text-text font-sans overflow-hidden select-none">

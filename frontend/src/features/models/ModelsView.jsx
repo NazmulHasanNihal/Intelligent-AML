@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { 
   Cpu, 
@@ -17,7 +17,8 @@ import { Button } from '../../components/ui/Button';
 
 export const ModelsView = () => {
   // ACI Distribution Drift Tracker EChart
-  const aciDriftOption = {
+  const aciDriftOption = useMemo(() => ({
+    animation: false,
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     legend: {
@@ -81,7 +82,7 @@ export const ModelsView = () => {
         lineStyle: { type: 'dashed', color: '#98A2B3', width: 1 }
       }
     ]
-  };
+  }), []);
 
   const handleDownloadModelCard = () => {
     const card = {
@@ -224,7 +225,12 @@ export const ModelsView = () => {
             badge={<Badge variant="neutral" size="sm">Active Monitor</Badge>}
           />
           <div className="h-64 w-full mt-2">
-            <ReactECharts option={aciDriftOption} style={{ height: '100%', width: '100%' }} />
+            <ReactECharts 
+              option={aciDriftOption} 
+              notMerge={true} 
+              lazyUpdate={true} 
+              style={{ height: '100%', width: '100%' }} 
+            />
           </div>
         </Card>
 

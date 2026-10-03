@@ -49,7 +49,8 @@ export const OverviewView = () => {
     .slice(0, 5);
 
   // ECharts Theme: Neutral grid, muted axes, throughput line + small alert bars beneath
-  const chartOption = {
+  const chartOption = useMemo(() => ({
+    animation: false,
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
@@ -116,7 +117,7 @@ export const OverviewView = () => {
         barWidth: '35%'
       }
     ]
-  };
+  }), []);
 
   return (
     <div className="space-y-4 select-none">
@@ -220,7 +221,12 @@ export const OverviewView = () => {
             }
           />
           <div className="h-72 w-full mt-2">
-            <ReactECharts option={chartOption} style={{ height: '100%', width: '100%' }} />
+            <ReactECharts 
+              option={chartOption} 
+              notMerge={true} 
+              lazyUpdate={true} 
+              style={{ height: '100%', width: '100%' }} 
+            />
           </div>
         </Card>
 

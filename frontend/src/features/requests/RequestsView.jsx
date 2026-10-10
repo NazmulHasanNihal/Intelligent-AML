@@ -27,6 +27,7 @@ import { useAppStore } from '../../lib/store';
 import { Card, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 export const RequestsView = () => {
   const { 
@@ -45,6 +46,7 @@ export const RequestsView = () => {
   const [targetAccount, setTargetAccount] = useState('BD22-EBLB-4829-1092-8823');
   const [targetEntity, setTargetEntity] = useState('Meghna Industrial & Agro Processing Ltd');
   const [amount, setAmount] = useState('$48,500.00 USD (৳5,820,000 BDT)');
+  const [formErrors, setFormErrors] = useState({});
   
   const [ocrLoadingId, setOcrLoadingId] = useState(null);
   const [ocrData, setOcrData] = useState({});
@@ -104,6 +106,16 @@ export const RequestsView = () => {
 
   const handleCreate = (e) => {
     e.preventDefault();
+    const errs = {};
+    if (!targetAccount.trim()) errs.targetAccount = 'Target account number is required.';
+    if (!targetEntity.trim()) errs.targetEntity = 'Target legal entity name is required.';
+    if (!amount.trim()) errs.amount = 'Exposure amount is required.';
+
+    if (Object.keys(errs).length > 0) {
+      setFormErrors(errs);
+      return;
+    }
+    setFormErrors({});
     createRFI({
       caseId: 'CASE-2026-0881',
       targetAccount,
@@ -185,14 +197,23 @@ export const RequestsView = () => {
 
       {/* RFI Cards with Document Ingestion, State Selectors, and SLA Reminder */}
       <div className="space-y-4">
-        {rfiRequests.map((rfi) => {
-          const isPending = rfi.status === 'PENDING_CUSTOMER_UPLOAD';
-          const isReview = rfi.status === 'UNDER_OFFICER_REVIEW';
-          const isSatisfied = rfi.status === 'SATISFIED_CLEARED';
-          const isEscalated = rfi.status === 'ESCALATED_TO_SAR';
+        {rfiRequests.length === 0 ? (
+          <EmptyState
+            icon={Mail}
+            title="No active RFI notices"
+            description="No customer Requests for Information are currently pending."
+            actionLabel="Issue New RFI"
+            onAction={() => setIsModalOpen(true)}
+          />
+        ) : (
+          rfiRequests.map((rfi) => {
+            const isPending = rfi.status === 'PENDING_CUSTOMER_UPLOAD';
+            const isReview = rfi.status === 'UNDER_OFFICER_REVIEW';
+            const isSatisfied = rfi.status === 'SATISFIED_CLEARED';
+            const isEscalated = rfi.status === 'ESCALATED_TO_SAR';
 
-          return (
-            <Card key={rfi.id} className="space-y-3.5 p-4">
+            return (
+              <Card key={rfi.id} className="space-y-3.5 p-4">
               {/* Header: RFI ID, Account, and Status Selector */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-borderSubtle">
                 <div className="flex items-center gap-2.5 flex-wrap">
@@ -267,7 +288,7 @@ export const RequestsView = () => {
                     <label htmlFor={`doc-upload-${rfi.id}`} className="cursor-pointer flex flex-col items-center gap-1.5 py-1">
                       <UploadCloud className="w-5 h-5 text-accent" />
                       <span className="text-xs font-semibold text-text">Customer Document Ingestion Pipeline</span>
-                      <span className="text-[10px] text-text-muted">Drag &amp; drop or click to ingest EXP Form, B/L, or Commercial Contract</span>
+                      <span className="text-[10px] text-text-muted">Drag & drop or click to ingest EXP Form, B/L, or Commercial Contract</span>
                     </label>
                   </div>
 
@@ -385,7 +406,7 @@ export const RequestsView = () => {
               </div>
             </Card>
           );
-        })}
+        }))}
       </div>
 
       {/* New RFI Modal */}
@@ -407,9 +428,15 @@ export const RequestsView = () => {
                   name="rfi-target-account"
                   type="text"
                   value={targetAccount}
-                  onChange={(e) => setTargetAccount(e.target.value)}
-                  className="ui-input w-full h-8 text-xs font-mono"
+                  onChange={(e) => {
+                    setTargetAccount(e.target.value);
+                    if (formErrors.targetAccount) setFormErrors(prev => ({ ...prev, targetAccount: null }));
+                  }}
+                  className={`ui-input w-full h-8 text-xs font-mono ${formErrors.targetAccount ? 'border-critical' : ''}`}
                 />
+                {formErrors.targetAccount && (
+                  <span className="text-[10px] text-critical font-sans mt-0.5 block">{formErrors.targetAccount}</span>
+                )}
               </div>
 
               <div>
@@ -419,9 +446,15 @@ export const RequestsView = () => {
                   name="rfi-target-entity"
                   type="text"
                   value={targetEntity}
-                  onChange={(e) => setTargetEntity(e.target.value)}
-                  className="ui-input w-full h-8 text-xs font-sans"
+                  onChange={(e) => {
+                    setTargetEntity(e.target.value);
+                    if (formErrors.targetEntity) setFormErrors(prev => ({ ...prev, targetEntity: null }));
+                  }}
+                  className={`ui-input w-full h-8 text-xs font-sans ${formErrors.targetEntity ? 'border-critical' : ''}`}
                 />
+                {formErrors.targetEntity && (
+                  <span className="text-[10px] text-critical font-sans mt-0.5 block">{formErrors.targetEntity}</span>
+                )}
               </div>
 
               <div>
@@ -431,9 +464,15 @@ export const RequestsView = () => {
                   name="rfi-amount"
                   type="text"
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="ui-input w-full h-8 text-xs"
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                    if (formErrors.amount) setFormErrors(prev => ({ ...prev, amount: null }));
+                  }}
+                  className={`ui-input w-full h-8 text-xs ${formErrors.amount ? 'border-critical' : ''}`}
                 />
+                {formErrors.amount && (
+                  <span className="text-[10px] text-critical font-sans mt-0.5 block">{formErrors.amount}</span>
+                )}
               </div>
 
               <div>
@@ -445,8 +484,8 @@ export const RequestsView = () => {
                   onChange={(e) => setTemplate(e.target.value)}
                   className="ui-input w-full h-8 text-xs"
                 >
-                  <option value="DOCUMENT_REQUEST_RFI">Document Request (Invoice &amp; EXP Form)</option>
-                  <option value="SOURCE_OF_FUNDS_DECLARATION">Source of Wealth &amp; Capital Declaration</option>
+                  <option value="DOCUMENT_REQUEST_RFI">Document Request (Invoice & EXP Form)</option>
+                  <option value="SOURCE_OF_FUNDS_DECLARATION">Source of Wealth & Capital Declaration</option>
                   <option value="UBO_BENEFICIAL_OWNERSHIP">Beneficial Ownership (UBO) Registry Update</option>
                 </select>
               </div>

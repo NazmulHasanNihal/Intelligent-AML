@@ -541,7 +541,7 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
                 icon={ShieldCheck}
                 className="w-full text-xs font-semibold"
               >
-                Sign with FIPS 140-2 HSM &amp; Seal Filing
+                Sign with FIPS 140-2 HSM & Seal Filing
               </Button>
             </Card>
           )}
@@ -549,7 +549,7 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
           {/* Trade LC Pricing Verification */}
           <Card className="space-y-2.5 bg-surfaceRaised border-border">
             <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-xs text-text uppercase">Customs &amp; LC Verification</span>
+              <span className="font-mono font-bold text-xs text-text uppercase">Customs & LC Verification</span>
               <Badge variant="critical" size="sm">Price Divergence</Badge>
             </div>
 

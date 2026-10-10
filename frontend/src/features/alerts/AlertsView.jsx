@@ -21,12 +21,15 @@ import {
   Flame,
   Layers,
   Zap,
-  RotateCcw
+  RotateCcw,
+  FilterX,
+  FileCode
 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 export const AlertsView = () => {
   const { 
@@ -53,11 +56,21 @@ export const AlertsView = () => {
 
   const [dismissReasonModal, setDismissReasonModal] = useState(false);
   const [selectedTypology, setSelectedTypology] = useState('ALL');
-  const [selectedDecisionSet, setSelectedDecisionSet] = useState('ALL'); // 'ALL' | 'GAMMA_1' | 'GAMMA_01' | 'GAMMA_0'
+  const [selectedDecisionSet, setSelectedDecisionSet] = useState('ALL'); // 'ALL' | 'TIER_1' | 'TIER_2' | 'TIER_3'
+  const [dateRange, setDateRange] = useState('ALL'); // 'ALL' | '24H' | '7D' | '30D'
   
   // High-Throughput Windowing / Virtual Pagination (prevents DOM re-render lag under 100+ tx/s)
   const [page, setPage] = useState(0);
   const pageSize = 12;
+
+  const handleResetFilters = () => {
+    setAlertFilters({ tier: 'ALL', rail: 'ALL', search: '' });
+    setSelectedDecisionSet('ALL');
+    setSelectedTypology('ALL');
+    setDateRange('ALL');
+    setPage(0);
+    addToast('Filters Reset', 'All filter constraints have been cleared.', 'info');
+  };
 
   // Multi-Filter Pipeline
   const filteredAlerts = useMemo(() => {
@@ -74,17 +87,27 @@ export const AlertsView = () => {
         if (!(alert.rail || '').toLowerCase().includes((alertFilters.rail || '').toLowerCase())) return false;
       }
 
-      // Decision Set Filter (CRC)
+      // Decision Tier Filter
       if (selectedDecisionSet !== 'ALL') {
-        if (selectedDecisionSet === 'GAMMA_1' && alert.decisionSet !== 'Γ = {1}' && alert.tierCode !== 1) return false;
-        if (selectedDecisionSet === 'GAMMA_01' && alert.decisionSet !== 'Γ = {0,1}' && alert.tierCode !== 2) return false;
-        if (selectedDecisionSet === 'GAMMA_0' && alert.decisionSet !== 'Γ = {0}' && alert.tierCode !== 3) return false;
+        if (selectedDecisionSet === 'TIER_1' && alert.tierCode !== 1) return false;
+        if (selectedDecisionSet === 'TIER_2' && alert.tierCode !== 2) return false;
+        if (selectedDecisionSet === 'TIER_3' && alert.tierCode !== 3) return false;
       }
 
       // Typology Filter
       if (selectedTypology !== 'ALL') {
         const typText = (alert.typologyBadge || alert.typology || alert.whyFlagged || '').toLowerCase();
         if (!typText.includes(selectedTypology.toLowerCase())) return false;
+      }
+
+      // Date Range Filter
+      if (dateRange !== 'ALL') {
+        const now = Date.now();
+        const alertTime = alert.unixMs || (alert.timestamp ? new Date(alert.timestamp).getTime() : now);
+        const diffHours = (now - alertTime) / (1000 * 60 * 60);
+        if (dateRange === '24H' && diffHours > 24) return false;
+        if (dateRange === '7D' && diffHours > 24 * 7) return false;
+        if (dateRange === '30D' && diffHours > 24 * 30) return false;
       }
 
       // Search Query
@@ -99,7 +122,7 @@ export const AlertsView = () => {
 
       return true;
     });
-  }, [alerts, alertFilters, selectedDecisionSet, selectedTypology]);
+  }, [alerts, alertFilters, selectedDecisionSet, selectedTypology, dateRange]);
 
   // Windowed Slice
   const totalPages = Math.ceil(filteredAlerts.length / pageSize) || 1;
@@ -113,7 +136,7 @@ export const AlertsView = () => {
   const handleExportCSV = () => {
     const headers = ['AlertID', 'CaseID', 'Timestamp', 'Account', 'EntityName', 'Amount', 'Rail', 'RiskScore', 'Tier', 'Status', 'Typology', 'DecisionSet'];
     const rows = filteredAlerts.map(a => [
-      a.id, a.caseId || 'N/A', a.timestamp || a.date || 'N/A', a.account, a.entityName, a.amount, a.rail, a.riskScore, a.tier, a.status, `"${a.typologyBadge || a.typology || 'Flagged'}"`, `"${a.decisionSet || 'Γ={1}'}"`
+      a.id, a.caseId || 'N/A', a.timestamp || a.date || 'N/A', a.account, a.entityName, a.amount, a.rail, a.riskScore, a.tier, a.status, `"${a.typologyBadge || a.typology || 'Flagged'}"`, `"${a.tier || 'Tier 1 Hold'}"`
     ]);
     const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
     const encodedUri = encodeURI(csvContent);
@@ -124,6 +147,19 @@ export const AlertsView = () => {
     link.click();
     document.body.removeChild(link);
     addToast('CSV Exported', `Exported ${filteredAlerts.length} alerts to CSV.`, 'info');
+  };
+
+  const handleExportJSON = () => {
+    const blob = new Blob([JSON.stringify(filteredAlerts, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `AML_Alert_Queue_${Date.now()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    addToast('JSON Exported', `Exported ${filteredAlerts.length} alerts to JSON.`, 'info');
   };
 
   return (
@@ -188,31 +224,70 @@ export const AlertsView = () => {
               <option value="BEFTN">BEFTN</option>
               <option value="Fedwire">Fedwire / CHAPS</option>
             </select>
+
+            {/* Date Range Filter */}
+            <select
+              id="alert-date-select"
+              name="alert-date-select"
+              aria-label="Filter by time horizon"
+              value={dateRange}
+              onChange={(e) => {
+                setDateRange(e.target.value);
+                setPage(0);
+              }}
+              className="ui-input h-8 text-xs font-mono"
+            >
+              <option value="ALL">All Time Window</option>
+              <option value="24H">Last 24 Hours</option>
+              <option value="7D">Last 7 Days</option>
+              <option value="30D">Last 30 Days</option>
+            </select>
           </div>
 
-          {/* Right Actions */}
+          {/* Right Actions: Export CSV / JSON & Reset */}
           <div className="flex items-center gap-2 shrink-0">
             <Button
               variant="outline"
               size="sm"
               onClick={handleExportCSV}
               icon={Download}
+              title="Export filtered alerts to CSV"
             >
               Export CSV
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExportJSON}
+              icon={FileCode}
+              title="Export filtered alerts to JSON"
+            >
+              JSON
+            </Button>
+            {(alertFilters.tier !== 'ALL' || alertFilters.rail !== 'ALL' || alertFilters.search || selectedDecisionSet !== 'ALL' || selectedTypology !== 'ALL' || dateRange !== 'ALL') && (
+              <Button
+                variant="subtle"
+                size="sm"
+                onClick={handleResetFilters}
+                icon={RotateCcw}
+                title="Reset all active filters"
+              >
+                Reset
+              </Button>
+            )}
           </div>
         </div>
 
-        {/* Row 2: Multi-Select Filter Chips (Typology & Decision Set) */}
+        {/* Row 2: Multi-Select Filter Chips (Typology & Decision Tier) */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-borderSubtle">
-          {/* Rail & CRC Decision Chips */}
+          {/* Decision Tier Chips */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-text-muted font-mono text-[10px] uppercase">Decision Set Γ:</span>
+            <span className="text-text-muted font-mono text-[10px] uppercase">Decision Tier:</span>
             {[
-              { id: 'ALL', label: 'All Sets' },
-              { id: 'GAMMA_1', label: 'Γ = {1} (Hold)' },
-              { id: 'GAMMA_01', label: 'Γ = {0,1} (Review)' },
-              { id: 'GAMMA_0', label: 'Γ = {0} (Clear)' }
+              { id: 'ALL', label: 'All Tiers' },
+              { id: 'TIER_1', label: 'Tier 1 (Immediate Hold)' },
+              { id: 'TIER_2', label: 'Tier 2 (Manual Review)' },
+              { id: 'TIER_3', label: 'Tier 3 (Auto-Cleared)' }
             ].map(chip => (
               <button
                 key={chip.id}
@@ -279,7 +354,7 @@ export const AlertsView = () => {
                 <th className="py-2.5 px-3">Amount (USD / BDT)</th>
                 <th className="py-2.5 px-3">Rail</th>
                 <th className="py-2.5 px-3">Risk Score</th>
-                <th className="py-2.5 px-3">Decision Set</th>
+                <th className="py-2.5 px-3">Decision Tier</th>
                 <th className="py-2.5 px-3">Status</th>
                 <th className="py-2.5 px-3 text-right">Inline Quick Actions</th>
               </tr>
@@ -287,8 +362,14 @@ export const AlertsView = () => {
             <tbody className="divide-y divide-borderSubtle">
               {paginatedAlerts.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-8 text-center text-text-muted text-xs">
-                    No alerts match the active filter criteria.
+                  <td colSpan={10} className="p-4">
+                    <EmptyState
+                      icon={FilterX}
+                      title="No alerts match the active filter criteria"
+                      description="No alerts match the selected search terms, rail, tier, or decision set parameters."
+                      actionLabel="Reset All Filters"
+                      onAction={handleResetFilters}
+                    />
                   </td>
                 </tr>
               ) : (
@@ -371,10 +452,16 @@ export const AlertsView = () => {
                         </span>
                       </td>
 
-                      {/* Decision Set Γ */}
+                      {/* Decision Tier */}
                       <td className="py-2.5 px-3 font-mono text-[11px]">
-                        <span className="px-1.5 py-0.5 rounded bg-bg border border-borderSubtle font-semibold text-text">
-                          {alert.decisionSet || (isTier1 ? 'Γ = {1}' : isTier2 ? 'Γ = {0,1}' : 'Γ = {0}')}
+                        <span className={`px-2 py-0.5 rounded border font-semibold inline-block ${
+                          isTier1 
+                            ? 'bg-critical/10 text-critical border-critical/30' 
+                            : isTier2 
+                            ? 'bg-review/10 text-review border-review/30'
+                            : 'bg-cleared/10 text-cleared border-cleared/30'
+                        }`}>
+                          {isTier1 ? 'Tier 1 Hold' : isTier2 ? 'Tier 2 Review' : 'Tier 3 Clear'}
                         </span>
                       </td>
 

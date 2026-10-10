@@ -117,7 +117,7 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
               <div className="space-y-2">
                 <h3 className="text-[11px] font-bold text-[var(--text-primary)] uppercase tracking-wider font-mono flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                  <span>Verification Profile &amp; PEP Sanctions Screening</span>
+                  <span>Verification Profile & PEP Sanctions Screening</span>
                 </h3>
 
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
@@ -162,12 +162,12 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
                 <div className="p-2.5 rounded-xl skeuo-well space-y-2 font-mono text-[10px]">
                   <div className="grid grid-cols-2 gap-2">
                     <div className="p-1.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">MASS CONSERVATION Φ_flow</span>
-                      <span className="text-xs font-bold text-rose-600 dark:text-rose-400">0.998 (In ≈ Out)</span>
-                      <span className="text-[8px] text-[var(--text-muted)] block">Kirchhoff Structuring</span>
+                      <span className="text-[8px] text-[var(--text-muted)] block">PASS-THROUGH FLOW RATIO</span>
+                      <span className="text-xs font-bold text-rose-600 dark:text-rose-400">99.8% (In ≈ Out)</span>
+                      <span className="text-[8px] text-[var(--text-muted)] block">Zero Dwell Retention</span>
                     </div>
                     <div className="p-1.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">HAWKES ARRIVAL RATE</span>
+                      <span className="text-[8px] text-[var(--text-muted)] block">TRANSFER VELOCITY RATE</span>
                       <span className="text-xs font-bold text-amber-600 dark:text-amber-400">18.4 tx / min</span>
                       <span className="text-[8px] text-[var(--text-muted)] block">High Burst Clustering</span>
                     </div>
@@ -175,7 +175,7 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
 
                   <div className="grid grid-cols-3 gap-1.5 text-center text-[9px]">
                     <div className="p-1 rounded bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">CYCLE-3 MOTIF</span>
+                      <span className="text-[8px] text-[var(--text-muted)] block">CIRCULAR WASH LOOP</span>
                       <span className="font-bold text-[var(--text-primary)]">4.2 / hr</span>
                     </div>
                     <div className="p-1 rounded bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
@@ -183,7 +183,7 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
                       <span className="font-bold text-[var(--text-primary)]">1.8 / hr</span>
                     </div>
                     <div className="p-1 rounded bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">FUSION WEIGHT α_u</span>
+                      <span className="text-[8px] text-[var(--text-muted)] block">NETWORK RISK WEIGHT</span>
                       <span className="font-bold text-[var(--accent-primary)]">0.88 GNN</span>
                     </div>
                   </div>

@@ -134,7 +134,7 @@ export const CommandDialog = ({ isOpen, onClose, open, setOpen }) => {
                 <Command.Item onSelect={() => go('models')}>
                   <div className="flex items-center gap-2.5">
                     <Cpu className="w-4 h-4 text-muted shrink-0" />
-                    <span>Engine Health &amp; Rail Status</span>
+                    <span>Engine Health & Rail Status</span>
                   </div>
                   <span className="text-[10px] font-mono text-muted">8</span>
                 </Command.Item>

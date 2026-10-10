@@ -135,17 +135,17 @@ export const WhatIfRecourseModal = () => {
                 {simulatedTier}
               </span>
               <span className="text-[10px] text-text-muted mt-0.5 block">
-                Conformal Set Γ
+                Calibrated Risk Tier
               </span>
             </div>
 
             <div className="p-3 rounded-lg bg-surfaceRaised border border-border">
-              <span className="text-[10px] uppercase font-mono text-text-muted block">Hawkes Burst Index</span>
+              <span className="text-[10px] uppercase font-mono text-text-muted block">Velocity Index</span>
               <span className="text-xl font-bold font-mono mt-0.5 block text-accent">
                 {burstIntensity}
               </span>
               <span className="text-[10px] text-text-muted mt-0.5 block">
-                Self-excitation decay
+                Transaction frequency rate
               </span>
             </div>
           </div>

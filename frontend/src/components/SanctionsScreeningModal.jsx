@@ -179,7 +179,7 @@ export const SanctionsScreeningModal = () => {
               </div>
               <div>
                 <Dialog.Title className="text-sm font-bold text-text">
-                  Automated Sanctions &amp; PEP Compliance Screener
+                  Automated Sanctions & PEP Compliance Screener
                 </Dialog.Title>
                 <Dialog.Description className="text-xs text-text-muted mt-0.5">
                   Real-time entity resolution against OFAC SDN, UN Consolidated, BFIU Adverse §15, and Global PEP watchlists.

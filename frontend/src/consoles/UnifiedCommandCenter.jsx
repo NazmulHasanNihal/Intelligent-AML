@@ -313,7 +313,7 @@ export const UnifiedCommandCenter = ({
             <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">TIER 1 QUARANTINED</span>
             <div className="text-xl font-bold font-mono text-rose-500 mt-0.5">1,280 <span className="text-xs font-normal text-[var(--text-muted)]">tx (0.86%)</span></div>
             <span className="text-[10px] text-rose-400 font-mono mt-0.5">
-              Γ = &#123;1&#125; Auto-Quarantine Hold
+              Immediate Quarantine Hold
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500">
@@ -331,7 +331,7 @@ export const UnifiedCommandCenter = ({
             <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">TIER 2 REVIEW QUEUE</span>
             <div className="text-xl font-bold font-mono text-amber-500 mt-0.5">748 <span className="text-xs font-normal text-[var(--text-muted)]">tx (0.50%)</span></div>
             <span className="text-[10px] text-amber-400 font-mono mt-0.5">
-              Γ = &#123;0, 1&#125; Four-Eyes Sign-Off
+              Four-Eyes Dual Sign-Off
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
@@ -349,7 +349,7 @@ export const UnifiedCommandCenter = ({
             <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">STRAIGHT-THROUGH RATE</span>
             <div className="text-xl font-bold font-mono text-[var(--accent-primary)] mt-0.5">98.6%</div>
             <span className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">
-              146,284 Safe Cleared (α = 0.01)
+              146,284 Safe Cleared (99.0% Confidence)
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 flex items-center justify-center text-[var(--accent-primary)]">
@@ -454,7 +454,7 @@ export const UnifiedCommandCenter = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold font-mono uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-1.5">
                 <Activity className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span>Streaming Throughput &amp; Alert Telemetry</span>
+                <span>Streaming Throughput & Alert Telemetry</span>
               </span>
               <span 
                 className="text-[10px] font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20"
@@ -638,13 +638,13 @@ export const UnifiedCommandCenter = ({
             {/* Metric Bars */}
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)]">
-                <span className="text-[9px] font-mono text-[var(--text-muted)] block uppercase">RISK POSTERIOR</span>
+                <span className="text-[9px] font-mono text-[var(--text-muted)] block uppercase">FRAUD RISK SCORE</span>
                 <span className="text-base font-bold font-mono text-[var(--text-primary)]">
                   {(sandboxResult.ensemble_posterior_prob * 100).toFixed(1)}%
                 </span>
               </div>
               <div className="p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)]">
-                <span className="text-[9px] font-mono text-[var(--text-muted)] block uppercase">CONFORMAL SET Γ</span>
+                <span className="text-[9px] font-mono text-[var(--text-muted)] block uppercase">DECISION TIER</span>
                 <span className="text-base font-bold font-mono text-[var(--accent-primary)]">
                   {sandboxResult.conformal_prediction_set.join(', ')}
                 </span>
@@ -662,7 +662,7 @@ export const UnifiedCommandCenter = ({
               <strong className="text-[var(--text-primary)]">Compliance Audit Summary:</strong>{' '}
               {sandboxResult.decision_tier.includes('QUARANTINE') 
                 ? 'High-confidence illicit signature detected. The account exhibits multi-hop cyclic flow conservation without commercial justification. Autonomous FinCEN Form 111 drafting triggered.' 
-                : 'Transaction satisfies finite-sample exchangeability coverage (1 - α >= 99.0%). Routed through Tier-3 Straight-Through Execution with zero customer friction.'}
+                : 'Transaction satisfies finite-sample exchangeability coverage (Safety Confidence >= 99.0%). Routed through Tier-3 Straight-Through Execution with zero customer friction.'}
             </div>
 
             {/* Action Buttons */}
@@ -687,38 +687,38 @@ export const UnifiedCommandCenter = ({
       </div>
       )}
 
-      {/* 5. Tab Content 3: Mathematical Invariants */}
+      {/* 5. Tab Content 3: Key Surveillance Indicators */}
       {activeSegment === 'INVARIANTS' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 animate-fadeIn">
           <div className="minimal-card p-3.5 space-y-1">
-            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">KIRCHHOFF FLOW MATCH</span>
-            <div className="text-xl font-bold font-mono text-[var(--text-primary)]">Φ_flow = 0.998</div>
+            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">PASS-THROUGH FLOW RATIO</span>
+            <div className="text-xl font-bold font-mono text-[var(--text-primary)]">99.8% Zero Retention</div>
             <p className="text-[11px] text-[var(--text-secondary)] pt-1">
               Inflows match outflows within 0.2% across transit nodes, verifying pass-through wash loops without legitimate commercial absorption.
             </p>
           </div>
 
           <div className="minimal-card p-3.5 space-y-1">
-            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">HAWKES INTENSITY</span>
-            <div className="text-xl font-bold font-mono text-[var(--text-primary)]">λ = 18.4 tx/min</div>
+            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">TRANSFER VELOCITY RATE</span>
+            <div className="text-xl font-bold font-mono text-[var(--text-primary)]">18.4 tx / min (Spike)</div>
             <p className="text-[11px] text-[var(--text-secondary)] pt-1">
-              Point-process self-excitation metric capturing rapid burst velocity smurfing across microsecond intervals.
+              Real-time velocity acceleration captures rapid burst smurfing and structuring across sub-second interbank intervals.
             </p>
           </div>
 
           <div className="minimal-card p-3.5 space-y-1">
-            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">CAMOUFLAGE SUPPRESSION</span>
+            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">NOISE SUPPRESSION</span>
             <div className="text-xl font-bold font-mono text-emerald-500">65.9% Filtered</div>
             <p className="text-[11px] text-[var(--text-secondary)] pt-1">
-              Learnable MLP edge-trust filter suppresses adversarial merchant noise (gᵢⱼ &lt; 0.10) to isolate underlying structuring rings.
+              Adaptive relational edge filter suppresses low-value retail noise (&lt; $150) to isolate underlying laundering rings.
             </p>
           </div>
 
           <div className="minimal-card p-3.5 space-y-1">
-            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">CONFORMAL COVERAGE</span>
-            <div className="text-xl font-bold font-mono text-[var(--accent-primary)]">1 - α &ge; 99.0%</div>
+            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">SAFETY GUARANTEE</span>
+            <div className="text-xl font-bold font-mono text-[var(--accent-primary)]">&ge; 99.0% Coverage</div>
             <p className="text-[11px] text-[var(--text-secondary)] pt-1">
-              Finite-sample distribution-free validity guarantees statutory safety while eliminating 98.6% of unnecessary compliance reviews.
+              Statutory safety guarantee ensures finite-sample reliability while automating 98.6% of routine commercial clearances.
             </p>
           </div>
         </div>

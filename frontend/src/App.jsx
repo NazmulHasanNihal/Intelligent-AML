@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -22,6 +22,8 @@ import { ToastContainer } from './components/ui/ToastContainer';
 
 // Feature Views
 import { OverviewView } from './features/overview/OverviewView';
+import { MonitoringView } from './features/monitoring/MonitoringView';
+import { ProfilesView } from './features/profiles/ProfilesView';
 import { AlertsView } from './features/alerts/AlertsView';
 import { CasesView } from './features/cases/CasesView';
 import { CaseDetailView } from './features/cases/CaseDetailView';
@@ -41,12 +43,11 @@ function MainAppShell() {
   });
   const [isCommandOpen, setIsCommandOpen] = useState(false);
 
-  const validRoutes = ['overview', 'alerts', 'cases', 'case-detail', 'network', 'filings', 'requests', 'audit', 'models', 'settings'];
+  const validRoutes = ['overview', 'monitoring', 'profiles', 'alerts', 'cases', 'case-detail', 'network', 'filings', 'requests', 'audit', 'models', 'settings'];
   const rawPath = location.pathname.replace(/^\//, '') || 'overview';
   const resolvedRoute = validRoutes.includes(rawPath) ? rawPath : 'overview';
 
   // 1. Sync Browser URL changes (direct load, back/forward buttons) into Zustand
-  // Runs ONLY when the resolved URL changes, preventing ping-pong oscillation
   useEffect(() => {
     if (useAppStore.getState().activeRoute !== resolvedRoute) {
       useAppStore.setState({ activeRoute: resolvedRoute, activeRouteParams: {} });
@@ -54,11 +55,16 @@ function MainAppShell() {
   }, [resolvedRoute]);
 
   // 2. Sync programmatic Zustand updates (from modals, drawer buttons) to the Browser URL
+  const isInitialMount = useRef(true);
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     const currentPath = location.pathname.replace(/^\//, '') || 'overview';
     if (activeRoute && activeRoute !== currentPath) {
       const targetUrl = activeRoute === 'overview' ? '/' : `/${activeRoute}`;
-      routerNavigate(targetUrl, { replace: true });
+      routerNavigate(targetUrl);
     }
   }, [activeRoute, location.pathname, routerNavigate]);
 
@@ -76,6 +82,8 @@ function MainAppShell() {
       if (!isInput && !e.metaKey && !e.ctrlKey && !e.altKey) {
         const routeKeys = {
           '1': 'overview',
+          'm': 'monitoring',
+          'p': 'profiles',
           '2': 'alerts',
           '3': 'cases',
           '4': 'network',
@@ -117,56 +125,68 @@ function MainAppShell() {
 
         {/* Dynamic Route Viewport */}
         <main className="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto">
-          {activeRoute === 'overview' && (
-            <ErrorBoundary viewName="Overview Dashboard">
-              <OverviewView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'alerts' && (
-            <ErrorBoundary viewName="Alerts Triage Queue">
-              <AlertsView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'cases' && (
-            <ErrorBoundary viewName="Case Management Console">
-              <CasesView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'case-detail' && (
-            <ErrorBoundary viewName="Case Detail Dossier">
-              <CaseDetailView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'network' && (
-            <ErrorBoundary viewName="Network Graph Studio">
-              <NetworkView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'filings' && (
-            <ErrorBoundary viewName="Regulatory Filings Vault">
-              <FilingsView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'requests' && (
-            <ErrorBoundary viewName="RFI Compliance Desk">
-              <RequestsView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'audit' && (
-            <ErrorBoundary viewName="Cryptographic Audit Vault">
-              <AuditView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'models' && (
-            <ErrorBoundary viewName="Model Risk & Governance Console">
-              <ModelsView />
-            </ErrorBoundary>
-          )}
-          {activeRoute === 'settings' && (
-            <ErrorBoundary viewName="Platform Governance Settings">
-              <SettingsView />
-            </ErrorBoundary>
-          )}
+          <div key={activeRoute} className="view-transition">
+            {activeRoute === 'overview' && (
+              <ErrorBoundary viewName="Overview Dashboard">
+                <OverviewView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'monitoring' && (
+              <ErrorBoundary viewName="Transaction Monitoring & Fraud Prevention Desk">
+                <MonitoringView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'profiles' && (
+              <ErrorBoundary viewName="Customer Profiles & Due Diligence Dossier">
+                <ProfilesView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'alerts' && (
+              <ErrorBoundary viewName="Alerts Triage Queue">
+                <AlertsView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'cases' && (
+              <ErrorBoundary viewName="Case Management Console">
+                <CasesView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'case-detail' && (
+              <ErrorBoundary viewName="Case Detail Dossier">
+                <CaseDetailView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'network' && (
+              <ErrorBoundary viewName="Network Graph Studio">
+                <NetworkView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'filings' && (
+              <ErrorBoundary viewName="Regulatory Filings Vault">
+                <FilingsView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'requests' && (
+              <ErrorBoundary viewName="RFI Compliance Desk">
+                <RequestsView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'audit' && (
+              <ErrorBoundary viewName="Cryptographic Audit Vault">
+                <AuditView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'models' && (
+              <ErrorBoundary viewName="Model Risk & Governance Console">
+                <ModelsView />
+              </ErrorBoundary>
+            )}
+            {activeRoute === 'settings' && (
+              <ErrorBoundary viewName="Platform Governance Settings">
+                <SettingsView />
+              </ErrorBoundary>
+            )}
+          </div>
         </main>
       </div>
 

@@ -334,7 +334,7 @@ export const TopNavbar = ({
                     }}
                     className="w-full py-1.5 px-2 rounded-lg skeuo-btn text-xs text-[var(--accent-primary)] font-semibold text-center block"
                   >
-                    Manage Branch Credentials &amp; Auth Key
+                    Manage Branch Credentials & Auth Key
                   </button>
                 </div>
               </div>
@@ -392,7 +392,7 @@ export const TopNavbar = ({
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--text-muted)]">CONFORMAL CALIBRATION:</span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">α = 0.01 (Coverage &ge; 99.0%)</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">Risk Tolerance 1.0% (Safety &ge; 99.0%)</span>
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--text-muted)]">TEST VERIFICATION SUITE:</span>

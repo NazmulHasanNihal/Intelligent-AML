@@ -96,7 +96,7 @@ const ENTERPRISE_TRANSACTIONS = [
     featureDrivers: [
       { name: 'Peeling Chain Entropy', impact: 44 },
       { name: 'CoinJoin Tag Match', impact: 32 },
-      { name: 'Burst Velocity (λ=18.4)', impact: 24 }
+      { name: 'Velocity Spike (18.4 tx/min)', impact: 24 }
     ],
     burst: true,
     domain: 'Crypto Assets',
@@ -711,8 +711,8 @@ export const AlertTriageQueue = ({
               </div>
               <div className="space-y-1">
                 {(selectedTx?.featureDrivers || [
-                  { name: 'Cyclic Conservation Φ', impact: 42 },
-                  { name: 'Burst Hawkes λ', impact: 32 },
+                  { name: 'Pass-Through Wash Ratio', impact: 42 },
+                  { name: 'Velocity Spike Burst', impact: 32 },
                   { name: 'Cross-Border Hop', impact: 18 }
                 ]).map((fd, idx) => (
                   <div key={idx} className="space-y-0.5">
@@ -733,7 +733,7 @@ export const AlertTriageQueue = ({
 
             {/* Conformal Prediction Set Analysis */}
             <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-[11px] shadow-inner">
-              <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">CONFORMAL RISK SET Γ(X)</span>
+              <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">RISK DECISION TIER</span>
               <div className="flex items-center justify-between">
                 <span className="text-[var(--text-primary)] font-mono font-bold text-xs">{selectedTx?.gammaSet} ({selectedTx?.gammaLabel})</span>
                 <span className="text-[9px] sm:text-[10px] font-mono text-[var(--accent-primary)] font-semibold">Coverage &ge; 99.0%</span>

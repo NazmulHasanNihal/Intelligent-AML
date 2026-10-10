@@ -211,7 +211,7 @@ export const OverviewView = () => {
         {/* Left: Single-Focus Telemetry Chart */}
         <Card className="lg:col-span-8 flex flex-col justify-between min-h-[380px]">
           <CardHeader
-            title="Stream Telemetry &amp; Detection Volume"
+            title="Stream Telemetry & Detection Volume"
             subtitle="Throughput velocity (tx/s) with flagged anomalous event counts"
             badge={<Badge variant="neutral" size="sm">24-Hour Horizon</Badge>}
             action={
@@ -225,6 +225,10 @@ export const OverviewView = () => {
               option={chartOption} 
               notMerge={true} 
               lazyUpdate={true} 
+              onChartReady={(instance) => {
+                const handleResize = () => instance?.resize();
+                window.addEventListener('resize', handleResize);
+              }}
               style={{ height: '100%', width: '100%' }} 
             />
           </div>
@@ -402,12 +406,12 @@ export const OverviewView = () => {
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="border-b border-borderSubtle text-[11px] font-mono text-text-muted">
-                <th className="py-2 px-2 font-medium">Time &amp; Reference</th>
+                <th className="py-2 px-2 font-medium">Time & Reference</th>
                 <th className="py-2 px-2 font-medium">Payment Rail</th>
                 <th className="py-2 px-2 font-medium">Originator &rarr; Beneficiary</th>
                 <th className="py-2 px-2 font-medium text-right">Settlement Amount</th>
                 <th className="py-2 px-2 font-medium">Remittance Narrative</th>
-                <th className="py-2 px-2 font-medium text-center">Conformal Calibration</th>
+                <th className="py-2 px-2 font-medium text-center">Risk Decision Tier</th>
                 <th className="py-2 px-2 font-medium text-right">Action</th>
               </tr>
             </thead>
@@ -434,7 +438,7 @@ export const OverviewView = () => {
                   }
                   return true;
                 })
-                .map((tx) => {
+                .map((tx, idx) => {
                   const railColor = 
                     tx.rail?.includes('LC') ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' :
                     tx.rail?.includes('MT103') || tx.rail?.includes('COV') ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
@@ -447,7 +451,7 @@ export const OverviewView = () => {
 
                   return (
                     <tr 
-                      key={tx.id || tx.swiftReference}
+                      key={`${tx.id || 'tx'}-${tx.unixMs || tx.timestamp || idx}-${idx}`}
                       onClick={() => openDrawer({
                         account: tx.sourceAccount,
                         entityName: tx.sourceEntity,
@@ -505,17 +509,17 @@ export const OverviewView = () => {
                         </p>
                       </td>
 
-                      {/* Conformal Calibration */}
+                      {/* Risk Decision Tier */}
                       <td className="py-2.5 px-2 text-center whitespace-nowrap">
                         <Badge 
                           variant={tx.tierCode === 1 ? 'critical' : tx.tierCode === 2 ? 'review' : 'cleared'}
                           size="sm"
-                          className="font-mono"
+                          className="font-mono font-bold"
                         >
                           {tx.tierCode === 1 ? 'Tier 1 Hold' : tx.tierCode === 2 ? 'Tier 2 Review' : 'Tier 3 Clear'}
                         </Badge>
                         <span className="text-[9px] text-text-muted block mt-0.5">
-                          {tx.conformalSet || (tx.tierCode === 1 ? 'Γ={1}' : tx.tierCode === 2 ? 'Γ={0,1}' : 'Γ={0}')}
+                          {tx.tierCode === 1 ? 'Immediate Hold' : tx.tierCode === 2 ? 'Manual Review' : 'Auto-Cleared'}
                         </span>
                       </td>
 

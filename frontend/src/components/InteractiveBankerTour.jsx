@@ -45,7 +45,7 @@ const BANKER_STEPS = [
           Clicking any transaction in the list opens the <b>Slide-Over Dossier</b> on the right.
         </p>
         <p>
-          It shows you the exact reason in plain English: e.g. <i>"Smurfing: splitting $9,450 into micro-bursts to avoid the $10,000 threshold"</i>. You can immediately click <b>"Clear Alert"</b> or <b>"Freeze &amp; File SAR"</b>.
+          It shows you the exact reason in plain English: e.g. <i>"Smurfing: splitting $9,450 into micro-bursts to avoid the $10,000 threshold"</i>. You can immediately click <b>"Clear Alert"</b> or <b>"Freeze & File SAR"</b>.
         </p>
       </div>
     ),

@@ -140,7 +140,7 @@ ${institution}`
               <Mail className="w-4 h-4 text-white" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">Client Due Diligence &amp; Request for Information (RFI)</h3>
+              <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">Client Due Diligence & Request for Information (RFI)</h3>
               <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">
                 Compliant institutional notice issued by {currentBanker.name}
               </p>

@@ -132,7 +132,7 @@ Authorized Dealer Correspondent Banking Network`;
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-text text-sm">Adverse Action &amp; Customer Appeal Notice</h3>
+                <h3 className="font-semibold text-text text-sm">Adverse Action & Customer Appeal Notice</h3>
                 <Badge variant="cleared" size="sm">CFPB / FCRA § 615(a) Compliant</Badge>
               </div>
               <p className="text-[11px] text-text-muted mt-0.5">

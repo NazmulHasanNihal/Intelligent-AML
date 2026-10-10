@@ -665,6 +665,31 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 pip install torch_geometric
 ```
 
+### 5. Environment Configuration & Secret Safety
+
+Copy the provided environment template to `.env` and fill in your actual production/staging credentials:
+```bash
+cp .env.example .env
+```
+
+> [!CAUTION]
+> ### 🚨 CRITICAL SECURITY NOTICE: MANDATORY SECRET ROTATION BEFORE DEPLOYMENT
+> **If any secret (such as `JWT_SECRET_KEY`, database passwords, or default account credentials) was previously committed to git history or used in older repository commits, that old value is permanently preserved in git history!**
+> 
+> **You MUST rotate any previously hardcoded secrets immediately before deploying this application to staging or production.**
+> 1. Generate a new, cryptographically random `JWT_SECRET_KEY` (minimum 32 bytes: `openssl rand -hex 32`).
+> 2. Rotate all database passwords (`POSTGRES_PASSWORD`, `DATABASE_URL`) on your target database server.
+> 3. Generate distinct passwords for seed accounts (`AML_COMPLIANCE_PASSWORD`, `AML_INVESTIGATOR_PASSWORD`, `AML_AUDITOR_PASSWORD`, `AML_ADMIN_PASSWORD`).
+> 4. Ensure `.env` is never committed to version control (enforced via `.gitignore`).
+
+#### Strict Architectural Secret Boundaries
+* **Database Connection Strings:** `DATABASE_URL` (PostgreSQL, MongoDB URI, Redis) must strictly remain in server environment variables — never hardcoded into source files, configs, or container images.
+* **JWT Signing & OAuth Secrets:** `JWT_SECRET_KEY` and any OAuth client secrets are strictly server-side and must never be exposed to the browser or client-side bundles.
+* **Third-Party API Keys:** All external API keys (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `KAGGLE_KEY`, `AWS_SECRET_ACCESS_KEY`, `SENDGRID_API_KEY`, `TWILIO_AUTH_TOKEN`) must reside exclusively in environment variables.
+* **Stripe Keys:** Only the publishable key (`pk_...`) may be exposed to client-side code; `STRIPE_SECRET_KEY` (`sk_...`) is strictly server-side.
+* **Supabase Keys:** The Supabase anonymous key (`anon_key`) is designed for client use **ONLY IF Row Level Security (RLS) is enabled and strictly enforced on EVERY table**. Without RLS, the anon key exposes your entire database. The Supabase `service_role_key` bypasses all RLS policies and must **NEVER appear in client-side code under any circumstances**.
+* **Frontend Exposure Rules:** React, Vite, and Next.js expose any environment variable prefixed with `VITE_`, `REACT_APP_`, or `NEXT_PUBLIC_` directly to the client browser. **No private secret, database URL, service role key, or signing secret may ever use these prefixes.**
+
 ---
 
 ## 🧪 Running & Verifying Tests Locally (144 Test Suite)

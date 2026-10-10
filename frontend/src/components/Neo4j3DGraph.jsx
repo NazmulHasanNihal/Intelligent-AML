@@ -472,7 +472,7 @@ export const Neo4j3DGraph = ({
           <div className="flex items-center gap-2">
             <Sliders className="w-4 h-4 text-[var(--accent-primary)] shrink-0" />
             <div>
-              <span className="font-bold text-[var(--text-primary)] text-[11px] block font-mono">Module 2: Camouflage Edge Denoising (gᵢⱼ)</span>
+              <span className="font-bold text-[var(--text-primary)] text-[11px] block font-mono">Module 2: Camouflage Retail Noise Suppression</span>
               <span className="text-[10px] text-[var(--text-muted)]">Prunes spurious retail noise to suppress graph over-smoothing</span>
             </div>
           </div>

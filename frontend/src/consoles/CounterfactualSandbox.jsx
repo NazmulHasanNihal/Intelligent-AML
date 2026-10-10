@@ -120,7 +120,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm block truncate">
-                Remediation &amp; Policy Simulation Hub
+                Remediation & Policy Simulation Hub
               </span>
               <span className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                 Internal Analyst Console
@@ -154,7 +154,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
             }`}
           >
             <BarChart3 className="w-3 h-3" />
-            <span>Policy &amp; Capacity Tuning</span>
+            <span>Policy & Capacity Tuning</span>
           </button>
         </div>
       </div>
@@ -224,7 +224,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
               {/* 3. Transaction Arrival Rate (Hawkes Intensity) */}
               <div className="space-y-1.5 p-2 sm:p-2.5 rounded-xl skeuo-well">
                 <div className="flex justify-between items-center text-[11px]">
-                  <span className="font-semibold text-[var(--text-primary)]">3. Arrival Burst Velocity (λ)</span>
+                  <span className="font-semibold text-[var(--text-primary)]">3. Transfer Velocity Frequency</span>
                   <span className="font-mono text-rose-600 dark:text-rose-400 font-bold text-xs sm:text-sm">{burstRate} tx/hr</span>
                 </div>
                 <input
@@ -426,7 +426,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
               <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
                 <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                  <span>Analyst Capacity &amp; Workload Impact</span>
+                  <span>Analyst Capacity & Workload Impact</span>
                 </span>
                 <span className={`text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded-full font-bold border ${
                   parseFloat(capacityUtilization) > 100 ? 'badge-tier1' : 'badge-tier3'

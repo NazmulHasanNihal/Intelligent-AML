@@ -100,7 +100,7 @@ export const DemoToolsModal = () => {
               <div className="flex items-center gap-2">
                 <FlaskConical className="w-5 h-5 text-accent" />
                 <Dialog.Title className="text-base font-semibold text-text">
-                  Operational Typology &amp; Threat Simulator
+                  Operational Typology & Threat Simulator
                 </Dialog.Title>
                 <Badge variant="accent" size="sm">FIU Threat Engine</Badge>
               </div>

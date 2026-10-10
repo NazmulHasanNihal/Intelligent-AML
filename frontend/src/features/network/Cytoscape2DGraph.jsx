@@ -158,8 +158,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         amountBdt: '৳576,000 BDT',
         rail: 'bKash MFS',
         typology: 'Sub-CTR Smurfing',
-        conformalSet: 'Γ = {1}',
-        hawkes: 'λ = 4.82 tx/min (Spike)',
+        conformalSet: 'Tier 1 Hold (High Risk)',
+        hawkes: 'Velocity: 4.8 tx/min (Spike)',
         color: '#F59E0B'
       }
     },
@@ -178,8 +178,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         amountBdt: '৳5,712,000 BDT',
         rail: 'RTGS (BD Bank)',
         typology: 'Interbank Rapid Layering',
-        conformalSet: 'Γ = {1}',
-        hawkes: 'λ = 9.14 tx/min (Critical)',
+        conformalSet: 'Tier 1 Hold (High Risk)',
+        hawkes: 'Velocity: 9.1 tx/min (Critical)',
         color: '#EF4444'
       }
     },
@@ -198,8 +198,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         amountBdt: '৳5,712,000 BDT',
         rail: 'SWIFT MT103',
         typology: 'Offshore Capital Flight',
-        conformalSet: 'Γ = {1}',
-        hawkes: 'λ = 11.2 tx/min',
+        conformalSet: 'Tier 1 Hold (High Risk)',
+        hawkes: 'Velocity: 11.2 tx/min (High)',
         color: '#EC4899'
       }
     },
@@ -218,12 +218,17 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         amountBdt: '৳5,712,000 BDT',
         rail: 'SWIFT MT700 (LC)',
         typology: 'TBML Circular Wash Loop',
-        conformalSet: 'Γ = {1}',
-        hawkes: 'λ = 14.8 tx/min (Ring Closed)',
+        conformalSet: 'Tier 1 Hold (High Risk)',
+        hawkes: 'Velocity: 14.8 tx/min (Ring Closed)',
         color: '#8B5CF6'
       }
     }
   ];
+
+  // Current Timeline Step Meta hoisted above hooks to eliminate TDZ ReferenceErrors
+  const currentStepMeta = useMemo(() => {
+    return TIMELINE_STEPS.find(s => s.step === timelineStep) || TIMELINE_STEPS[0];
+  }, [timelineStep]);
 
   // Initialize and Update Cytoscape Instance
   useEffect(() => {
@@ -629,9 +634,19 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
       canvas.height = rect.height * dpr;
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
+      if (cyRef.current) {
+        cyRef.current.resize();
+      }
     };
 
     handleResize();
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        handleResize();
+      });
+      resizeObserver.observe(containerRef.current);
+    }
     window.addEventListener('resize', handleResize);
 
     const renderAnim = (now) => {
@@ -775,8 +790,20 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
       isRunning = false;
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       window.removeEventListener('resize', handleResize);
+      if (resizeObserver) resizeObserver.disconnect();
     };
   }, [currentStepMeta, timelineStep, playbackSpeed]);
+
+  const handleTogglePlay = () => {
+    if (!isPlaying) {
+      if (timelineStep === 0 || timelineStep >= 4) {
+        setTimelineStep(1);
+      }
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+    }
+  };
 
   const handleFit = () => cyRef.current?.fit(undefined, 35);
   const handleZoomIn = () => cyRef.current?.zoom(cyRef.current.zoom() * 1.2);
@@ -811,8 +838,6 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
     downloadLink.download = `AML_Forensic_Network_${Date.now()}.png`;
     downloadLink.click();
   };
-
-  const currentStepMeta = TIMELINE_STEPS.find(s => s.step === timelineStep) || TIMELINE_STEPS[0];
 
   return (
     <div className="relative w-full h-[620px] sm:h-[680px] bg-surface rounded-lg border border-border overflow-hidden flex flex-col justify-between select-none">
@@ -866,10 +891,10 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
                 ? 'bg-cleared-bg text-cleared border-cleared font-semibold' 
                 : 'bg-bg text-text-muted border-border hover:text-text'
             }`}
-            title="Toggle learned edge-trust gating threshold (g_ij < 0.10)"
+            title="Filter out low-value noise and irrelevant retail transactions (< $150)"
           >
             {camouflageGatingEnabled ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-            <span>Gate Chaff (g &lt; 0.10)</span>
+            <span>Filter Low-Value Transfers (&lt; $150)</span>
           </button>
         </div>
 
@@ -1000,7 +1025,7 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
                         </span>
                       </div>
                       <div className="p-1.5 rounded bg-bg/50 border border-border/50">
-                        <span className="text-text-muted block">BURST INTENSITY</span>
+                        <span className="text-text-muted block">VELOCITY RATE</span>
                         <span className="font-semibold text-text truncate block">
                           {currentStepMeta.activeTx.hawkes}
                         </span>
@@ -1038,7 +1063,7 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
               <SkipBack className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={handleTogglePlay}
               className={`px-3 py-1.5 rounded font-mono text-xs font-semibold cursor-pointer transition-all shadow-xs flex items-center gap-1.5 ${
                 isPlaying 
                   ? 'bg-amber-600 text-white hover:bg-amber-500 animate-pulse' 

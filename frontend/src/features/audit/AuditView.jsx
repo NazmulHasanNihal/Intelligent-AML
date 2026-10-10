@@ -9,29 +9,60 @@ import {
   Lock, 
   CheckCircle2, 
   Clock,
-  Filter
+  Filter,
+  FileSpreadsheet,
+  RotateCcw,
+  FilterX
 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { Card, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 export const AuditView = () => {
   const { auditLogs, addToast } = useAppStore();
   const [search, setSearch] = useState('');
+  const [dateRange, setDateRange] = useState('ALL');
   const [selectedHash, setSelectedHash] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState(null);
 
   const filteredLogs = auditLogs.filter(log => {
-    if (!search) return true;
-    const q = search.toLowerCase();
-    return log.action.toLowerCase().includes(q) ||
-           log.bankerName.toLowerCase().includes(q) ||
-           log.targetAccount.toLowerCase().includes(q) ||
-           log.details.toLowerCase().includes(q);
+    if (search) {
+      const q = search.toLowerCase();
+      const match = log.action.toLowerCase().includes(q) ||
+                    log.bankerName.toLowerCase().includes(q) ||
+                    log.targetAccount.toLowerCase().includes(q) ||
+                    log.details.toLowerCase().includes(q);
+      if (!match) return false;
+    }
+    if (dateRange !== 'ALL') {
+      const logTime = new Date(log.timestamp).getTime();
+      const now = Date.now();
+      const diffHours = (now - logTime) / (1000 * 60 * 60);
+      if (dateRange === '24H' && diffHours > 24) return false;
+      if (dateRange === '7D' && diffHours > 24 * 7) return false;
+      if (dateRange === '30D' && diffHours > 24 * 30) return false;
+    }
+    return true;
   });
+
+  const handleExportCSV = () => {
+    const headers = ['EntryID', 'Action', 'TargetSubject', 'Officer', 'Role', 'TimestampUTC', 'Details', 'MerkleProof'];
+    const rows = filteredLogs.map(l => [
+      l.id, `"${l.action}"`, `"${l.targetAccount}"`, `"${l.bankerName}"`, `"${l.role}"`, l.timestamp, `"${l.details}"`, l.merkleHash
+    ]);
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const link = document.createElement('a');
+    link.href = encodeURI(csvContent);
+    link.download = `AML_Audit_Vault_${Date.now()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    addToast('Audit CSV Exported', `Exported ${filteredLogs.length} audit entries to CSV.`, 'info');
+  };
 
   const handleVerifyChain = () => {
     setIsVerifying(true);
@@ -135,23 +166,64 @@ export const AuditView = () => {
 
       {/* Audit Log Table */}
       <Card padding={false} className="overflow-hidden">
-        <div className="p-3 border-b border-border bg-surfaceRaised flex items-center justify-between gap-2">
-          <div className="relative max-w-xs w-full">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-text-muted" />
-            <input
-              id="audit-search-input"
-              name="audit-search-input"
-              aria-label="Search audit ledger"
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search audit ledger..."
-              className="ui-input pl-8 w-full text-xs h-8"
-            />
+        <div className="p-3 border-b border-border bg-surfaceRaised flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+          <div className="flex items-center gap-2 flex-1">
+            <div className="relative max-w-xs w-full">
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-text-muted" />
+              <input
+                id="audit-search-input"
+                name="audit-search-input"
+                aria-label="Search audit ledger"
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search audit ledger..."
+                className="ui-input pl-8 w-full text-xs h-8"
+              />
+            </div>
+
+            <select
+              id="audit-date-range-select"
+              name="audit-date-range-select"
+              aria-label="Filter audit entries by date"
+              value={dateRange}
+              onChange={(e) => setDateRange(e.target.value)}
+              className="ui-input h-8 text-xs font-mono"
+            >
+              <option value="ALL">All Entries</option>
+              <option value="24H">Last 24 Hours</option>
+              <option value="7D">Last 7 Days</option>
+              <option value="30D">Last 30 Days</option>
+            </select>
           </div>
-          <span className="text-xs font-mono text-text-muted">
-            {filteredLogs.length} Certified Entries
-          </span>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExportCSV}
+              icon={FileSpreadsheet}
+              title="Export audit logs to CSV"
+            >
+              Export CSV
+            </Button>
+
+            {(search || dateRange !== 'ALL') && (
+              <Button
+                variant="subtle"
+                size="sm"
+                onClick={() => { setSearch(''); setDateRange('ALL'); }}
+                icon={RotateCcw}
+                title="Reset search and date filters"
+              >
+                Reset
+              </Button>
+            )}
+
+            <span className="text-xs font-mono text-text-muted">
+              {filteredLogs.length} Certified Entries
+            </span>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -167,7 +239,20 @@ export const AuditView = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-borderSubtle">
-              {filteredLogs.map((log) => (
+              {filteredLogs.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-4">
+                    <EmptyState
+                      icon={FilterX}
+                      title="No audit entries match filter"
+                      description="No records match your search keyword or selected date range."
+                      actionLabel="Reset Search"
+                      onAction={() => { setSearch(''); setDateRange('ALL'); }}
+                    />
+                  </td>
+                </tr>
+              ) : (
+                filteredLogs.map((log) => (
                 <tr key={log.id} className="hover:bg-surfaceHover transition-colors">
                   <td className="py-2.5 px-3 font-mono font-medium text-accent">
                     {log.id}
@@ -196,7 +281,7 @@ export const AuditView = () => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

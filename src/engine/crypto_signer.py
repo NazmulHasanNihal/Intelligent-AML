@@ -8,10 +8,14 @@ Simulates FIPS 140-2 Level 3 Hardware Security Module (HSM) signing of:
 - SEC Rule 17a-4 / FRE 902(11) Cryptographic Proof Receipts
 """
 
+import os
 import time
 import hashlib
 from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class DigitalSignatureReceipt(BaseModel):
@@ -33,16 +37,24 @@ class InstitutionalCryptoSigner:
     """
 
     def __init__(self):
-        self.cert_dn = "CN=Intelligent-AML Central Signatory, OU=Financial Crime Compliance, O=Interbank Clearing Authority, C=BD"
-        self.issuer_dn = "CN=Bangladesh Bank Root PKI Authority, O=Central Bank, C=BD"
-        self.serial = "0x4892A81B8823EBLB"
-        self.key_slot = "HSM-SLOT-01 (FIPS 140-2 Level 3 Hardware Token)"
+        self.cert_dn = os.getenv(
+            "HSM_CERT_SUBJECT_DN",
+            "CN=Intelligent-AML Central Signatory, OU=Financial Crime Compliance, O=Interbank Clearing Authority, C=BD"
+        )
+        self.issuer_dn = os.getenv(
+            "HSM_CERT_ISSUER_DN",
+            "CN=Bangladesh Bank Root PKI Authority, O=Central Bank, C=BD"
+        )
+        self.serial = os.getenv("HSM_CERT_SERIAL", "0x4892A81B8823EBLB")
+        self.key_slot = os.getenv("HSM_KEY_SLOT", "HSM-SLOT-01 (FIPS 140-2 Level 3 Hardware Token)")
+        self.priv_seed = os.getenv("HSM_PRIVATE_KEY_SEED")
 
     def sign_payload(self, payload_str: str, statute: str = "FRE 902(11) / SEC Rule 17a-4") -> DigitalSignatureReceipt:
         doc_hash = hashlib.sha256(payload_str.encode()).hexdigest()
         
         # Deterministic RSA-4096 style signature derivation from document hash + private key seed
-        sig_seed = f"PRIV_KEY_SLOT_01:{doc_hash}:{self.serial}:2026"
+        hsm_seed = self.priv_seed or f"HSM_ENTROPY_{self.serial}"
+        sig_seed = f"{hsm_seed}:{doc_hash}:{self.serial}"
         sig_digest1 = hashlib.sha512(sig_seed.encode()).hexdigest()
         sig_digest2 = hashlib.sha512(f"{sig_digest1}:PKCS1_PSS".encode()).hexdigest()
         sig_hex = (sig_digest1 + sig_digest2)[:256]

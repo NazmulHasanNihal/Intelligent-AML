@@ -22,7 +22,7 @@ export const ModelsView = () => {
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     legend: {
-      data: ['KS Drift Distance D_KS', 'Calibrated Alpha α_t', 'Target α = 0.01'],
+      data: ['Statistical Drift Index', 'Calibrated Risk Tolerance (1%)', 'Target Error Tolerance (1%)'],
       bottom: 0,
       textStyle: { color: '#667085', fontSize: 11 }
     },
@@ -36,7 +36,7 @@ export const ModelsView = () => {
     yAxis: [
       {
         type: 'value',
-        name: 'D_KS Bound',
+        name: 'Drift Index',
         min: 0,
         max: 0.25,
         splitLine: { lineStyle: { color: '#F2F4F7' } },
@@ -45,7 +45,7 @@ export const ModelsView = () => {
       },
       {
         type: 'value',
-        name: 'Alpha α_t',
+        name: 'Risk Tolerance',
         min: 0.005,
         max: 0.020,
         splitLine: { show: false },
@@ -60,14 +60,14 @@ export const ModelsView = () => {
     ],
     series: [
       {
-        name: 'KS Drift Distance D_KS',
+        name: 'Statistical Drift Index',
         type: 'line',
         data: [0.012, 0.018, 0.142, 0.082, 0.168, 0.074, 0.041, 0.185, 0.062, 0.038, 0.024],
         itemStyle: { color: '#E8A23B' },
         lineStyle: { width: 2 }
       },
       {
-        name: 'Calibrated Alpha α_t',
+        name: 'Calibrated Risk Tolerance (1%)',
         type: 'line',
         yAxisIndex: 1,
         data: [0.010, 0.0102, 0.0078, 0.0089, 0.0072, 0.0094, 0.0098, 0.0069, 0.0092, 0.0099, 0.010],
@@ -75,7 +75,7 @@ export const ModelsView = () => {
         lineStyle: { width: 2 }
       },
       {
-        name: 'Target α = 0.01',
+        name: 'Target Error Tolerance (1%)',
         type: 'line',
         yAxisIndex: 1,
         data: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
@@ -119,7 +119,7 @@ export const ModelsView = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-lg bg-surface border border-border">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold text-text">Surveillance Engine Health &amp; Model Governance</h2>
+            <h2 className="text-sm font-semibold text-text">Surveillance Engine Health & Model Governance</h2>
             <Badge variant="cleared" size="sm">SR 11-7 Validated</Badge>
           </div>
           <p className="text-xs text-text-2 mt-0.5">
@@ -185,7 +185,7 @@ export const ModelsView = () => {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-text">Interbank Settlement &amp; Rail Gateways</h3>
+            <h3 className="text-sm font-semibold text-text">Interbank Settlement & Rail Gateways</h3>
             <p className="text-xs text-text-muted mt-0.5">Real-time webhook and ISO 20022 message parsers</p>
           </div>
 
@@ -205,7 +205,7 @@ export const ModelsView = () => {
               </span>
             </div>
             <div className="flex items-center justify-between p-2 rounded bg-bg border border-borderSubtle">
-              <span className="text-text font-medium">bKash &amp; Nagad MFS Webhook</span>
+              <span className="text-text font-medium">bKash & Nagad MFS Webhook</span>
               <span className="text-cleared font-semibold text-[11px] flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-cleared" />
                 ACTIVE (Listening)
@@ -220,8 +220,8 @@ export const ModelsView = () => {
         {/* ACI Drift Chart */}
         <Card className="lg:col-span-8 flex flex-col justify-between min-h-[360px]">
           <CardHeader
-            title="Real-Time Typology Drift &amp; Recalibration Monitor"
-            subtitle="Kolmogorov-Smirnov statistical shift tracking vs automated risk parameter adaptation"
+            title="Real-Time Typology Drift & Recalibration Monitor"
+            subtitle="Automated statistical distribution shift tracking vs automated risk parameter adaptation"
             badge={<Badge variant="neutral" size="sm">Active Monitor</Badge>}
           />
           <div className="h-64 w-full mt-2">
@@ -229,6 +229,10 @@ export const ModelsView = () => {
               option={aciDriftOption} 
               notMerge={true} 
               lazyUpdate={true} 
+              onChartReady={(instance) => {
+                const handleResize = () => instance?.resize();
+                window.addEventListener('resize', handleResize);
+              }}
               style={{ height: '100%', width: '100%' }} 
             />
           </div>

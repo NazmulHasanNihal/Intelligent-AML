@@ -12,7 +12,8 @@ import {
   Shield,
   PanelLeftClose,
   PanelLeft,
-  ChevronRight
+  Users,
+  ShieldAlert
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
@@ -23,6 +24,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
   const activeRoute = useAppStore(state => state.activeRoute);
   const alerts = useAppStore(state => state.alerts);
   const cases = useAppStore(state => state.cases);
+  const blockedTransactions = useAppStore(state => state.blockedTransactions || []);
 
   const handleNavClick = (id) => {
     const targetUrl = id === 'overview' ? '/' : `/${id}`;
@@ -31,28 +33,43 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
   };
 
   const primaryNav = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard, shortcut: '1' },
+    { 
+      id: 'monitoring', 
+      label: 'Monitoring & Fraud', 
+      icon: ShieldAlert, 
+      shortcut: 'M',
+      badge: `${blockedTransactions.filter(b => b.status === 'BLOCKED').length || 2}`
+    },
+    { 
+      id: 'profiles', 
+      label: 'Customer Profiles', 
+      icon: Users, 
+      shortcut: 'P' 
+    },
     { 
       id: 'alerts', 
       label: 'Alerts', 
       icon: AlertCircle, 
+      shortcut: '2',
       badge: `${alerts.filter(a => a.status !== 'DISMISSED' && a.status !== 'AUTO_CLEARED').length}` 
     },
     { 
       id: 'cases', 
       label: 'Cases', 
       icon: Briefcase, 
+      shortcut: '3',
       badge: `${cases.length}` 
     },
-    { id: 'network', label: 'Network', icon: Share2 },
-    { id: 'filings', label: 'Filings', icon: FileText },
-    { id: 'requests', label: 'Requests (RFI)', icon: Mail },
-    { id: 'audit', label: 'Audit Vault', icon: ShieldCheck }
+    { id: 'network', label: 'Network', icon: Share2, shortcut: '4' },
+    { id: 'filings', label: 'Filings', icon: FileText, shortcut: '5' },
+    { id: 'requests', label: 'Requests (RFI)', icon: Mail, shortcut: '6' },
+    { id: 'audit', label: 'Audit Vault', icon: ShieldCheck, shortcut: '7' }
   ];
 
   const secondaryNav = [
-    { id: 'models', label: 'Engine & Health', icon: Cpu },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'models', label: 'Engine & Health', icon: Cpu, shortcut: '8' },
+    { id: 'settings', label: 'Settings', icon: Settings, shortcut: '9' }
   ];
 
   return (
@@ -84,6 +101,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
             onClick={onToggleCollapse}
             className="p-1 rounded hover:bg-surfaceHover text-text-muted hover:text-text block transition-colors cursor-pointer"
             title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+            aria-label="Toggle sidebar collapse"
           >
             {isCollapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
           </button>
@@ -93,7 +111,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
         <div className="p-2 space-y-0.5">
           {!isCollapsed && (
             <div className="px-2 py-1 text-[10px] font-mono text-text-muted uppercase tracking-wider">
-              Surveillance &amp; Triage
+              Surveillance & Triage
             </div>
           )}
 
@@ -105,22 +123,29 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs transition-colors cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs transition-colors cursor-pointer group ${
                   isActive 
                     ? 'bg-accent-subtle text-accent-text font-semibold' 
                     : 'text-text-2 hover:bg-surfaceHover hover:text-text'
                 } ${isCollapsed ? 'justify-center px-0' : ''}`}
-                title={item.label}
+                title={`${item.label} (Hotkey ${item.shortcut})`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-accent' : 'text-text-muted'}`} />
                   {!isCollapsed && <span className="truncate">{item.label}</span>}
                 </div>
 
-                {!isCollapsed && item.badge && (
-                  <Badge variant={isActive ? 'accent' : 'neutral'} size="sm">
-                    {item.badge}
-                  </Badge>
+                {!isCollapsed && (
+                  <div className="flex items-center gap-1.5">
+                    {item.badge && (
+                      <Badge variant={isActive ? 'accent' : 'neutral'} size="sm">
+                        {item.badge}
+                      </Badge>
+                    )}
+                    <kbd className="hidden group-hover:inline-block text-[9px] font-mono px-1 py-0.2 rounded bg-surfaceRaised text-text-muted border border-borderSubtle">
+                      {item.shortcut}
+                    </kbd>
+                  </div>
                 )}
               </button>
             );
@@ -132,7 +157,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
       <div className="p-2 border-t border-border space-y-0.5">
         {!isCollapsed && (
           <div className="px-2 py-1 text-[10px] font-mono text-text-muted uppercase tracking-wider">
-            Governance &amp; Controls
+            Governance & Controls
           </div>
         )}
 
@@ -144,15 +169,23 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
             <button
               key={item.id}
               onClick={() => handleNavClick(item.id)}
-              className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded text-xs transition-colors cursor-pointer ${
+              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs transition-colors cursor-pointer group ${
                 isActive 
                   ? 'bg-accent-subtle text-accent-text font-semibold' 
-                    : 'text-text-2 hover:bg-surfaceHover hover:text-text'
+                  : 'text-text-2 hover:bg-surfaceHover hover:text-text'
               } ${isCollapsed ? 'justify-center px-0' : ''}`}
-              title={item.label}
+              title={`${item.label} (Hotkey ${item.shortcut})`}
             >
-              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-accent' : 'text-text-muted'}`} />
-              {!isCollapsed && <span className="truncate">{item.label}</span>}
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-accent' : 'text-text-muted'}`} />
+                {!isCollapsed && <span className="truncate">{item.label}</span>}
+              </div>
+
+              {!isCollapsed && (
+                <kbd className="hidden group-hover:inline-block text-[9px] font-mono px-1 py-0.2 rounded bg-surfaceRaised text-text-muted border border-borderSubtle">
+                  {item.shortcut}
+                </kbd>
+              )}
             </button>
           );
         })}

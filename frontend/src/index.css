@@ -265,6 +265,29 @@
   border-color: rgb(var(--border)) !important;
 }
 
+/* Smooth Page & View Transitions */
+@keyframes viewFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.view-transition {
+  animation: viewFadeIn 180ms ease-out forwards;
+}
+
+@keyframes microPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.98); }
+}
+
+.micro-pulse {
+  animation: microPulse 1.8s ease-in-out infinite;
+}
+
 /* Reduced Motion Respect */
 @media (prefers-reduced-motion: reduce) {
   *,

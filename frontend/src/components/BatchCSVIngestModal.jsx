@@ -194,7 +194,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
             </div>
             <div>
               <h2 className="text-sm font-bold font-mono text-[var(--text-primary)] uppercase tracking-wider flex items-center gap-2">
-                <span>Batch CSV Ingestion &amp; Conformal Triage</span>
+                <span>Batch CSV Ingestion & Conformal Triage</span>
                 <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30">
                   C-STGB Streaming
                 </span>
@@ -283,7 +283,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
               <div className="flex items-center justify-between text-[11px] font-mono">
                 <span className="flex items-center gap-1.5 text-[var(--accent-primary)] font-bold">
                   <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-ping" />
-                  Streaming C-STGB Ingestion &amp; Conformal Classification...
+                  Streaming C-STGB Ingestion & Conformal Classification...
                 </span>
                 <span>{progress}%</span>
               </div>
@@ -320,7 +320,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
                   <div className="text-base font-bold font-mono text-rose-600 dark:text-rose-400">
                     {results.tier1Quarantine}
                   </div>
-                  <span className="text-[9px] text-[var(--text-muted)]">Γ = &#123;1&#125; Auto-SAR</span>
+                  <span className="text-[9px] text-[var(--text-muted)]">Immediate Quarantine Hold</span>
                 </div>
 
                 <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-center">
@@ -330,7 +330,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
                   <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">
                     {results.tier2Review}
                   </div>
-                  <span className="text-[9px] text-[var(--text-muted)]">Γ = &#123;0, 1&#125; Abstention</span>
+                  <span className="text-[9px] text-[var(--text-muted)]">Manual Compliance Review</span>
                 </div>
 
                 <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-center">
@@ -340,7 +340,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
                   <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">
                     {results.tier3AutoClear}
                   </div>
-                  <span className="text-[9px] text-[var(--text-muted)]">Γ = &#123;0&#125; Straight-Through</span>
+                  <span className="text-[9px] text-[var(--text-muted)]">Automated Straight-Through</span>
                 </div>
               </div>
 

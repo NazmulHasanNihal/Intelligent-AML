@@ -52,7 +52,7 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenR
   const commands = [
     // Navigation Across All 6 Consoles
     { id: 'nav-command', category: 'Consoles', title: '1. Unified Surveillance Command Center', desc: 'Real-time transaction stream, dual C-STGB scoring & live gauges', icon: Zap, action: () => onNavigate('command-center'), keys: ['1'] },
-    { id: 'nav-alerts', category: 'Consoles', title: '2. Alert Triage & Conformal Clearing Hub', desc: 'Class-conditional CRC 3-tier queue (α = 0.01)', icon: Inbox, action: () => onNavigate('alerts'), keys: ['2'] },
+    { id: 'nav-alerts', category: 'Consoles', title: '2. Alert Triage & Conformal Clearing Hub', desc: 'Class-conditional 3-tier queue (99.0% Confidence)', icon: Inbox, action: () => onNavigate('alerts'), keys: ['2'] },
     { id: 'nav-graph', category: 'Consoles', title: '3. Forensic Graph Studio (2D / 3D)', desc: 'Topological network visualizer with camouflage pruning and timeline scrubber', icon: Share2, action: () => onNavigate('investigate'), keys: ['3'] },
     { id: 'nav-cases', category: 'Consoles', title: '4. Autonomous Multi-Agent SAR Drafter', desc: '4-agent LLM swarm: FinCEN 111, goAML v4.0 & BFIU STR-2 dossiers', icon: FileText, action: () => onNavigate('cases'), keys: ['4'] },
     { id: 'nav-recourse', category: 'Consoles', title: '5. Remediation & RFI Hub', desc: 'Internal analyst RFI generator & policy threshold capacity simulator', icon: UserCheck, action: () => onNavigate('recourse'), keys: ['5'] },

@@ -191,7 +191,7 @@ export const CoreBankingModal = () => {
                   <option value="MLPA_SECTION_15_ADMIN_HOLD">BFIU MLPA 2012 §15 — Administrative Pre-Filing Freeze (72h)</option>
                   <option value="CTR_STRUCTURING_HOLD">Structuring / Smurfing Pattern Trigger (31 CFR § 1010.311)</option>
                   <option value="TBML_NBR_ASYCUDA_OVERINVOICE">Trade-Based Money Laundering Valuation Discrepancy</option>
-                  <option value="SANCTIONS_INTERDICTION">Correspondent Interdiction &amp; Sanctions Screening Positive</option>
+                  <option value="SANCTIONS_INTERDICTION">Correspondent Interdiction & Sanctions Screening Positive</option>
                 </select>
               </div>
 

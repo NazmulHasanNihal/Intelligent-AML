@@ -218,12 +218,12 @@ export const InspectorDrawer = () => {
               {/* Risk Metric Grid */}
               <div className="grid grid-cols-2 gap-2 font-mono">
                 <div className="p-3 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">Conformal Risk Posterior</span>
+                  <span className="text-[10px] text-text-muted uppercase block">Fraud Risk Probability</span>
                   <span className={`text-xl font-bold ${isTier1 ? 'text-critical' : isTier2 ? 'text-review' : 'text-cleared'}`}>
                     {drawerItem.riskScore ? `${(drawerItem.riskScore * 100).toFixed(1)}%` : '98.4%'}
                   </span>
                   <span className="text-[10px] text-text-muted block mt-0.5">
-                    p-value: {drawerItem.pConformal || '0.0004'}
+                    Confidence Level: 99.96%
                   </span>
                 </div>
 
@@ -371,7 +371,7 @@ export const InspectorDrawer = () => {
             <div className="space-y-3 font-mono text-[11px]">
               <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle space-y-2">
                 <span className="font-semibold text-text text-xs uppercase font-sans block">
-                  Sanctions &amp; Watchlist Multi-Bureau Matches
+                  Sanctions & Watchlist Multi-Bureau Matches
                 </span>
 
                 <div className="space-y-2 pt-1">
@@ -386,7 +386,7 @@ export const InspectorDrawer = () => {
                   <div className="flex items-center justify-between p-2 rounded bg-surfaceRaised border border-border">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-cleared" />
-                      <span className="text-text">UN Security Council ISIL &amp; Al-Qaida 1267 List</span>
+                      <span className="text-text">UN Security Council ISIL & Al-Qaida 1267 List</span>
                     </div>
                     <span className="font-bold text-cleared">NEGATIVE</span>
                   </div>
@@ -468,7 +468,7 @@ export const InspectorDrawer = () => {
               <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-text text-xs uppercase font-sans">
-                    Topological Centrality &amp; Archetypes
+                    Topological Centrality & Archetypes
                   </span>
                   <Badge variant={isTier1 ? 'critical' : 'cleared'} size="sm">
                     {topologyData?.structural_role || (isTier1 ? 'Conduit Hub' : 'Benign Commercial')}

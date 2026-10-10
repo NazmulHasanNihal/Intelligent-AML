@@ -191,7 +191,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
               </span>
             </div>
             <p className="text-[var(--text-secondary)] text-[10px] sm:text-[11px] truncate mt-0.5">
-              High-resolution topology with anti-camouflage edge gating (gᵢⱼ &ge; {(camouflageThreshold * 100).toFixed(0)}%) &amp; audit-ready forensic subgraphs (FRE 902(11)).
+              High-resolution topology with anti-camouflage noise gating (Threshold: {(camouflageThreshold * 100).toFixed(0)}%) & audit-ready forensic subgraphs (FRE 902(11)).
             </p>
           </div>
         </div>
@@ -277,7 +277,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
           </form>
 
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-[var(--text-muted)]">Camouflage Filter (gᵢⱼ &ge; {camouflageThreshold}):</span>
+            <span className="text-[10px] text-[var(--text-muted)]">Noise Filter (Threshold: {(camouflageThreshold * 100).toFixed(0)}%):</span>
             <input 
               type="range"
               min="0.00"
@@ -485,7 +485,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
           <div className="quantum-prism-card p-3 sm:p-3.5 space-y-2 text-xs border-cyan-500/30">
             <span className="text-[11px] sm:text-xs font-bold text-cyan-300 font-mono uppercase tracking-wider flex items-center gap-1.5 pb-2 border-b border-cyan-500/20">
               <Sparkles className="w-3.5 h-3.5 text-fuchsia-400" />
-              <span>Anti-Camouflage Defense (Edge Gating gᵢⱼ)</span>
+              <span>Anti-Camouflage Defense (Noise Suppression)</span>
             </span>
             <div className="space-y-1.5">
               <div className="flex justify-between text-[10px] font-mono">

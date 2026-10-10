@@ -45,6 +45,11 @@ cover/
 
 # Environments
 .env
+.env.*
+*.env
+.env.local
+.env.*.local
+!.env.example
 .venv
 env/
 venv/

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Loader2 } from 'lucide-react';
 
 export const Button = React.forwardRef(({
   children,
@@ -6,12 +7,14 @@ export const Button = React.forwardRef(({
   size = 'md', // 'sm' | 'md' | 'lg' | 'icon'
   className = '',
   disabled = false,
+  loading = false,
   onClick,
   type = 'button',
   icon: Icon,
+  title,
   ...props
 }, ref) => {
-  const baseStyles = "inline-flex items-center justify-center font-medium transition-colors select-none rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 disabled:pointer-events-none active:translate-y-px";
+  const baseStyles = "inline-flex items-center justify-center font-medium transition-all select-none rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none active:translate-y-px";
 
   const sizeStyles = {
     sm: "text-xs px-2.5 py-1 gap-1.5 h-7",
@@ -29,16 +32,24 @@ export const Button = React.forwardRef(({
     subtle: "bg-accent-subtle text-accent-text hover:bg-accent/20 border border-transparent font-semibold"
   };
 
+  const isDisabled = disabled || loading;
+
   return (
     <button
       ref={ref}
       type={type}
-      disabled={disabled}
+      disabled={isDisabled}
       onClick={onClick}
       className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
+      title={title}
+      aria-busy={loading || undefined}
       {...props}
     >
-      {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
+      {loading ? (
+        <Loader2 className="w-3.5 h-3.5 shrink-0 animate-spin" />
+      ) : (
+        Icon && <Icon className="w-3.5 h-3.5 shrink-0" />
+      )}
       {children}
     </button>
   );

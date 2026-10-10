@@ -12,6 +12,9 @@ import hashlib
 import numpy as np
 import os
 import asyncio
+from dotenv import load_dotenv
+
+load_dotenv()
 from typing import Dict, List, Optional, Any
 from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect, Request, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -332,6 +335,13 @@ def get_current_user_profile(user: UserProfile = Depends(get_current_user)):
 @app.get("/api/v1/auth/demo-tokens", tags=["Authentication & RBAC"])
 def list_demo_tokens():
     """Generates pre-signed tokens for all standard roles to streamline demo testing."""
+    is_prod = os.getenv("ENVIRONMENT", "").lower() == "production"
+    demo_enabled = os.getenv("AML_ENABLE_DEMO_TOKENS", "false" if is_prod else "true").lower() in ("true", "1", "yes")
+    if is_prod or not demo_enabled:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Demo token endpoint is disabled in production mode."
+        )
     API_METRICS["total_requests"] += 1
     tokens = {}
     for username, data in USER_DATABASE.items():

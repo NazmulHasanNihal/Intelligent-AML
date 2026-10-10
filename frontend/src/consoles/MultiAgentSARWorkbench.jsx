@@ -429,7 +429,7 @@ Reporting Entity: ${currentBanker.institution}
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm block truncate">
-                Multi-Agent SAR Filing &amp; Evidence Workbench
+                Multi-Agent SAR Filing & Evidence Workbench
               </span>
               <span className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30 shadow-inner">
                 AI Draft — Pending Officer Sign-Off
@@ -538,7 +538,7 @@ Reporting Entity: ${currentBanker.institution}
             <div className="flex items-center justify-between pb-1.5 border-b border-[var(--border-subtle)]">
               <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span>Subject Account &amp; Exposure</span>
+                <span>Subject Account & Exposure</span>
               </span>
               <span className="badge-tier1 text-[9px] sm:text-[10px] px-2 py-0.5">
                 Tier 1 Quarantine
@@ -771,7 +771,7 @@ Reporting Entity: ${currentBanker.institution}
             <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-2 text-[11px]">
               <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)]">
                 <MessageSquare className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span>Compliance Reviewer Notes &amp; Audit Comments</span>
+                <span>Compliance Reviewer Notes & Audit Comments</span>
               </div>
 
               <div className="space-y-1.5 max-h-24 overflow-y-auto pr-1">

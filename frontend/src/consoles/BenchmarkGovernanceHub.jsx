@@ -142,7 +142,7 @@ export const BenchmarkGovernanceHub = () => {
   const aciDriftOption = {
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { data: ['KS Drift Distance D_KS', 'Calibrated Alpha α_t', 'Target α = 0.01'], bottom: 0, textStyle: { color: '#235833', fontSize: 10 } },
+    legend: { data: ['Population Drift Index', 'Calibrated Risk Threshold', 'Target Risk Tolerance (1.0%)'], bottom: 0, textStyle: { color: '#235833', fontSize: 10 } },
     grid: { left: '8%', right: '5%', top: '12%', bottom: '18%' },
     xAxis: {
       type: 'category',
@@ -152,7 +152,7 @@ export const BenchmarkGovernanceHub = () => {
     yAxis: [
       {
         type: 'value',
-        name: 'D_KS',
+        name: 'Drift Index',
         min: 0,
         max: 0.25,
         axisLabel: { color: '#64748b', fontSize: 9, fontFamily: 'monospace' },
@@ -160,7 +160,7 @@ export const BenchmarkGovernanceHub = () => {
       },
       {
         type: 'value',
-        name: 'α_t',
+        name: 'Tolerance',
         min: 0.005,
         max: 0.020,
         axisLabel: { color: '#64748b', fontSize: 9, fontFamily: 'monospace' },
@@ -169,14 +169,14 @@ export const BenchmarkGovernanceHub = () => {
     ],
     series: [
       {
-        name: 'KS Drift Distance D_KS',
+        name: 'Population Drift Index',
         type: 'line',
         data: [0.012, 0.015, 0.018, 0.142, 0.082, 0.168, 0.074, 0.041, 0.185, 0.062, 0.038, 0.024],
         itemStyle: { color: '#F59E0B' },
         lineStyle: { width: 2 }
       },
       {
-        name: 'Calibrated Alpha α_t',
+        name: 'Calibrated Risk Threshold',
         type: 'line',
         yAxisIndex: 1,
         data: [0.010, 0.010, 0.0102, 0.0078, 0.0089, 0.0072, 0.0094, 0.0098, 0.0069, 0.0092, 0.0099, 0.010],
@@ -184,7 +184,7 @@ export const BenchmarkGovernanceHub = () => {
         lineStyle: { width: 2 }
       },
       {
-        name: 'Target α = 0.01',
+        name: 'Target Risk Tolerance (1.0%)',
         type: 'line',
         yAxisIndex: 1,
         data: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
@@ -276,7 +276,7 @@ export const BenchmarkGovernanceHub = () => {
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm block truncate">
-                Model Risk Governance &amp; WORM Cryptographic Audit Vault
+                Model Risk Governance & WORM Cryptographic Audit Vault
               </span>
               <span className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 shadow-inner">
                 SR 11-7 / FRE 902(11)
@@ -427,7 +427,7 @@ export const BenchmarkGovernanceHub = () => {
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
               <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
                 <Activity className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span>Adaptive Conformal Inference (ACI) Distribution Drift Tracker (D_KS vs α_t)</span>
+                <span>Adaptive Risk Tolerance & Macro Distribution Drift Tracker</span>
               </span>
               <span className="text-[9px] sm:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-semibold">
                 Coverage Guaranteed &ge; 99.0%
@@ -455,7 +455,7 @@ export const BenchmarkGovernanceHub = () => {
                 </div>
                 <div>
                   <span className="text-[8px] text-[var(--text-muted)] block">ONLINE UPDATE RECURSION:</span>
-                  <span className="text-[var(--text-primary)] font-bold block">α_{'{t+1}'} = α_t + γ (α - err_t)</span>
+                  <span className="text-[var(--text-primary)] font-bold block">Dynamic Recalibration: Automatic Error Feedback Control</span>
                 </div>
                 <div>
                   <span className="text-[8px] text-[var(--text-muted)] block">EMPIRICAL BENCHMARK RESULT:</span>
@@ -464,7 +464,7 @@ export const BenchmarkGovernanceHub = () => {
               </div>
 
               <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
-                When sudden macroeconomic velocity spikes or cross-border payment waves occur, static neural networks suffer silent confidence degradation. C-STGB's online ACI engine dynamically recalibrates the error threshold α_t, preventing both false quarantines and evasion breaches.
+                When sudden macroeconomic velocity spikes or cross-border payment waves occur, static neural networks suffer silent confidence degradation. C-STGB's online ACI engine dynamically recalibrates the error threshold, preventing both false quarantines and evasion breaches.
               </p>
             </div>
 
@@ -479,7 +479,7 @@ export const BenchmarkGovernanceHub = () => {
               <div className="flex items-center gap-1.5 flex-wrap">
                 <Target className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider">
-                  OCC 2011-12 Population Stability Index (PSI) &amp; Feature Drift Matrix
+                  OCC 2011-12 Population Stability Index (PSI) & Feature Drift Matrix
                 </span>
                 {driftReport && (
                   <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold border ${
@@ -511,7 +511,7 @@ export const BenchmarkGovernanceHub = () => {
                     <th className="py-1.5 px-2.5">Stability Status</th>
                     <th className="py-1.5 px-2.5">PSI Metric (&lt;0.10 Stable)</th>
                     <th className="py-1.5 px-2.5">KS Statistic (D)</th>
-                    <th className="py-1.5 px-2.5">KS p-Value</th>
+                    <th className="py-1.5 px-2.5">Statistical Significance</th>
                     <th className="py-1.5 px-2.5 text-right">Wasserstein Distance</th>
                   </tr>
                 </thead>
@@ -667,7 +667,7 @@ export const BenchmarkGovernanceHub = () => {
             <div className="space-y-2">
               <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5 pb-2 border-b border-[var(--border-subtle)]">
                 <Cpu className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span>Audited Latency &amp; Hardware Profile</span>
+                <span>Audited Latency & Hardware Profile</span>
               </span>
 
               <div className="p-2.5 rounded-xl skeuo-well space-y-1.5 text-xs">

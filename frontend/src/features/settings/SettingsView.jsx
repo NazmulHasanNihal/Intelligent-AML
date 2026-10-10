@@ -24,7 +24,7 @@ export const SettingsView = () => {
     <div className="space-y-4 max-w-4xl">
       {/* Top Banner */}
       <div className="p-4 rounded-lg bg-surface border border-border">
-        <h2 className="text-sm font-semibold text-text">Platform Settings &amp; Compliance Configuration</h2>
+        <h2 className="text-sm font-semibold text-text">Platform Settings & Compliance Configuration</h2>
         <p className="text-xs text-text-2 mt-0.5">
           Configure interface density, visual themes, officer roles, and jurisdictional defaults.
         </p>
@@ -33,7 +33,7 @@ export const SettingsView = () => {
       {/* Appearance & Interface Density */}
       <Card>
         <CardHeader
-          title="Appearance &amp; Display Density"
+          title="Appearance & Display Density"
           subtitle="Minimalist token-based styling settings"
         />
 
@@ -132,8 +132,8 @@ export const SettingsView = () => {
       {/* Regulatory Retention & Data Governance */}
       <Card>
         <CardHeader
-          title="Statutory Retention &amp; Cryptographic Storage Standards"
-          subtitle="Mandatory Bank Secrecy Act (BSA) &amp; SEC 17a-4 record-keeping configuration"
+          title="Statutory Retention & Cryptographic Storage Standards"
+          subtitle="Mandatory Bank Secrecy Act (BSA) & SEC 17a-4 record-keeping configuration"
         />
 
         <div className="space-y-2.5 mt-3 text-xs text-text-2 leading-relaxed">

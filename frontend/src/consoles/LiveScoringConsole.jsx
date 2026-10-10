@@ -313,8 +313,8 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
 
               <div className="grid grid-cols-2 gap-2 text-[11px]">
                 <div className="p-2 rounded bg-[#0B0E17] border border-white/[0.06]">
-                  <span className="text-slate-500 text-[9px] block">CONFORMAL SET</span>
-                  <span className="text-indigo-300 font-semibold">Γ(X) = {`{ ${result.conformal_prediction_set.join(', ')} }`}</span>
+                  <span className="text-slate-500 text-[9px] block">DECISION TIER</span>
+                  <span className="text-indigo-300 font-semibold">{`{ ${result.conformal_prediction_set.join(', ')} }`}</span>
                 </div>
                 <div className="p-2 rounded bg-[#0B0E17] border border-white/[0.06]">
                   <span className="text-slate-500 text-[9px] block">MEASURED LATENCY</span>

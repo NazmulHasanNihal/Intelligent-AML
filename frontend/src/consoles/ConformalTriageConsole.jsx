@@ -45,8 +45,8 @@ export const ConformalTriageConsole = () => {
       <div className="card-panel p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         <div className="md:col-span-6">
           <div className="flex justify-between items-center mb-1.5">
-            <label className="text-xs font-semibold text-slate-200">Conformal Risk Budget (α)</label>
-            <span className="text-xs font-mono font-semibold text-indigo-400">α = {alpha.toFixed(3)} (Coverage ≥ {coveragePct}%)</span>
+            <label className="text-xs font-semibold text-slate-200">Calibrated Risk Error Budget</label>
+            <span className="text-xs font-mono font-semibold text-indigo-400">Error Rate: {alpha.toFixed(3)} (Safety Confidence ≥ {coveragePct}%)</span>
           </div>
           <input
             type="range"
@@ -93,7 +93,7 @@ export const ConformalTriageConsole = () => {
                 <Users className="w-3.5 h-3.5 text-amber-400" />
                 <span>Tier 2 Compliance Escalation Queue ({inbox.length})</span>
               </h3>
-              <span className="text-[10px] font-mono text-slate-400">Non-Singleton Sets Γ = &#123;0, 1&#125;</span>
+              <span className="text-[10px] font-mono text-slate-400">Manual Four-Eyes Review Tier</span>
             </div>
 
             <div className="space-y-2">

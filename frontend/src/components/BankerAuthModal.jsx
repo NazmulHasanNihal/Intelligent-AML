@@ -35,9 +35,9 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
               <Key className="w-4 h-4 text-white" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">Banker Auth &amp; Role Switcher</h3>
+              <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">Banker Auth & Role Switcher</h3>
               <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">
-                Role-Based Access Control (RBAC) &amp; Compliance Attribution
+                Role-Based Access Control (RBAC) & Compliance Attribution
               </p>
             </div>
           </div>
@@ -132,7 +132,7 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
             onClick={onClose}
             className="px-4 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary font-bold text-xs cursor-pointer shadow-md transition-all"
           >
-            Confirm &amp; Proceed
+            Confirm & Proceed
           </button>
         </div>
 

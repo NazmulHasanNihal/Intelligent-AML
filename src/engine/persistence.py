@@ -20,6 +20,9 @@ import sqlite3
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
+
+load_dotenv()
 
 try:
     from sqlalchemy import create_engine, text

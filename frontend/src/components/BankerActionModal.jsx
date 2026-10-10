@@ -32,7 +32,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
 
   const REASON_CODES = [
     { code: 'STRUCTURING_CTR_EVASION', label: 'Structuring to Evade CTR (31 U.S.C. § 5324)' },
-    { code: 'LAYERED_MULE_CIRCUIT', label: 'Layered Mule Conduit (Hawkes Burst λ > 10 tx/min)' },
+    { code: 'LAYERED_MULE_CIRCUIT', label: 'Layered Mule Conduit (Velocity Burst > 10 tx/min)' },
     { code: 'OFAC_SDN_SANCTIONS_MATCH', label: 'OFAC SDN or International Watchlist Match' },
     { code: 'HIGH_RISK_CORRIDOR', label: 'Unregistered Offshore Corridor (BVI / Panama Transit)' },
     { code: 'CLEAN_COMMERCIAL_INVOICE', label: 'Verified Trade Documentation & Validated UBO' },
@@ -85,7 +85,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
   const handleDispatchRFI = () => {
     logBankerAction(
       'DISPATCH_SECURE_RFI_LINK',
-      `Secure document upload link generated and dispatched to ${targetId}: https://compliance.bank.com/rfi/upload?token=9f8e4b7a12c8`,
+      `Secure document upload link generated and dispatched to ${targetId}: https://compliance.bank.com/rfi/upload?case=${encodeURIComponent(targetId)}`,
       { accountId: targetId }
     );
     setRfiDispatched(true);
@@ -211,7 +211,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
           {/* Compliance Justification Memo */}
           <div className="space-y-1">
             <label className="text-[10px] sm:text-[11px] font-semibold text-[var(--text-secondary)] block font-mono">
-              Officer Rationale &amp; Evidence Memo:
+              Officer Rationale & Evidence Memo:
             </label>
             <textarea
               rows={2}
@@ -271,7 +271,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
                   onChange={() => setCoreWebhookAction('WEBHOOK_RELEASE_FUNDS')}
                   className="sr-only"
                 />
-                Release &amp; Whitelist
+                Release & Whitelist
               </label>
             </div>
           </div>
@@ -279,7 +279,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
           {success && (
             <div className="p-2 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-[var(--accent-primary)] text-xs font-mono text-center flex items-center justify-center gap-1.5">
               <Check className="w-3.5 h-3.5" />
-              <span>Four-Eyes Authorization Stamped &amp; Webhooks Dispatched!</span>
+              <span>Four-Eyes Authorization Stamped & Webhooks Dispatched!</span>
             </div>
           )}
         </div>

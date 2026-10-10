@@ -333,7 +333,7 @@ ${institution}
               </div>
               <div>
                 <Dialog.Title className="text-sm sm:text-base font-bold text-text">
-                  Statutory Account Freeze &amp; Customer Remediation Notice
+                  Statutory Account Freeze & Customer Remediation Notice
                 </Dialog.Title>
                 <p className="text-xs text-text-2 mt-0.5 font-mono">
                   {institution} • Compliance Case: <span className="text-accent font-semibold">{caseId}</span>
@@ -513,7 +513,7 @@ ${institution}
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span>
-                  Notice successfully dispatched to <strong>{recipientEmail}</strong>. PDF copy attached to case docket #{caseId} &amp; logged to Merkle audit vault.
+                  Notice successfully dispatched to <strong>{recipientEmail}</strong>. PDF copy attached to case docket #{caseId} & logged to Merkle audit vault.
                 </span>
               </div>
             </div>

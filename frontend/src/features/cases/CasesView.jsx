@@ -15,17 +15,42 @@ import {
   Pin,
   Paperclip,
   ArrowRight,
-  FileText
+  FileText,
+  Download,
+  RotateCcw,
+  FilterX
 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { Card, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 export const CasesView = () => {
-  const { cases, selectCase, caseViewMode, setCaseViewMode } = useAppStore();
+  const { cases, selectCase, caseViewMode, setCaseViewMode, addToast } = useAppStore();
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [search, setSearch] = useState('');
+
+  const handleReset = () => {
+    setFilterStatus('ALL');
+    setSearch('');
+    if (addToast) addToast('Filters Cleared', 'Displaying all investigation cases.', 'info');
+  };
+
+  const handleExportCSV = () => {
+    const headers = ['CaseID', 'Title', 'SubjectEntity', 'SubjectAccount', 'ExposureUSD', 'RiskScore', 'Status', 'SLAHours'];
+    const rows = filteredCases.map(c => [
+      c.id, `"${c.title}"`, `"${c.subjectEntity}"`, c.subjectAccount, c.totalExposure || 0, c.riskScore || 0, c.status, c.statutorySlaHours || 72
+    ]);
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const link = document.createElement('a');
+    link.href = encodeURI(csvContent);
+    link.download = `AML_Cases_Docket_${Date.now()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    if (addToast) addToast('CSV Exported', `Exported ${filteredCases.length} cases to CSV.`, 'info');
+  };
 
   const filteredCases = cases.filter((c) => {
     if (filterStatus !== 'ALL' && c.status !== filterStatus) return false;
@@ -69,12 +94,34 @@ export const CasesView = () => {
             <option value="ALL">All Case Statuses</option>
             <option value="UNDER_INVESTIGATION">Under Investigation</option>
             <option value="SAR_PENDING_APPROVAL">SAR Pending Four-Eyes Sign-Off</option>
-            <option value="SAR_APPROVED_FILED">SAR Approved &amp; Filed</option>
+            <option value="SAR_APPROVED_FILED">SAR Approved & Filed</option>
           </select>
         </div>
 
-        {/* Right: Layout Toggle Switch (Grid vs Dense Table) & Stats */}
-        <div className="flex items-center gap-2.5 shrink-0">
+        {/* Right: Actions, Layout Toggle Switch (Grid vs Dense Table) & Stats */}
+        <div className="flex items-center gap-2 shrink-0">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExportCSV}
+            icon={Download}
+            title="Export cases docket to CSV"
+          >
+            Export CSV
+          </Button>
+
+          {(filterStatus !== 'ALL' || search) && (
+            <Button
+              variant="subtle"
+              size="sm"
+              onClick={handleReset}
+              icon={RotateCcw}
+              title="Reset case filters"
+            >
+              Reset
+            </Button>
+          )}
+
           <div className="flex items-center gap-0.5 p-0.5 bg-bg rounded border border-border">
             <button
               onClick={() => setCaseViewMode('grid')}
@@ -114,7 +161,7 @@ export const CasesView = () => {
               <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-[11px] uppercase tracking-wider select-none">
                 <tr>
                   <th className="py-2.5 px-3">Docket ID</th>
-                  <th className="py-2.5 px-3">Case Title &amp; Target Entity</th>
+                  <th className="py-2.5 px-3">Case Title & Target Entity</th>
                   <th className="py-2.5 px-3">Exposure (USD / BDT)</th>
                   <th className="py-2.5 px-3">Risk</th>
                   <th className="py-2.5 px-3">Milestone Progress</th>
@@ -125,7 +172,20 @@ export const CasesView = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-borderSubtle">
-                {filteredCases.map((c) => {
+                {filteredCases.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} className="p-4">
+                      <EmptyState
+                        icon={FilterX}
+                        title="No investigations match criteria"
+                        description="No cases match your status filter or search parameters."
+                        actionLabel="Reset Filters"
+                        onAction={handleReset}
+                      />
+                    </td>
+                  </tr>
+                ) : (
+                  filteredCases.map((c) => {
                   const isApproved = c.status === 'SAR_APPROVED_FILED';
                   const isPending = c.status === 'SAR_PENDING_APPROVAL';
                   const completedMilestones = (c.milestones || []).filter(m => m.status === 'completed').length;
@@ -191,17 +251,30 @@ export const CasesView = () => {
                         </span>
                       </td>
                       <td className="py-2.5 px-3 text-right">
-                        <Button variant="ghost" size="sm" className="h-7 text-xs font-mono">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-7 text-xs font-mono"
+                          onClick={() => selectCase(c.id)}
+                        >
                           Open <ChevronRight className="w-3 h-3 ml-1" />
                         </Button>
                       </td>
                     </tr>
                   );
-                })}
+                }))}
               </tbody>
             </table>
           </div>
         </Card>
+      ) : filteredCases.length === 0 ? (
+        <EmptyState
+          icon={FilterX}
+          title="No investigations match criteria"
+          description="No cases match your status filter or search parameters."
+          actionLabel="Reset Filters"
+          onAction={handleReset}
+        />
       ) : (
         /* CARD GRID VIEW (Default) */
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5">

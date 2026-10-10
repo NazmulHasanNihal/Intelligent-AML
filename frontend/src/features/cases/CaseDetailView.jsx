@@ -281,11 +281,11 @@ export const CaseDetailView = () => {
                 onClick={handleSignOff}
                 icon={Check}
               >
-                Sign Off &amp; File SAR ({currentBanker.name.split(' ')[0]})
+                Sign Off & File SAR ({currentBanker.name.split(' ')[0]})
               </Button>
             ) : (
               <Badge variant="cleared" size="md">
-                Certified &amp; Sealed in Audit Vault
+                Certified & Sealed in Audit Vault
               </Badge>
             )}
           </div>
@@ -306,7 +306,7 @@ export const CaseDetailView = () => {
           {/* Key Evidence & Metrics */}
           <Card>
             <CardHeader
-              title="Subject Entity &amp; Transaction Exposure"
+              title="Subject Entity & Transaction Exposure"
               badge={<Badge variant="neutral" size="sm">{activeCase.subjectBic}</Badge>}
             />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 font-mono text-xs">
@@ -320,11 +320,11 @@ export const CaseDetailView = () => {
                 </span>
               </div>
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">Risk Posterior</span>
+                <span className="text-[10px] text-text-muted uppercase block">Fraud Risk Probability</span>
                 <span className="font-bold text-critical tabular-nums text-sm">
                   {(activeCase.riskScore * 100).toFixed(1)}%
                 </span>
-                <span className="text-[10px] text-text-muted block mt-0.5">p = 0.0004</span>
+                <span className="text-[10px] text-text-muted block mt-0.5">Confidence: 99.96%</span>
               </div>
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
                 <span className="text-[10px] text-text-muted uppercase block">Linked Alerts</span>
@@ -346,7 +346,7 @@ export const CaseDetailView = () => {
           {activeCase.tbmlDetails && (
             <Card className="border-accent/40 bg-surfaceRaised">
               <CardHeader
-                title="Trade-Based AML (TBML) &amp; Customs Intelligence"
+                title="Trade-Based AML (TBML) & Customs Intelligence"
                 subtitle="Letter of Credit pricing vs National Board of Revenue ASYCUDA valuation"
                 badge={<Badge variant="critical" size="sm">BFIU MLPA §2(v)</Badge>}
               />
@@ -452,7 +452,7 @@ export const CaseDetailView = () => {
           <Card className="flex flex-col justify-between min-h-[460px]">
             <div>
               <CardHeader
-                title="Investigator Notes &amp; Actions"
+                title="Investigator Notes & Actions"
                 subtitle="Append-only record stored with case"
               />
 

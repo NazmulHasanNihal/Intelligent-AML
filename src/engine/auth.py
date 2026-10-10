@@ -5,6 +5,7 @@ and Granular OCC 2011-12 / BFIU Compliant Dual-Control Permissions.
 """
 
 import os
+import secrets
 import time
 import hashlib
 import hmac
@@ -15,9 +16,23 @@ import jwt
 from pydantic import BaseModel, Field
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordBearer
+from dotenv import load_dotenv
 
-# Configuration
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "intelligent-aml-research-production-crypto-key-2026-sha256")
+# Load local environment configuration
+load_dotenv()
+
+_raw_jwt_key = os.getenv("JWT_SECRET_KEY")
+_is_prod = os.getenv("ENVIRONMENT", "").lower() == "production"
+
+if not _raw_jwt_key:
+    if _is_prod:
+        raise RuntimeError(
+            "FATAL SECURITY ERROR: 'JWT_SECRET_KEY' must be configured in environment variables for production."
+        )
+    # Generate an ephemeral secure random key for development/test sessions (never static string)
+    _raw_jwt_key = secrets.token_urlsafe(32)
+
+SECRET_KEY = _raw_jwt_key
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))  # 24 Hours
 AUTH_ENFORCED = os.getenv("AML_AUTH_ENFORCED", "true").lower() in ("true", "1", "yes")
@@ -99,22 +114,47 @@ ROLE_PERMISSIONS: Dict[UserRole, List[str]] = {
 }
 
 
-def _hash_pw(password: str, salt: str = "aml_salt_2026") -> str:
+def _get_salt() -> str:
+    """Retrieves cryptographic salt from environment or derives dynamic salt."""
+    salt = os.getenv("AML_PASSWORD_SALT")
+    if not salt:
+        # Dynamically derive entropy from session secret key without static hardcoded literals
+        salt = hashlib.sha256(f"aml_salt_entropy_{SECRET_KEY[:16]}".encode()).hexdigest()[:16]
+    return salt
+
+
+def _hash_pw(password: str, salt: Optional[str] = None) -> str:
     """PBKDF2-HMAC-SHA256 password hashing."""
+    active_salt = salt or _get_salt()
     return hashlib.pbkdf2_hmac(
         "sha256",
         password.encode("utf-8"),
-        salt.encode("utf-8"),
+        active_salt.encode("utf-8"),
         iterations=100_000
     ).hex()
 
 
-# Seed Enterprise Accounts
+# Load seed account credentials from environment variables (never stored as hardcoded literals)
+_COMPLIANCE_PW = os.getenv("AML_COMPLIANCE_PASSWORD")
+_INVESTIGATOR_PW = os.getenv("AML_INVESTIGATOR_PASSWORD")
+_AUDITOR_PW = os.getenv("AML_AUDITOR_PASSWORD")
+_ADMIN_PW = os.getenv("AML_ADMIN_PASSWORD")
+
+# In local/test mode without preconfigured .env, generate random one-time passwords for safety
+if not _COMPLIANCE_PW:
+    _COMPLIANCE_PW = secrets.token_urlsafe(16)
+if not _INVESTIGATOR_PW:
+    _INVESTIGATOR_PW = secrets.token_urlsafe(16)
+if not _AUDITOR_PW:
+    _AUDITOR_PW = secrets.token_urlsafe(16)
+if not _ADMIN_PW:
+    _ADMIN_PW = secrets.token_urlsafe(16)
+
 USER_DATABASE: Dict[str, Dict[str, Any]] = {
     "compliance_officer": {
         "user_id": "USR-OCC-9481-01",
         "username": "compliance_officer",
-        "password_hash": _hash_pw("Compliance2026!"),
+        "password_hash": _hash_pw(_COMPLIANCE_PW),
         "full_name": "Farhana Ahmed, CAMS",
         "role": UserRole.COMPLIANCE_OFFICER,
         "department": "AML Operations & Alert Triage",
@@ -124,7 +164,7 @@ USER_DATABASE: Dict[str, Dict[str, Any]] = {
     "investigator": {
         "user_id": "USR-OCC-9481-02",
         "username": "investigator",
-        "password_hash": _hash_pw("Investigator2026!"),
+        "password_hash": _hash_pw(_INVESTIGATOR_PW),
         "full_name": "Tanvir Chowdhury, CFE",
         "role": UserRole.FORENSIC_INVESTIGATOR,
         "department": "Special Investigations Unit (SIU)",
@@ -134,7 +174,7 @@ USER_DATABASE: Dict[str, Dict[str, Any]] = {
     "auditor": {
         "user_id": "USR-OCC-9481-03",
         "username": "auditor",
-        "password_hash": _hash_pw("Auditor2026!"),
+        "password_hash": _hash_pw(_AUDITOR_PW),
         "full_name": "Kazi Masud, CIA",
         "role": UserRole.AUDITOR,
         "department": "Internal Audit & Model Governance",
@@ -144,7 +184,7 @@ USER_DATABASE: Dict[str, Dict[str, Any]] = {
     "admin": {
         "user_id": "USR-OCC-9481-00",
         "username": "admin",
-        "password_hash": _hash_pw("Admin2026!"),
+        "password_hash": _hash_pw(_ADMIN_PW),
         "full_name": "System Administrator",
         "role": UserRole.ADMIN,
         "department": "Risk & Infrastructure Architecture",
@@ -205,6 +245,12 @@ def get_current_user(
     Provides graceful fallback to demo compliance officer if no token provided in local dev mode.
     """
     if credentials is None or not credentials.credentials:
+        if AUTH_ENFORCED and _is_prod:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication credentials required in production mode.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
         # Fallback in local/research mode to prevent breaking UI or manual test sessions
         default_user = USER_DATABASE["compliance_officer"]
         return UserProfile(
@@ -264,10 +310,10 @@ def get_current_user(
             detail="Session has expired. Please re-authenticate.",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    except (jwt.InvalidTokenError, Exception) as e:
+    except (jwt.InvalidTokenError, Exception):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Cryptographic authentication verification failed: {str(e)}",
+            detail="Cryptographic authentication verification failed. Invalid or expired token.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 

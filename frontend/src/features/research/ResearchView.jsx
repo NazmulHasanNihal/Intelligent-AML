@@ -104,7 +104,7 @@ export const ResearchView = () => {
         <Card className="lg:col-span-4 flex flex-col justify-between">
           <div>
             <CardHeader
-              title="Statistical Invariants &amp; Tests"
+              title="Statistical Invariants & Tests"
               subtitle="Hypothesis tests across 15 benchmark suites"
             />
 

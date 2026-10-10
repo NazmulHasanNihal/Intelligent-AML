@@ -174,12 +174,12 @@ const HELP_TOPICS = [
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.06]">
           <span className="font-bold text-white block">Q: What should I tell a customer if their transaction is held?</span>
           <p className="text-slate-300 text-[11px] mt-1">
-            Open <b>Console 5 (Remediation &amp; RFI Hub)</b>. It generates a compliant <b>Request for Information (RFI)</b> document notice (commercial invoice, Bill of Lading, UBO verification). Under 31 U.S.C. § 5318(g)(2), tipping off internal AML thresholds or algorithmic flags is strictly prohibited.
+            Open <b>Console 5 (Remediation & RFI Hub)</b>. It generates a compliant <b>Request for Information (RFI)</b> document notice (commercial invoice, Bill of Lading, UBO verification). Under 31 U.S.C. § 5318(g)(2), tipping off internal AML thresholds or algorithmic flags is strictly prohibited.
           </p>
         </div>
 
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.06]">
-          <span className="font-bold text-white block">Q: Is this system compliant with banking regulators (Federal Reserve &amp; FinCEN)?</span>
+          <span className="font-bold text-white block">Q: Is this system compliant with banking regulators (Federal Reserve & FinCEN)?</span>
           <p className="text-slate-300 text-[11px] mt-1">
             <b>Yes.</b> It fully complies with the Bank Secrecy Act (31 U.S.C. 5318(g)), FinCEN Form 111 standards, and Federal Reserve SR 11-7 / OCC 2011-12 model risk governance principles with tamper-evident WORM audit seals under Federal Rules of Evidence 902(11).
           </p>
@@ -206,7 +206,7 @@ export const BankerHelpModal = ({ isOpen, onClose }) => {
               <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] truncate">Banker's Compliance Guide &amp; Knowledge Center</h2>
+              <h2 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] truncate">Banker's Compliance Guide & Knowledge Center</h2>
               <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">Guide for compliance officers, examiners, and investigators</p>
             </div>
           </div>

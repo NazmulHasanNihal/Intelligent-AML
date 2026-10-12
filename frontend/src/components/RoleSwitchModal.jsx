@@ -1,10 +1,10 @@
 import React from 'react';
-import { 
-  UserCheck, 
-  X, 
-  ShieldCheck, 
-  Check, 
-  Shield, 
+import {
+  UserCheck,
+  X,
+  ShieldCheck,
+  Check,
+  Shield,
   Lock,
   ArrowRight
 } from 'lucide-react';
@@ -36,7 +36,7 @@ export const RoleSwitchModal = () => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-      <div 
+      <div
         className="w-full max-w-lg bg-surface border border-border rounded-xl shadow-2xl overflow-hidden flex flex-col text-xs"
         onClick={(e) => e.stopPropagation()}
       >
@@ -56,7 +56,7 @@ export const RoleSwitchModal = () => {
               </p>
             </div>
           </div>
-          <button 
+          <button
             onClick={() => setRoleModalOpen(false)}
             className="p-1 rounded text-text-muted hover:text-text hover:bg-surface transition-colors cursor-pointer"
           >
@@ -68,8 +68,8 @@ export const RoleSwitchModal = () => {
         <div className="px-5 py-3 bg-bg border-b border-borderSubtle flex items-center justify-between">
           <div>
             <span className="text-[10px] font-mono uppercase text-text-muted block">Active Signed-In Signatory</span>
-            <span className="font-semibold text-text text-sm">{currentBanker.name}</span>
-            <span className="text-[11px] text-accent block font-mono">{currentBanker.roleTitle}</span>
+            <span className="font-semibold text-text text-sm">{currentBanker?.name || 'Authorized Officer'}</span>
+            <span className="text-[11px] text-accent block font-mono">{currentBanker?.roleTitle || 'Compliance Officer'}</span>
           </div>
           <Badge variant="cleared" size="sm">Active Session</Badge>
         </div>
@@ -82,7 +82,7 @@ export const RoleSwitchModal = () => {
 
           <div className="space-y-2">
             {(availableBankers || []).map((b) => {
-              const isCurrent = b.id === currentBanker.id;
+              const isCurrent = b.id === currentBanker?.id;
               const isMaker = b.role?.includes('INVESTIGATOR') || b.role?.includes('MAKER') || b.id.includes('jenkins') || b.name.includes('Sarah');
 
               return (

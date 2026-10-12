@@ -41,10 +41,14 @@ KAGGLE_DIR = Path.home() / ".kaggle"
 
 
 def _kaggle_cli() -> str:
-    """Return a command that invokes the Kaggle CLI (prefer venv, fall back to PATH)."""
-    venv_kaggle = REPO_ROOT / "venv" / "Scripts" / "kaggle.exe"
-    if venv_kaggle.exists():
-        return str(venv_kaggle)
+    """Return a command that invokes the Kaggle CLI (prefer .venv, fall back to PATH)."""
+    for candidate in [
+        REPO_ROOT / ".venv" / "Scripts" / "kaggle.exe",
+        Path(sys.prefix) / "Scripts" / "kaggle.exe",
+        REPO_ROOT / "venv" / "Scripts" / "kaggle.exe",
+    ]:
+        if candidate.exists():
+            return str(candidate)
     return "kaggle"
 
 

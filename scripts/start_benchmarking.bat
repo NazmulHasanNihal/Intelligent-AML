@@ -12,7 +12,13 @@ echo   - Safe Against Power Loss / Crashes: Resumes from exact pending test
 echo ===============================================================================
 echo.
 
-start /low /wait .\venv\Scripts\python.exe scripts\master_physical_benchmark_runner.py
+if exist ".\.venv\Scripts\python.exe" (
+    start /low /wait .\.venv\Scripts\python.exe scripts\master_physical_benchmark_runner.py
+) else if exist ".\venv\Scripts\python.exe" (
+    start /low /wait .\venv\Scripts\python.exe scripts\master_physical_benchmark_runner.py
+) else (
+    start /low /wait python scripts\master_physical_benchmark_runner.py
+)
 
 echo.
 echo ===============================================================================

@@ -4,12 +4,18 @@ Reads streaming transactions from Redpanda (Kafka), normalizes them, and writes 
 """
 import os
 import json
-from pyflink.datastream import StreamExecutionEnvironment
-from pyflink.datastream.connectors.kafka import KafkaSource, KafkaOffsetsInitializer
-from pyflink.common.serialization import SimpleStringSchema
-from pyflink.common.typeinfo import Types
-from pyflink.datastream.functions import MapFunction
-from pyflink.common.watermark_strategy import WatermarkStrategy
+try:
+    from pyflink.datastream import StreamExecutionEnvironment
+    from pyflink.datastream.connectors.kafka import KafkaSource, KafkaOffsetsInitializer
+    from pyflink.common.serialization import SimpleStringSchema
+    from pyflink.common.typeinfo import Types
+    from pyflink.datastream.functions import MapFunction
+    from pyflink.common.watermark_strategy import WatermarkStrategy
+    HAS_PYFLINK = True
+except ImportError:
+    HAS_PYFLINK = False
+    class MapFunction:
+        pass
 
 # Configure Redpanda connection
 REDPANDA_BROKER = os.getenv("REDPANDA_BROKER", "localhost:9092")
@@ -17,7 +23,7 @@ TOPIC_NAME = "aml_transactions_live"
 
 class TransactionNormalizer(MapFunction):
     """
-    Normalizes transaction events one at a time and runs a real-time 
+    Normalizes transaction events one at a time and runs a real-time
     inference check against the trained HT-GNN model weights.
     """
     def __init__(self):
@@ -31,10 +37,10 @@ class TransactionNormalizer(MapFunction):
             project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
             if project_root not in sys.path:
                 sys.path.append(project_root)
-                
+
             from src.models.htgnn import BurstAwareHGT
             import torch
-            
+
             model_path = os.path.join(project_root, "data", "outputs", "models", "htgnn_model.pt")
             if os.path.exists(model_path):
                 metadata = (
@@ -65,9 +71,9 @@ class TransactionNormalizer(MapFunction):
             # Parse JSON
             tx = json.loads(value)
             amount = float(tx.get('amount', 0.0))
-            
+
             risk_score = 0.1  # default low risk
-            
+
             if self.model is not None:
                 try:
                     import torch
@@ -90,7 +96,7 @@ class TransactionNormalizer(MapFunction):
                         ("Account", "Transaction", "Account"): torch.tensor([amount / 1000.0]),
                         ("User", "Shared_Ownership", "Account"): torch.zeros(0)
                     }
-                    
+
                     with torch.no_grad():
                         out_dict = self.model(x_dict, edge_index_dict, delta_t_dict, burst_score_dict)
                         # Probability of fraud for the destination account
@@ -102,7 +108,7 @@ class TransactionNormalizer(MapFunction):
             else:
                 # Basic tabular risk heuristics (fallback)
                 risk_score = 0.6 if amount > 50000.0 else 0.15
-            
+
             tx['risk_score'] = risk_score
             tx['is_flagged'] = risk_score > 0.5
             tx['processed_by'] = 'flink_consumer'
@@ -111,6 +117,10 @@ class TransactionNormalizer(MapFunction):
             return json.dumps({"error": str(e), "raw": value})
 
 def main():
+    if not HAS_PYFLINK:
+        print("Apache PyFlink is not installed. Install pyflink to run streaming ingestion.")
+        return
+
     # 1. Initialize execution environment
     env = StreamExecutionEnvironment.get_execution_environment()
     # For local testing, parallelism of 1 is fine
@@ -128,17 +138,17 @@ def main():
         .set_starting_offsets(KafkaOffsetsInitializer.earliest()) \
         .set_value_only_deserializer(SimpleStringSchema()) \
         .build()
-        
+
     # 3. Add Source to Environment
     stream = env.from_source(kafka_source, WatermarkStrategy.for_monotonous_timestamps(), "Kafka Source")
-    
+
     # 4. Apply Normalization Transformation
     normalized_stream = stream.map(TransactionNormalizer(), output_type=Types.STRING())
-    
+
     # 5. Define Sink (Print to stdout for testing)
     # In production, this would write to a FileSink (Parquet) or a custom DuckDB/Delta sink.
     normalized_stream.print()
-    
+
     # 6. Execute Job
     print("Starting Flink Consumer job to process live transactions...")
     env.execute("AML Live Transaction Processor")

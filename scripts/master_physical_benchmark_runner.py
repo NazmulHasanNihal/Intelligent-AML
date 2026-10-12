@@ -123,14 +123,20 @@ class MemoryGuard:
 
 # Windows PyTorch DLL loading safety guard
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-_venv_torch_lib = ROOT / "venv" / "Lib" / "site-packages" / "torch" / "lib"
-if _venv_torch_lib.exists():
-    os.environ["PATH"] = str(_venv_torch_lib) + ";" + os.environ.get("PATH", "")
-    if hasattr(os, "add_dll_directory"):
-        try:
-            os.add_dll_directory(str(_venv_torch_lib))
-        except Exception:
-            pass
+_torch_candidates = [
+    Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib",
+    ROOT / ".venv" / "Lib" / "site-packages" / "torch" / "lib",
+    ROOT / "venv" / "Lib" / "site-packages" / "torch" / "lib",
+]
+for _torch_lib in _torch_candidates:
+    if _torch_lib.exists():
+        os.environ["PATH"] = str(_torch_lib) + ";" + os.environ.get("PATH", "")
+        if hasattr(os, "add_dll_directory"):
+            try:
+                os.add_dll_directory(str(_torch_lib))
+            except Exception:
+                pass
+        break
 
 from scripts.run_automated_paper_benchmark import (
     run_paper_benchmark,
@@ -165,7 +171,7 @@ PROGRESS_MD = ROOT / "docs" / "Live_Physical_Benchmark_Progress.md"
 def get_dataset_checkpoint_status(dataset_name: str, split_name: str = "70_30", epochs: int = 10):
     """Checks how many models are completed for a given dataset, with cross-epoch fallback."""
     ckpt_dir = DEFAULT_BENCHMARK_DIR / dataset_name / f"{split_name}_{epochs}ep" / "checkpoints"
-    
+
     # Fallback to any sibling checkpoint folder if primary does not exist or has fewer models
     ds_dir = DEFAULT_BENCHMARK_DIR / dataset_name
     candidate_dirs = [ckpt_dir]
@@ -198,16 +204,16 @@ def update_live_progress_report():
     """Generates a comprehensive real-time progress markdown report."""
     DOCS_DIR = ROOT / "docs"
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
-    
+
     rows = []
     total_completed = 0
     total_possible = len(BENCHMARK_DATASETS) * len(ALL_MODELS_REGISTRY)
-    
+
     for ds in BENCHMARK_DATASETS:
         done_cnt, tot_cnt, details = get_dataset_checkpoint_status(ds)
         total_completed += done_cnt
         status = "COMPLETED" if done_cnt == tot_cnt else ("IN PROGRESS" if done_cnt > 0 else "PENDING")
-        
+
         # Best C-STGB score if available
         cstgb_f1 = "-"
         cstgb_prauc = "-"
@@ -221,15 +227,15 @@ def update_live_progress_report():
                 cstgb_prauc = f"{d.get('pr_auc', 0.0):.4f}"
             except Exception:
                 pass
-                
+
         rows.append(f"| `{ds}` | {done_cnt}/{tot_cnt} | **{status}** | {cstgb_f1} | {cstgb_prauc} |")
 
     pct = (total_completed / max(1, total_possible)) * 100.0
-    
+
     md_content = f"""# 🚀 Live Physical Benchmark Execution Progress
 
-**Last Updated:** `{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}`  
-**Overall Completion:** `{total_completed}/{total_possible} Model Runs` (**{pct:.1f}%**)  
+**Last Updated:** `{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}`
+**Overall Completion:** `{total_completed}/{total_possible} Model Runs` (**{pct:.1f}%**)
 **Resumption Guard:** Atomic per-model JSON checkpoints active (safe against crashes/power loss)
 
 ---
@@ -270,14 +276,14 @@ def main():
     parser.add_argument("--models", type=str, default=None, help="Filter specific model names/slugs (e.g. proposed_c_stgb,xgboost)")
     parser.add_argument("--force-rerun", action="store_true", help="Force clean slate execution: retrain all models from scratch")
     args = parser.parse_args()
-    
+
     target_datasets = [d.strip() for d in args.datasets.split(",")] if args.datasets else BENCHMARK_DATASETS
     target_splits = [float(s.strip()) for s in args.splits.split(",")]
     target_epochs = [args.epochs]
     target_models = [m.strip() for m in args.models.split(",")] if args.models else None
-    
+
     update_live_progress_report()
-    
+
     if args.status:
         print("\n" + "=" * 90)
         print(" [INTELLIGENT-AML] PHYSICAL BENCHMARK EXECUTION STATUS")
@@ -309,7 +315,7 @@ def main():
         peak_ram = mem_guard.get_peak_mb() / 1024
         print(f"\n[{i}/{len(target_datasets)}] >>> STARTING DATASET: {ds.upper()} ({done}/{tot} already completed) <<<")
         print(f"  [RAM Monitor] Current: {curr_ram:.2f} GB / {args.max_ram_gb:.1f} GB (Peak: {peak_ram:.2f} GB)")
-        
+
         try:
             run_paper_benchmark(
                 dataset_name=ds,
@@ -323,7 +329,7 @@ def main():
         except Exception as ex:
             print(f"\n[Warning] Dataset {ds} encountered an exception: {ex}")
             print("Saving progress and proceeding to next dataset...\n")
-            
+
         update_live_progress_report()
 
     print("\n" + "#" * 90)
@@ -354,7 +360,7 @@ def main():
             generate_latex_tables()
         except Exception as ex:
             print(f"  [Warning] Table generation error: {ex}")
-            
+
         try:
             import subprocess
             fig_script = ROOT / "scripts" / "generate_all_publication_figures.py"

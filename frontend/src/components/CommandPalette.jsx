@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Search, 
-  Command, 
-  Zap, 
-  Inbox, 
-  Share2, 
-  FileText, 
-  UserCheck, 
-  BarChart3, 
-  Sparkles, 
-  ShieldAlert, 
-  ArrowRight, 
+import {
+  Search,
+  Command,
+  Zap,
+  Inbox,
+  Share2,
+  FileText,
+  UserCheck,
+  BarChart3,
+  Sparkles,
+  ShieldAlert,
+  ArrowRight,
   X,
   Palette,
   Shield,
@@ -83,7 +83,7 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenR
     { id: 'theme-gold', category: 'Themes & Aesthetics', title: 'Switch to Swiss Private Gold Clay Theme', desc: 'Midnight navy & refined champagne gold', icon: Palette, action: () => setTheme('swiss-gold') },
 
     // Quick Compliance Actions
-    { id: 'act-role', category: 'Officer Actions', title: 'Switch Banker Persona / Branch Profile', desc: `Current: ${currentBanker.name} (${currentBanker.roleTitle})`, icon: Shield, action: () => setIsAuthModalOpen(true) },
+    { id: 'act-role', category: 'Officer Actions', title: 'Switch Banker Persona / Branch Profile', desc: `Current: ${currentBanker?.name || 'Officer'} (${currentBanker?.roleTitle || 'Compliance Officer'})`, icon: Shield, action: () => setIsAuthModalOpen(true) },
     { id: 'act-sar-fincen', category: 'Officer Actions', title: 'Generate FinCEN Form 111 XML Dossier', desc: 'Autonomous multi-agent evidence synthesis', icon: FileText, action: () => onNavigate('cases') },
   ];
 
@@ -91,7 +91,7 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenR
   const filteredCommands = commands.filter(c => {
     if (!searchTarget) return true;
     return (
-      c.title.toLowerCase().includes(searchTarget) || 
+      c.title.toLowerCase().includes(searchTarget) ||
       c.desc.toLowerCase().includes(searchTarget) ||
       c.category.toLowerCase().includes(searchTarget) ||
       (c.bic && c.bic.toLowerCase().includes(searchTarget)) ||
@@ -122,7 +122,7 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenR
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-10 sm:pt-16 px-2.5 sm:px-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div 
+      <div
         className="w-full max-w-xl bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl shadow-2xl overflow-hidden text-[var(--text-primary)] font-sans skeuo-card"
       >
         {/* Search Bar Input */}
@@ -158,8 +158,8 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenR
                   onClick={() => { cmd.action(); onClose(); }}
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`w-full flex items-center justify-between p-2 sm:p-2.5 rounded-xl text-left transition-all cursor-pointer ${
-                    isSelected 
-                      ? 'bg-gradient-to-b from-[#257843] to-[#144726] text-white border border-[#113C21] shadow-[var(--skeuo-btn)]' 
+                    isSelected
+                      ? 'bg-gradient-to-b from-[#257843] to-[#144726] text-white border border-[#113C21] shadow-[var(--skeuo-btn)]'
                       : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-[var(--text-secondary)] border border-transparent'
                   }`}
                 >

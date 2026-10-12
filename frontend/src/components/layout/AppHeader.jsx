@@ -1,15 +1,16 @@
 import React from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { 
-  Search, 
-  Command, 
-  Sun, 
-  Moon, 
-  SlidersHorizontal, 
-  UserCheck, 
-  Check, 
+import {
+  Search,
+  Command,
+  Sun,
+  Moon,
+  SlidersHorizontal,
+  UserCheck,
+  Check,
   ChevronDown,
-  ShieldAlert
+  ShieldAlert,
+  BookOpen
 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { useTheme } from '../../context/ThemeContext';
@@ -18,7 +19,7 @@ import { Breadcrumbs } from './Breadcrumbs';
 import { NotificationBell } from './NotificationBell';
 
 export const AppHeader = ({ onOpenCommandPalette }) => {
-  const { activeRoute, activeRouteParams, setRoleModalOpen, setSanctionsModalOpen } = useAppStore();
+  const { activeRoute, activeRouteParams, setRoleModalOpen, setSanctionsModalOpen, setPlainEnglishGuideOpen } = useAppStore();
   const { theme, toggleTheme, density, toggleDensity } = useTheme();
   const { currentBanker, availableBankers, switchBanker } = useAuth();
 
@@ -65,6 +66,16 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
           <Search className="w-4 h-4" />
         </button>
 
+        {/* Plain-English Beginner Guide & Jargon Buster Trigger */}
+        <button
+          onClick={() => setPlainEnglishGuideOpen(true)}
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-accent/10 hover:bg-accent/20 border border-accent/30 text-accent text-xs font-medium transition-colors cursor-pointer"
+          title="Open Plain English Guide & Jargon Buster (How Everything Works for Real-World Users)"
+        >
+          <BookOpen className="w-3.5 h-3.5 text-accent" />
+          <span className="hidden sm:inline">💡 Plain English Guide</span>
+        </button>
+
         {/* Real-Time Sanctions Screener Trigger */}
         <button
           onClick={() => setSanctionsModalOpen(true)}
@@ -104,11 +115,11 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
               title="Switch Authorized Signatory"
             >
               <div className="w-5 h-5 rounded bg-surfaceRaised text-foreground font-mono font-bold flex items-center justify-center text-[10px] border border-border">
-                {currentBanker.avatar || 'O'}
+                {currentBanker?.avatar || 'O'}
               </div>
               <div className="text-left hidden lg:block leading-tight">
-                <span className="font-semibold text-foreground text-xs block truncate max-w-[120px]">{currentBanker.name}</span>
-                <span className="text-[10px] text-muted block font-mono">{currentBanker.role}</span>
+                <span className="font-semibold text-foreground text-xs block truncate max-w-[120px]">{currentBanker?.name || 'Authorized Officer'}</span>
+                <span className="text-[10px] text-muted block font-mono">{currentBanker?.role || 'admin'}</span>
               </div>
               <ChevronDown className="w-3 h-3 text-muted" />
             </button>
@@ -129,14 +140,14 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
               {/* Signatory Options */}
               <div className="space-y-0.5">
                 {(availableBankers || []).map((b) => {
-                  const isSelected = b.id === currentBanker.id;
+                  const isSelected = b.id === currentBanker?.id;
                   return (
                     <DropdownMenu.Item
                       key={b.id}
                       onSelect={() => switchBanker(b.id)}
                       className={`w-full flex items-center justify-between p-2 rounded text-left text-xs transition-colors cursor-pointer outline-none ${
-                        isSelected 
-                          ? 'bg-accent/10 text-accent font-semibold' 
+                        isSelected
+                          ? 'bg-accent/10 text-accent font-semibold'
                           : 'hover:bg-surfaceHover text-foreground focus:bg-surfaceHover'
                       }`}
                     >

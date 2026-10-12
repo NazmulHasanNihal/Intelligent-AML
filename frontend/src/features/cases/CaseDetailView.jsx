@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import { 
-  ArrowLeft, 
-  Briefcase, 
-  Clock, 
-  ShieldCheck, 
-  UserCheck, 
-  FileText, 
-  Share2, 
-  Mail, 
-  ShieldAlert, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Plus, 
-  Send, 
-  Lock, 
-  Layers, 
-  Check, 
-  Paperclip, 
-  UploadCloud, 
-  File, 
-  Pin, 
+import {
+  ArrowLeft,
+  Briefcase,
+  Clock,
+  ShieldCheck,
+  UserCheck,
+  FileText,
+  Share2,
+  Mail,
+  ShieldAlert,
+  CheckCircle2,
+  AlertTriangle,
+  Plus,
+  Send,
+  Lock,
+  Layers,
+  Check,
+  Paperclip,
+  UploadCloud,
+  File,
+  Pin,
   PinOff,
   Sparkles,
   ExternalLink
@@ -31,14 +31,14 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 
 export const CaseDetailView = () => {
-  const { 
-    cases, 
-    selectedCaseId, 
-    navigate, 
-    addCaseNote, 
-    addCaseAttachment, 
-    fourEyesSignOffCase, 
-    addToast, 
+  const {
+    cases,
+    selectedCaseId,
+    navigate,
+    addCaseNote,
+    addCaseAttachment,
+    fourEyesSignOffCase,
+    addToast,
     openFreezeNoticeModal,
     pinEvidence,
     unpinEvidence
@@ -68,7 +68,7 @@ export const CaseDetailView = () => {
   const handleAddNote = (e) => {
     e.preventDefault();
     if (!newNoteText.trim()) return;
-    addCaseNote(activeCase.id, newNoteText.trim(), currentBanker.name);
+    addCaseNote(activeCase.id, newNoteText.trim(), currentBanker?.name || 'Authorized Officer');
     setNewNoteText('');
     addToast('Note Added', 'Internal case note appended to audit record.', 'info');
   };
@@ -84,7 +84,7 @@ export const CaseDetailView = () => {
         size: `${(file.size / 1024).toFixed(0)} KB`,
         type: file.type || 'application/octet-stream',
         uploadedAt: new Date().toISOString().substring(11, 16) + ' UTC',
-        uploadedBy: currentBanker.name
+        uploadedBy: currentBanker?.name || 'Authorized Officer'
       };
       addCaseAttachment(activeCase.id, newAtt);
       setIsUploading(false);
@@ -93,14 +93,15 @@ export const CaseDetailView = () => {
   };
 
   const handleSignOff = () => {
-    const res = fourEyesSignOffCase(activeCase.id, currentBanker.name);
+    const officerName = currentBanker?.name || 'Authorized Officer';
+    const res = fourEyesSignOffCase(activeCase.id, officerName);
     if (!res.success) {
       setApproverError(res.error);
       setTimeout(() => setApproverError(null), 5000);
       addToast('Approval Rejected', res.error, 'error');
     } else {
       setApproverError(null);
-      addToast('Four-Eyes Ratification Certified', `Dual sign-off completed by ${currentBanker.name}.`, 'success');
+      addToast('Four-Eyes Ratification Certified', `Dual sign-off completed by ${officerName}.`, 'success');
     }
   };
 
@@ -136,8 +137,8 @@ export const CaseDetailView = () => {
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-mono text-xs font-bold text-accent">{activeCase.id}</span>
-              <Badge 
-                variant={isApproved ? 'cleared' : 'critical'} 
+              <Badge
+                variant={isApproved ? 'cleared' : 'critical'}
                 size="sm"
                 dot
               >
@@ -146,10 +147,10 @@ export const CaseDetailView = () => {
 
               {/* Active Countdown Urgency Badge */}
               <span className={`px-2 py-0.5 rounded font-mono text-[11px] font-bold flex items-center gap-1 border ${
-                isApproved 
-                  ? 'bg-cleared-bg text-cleared border-cleared' 
-                  : isUrgentSla 
-                  ? 'bg-critical-bg text-critical border-critical animate-pulse' 
+                isApproved
+                  ? 'bg-cleared-bg text-cleared border-cleared'
+                  : isUrgentSla
+                  ? 'bg-critical-bg text-critical border-critical animate-pulse'
                   : 'bg-review-bg text-review border-review'
               }`}>
                 <Clock className="w-3.5 h-3.5" />
@@ -225,13 +226,13 @@ export const CaseDetailView = () => {
               const isInProg = m.status === 'in_progress';
 
               return (
-                <div 
+                <div
                   key={idx}
                   className={`p-2 rounded border transition-colors ${
-                    isDone 
-                      ? 'bg-cleared-bg/60 border-cleared text-cleared' 
-                      : isInProg 
-                      ? 'bg-accent-subtle/50 border-accent text-accent font-bold animate-pulse' 
+                    isDone
+                      ? 'bg-cleared-bg/60 border-cleared text-cleared'
+                      : isInProg
+                      ? 'bg-accent-subtle/50 border-accent text-accent font-bold animate-pulse'
                       : 'bg-bg border-border text-text-muted'
                   }`}
                 >
@@ -259,15 +260,15 @@ export const CaseDetailView = () => {
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-xs text-text">Four-Eyes Dual Control Sign-off</span>
-                <span className="font-mono text-[10px] text-text-muted">(Federal Reserve SR 11-7 / OCC 2011-12)</span>
+                <span className="font-semibold text-xs text-text">Two-Officer Sign-Off Rule (Four-Eyes Dual Control)</span>
+                <span className="font-mono text-[10px] text-text-muted">(Anti-Bribery & Error Prevention)</span>
               </div>
               <p className="text-xs text-text-2 mt-0.5">
-                Initiator: <strong className="text-text">{activeCase.fourEyesInitiator}</strong>
+                Investigator (Maker): <strong className="text-text">{activeCase.fourEyesInitiator}</strong>
                 {activeCase.fourEyesApprover ? (
-                  <> • Ratified by CCO: <strong className="text-cleared">{activeCase.fourEyesApprover}</strong></>
+                  <> • Approved by Senior Officer (Checker): <strong className="text-cleared">{activeCase.fourEyesApprover}</strong></>
                 ) : (
-                  <> • Awaiting second signatory ratification</>
+                  <> • <span className="text-review font-semibold">Awaiting second independent officer sign-off</span> (No single person can file alone)</>
                 )}
               </p>
             </div>
@@ -281,7 +282,7 @@ export const CaseDetailView = () => {
                 onClick={handleSignOff}
                 icon={Check}
               >
-                Sign Off & File SAR ({currentBanker.name.split(' ')[0]})
+                Sign Off & File SAR ({currentBanker?.name ? currentBanker.name.split(' ')[0] : 'Officer'})
               </Button>
             ) : (
               <Badge variant="cleared" size="md">
@@ -501,7 +502,7 @@ export const CaseDetailView = () => {
               subtitle="Subpoenas, MT103 receipts, and registry filings"
               badge={<Badge variant="neutral" size="sm">{activeCase.attachments?.length || 0} Files</Badge>}
             />
-            
+
             {/* Attachment Dropzone */}
             <div className="mt-3 p-3 border border-dashed border-border rounded bg-bg text-center">
               <input

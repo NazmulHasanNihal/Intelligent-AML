@@ -16,6 +16,7 @@ import { WhatIfRecourseModal } from './components/WhatIfRecourseModal';
 import { AdverseActionNoticeModal } from './components/AdverseActionNoticeModal';
 import { RoleSwitchModal } from './components/RoleSwitchModal';
 import { CoreBankingModal } from './components/CoreBankingModal';
+import { PlainEnglishGuideModal } from './components/PlainEnglishGuideModal';
 import { InspectorDrawer } from './components/ui/InspectorDrawer';
 import { CommandDialog } from './components/ui/CommandDialog';
 import { ToastContainer } from './components/ui/ToastContainer';
@@ -72,7 +73,7 @@ function MainAppShell() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       const isInput = e.target?.tagName === 'INPUT' || e.target?.tagName === 'TEXTAREA';
-      
+
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsCommandOpen(prev => !prev);
@@ -124,7 +125,9 @@ function MainAppShell() {
         <DemoBanner />
 
         {/* Dynamic Route Viewport */}
-        <main className="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto">
+        <main className={`flex-1 w-full mx-auto transition-all ${
+          activeRoute === 'network' ? 'p-2 sm:p-3 max-w-none' : 'p-4 sm:p-6 max-w-7xl'
+        }`}>
           <div key={activeRoute} className="view-transition">
             {activeRoute === 'overview' && (
               <ErrorBoundary viewName="Overview Dashboard">
@@ -219,6 +222,9 @@ function MainAppShell() {
 
       {/* Core Banking Freeze & Webhook Trigger Modal */}
       <CoreBankingModal />
+
+      {/* Beginner-Friendly Plain-English Guide & Jargon Buster Modal */}
+      <PlainEnglishGuideModal />
 
       {/* Minimalist Toast Notifications */}
       <ToastContainer />

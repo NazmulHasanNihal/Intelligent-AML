@@ -222,7 +222,7 @@ def authenticate_user(username: str, password: str) -> Optional[UserProfile]:
     hashed_input = _hash_pw(password)
     if not hmac.compare_digest(user_entry["password_hash"], hashed_input):
         return None
-    
+
     role = user_entry["role"]
     perms = ROLE_PERMISSIONS.get(role, [])
     return UserProfile(
@@ -245,13 +245,14 @@ def get_current_user(
     Provides graceful fallback to demo compliance officer if no token provided in local dev mode.
     """
     if credentials is None or not credentials.credentials:
-        if AUTH_ENFORCED and _is_prod:
+        strict_auth = os.getenv("AML_STRICT_AUTH", "false").lower() in ("true", "1", "yes")
+        if _is_prod or (AUTH_ENFORCED and strict_auth):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication credentials required in production mode.",
+                detail="Authentication credentials required in production mode." if _is_prod else "Authentication credentials required: Bearer token missing.",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        # Fallback in local/research mode to prevent breaking UI or manual test sessions
+        # Fallback in local/research mode to prevent breaking UI or manual test sessions when strict auth is off
         default_user = USER_DATABASE["compliance_officer"]
         return UserProfile(
             user_id=default_user["user_id"],
@@ -275,7 +276,7 @@ def get_current_user(
                 detail="Invalid token payload: missing subject identifier.",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        
+
         # Check against db or use payload claims
         user_entry = USER_DATABASE.get(username)
         if user_entry:
@@ -291,7 +292,7 @@ def get_current_user(
                 permissions=perms,
                 is_active=user_entry["is_active"]
             )
-        
+
         # External valid JWT token with claims
         return UserProfile(
             user_id=payload.get("uid", f"EXT-{username}"),

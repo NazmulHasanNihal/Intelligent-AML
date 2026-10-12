@@ -2,15 +2,22 @@ import os
 from pathlib import Path
 
 if os.name == "nt":
+    import sys
     _root = Path(__file__).resolve().parent.parent
-    _torch_lib = _root / "venv" / "Lib" / "site-packages" / "torch" / "lib"
-    if _torch_lib.exists():
-        os.environ["PATH"] = str(_torch_lib) + ";" + os.environ.get("PATH", "")
-        if hasattr(os, "add_dll_directory"):
-            try:
-                os.add_dll_directory(str(_torch_lib))
-            except Exception:
-                pass
+    _torch_candidates = [
+        Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib",
+        _root / ".venv" / "Lib" / "site-packages" / "torch" / "lib",
+        _root / "venv" / "Lib" / "site-packages" / "torch" / "lib",
+    ]
+    for _torch_lib in _torch_candidates:
+        if _torch_lib.exists():
+            os.environ["PATH"] = str(_torch_lib) + ";" + os.environ.get("PATH", "")
+            if hasattr(os, "add_dll_directory"):
+                try:
+                    os.add_dll_directory(str(_torch_lib))
+                except Exception:
+                    pass
+            break
 
 from .base_models import (
     HomogeneousGCN,

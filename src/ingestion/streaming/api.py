@@ -4,7 +4,13 @@ Receives live streaming transactions and publishes them to Redpanda (Kafka) for 
 """
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from confluent_kafka import Producer
+try:
+    from confluent_kafka import Producer
+    HAS_KAFKA = True
+except ImportError:
+    Producer = None
+    HAS_KAFKA = False
+
 import json
 import os
 
@@ -14,10 +20,16 @@ app = FastAPI(title="Intelligent AML - Streaming API")
 REDPANDA_BROKER = os.getenv("REDPANDA_BROKER", "localhost:9092")
 TOPIC_NAME = "aml_transactions_live"
 
-producer = Producer({
-    'bootstrap.servers': REDPANDA_BROKER,
-    'client.id': 'aml-fastapi-producer'
-})
+if HAS_KAFKA and Producer is not None:
+    try:
+        producer = Producer({
+            'bootstrap.servers': REDPANDA_BROKER,
+            'client.id': 'aml-fastapi-producer'
+        })
+    except Exception:
+        producer = None
+else:
+    producer = None
 
 class TransactionEvent(BaseModel):
     transaction_id: str
@@ -43,7 +55,7 @@ async def ingest_transaction(tx: TransactionEvent):
         # Convert Pydantic model to dict, then to JSON string
         tx_data = tx.model_dump()
         tx_json = json.dumps(tx_data)
-        
+
         # Publish to Redpanda
         producer.produce(
             topic=TOPIC_NAME,
@@ -52,7 +64,7 @@ async def ingest_transaction(tx: TransactionEvent):
             callback=delivery_report
         )
         producer.poll(0) # trigger delivery reports
-        
+
         return {"status": "success", "message": "Transaction queued for processing."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -60,4 +72,5 @@ async def ingest_transaction(tx: TransactionEvent):
 @app.on_event("shutdown")
 def shutdown_event():
     # Flush remaining messages before shutting down
-    producer.flush(10)
+    if producer is not None:
+        producer.flush(10)

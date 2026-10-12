@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Play, 
-  Copy, 
-  Download, 
-  Check, 
-  Shield, 
-  Terminal, 
-  FileCode, 
-  CheckCircle2, 
-  FileText, 
-  Sparkles, 
-  RefreshCw, 
-  Clock, 
-  ShieldCheck, 
+import {
+  Play,
+  Copy,
+  Download,
+  Check,
+  Shield,
+  Terminal,
+  FileCode,
+  CheckCircle2,
+  FileText,
+  Sparkles,
+  RefreshCw,
+  Clock,
+  ShieldCheck,
   Hash,
   GitCommit,
   CheckCheck,
@@ -37,10 +37,14 @@ import { runAgentInvestigation } from '../api/client';
 
 export const MultiAgentSARWorkbench = ({ activeCase, onOpenNoticeModal, onOpenActionModal }) => {
   const { currentBanker, logBankerAction } = useAuth();
-  
+  const bankerName = currentBanker?.name || 'Nazmul Hasan, CAMS';
+  const bankerTitle = currentBanker?.roleTitle || 'Chief Compliance Officer (CCO)';
+  const bankerId = currentBanker?.id || 'BNK-7842';
+  const bankerInstitution = currentBanker?.institution || 'JPMorgan Chase & Co.';
+
   // Jurisdiction Selector: 'FINCEN' (US) | 'GOAML' (UN/UK/UAE) | 'BFIU' (Bangladesh)
   const [selectedJurisdiction, setSelectedJurisdiction] = useState('FINCEN');
-  
+
   // View Format: 'NARRATIVE' | 'XML_PAYLOAD' | 'EVIDENCE_AUDIT'
   const [viewFormat, setViewFormat] = useState('NARRATIVE');
 
@@ -122,7 +126,7 @@ export const MultiAgentSARWorkbench = ({ activeCase, onOpenNoticeModal, onOpenAc
     if (activeCase) {
       const accId = activeCase.accountNumber || activeCase.src || activeCase.srcId || activeCase.id || 'US-JPMC-4829-1092-8823';
       const name = activeCase.holderName || activeCase.name || 'Apex Global Logistics Ltd';
-      const bank = activeCase.institution || activeCase.bank || currentBanker.institution;
+      const bank = activeCase.institution || activeCase.bank || bankerInstitution;
       const amt = activeCase.amount || 48500.00;
       setTargetAccount({
         accountNumber: accId,
@@ -131,7 +135,7 @@ export const MultiAgentSARWorkbench = ({ activeCase, onOpenNoticeModal, onOpenAc
         amount: amt
       });
     }
-  }, [activeCase, currentBanker.institution]);
+  }, [activeCase, bankerInstitution]);
 
   // Jurisdiction-Specific Configurations
   const JURISDICTION_SPECS = {
@@ -170,7 +174,7 @@ export const MultiAgentSARWorkbench = ({ activeCase, onOpenNoticeModal, onOpenAc
   const fincenNarrative = `================================================================================
 CONFIDENTIAL LAW ENFORCEMENT DOCUMENT — REGULATORY FILING
 SUSPICIOUS ACTIVITY REPORT (SAR) NARRATIVE
-Reporting Financial Institution: ${currentBanker.institution} (RSSD ID: 000852218)
+Reporting Financial Institution: ${bankerInstitution} (RSSD ID: 000852218)
 Filing Jurisdiction: United States — FinCEN Form 111 (31 CFR § 1020.320)
 Document Status: AI Draft v1.1 [Verified by Senior Investigator | Pending Final CCO Sign-Off]
 ================================================================================
@@ -183,7 +187,7 @@ PART I: SUBJECT IDENTIFICATION
 • Beneficial Ownership (UBO): Registered signatory Dmitry Rostov (51% equity interest).
 
 PART II: SUMMARY OF SUSPICIOUS ACTIVITY
-On September 2, 2026, between 08:10 UTC and 08:31 UTC, ${currentBanker.institution} identified an acute circular funds transfer sequence totaling $${targetAccount.amount.toLocaleString()} USD originating from and terminating at the account of ${targetAccount.holderName}. The funds traversed multiple corporate and retail accounts across four distinct banking corridors within twenty-one (21) minutes without apparent economic substance, commercial rationale, or legitimate business purpose.
+On September 2, 2026, between 08:10 UTC and 08:31 UTC, ${bankerInstitution} identified an acute circular funds transfer sequence totaling $${targetAccount.amount.toLocaleString()} USD originating from and terminating at the account of ${targetAccount.holderName}. The funds traversed multiple corporate and retail accounts across four distinct banking corridors within twenty-one (21) minutes without apparent economic substance, commercial rationale, or legitimate business purpose.
 
 PART III: CHRONOLOGICAL TRANSACTION TRAIL
 1. Step 1 (08:10:14 UTC): Outbound SWIFT Wire MT103 [Ref: #994821] in the amount of $${targetAccount.amount.toLocaleString()} USD debited from ${targetAccount.holderName} (${targetAccount.accountNumber}) and transmitted to Barclays Bank PLC (London, UK) beneficiary Elena Rostova (Account: GB-BARC-1109-8832-9011).
@@ -208,7 +212,7 @@ The described transactions exhibit classical indicators of Trade-Based Money Lau
 ================================================================================
 FOUR-EYES GOVERNANCE & HUMAN SIGN-OFF RECORD
 • Prepared by: Sarah L. Jenkins, CFE (Senior AML Investigator, SIU)
-• Reviewed & Authorized by: ${currentBanker.name} (${currentBanker.roleTitle})
+• Reviewed & Authorized by: ${bankerName} (${bankerTitle})
 • Cryptographic Ledger Root: 9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d
 • Retention Schedule: 5 Years pursuant to 31 CFR § 1010.430 (WORM Storage Policy Active)
 ================================================================================`;
@@ -216,12 +220,12 @@ FOUR-EYES GOVERNANCE & HUMAN SIGN-OFF RECORD
   const goAMLNarrative = `================================================================================
 UNODC goAML v4.0 — SUSPICIOUS TRANSACTION REPORT (STR)
 National Financial Intelligence Unit (FIU) Electronic Transmission
-Reporting Entity: ${currentBanker.institution} | Reporting Officer ID: ${currentBanker.id}
+Reporting Entity: ${bankerInstitution} | Reporting Officer ID: ${bankerId}
 Statutory Basis: FATF Recommendation 20 / National AML Enforcement Directives
 ================================================================================
 
 1. REPORTING PARTY DETAILS:
-   • Reporting Institution: ${currentBanker.institution}
+   • Reporting Institution: ${bankerInstitution}
    • Branch / Desk: Global Financial Crimes & Special Investigations Unit
    • FIU Registration Number: FIU-US-00852218
 
@@ -242,19 +246,19 @@ Statutory Basis: FATF Recommendation 20 / National AML Enforcement Directives
 
 5. SIGNATORY VERIFICATION:
    • Senior Compliance Investigator: Sarah L. Jenkins, CFE
-   • Authorizing MLRO: ${currentBanker.name}, CAMS
+   • Authorizing MLRO: ${bankerName}, CAMS
    • Tamper-Evident SHA-256 Receipt: 9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d`;
 
   const bfiuNarrative = `================================================================================
 BANGLADESH FINANCIAL INTELLIGENCE UNIT (BFIU)
 SUSPICIOUS TRANSACTION REPORT (STR) — FORM STR-2 (INSTITUTIONAL)
 Submission under Section 25(1)(c) of the Money Laundering Prevention Act, 2012
-Reporting Entity: ${currentBanker.institution}
+Reporting Entity: ${bankerInstitution}
 ================================================================================
 
 1. REPORTING ENTITY DETAILS:
-   • Organization Name: ${currentBanker.institution}
-   • Designated Anti-Money Laundering Compliance Officer (CAMLCO): ${currentBanker.name}, CAMS
+   • Organization Name: ${bankerInstitution}
+   • Designated Anti-Money Laundering Compliance Officer (CAMLCO): ${bankerName}, CAMS
    • BFIU Registration Code: BFIU-RE-2026-0814
 
 2. TRANSACTION PARTICULARS:
@@ -275,13 +279,13 @@ Reporting Entity: ${currentBanker.institution}
    I hereby declare that this report is submitted in good faith and that tipping-off safeguards under Section 25(2) of the MLPA 2012 have been enforced.
 
    Submitted by:
-   ${currentBanker.name} (${currentBanker.roleTitle})
+   ${bankerName} (${bankerTitle})
    Chief Anti-Money Laundering Officer`;
 
   const fincenXML = `<?xml version="1.0" encoding="UTF-8"?>
 <FinCENSAR version="1.2" xmlns="http://www.fincen.gov/sar">
   <Header>
-    <FilingInstitution>${currentBanker.institution}</FilingInstitution>
+    <FilingInstitution>${bankerInstitution}</FilingInstitution>
     <TransmissionDate>${new Date().toISOString()}</TransmissionDate>
     <RegulatoryCitation>31 CFR § 1020.320</RegulatoryCitation>
     <Jurisdiction>USA</Jurisdiction>
@@ -301,17 +305,17 @@ Reporting Entity: ${currentBanker.institution}
   </Chronology>
   <Governance>
     <PreparedBy>Sarah L. Jenkins, CFE (Senior Investigator)</PreparedBy>
-    <AuthorizedBy>${currentBanker.name} (${currentBanker.roleTitle})</AuthorizedBy>
+    <AuthorizedBy>${bankerName} (${bankerTitle})</AuthorizedBy>
     <FourEyesVerified>true</FourEyesVerified>
     <MerkleRootHash>9f8e4b7a12c85d6e3f019a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d</MerkleRootHash>
     <WORMStoragePolicy>SEC 17a-4 / FINRA 4511 Compliant (5-Year Minimum)</WORMStoragePolicy>
   </Governance>
 </FinCENSAR>`;
 
-  const activeNarrative = selectedJurisdiction === 'FINCEN' 
-    ? fincenNarrative 
-    : selectedJurisdiction === 'GOAML' 
-    ? goAMLNarrative 
+  const activeNarrative = selectedJurisdiction === 'FINCEN'
+    ? fincenNarrative
+    : selectedJurisdiction === 'GOAML'
+    ? goAMLNarrative
     : bfiuNarrative;
 
   useEffect(() => {
@@ -395,7 +399,7 @@ Reporting Entity: ${currentBanker.institution}
     setComments(prev => [
       ...prev,
       {
-        author: `${currentBanker.name} (${currentBanker.roleTitle})`,
+        author: `${bankerName} (${bankerTitle})`,
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }) + ' UTC',
         text: newComment.trim()
       }
@@ -411,7 +415,7 @@ Reporting Entity: ${currentBanker.institution}
       targetAccount: targetAccount.accountNumber,
       reason: `Dual-control authorization executed for ${currentSpec.name} filing ($${targetAccount.amount.toLocaleString()}).`,
       initiatorName: 'Sarah L. Jenkins, CFE (Senior Investigator)',
-      approverName: `${currentBanker.name} (${currentBanker.roleTitle})`,
+      approverName: `${bankerName} (${bankerTitle})`,
       reasonCode: 'FOUR_EYES_SAR_APPROVAL',
       fourEyesVerified: true
     });
@@ -419,7 +423,7 @@ Reporting Entity: ${currentBanker.institution}
 
   return (
     <div className="space-y-2.5 font-sans text-[var(--text-primary)] min-w-0">
-      
+
       {/* Top Banner: Institutional Compliance Workspace */}
       <div className="p-2.5 sm:p-3 rounded-xl skeuo-card flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5 text-xs">
         <div className="flex items-center gap-2.5 min-w-0">
@@ -481,7 +485,7 @@ Reporting Entity: ${currentBanker.institution}
         <div className="flex items-center gap-2">
           <Globe className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />
           <span className="text-[var(--text-muted)] font-bold">FILING JURISDICTION:</span>
-          
+
           <div className="flex items-center gap-1 bg-[var(--bg-base)] p-0.5 rounded-lg border border-[var(--border-subtle)]">
             <button
               onClick={() => setSelectedJurisdiction('FINCEN')}
@@ -529,10 +533,10 @@ Reporting Entity: ${currentBanker.institution}
 
       {/* Main Side-by-Side Workspace */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-2.5 sm:gap-3">
-        
+
         {/* Left Column (5 Cols): Evidence Chronicle & Expandable Agent Reasoning */}
         <div className="xl:col-span-5 space-y-2.5">
-          
+
           {/* Target Account Summary Card */}
           <div className="skeuo-card p-2.5 sm:p-3 space-y-2 font-sans">
             <div className="flex items-center justify-between pb-1.5 border-b border-[var(--border-subtle)]">
@@ -590,7 +594,7 @@ Reporting Entity: ${currentBanker.institution}
                 const isExpanded = expandedAgent === i;
                 return (
                   <div key={agent.id} className="rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] p-2 space-y-1 transition-all">
-                    <div 
+                    <div
                       onClick={() => setExpandedAgent(isExpanded ? null : i)}
                       className="flex items-center justify-between cursor-pointer text-[11px]"
                     >
@@ -633,29 +637,29 @@ Reporting Entity: ${currentBanker.institution}
 
             <div className="space-y-1.5 text-[11px]">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={checklist.subjectIdentified} 
+                <input
+                  type="checkbox"
+                  checked={checklist.subjectIdentified}
                   onChange={(e) => setChecklist(prev => ({ ...prev, subjectIdentified: e.target.checked }))}
-                  className="accent-[var(--accent-primary)]" 
+                  className="accent-[var(--accent-primary)]"
                 />
                 <span className="text-[var(--text-secondary)]">Subject identity verified via core banking KYC records</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={checklist.amountsReconciled} 
+                <input
+                  type="checkbox"
+                  checked={checklist.amountsReconciled}
                   onChange={(e) => setChecklist(prev => ({ ...prev, amountsReconciled: e.target.checked }))}
-                  className="accent-[var(--accent-primary)]" 
+                  className="accent-[var(--accent-primary)]"
                 />
                 <span className="text-[var(--text-secondary)]">All 4 transaction leg amounts reconciled ($48,500 total exposure)</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={checklist.tippingOffSafeguardActive} 
+                <input
+                  type="checkbox"
+                  checked={checklist.tippingOffSafeguardActive}
                   onChange={(e) => setChecklist(prev => ({ ...prev, tippingOffSafeguardActive: e.target.checked }))}
-                  className="accent-[var(--accent-primary)]" 
+                  className="accent-[var(--accent-primary)]"
                 />
                 <span className="text-[var(--text-secondary)]">Anti-Tipping-Off protocols enforced (31 U.S.C. § 5318(g)(2))</span>
               </label>
@@ -666,7 +670,7 @@ Reporting Entity: ${currentBanker.institution}
                 onClick={handleAuthorizeFourEyes}
                 disabled={checklist.fourEyesApproved}
                 className={`w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                  checklist.fourEyesApproved 
+                  checklist.fourEyesApproved
                     ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/40 cursor-default'
                     : 'skeuo-btn skeuo-btn-primary'
                 }`}
@@ -681,7 +685,7 @@ Reporting Entity: ${currentBanker.institution}
 
         {/* Right Column (7 Cols): Editable Side-by-Side Narrative & Version History */}
         <div className="xl:col-span-7 skeuo-card p-2.5 sm:p-3 flex flex-col justify-between font-sans">
-          
+
           <div className="space-y-2">
             {/* Workbench Sub-Header: Version Tabs & View Formats */}
             <div className="flex flex-wrap items-center justify-between pb-2 border-b border-[var(--border-subtle)] gap-2">
@@ -732,8 +736,8 @@ Reporting Entity: ${currentBanker.institution}
                 <button
                   onClick={() => setIsEditable(prev => !prev)}
                   className={`px-2 py-1 rounded-md text-[10px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
-                    isEditable 
-                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' 
+                    isEditable
+                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                       : 'border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                   }`}
                 >

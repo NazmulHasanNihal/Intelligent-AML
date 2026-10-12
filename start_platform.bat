@@ -10,10 +10,10 @@ echo.
 cd /d "%~dp0"
 
 echo [1/2] Launching High-Throughput FastAPI Streaming Backend (Port 8000)...
-if exist ".\venv\Scripts\python.exe" (
-    start "Intelligent-AML Backend" cmd /k ".\venv\Scripts\python.exe -m uvicorn src.engine.api:app --host 127.0.0.1 --port 8000 --reload"
-) else if exist ".\.venv\Scripts\python.exe" (
+if exist ".\.venv\Scripts\python.exe" (
     start "Intelligent-AML Backend" cmd /k ".\.venv\Scripts\python.exe -m uvicorn src.engine.api:app --host 127.0.0.1 --port 8000 --reload"
+) else if exist ".\venv\Scripts\python.exe" (
+    start "Intelligent-AML Backend" cmd /k ".\venv\Scripts\python.exe -m uvicorn src.engine.api:app --host 127.0.0.1 --port 8000 --reload"
 ) else (
     start "Intelligent-AML Backend" cmd /k "python -m uvicorn src.engine.api:app --host 127.0.0.1 --port 8000 --reload"
 )

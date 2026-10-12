@@ -8,8 +8,8 @@ Write-Host "====================================================================
 
 $RepoRoot = Resolve-Path "$PSScriptRoot\.."
 
-Write-Host "`n[1/2] Starting FastAPI Backend on http://127.0.0.1:8000..." -ForegroundColor Yellow
-Start-Process -FilePath "powershell.exe" -ArgumentList "-NoExit", "-Command", "Set-Location '$RepoRoot'; .\venv\Scripts\python.exe -m uvicorn src.engine.api:app --host 127.0.0.1 --port 8000 --reload"
+$PythonExe = if (Test-Path "$RepoRoot\.venv\Scripts\python.exe") { "$RepoRoot\.venv\Scripts\python.exe" } elseif (Test-Path "$RepoRoot\venv\Scripts\python.exe") { "$RepoRoot\venv\Scripts\python.exe" } else { "python" }
+Start-Process -FilePath "powershell.exe" -ArgumentList "-NoExit", "-Command", "Set-Location '$RepoRoot'; & '$PythonExe' -m uvicorn src.engine.api:app --host 127.0.0.1 --port 8000 --reload"
 
 Write-Host "[2/2] Starting React 18 + Vite Web Dashboard on http://localhost:3000..." -ForegroundColor Yellow
 Start-Process -FilePath "powershell.exe" -ArgumentList "-NoExit", "-Command", "Set-Location '$RepoRoot\frontend'; npm run dev"

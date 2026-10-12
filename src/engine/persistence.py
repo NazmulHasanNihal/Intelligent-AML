@@ -119,6 +119,8 @@ class RFIRecord(BaseModel):
     requested_by: str
 
 
+import threading
+
 class IntelligentAMLDatabase:
     """
     In-memory / SQLite / Postgres persistence layer ensuring relational integrity,
@@ -130,10 +132,19 @@ class IntelligentAMLDatabase:
         default_db.parent.mkdir(parents=True, exist_ok=True)
         self.db_path = db_path or str(default_db)
         self.db_url = os.getenv("DATABASE_URL")
+        self.lock = threading.RLock()
         self.pg_engine = None
         if self.db_url and HAS_SQLALCHEMY and ("postgresql" in self.db_url or "postgres" in self.db_url):
             try:
-                self.pg_engine = create_engine(self.db_url, pool_pre_ping=True)
+                # Production enterprise PostgreSQL connection pooling
+                self.pg_engine = create_engine(
+                    self.db_url,
+                    pool_size=int(os.getenv("DB_POOL_SIZE", "20")),
+                    max_overflow=int(os.getenv("DB_MAX_OVERFLOW", "10")),
+                    pool_timeout=int(os.getenv("DB_POOL_TIMEOUT", "30")),
+                    pool_recycle=int(os.getenv("DB_POOL_RECYCLE", "1800")),
+                    pool_pre_ping=True
+                )
                 self._init_postgres_schema()
             except Exception:
                 self.pg_engine = None
@@ -189,69 +200,241 @@ class IntelligentAMLDatabase:
     def _init_sqlite_schema(self):
         """Initializes relational tables for cases, audit ledger, and RFI requests."""
         try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS cases (
-                    id TEXT PRIMARY KEY,
-                    title TEXT,
-                    target_account TEXT,
-                    status TEXT,
-                    priority TEXT,
-                    exposure_usd REAL,
-                    cstgb_risk_score REAL,
-                    initiator TEXT,
-                    lead_assignee TEXT,
-                    second_approver TEXT,
-                    data_json TEXT
-                )
-            """)
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS audit_ledger (
-                    block_index INTEGER PRIMARY KEY,
-                    prev_hash TEXT,
-                    curr_hash TEXT,
-                    timestamp TEXT,
-                    event_type TEXT,
-                    actor TEXT,
-                    payload_json TEXT
-                )
-            """)
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS rfi_requests (
-                    id TEXT PRIMARY KEY,
-                    case_id TEXT,
-                    target_account TEXT,
-                    entity_name TEXT,
-                    status TEXT,
-                    data_json TEXT
-                )
-            """)
-            conn.commit()
-            conn.close()
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS cases (
+                        id TEXT PRIMARY KEY,
+                        title TEXT,
+                        target_account TEXT,
+                        status TEXT,
+                        priority TEXT,
+                        exposure_usd REAL,
+                        cstgb_risk_score REAL,
+                        initiator TEXT,
+                        lead_assignee TEXT,
+                        second_approver TEXT,
+                        data_json TEXT
+                    )
+                """)
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS audit_ledger (
+                        block_index INTEGER PRIMARY KEY,
+                        prev_hash TEXT,
+                        curr_hash TEXT,
+                        timestamp TEXT,
+                        event_type TEXT,
+                        actor TEXT,
+                        payload_json TEXT
+                    )
+                """)
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS rfi_requests (
+                        id TEXT PRIMARY KEY,
+                        case_id TEXT,
+                        target_account TEXT,
+                        entity_name TEXT,
+                        status TEXT,
+                        data_json TEXT
+                    )
+                """)
+                conn.commit()
         except Exception:
             pass
 
+    def _sync_case_to_db(self, case: CaseRecord):
+        """Synchronizes case state to SQLite and PostgreSQL (write-through persistence)."""
+        data_json = case.model_dump_json()
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO cases (id, title, target_account, status, priority,
+                                       exposure_usd, cstgb_risk_score, initiator,
+                                       lead_assignee, second_approver, data_json)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(id) DO UPDATE SET
+                        title=excluded.title,
+                        target_account=excluded.target_account,
+                        status=excluded.status,
+                        priority=excluded.priority,
+                        exposure_usd=excluded.exposure_usd,
+                        cstgb_risk_score=excluded.cstgb_risk_score,
+                        initiator=excluded.initiator,
+                        lead_assignee=excluded.lead_assignee,
+                        second_approver=excluded.second_approver,
+                        data_json=excluded.data_json
+                """, (
+                    case.id, case.title, case.target_account, case.status, case.priority,
+                    case.exposure_usd, case.cstgb_risk_score, case.initiator,
+                    case.lead_assignee, case.second_approver, data_json
+                ))
+                conn.commit()
+        except Exception:
+            pass
+
+        if self.pg_engine:
+            try:
+                with self.pg_engine.begin() as conn:
+                    conn.execute(text("""
+                        INSERT INTO cases (id, title, target_account, status, priority,
+                                           exposure_usd, cstgb_risk_score, initiator,
+                                           lead_assignee, second_approver, data_json)
+                        VALUES (:id, :title, :target_account, :status, :priority,
+                                :exposure_usd, :cstgb_risk_score, :initiator,
+                                :lead_assignee, :second_approver, :data_json)
+                        ON CONFLICT(id) DO UPDATE SET
+                            title=EXCLUDED.title,
+                            target_account=EXCLUDED.target_account,
+                            status=EXCLUDED.status,
+                            priority=EXCLUDED.priority,
+                            exposure_usd=EXCLUDED.exposure_usd,
+                            cstgb_risk_score=EXCLUDED.cstgb_risk_score,
+                            initiator=EXCLUDED.initiator,
+                            lead_assignee=EXCLUDED.lead_assignee,
+                            second_approver=EXCLUDED.second_approver,
+                            data_json=EXCLUDED.data_json
+                    """), {
+                        "id": case.id, "title": case.title, "target_account": case.target_account,
+                        "status": case.status, "priority": case.priority, "exposure_usd": case.exposure_usd,
+                        "cstgb_risk_score": case.cstgb_risk_score, "initiator": case.initiator,
+                        "lead_assignee": case.lead_assignee, "second_approver": case.second_approver,
+                        "data_json": data_json
+                    })
+            except Exception:
+                pass
+
+    def _sync_audit_to_db(self, block: AuditBlock):
+        """Synchronizes an immutable block to SQLite and PostgreSQL."""
+        payload_json = json.dumps(block.payload)
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT OR REPLACE INTO audit_ledger (block_index, prev_hash, curr_hash, timestamp, event_type, actor, payload_json)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    block.index, block.prev_hash, block.curr_hash, block.timestamp,
+                    block.event_type, block.actor, payload_json
+                ))
+                conn.commit()
+        except Exception:
+            pass
+
+        if self.pg_engine:
+            try:
+                with self.pg_engine.begin() as conn:
+                    conn.execute(text("""
+                        INSERT INTO audit_ledger (block_index, prev_hash, curr_hash, timestamp, event_type, actor, payload_json)
+                        VALUES (:block_index, :prev_hash, :curr_hash, :timestamp, :event_type, :actor, :payload_json)
+                        ON CONFLICT(block_index) DO NOTHING
+                    """), {
+                        "block_index": block.index, "prev_hash": block.prev_hash, "curr_hash": block.curr_hash,
+                        "timestamp": block.timestamp, "event_type": block.event_type, "actor": block.actor,
+                        "payload_json": payload_json
+                    })
+            except Exception:
+                pass
+
+    def _sync_rfi_to_db(self, rfi: RFIRecord):
+        """Synchronizes an RFI record to SQLite and PostgreSQL."""
+        data_json = rfi.model_dump_json()
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO rfi_requests (id, case_id, target_account, entity_name, status, data_json)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(id) DO UPDATE SET
+                        case_id=excluded.case_id,
+                        target_account=excluded.target_account,
+                        entity_name=excluded.entity_name,
+                        status=excluded.status,
+                        data_json=excluded.data_json
+                """, (rfi.id, rfi.case_id, rfi.target_account, rfi.entity_name, rfi.status, data_json))
+                conn.commit()
+        except Exception:
+            pass
+
+    def create_case(self, case: CaseRecord) -> CaseRecord:
+        """Creates a new case docket, syncs to relational store, and logs audit block."""
+        with self.lock:
+            self.cases[case.id] = case
+            self._sync_case_to_db(case)
+            self.append_audit_event(
+                event_type="CASE_CREATED",
+                actor=case.initiator,
+                payload={"case_id": case.id, "title": case.title, "exposure_usd": case.exposure_usd}
+            )
+            return case
+
+    def add_case_note(self, case_id: str, author: str, role: str, text: str) -> Dict[str, Any]:
+        """Appends an internal note to the case docket and syncs to relational store."""
+        with self.lock:
+            if case_id not in self.cases:
+                raise KeyError(f"Case '{case_id}' not found.")
+            case = self.cases[case_id]
+            note_id = f"N_{len(case.notes) + 1}"
+            note_obj = {
+                "id": note_id,
+                "author": author,
+                "role": role,
+                "timestamp": time.strftime("%Y-%m-%d %H:%M UTC"),
+                "text": text
+            }
+            case.notes.append(note_obj)
+            self._sync_case_to_db(case)
+            self.append_audit_event(
+                event_type="CASE_NOTE_ADDED",
+                actor=author,
+                payload={"case_id": case_id, "note_id": note_id, "text_preview": text[:60]}
+            )
+            return note_obj
+
+    def update_case_status(self, case_id: str, new_status: str, actor: str, reason: Optional[str] = None) -> CaseRecord:
+        """Updates case status, records timeline entry, and syncs to relational store."""
+        with self.lock:
+            if case_id not in self.cases:
+                raise KeyError(f"Case '{case_id}' not found.")
+            case = self.cases[case_id]
+            old_status = case.status
+            case.status = new_status
+            case.timeline.append({
+                "timestamp": time.strftime("%Y-%m-%d %H:%M UTC"),
+                "event": f"Status updated from {old_status} to {new_status}" + (f": {reason}" if reason else ""),
+                "actor": actor,
+                "type": "status_change"
+            })
+            self._sync_case_to_db(case)
+            self.append_audit_event(
+                event_type="CASE_STATUS_UPDATED",
+                actor=actor,
+                payload={"case_id": case_id, "old_status": old_status, "new_status": new_status, "reason": reason}
+            )
+            return case
+
     def add_case_attachment(self, case_id: str, filename: str, file_type: str, file_size: str, uploaded_by: str) -> Dict[str, Any]:
         """Attaches an external evidentiary exhibit or subpoena document and logs audit trail."""
-        if case_id not in self.cases:
-            raise KeyError(f"Case '{case_id}' not found.")
-        att_id = f"ATT_{len(self.cases[case_id].attachments) + 1}"
-        att_obj = {
-            "id": att_id,
-            "filename": filename,
-            "file_type": file_type,
-            "file_size": file_size,
-            "uploaded_by": uploaded_by,
-            "uploaded_at": time.strftime("%Y-%m-%d %H:%M UTC")
-        }
-        self.cases[case_id].attachments.append(att_obj)
-        self.append_audit_event(
-            event_type="CASE_ATTACHMENT_UPLOADED",
-            actor=uploaded_by,
-            payload={"case_id": case_id, "attachment_id": att_id, "filename": filename}
-        )
-        return att_obj
+        with self.lock:
+            if case_id not in self.cases:
+                raise KeyError(f"Case '{case_id}' not found.")
+            att_id = f"ATT_{len(self.cases[case_id].attachments) + 1}"
+            att_obj = {
+                "id": att_id,
+                "filename": filename,
+                "file_type": file_type,
+                "file_size": file_size,
+                "uploaded_by": uploaded_by,
+                "uploaded_at": time.strftime("%Y-%m-%d %H:%M UTC")
+            }
+            self.cases[case_id].attachments.append(att_obj)
+            self._sync_case_to_db(self.cases[case_id])
+            self.append_audit_event(
+                event_type="CASE_ATTACHMENT_UPLOADED",
+                actor=uploaded_by,
+                payload={"case_id": case_id, "attachment_id": att_id, "filename": filename}
+            )
+            return att_obj
 
     def _init_genesis_block(self):
         genesis = AuditBlock(
@@ -263,101 +446,108 @@ class IntelligentAMLDatabase:
             payload={"system": "Intelligent-AML C-STGB", "standard": "FRE 902(11) / SEC 17a-4"}
         )
         self.audit_chain.append(genesis)
+        self._sync_audit_to_db(genesis)
 
     def append_audit_event(self, event_type: str, actor: str, payload: Dict[str, Any]) -> AuditBlock:
-        prev_hash = self.audit_chain[-1].curr_hash
-        new_block = AuditBlock(
-            index=len(self.audit_chain),
-            prev_hash=prev_hash,
-            timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            event_type=event_type,
-            actor=actor,
-            payload=payload
-        )
-        self.audit_chain.append(new_block)
-        return new_block
+        with self.lock:
+            prev_hash = self.audit_chain[-1].curr_hash if self.audit_chain else "0" * 64
+            new_block = AuditBlock(
+                index=len(self.audit_chain),
+                prev_hash=prev_hash,
+                timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                event_type=event_type,
+                actor=actor,
+                payload=payload
+            )
+            self.audit_chain.append(new_block)
+            self._sync_audit_to_db(new_block)
+            return new_block
 
     def verify_audit_chain(self) -> Dict[str, Any]:
         """
         Cryptographically validates every link in the append-only ledger.
         Returns verifiable proof receipt under Federal Rule of Evidence 902(11).
         """
-        for i in range(1, len(self.audit_chain)):
-            prev = self.audit_chain[i - 1]
-            curr = self.audit_chain[i]
+        with self.lock:
+            for i in range(1, len(self.audit_chain)):
+                prev = self.audit_chain[i - 1]
+                curr = self.audit_chain[i]
 
-            # Check 1: Pointer integrity
-            if curr.prev_hash != prev.curr_hash:
-                return {
-                    "is_valid": False,
-                    "broken_block_index": curr.index,
-                    "error": f"Pointer mismatch at block {curr.index}: expected {prev.curr_hash[:16]}..., got {curr.prev_hash[:16]}..."
-                }
+                # Check 1: Pointer integrity
+                if curr.prev_hash != prev.curr_hash:
+                    return {
+                        "is_valid": False,
+                        "broken_block_index": curr.index,
+                        "error": f"Pointer mismatch at block {curr.index}: expected {prev.curr_hash[:16]}..., got {curr.prev_hash[:16]}..."
+                    }
 
-            # Check 2: Content integrity
-            expected_hash = curr.calculate_hash()
-            if curr.curr_hash != expected_hash:
-                return {
-                    "is_valid": False,
-                    "broken_block_index": curr.index,
-                    "error": f"Payload tampering at block {curr.index}: hash {curr.curr_hash[:16]}... != calculated {expected_hash[:16]}..."
-                }
+                # Check 2: Content integrity
+                expected_hash = curr.calculate_hash()
+                if curr.curr_hash != expected_hash:
+                    return {
+                        "is_valid": False,
+                        "broken_block_index": curr.index,
+                        "error": f"Payload tampering at block {curr.index}: hash {curr.curr_hash[:16]}... != calculated {expected_hash[:16]}..."
+                    }
 
-        return {
-            "is_valid": True,
-            "total_blocks": len(self.audit_chain),
-            "root_hash": self.audit_chain[0].curr_hash,
-            "head_hash": self.audit_chain[-1].curr_hash,
-            "verification_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "status": "CRYPTOGRAPHICALLY_VERIFIED"
-        }
+            return {
+                "is_valid": True,
+                "total_blocks": len(self.audit_chain),
+                "root_hash": self.audit_chain[0].curr_hash,
+                "head_hash": self.audit_chain[-1].curr_hash,
+                "verification_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "status": "CRYPTOGRAPHICALLY_VERIFIED"
+            }
 
     def sign_off_case(self, case_id: str, approver: str, notes: str) -> CaseRecord:
         """
         Enforces Four-Eyes Dual Control (OCC 2011-12 / Federal Reserve SR 11-7).
         Strictly rejects approval if the approver is the case initiator.
         """
-        if case_id not in self.cases:
-            raise KeyError(f"Case {case_id} not found.")
+        with self.lock:
+            if case_id not in self.cases:
+                raise KeyError(f"Case {case_id} not found.")
 
-        case = self.cases[case_id]
+            case = self.cases[case_id]
+            clean_approver = approver.split("(")[0].strip().lower()
+            clean_initiator = case.initiator.split("(")[0].strip().lower()
+            if clean_approver == clean_initiator or approver.strip().lower() == case.initiator.strip().lower():
+                raise PermissionError(
+                    f"Four-Eyes Dual Control violation: Initiator '{case.initiator}' cannot ratify their own filing. "
+                    "Second independent compliance officer approval required by OCC 2011-12 / FINRA Rule 3110."
+                )
 
-        if approver.strip().lower() == case.initiator.strip().lower():
-            raise PermissionError(
-                f"Four-Eyes Dual Control violation: Initiator '{case.initiator}' cannot ratify their own filing. "
-                "Second independent compliance officer approval required by OCC 2011-12 / FINRA Rule 3110."
+            case.second_approver = approver
+            case.status = "APPROVED"
+            case.timeline.append({
+                "timestamp": time.strftime("%Y-%m-%d %H:%M UTC"),
+                "event": f"Second-Signer Dual Approval granted by {approver}",
+                "actor": approver,
+                "type": "sign_off"
+            })
+            case.notes.append({
+                "id": f"N_{len(case.notes) + 1}",
+                "author": approver,
+                "role": "MLRO / Compliance Signatory",
+                "timestamp": time.strftime("%Y-%m-%d %H:%M UTC"),
+                "text": f"[DUAL_APPROVAL]: {notes}"
+            })
+            self._sync_case_to_db(case)
+
+            # Append immutable audit entry
+            self.append_audit_event(
+                event_type="FOUR_EYES_DUAL_SIGNOFF",
+                actor=approver,
+                payload={
+                    "case_id": case.id,
+                    "initiator": case.initiator,
+                    "approver": approver,
+                    "notes": notes,
+                    "exposure_usd": case.exposure_usd
+                }
             )
 
-        case.second_approver = approver
-        case.status = "APPROVED"
-        case.timeline.append({
-            "timestamp": time.strftime("%Y-%m-%d %H:%M UTC"),
-            "event": f"Second-Signer Dual Approval granted by {approver}",
-            "actor": approver,
-            "type": "sign_off"
-        })
-        case.notes.append({
-            "id": f"N_{len(case.notes) + 1}",
-            "author": approver,
-            "role": "MLRO / Compliance Signatory",
-            "timestamp": time.strftime("%Y-%m-%d %H:%M UTC"),
-            "text": f"[DUAL_APPROVAL]: {notes}"
-        })
-
-        # Append immutable audit entry
-        self.append_audit_event(
-            event_type="FOUR_EYES_DUAL_SIGNOFF",
-            actor=approver,
-            payload={
-                "case_id": case.id,
-                "initiator": case.initiator,
-                "approver": approver,
-                "notes": notes,
-                "exposure_usd": case.exposure_usd
-            }
-        )
-
-        return case
+            return case
 
     def _seed_initial_data(self):
         """Seeds deterministic case and alert records matching the single source of truth."""
@@ -446,6 +636,9 @@ class IntelligentAMLDatabase:
         self.cases[c1.id] = c1
         self.cases[c2.id] = c2
         self.cases[c3.id] = c3
+        self._sync_case_to_db(c1)
+        self._sync_case_to_db(c2)
+        self._sync_case_to_db(c3)
 
         # Seed initial audit chain entries
         self.append_audit_event("CASE_CREATED", "Sarah Jenkins", {"case_id": "CASE-2026-0881", "exposure_usd": 342800.0})
@@ -473,6 +666,7 @@ class IntelligentAMLDatabase:
             requested_by="Sarah Jenkins"
         )
         self.rfi_requests[rfi1.id] = rfi1
+        self._sync_rfi_to_db(rfi1)
 
 
 # Global persistence singleton

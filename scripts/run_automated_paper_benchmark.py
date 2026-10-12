@@ -89,12 +89,18 @@ if os.name == "nt":
 
 # Windows DLL loading for PyTorch
 if os.name == "nt":
-    _torch_lib = ROOT / "venv" / "Lib" / "site-packages" / "torch" / "lib"
-    if _torch_lib.exists():
-        try:
-            os.add_dll_directory(str(_torch_lib))
-        except Exception:
-            pass
+    _torch_candidates = [
+        Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib",
+        ROOT / ".venv" / "Lib" / "site-packages" / "torch" / "lib",
+        ROOT / "venv" / "Lib" / "site-packages" / "torch" / "lib",
+    ]
+    for _torch_lib in _torch_candidates:
+        if _torch_lib.exists():
+            try:
+                os.add_dll_directory(str(_torch_lib))
+            except Exception:
+                pass
+            break
 
 # IMPORTANT: torch MUST be imported before numpy/pandas/polars
 import warnings
@@ -318,12 +324,12 @@ def get_dataset_summary(data: Any, dataset_name: str) -> Dict[str, Any]:
     """Extracts node, edge, feature, and class imbalance distributions."""
     metadata = data.metadata()
     node_types, edge_types = metadata
-    
+
     total_nodes = sum(
-        data[nt].num_nodes for nt in node_types 
+        data[nt].num_nodes for nt in node_types
         if hasattr(data[nt], "num_nodes") and data[nt].num_nodes is not None
     )
-    
+
     total_edges = 0
     for et in edge_types:
         try:
@@ -331,7 +337,7 @@ def get_dataset_summary(data: Any, dataset_name: str) -> Dict[str, Any]:
                 total_edges += int(data[et].edge_index.shape[1])
         except Exception:
             pass
-            
+
     target_node = resolve_target_node(data)
     y = data[target_node].y.cpu().numpy()
     valid_mask = y >= 0
@@ -339,7 +345,7 @@ def get_dataset_summary(data: Any, dataset_name: str) -> Dict[str, Any]:
     neg_count = int(np.sum(y == 0))
     illicit_pct = (pos_count / max(1, pos_count + neg_count)) * 100.0
     feat_dim = data[target_node].x.shape[1] if hasattr(data[target_node], "x") else 0
-    
+
     return {
         "dataset": dataset_name,
         "target_node": target_node,
@@ -411,7 +417,7 @@ def sync_to_central_registry(record: Dict[str, Any]) -> None:
     """Synchronizes a single evaluated model trial with the master results registry."""
     runs_dir = ROOT / "results" / "metrics" / "runs"
     runs_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # 1. Master CSV
     MASTER_CSV.parent.mkdir(parents=True, exist_ok=True)
     df_single = pd.DataFrame([record])
@@ -440,20 +446,20 @@ def sync_to_central_registry(record: Dict[str, Any]) -> None:
                 all_records = json.load(f)
         except Exception:
             all_records = []
-            
+
     # Update or append
     updated = False
     for idx, r in enumerate(all_records):
-        if (r.get("dataset") == record["dataset"] and 
-            r.get("model") == record["model"] and 
-            r.get("split") == record["split"] and 
+        if (r.get("dataset") == record["dataset"] and
+            r.get("model") == record["model"] and
+            r.get("split") == record["split"] and
             r.get("epochs") == record["epochs"]):
             all_records[idx] = record
             updated = True
             break
     if not updated:
         all_records.append(record)
-        
+
     with open(MASTER_JSON, "w", encoding="utf-8") as f:
         json.dump(all_records, f, indent=2)
 
@@ -478,7 +484,7 @@ def evaluate_cstgb_model(data: Any, dataset_name: str, num_epochs: int, split_ra
     y_target = data[target_node].y.cpu().numpy()
     num_target_nodes_orig = len(y_target)
     train_split_idx = int(num_target_nodes_orig * split_ratio)
-    
+
     # 1. Training Phase with Memory Profiling
     ram_before = get_process_ram_mb()
     t0 = time.perf_counter()
@@ -488,7 +494,7 @@ def evaluate_cstgb_model(data: Any, dataset_name: str, num_epochs: int, split_ra
         cstgb_model, _ = train_htgnn(dataset_name, num_epochs=num_epochs)
     train_time = time.perf_counter() - t0
     peak_mem = max(0.0, (get_process_ram_mb() - ram_before)) * 1024 * 1024
-    
+
     # 2. Dynamic Temporal Split Subgraph Assembly
     metadata = data.metadata()
     all_ts = []
@@ -510,26 +516,26 @@ def evaluate_cstgb_model(data: Any, dataset_name: str, num_epochs: int, split_ra
             test_edge_index[rel] = data[rel].edge_index[:, test_mask_edges]
             test_delta_t[rel] = delta_t[test_mask_edges]
             test_burst_score[rel] = data[rel].burst_score[test_mask_edges]
-            
+
     x_dict = {nt: data[nt].x for nt in metadata[0]}
     test_node_mask = torch.zeros(data[target_node].x.shape[0], dtype=torch.bool)
     test_node_mask[train_split_idx:num_target_nodes_orig] = True
     num_test_samples = int(test_node_mask.sum().item())
-    
+
     # 3. Inference Phase with Throughput & Latency Profiling
     t_inf0 = time.perf_counter()
     test_probs = cstgb_model.predict_proba(
         x_dict, test_edge_index, test_delta_t, test_burst_score, test_node_mask
     )
     inf_total_time = time.perf_counter() - t_inf0
-    
+
     inf_latency_ms = (inf_total_time / max(1, num_test_samples)) * 1000.0
     throughput = max(1.0, num_test_samples / max(1e-6, inf_total_time))
-    
+
     # 4. Metric Evaluation
     y_test = y_target[train_split_idx:num_target_nodes_orig]
     metrics = evaluate_model_performance(y_test, test_probs, threshold=cstgb_model.optimal_threshold)
-    
+
     # Fair comparison against baseline models: also compute test-optimal frontier
     opt_metrics = evaluate_model_performance(y_test, test_probs, threshold=None)
     if opt_metrics.get("f1_score", 0.0) > metrics.get("f1_score", 0.0):
@@ -541,9 +547,9 @@ def evaluate_cstgb_model(data: Any, dataset_name: str, num_epochs: int, split_ra
         metrics["recall"] = float(opt_metrics["recall"])
         metrics["f2_score"] = float(opt_metrics["f2_score"])
         metrics["accuracy"] = float(opt_metrics["accuracy"])
-    
+
     param_count = count_model_parameters(cstgb_model.gnn) if hasattr(cstgb_model, "gnn") else 0
-    
+
     metrics.update({
         "training_time_sec": round(train_time, 2),
         "inference_time_sec": round(inf_total_time, 4),
@@ -553,12 +559,12 @@ def evaluate_cstgb_model(data: Any, dataset_name: str, num_epochs: int, split_ra
         "parameter_count": param_count,
         "test_samples_count": num_test_samples
     })
-    
+
     del cstgb_model, test_edge_index, test_delta_t, test_burst_score, x_dict
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
-        
+
     return metrics
 
 
@@ -566,52 +572,52 @@ def evaluate_tabular_model(model_cls: Any, data: Any, split_ratio: float, is_top
     """Evaluates standalone tabular, tree, or anomaly models with resource profiling."""
     target_node = resolve_target_node(data)
     y = data[target_node].y.cpu().numpy()
-    
+
     if is_topological:
         from scripts.run_experiments import extract_topological_features
         x = extract_topological_features(data, target_node).cpu().numpy()
     else:
         x = data[target_node].x.cpu().numpy()
     x = np.nan_to_num(x, nan=0.0, posinf=1.0, neginf=0.0)
-        
+
     split_idx = int(len(x) * split_ratio)
     x_train, x_test = x[:split_idx], x[split_idx:]
     y_train, y_test = y[:split_idx], y[split_idx:]
-    
+
     train_mask = y_train >= 0
     test_mask = y_test >= 0
     num_test_samples = int(np.sum(test_mask))
-    
+
     # 1. Training Phase
     ram_start_mb = get_process_ram_mb()
     t0 = time.perf_counter()
-    
+
     if model_cls == DeepAutoencoderBaseline:
         model = model_cls(in_channels=x_train.shape[1], epochs=15)
     else:
         model = model_cls()
-        
+
     if model_cls in [IsolationForestBaseline, DeepAutoencoderBaseline]:
         model.fit(x_train[train_mask])
     else:
         model.fit(x_train[train_mask], y_train[train_mask])
-        
+
     train_time = time.perf_counter() - t0
     peak_mem = max(0, int((get_process_ram_mb() - ram_start_mb) * 1024 * 1024))
-    
+
     # 2. Inference Phase
     t_inf0 = time.perf_counter()
     probs = model.predict_proba(x_test[test_mask])
     inf_total_time = time.perf_counter() - t_inf0
-    
+
     inf_latency_ms = (inf_total_time / max(1, num_test_samples)) * 1000.0
     throughput = max(1.0, num_test_samples / max(1e-6, inf_total_time))
-    
+
     # 3. Metric Evaluation
     y_test_clean = y_test[test_mask]
     metrics = evaluate_model_performance(y_test_clean, probs, threshold=None)
     param_count = count_model_parameters(model)
-    
+
     metrics.update({
         "training_time_sec": round(train_time, 2),
         "inference_time_sec": round(inf_total_time, 4),
@@ -621,7 +627,7 @@ def evaluate_tabular_model(model_cls: Any, data: Any, split_ratio: float, is_top
         "parameter_count": param_count,
         "test_samples_count": num_test_samples
     })
-    
+
     del model, x_train, x_test, y_train, y_test
     gc.collect()
     return metrics
@@ -633,7 +639,7 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
     target_node = resolve_target_node(data)
     y_target = data[target_node].y.cpu().numpy()
     target_offset = offset_dict[target_node]
-    
+
     metadata = data.metadata()
     all_ts_tensors = [data[rel].delta_t for rel in metadata[1] if rel in data and hasattr(data[rel], "delta_t")]
     if all_ts_tensors:
@@ -651,13 +657,13 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
             delta_t = data[rel].delta_t
             train_mask_edge = delta_t <= ts_threshold
             valid_edge_indices.append(edge_index[:, train_mask_edge])
-            
+
     train_edge_index = (
-        torch.cat(valid_edge_indices, dim=1) 
-        if valid_edge_indices 
+        torch.cat(valid_edge_indices, dim=1)
+        if valid_edge_indices
         else torch.zeros((2, 0), dtype=torch.long)
     )
-    
+
     num_nodes_total = x_homo.shape[0]
     if num_nodes_total > 1_000_000:
         hidden_dim = 16
@@ -671,10 +677,10 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
         hidden_dim = 128
         gat_heads = 4
         gat_hidden = 64
-    
+
     trim_process_memory()
     device, dev_type = get_accelerator_device(device_idx=device_idx)
-    
+
     # Check GPU memory headroom for massive graphs (>1M nodes)
     if num_nodes_total > 1_000_000 and dev_type == "cuda":
         try:
@@ -685,36 +691,36 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
                 dev_type = "cpu"
         except Exception:
             pass
-    
+
     if is_gat:
         model = model_cls(x_homo.shape[1], hidden_channels=gat_hidden, out_channels=2, heads=gat_heads)
     else:
         model = model_cls(x_homo.shape[1], hidden_dim)
-        
+
     model = model.to(device)
     x_homo = x_homo.to(device)
     train_edge_index = train_edge_index.to(device)
     edge_index_homo = edge_index_homo.to(device)
-    
+
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
     criterion = nn.CrossEntropyLoss()
-    
+
     # 1. Training Phase
     ram_start_mb = get_process_ram_mb()
     t0 = time.perf_counter()
     model.train()
-    
+
     h_prev = None
     train_mask = y_target >= 0
     valid_indices = np.where(train_mask)[0]
-    
+
     # Adaptive CPU epoch limit if running strictly on CPU on huge graphs
     effective_epochs = num_epochs
     if dev_type == "cpu" and num_nodes_total > 5_000_000:
         effective_epochs = 1
     elif dev_type == "cpu" and num_nodes_total > 500_000:
         effective_epochs = min(num_epochs, 3)
-    
+
     try:
         for epoch in range(1, effective_epochs + 1):
             optimizer.zero_grad()
@@ -724,16 +730,16 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
                 del h_new
             else:
                 out = model(x_homo, train_edge_index)
-                
+
             target_out = out[target_offset : target_offset + len(y_target)]
-            
+
             if len(valid_indices) > 50000:
                 sub_idx = np.random.choice(valid_indices, size=50000, replace=False)
                 sub_y = y_target[sub_idx]
                 loss = criterion(target_out[sub_idx], torch.tensor(sub_y, dtype=torch.long, device=device))
             else:
                 loss = criterion(target_out[train_mask], torch.tensor(y_target[train_mask], dtype=torch.long, device=device))
-                
+
             loss_val = float(loss.item())
             loss.backward()
             optimizer.step()
@@ -761,10 +767,10 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
                 print(f"      [Fallback CPU Training] Epoch {epoch:2d} | Loss: {loss_val:.4f}", flush=True)
         else:
             raise oom
-        
+
     train_time = time.perf_counter() - t0
     peak_mem = max(0, int((get_process_ram_mb() - ram_start_mb) * 1024 * 1024))
-    
+
     # 2. Inference Phase
     model.eval()
     t_inf0 = time.perf_counter()
@@ -787,19 +793,19 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
             probs = F.softmax(target_out, dim=1)[:, 1].cpu().numpy()
             del out, target_out, x_cpu, edge_cpu
     inf_total_time = time.perf_counter() - t_inf0
-    
+
     split_idx = int(len(y_target) * split_ratio)
     y_test = y_target[split_idx:]
     probs_test = probs[split_idx:]
     num_test_samples = len(probs_test)
-    
+
     inf_latency_ms = (inf_total_time / max(1, num_test_samples)) * 1000.0
     throughput = max(1.0, num_test_samples / max(1e-6, inf_total_time))
-    
+
     # 3. Metric Evaluation
     metrics = evaluate_model_performance(y_test, probs_test, threshold=None)
     param_count = count_model_parameters(model)
-    
+
     metrics.update({
         "training_time_sec": round(train_time, 2),
         "inference_time_sec": round(inf_total_time, 4),
@@ -809,10 +815,10 @@ def evaluate_gnn_model(model_cls: Any, data: Any, num_epochs: int, split_ratio: 
         "parameter_count": param_count,
         "test_samples_count": num_test_samples
     })
-    
+
     del model, optimizer, criterion, x_homo, edge_index_homo, train_edge_index
     trim_process_memory()
-        
+
     return metrics
 
 
@@ -825,34 +831,34 @@ def generate_trial_group_summary(group_dir: Path, dataset_name: str, split_name:
     checkpoints_dir = group_dir / "checkpoints"
     if not checkpoints_dir.exists():
         return
-        
+
     records = []
     for f in sorted(checkpoints_dir.glob("*.json")):
         rec = load_checkpoint(f)
         if rec:
             records.append(rec)
-            
+
     if not records:
         return
-        
+
     df = pd.DataFrame(records)
-    
+
     # Sort with Proposed C-STGB first, then descending by F1-Score
     df["sort_key"] = df["model"].apply(lambda m: 0 if "Proposed" in m else 1)
     df = df.sort_values(by=["sort_key", "f1_score"], ascending=[True, False]).drop(columns=["sort_key"])
-    
+
     # 1. Save Group CSV & JSON
     summary_csv = group_dir / "benchmark_summary.csv"
     summary_json = group_dir / "benchmark_summary.json"
     df.to_csv(summary_csv, index=False)
     with open(summary_json, "w", encoding="utf-8") as f:
         json.dump(records, f, indent=2)
-        
+
     # 2. Build Publication-Quality Markdown Report
     best_f1 = df["f1_score"].max()
     best_rec = df["recall"].max()
     best_pr_auc = df["pr_auc"].max()
-    
+
     md_lines = [
         f"# Automated Paper Benchmark Report: `{dataset_name}`",
         f"**Configuration:** Chronological Split `{split_name}` | Epochs: `{epochs}`  ",
@@ -864,18 +870,18 @@ def generate_trial_group_summary(group_dir: Path, dataset_name: str, split_name:
         "| Architecture | Category | F1-Score | Catch Rate (Recall) | Precision | F2-Score | PR-AUC | ROC-AUC | TPR@0.1%FPR | Accuracy | Train (s) | Latency (ms) | Throughput (s/s) | RAM (MB) |",
         "| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |"
     ]
-    
+
     for _, row in df.iterrows():
         mdl = row.get("model", "")
         cat = row.get("category", "Baseline")
         f1_val = row.get("f1_score", 0.0)
         rec_val = row.get("recall", 0.0)
         prauc_val = row.get("pr_auc", 0.0)
-        
+
         f1_str = f"**{f1_val:.4f}** 🏆" if f1_val == best_f1 else f"{f1_val:.4f}"
         rec_str = f"**{rec_val:.4f}** 🏆" if rec_val == best_rec else f"{rec_val:.4f}"
         prauc_str = f"**{prauc_val:.4f}** 🏆" if prauc_val == best_pr_auc else f"{prauc_val:.4f}"
-        
+
         md_lines.append(
             f"| `{mdl}` | {cat} | {f1_str} | {rec_str} | {row.get('precision', 0.0):.4f} | "
             f"{row.get('f2_score', 0.0):.4f} | {prauc_str} | {row.get('roc_auc', 0.0):.4f} | "
@@ -883,7 +889,7 @@ def generate_trial_group_summary(group_dir: Path, dataset_name: str, split_name:
             f"{row.get('training_time_sec', 0.0):.2f}s | {row.get('inference_latency_ms', 0.0):.4f}ms | "
             f"{row.get('throughput_samples_per_sec', 0.0):.0f} | {row.get('peak_memory_mb', 0.0):.1f}MB |"
         )
-        
+
     md_lines.extend([
         "\n---",
         "\n## 2. Key Research Findings & Comparative Highlights\n",
@@ -897,7 +903,7 @@ def generate_trial_group_summary(group_dir: Path, dataset_name: str, split_name:
         "\n---",
         f"\n*Auto-generated by `scripts/run_automated_paper_benchmark.py`.*"
     ])
-    
+
     report_file = group_dir / "benchmark_report.md"
     with open(report_file, "w", encoding="utf-8") as f:
         f.write("\n".join(md_lines) + "\n")
@@ -926,19 +932,19 @@ def run_paper_benchmark(
     print("\n" + "=" * 100)
     print(f" [AUTOMATED PAPER BENCHMARK ENGINE] TARGET: {dataset_name.upper()}")
     print("=" * 100)
-    
+
     # Filter Models if requested
     models_pool = ALL_MODELS_REGISTRY
     if selected_models:
         filter_slugs = [s.strip().lower() for s in selected_models]
         models_pool = [
-            m for m in ALL_MODELS_REGISTRY 
+            m for m in ALL_MODELS_REGISTRY
             if any(fs in m["slug"] or fs in m["name"].lower() for fs in filter_slugs)
         ]
         if not models_pool:
             print(f"  [Error] No registered models matched filter: {selected_models}")
             return
-            
+
     print(f"  * Configured Model Portfolio ({len(models_pool)} architectures):")
     for m in models_pool:
         print(f"    - [{m['category']:<28}] {m['name']:<35} ({m['paper_ref']})")
@@ -985,7 +991,7 @@ def run_paper_benchmark(
             "illicit_ratio_pct": 0.0
         }
         data = None
-        
+
     print(f"  Dataset Profile:")
     print(f"    - Entities (Nodes):     {ds_meta['total_nodes']:,}")
     print(f"    - Interactions (Edges): {ds_meta['total_edges']:,}")
@@ -995,7 +1001,7 @@ def run_paper_benchmark(
     print(f"    - Epoch Schedules:      {epochs_list}")
     print(f"    - Storage Root:         {output_dir / dataset_name}")
     print("-" * 100)
-    
+
     if dry_run:
         print("\n  [DRY RUN COMPLETE] Dataset, paths, and model configurations successfully verified.")
         return
@@ -1003,16 +1009,16 @@ def run_paper_benchmark(
     # 2. Sequential Trial Execution
     total_combinations = len(splits_list) * len(epochs_list) * len(models_pool)
     current_trial = 0
-    
+
     for split_ratio in splits_list:
         split_name = f"{int(split_ratio * 100)}_{int((1 - split_ratio) * 100)}"
-        
+
         for epochs in epochs_list:
             group_dir = output_dir / dataset_name / f"{split_name}_{epochs}ep"
             group_dir.mkdir(parents=True, exist_ok=True)
-            
+
             print(f"\n>>> [Trial Group] Split: {split_name} ({split_ratio*100:.0f}% Train / {(1-split_ratio)*100:.0f}% Test) | Epochs: {epochs}")
-            
+
             if summary_only:
                 generate_trial_group_summary(group_dir, dataset_name, split_name, epochs, ds_meta)
                 print(f"  [Summary Generated] -> {group_dir / 'benchmark_report.md'}")
@@ -1024,9 +1030,9 @@ def run_paper_benchmark(
                 model_name = model_info["name"]
                 m_type = model_info["type"]
                 m_cls = model_info["cls"]
-                
+
                 ckpt_path = get_checkpoint_path(output_dir, dataset_name, split_name, epochs, model_slug)
-                
+
                 # Checkpoint & Resumption Detection
                 if not force_rerun:
                     cached_record = load_checkpoint(ckpt_path)
@@ -1043,7 +1049,7 @@ def run_paper_benchmark(
                 # Run Execution
                 print(f"  [{current_trial:02d}/{total_combinations:02d}] Evaluating {model_name:<36} ...", flush=True)
                 t_start = time.perf_counter()
-                
+
                 try:
                     if m_type == "cstgb":
                         metrics = evaluate_cstgb_model(data, dataset_name, num_epochs=epochs, split_ratio=split_ratio)
@@ -1060,9 +1066,9 @@ def run_paper_benchmark(
                     else:
                         print(f"[Unknown Model Type: {m_type}]")
                         continue
-                        
+
                     elapsed = time.perf_counter() - t_start
-                    
+
                     # Prepare Standard Benchmark Record
                     record = {
                         "timestamp": datetime.utcnow().isoformat(),
@@ -1079,16 +1085,16 @@ def run_paper_benchmark(
                         "illicit_pct": ds_meta["illicit_ratio_pct"],
                         **metrics
                     }
-                    
+
                     # 1. Atomic Checkpoint Save
                     save_atomic_checkpoint(ckpt_path, record)
-                    
+
                     # 2. Sync to Central Master Registry
                     sync_to_central_registry(record)
-                    
+
                     # 3. Real-Time Group Summary Update
                     generate_trial_group_summary(group_dir, dataset_name, split_name, epochs, ds_meta)
-                    
+
                     current_ram_mb = get_process_ram_mb()
                     total_sys_ram_gb = psutil.virtual_memory().total / (1024**3)
                     print(
@@ -1101,10 +1107,10 @@ def run_paper_benchmark(
                         f"RAM: {current_ram_mb/1024:.2f}GB / {total_sys_ram_gb:.1f}GB",
                         flush=True
                     )
-                    
+
                 except Exception as e:
                     print(f"    -> FAILED: {e}", flush=True)
-                    
+
                 trim_process_memory()
 
     if data is not None:
@@ -1122,33 +1128,33 @@ def print_status_overview(dataset_name: Optional[str] = None, output_dir: Path =
     print("\n" + "=" * 90)
     print(" [BENCHMARK SUITE EXECUTION STATUS OVERVIEW]")
     print("=" * 90)
-    
+
     target_datasets = [dataset_name] if dataset_name else [
         "ibm_amlsim_hi_small", "ibm_amlsim_li_small", "saml_d", "mtgox_leaked",
         "elliptic_v1", "elliptic_v2", "paysim1", "data_generator",
         "dgraphfin", "xblock_eth", "cc_transactions"
     ]
-    
+
     total_registered_models = len(ALL_MODELS_REGISTRY)
-    
+
     for ds in target_datasets:
         ds_dir = output_dir / ds
         if not ds_dir.exists():
             print(f"  Dataset: {ds:<25} -> Status: [NOT STARTED] (0/{total_registered_models} models)")
             continue
-            
+
         group_dirs = [d for d in ds_dir.iterdir() if d.is_dir()]
         if not group_dirs:
             print(f"  Dataset: {ds:<25} -> Status: [NOT STARTED] (0/{total_registered_models} models)")
             continue
-            
+
         for gd in sorted(group_dirs):
             ckpts_dir = gd / "checkpoints"
             num_completed = len(list(ckpts_dir.glob("*.json"))) if ckpts_dir.exists() else 0
             pct = (num_completed / total_registered_models) * 100.0
             status_tag = "[COMPLETED]" if num_completed >= total_registered_models else f"[IN PROGRESS {pct:.0f}%]"
             print(f"  Dataset: {ds:<22} | Group: {gd.name:<12} | Completed: {num_completed:02d}/{total_registered_models:02d} models {status_tag}")
-            
+
     print("=" * 90 + "\n")
 
 
@@ -1169,15 +1175,15 @@ def main():
 
     args = parser.parse_args()
     output_path = Path(args.output_dir)
-    
+
     if args.status:
         print_status_overview(dataset_name=args.dataset if args.dataset != "all" else None, output_dir=output_path)
         return
-        
+
     splits_list = [float(s.strip()) for s in args.splits.split(",") if s.strip()]
     epochs_list = [int(e.strip()) for e in args.epochs.split(",") if e.strip()]
     selected_models = [m.strip() for m in args.models.split(",") if m.strip()] if args.models else None
-    
+
     if args.dataset == "all":
         datasets_to_run = [
             "ibm_amlsim_hi_small", "ibm_amlsim_li_small", "saml_d", "mtgox_leaked",
@@ -1187,7 +1193,7 @@ def main():
         ]
     else:
         datasets_to_run = [d.strip() for d in args.dataset.split(",") if d.strip()]
-        
+
     for ds in datasets_to_run:
         run_paper_benchmark(
             dataset_name=ds,

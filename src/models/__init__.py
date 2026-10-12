@@ -8,15 +8,22 @@ from pathlib import Path
 
 # Windows PyTorch DLL loading safety guard
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-_venv_torch_lib = Path(__file__).resolve().parent.parent.parent / "venv" / "Lib" / "site-packages" / "torch" / "lib"
+_repo_root = Path(__file__).resolve().parent.parent.parent
+_torch_candidates = [
+    Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib",
+    _repo_root / ".venv" / "Lib" / "site-packages" / "torch" / "lib",
+    _repo_root / "venv" / "Lib" / "site-packages" / "torch" / "lib",
+]
 _dll_handle = None
-if _venv_torch_lib.exists():
-    os.environ["PATH"] = str(_venv_torch_lib) + ";" + os.environ.get("PATH", "")
-    if hasattr(os, "add_dll_directory"):
-        try:
-            _dll_handle = os.add_dll_directory(str(_venv_torch_lib))
-        except Exception:
-            pass
+for _torch_lib in _torch_candidates:
+    if _torch_lib.exists():
+        os.environ["PATH"] = str(_torch_lib) + ";" + os.environ.get("PATH", "")
+        if hasattr(os, "add_dll_directory"):
+            try:
+                _dll_handle = os.add_dll_directory(str(_torch_lib))
+            except Exception:
+                pass
+        break
 
 import torch
 

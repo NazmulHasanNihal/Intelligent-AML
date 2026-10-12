@@ -1,25 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { 
+import {
   Building2,
-  ChevronRight, 
-  BookOpen, 
-  Sparkles, 
-  UserCheck, 
-  ShieldCheck, 
-  Key, 
-  Menu, 
-  PanelLeftClose, 
-  PanelLeft, 
-  Bell, 
-  Search, 
-  Palette, 
-  Check, 
-  ChevronDown, 
-  Command, 
-  HelpCircle, 
-  Shield, 
-  Activity, 
-  Database, 
+  ChevronRight,
+  BookOpen,
+  Sparkles,
+  UserCheck,
+  ShieldCheck,
+  Key,
+  Menu,
+  PanelLeftClose,
+  PanelLeft,
+  Bell,
+  Search,
+  Palette,
+  Check,
+  ChevronDown,
+  Command,
+  HelpCircle,
+  Shield,
+  Activity,
+  Database,
   Cpu,
   Server,
   Zap,
@@ -37,11 +37,11 @@ export const DATASET_OPTIONS = [
   { id: 'saml_d', name: 'SAML-D (15-Bank Clearing)', domain: 'Inter-Bank RTGS', scale: '980k nodes / 1.45M txs', scenario: 'Cross-Border Layering Cycle' },
 ];
 
-export const TopNavbar = ({ 
-  activeTab, 
-  onOpenHelp, 
-  isSidebarCollapsed, 
-  onToggleSidebar, 
+export const TopNavbar = ({
+  activeTab,
+  onOpenHelp,
+  isSidebarCollapsed,
+  onToggleSidebar,
   onOpenCommandPalette,
   health,
   onRefreshHealth,
@@ -50,13 +50,13 @@ export const TopNavbar = ({
 }) => {
   const { currentBanker, setIsAuthModalOpen, switchBanker, availableBankers } = useAuth();
   const { currentTheme, themeId, setTheme, availableThemes } = useTheme();
-  
+
   const [selectedDataset, setSelectedDataset] = useState(DATASET_OPTIONS[0]);
   const [isDatasetOpen, setIsDatasetOpen] = useState(false);
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
   const [isPersonaOpen, setIsPersonaOpen] = useState(false);
   const [isDiagnosticsOpen, setIsDiagnosticsOpen] = useState(false);
-  
+
   const themeDropdownRef = useRef(null);
   const datasetDropdownRef = useRef(null);
   const personaDropdownRef = useRef(null);
@@ -83,7 +83,7 @@ export const TopNavbar = ({
   return (
     <>
       <header className="h-14 px-3 sm:px-4 sticky top-0 z-40 flex items-center justify-between gap-2.5 bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] text-[var(--text-primary)] font-sans transition-colors duration-300 shadow-sm shrink-0">
-        
+
         {/* Left: Brand / Sidebar Toggle + Active Scenario Stream Selector */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
@@ -138,8 +138,8 @@ export const TopNavbar = ({
                           if (onSelectScenario) onSelectScenario(ds);
                         }}
                         className={`w-full flex items-start justify-between p-2 rounded-xl text-left transition-all cursor-pointer ${
-                          isSelected 
-                            ? 'bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/40 text-[var(--text-primary)] font-semibold shadow-sm' 
+                          isSelected
+                            ? 'bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/40 text-[var(--text-primary)] font-semibold shadow-sm'
                             : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-[var(--text-secondary)] border border-transparent'
                         }`}
                       >
@@ -167,8 +167,8 @@ export const TopNavbar = ({
             <button
               onClick={() => setIsDiagnosticsOpen(true)}
               className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all cursor-pointer shadow-sm active:translate-y-0.5 ${
-                isLiveServer 
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300' 
+                isLiveServer
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300'
                   : 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300'
               }`}
               title="Click to view full C-STGB Engine Diagnostics & SLAs"
@@ -218,7 +218,7 @@ export const TopNavbar = ({
 
         {/* Right: Theme Switcher, Banker Profile & Knowledge Guide */}
         <div className="flex items-center gap-1.5 shrink-0">
-          
+
           {/* Theme Switcher Dropdown */}
           <div className="relative" ref={themeDropdownRef}>
             <button
@@ -248,8 +248,8 @@ export const TopNavbar = ({
                           setIsThemeDropdownOpen(false);
                         }}
                         className={`w-full flex items-start gap-2 p-1.5 rounded-lg text-left transition-all cursor-pointer ${
-                          isSelected 
-                            ? 'bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/50 text-[var(--text-primary)] shadow-sm' 
+                          isSelected
+                            ? 'bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/50 text-[var(--text-primary)] shadow-sm'
                             : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-[var(--text-secondary)] border border-transparent'
                         }`}
                       >
@@ -276,14 +276,14 @@ export const TopNavbar = ({
               className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-card)] hover:border-[var(--accent-primary)] text-xs text-[var(--text-primary)] transition-all cursor-pointer shadow-[var(--skeuo-btn)] active:translate-y-0.5 group"
               title="Switch Officer Persona (Analyst L1, Investigator L2, CCO L3, Model Auditor)"
             >
-              <div className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${currentBanker.badgeClass}`}>
-                {currentBanker.avatar}
+              <div className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${currentBanker?.badgeClass || 'bg-indigo-500/20 text-indigo-300'}`}>
+                {currentBanker?.avatar || 'NH'}
               </div>
               <div className="text-left font-sans hidden sm:block">
                 <div className="text-[11px] font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] flex items-center gap-1.5">
-                  <span className="truncate max-w-[120px]">{currentBanker.name}</span>
+                  <span className="truncate max-w-[120px]">{currentBanker?.name || 'Officer'}</span>
                   <span className="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold bg-black/[0.05] dark:bg-white/[0.08] text-[var(--text-secondary)] uppercase">
-                    {currentBanker.role}
+                    {currentBanker?.role || 'admin'}
                   </span>
                 </div>
               </div>
@@ -298,7 +298,7 @@ export const TopNavbar = ({
                 </div>
                 <div className="space-y-1">
                   {(availableBankers || []).map((banker) => {
-                    const isSelected = banker.id === currentBanker.id;
+                    const isSelected = banker.id === currentBanker?.id;
                     return (
                       <button
                         key={banker.id}
@@ -307,8 +307,8 @@ export const TopNavbar = ({
                           setIsPersonaOpen(false);
                         }}
                         className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-all cursor-pointer ${
-                          isSelected 
-                            ? 'bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/40 text-[var(--text-primary)] font-semibold shadow-sm' 
+                          isSelected
+                            ? 'bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/40 text-[var(--text-primary)] font-semibold shadow-sm'
                             : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-[var(--text-secondary)] border border-transparent'
                         }`}
                       >
@@ -364,7 +364,7 @@ export const TopNavbar = ({
                   C-STGB Production Engine Diagnostics
                 </span>
               </div>
-              <button 
+              <button
                 onClick={() => setIsDiagnosticsOpen(false)}
                 className="p-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
               >

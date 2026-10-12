@@ -67,6 +67,8 @@ from src.models.checkpoint_manager import checkpoint_manager
 from src.engine.sar_pdf_exporter import sar_pdf_generator
 from src.models.drift_detector import drift_detector
 from src.engine.aml_copilot import aml_copilot
+from src.engine.graph_adapter import graph_adapter, fast_path_gate
+from src.engine.drift_monitor import mrm_monitor
 from src.utils.logger import get_logger
 
 logger = get_logger("intelligent_aml.api")
@@ -108,6 +110,8 @@ app.add_middleware(
 )
 
 # Global Telemetry Counters for Observability & Prometheus
+import threading as _threading
+_metrics_lock = _threading.Lock()
 API_METRICS = {
     "total_requests": 0,
     "transactions_scored": 0,
@@ -117,6 +121,11 @@ API_METRICS = {
     "sars_generated": 0,
     "avg_latency_ms": 1.45
 }
+
+def _incr_metric(key: str, value: int = 1):
+    """Thread-safe metric increment."""
+    with _metrics_lock:
+        API_METRICS[key] += value
 
 # Global Singletons
 subgraph_cache = SubgraphLRUCache(capacity=50_000, hidden_dim=128)
@@ -328,7 +337,7 @@ def login_endpoint(request: Request, body: LoginRequest):
 @app.get("/api/v1/auth/me", response_model=UserProfile, tags=["Authentication & RBAC"])
 def get_current_user_profile(user: UserProfile = Depends(get_current_user)):
     """Returns cryptographic user profile and active RBAC permissions."""
-    API_METRICS["total_requests"] += 1
+    _incr_metric("total_requests")
     return user
 
 
@@ -342,7 +351,7 @@ def list_demo_tokens():
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Demo token endpoint is disabled in production mode."
         )
-    API_METRICS["total_requests"] += 1
+    _incr_metric("total_requests")
     tokens = {}
     for username, data in USER_DATABASE.items():
         prof = UserProfile(
@@ -514,7 +523,7 @@ def get_ego_subgraph(node_id: str, depth: int = Query(2, ge=1, le=3), delta_floo
         ("BD08-SONA-9901-7721-5540", "Walton Hi-Tech Industries PLC", "Consumer Electronics PLC (Licit)", 0.02, 2, 2),
         ("BD33-IBBL-5512-9901-3321", "PRAN Agro Business Ltd", "Agro-Processing & Export (Licit)", 0.02, 3, 2),
         ("BD12-HSBC-2201-9940-1120", "Grameenphone Corporate Treasury", "Telecom Corporate (Licit)", 0.01, 2, 2),
-        ("SG-DBS-8819-3301", "Pacific Commodities Escrow Pte (Singapore)", "Offshore Escrow Desk", 0.65, 3, 3),
+        ("SG-DBS-8819-3301-4491", "Pacific Commodities Escrow Pte (Singapore)", "Offshore Escrow Desk", 0.65, 3, 3),
         ("US-JPMC-4829-1092-8823", "JPMorgan Chase New York NA", "Correspondent Clearing Hub", 0.04, 5, 5),
     ]
 
@@ -788,20 +797,28 @@ def get_benchmark_scorecard():
 def download_sar_pdf(target_account: str):
     """
     Compiles and downloads an official FinCEN Form 111 PDF Suspicious Activity Report.
+    Enforces strict path sanitization to eliminate path traversal vulnerabilities (SEC-3).
     """
+    import re
+    if not re.match(r"^[A-Za-z0-9_\-\.:]{1,64}$", target_account):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid target_account format. Account identifier must be alphanumeric (1-64 chars)."
+        )
+    safe_account = os.path.basename(target_account)
     output_dir = "results/reports"
     os.makedirs(output_dir, exist_ok=True)
-    pdf_path = os.path.join(output_dir, f"FinCEN_Form_111_{target_account}_{int(time.time())}.pdf")
-    
+    pdf_path = os.path.join(output_dir, f"FinCEN_Form_111_{safe_account}_{int(time.time())}.pdf")
+
     # Generate report
     sar_generator.generate_fincen_pdf(
-        target_account_id=target_account,
+        target_account_id=safe_account,
         risk_score=0.9450,
         topological_metrics={"deg_in": 12, "deg_out": 1, "max_burst_score": 4.80, "pass_through_ratio": 0.984},
         conformal_details={"alpha": 0.01, "stratum_name": "High-Burst Smurfing Conduit"},
         output_path=pdf_path
     )
-    
+
     if os.path.exists(pdf_path):
         return FileResponse(pdf_path, media_type="application/pdf", filename=os.path.basename(pdf_path))
     else:
@@ -826,9 +843,9 @@ async def websocket_live_stream(websocket: WebSocket):
             await websocket.send_json(payload)
             await asyncio.sleep(0.58)  # ~1.72 tx/s realistic banking baseline rate
     except WebSocketDisconnect:
-        pass
-    except Exception:
-        pass
+        logger.info("WebSocket client disconnected from /ws/stream")
+    except Exception as e:
+        logger.error(f"WebSocket stream error: {e}", exc_info=True)
 
 
 @app.get("/api/v1/stream/transactions", tags=["Real-World Banking Stream"])
@@ -887,6 +904,25 @@ from src.engine.persistence import (
 )
 
 
+class CaseCreateRequest(BaseModel):
+    title: str = Field(..., json_schema_extra={"example": "Anomalous Cross-Border Smurfing Aggregation"})
+    target_account: str = Field(..., json_schema_extra={"example": "BD04-BRAC-1109-8421-4402"})
+    priority: str = Field("HIGH", json_schema_extra={"example": "HIGH"})
+    exposure_usd: float = Field(..., ge=0.0, json_schema_extra={"example": 54200.0})
+    cstgb_risk_score: float = Field(0.85, ge=0.0, le=1.0, json_schema_extra={"example": 0.88})
+    initiator: str = Field(..., json_schema_extra={"example": "Sarah Jenkins (Senior Forensic Investigator)"})
+    lead_assignee: Optional[str] = Field("Sarah Jenkins", json_schema_extra={"example": "Sarah Jenkins"})
+    regulatory_framework: Optional[str] = Field("FinCEN Form 111 (USA)", json_schema_extra={"example": "FinCEN Form 111 (USA)"})
+    linked_alert_ids: Optional[List[str]] = Field(default_factory=list)
+    grounded_evidence: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
+
+
+class CaseStatusUpdateRequest(BaseModel):
+    status: str = Field(..., json_schema_extra={"example": "UNDER_REVIEW"})
+    actor: str = Field(..., json_schema_extra={"example": "Sarah Jenkins"})
+    reason: Optional[str] = Field(None, json_schema_extra={"example": "Correspondent bank subpoena response pending."})
+
+
 class CaseSignOffRequest(BaseModel):
     approver: str = Field(..., json_schema_extra={"example": "Elena Rostova (Compliance Director)"})
     notes: str = Field(..., json_schema_extra={"example": "Independent four-eyes forensic review completed. SAR approved for FinCEN transmission."})
@@ -940,6 +976,38 @@ def list_cases(status: Optional[str] = None):
     return cases
 
 
+@app.post("/api/v1/cases", response_model=CaseRecord, tags=["Case Management"])
+def create_case_endpoint(req: CaseCreateRequest):
+    """
+    Creates a new regulatory AML investigation case docket with relational write-through persistence.
+    """
+    case_id = f"CASE-{time.strftime('%Y')}-{len(db.cases) + 1:04d}"
+    new_case = CaseRecord(
+        id=case_id,
+        title=req.title,
+        target_account=req.target_account,
+        status="OPEN",
+        priority=req.priority.upper(),
+        exposure_usd=req.exposure_usd,
+        cstgb_risk_score=req.cstgb_risk_score,
+        initiator=req.initiator,
+        lead_assignee=req.lead_assignee or req.initiator,
+        regulatory_framework=req.regulatory_framework or "FinCEN Form 111 (USA)",
+        linked_alert_ids=req.linked_alert_ids or [],
+        grounded_evidence=req.grounded_evidence or [],
+        timeline=[{
+            "timestamp": time.strftime("%Y-%m-%d %H:%M UTC"),
+            "event": f"Case docket opened by {req.initiator}",
+            "actor": req.initiator,
+            "type": "creation"
+        }],
+        notes=[],
+        attachments=[],
+        created_at=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    )
+    return db.create_case(new_case)
+
+
 @app.get("/api/v1/cases/{case_id}", tags=["Case Management"])
 def get_case(case_id: str):
     """
@@ -953,7 +1021,7 @@ def get_case(case_id: str):
 @app.post("/api/v1/cases/{case_id}/sign-off", tags=["Case Management & Four-Eyes"])
 def sign_off_case_endpoint(case_id: str, req: CaseSignOffRequest):
     """
-    Four-Eyes Dual Control Sign-off (OCC 2011-12 / Federal Reserve SR 11-7).
+    Four-Eyes Dual Control Sign-off (OCC 2011-12 / Federal Reserve SR 11-7 / FINRA Rule 3110).
     Rejects sign-off with 403 Forbidden if approver is identical to case initiator.
     """
     try:
@@ -965,31 +1033,60 @@ def sign_off_case_endpoint(case_id: str, req: CaseSignOffRequest):
         raise HTTPException(status_code=403, detail=str(pe))
 
 
+@app.post("/api/v1/cases/{case_id}/dual-signoff", tags=["Case Management & Four-Eyes"])
+def dual_signoff_case_alias_endpoint(case_id: str, req: CaseSignOffRequest):
+    """
+    Four-Eyes Dual Control Sign-off canonical route (OCC 2011-12 / FINRA Rule 3110).
+    Enforces independent dual authorization; returns 403 Forbidden on maker-checker identity collision.
+    """
+    return sign_off_case_endpoint(case_id=case_id, req=req)
+
+
+@app.put("/api/v1/cases/{case_id}/status", tags=["Case Management"])
+def update_case_status_endpoint(case_id: str, req: CaseStatusUpdateRequest):
+    """
+    Updates the status of an AML case docket and records an immutable audit ledger entry.
+    """
+    try:
+        updated = db.update_case_status(case_id=case_id, new_status=req.status, actor=req.actor, reason=req.reason)
+        return updated
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found.")
+
+
+@app.get("/api/v1/cases/{case_id}/audit-trail", tags=["Case Management & Four-Eyes"])
+def get_case_audit_trail(case_id: str):
+    """
+    Retrieves the tamper-evident cryptographically chained audit blocks specific to a case.
+    """
+    if case_id not in db.cases:
+        raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found.")
+    matching = [
+        block.to_dict() for block in db.audit_chain
+        if block.payload.get("case_id") == case_id
+    ]
+    return {
+        "case_id": case_id,
+        "total_audit_blocks": len(matching),
+        "audit_trail": matching
+    }
+
+
 @app.post("/api/v1/cases/{case_id}/notes", tags=["Case Management"])
 def add_case_note(case_id: str, req: CaseNoteRequest):
     """
     Appends an internal note to the case dossier and records an immutable audit log.
     """
-    if case_id not in db.cases:
+    try:
+        note_obj = db.add_case_note(
+            case_id=case_id,
+            author=req.author,
+            role=req.role,
+            text=req.text
+        )
+        return {"status": "SUCCESS", "note": note_obj}
+    except KeyError:
         raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found.")
-
-    case = db.cases[case_id]
-    note_id = f"N_{len(case.notes) + 1}"
-    note_obj = {
-        "id": note_id,
-        "author": req.author,
-        "role": req.role,
-        "timestamp": time.strftime("%Y-%m-%d %H:%M UTC"),
-        "text": req.text
-    }
-    case.notes.append(note_obj)
-
-    db.append_audit_event(
-        event_type="CASE_NOTE_ADDED",
-        actor=req.author,
-        payload={"case_id": case_id, "note_id": note_id, "text_preview": req.text[:60]}
-    )
-    return {"status": "SUCCESS", "note": note_obj}
 
 
 class CaseAttachmentRequest(BaseModel):
@@ -1048,7 +1145,6 @@ def list_rfi_requests():
 
 from src.engine.sanctions_engine import sanctions_engine, ScreeningRequest, ScreeningResponse
 from src.engine.ocr_engine import ocr_engine, TradeDocumentIngestRequest, ExtractedTradeDocument
-from src.engine.graph_analytics_engine import graph_analytics, TopologicalNodeAnalytics
 from src.engine.crypto_signer import crypto_signer, DigitalSignatureReceipt
 
 
@@ -1115,14 +1211,6 @@ def ingest_and_ocr_trade_document(req: TradeDocumentIngestRequest):
     return parsed
 
 
-@app.get("/api/v1/graph/analytics/{node_id}", response_model=TopologicalNodeAnalytics, tags=["Graph & Visualizer"])
-def get_graph_node_analytics(node_id: str):
-    """
-    Computes graph structural metrics (PageRank, betweenness centrality, degree asymmetry,
-    clustering coefficient) and hyperbolic embedding vector similarity against known laundering archetypes.
-    """
-    return graph_analytics.analyze_node(node_id)
-
 
 class SARSigRequest(BaseModel):
     case_id: str = Field(..., json_schema_extra={"example": "CASE-2026-0881"})
@@ -1176,10 +1264,18 @@ class SARExportRequest(BaseModel):
 def export_sar_pdf_by_id(request: Request, case_id: str):
     """
     Exports an institutional-grade, tamper-evident SAR dossier PDF with SHA-256 digital seals.
+    Enforces strict case_id parameter validation (SEC-3).
     """
+    import re
+    if not re.match(r"^[A-Za-z0-9_\-\.]{1,64}$", case_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid case_id format. Must contain only alphanumeric characters, dashes, dots, or underscores (1-64 chars)."
+        )
+    safe_case_id = os.path.basename(case_id)
     case_data = {
-        "case_id": case_id,
-        "target_entity": f"ENTITY-{case_id[-4:]}",
+        "case_id": safe_case_id,
+        "target_entity": f"ENTITY-{safe_case_id[-4:]}",
         "risk_score": 0.942,
         "conformal_bound": "[0.915, 0.990] (95% Coverage)",
         "jurisdiction": "Bangladesh Bank BFIU / FATF Tier-1"
@@ -1188,7 +1284,7 @@ def export_sar_pdf_by_id(request: Request, case_id: str):
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename="SAR_{case_id}.pdf"'}
+        headers={"Content-Disposition": f'attachment; filename="SAR_{safe_case_id}.pdf"'}
     )
 
 
@@ -1198,11 +1294,18 @@ def export_custom_sar_pdf(request: Request, req: SARExportRequest):
     """
     Dynamically generates and downloads an official Regulatory SAR PDF from submitted case data.
     """
+    import re
+    if not re.match(r"^[A-Za-z0-9_\-\.]{1,64}$", req.case_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid case_id format in export request."
+        )
+    safe_case_id = os.path.basename(req.case_id)
     pdf_bytes = sar_pdf_generator.generate_sar_pdf(req.model_dump())
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename="SAR_{req.case_id}.pdf"'}
+        headers={"Content-Disposition": f'attachment; filename="SAR_{safe_case_id}.pdf"'}
     )
 
 
@@ -1218,6 +1321,30 @@ def get_model_drift_status(request: Request):
     and Wasserstein distance on live streaming distributions versus reference baselines.
     """
     return drift_detector.evaluate_system_drift()
+
+
+class DriftEvaluateRequest(BaseModel):
+    custom_batches: Dict[str, List[float]] = Field(..., json_schema_extra={"example": {"tx_amount": [5400.0, 9200.0, 48000.0]}})
+
+
+@app.get("/api/v1/models/drift-audit", tags=["Model Governance & MRM"])
+@limiter.limit("60/minute")
+def get_mrm_model_drift_audit(request: Request):
+    """
+    Comprehensive Federal Reserve SR 11-7 / OCC 2011-12 Model Risk Management (MRM) Audit.
+    Evaluates Population Stability Index (PSI), Characteristic Stability Index (CSI),
+    Kolmogorov-Smirnov test, and Wasserstein distance with a cryptographic Merkle attestation seal.
+    """
+    return mrm_monitor.generate_mrm_audit_report()
+
+
+@app.post("/api/v1/models/drift-evaluate", tags=["Model Governance & MRM"])
+@limiter.limit("60/minute")
+def evaluate_custom_stream_drift(request: Request, req: DriftEvaluateRequest):
+    """
+    Evaluates real-time custom transaction streams against baseline distributions for Model Risk Management.
+    """
+    return mrm_monitor.generate_mrm_audit_report(custom_stream=req.custom_batches)
 
 
 # =============================================================================
@@ -1286,3 +1413,144 @@ async def websocket_telemetry_alias(websocket: WebSocket):
     await websocket_live_stream(websocket)
 
 
+# =============================================================================
+# Enterprise Core Banking System (CBS) & Streaming Bus Gateways
+# =============================================================================
+
+from src.engine.cbs_adapter import cbs_adapter, CBSProviderConfig, CBSInterceptResult, StreamingBusClusterStatus
+
+class CBSConfigureRequest(BaseModel):
+    provider: str = Field("TEMENOS_T24", json_schema_extra={"example": "TEMENOS_T24"})
+    operating_mode: str = Field("SHADOW_SURVEILLANCE", json_schema_extra={"example": "SHADOW_SURVEILLANCE"})
+    endpoint_url: Optional[str] = Field(None, json_schema_extra={"example": "https://cbs-gw.interbank.internal:8443/api/v2/settlement"})
+
+
+class CBSTestInterceptRequest(BaseModel):
+    account_number: str = Field("BD22-EBLB-4829-1092-8823", json_schema_extra={"example": "BD22-EBLB-4829-1092-8823"})
+    amount: float = Field(47600.0, json_schema_extra={"example": 47600.0})
+    tier: str = Field("Tier 1 Hold", json_schema_extra={"example": "Tier 1 Hold"})
+    rail: str = Field("SWIFT MT103", json_schema_extra={"example": "SWIFT MT103"})
+
+
+@app.get("/api/v1/cbs/status", tags=["Enterprise Banking Gateway"])
+def get_cbs_gateway_status():
+    """Returns active Core Banking System (CBS) connector configuration and runtime telemetry."""
+    return {
+        "status": "ONLINE",
+        "config": cbs_adapter.config.model_dump(),
+        "total_intercepts": cbs_adapter.total_intercepts,
+        "total_holds_placed": cbs_adapter.total_holds_placed,
+        "supported_providers": ["TEMENOS_T24", "INFOSYS_FINACLE", "ORACLE_FLEXCUBE", "FIS_PROFILE", "ISO20022_GATEWAY"],
+        "supported_modes": ["SHADOW_SURVEILLANCE", "INLINE_INTERCEPTOR"],
+        "heartbeat_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+
+
+@app.post("/api/v1/cbs/configure", response_model=CBSProviderConfig, tags=["Enterprise Banking Gateway"])
+def configure_cbs_gateway(req: CBSConfigureRequest):
+    """Configures the core banking connector and toggles between Shadow Surveillance and Inline Settlement Interceptor."""
+    updated = cbs_adapter.configure(req.provider, req.operating_mode, req.endpoint_url)
+    db.append_audit_event(
+        event_type="CBS_GATEWAY_RECONFIGURED",
+        actor="System Compliance Architect",
+        payload=updated.model_dump()
+    )
+    return updated
+
+
+@app.post("/api/v1/cbs/test-intercept", response_model=CBSInterceptResult, tags=["Enterprise Banking Gateway"])
+def test_cbs_intercept(req: CBSTestInterceptRequest):
+    """Executes a simulated real-time pre-clearing settlement intercept against the configured CBS."""
+    result = cbs_adapter.execute_intercept(
+        account_number=req.account_number,
+        amount=req.amount,
+        tier=req.tier,
+        rail=req.rail
+    )
+    db.append_audit_event(
+        event_type="CBS_INTERCEPT_EXECUTED",
+        actor="Core Banking Settlement Gateway",
+        payload=result.model_dump()
+    )
+    return result
+
+
+@app.get("/api/v1/streaming/bus-status", response_model=StreamingBusClusterStatus, tags=["Enterprise Banking Gateway"])
+def get_streaming_bus_telemetry():
+    """Returns enterprise streaming message bus (Kafka / RabbitMQ) cluster partition health and lag."""
+    return cbs_adapter.get_streaming_bus_status()
+
+
+@app.post("/api/v1/security/hsm-test", tags=["Enterprise Banking Gateway"])
+def test_hsm_cryptographic_token():
+    """Executes FIPS 140-2 Level 3 Hardware Security Module (HSM) signing probe to verify certificate serial."""
+    test_payload = f"TEST_AUDIT_PROBE_{int(time.time()*1000)}"
+    receipt = crypto_signer.sign_payload(test_payload, statute="FIPS 140-2 Level 3 Hardware Token Probe")
+    return {
+        "hsm_status": "ONLINE",
+        "fips_level": "Level 3 Certified Hardware Token",
+        "key_slot": receipt.hsm_key_slot,
+        "cert_serial": receipt.certificate_serial_number,
+        "algorithm": receipt.signature_algorithm,
+        "signature_preview": receipt.signature_hex[:48] + "...",
+        "rfc3161_timestamp": receipt.rfc3161_timestamp,
+        "verification_status": receipt.verification_status
+    }
+
+
+# =============================================================================
+# Distributed Graph Database Adapter & Fast-Path Pre-Clearing Endpoints
+# =============================================================================
+
+class GraphAdapterConfigureRequest(BaseModel):
+    uri: Optional[str] = Field("bolt://localhost:7687", json_schema_extra={"example": "bolt://localhost:7687"})
+    user: Optional[str] = Field("neo4j", json_schema_extra={"example": "neo4j"})
+    password: Optional[str] = Field("password", json_schema_extra={"example": "password"})
+    pool_size: Optional[int] = Field(50, json_schema_extra={"example": 50})
+
+
+class GraphQueryRequest(BaseModel):
+    query: str = Field(..., json_schema_extra={"example": "MATCH (n:Account) WHERE n.id = $id RETURN n"})
+    params: Optional[Dict[str, Any]] = Field(default_factory=dict)
+
+
+@app.get("/api/v1/graph/adapter/status", tags=["Distributed Graph Store"])
+def get_graph_adapter_status():
+    """Returns cluster connection health, topology cache metrics, and operating mode for the graph adapter."""
+    return graph_adapter.health_check()
+
+
+@app.post("/api/v1/graph/adapter/configure", tags=["Distributed Graph Store"])
+def configure_graph_adapter(req: GraphAdapterConfigureRequest):
+    """Dynamically reconfigures the distributed graph cluster connector (Neo4j / Memgraph / Neptune)."""
+    graph_adapter.uri = req.uri
+    graph_adapter.user = req.user
+    graph_adapter.password = req.password
+    graph_adapter.pool_size = req.pool_size or 50
+    graph_adapter._init_connection()
+    db.append_audit_event(
+        event_type="GRAPH_ADAPTER_RECONFIGURED",
+        actor="System Infrastructure Architect",
+        payload={"uri": req.uri, "operating_mode": graph_adapter.operating_mode}
+    )
+    return graph_adapter.health_check()
+
+
+@app.post("/api/v1/graph/query", tags=["Distributed Graph Store"])
+def execute_graph_query(req: GraphQueryRequest):
+    """Executes a Cypher graph query across the distributed graph engine with automated caching."""
+    t0 = time.perf_counter()
+    records = graph_adapter.execute_cypher(req.query, req.params)
+    latency_ms = (time.perf_counter() - t0) * 1000.0
+    return {
+        "query": req.query,
+        "records_count": len(records),
+        "results": records,
+        "execution_latency_ms": round(latency_ms, 3)
+    }
+
+
+@app.get("/api/v1/fast-path/telemetry", tags=["Distributed Graph Store"])
+def get_fast_path_telemetry():
+    """Returns high-throughput Fast-Path early-exit triage statistics."""
+    return fast_path_gate.get_telemetry()

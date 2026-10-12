@@ -14,12 +14,20 @@ import argparse
 from pathlib import Path
 
 # Windows PyTorch DLL loading safety guard
-torch_lib = Path(r"C:\Research and Business Project\Intelligent-AML\venv\Lib\site-packages\torch\lib")
-if torch_lib.exists() and hasattr(os, "add_dll_directory"):
-    try:
-        os.add_dll_directory(str(torch_lib))
-    except Exception:
-        pass
+_repo_root = Path(__file__).resolve().parent.parent
+_torch_candidates = [
+    Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib",
+    _repo_root / ".venv" / "Lib" / "site-packages" / "torch" / "lib",
+    _repo_root / "venv" / "Lib" / "site-packages" / "torch" / "lib",
+]
+for torch_lib in _torch_candidates:
+    if torch_lib.exists():
+        if hasattr(os, "add_dll_directory"):
+            try:
+                os.add_dll_directory(str(torch_lib))
+            except Exception:
+                pass
+        break
 
 import torch
 import numpy as np
@@ -38,7 +46,7 @@ from src.models.htgnn import build_hetero_data
 def extract_ego_subgraph(data, target_node_idx=0, num_hops=2, max_neighbors=30):
     """Extracts a multi-hop ego-neighborhood from PyG HeteroData."""
     G = nx.DiGraph()
-    
+
     # Collect edges
     edge_tuples = []
     for rel in data.edge_types:
@@ -46,19 +54,19 @@ def extract_ego_subgraph(data, target_node_idx=0, num_hops=2, max_neighbors=30):
         for i in range(edge_index.shape[1]):
             u, v = int(edge_index[0, i]), int(edge_index[1, i])
             edge_tuples.append((u, v, rel))
-            
+
     full_G = nx.DiGraph()
     for u, v, rel in edge_tuples:
         full_G.add_edge(u, v, relation=str(rel))
-        
+
     if target_node_idx not in full_G:
         # Fallback to first active node
         target_node_idx = list(full_G.nodes())[0] if len(full_G.nodes()) > 0 else 0
-        
+
     # Extract k-hop ego graph
     ego_nodes = {target_node_idx}
     frontier = {target_node_idx}
-    
+
     for _ in range(num_hops):
         next_frontier = set()
         for n in frontier:
@@ -68,7 +76,7 @@ def extract_ego_subgraph(data, target_node_idx=0, num_hops=2, max_neighbors=30):
             next_frontier.update(pred)
         ego_nodes.update(next_frontier)
         frontier = next_frontier
-        
+
     sub_G = full_G.subgraph(ego_nodes).copy()
     return sub_G, target_node_idx
 
@@ -76,31 +84,31 @@ def extract_ego_subgraph(data, target_node_idx=0, num_hops=2, max_neighbors=30):
 def render_interactive_plot(sub_G, target_node_idx, dataset_name, output_html_path):
     """Renders interactive Plotly graph of the laundering subnetwork."""
     pos = nx.spring_layout(sub_G, seed=42, k=0.3)
-    
+
     edge_x, edge_y = [], []
     for edge in sub_G.edges():
         x0, y0 = pos[edge[0]]
         x1, y1 = pos[edge[1]]
         edge_x.extend([x0, x1, None])
         edge_y.extend([y0, y1, None])
-        
+
     edge_trace = go.Scatter(
         x=edge_x, y=edge_y,
         line=dict(width=1.5, color='#475569'),
         hoverinfo='none',
         mode='lines'
     )
-    
+
     node_x, node_y, node_color, node_text, node_size = [], [], [], [], []
     for node in sub_G.nodes():
         x, y = pos[node]
         node_x.append(x)
         node_y.append(y)
-        
+
         is_target = (node == target_node_idx)
         deg_in = sub_G.in_degree(node)
         deg_out = sub_G.out_degree(node)
-        
+
         if is_target:
             node_color.append('#ef4444') # Red target
             node_size.append(24)
@@ -113,7 +121,7 @@ def render_interactive_plot(sub_G, target_node_idx, dataset_name, output_html_pa
             node_color.append('#3b82f6') # Blue standard account
             node_size.append(10)
             node_text.append(f"Account #{node}<br>In-Degree: {deg_in}<br>Out-Degree: {deg_out}")
-            
+
     node_trace = go.Scatter(
         x=node_x, y=node_y,
         mode='markers',
@@ -125,7 +133,7 @@ def render_interactive_plot(sub_G, target_node_idx, dataset_name, output_html_pa
             line=dict(width=2, color='#ffffff')
         )
     )
-    
+
     fig = go.Figure(
         data=[edge_trace, node_trace],
         layout=go.Layout(
@@ -151,7 +159,7 @@ def render_interactive_plot(sub_G, target_node_idx, dataset_name, output_html_pa
             ]
         )
     )
-    
+
     p = Path(output_html_path)
     p.parent.mkdir(parents=True, exist_ok=True)
     fig.write_html(str(p))
@@ -173,7 +181,7 @@ def main():
 
     data = build_hetero_data(args.dataset)
     target_idx = args.node_idx
-    
+
     if args.sample_illicit:
         for nt in data.node_types:
             if hasattr(data[nt], "y") and data[nt].y is not None:
@@ -186,7 +194,7 @@ def main():
 
     sub_G, actual_target = extract_ego_subgraph(data, target_node_idx=target_idx, num_hops=args.hops)
     print(f"  [Extracted] Subgraph contains {sub_G.number_of_nodes()} nodes and {sub_G.number_of_edges()} edges.")
-    
+
     render_interactive_plot(sub_G, actual_target, args.dataset, args.output)
     print("\n" + "=" * 80)
     print(" VISUALIZATION COMPLETE")

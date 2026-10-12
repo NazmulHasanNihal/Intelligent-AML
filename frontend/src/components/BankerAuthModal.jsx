@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-  X, 
-  UserCheck, 
-  ShieldCheck, 
-  Key, 
-  Building2, 
-  Check, 
+import {
+  X,
+  UserCheck,
+  ShieldCheck,
+  Key,
+  Building2,
+  Check,
   ChevronRight,
   Lock,
   Sparkles
@@ -27,7 +27,7 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fadeIn select-none">
       <div className="w-full max-w-md bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl shadow-2xl overflow-hidden flex flex-col skeuo-card max-h-[92vh] overflow-y-auto">
-        
+
         {/* Header */}
         <div className="p-3.5 sm:p-4 bg-[var(--bg-card-elevated)] border-b border-[var(--border-subtle)] flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -76,7 +76,7 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
 
             <div className="space-y-1.5">
               {bankerProfiles.map(profile => {
-                const isActive = currentBanker.id === profile.id;
+                const isActive = currentBanker?.id === profile.id;
                 return (
                   <div
                     key={profile.id}
@@ -84,8 +84,8 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
                       switchBanker(profile.id);
                     }}
                     className={`p-2.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
-                      isActive 
-                        ? 'bg-[var(--accent-primary)]/15 border-[var(--accent-primary)] shadow-sm' 
+                      isActive
+                        ? 'bg-[var(--accent-primary)]/15 border-[var(--accent-primary)] shadow-sm'
                         : 'skeuo-card hover:bg-black/[0.02] dark:hover:bg-white/[0.03]'
                     }`}
                   >
@@ -121,7 +121,7 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
           <div className="p-2.5 rounded-xl skeuo-well flex items-center gap-2 text-[10px] sm:text-[11px] text-[var(--text-secondary)]">
             <Lock className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />
             <span>
-              All actions signed and attributed to <b>{currentBanker.name}</b> in the audit trail.
+              All actions signed and attributed to <b>{currentBanker?.name || 'Authorized Officer'}</b> in the audit trail.
             </span>
           </div>
         </div>

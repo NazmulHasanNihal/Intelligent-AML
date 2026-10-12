@@ -7,12 +7,18 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 if os.name == "nt":
-    _torch_lib = ROOT / "venv" / "Lib" / "site-packages" / "torch" / "lib"
-    if _torch_lib.exists():
-        try:
-            os.add_dll_directory(str(_torch_lib))
-        except Exception:
-            pass
+    _torch_candidates = [
+        Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib",
+        ROOT / ".venv" / "Lib" / "site-packages" / "torch" / "lib",
+        ROOT / "venv" / "Lib" / "site-packages" / "torch" / "lib",
+    ]
+    for _torch_lib in _torch_candidates:
+        if _torch_lib.exists():
+            try:
+                os.add_dll_directory(str(_torch_lib))
+            except Exception:
+                pass
+            break
 
 import shutil
 import tempfile
@@ -49,10 +55,10 @@ class TestAutomatedPaperBenchmark(unittest.TestCase):
         self.assertEqual(len(ALL_MODELS_REGISTRY), 13)
         slugs = [m["slug"] for m in ALL_MODELS_REGISTRY]
         self.assertEqual(len(slugs), len(set(slugs)), "Model slugs must be unique")
-        
+
         # Verify Proposed model is present
         self.assertTrue(any(m["slug"] == "proposed_c_stgb" for m in ALL_MODELS_REGISTRY))
-        
+
         for m in ALL_MODELS_REGISTRY:
             self.assertIn("slug", m)
             self.assertIn("name", m)
@@ -74,7 +80,7 @@ class TestAutomatedPaperBenchmark(unittest.TestCase):
             epochs=10,
             model_slug="tabular_xgboost"
         )
-        
+
         test_record = {
             "dataset": "test_dataset",
             "model": "Tabular XGBoost",
@@ -94,11 +100,11 @@ class TestAutomatedPaperBenchmark(unittest.TestCase):
             "peak_memory_mb": 45.2,
             "parameter_count": 0
         }
-        
+
         # 1. Save checkpoint
         save_atomic_checkpoint(ckpt_path, test_record)
         self.assertTrue(ckpt_path.exists())
-        
+
         # 2. Load checkpoint
         loaded = load_checkpoint(ckpt_path)
         self.assertIsNotNone(loaded)
@@ -110,7 +116,7 @@ class TestAutomatedPaperBenchmark(unittest.TestCase):
         group_dir = self.temp_dir / "test_dataset" / "70_30_10ep"
         checkpoints_dir = group_dir / "checkpoints"
         checkpoints_dir.mkdir(parents=True, exist_ok=True)
-        
+
         record_cstgb = {
             "dataset": "test_dataset",
             "model": "Proposed C-STGB",
@@ -132,7 +138,7 @@ class TestAutomatedPaperBenchmark(unittest.TestCase):
             "peak_memory_mb": 110.0,
             "parameter_count": 150000
         }
-        
+
         record_xgb = {
             "dataset": "test_dataset",
             "model": "Tabular XGBoost",
@@ -154,32 +160,32 @@ class TestAutomatedPaperBenchmark(unittest.TestCase):
             "peak_memory_mb": 45.0,
             "parameter_count": 0
         }
-        
+
         save_atomic_checkpoint(checkpoints_dir / "proposed_c_stgb.json", record_cstgb)
         save_atomic_checkpoint(checkpoints_dir / "tabular_xgboost.json", record_xgb)
-        
+
         ds_meta = {
             "dataset": "test_dataset",
             "total_nodes": 5000,
             "total_edges": 15000,
             "illicit_ratio_pct": 2.50
         }
-        
+
         generate_trial_group_summary(group_dir, "test_dataset", "70_30", 10, ds_meta)
-        
+
         summary_csv = group_dir / "benchmark_summary.csv"
         summary_json = group_dir / "benchmark_summary.json"
         report_md = group_dir / "benchmark_report.md"
-        
+
         self.assertTrue(summary_csv.exists())
         self.assertTrue(summary_json.exists())
         self.assertTrue(report_md.exists())
-        
+
         df = pd.read_csv(summary_csv)
         self.assertEqual(len(df), 2)
         # Proposed model should be sorted first
         self.assertEqual(df.iloc[0]["model"], "Proposed C-STGB")
-        
+
         md_text = report_md.read_text(encoding="utf-8")
         self.assertIn("Proposed C-STGB", md_text)
         self.assertIn("Tabular XGBoost", md_text)

@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import ReactECharts from 'echarts-for-react';
-import { 
-  ShieldAlert, 
-  Clock, 
-  CheckCircle2, 
-  AlertTriangle, 
-  ArrowUpRight, 
-  Zap, 
+import {
+  ShieldAlert,
+  Clock,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowUpRight,
+  Zap,
   ChevronRight,
   TrendingUp,
   Cpu,
@@ -27,13 +27,13 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 
 export const OverviewView = () => {
-  const { 
-    telemetry, 
-    metrics, 
-    alerts, 
-    cases, 
+  const {
+    telemetry,
+    metrics,
+    alerts,
+    cases,
     liveTransactions,
-    navigate, 
+    navigate,
     openDrawer,
     quickQuarantine,
     setRoleModalOpen,
@@ -144,64 +144,68 @@ export const OverviewView = () => {
             onClick={() => setRoleModalOpen(true)}
             icon={UserCheck}
             className="h-7 text-xs font-mono"
+            title="Two-Officer Sign-Off Rule to prevent corruption (Maker/Checker)"
           >
-            Role Delegation (Maker/Checker)
+            Two-Officer Rule (Maker/Checker)
           </Button>
         </div>
       </div>
 
-      {/* 4 Plain, Elegant KPI Cards */}
+      {/* 4 Plain, Elegant KPI Cards with Real-World Explanations */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Card className="flex flex-col justify-between">
           <div>
-            <span className="text-xs text-text-muted font-medium block">24h Processed Volume</span>
+            <span className="text-xs text-text-muted font-medium block">24h Volume (Honest Payments)</span>
             <div className="text-xl sm:text-2xl font-bold text-text mt-1 tabular-nums font-mono">
               {telemetry.totalProcessed24h.toLocaleString()}
             </div>
+            <span className="text-[10px] text-text-muted block mt-0.5">Cleared in &lt;1ms without human delays</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-cleared font-mono mt-3">
             <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-            <span className="font-semibold">{metrics.stpRate}% STP Cleared</span>
+            <span className="font-semibold">{metrics.stpRate}% Auto-Approved (STP)</span>
           </div>
         </Card>
 
         <Card className="flex flex-col justify-between">
           <div>
-            <span className="text-xs text-text-muted font-medium block">Tier 1 Auto-Quarantine</span>
+            <span className="text-xs text-text-muted font-medium block">Tier 1 Immediate Freeze</span>
             <div className="text-xl sm:text-2xl font-bold text-critical mt-1 tabular-nums font-mono">
               {telemetry.tier1Quarantined.toLocaleString()}
             </div>
+            <span className="text-[10px] text-text-muted block mt-0.5">High danger / Sanctioned crime match</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-2 font-mono mt-3">
             <span className="w-1.5 h-1.5 rounded-full bg-critical" />
-            <span>{metrics.quarantineRate}% of Total Volume</span>
+            <span>{metrics.quarantineRate}% Immediate Stop</span>
           </div>
         </Card>
 
         <Card className="flex flex-col justify-between">
           <div>
-            <span className="text-xs text-text-muted font-medium block">Tier 2 Review Queue</span>
+            <span className="text-xs text-text-muted font-medium block">Tier 2 Needs Human Check</span>
             <div className="text-xl sm:text-2xl font-bold text-review mt-1 tabular-nums font-mono">
               {telemetry.tier2ReviewQueue.toLocaleString()}
             </div>
+            <span className="text-[10px] text-text-muted block mt-0.5">Unusual pattern sent to human officer</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-2 font-mono mt-3">
             <span className="w-1.5 h-1.5 rounded-full bg-review" />
-            <span>{metrics.reviewRate}% Analyst Queue</span>
+            <span>{metrics.reviewRate}% Officer Queue</span>
           </div>
         </Card>
 
         <Card className="flex flex-col justify-between">
           <div>
-            <span className="text-xs text-text-muted font-medium block">Quarantined Illicit Capital</span>
+            <span className="text-xs text-text-muted font-medium block">Locked Dirty Money</span>
             <div className="text-xl sm:text-2xl font-bold text-critical mt-1 tabular-nums font-mono">
               $1,482,900
             </div>
-            <span className="text-[11px] font-mono text-text-muted">৳177,948,000 BDT</span>
+            <span className="text-[11px] font-mono text-text-muted">৳177,948,000 BDT locked in escrow</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-cleared font-mono mt-3">
             <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-cleared" />
-            <span>100% Held (BFIU §15 Order)</span>
+            <span>100% Held Before Exit</span>
           </div>
         </Card>
       </div>
@@ -221,15 +225,15 @@ export const OverviewView = () => {
             }
           />
           <div className="h-72 w-full mt-2">
-            <ReactECharts 
-              option={chartOption} 
-              notMerge={true} 
-              lazyUpdate={true} 
+            <ReactECharts
+              option={chartOption}
+              notMerge={true}
+              lazyUpdate={true}
               onChartReady={(instance) => {
                 const handleResize = () => instance?.resize();
                 window.addEventListener('resize', handleResize);
               }}
-              style={{ height: '100%', width: '100%' }} 
+              style={{ height: '100%', width: '100%' }}
             />
           </div>
         </Card>
@@ -279,7 +283,7 @@ export const OverviewView = () => {
                   </div>
 
                   {/* Immediate Action Triggers: Open Subgraph & Hold Transaction */}
-                  <div 
+                  <div
                     className="flex items-center justify-end gap-1.5 pt-1"
                     onClick={(e) => e.stopPropagation()}
                   >
@@ -439,7 +443,7 @@ export const OverviewView = () => {
                   return true;
                 })
                 .map((tx, idx) => {
-                  const railColor = 
+                  const railColor =
                     tx.rail?.includes('LC') ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' :
                     tx.rail?.includes('MT103') || tx.rail?.includes('COV') ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                     tx.rail?.includes('RTGS') ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
@@ -450,7 +454,7 @@ export const OverviewView = () => {
                     'bg-teal-500/10 text-teal-400 border-teal-500/20';
 
                   return (
-                    <tr 
+                    <tr
                       key={`${tx.id || 'tx'}-${tx.unixMs || tx.timestamp || idx}-${idx}`}
                       onClick={() => openDrawer({
                         account: tx.sourceAccount,
@@ -511,7 +515,7 @@ export const OverviewView = () => {
 
                       {/* Risk Decision Tier */}
                       <td className="py-2.5 px-2 text-center whitespace-nowrap">
-                        <Badge 
+                        <Badge
                           variant={tx.tierCode === 1 ? 'critical' : tx.tierCode === 2 ? 'review' : 'cleared'}
                           size="sm"
                           className="font-mono font-bold"

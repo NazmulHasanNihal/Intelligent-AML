@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { 
-  X, 
-  Mail, 
-  Send, 
-  Copy, 
-  Check, 
-  FileText, 
-  ShieldCheck, 
-  AlertCircle, 
-  Download, 
+import {
+  X,
+  Mail,
+  Send,
+  Copy,
+  Check,
+  FileText,
+  ShieldCheck,
+  AlertCircle,
+  Download,
   HelpCircle,
   Clock,
   ArrowRight,
@@ -27,7 +27,10 @@ export const CustomerNoticeModal = ({ isOpen, onClose, targetAccount, onNoticeDi
   const holderName = targetAccount.holderName || 'Apex Global Logistics Ltd';
   const accountNum = targetAccount.accountNumber || targetAccount.src || 'US-JPMC-4829-1092-8823';
   const amount = targetAccount.amount ? `$${targetAccount.amount.toLocaleString()}` : '$9,450.00 USD';
-  const institution = currentBanker.institution || 'JPMorgan Chase & Co.';
+  const bankerName = currentBanker?.name || 'Authorized Compliance Officer';
+  const bankerRole = currentBanker?.roleTitle || 'Compliance & Risk Operations';
+  const bankerId = currentBanker?.id || 'BNK-7842';
+  const institution = currentBanker?.institution || 'JPMorgan Chase & Co.';
 
   const NOTICE_TEMPLATES = {
     VERIFICATION_REQUIRED: {
@@ -44,7 +47,7 @@ Next Steps to Complete Processing:
 If you or your authorized representatives did not initiate this payment instruction, please contact our 24/7 Treasury Operations Support desk immediately at 1-800-555-0199.
 
 Sincerely,
-${currentBanker.name} (${currentBanker.roleTitle})
+${bankerName} (${bankerRole})
 Operations & Risk Controls
 ${institution}`
     },
@@ -64,7 +67,7 @@ Please furnish the following documentation within 5 business days:
 Documents may be uploaded securely through the Corporate Treasury Portal under "Compliance & Documentation" or transmitted directly to your dedicated Relationship Manager.
 
 Sincerely,
-${currentBanker.name} (${currentBanker.roleTitle})
+${bankerName} (${bankerRole})
 Commercial Due Diligence Operations
 ${institution}`
     },
@@ -82,7 +85,7 @@ Required Submission Items:
 Please upload the executed declaration package to the Corporate Portal within 7 business days to prevent operational holds on future settlements.
 
 Sincerely,
-${currentBanker.name} (${currentBanker.roleTitle})
+${bankerName} (${bankerRole})
 Compliance Operations & Customer Due Diligence
 ${institution}`
     },
@@ -100,7 +103,7 @@ Required Counterparty Validation:
 Please transmit this verification via your secure relationship portal.
 
 Sincerely,
-${currentBanker.name} (${currentBanker.roleTitle})
+${bankerName} (${bankerRole})
 Treasury Settlements & Counterparty Risk
 ${institution}`
     }
@@ -132,7 +135,7 @@ ${institution}`
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fadeIn select-none">
       <div className="w-full max-w-xl bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl shadow-2xl overflow-hidden flex flex-col skeuo-card max-h-[92vh] overflow-y-auto">
-        
+
         {/* Header */}
         <div className="p-3.5 sm:p-4 bg-[var(--bg-card-elevated)] border-b border-[var(--border-subtle)] flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -142,7 +145,7 @@ ${institution}`
             <div className="min-w-0">
               <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">Client Due Diligence & Request for Information (RFI)</h3>
               <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">
-                Compliant institutional notice issued by {currentBanker.name}
+                Compliant institutional notice issued by {bankerName}
               </p>
             </div>
           </div>
@@ -240,7 +243,7 @@ ${institution}`
           <div className="p-2 sm:p-2.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] flex items-center justify-between text-[10px] sm:text-[11px] text-[var(--text-secondary)] font-sans">
             <div className="flex items-center gap-1.5 truncate">
               <ShieldCheck className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />
-              <span className="truncate">Stamped: <b>{currentBanker.id}</b> • Audit Logged</span>
+              <span className="truncate">Stamped: <b>{bankerId}</b> • Audit Logged</span>
             </div>
             <span className="text-[var(--text-muted)] font-mono text-[9px] shrink-0">ISO 20022 Std</span>
           </div>

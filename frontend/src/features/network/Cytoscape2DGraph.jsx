@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import cytoscape from 'cytoscape';
-import { 
-  Maximize2, 
-  ZoomIn, 
-  ZoomOut, 
-  Download, 
-  Layers, 
+import {
+  Maximize2,
+  ZoomIn,
+  ZoomOut,
+  Download,
+  Layers,
   Filter,
   Route,
   ArrowRight,
@@ -33,14 +33,74 @@ import { evaluateEdgeTrust } from '../../lib/scoringEngine';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 
-export const Cytoscape2DGraph = ({ onNodeSelect }) => {
+const getLayoutConfig = (mode) => {
+  if (mode === 'sugiyama') {
+    return {
+      name: 'breadthfirst',
+      directed: true,
+      roots: ['BD22-EBLB-4829-1092-8823', 'MFS-BKASH-0171-8840'],
+      padding: 24,
+      spacingFactor: 1.1,
+      animate: false
+    };
+  }
+  if (mode === 'orbital') {
+    return {
+      name: 'concentric',
+      concentric: (node) => {
+        const tier = node.data('tierCode') || 3;
+        return 4 - tier; // Tier 1 center (3), Tier 2 middle (2), Tier 3 outer (1)
+      },
+      levelWidth: () => 1,
+      padding: 24,
+      animate: false
+    };
+  }
+  if (mode === 'circle') {
+    return {
+      name: 'circle',
+      padding: 24,
+      animate: false
+    };
+  }
+  return {
+    name: 'cose',
+    animate: false,
+    nodeRepulsion: 20000,
+    idealEdgeLength: 140,
+    nodeOverlap: 35,
+    componentSpacing: 100,
+    edgeElasticity: 100,
+    nestingFactor: 1.2,
+    gravity: 0.22,
+    numIter: 1000,
+    nodeDimensionsIncludeLabels: true
+  };
+};
+
+export const Cytoscape2DGraph = ({
+  onNodeSelect,
+  layoutMode: externalLayoutMode = 'sugiyama',
+  onLayoutChange,
+  selectedNodeId,
+  showTopControls = true,
+  externalCamouflageDelta,
+  className
+}) => {
   const containerRef = useRef(null);
   const animCanvasRef = useRef(null);
   const animFrameRef = useRef(null);
   const cyRef = useRef(null);
-  const { 
-    openDrawer, 
-    camouflageDelta, 
+  const [internalLayout, setInternalLayout] = useState('sugiyama');
+  const activeLayout = externalLayoutMode || internalLayout;
+
+  const handleLayoutSwitch = (mode) => {
+    setInternalLayout(mode);
+    if (onLayoutChange) onLayoutChange(mode);
+  };
+  const {
+    openDrawer,
+    camouflageDelta,
     setCamouflageDelta,
     timelineStep,
     setTimelineStep,
@@ -52,6 +112,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
     setCamouflageGatingEnabled,
     setSelectedGraphNode
   } = useAppStore();
+
+  const effectiveCamouflageDelta = externalCamouflageDelta !== undefined ? externalCamouflageDelta : camouflageDelta;
 
   const [pathSource, setPathSource] = useState('BD22-EBLB-4829-1092-8823');
   const [pathTarget, setPathTarget] = useState('BD04-BRAC-1109-8421-4402');
@@ -89,14 +151,14 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
     // Flow Edges with Temporal Sequence Tagging
     // Step 1: Smurfing Inflow ($4,800 bKash to Mule)
     { data: { id: 'e6', source: 'MFS-BKASH-0171-8840', target: 'BD04-BRAC-1109-8421-4402', label: '$4,800 (bKash MFS)', amount: 4800, rail: 'bKash MFS', timeStep: 1, hop: 1 } },
-    
+
     // Step 2: Layering Interbank ($47,600 RTGS from Meghna to Tanvir)
     { data: { id: 'e3', source: 'BD22-EBLB-4829-1092-8823', target: 'BD04-BRAC-1109-8421-4402', label: '$47,600 (RTGS)', amount: 47600, rail: 'RTGS (BD Bank)', isLoop: true, timeStep: 2, hop: 1 } },
-    
+
     // Step 3: Integration Outflow ($47,600 SWIFT to Dubai Free Zone)
     { data: { id: 'e4', source: 'BD04-BRAC-1109-8421-4402', target: 'AE-EBIL-4412-8819-3301', label: '$47,600 (SWIFT Wire)', amount: 47600, rail: 'SWIFT MT103', isLoop: true, timeStep: 3, hop: 1 } },
     { data: { id: 'e10', source: 'AE-EBIL-4412-8819-3301', target: 'GB-BARC-1109-8421-4402', label: '$47,600 (CHAPS)', amount: 47600, rail: 'CHAPS', timeStep: 3, hop: 3 } },
-    
+
     // Step 4: Cycle-3 Wash Return (SWIFT MT700 LC Wash Return to Meghna)
     { data: { id: 'e5', source: 'AE-EBIL-4412-8819-3301', target: 'BD22-EBLB-4829-1092-8823', label: '$47,600 (Cycle-3 Return)', amount: 47600, rail: 'SWIFT MT700 (LC)', isLoop: true, timeStep: 4, hop: 1 } },
     { data: { id: 'e1', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9,450 (SWIFT LC)', amount: 9450, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
@@ -119,7 +181,7 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
   const visibleElements = useMemo(() => {
     // 1. Filter nodes by hop distance
     const nodes = allElements.filter(el => !el.data.source && el.data.hop <= egoHopDistance);
-    
+
     // Sort nodes to prioritize high-risk nodes (Tier 1 then Tier 2) up to maxVisibleNodes
     nodes.sort((a, b) => (b.data.riskScore || 0) - (a.data.riskScore || 0));
     const cappedNodes = nodes.slice(0, maxVisibleNodes);
@@ -136,17 +198,17 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
 
   // Timeline Step Metadata with Full Forensic Flow Profiles
   const TIMELINE_STEPS = [
-    { 
-      step: 0, 
-      label: '08:00 UTC', 
-      title: 'Quiescent Baseline', 
+    {
+      step: 0,
+      label: '08:00 UTC',
+      title: 'Quiescent Baseline',
       desc: 'All interbank corridors operating within normal Poisson intensity baseline. Zero invariant alerts.',
       activeTx: null
     },
-    { 
-      step: 1, 
-      label: '08:14 UTC', 
-      title: 'Phase 1: MFS Smurfing Inflow', 
+    {
+      step: 1,
+      label: '08:14 UTC',
+      title: 'Phase 1: MFS Smurfing Inflow',
       desc: 'bKash micro-transfers aggregated from MFS retail agents into Tanvir mule account to evade single-ticket CTR thresholds.',
       activeTx: {
         edgeId: 'e6',
@@ -163,10 +225,10 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         color: '#F59E0B'
       }
     },
-    { 
-      step: 2, 
-      label: '08:16 UTC', 
-      title: 'Phase 2: RTGS Layering Injection', 
+    {
+      step: 2,
+      label: '08:16 UTC',
+      title: 'Phase 2: RTGS Layering Injection',
       desc: 'Corporate treasury executes $47,600 high-speed interbank RTGS transfer into conduit aggregator within 120 seconds.',
       activeTx: {
         edgeId: 'e3',
@@ -183,10 +245,10 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         color: '#EF4444'
       }
     },
-    { 
-      step: 3, 
-      label: '08:22 UTC', 
-      title: 'Phase 3: Cross-Border SWIFT Outflow', 
+    {
+      step: 3,
+      label: '08:22 UTC',
+      title: 'Phase 3: Cross-Border SWIFT Outflow',
       desc: 'Layered funds wired to JAFZA Free Zone shell entity in Dubai via international telegraphic wire to obscure ownership.',
       activeTx: {
         edgeId: 'e4',
@@ -203,10 +265,10 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         color: '#EC4899'
       }
     },
-    { 
-      step: 4, 
-      label: '08:35 UTC', 
-      title: 'Phase 4: Cycle-3 Trade Wash Return', 
+    {
+      step: 4,
+      label: '08:35 UTC',
+      title: 'Phase 4: Cycle-3 Trade Wash Return',
       desc: 'Documentary credit import settlement under over-invoiced trade bills completes full circular wash ring back to origin hub.',
       activeTx: {
         edgeId: 'e5',
@@ -459,19 +521,7 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
           }
         }
       ],
-      layout: {
-        name: 'cose',
-        animate: false,
-        nodeRepulsion: 22000, // Barnes-Hut charge repulsion preventing dense hub overlap
-        idealEdgeLength: 150,
-        nodeOverlap: 40,
-        componentSpacing: 110,
-        edgeElasticity: 100,
-        nestingFactor: 1.2,
-        gravity: 0.22,
-        numIter: 1000,
-        nodeDimensionsIncludeLabels: true
-      }
+      layout: getLayoutConfig(activeLayout)
     });
 
     cy.on('tap', 'node', (evt) => {
@@ -485,14 +535,17 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
         tierCode: nodeData.tierCode,
         amount: nodeData.amount,
         riskScore: nodeData.riskScore,
-        whyFlagged: nodeData.isCamouflageNode 
-          ? 'Peripheral retail POS merchant connected to suspected mule account.' 
+        whyFlagged: nodeData.isCamouflageNode
+          ? 'Peripheral retail POS merchant connected to suspected mule account.'
           : `Entity exhibiting topology cluster signatures (${nodeData.role}) with multi-hop connectivity.`
       });
       if (onNodeSelect) onNodeSelect(nodeData);
     });
 
     cyRef.current = cy;
+    setTimeout(() => {
+      if (cyRef.current) cyRef.current.fit(undefined, 25);
+    }, 150);
 
     return () => {
       if (cyRef.current) {
@@ -507,6 +560,34 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
     };
   }, [visibleElements]);
 
+  // Dynamic layout engine switching with smooth animated transition
+  useEffect(() => {
+    if (!cyRef.current) return;
+    const cy = cyRef.current;
+    const config = { ...getLayoutConfig(activeLayout), animate: true, animationDuration: 400 };
+    try {
+      cy.layout(config).run();
+      setTimeout(() => {
+        if (cyRef.current) cyRef.current.fit(undefined, 25);
+      }, 420);
+    } catch (e) {
+      console.warn('Cytoscape layout update error:', e);
+    }
+  }, [activeLayout]);
+
+  // Sync external selectedNodeId
+  useEffect(() => {
+    if (!cyRef.current) return;
+    const cy = cyRef.current;
+    cy.nodes().unselect();
+    if (selectedNodeId) {
+      const match = cy.$(`node[id = "${selectedNodeId}"]`);
+      if (match.length > 0) {
+        match.select();
+      }
+    }
+  }, [selectedNodeId]);
+
   // Update Cytoscape styles dynamically when camouflage gating changes
   useEffect(() => {
     if (!cyRef.current) return;
@@ -514,7 +595,7 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
 
     cy.edges().forEach((edge) => {
       const data = edge.data();
-      if (data.isCamouflage && (camouflageGatingEnabled || camouflageDelta >= 0.04)) {
+      if (data.isCamouflage && (camouflageGatingEnabled || effectiveCamouflageDelta >= 0.04)) {
         edge.addClass('pruned-edge');
       } else {
         edge.removeClass('pruned-edge');
@@ -522,13 +603,13 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
     });
 
     cy.nodes('[?isCamouflageNode]').forEach((node) => {
-      if (camouflageGatingEnabled || camouflageDelta >= 0.04) {
+      if (camouflageGatingEnabled || effectiveCamouflageDelta >= 0.04) {
         node.addClass('pruned-node');
       } else {
         node.removeClass('pruned-node');
       }
     });
-  }, [camouflageDelta, camouflageGatingEnabled]);
+  }, [effectiveCamouflageDelta, camouflageGatingEnabled]);
 
   // Update Cytoscape styles dynamically when timeline step changes
   useEffect(() => {
@@ -593,20 +674,27 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
   }, [timelineStep, playbackMode, currentStepMeta, trackCamera]);
 
   // Continuous Timeline Playback Timer with Speed & Auto-Loop Controls
+  const timelineStepRef = useRef(timelineStep);
+  useEffect(() => {
+    timelineStepRef.current = timelineStep;
+  }, [timelineStep]);
+
   useEffect(() => {
     if (isPlaying) {
-      const stepDuration = Math.round(2600 / playbackSpeed);
+      const stepDuration = Math.round(2400 / playbackSpeed);
+      if (playTimerRef.current) clearInterval(playTimerRef.current);
       playTimerRef.current = setInterval(() => {
-        setTimelineStep(prev => {
-          if (prev >= 4) {
-            if (!autoLoop) {
-              setIsPlaying(false);
-              return 4;
-            }
-            return 1; // Smoothly loop back to Phase 1 (Smurfing Inflow)
+        const cur = typeof timelineStepRef.current === 'number' ? timelineStepRef.current : 0;
+        let next = cur + 1;
+        if (cur >= 4) {
+          if (!autoLoop) {
+            setIsPlaying(false);
+            return;
           }
-          return prev + 1;
-        });
+          next = 0; // Return to t0 (quiescent baseline) so the complete money trail restarts smoothly
+        }
+        timelineStepRef.current = next;
+        setTimelineStep(next);
       }, stepDuration);
     } else {
       if (playTimerRef.current) clearInterval(playTimerRef.current);
@@ -662,6 +750,36 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
 
       const cy = cyRef.current;
       const activeTx = currentStepMeta?.activeTx;
+
+      // 0. Legitimate Baseline Flow Animation at t0 (Soft Green Pulses on Verifiable Corridors)
+      if (cy && timelineStep === 0) {
+        const baseEdges = cy.$('edge[id = "e7"], edge[id = "e8"]');
+        baseEdges.forEach((edge) => {
+          const src = edge.source();
+          const tgt = edge.target();
+          if (src.length > 0 && tgt.length > 0 && src.visible() && tgt.visible()) {
+            const sPos = src.renderedPosition();
+            const tPos = tgt.renderedPosition();
+            const dx = tPos.x - sPos.x;
+            const dy = tPos.y - sPos.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist > 5) {
+              const elapsed = now - startTime;
+              const p = (elapsed % (2200 / playbackSpeed)) / (2200 / playbackSpeed);
+              const curX = sPos.x + dx * p;
+              const curY = sPos.y + dy * p;
+
+              ctx.beginPath();
+              ctx.arc(curX, curY, 3.5, 0, Math.PI * 2);
+              ctx.fillStyle = '#22C55E';
+              ctx.shadowColor = '#22C55E';
+              ctx.shadowBlur = 8;
+              ctx.fill();
+              ctx.shadowBlur = 0;
+            }
+          }
+        });
+      }
 
       if (cy && activeTx && timelineStep > 0) {
         const srcNode = cy.$(`node[id = "${activeTx.sourceId}"]`);
@@ -723,8 +841,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
 
                 ctx.beginPath();
                 ctx.arc(txX, txY, Math.max(1, 4.5 - t), 0, Math.PI * 2);
-                ctx.fillStyle = activeTx.color 
-                  ? `${activeTx.color}${Math.floor((0.35 / t) * 255).toString(16).padStart(2, '0')}` 
+                ctx.fillStyle = activeTx.color
+                  ? `${activeTx.color}${Math.floor((0.35 / t) * 255).toString(16).padStart(2, '0')}`
                   : 'rgba(239, 68, 68, 0.2)';
                 ctx.fill();
               }
@@ -796,8 +914,9 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
 
   const handleTogglePlay = () => {
     if (!isPlaying) {
-      if (timelineStep === 0 || timelineStep >= 4) {
-        setTimelineStep(1);
+      if (timelineStep >= 4) {
+        setTimelineStep(0);
+        timelineStepRef.current = 0;
       }
       setIsPlaying(true);
     } else {
@@ -840,34 +959,59 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
   };
 
   return (
-    <div className="relative w-full h-[620px] sm:h-[680px] bg-surface rounded-lg border border-border overflow-hidden flex flex-col justify-between select-none">
-      {/* Top Controls Toolbar: Radial Expansion, Max Node Cap, Path Finding */}
-      <div className="p-3 border-b border-border bg-surfaceRaised flex flex-wrap items-center justify-between gap-2.5 z-10 text-xs">
-        {/* Left: Ego Hop & Radial Expansion */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-semibold text-text">Ego Neighborhood:</span>
-          <div className="flex items-center gap-1 font-mono text-[11px] p-0.5 bg-bg rounded border border-border">
-            {[1, 2, 3].map(h => (
-              <button
-                key={h}
-                onClick={() => setEgoHopDistance(h)}
-                className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                  egoHopDistance === h 
-                    ? 'bg-surfaceRaised font-bold text-accent shadow-xs' 
-                    : 'text-text-muted hover:text-text'
-                }`}
-              >
-                {h}-Hop
-              </button>
-            ))}
-          </div>
+    <div className={className || "relative w-full h-[450px] sm:h-[480px] bg-surface rounded-lg border border-border overflow-hidden flex flex-col justify-between select-none"}>
+      {/* Top Controls Toolbar: Radial Expansion, Max Node Cap, Layout Switcher, Path Finding */}
+      {showTopControls && (
+        <div className="p-3 border-b border-border bg-surfaceRaised flex flex-wrap items-center justify-between gap-2.5 z-10 text-xs">
+          {/* Left: Ego Hop, Radial Expansion & Layout Switcher */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-semibold text-text">Ego:</span>
+            <div className="flex items-center gap-1 font-mono text-[11px] p-0.5 bg-bg rounded border border-border">
+              {[1, 2, 3].map(h => (
+                <button
+                  key={h}
+                  onClick={() => setEgoHopDistance(h)}
+                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                    egoHopDistance === h
+                      ? 'bg-surfaceRaised font-bold text-accent shadow-xs'
+                      : 'text-text-muted hover:text-text'
+                  }`}
+                >
+                  {h}-Hop
+                </button>
+              ))}
+            </div>
+
+            {/* Layout Mode Selector */}
+            <div className="w-px h-3.5 bg-border mx-1" />
+            <div className="flex items-center gap-0.5 font-mono text-[10px] p-0.5 bg-bg rounded border border-border">
+              {[
+                { id: 'sugiyama', label: 'Sugiyama' },
+                { id: 'orbital', label: 'Orbital' },
+                { id: 'cose', label: 'COSE' },
+                { id: 'circle', label: 'Ring' }
+              ].map(l => (
+                <button
+                  key={l.id}
+                  onClick={() => handleLayoutSwitch(l.id)}
+                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
+                    activeLayout === l.id
+                      ? 'bg-surfaceRaised font-bold text-accent shadow-xs'
+                      : 'text-text-muted hover:text-text'
+                  }`}
+                  title={`Topology Layout: ${l.label}`}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
 
           <div className="w-px h-3.5 bg-border mx-1" />
 
           {/* Max Visible Entities Slider Cap (WebGL/DOM Protection) */}
           <div className="flex items-center gap-1.5 font-mono text-[11px]">
             <label htmlFor="graph-entity-cap-slider" className="text-text-muted cursor-pointer">Entity Cap:</label>
-            <input 
+            <input
               id="graph-entity-cap-slider"
               name="graph-entity-cap-slider"
               type="range"
@@ -887,8 +1031,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
           <button
             onClick={() => setCamouflageGatingEnabled(!camouflageGatingEnabled)}
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${
-              camouflageGatingEnabled 
-                ? 'bg-cleared-bg text-cleared border-cleared font-semibold' 
+              camouflageGatingEnabled
+                ? 'bg-cleared-bg text-cleared border-cleared font-semibold'
                 : 'bg-bg text-text-muted border-border hover:text-text'
             }`}
             title="Filter out low-value noise and irrelevant retail transactions (< $150)"
@@ -937,13 +1081,14 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
           </Button>
         </div>
       </div>
+      )}
 
       {/* Main Graph Viewport with 60FPS Canvas Animation Overlay */}
       <div className="w-full flex-1 relative bg-bg overflow-hidden">
         <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing bg-bg" />
-        <canvas 
-          ref={animCanvasRef} 
-          className="absolute inset-0 pointer-events-none z-10 w-full h-full" 
+        <canvas
+          ref={animCanvasRef}
+          className="absolute inset-0 pointer-events-none z-10 w-full h-full"
         />
 
         {/* Live Transaction HUD Card */}
@@ -959,7 +1104,7 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
                   </div>
                 </div>
                 <button
-                  onClick={() => { setIsPlaying(true); setTimelineStep(1); }}
+                  onClick={() => { timelineStepRef.current = 1; setTimelineStep(1); setIsPlaying(true); }}
                   className="px-2.5 py-1 rounded bg-accent text-white text-[11px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
                 >
                   <Play className="w-3 h-3" />
@@ -971,9 +1116,9 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
                 {/* Header: Phase badge & timestamp */}
                 <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2">
                   <div className="flex items-center gap-2">
-                    <span 
-                      className="w-2.5 h-2.5 rounded-full animate-ping" 
-                      style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }} 
+                    <span
+                      className="w-2.5 h-2.5 rounded-full animate-ping"
+                      style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }}
                     />
                     <span className="font-bold text-text uppercase tracking-wider text-[11px]">
                       {currentStepMeta.title}
@@ -1056,7 +1201,7 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
           {/* Play/Pause & Step Buttons */}
           <div className="flex items-center gap-1 shrink-0">
             <button
-              onClick={() => setTimelineStep(prev => Math.max(0, prev - 1))}
+              onClick={() => { const n = Math.max(0, (timelineStepRef.current || 0) - 1); setTimelineStep(n); timelineStepRef.current = n; }}
               className="p-1.5 rounded hover:bg-surface text-text-2 hover:text-text border border-border cursor-pointer transition-colors"
               title="Step Backward (Δt - 1)"
             >
@@ -1065,8 +1210,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
             <button
               onClick={handleTogglePlay}
               className={`px-3 py-1.5 rounded font-mono text-xs font-semibold cursor-pointer transition-all shadow-xs flex items-center gap-1.5 ${
-                isPlaying 
-                  ? 'bg-amber-600 text-white hover:bg-amber-500 animate-pulse' 
+                isPlaying
+                  ? 'bg-amber-600 text-white hover:bg-amber-500 animate-pulse'
                   : 'bg-accent text-white hover:bg-accent/90'
               }`}
               title={isPlaying ? 'Pause Playback' : 'Play Transaction Flow Sequence'}
@@ -1075,14 +1220,14 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
               <span>{isPlaying ? 'PAUSE' : 'PLAY FLOW'}</span>
             </button>
             <button
-              onClick={() => setTimelineStep(prev => Math.min(4, prev + 1))}
+              onClick={() => { const n = Math.min(4, (timelineStepRef.current || 0) + 1); setTimelineStep(n); timelineStepRef.current = n; }}
               className="p-1.5 rounded hover:bg-surface text-text-2 hover:text-text border border-border cursor-pointer transition-colors"
               title="Step Forward (Δt + 1)"
             >
               <SkipForward className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => { setIsPlaying(false); setTimelineStep(0); }}
+              onClick={() => { setIsPlaying(false); setTimelineStep(0); timelineStepRef.current = 0; }}
               className="p-1.5 rounded hover:bg-surface text-text-muted hover:text-text border border-border cursor-pointer transition-colors"
               title="Reset Timeline to Baseline"
             >
@@ -1103,8 +1248,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
                 key={s.speed}
                 onClick={() => setPlaybackSpeed(s.speed)}
                 className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                  playbackSpeed === s.speed 
-                    ? 'bg-surface font-bold text-accent shadow-xs' 
+                  playbackSpeed === s.speed
+                    ? 'bg-surface font-bold text-accent shadow-xs'
                     : 'text-text-muted hover:text-text'
                 }`}
                 title={`Playback Speed: ${s.label}`}
@@ -1132,8 +1277,8 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
           <button
             onClick={() => setAutoLoop(!autoLoop)}
             className={`p-1.5 rounded border text-[10px] font-mono transition-colors cursor-pointer ${
-              autoLoop 
-                ? 'bg-accent/10 border-accent/40 text-accent' 
+              autoLoop
+                ? 'bg-accent/10 border-accent/40 text-accent'
                 : 'bg-bg border-border text-text-muted hover:text-text'
             }`}
             title={autoLoop ? 'Auto-looping active' : 'Auto-loop disabled'}
@@ -1150,21 +1295,21 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
             return (
               <button
                 key={st.step}
-                onClick={() => { setIsPlaying(false); setTimelineStep(st.step); }}
+                onClick={() => { setIsPlaying(false); setTimelineStep(st.step); timelineStepRef.current = st.step; }}
                 className={`flex-1 flex flex-col items-center gap-1 py-1 px-1.5 rounded transition-all cursor-pointer border ${
-                  isCurrent 
-                    ? 'bg-surface border-accent shadow-xs' 
-                    : isPast 
-                      ? 'bg-surfaceRaised border-borderSubtle hover:border-border' 
+                  isCurrent
+                    ? 'bg-surface border-accent shadow-xs'
+                    : isPast
+                      ? 'bg-surfaceRaised border-borderSubtle hover:border-border'
                       : 'border-transparent hover:bg-surface/50 text-text-muted'
                 }`}
                 title={`${st.label}: ${st.title}`}
               >
                 <div className={`w-2.5 h-2.5 rounded-full transition-all ${
-                  isCurrent 
-                    ? 'bg-accent scale-125 ring-2 ring-accent/30' 
-                    : isPast 
-                      ? 'bg-accent/70' 
+                  isCurrent
+                    ? 'bg-accent scale-125 ring-2 ring-accent/30'
+                    : isPast
+                      ? 'bg-accent/70'
                       : 'bg-border'
                 }`} />
                 <span className={`text-[9.5px] font-mono leading-none ${
@@ -1193,10 +1338,10 @@ export const Cytoscape2DGraph = ({ onNodeSelect }) => {
           <Maximize2 className="w-4 h-4 text-text-2" />
         </Button>
         <div className="w-px h-4 bg-border mx-0.5" />
-        <Button 
-          variant={trackCamera ? "secondary" : "ghost"} 
-          size="icon" 
-          onClick={() => setTrackCamera(!trackCamera)} 
+        <Button
+          variant={trackCamera ? "secondary" : "ghost"}
+          size="icon"
+          onClick={() => setTrackCamera(!trackCamera)}
           title={trackCamera ? "Auto-Track Camera Active" : "Enable Auto-Track Camera"}
         >
           <Crosshair className={`w-4 h-4 ${trackCamera ? 'text-accent' : 'text-text-2'}`} />

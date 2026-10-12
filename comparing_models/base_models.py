@@ -17,14 +17,21 @@ import sys
 from pathlib import Path
 
 # Windows PyTorch DLL loading safety guard
-_venv_torch_lib = Path(__file__).resolve().parent.parent / "venv" / "Lib" / "site-packages" / "torch" / "lib"
-if _venv_torch_lib.exists():
-    os.environ["PATH"] = str(_venv_torch_lib) + ";" + os.environ.get("PATH", "")
-    if hasattr(os, "add_dll_directory"):
-        try:
-            os.add_dll_directory(str(_venv_torch_lib))
-        except Exception:
-            pass
+_repo_root = Path(__file__).resolve().parent.parent
+_torch_candidates = [
+    Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib",
+    _repo_root / ".venv" / "Lib" / "site-packages" / "torch" / "lib",
+    _repo_root / "venv" / "Lib" / "site-packages" / "torch" / "lib",
+]
+for _torch_lib in _torch_candidates:
+    if _torch_lib.exists():
+        os.environ["PATH"] = str(_torch_lib) + ";" + os.environ.get("PATH", "")
+        if hasattr(os, "add_dll_directory"):
+            try:
+                os.add_dll_directory(str(_torch_lib))
+            except Exception:
+                pass
+        break
 
 import torch
 import torch.nn as nn
@@ -336,12 +343,12 @@ class DeepAutoencoderBaseline:
             x_fit = x[idx]
         else:
             x_fit = x
-            
+
         x_tensor = torch.tensor(x_fit, dtype=torch.float)
         batch_size = max(512, min(8192, len(x_fit) // 50))
         dataset = torch.utils.data.TensorDataset(x_tensor)
         loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
-        
+
         self.encoder.train()
         self.decoder.train()
         for _ in range(self.epochs):
@@ -370,7 +377,7 @@ class DeepAutoencoderBaseline:
                 berr = torch.mean((bx - brec) ** 2, dim=-1).cpu().numpy()
                 rec_errors_list.append(berr)
             rec_errors = np.concatenate(rec_errors_list)
-            
+
         probs = (rec_errors - rec_errors.min()) / (rec_errors.max() - rec_errors.min() + 1e-6)
         return probs
 
@@ -441,7 +448,7 @@ class VanillaHGTBaseline(nn.Module):
                     "v_proj": nn.Linear(hidden_channels, hidden_channels),
                 })
             self.convs.append(layer_dict)
-            
+
         self.num_heads = num_heads
         self.head_dim = hidden_channels // num_heads
         self.hidden_channels = hidden_channels
@@ -459,27 +466,27 @@ class VanillaHGTBaseline(nn.Module):
                     edge_index = edge_index_dict[edge_type]
                     src_nodes, dst_nodes = edge_index[0], edge_index[1]
                     mods = layer_dict[key]
-                    
+
                     h_src = h_dict[src][src_nodes]
                     h_dst = h_dict[dst][dst_nodes]
-                    
+
                     k = mods["k_proj"](h_src).view(-1, self.num_heads, self.head_dim)
                     q = mods["q_proj"](h_dst).view(-1, self.num_heads, self.head_dim)
                     v = mods["v_proj"](h_src).view(-1, self.num_heads, self.head_dim)
-                    
+
                     att = (q * k).sum(dim=-1) / math.sqrt(self.head_dim)
                     att = torch.softmax(att, dim=0).unsqueeze(-1)
-                    
+
                     msg = (att * v).view(-1, self.hidden_channels)
                     out = torch.zeros(h_dict[dst].shape[0], self.hidden_channels, device=h_src.device)
                     out.index_add_(0, dst_nodes, msg)
                     new_h_dict[dst].append(out)
-                    
+
             for nt in self.node_types:
                 if len(new_h_dict[nt]) > 0:
                     h_dict[nt] = F.relu(torch.stack(new_h_dict[nt]).mean(dim=0))
                     h_dict[nt] = self.dropout(h_dict[nt])
-                    
+
         return {nt: self.classifier(h_dict[nt]) for nt in self.node_types}
 
 
@@ -498,24 +505,22 @@ class CareGNNBaseline(nn.Module):
     def forward(self, x, edge_index):
         h = F.relu(self.feature_proj(x))
         h_norm = F.normalize(h, p=2, dim=-1)
-        
+
         src_nodes, dst_nodes = edge_index[0], edge_index[1]
-        
+
         # Camouflage Filtering via Cosine Similarity Gating
         sim = (h_norm[src_nodes] * h_norm[dst_nodes]).sum(dim=-1)
         gate = torch.sigmoid(sim * 3.0).unsqueeze(-1)
-        
+
         # Filtered Neighborhood Aggregation
         filtered_msg = h[src_nodes] * gate
         h_agg = torch.zeros_like(h)
         h_agg.index_add_(0, dst_nodes, filtered_msg)
-        
+
         deg = torch.zeros(h.shape[0], 1, device=x.device)
         deg.index_add_(0, dst_nodes, torch.ones_like(gate))
         h_agg = h_agg / (deg + 1e-6)
-        
+
         h_out = F.relu(h + h_agg)
         h_out = self.dropout(h_out)
         return self.classifier(h_out)
-
-

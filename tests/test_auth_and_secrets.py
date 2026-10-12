@@ -25,7 +25,7 @@ def test_auth_no_hardcoded_passwords_in_source():
     # Ensure salt entropy is non-empty and dynamic
     salt = _get_salt()
     assert len(salt) >= 8
-    
+
     # Verify hash function produces standard 64-char hex SHA256
     hashed = _hash_pw("TestPassword123!")
     assert len(hashed) == 64
@@ -64,3 +64,44 @@ def test_demo_tokens_disabled_when_flag_false(monkeypatch):
     with pytest.raises(HTTPException) as excinfo:
         list_demo_tokens()
     assert excinfo.value.status_code == 403
+
+
+def test_get_current_user_unauthenticated_blocked_in_production(monkeypatch):
+    """Verify that unauthenticated requests fail with 401 in production (SEC-1)."""
+    import src.engine.auth as auth_mod
+    monkeypatch.setattr(auth_mod, "_is_prod", True)
+    with pytest.raises(HTTPException) as excinfo:
+        auth_mod.get_current_user(None)
+    assert excinfo.value.status_code == 401
+    assert "credentials required" in excinfo.value.detail.lower()
+
+
+def test_get_current_user_unauthenticated_blocked_under_strict_auth(monkeypatch):
+    """Verify that unauthenticated requests fail with 401 when AML_STRICT_AUTH is active (SEC-1)."""
+    import src.engine.auth as auth_mod
+    monkeypatch.setenv("AML_STRICT_AUTH", "true")
+    with pytest.raises(HTTPException) as excinfo:
+        auth_mod.get_current_user(None)
+    assert excinfo.value.status_code == 401
+    assert "credentials required" in excinfo.value.detail.lower()
+
+
+def test_download_sar_pdf_rejects_path_traversal():
+    """Verify that path traversal in download_sar_pdf is blocked with 400 Bad Request (SEC-3)."""
+    from src.engine.api import download_sar_pdf
+    with pytest.raises(HTTPException) as excinfo:
+        download_sar_pdf("../../../etc/passwd")
+    assert excinfo.value.status_code == 400
+    assert "invalid target_account format" in excinfo.value.detail.lower()
+
+
+def test_export_sar_pdf_by_id_rejects_path_traversal():
+    """Verify that path traversal or newline injection in case_id is blocked with 400 Bad Request (SEC-3)."""
+    from src.engine.api import export_sar_pdf_by_id
+    from starlette.requests import Request
+    scope = {"type": "http", "method": "GET", "path": "/api/v1/sar/test/pdf", "headers": []}
+    mock_request = Request(scope)
+    with pytest.raises(HTTPException) as excinfo:
+        export_sar_pdf_by_id(mock_request, "../../secret_keys\r\n")
+    assert excinfo.value.status_code == 400
+    assert "invalid case_id format" in excinfo.value.detail.lower()

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { 
-  Sliders, 
-  CheckCircle2, 
+import {
+  Sliders,
+  CheckCircle2,
   AlertTriangle,
-  ArrowRight, 
-  ShieldAlert, 
-  Sparkles, 
-  RefreshCw, 
+  ArrowRight,
+  ShieldAlert,
+  Sparkles,
+  RefreshCw,
   Check,
   UserCheck,
   HelpCircle,
@@ -29,7 +29,7 @@ import { useAuth } from '../context/AuthContext';
 export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
   const { currentBanker, logBankerAction } = useAuth();
   const [activeTab, setActiveTab] = useState('ANALYST_PERTURBATION'); // 'ANALYST_PERTURBATION' | 'THRESHOLD_TUNING'
-  
+
   // Tab 1: Feature Perturbation State
   const [transferAmount, setTransferAmount] = useState(48500);
   const [holdingHours, setHoldingHours] = useState(0.4);
@@ -47,7 +47,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
   const isStructuring = transferAmount >= 7500 && transferAmount <= 9999;
   const isPassThrough = holdingHours < 2.0;
   const isBurst = burstRate > 3.0;
-  
+
   let dynamicRisk = 0.05;
   if (transferAmount > 20000) dynamicRisk += 0.25;
   if (isStructuring) dynamicRisk += 0.35;
@@ -282,19 +282,19 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                 <div className="border-l border-[var(--border-subtle)] pl-2">
                   <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block uppercase">SIMULATED RISK</span>
                   <span className={`text-xl sm:text-2xl font-black ${
-                    dynamicRisk >= 0.85 
-                      ? 'text-rose-600 dark:text-rose-400' 
-                      : dynamicRisk >= 0.30 
-                        ? 'text-amber-600 dark:text-amber-300' 
+                    dynamicRisk >= 0.85
+                      ? 'text-rose-600 dark:text-rose-400'
+                      : dynamicRisk >= 0.30
+                        ? 'text-amber-600 dark:text-amber-300'
                         : 'text-[var(--accent-primary)]'
                   }`}>
                     {(dynamicRisk * 100).toFixed(1)}%
                   </span>
                   <span className={`text-[9px] sm:text-[10px] block mt-0.5 font-bold ${
-                    dynamicRisk >= 0.85 
-                      ? 'text-rose-600 dark:text-rose-400' 
-                      : dynamicRisk >= 0.30 
-                        ? 'text-amber-600 dark:text-amber-300' 
+                    dynamicRisk >= 0.85
+                      ? 'text-rose-600 dark:text-rose-400'
+                      : dynamicRisk >= 0.30
+                        ? 'text-amber-600 dark:text-amber-300'
                         : 'text-[var(--accent-primary)]'
                   }`}>
                     {simulatedTier}
@@ -331,7 +331,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
             {/* Compliant Action Buttons */}
             <div className="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between gap-2">
               <span className="text-[10px] sm:text-[11px] font-mono text-[var(--text-muted)] truncate">
-                Case Officer: <strong className="text-[var(--text-primary)]">{currentBanker.name}</strong>
+                Case Officer: <strong className="text-[var(--text-primary)]">{currentBanker?.name || 'Compliance Officer'}</strong>
               </span>
 
               <button

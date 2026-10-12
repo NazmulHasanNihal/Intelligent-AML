@@ -1,13 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { 
-  FileText, 
-  Download, 
-  CheckCircle2, 
-  ShieldCheck, 
-  Send, 
-  Clock, 
-  Copy, 
-  Check, 
+import {
+  FileText,
+  Download,
+  CheckCircle2,
+  ShieldCheck,
+  Send,
+  Clock,
+  Copy,
+  Check,
   Building2,
   Lock,
   AlertTriangle,
@@ -28,7 +28,7 @@ import { Button } from '../../components/ui/Button';
 export const FilingsView = () => {
   const { cases, selectedCaseId, fourEyesSignOffCase, addToast, logAuditAction } = useAppStore();
   const { currentBanker } = useAuth();
-  
+
   const [selectedCaseIdState, setSelectedCaseIdState] = useState(selectedCaseId || cases[0]?.id);
   const [selectedJurisdiction, setSelectedJurisdiction] = useState('BFIU_STR');
   const [copied, setCopied] = useState(false);
@@ -202,7 +202,7 @@ In accordance with ${currentJurisdiction.citation}, this suspicious activity rep
           case_id: activeCase.id,
           target_account: activeCase.subjectAccount,
           sar_narrative: editableNarrative,
-          approver: currentBanker.name
+          approver: currentBanker?.name || 'Authorized Officer'
         })
       });
       if (res.ok) {
@@ -212,7 +212,7 @@ In accordance with ${currentJurisdiction.citation}, this suspicious activity rep
           'SAR_HSM_DIGITALLY_SIGNED',
           `FIPS 140-2 Level 3 HSM Digital Signing executed for ${activeCase.id}. Cert Serial: ${data.certificate_serial_number}. Slot: ${data.hsm_key_slot}`,
           activeCase.subjectAccount,
-          currentBanker.name
+          currentBanker?.name || 'Authorized Officer'
         );
         addToast('FIPS 140-2 HSM Signature Sealed', `Case ${activeCase.id} signed with 4096-bit RSA-PSS. Receipt generated.`, 'success');
       } else {
@@ -237,7 +237,7 @@ In accordance with ${currentJurisdiction.citation}, this suspicious activity rep
         'SAR_HSM_DIGITALLY_SIGNED',
         `FIPS 140-2 Level 3 HSM Digital Signing executed for ${activeCase.id}. Cert Serial: ${mockReceipt.certificate_serial_number}`,
         activeCase.subjectAccount,
-        currentBanker.name
+        currentBanker?.name || 'Authorized Officer'
       );
       addToast('FIPS 140-2 HSM Signature Sealed', `Case ${activeCase.id} sealed with cryptographic HSM token.`, 'success');
     } finally {
@@ -257,7 +257,7 @@ In accordance with ${currentJurisdiction.citation}, this suspicious activity rep
       sarNarrative: editableNarrative,
       signatories: {
         maker: activeCase.fourEyesInitiator || 'Sarah Jenkins',
-        checker: activeCase.fourEyesApprover || currentBanker.name,
+        checker: activeCase.fourEyesApprover || currentBanker?.name || 'Authorized Officer',
         dualControlVerified: true
       },
       exportedAt: new Date().toISOString()
@@ -313,7 +313,7 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
       'SAR_SEALED_DOSSIER_COMPILED',
       `Compiled tamper-evident statutory filing dossier for ${activeCase.id} under ${selectedJurisdiction}. Merkle Receipt: ${merkleReceipt}`,
       activeCase.subjectAccount,
-      currentBanker.name
+      currentBanker?.name || 'Authorized Officer'
     );
     addToast('Tamper-Evident Dossier Compiled', `Exported cryptographically sealed filing for ${activeCase.id}.`, 'success');
   };

@@ -61,23 +61,23 @@ Between **$800 Billion and $2 Trillion** in illicit capital traverses the global
 | 13-Dataset Empirical Performance Radar | Sub-Millisecond Throughput vs. Latency Pareto Frontier |
 | :---: | :---: |
 | ![13-Dataset Empirical Performance Radar](docs/figures/07_multi_dataset_radar.png) | ![Sub-Millisecond Throughput vs Latency Pareto Frontier](docs/figures/08_latency_pareto_frontier.png) |
-| *Multi-dataset performance comparison across 13 benchmarks showing C-STGB consistently outperforming SOTA baselines (E-GCN, GAT, XGBoost).* | *Empirical latency vs. detection accuracy Pareto curve demonstrating sub-millisecond execution ($0.12\text{ ms}$ STP auto-clearance vs. $0.45\text{ ms}$ containment).* |
+| *Multi-dataset performance comparison across 13 benchmarks showing C-STGB consistently outperforming SOTA baselines (E-GCN, GAT, XGBoost).* | *Empirical latency vs. detection accuracy Pareto curve demonstrating sub-millisecond execution (0.12 ms STP auto-clearance vs. 0.45 ms containment).* |
 
 #### 🏆 Master Benchmark Performance Scorecard (14 Financial Networks)
 
-| Model Architecture | Model Category | PR-AUC (Macro) | Minority F1-Score | Inference Latency | Statistical Significance ($p$-value) |
+| Model Architecture | Model Category | PR-AUC (Macro) | Minority F1-Score | Inference Latency | Statistical Significance (p-value) |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | **C-STGB (Proposed)** | **Conformal Spatio-Temporal GraphBoost** | **0.6848** | **67.26%** | **0.12 ms (STP) / 0.45 ms** | — *(Reference Anchor)* |
-| **XGBoost** | Tabular Gradient Boost | 0.6799 | 67.92% | 2.10 ms | $p = 0.8077$ *(Parity / Not Sig.)* |
-| **CatBoost** | Industrial Gradient Boost | 0.6666 | 67.14% | 1.85 ms | $p = 0.4318$ *(Parity / Not Sig.)* |
-| **GraphSAGE** | Inductive Neighborhood GNN | 0.2170 | 24.31% | 12.40 ms | **$p < 0.001$ ($^\dagger$)** |
-| **GCN** | Spectral Graph Convolution | 0.2143 | 23.78% | 11.20 ms | **$p < 0.001$ ($^\dagger$)** |
-| **EvolveGCN** | Dynamic Recurrent GNN | 0.1480 | 18.94% | 19.80 ms | **$p < 0.001$ ($^\dagger$)** |
+| **XGBoost** | Tabular Gradient Boost | 0.6799 | 67.92% | 2.10 ms | p = 0.8077 *(Parity / Not Sig.)* |
+| **CatBoost** | Industrial Gradient Boost | 0.6666 | 67.14% | 1.85 ms | p = 0.4318 *(Parity / Not Sig.)* |
+| **GraphSAGE** | Inductive Neighborhood GNN | 0.2170 | 24.31% | 12.40 ms | **p < 0.001 (†)** |
+| **GCN** | Spectral Graph Convolution | 0.2143 | 23.78% | 11.20 ms | **p < 0.001 (†)** |
+| **EvolveGCN** | Dynamic Recurrent GNN | 0.1480 | 18.94% | 19.80 ms | **p < 0.001 (†)** |
 
-*($^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W=105.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all 14 benchmark networks.)*
+*(† indicates statistically significant corpus-wide improvement over deep GNNs at W = 105.0, p_adj < 0.001 under two-sided Wilcoxon signed-rank test across all 14 benchmark networks.)*
 
 > [!TIP]
-> **Commodity Hardware & Zero-GPU Footprint:** The $0.12\text{ ms}$ Straight-Through Processing (STP) engine and universal 12-D invariant kernels execute on standard **commodity x86-64 / ARM64 enterprise CPU infrastructure** without requiring dedicated GPU acceleration, enabling drop-in integration with on-premise core banking systems (Finacle, Temenos T24, FIS).
+> **Commodity Hardware & Zero-GPU Footprint:** The 0.12 ms Straight-Through Processing (STP) engine and universal 12-D invariant kernels execute on standard **commodity x86-64 / ARM64 enterprise CPU infrastructure** without requiring dedicated GPU acceleration, enabling drop-in integration with on-premise core banking systems (Finacle, Temenos T24, FIS).
 
 ---
 
@@ -103,16 +103,16 @@ The platform couples high-throughput streaming inference with interactive visual
 Intelligent-AML bridges high-throughput quantitative stream processing with deterministic regulatory compliance. To understand the operational mechanics of the platform, the end-to-end lifecycle of a transaction unfolds across five synchronized stages:
 
 1. **What It Does (The Core Mission):**
-   * **Stops Crime Before Money Escapes:** Automatically detects and quarantines illicit funds (sanctions violations, terrorism financing, trade-based money laundering, smurfing, and pass-through conduits) in **$0.45\text{ ms}$**, locking them into escrow before capital leaves the bank.
-   * **Eliminates False-Alarm Backlogs:** Replaces obsolete rule-based filters that flag 98% false positives with a mathematically grounded Conformal Risk Control engine that **auto-approves 98.6% of honest payments in $<0.12\text{ ms}$** via Straight-Through Processing (STP).
+   * **Stops Crime Before Money Escapes:** Automatically detects and quarantines illicit funds (sanctions violations, terrorism financing, trade-based money laundering, smurfing, and pass-through conduits) in **0.45 ms**, locking them into escrow before capital leaves the bank.
+   * **Eliminates False-Alarm Backlogs:** Replaces obsolete rule-based filters that flag 98% false positives with a mathematically grounded Conformal Risk Control engine that **auto-approves 98.6% of honest payments in < 0.12 ms** via Straight-Through Processing (STP).
    * **Automates Forensic Dossier Synthesis:** When an alert is escalated, an autonomous 3-agent AI forensic swarm reconstructs money trails, isolates shell companies, audits statutory rules, and drafts complete 5-page courtroom-grade SAR/STR filings in **under 30 seconds**.
-   * **Guarantees Zero Hallucination & Non-Repudiation:** Enforces compiler-level Abstract Syntax Tree (AST) grammar proofs ($\mathcal{V}(\mathcal{T}) \subseteq \mathcal{V}_{\text{sub}}$) against raw core banking ledgers, dual-officer Maker-Checker authorization, and an immutable SHA-256 hash-chained WORM audit ledger.
+   * **Guarantees Zero Hallucination & Non-Repudiation:** Enforces compiler-level Abstract Syntax Tree (AST) grammar proofs (Proposition 6.1: V(T) ⊆ V_sub) against raw core banking ledgers, dual-officer Maker-Checker authorization, and an immutable SHA-256 hash-chained WORM audit ledger.
 
 2. **How It Works (The Underlying Architecture & Mechanics):**
    * **High-Throughput Streaming Ingestion Tier:** Ingests transaction messages across SWIFT (MT103 wire transfers, MT700 Letters of Credit), domestic RTGS, mobile money webhooks (bKash, Nagad), and crypto chains via a Redpanda/Kafka pipeline processing **31,200+ transactions/second** with zero backlog lag.
-   * **12-Dimensional Canonical Deterministic Invariant Space:** Every transaction is mapped into universal physical conservation laws: mass-balance flow ($\Phi_{\text{flow}}$), topological degree asymmetry ($\Psi_{\text{asym}}$), fan-in/fan-out burstiness, and temporal dispersion, stripping away superficial transaction camouflage.
+   * **12-Dimensional Canonical Deterministic Invariant Space:** Every transaction is mapped into universal physical conservation laws: mass-balance flow (Φ_flow), topological degree asymmetry (Ψ_asym), fan-in/fan-out burstiness, and temporal dispersion, stripping away superficial transaction camouflage.
    * **Burst-Aware Spatio-Temporal Graph Convolutions (BurstAwareHGT):** Evaluates accounts as dynamic graph nodes. Uses Hawkes point-process arrival intensity to detect sudden burst velocity and anti-camouflage edge gating to prune 65.9% of benign background payment noise.
-   * **Class-Conditional Conformal Risk Control (CRC):** Generates rigorous mathematical error bounds ensuring $\ge 99.0\%$ empirical statistical coverage ($\alpha = 0.01$). If a transaction's non-conformity score is provably benign, it clears instantly (Tier 3); if ambiguous, it enters the Tier 2 docket; if flagged as severe crime, it is immediately quarantined (Tier 1).
+   * **Class-Conditional Conformal Risk Control (CRC):** Generates rigorous mathematical error bounds ensuring ≥ 99.0% empirical statistical coverage (α = 0.01). If a transaction's non-conformity score is provably benign, it clears instantly (Tier 3); if ambiguous, it enters the Tier 2 docket; if flagged as severe crime, it is immediately quarantined (Tier 1).
    * **Autonomous 3-Agent Swarm + Formal AST Compiler:** An investigator agent traces graph subgraphs, a legal drafter generates statutory narratives, and a compliance auditor validates statutory citations. The draft is verified by an AST compiler that checks every account number, date, and dollar amount against ledger records with zero tolerance for hallucinated entities.
    * **Two-Officer (Maker-Checker) Institutional Gate:** The AI swarm cannot unilaterally freeze funds or file reports. The primary investigating officer (Maker) submits findings, and an independent Senior Officer (Checker) must review and cryptographically authorize the action with a hardware PKI token.
    * **Cryptographic WORM Audit Vault:** All events, scores, and officer signatures are appended to a Write-Once-Read-Many SHA-256 Merkle chain, producing court-admissible audit receipts compliant with Federal Rules of Evidence FRE 902(11) and SEC Rule 17a-4.
@@ -145,13 +145,13 @@ The Intelligent-AML web command center provides banking compliance officers, dat
   Serves as the bank's central operational "air-traffic control room." It monitors live payment streams across all domestic and international payment rails, instantly classifies incoming wires into the 3 safety tiers, tracks 24-hour volume metrics, and surfaces critical alerts requiring urgent compliance attention.
 
 * **⚙️ How It Works (Under the Hood):**
-  * Connects to the backend via a bidirectional WebSocket (`/ws`), streaming live transactions directly from the Redpanda/Kafka message broker at up to $500\text{ tx/s}$ peak velocity with **0 msgs lag behind head**.
-  * Executes the C-STGB fast-path inference kernel in **$0.12\text{ ms}$** per payment.
+  * Connects to the backend via a bidirectional WebSocket (`/ws`), streaming live transactions directly from the Redpanda/Kafka message broker at up to 500 tx/s peak velocity with **0 msgs lag behind head**.
+  * Executes the C-STGB fast-path inference kernel in **0.12 ms** per payment.
   * In the live snapshot above:
-    * **157,860 honest payments** ($98.6\%$ STP) auto-cleared in $<1\text{ ms}$ without human intervention.
-    * **1,309 high-risk payments** ($0.83\%$) auto-quarantined under Tier 1 before money exits the bank.
-    * **861 anomalous payments** ($0.55\%$) routed to the Tier 2 human investigation queue.
-    * **$\$1,482,900\text{ USD}$ (৳177,948,000 BDT)** in dirty capital frozen securely in escrow.
+    * **157,860 honest payments** (98.6% STP) auto-cleared in < 1 ms without human intervention.
+    * **1,309 high-risk payments** (0.83%) auto-quarantined under Tier 1 before money exits the bank.
+    * **861 anomalous payments** (0.55%) routed to the Tier 2 human investigation queue.
+    * **$1,482,900 USD (৳177,948,000 BDT)** in dirty capital frozen securely in escrow.
 
 * **🖱️ Key Interactive Analyst Workflows:**
   * **Streaming Pace Controls:** Analysts can toggle the live feed between **Live Stream** and **Pause**, or adjust replay speed from **1x (Bank Pace)** to **2x, 5x, or 10x**.
@@ -172,9 +172,9 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 
 * **⚙️ How It Works (Under the Hood):**
   * Built using a dual-engine rendering architecture: **Cytoscape.js** for high-precision 2D deterministic layouts and **Three.js / 3d-force-graph** for hardware-accelerated 3D WebGL exploration.
-  * Implements **Causal Flow Preservation**: nodes are organized chronologically to visualize the three classic stages of money laundering: **Placement $\to$ Layering $\to$ Integration**.
+  * Implements **Causal Flow Preservation**: nodes are organized chronologically to visualize the three classic stages of money laundering: **Placement → Layering → Integration**.
   * Uses **Anti-Camouflage Edge Gating**: dynamically identifies and suppresses high-volume benign background noise (e.g., routine utility payments, salary disbursements) so investigators can zero in on the core criminal syndicate.
-  * In the screenshot above, the engine isolates a trade-based laundering scheme: $\$9,600$ SWIFT Letters of Credit flowing between Meghna Industrial & Agro, EuroTextile Importers (Hamburg), Gulf Star Commodities (Dubai), Tanvir Ahmed Rahman (Conduit), and Pacific Commodities (Singapore), complete with circular wash-trading return loops.
+  * In the screenshot above, the engine isolates a trade-based laundering scheme: $9,600 SWIFT Letters of Credit flowing between Meghna Industrial & Agro, EuroTextile Importers (Hamburg), Gulf Star Commodities (Dubai), Tanvir Ahmed Rahman (Conduit), and Pacific Commodities (Singapore), complete with circular wash-trading return loops.
 
 * **🖱️ Key Interactive Analyst Workflows:**
   * **Layout Algorithms:** Switch with one click between **Sugiyama Flow** (hierarchical top-to-bottom time ordering), **Orbital Ring**, **COSE** (compound force-directed physics), **Cycle Ring** (isolating circular wash loops), and **Wide Canvas**.
@@ -196,7 +196,7 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 
 * **⚙️ How It Works (Under the Hood):**
   * Aggregates interrelated transaction alerts into unified legal case dockets using graph connected-component clustering.
-  * Dynamically computes **Risk Posterior Probabilities** (e.g., $98.4\%$ for `CASE-2026-0881` Meghna Industrial RMG Over-Invoicing; $97.2\%$ for `CASE-2026-0882` Tanvir Ahmed Rahman Cross-Border Hundi Conduit).
+  * Dynamically computes **Risk Posterior Probabilities** (e.g., 98.4% for `CASE-2026-0881` Meghna Industrial RMG Over-Invoicing; 97.2% for `CASE-2026-0882` Tanvir Ahmed Rahman Cross-Border Hundi Conduit).
   * Continuously evaluates statutory turnaround windows: displays precise remaining SLA hours (e.g., **72h SLA Remaining** for Bangladesh Bank BFIU filings; **120h SLA** for complex cross-border cases).
   * Tracks progress across 5 standardized investigation milestones (e.g., "4 of 5 Steps Completed").
 
@@ -219,9 +219,9 @@ The Intelligent-AML web command center provides banking compliance officers, dat
   Provides the deep-dive investigation workspace for a specific case and enforces the institutional **Two-Officer (Maker-Checker) Four-Eyes Principle**. It prevents unilateral decision-making, ensuring that no single employee—regardless of seniority—can freeze accounts or dismiss criminal allegations alone.
 
 * **⚙️ How It Works (Under the Hood):**
-  * Visualizes the 5 statutory milestones: **Step 01 (Triggered)** $\to$ **Step 02 (Analyst Assigned)** $\to$ **Step 03 (RFI Dispatched)** $\to$ **Step 04 (SAR Drafted)** $\to$ **Step 05 (4-Eyes Approved)**.
+  * Visualizes the 5 statutory milestones: **Step 01 (Triggered)** → **Step 02 (Analyst Assigned)** → **Step 03 (RFI Dispatched)** → **Step 04 (SAR Drafted)** → **Step 05 (4-Eyes Approved)**.
   * Segregates duties between the primary investigating analyst (**Maker**, e.g., Sarah Jenkins) and the approving senior officer (**Checker**, e.g., Nazmul Hasan, Chief Compliance Officer).
-  * Displays total financial exposure ($\$48,500\text{ USD}$ / ৳5,820,000 BDT), fraud risk probability ($98.4\%$ with $99.96\%$ confidence), linked alerts, and jurisdiction regulatory deadlines.
+  * Displays total financial exposure ($48,500 USD / ৳5,820,000 BDT), fraud risk probability (98.4% with 99.96% confidence), linked alerts, and jurisdiction regulatory deadlines.
   * Maintains an append-only timeline of investigator notes, documenting every interview, document request, and evidentiary finding.
 
 * **🖱️ Key Interactive Analyst Workflows:**
@@ -247,8 +247,8 @@ The Intelligent-AML web command center provides banking compliance officers, dat
     1. **Forensic Investigator Agent:** Analyzes the transaction subgraph, identifies trade discrepancies, and reconstructs the cash flow chronology.
     2. **Legal SAR Drafter Agent:** Synthesizes the narrative into statutory 5-part structures (Subject Identification, Chronological Summary, Methodology, Statutory Violations, Recommended Action).
     3. **Compliance Auditor Agent:** Audits legal citations against jurisdiction-specific statutes (FinCEN 31 CFR § 1010.311, UN goAML XML v4.0, BFIU MLPA 2012 §25).
-  * **Deterministic AST Zero-Hallucination Compiler:** Validates the draft against formal grammar $\mathcal{G}_{\text{SAR}}$. Strictly proves Proposition 6.1 ($\mathcal{V}(\mathcal{T}) \subseteq \mathcal{V}_{\text{sub}}$): if the LLM invents an account number, date, or amount not present in the verified bank ledger, the compilation fails instantly.
-  * **Customs & LC Verification Engine:** Performs automated trade-based money laundering (TBML) price benchmarking, detecting pricing anomalies (e.g., raw cotton HS 5201.00 invoiced at $\$42.50\text{/kg}$ vs market benchmark of $\$9.80\text{/kg}$).
+  * **Deterministic AST Zero-Hallucination Compiler:** Validates the draft against formal grammar G_SAR. Strictly proves Proposition 6.1 (Proposition 6.1: V(T) ⊆ V_sub): if the LLM invents an account number, date, or amount not present in the verified bank ledger, the compilation fails instantly.
+  * **Customs & LC Verification Engine:** Performs automated trade-based money laundering (TBML) price benchmarking, detecting pricing anomalies (e.g., raw cotton HS 5201.00 invoiced at $42.50/kg vs market benchmark of $9.80/kg).
 
 * **🖱️ Key Interactive Analyst Workflows:**
   * **Jurisdiction Switcher:** Toggle with one click between **BFIU STR-1 / STR-2** (Bangladesh), **FinCEN 111** (United States), and **UN goAML XML** (United Nations / international FIUs).
@@ -270,10 +270,10 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 
 * **⚙️ How It Works (Under the Hood):**
   * Displays active production engine state (`v2.4.0-PROD`) with verified empirical metrics:
-    * **F1 Precision Score:** $94.2\%$
-    * **PR-AUC Accuracy:** $0.982$
-    * **Triage Decision Latency:** $< 0.45\text{ ms}$
-    * **Safety Guarantee:** $\ge 99.0\%$ coverage via Conformal Risk Control ($\alpha = 0.01$).
+    * **F1 Precision Score:** 94.2%
+    * **PR-AUC Accuracy:** 0.982
+    * **Triage Decision Latency:** < 0.45 ms
+    * **Safety Guarantee:** ≥ 99.0% coverage via Conformal Risk Control (α = 0.01).
   * **Clearing Gateway Heartbeats:** Continuously monitors all four interbank settlement connectors:
     * `SWIFT Alliance (MT103 / MT700 LC)`: ONLINE (0 dropped packets)
     * `Bangladesh Bank RTGS Gateway`: ONLINE (12ms ACK roundtrip)
@@ -282,8 +282,8 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 
 * **🖱️ Key Interactive Analyst Workflows:**
   * **Download Model Governance Pack (JSON):** Generates an audit-ready compliance artifact documenting model weights, hyperparameters, validation scores, and drift metrics for bank examiners.
-  * **Interactive Drift & Risk Tolerance Sliders:** Adjust drift alert sensitivity thresholds ($0.25$) and risk tolerances ($0.020$) to calibrate engine sensitivity to emerging macro-economic trends.
-  * **Statutory Settlement SLAs:** Monitors turnarounds against ISO 20022 $<50\text{ ms}$ regulatory limits.
+  * **Interactive Drift & Risk Tolerance Sliders:** Adjust drift alert sensitivity thresholds (0.25) and risk tolerances (0.020) to calibrate engine sensitivity to emerging macro-economic trends.
+  * **Statutory Settlement SLAs:** Monitors turnarounds against ISO 20022 < 50 ms regulatory limits.
 
 * **⚖️ Regulatory & Legal Compliance Standards:**
   Strictly complies with **Federal Reserve Supervisory Letter SR 11-7 / OCC Bulletin 2011-12 (Guidance on Model Risk Management)** and the **EU Artificial Intelligence Act (High-Risk AI Governance Obligations)**.
@@ -327,7 +327,7 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 
 * **⚙️ How It Works (Under the Hood):**
   * Integrated directly into the top navigation header (`💡 Plain English Guide`), accessible from any screen in the application with a single click.
-  * Provides a beginner-friendly "30-Second Elevator Pitch" explaining why older banking systems fail ($98\%$ false alarms) and how Intelligent-AML fixes it ($98.6\%$ auto-approved honest payments, $0.45\text{ ms}$ crime freeze, 4 AI detectives).
+  * Provides a beginner-friendly "30-Second Elevator Pitch" explaining why older banking systems fail (98% false alarms) and how Intelligent-AML fixes it (98.6% auto-approved honest payments, 0.45 ms crime freeze, 4 AI detectives).
   * Breaks down the 3 safety tiers in plain language and summarizes the real-world financial crimes the platform stops.
 
 * **🖱️ Key Interactive Analyst Workflows:**
@@ -353,14 +353,14 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 * **⚙️ How It Works (Under the Hood):**
   * Features a pre-indexed client-side search engine with instant fuzzy query matching.
   * Translates every complex technical concept into a simple plain-English title, practical definition, and real-world example:
-    * **STP (Straight-Through Processing)** $\to$ *Instant Auto-Approval (No Human Needed)*
-    * **Tier 1 Auto-Quarantine** $\to$ *Immediate Account Freeze (Severe Crime Match)*
-    * **Tier 2 Review Queue** $\to$ *Yellow Alert / Human Check Needed*
-    * **Structuring / Smurfing** $\to$ *Splitting Deposits to Evade Limits*
-    * **Pass-Through Conduit** $\to$ *Hot Potato Account (Middleman)*
-    * **Circular Wash-Trading** $\to$ *The Carousel Trick (Faking Sales)*
-    * **Trade-Based AML (TBML)** $\to$ *Fake Customs Invoicing*
-    * **Cryptographic WORM Ledger** $\to$ *Digital Wax Seal*
+    * **STP (Straight-Through Processing)** → *Instant Auto-Approval (No Human Needed)*
+    * **Tier 1 Auto-Quarantine** → *Immediate Account Freeze (Severe Crime Match)*
+    * **Tier 2 Review Queue** → *Yellow Alert / Human Check Needed*
+    * **Structuring / Smurfing** → *Splitting Deposits to Evade Limits*
+    * **Pass-Through Conduit** → *Hot Potato Account (Middleman)*
+    * **Circular Wash-Trading** → *The Carousel Trick (Faking Sales)*
+    * **Trade-Based AML (TBML)** → *Fake Customs Invoicing*
+    * **Cryptographic WORM Ledger** → *Digital Wax Seal*
 
 * **🖱️ Key Interactive Analyst Workflows:**
   * **Instant Search Bar:** Type any term or acronym (e.g., "STP", "smurfing", "conduit", "conformal") to immediately filter matching cards with real-time highlighted keywords.
@@ -376,13 +376,13 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 Transactions entering the platform are evaluated dynamically and classified into three distinct operational tiers governed by Conformal Risk Control:
 
 ![Conformal Risk Triage Mechanism](docs/figures/04_conformal_risk_mechanism.png)
-*Rigorous finite-sample Conformal Risk Control (CRC) calibration curve ($\alpha = 0.01$). Transactions with provably bounded non-conformity scores clear instantly via Straight-Through Processing (Tier 3), ambiguous borderline alerts route to the SLA Review Docket (Tier 2), and extreme financial crime is immediately quarantined into escrow (Tier 1).*
+*Rigorous finite-sample Conformal Risk Control (CRC) calibration curve (α = 0.01). Transactions with provably bounded non-conformity scores clear instantly via Straight-Through Processing (Tier 3), ambiguous borderline alerts route to the SLA Review Docket (Tier 2), and extreme financial crime is immediately quarantined into escrow (Tier 1).*
 
 | Tier | Status Indicator | Operational Designation | Functional Meaning | Automated Execution Action |
 | :---: | :---: | :--- | :--- | :--- |
-| **Tier 3** | 🟢 **Green** | **Straight-Through Processing (STP)** | **Clean Payment** | Cleared in $< 1\text{ ms}$ with guaranteed statistical coverage. Funds credit instantly without human delay. |
+| **Tier 3** | 🟢 **Green** | **Straight-Through Processing (STP)** | **Clean Payment** | Cleared in < 1 ms with guaranteed statistical coverage. Funds credit instantly without human delay. |
 | **Tier 2** | 🟡 **Yellow** | **Investigator Review Docket** | **Unusual Activity** | Held in an analyst queue with statutory SLA countdown timers for documentary inspection and customer follow-up. |
-| **Tier 1** | 🔴 **Red** | **Immediate Auto-Quarantine** | **High Crime / Sanctions** | Frozen in $0.45\text{ ms}$. Funds locked into secure escrow and formal legal drafting is triggered. |
+| **Tier 1** | 🔴 **Red** | **Immediate Auto-Quarantine** | **High Crime / Sanctions** | Frozen in 0.45 ms. Funds locked into secure escrow and formal legal drafting is triggered. |
 
 ---
 
@@ -393,7 +393,7 @@ To ensure operational transparency for compliance staff, regulators, and non-tec
 | Technical Banking Term | Plain-English Name | What It Means in Practice |
 | :--- | :--- | :--- |
 | **STP (Straight-Through Processing)** | **Instant Green Light** | Honest payments clear through banking rails immediately without stopping on an analyst's desk. |
-| **Tier 1 Auto-Quarantine** | **Immediate Asset Freeze** | Automatically locks suspicious funds in $< 1\text{ ms}$ due to severe crime, sanctions, or fraud indicators. |
+| **Tier 1 Auto-Quarantine** | **Immediate Asset Freeze** | Automatically locks suspicious funds in < 1 ms due to severe crime, sanctions, or fraud indicators. |
 | **Tier 2 Review Queue** | **Human Inspection Queue** | Holds anomalous transfers for analyst review with a statutory regulatory deadline timer. |
 | **Maker-Checker / Four-Eyes** | **Two-Officer Sign-Off Rule** | Requires one investigator to prepare a case and a second senior officer to approve before freezing accounts. |
 | **SAR / STR** | **Official Legal Crime Report** | Formal filing submitted to financial intelligence authorities (FinCEN, UN goAML, BFIU) detailing financial crime. |
@@ -418,15 +418,15 @@ To ensure operational transparency for compliance staff, regulators, and non-tec
 ## 🤖 Autonomous Multi-Agent AI Forensic Swarm
 
 ![Autonomous Multi-Agent Forensic Swarm Pipeline](docs/figures/05_multi_agent_forensic_swarm.png)
-*Coordinated multi-agent forensic reasoning pipeline: AMLSwarmOrchestrator coordinates evidentiary extraction, ForensicInvestigator traces money flows, SARDrafter compiles regulatory narratives, and ComplianceAuditor enforces statutory citations under compiler-enforced AST verification ($\mathcal{V}(\mathcal{T}) \subseteq \mathcal{V}_{\text{sub}}$) and Maker-Checker dual authorization.*
+*Coordinated multi-agent forensic reasoning pipeline: AMLSwarmOrchestrator coordinates evidentiary extraction, ForensicInvestigator traces money flows, SARDrafter compiles regulatory narratives, and ComplianceAuditor enforces statutory citations under compiler-enforced AST verification (Proposition 6.1: V(T) ⊆ V_sub) and Maker-Checker dual authorization.*
 
 To guarantee forensic accuracy and eliminate artificial intelligence hallucinations, Intelligent-AML deploys a specialized multi-agent pipeline:
 
-1. **🕵️ Forensic Investigator Agent (`ForensicInvestigatorAgent`):** Reconstructs financial trajectories across SWIFT, ACH, and digital rails, computing flow conservation ($\Phi_{\text{flow}}$) and isolating pass-through intermediary accounts.
+1. **🕵️ Forensic Investigator Agent (`ForensicInvestigatorAgent`):** Reconstructs financial trajectories across SWIFT, ACH, and digital rails, computing flow conservation (Φ_flow) and isolating pass-through intermediary accounts.
 2. **✍️ Legal SAR/STR Drafter Agent (`SARDrafterAgent`):** Synthesizes forensic findings into a comprehensive 5-page narrative detailing subject identity, chronological transaction sequences, and violation typologies aligned with US FinCEN Form 111, UN goAML v4.0 XML, and BFIU guidelines.
 3. **⚖️ Compliance Auditor Agent (`ComplianceAuditorAgent`):** Benchmarks suspicious activity against global statutory frameworks (US FinCEN 31 CFR § 1010.311, UN goAML v4.0, BFIU circulars), citing precise statutory mandates and computing objective compliance confidence scores.
 4. **⚡ Master Swarm Orchestrator (`AMLSwarmOrchestrator`):** Coordinates alerts from the C-STGB inference engine, dispatching evidence through the 3-agent pipeline and assembling end-to-end case dossiers in under 30 seconds.
-5. **🛡️ Compiler-Enforced AST Verification Engine:** Audits every account number, date, and dollar amount against raw core banking ledgers using deterministic Abstract Syntax Tree (AST) grammar validation ($\mathcal{G}_{\text{SAR}}$) and formal verification (Proposition 6.1: $\mathcal{V}(\mathcal{T}) \subseteq \mathcal{V}_{\text{sub}}$) to guarantee 0% hallucination.
+5. **🛡️ Compiler-Enforced AST Verification Engine:** Audits every account number, date, and dollar amount against raw core banking ledgers using deterministic Abstract Syntax Tree (AST) grammar validation (G_SAR) and formal verification (Proposition 6.1: V(T) ⊆ V_sub) to guarantee 0% hallucination.
 6. **👥 Mandatory Human Oversight Gate:** The AI swarm cannot file reports or freeze accounts autonomously. All outputs require dual authorization under the institutional Maker-Checker governance gate.
 
 ---

@@ -4,7 +4,7 @@
 # ================================================================
 
 # ─── Core ML & Deep Learning ───────────────────────────────────
-tensorflow==2.18.0
+# tensorflow==2.18.0         # Optional: legacy benchmark framework
 scikit-learn>=1.5
 pyyaml>=6.0
 
@@ -20,16 +20,16 @@ duckdb>=1.0
 pyarrow>=17.0
 
 # ─── Federated Learning & Privacy (Layer 3) ────────────────────
-flwr>=1.11                   # Flower
-opacus>=1.5
+# flwr>=1.11                 # Optional: Flower for federated learning notebooks
+# opacus>=1.5                # Optional: differential privacy for DP-SGD
 
 # ─── Explainability (Layer 4) ──────────────────────────────────
-captum>=0.7
+# captum>=0.7                # Optional: model interpretability
 
 # ─── Agentic SAR Automation (Layer 5) ──────────────────────────
-langchain>=0.2.14
-langchain-community>=0.2.12
-crewai>=0.51.1
+# langchain>=0.2.14          # Optional: external LLM abstractions
+# langchain-community>=0.2.12
+# crewai>=0.51.1             # Optional: multi-agent autonomous framework
 reportlab>=4.2.2
 
 # ─── Human-in-the-Loop UI (Layer 6) ───────────────────────────
@@ -40,9 +40,9 @@ pyvis>=0.3.2
 # ─── Kaggle Orchestration ─────────────────────────────────────
 kaggle>=1.6
 
-# ─── Streaming & Message Broker ───────────────────────────────
-apache-flink>=1.18.0
-confluent-kafka>=2.3.0
+# ─── Streaming & Message Broker (Optional) ────────────────────
+# apache-flink>=1.18.0       # Optional: requires OpenJDK 11+ and JAVA_HOME
+# confluent-kafka>=2.3.0     # Optional: requires librdkafka-dev
 
 # ─── Visualization & Analysis ─────────────────────────────────
 matplotlib>=3.9

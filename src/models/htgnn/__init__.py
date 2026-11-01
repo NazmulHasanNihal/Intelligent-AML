@@ -54,9 +54,14 @@ from .cstgb import (
     run_htgnn_pipeline,
 )
 
+from .enterprise import (
+    EnterpriseSaaSExtensionsMixin,
+)
+
 __all__ = [
     "BurstAwareHGT",
     "CSTGBClassifier",
+    "EnterpriseSaaSExtensionsMixin",
     "train_htgnn",
     "run_htgnn_pipeline",
     "build_hetero_data",

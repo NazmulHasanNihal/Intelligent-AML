@@ -18,9 +18,20 @@ try:
 except ImportError:
     XGBClassifier = None
 
+try:
+    import lightgbm as lgb
+except ImportError:
+    lgb = None
+
+try:
+    from catboost import CatBoostClassifier
+except ImportError:
+    CatBoostClassifier = None
+
 from .profiles import get_dataset_profile
 from .model import BurstAwareHGT
 from .training import extract_ego_neighborhood_embeddings, train_htgnn
+from .enterprise import EnterpriseSaaSExtensionsMixin
 
 class ResMLPNet(nn.Module):
     """Deep Gated Residual MLP PyTorch network for cross-modal meta-stacking."""
@@ -116,7 +127,7 @@ class ResMLPMetaLearner:
         return np.column_stack([1.0 - p, p])
 
 
-class CSTGBClassifier:
+class CSTGBClassifier(EnterpriseSaaSExtensionsMixin):
     """
     C-STGB: Conformal Spatio-Temporal GraphBoost Classifier (Dual-Stream Gated Stacking SOTA)
     
@@ -127,8 +138,14 @@ class CSTGBClassifier:
     4. Mondrian Topology-Stratified Inductive Conformal Prediction & Delayed-Feedback ACI
     """
     def __init__(self, gnn_model, target_node="Account", hidden_channels=128, alpha=0.10):
-        import lightgbm as lgb
-        from catboost import CatBoostClassifier
+        try:
+            import lightgbm as lgb
+        except ImportError:
+            lgb = None
+        try:
+            from catboost import CatBoostClassifier
+        except ImportError:
+            CatBoostClassifier = None
         
         self.gnn_model = gnn_model
         self.target_node = target_node
@@ -149,36 +166,54 @@ class CSTGBClassifier:
 
         # --- STREAM 1: Pure Tabular Expert (Trains strictly on X) ---
         # High-Speed Accelerated Estimators (10x throughput via histogram bins & optimized depth)
-        try:
-            self.lgbm_tab = lgb.LGBMClassifier(n_estimators=150, num_leaves=63, max_bin=128, learning_rate=0.08, subsample=0.85, colsample_bytree=0.85, random_state=42, n_jobs=-1, verbose=-1)
-        except Exception:
+        if lgb is not None:
+            try:
+                self.lgbm_tab = lgb.LGBMClassifier(n_estimators=150, num_leaves=63, max_bin=128, learning_rate=0.08, subsample=0.85, colsample_bytree=0.85, random_state=42, n_jobs=-1, verbose=-1)
+            except Exception:
+                self.lgbm_tab = None
+        else:
             self.lgbm_tab = None
 
-        try:
-            self.cat_tab = CatBoostClassifier(iterations=120, depth=6, learning_rate=0.08, random_seed=42, verbose=False, **cb_kwargs)
-        except Exception:
-            self.cat_tab = CatBoostClassifier(iterations=120, depth=6, learning_rate=0.08, random_seed=42, thread_count=-1, verbose=False)
+        if CatBoostClassifier is not None:
+            try:
+                self.cat_tab = CatBoostClassifier(iterations=120, depth=6, learning_rate=0.08, random_seed=42, verbose=False, **cb_kwargs)
+            except Exception:
+                self.cat_tab = CatBoostClassifier(iterations=120, depth=6, learning_rate=0.08, random_seed=42, thread_count=-1, verbose=False)
+        else:
+            self.cat_tab = None
 
-        try:
-            self.xgb_tab = XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.08, subsample=0.85, colsample_bytree=0.85, random_state=42, **xgb_kwargs)
-        except Exception:
-            self.xgb_tab = XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.08, subsample=0.85, colsample_bytree=0.85, random_state=42, tree_method="hist", max_bin=128, n_jobs=-1)
+        if XGBClassifier is not None:
+            try:
+                self.xgb_tab = XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.08, subsample=0.85, colsample_bytree=0.85, random_state=42, **xgb_kwargs)
+            except Exception:
+                self.xgb_tab = XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.08, subsample=0.85, colsample_bytree=0.85, random_state=42, tree_method="hist", max_bin=128, n_jobs=-1)
+        else:
+            self.xgb_tab = None
         
         # --- STREAM 3: Cross-Modal Fused Residual Expert (Trains on X, Z, Ego, and p_gnn) ---
-        try:
-            self.lgbm_fused = lgb.LGBMClassifier(n_estimators=120, num_leaves=31, max_bin=128, learning_rate=0.08, random_state=42, n_jobs=-1, verbose=-1)
-        except Exception:
+        if lgb is not None:
+            try:
+                self.lgbm_fused = lgb.LGBMClassifier(n_estimators=120, num_leaves=31, max_bin=128, learning_rate=0.08, random_state=42, n_jobs=-1, verbose=-1)
+            except Exception:
+                self.lgbm_fused = None
+        else:
             self.lgbm_fused = None
             
-        try:
-            self.cat_fused = CatBoostClassifier(iterations=100, depth=5, learning_rate=0.08, random_seed=42, verbose=False, **cb_kwargs)
-        except Exception:
-            self.cat_fused = CatBoostClassifier(iterations=100, depth=5, learning_rate=0.08, random_seed=42, thread_count=-1, verbose=False)
+        if CatBoostClassifier is not None:
+            try:
+                self.cat_fused = CatBoostClassifier(iterations=100, depth=5, learning_rate=0.08, random_seed=42, verbose=False, **cb_kwargs)
+            except Exception:
+                self.cat_fused = CatBoostClassifier(iterations=100, depth=5, learning_rate=0.08, random_seed=42, thread_count=-1, verbose=False)
+        else:
+            self.cat_fused = None
 
-        try:
-            self.xgb_fused = XGBClassifier(n_estimators=80, max_depth=4, learning_rate=0.08, random_state=42, **xgb_kwargs)
-        except Exception:
-            self.xgb_fused = XGBClassifier(n_estimators=80, max_depth=4, learning_rate=0.08, random_state=42, tree_method="hist", max_bin=128, n_jobs=-1)
+        if XGBClassifier is not None:
+            try:
+                self.xgb_fused = XGBClassifier(n_estimators=80, max_depth=4, learning_rate=0.08, random_state=42, **xgb_kwargs)
+            except Exception:
+                self.xgb_fused = XGBClassifier(n_estimators=80, max_depth=4, learning_rate=0.08, random_state=42, tree_method="hist", max_bin=128, n_jobs=-1)
+        else:
+            self.xgb_fused = None
         
         # --- META-LEARNER (Deep Gated Residual MLP Stacking Engine) ---
         self.meta_learner = ResMLPMetaLearner(in_features=18, hidden_dim=64)
@@ -473,22 +508,31 @@ class CSTGBClassifier:
                         oof_p_lgb_t[val_idx] = p_lgb_val
                         oof_p_xgb_t[val_idx] = p_lgb_val
                         
-                        m_cat_tab = CatBoostClassifier(iterations=40, depth=4, learning_rate=0.10, random_seed=42, thread_count=-1, verbose=False)
-                        m_cat_tab.set_params(scale_pos_weight=scale_pos_tab)
-                        m_cat_tab.fit(x_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
-                        oof_p_cat_t[val_idx] = m_cat_tab.predict_proba(x_meta_train[val_idx])[:, 1]
+                        if CatBoostClassifier is not None:
+                            m_cat_tab = CatBoostClassifier(iterations=40, depth=4, learning_rate=0.10, random_seed=42, thread_count=-1, verbose=False)
+                            m_cat_tab.set_params(scale_pos_weight=scale_pos_tab)
+                            m_cat_tab.fit(x_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
+                            oof_p_cat_t[val_idx] = m_cat_tab.predict_proba(x_meta_train[val_idx])[:, 1]
+                        else:
+                            oof_p_cat_t[val_idx] = p_lgb_val
                         
-                        m_lgb_fus = lgb.LGBMClassifier(n_estimators=30, num_leaves=15, learning_rate=0.10, random_state=42, n_jobs=-1, verbose=-1)
-                        m_lgb_fus.set_params(scale_pos_weight=1.0)
-                        m_lgb_fus.fit(fused_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
-                        p_fus_val = m_lgb_fus.predict_proba(fused_meta_train[val_idx])[:, 1]
+                        if lgb is not None:
+                            m_lgb_fus = lgb.LGBMClassifier(n_estimators=30, num_leaves=15, learning_rate=0.10, random_state=42, n_jobs=-1, verbose=-1)
+                            m_lgb_fus.set_params(scale_pos_weight=1.0)
+                            m_lgb_fus.fit(fused_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
+                            p_fus_val = m_lgb_fus.predict_proba(fused_meta_train[val_idx])[:, 1]
+                        else:
+                            p_fus_val = p_lgb_val
                         oof_p_lgb_f[val_idx] = p_fus_val
                         oof_p_xgb_f[val_idx] = p_fus_val
                         
-                        m_cat_fus = CatBoostClassifier(iterations=30, depth=4, learning_rate=0.10, random_seed=42, thread_count=-1, verbose=False)
-                        m_cat_fus.set_params(scale_pos_weight=1.0)
-                        m_cat_fus.fit(fused_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
-                        oof_p_cat_f[val_idx] = m_cat_fus.predict_proba(fused_meta_train[val_idx])[:, 1]
+                        if CatBoostClassifier is not None:
+                            m_cat_fus = CatBoostClassifier(iterations=30, depth=4, learning_rate=0.10, random_seed=42, thread_count=-1, verbose=False)
+                            m_cat_fus.set_params(scale_pos_weight=1.0)
+                            m_cat_fus.fit(fused_meta_train[tr_idx], y_meta[tr_idx], sample_weight=sw_tr)
+                            oof_p_cat_f[val_idx] = m_cat_fus.predict_proba(fused_meta_train[val_idx])[:, 1]
+                        else:
+                            oof_p_cat_f[val_idx] = p_fus_val
                         
                     oof_meta = self._compute_meta_features(
                         oof_p_xgb_t, oof_p_lgb_t, oof_p_cat_t, p_gnn_meta,
@@ -754,16 +798,6 @@ class CSTGBClassifier:
                 
         return node_probs
 
-    def predict_proba_fast_path(self, x_dict, edge_index_dict, delta_t_dict, burst_score_dict, mask=None,
-                                tau_safe_licit=0.02, tau_safe_illicit=0.98):
-        """
-        Sub-microsecond Hierarchical Early-Exit Inference Engine for 1M+ TPS throughput.
-        """
-        from src.models.inference_accelerator import CSTGBHierarchicalAccelerator
-        accelerator = CSTGBHierarchicalAccelerator(self, tau_safe_licit=tau_safe_licit, tau_safe_illicit=tau_safe_illicit)
-        probs, telemetry = accelerator.predict_proba_hierarchical(x_dict, edge_index_dict, delta_t_dict, burst_score_dict, mask=mask)
-        return probs
-
     def predict(self, x_dict, edge_index_dict, delta_t_dict, burst_score_dict, mask=None, threshold=None, fast_path=False):
         tau = threshold if threshold is not None else self.optimal_threshold
         if fast_path:
@@ -815,44 +849,6 @@ class CSTGBClassifier:
             self.aci.step(probs, y_arr)
             
         return preds_set
-
-    def explain_prediction_sar_rationale(self, node_idx, x_dict, edge_index_dict, delta_t_dict, burst_score_dict):
-        from src.explainability.sar_generator import SARNarrativeGenerator
-        feat_tuple = self._extract_all_features(x_dict, edge_index_dict, delta_t_dict, burst_score_dict)
-        prob = float(self._predict_ensemble(feat_tuple)[node_idx])
-        
-        deg = float(feat_tuple[3][node_idx, 0]) if feat_tuple[3].shape[0] > node_idx else 1.0
-        pt = float(feat_tuple[4][node_idx, 0]) if feat_tuple[4].shape[0] > node_idx else 0.0
-        burst = float(feat_tuple[5][node_idx, 0]) if feat_tuple[5].shape[0] > node_idx else 0.0
-        
-        sar_gen = SARNarrativeGenerator()
-        narrative = sar_gen.generate_fincen_narrative(
-            target_account_id=str(node_idx),
-            risk_score=prob,
-            topological_metrics={"deg_in": max(1, int(deg/2)), "deg_out": max(1, int(deg/2)), "max_burst_score": burst, "pass_through_ratio": pt},
-            conformal_details={"alpha": self.alpha, "stratum_name": "Dynamic Strata", "prediction_set_desc": "Confident Fraud" if prob > 0.5 else "Licit"}
-        )
-        return {
-            "fraud_probability": prob,
-            "sar_narrative": narrative,
-            "conformal_action": "TRIGGER_FORM_111_SAR" if prob > 0.5 else "AUTO_PASS"
-        }
-
-    def predict_with_governance(self, transaction: dict, x_dict, edge_index_dict, delta_t_dict, burst_score_dict, node_idx: int = 0, recent_history: list = None) -> dict:
-        from src.engine.zero_divergence_arbiter import ZeroDivergenceArbiter
-        feat_tuple = self._extract_all_features(x_dict, edge_index_dict, delta_t_dict, burst_score_dict)
-        probs = self._predict_ensemble(feat_tuple)
-        node_prob = float(probs[node_idx]) if len(probs) > node_idx else 0.5
-
-        conf_set = 0 if node_prob < 0.10 else (1 if node_prob > 0.85 else 2)
-
-        arbiter = ZeroDivergenceArbiter(conformal_alpha=self.alpha)
-        return arbiter.evaluate_transaction(
-            transaction=transaction,
-            ai_model_prob=node_prob,
-            conformal_prediction_set=conf_set,
-            recent_history=recent_history
-        )
 
     def save(self, directory_path):
         import joblib

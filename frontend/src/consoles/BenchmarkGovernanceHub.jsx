@@ -88,7 +88,7 @@ export const BenchmarkGovernanceHub = () => {
     }
   }, [activeView]);
 
-  // Fixed radar options: smaller radius and higher center to prevent overlap with the legend
+  // Fixed radar options: optimized radius and center with axis label padding to prevent clipping
   const radarOption = {
     backgroundColor: 'transparent',
     radar: {
@@ -100,17 +100,17 @@ export const BenchmarkGovernanceHub = () => {
         { name: 'Latency SLA (0.45ms)', max: 100 },
         { name: 'Finite Coverage (99%)', max: 100 },
       ],
-      radius: '48%',
-      center: ['50%', '40%'],
+      radius: '52%',
+      center: ['50%', '48%'],
       splitArea: { show: false },
       axisLine: { lineStyle: { color: 'rgba(27, 94, 52, 0.25)' } },
       splitLine: { lineStyle: { color: 'rgba(27, 94, 52, 0.15)' } },
-      axisName: { color: '#12381E', fontSize: 10, fontFamily: 'Inter' },
+      axisName: { color: '#12381E', fontSize: 10, fontFamily: 'Inter', padding: [4, 6] },
     },
     legend: {
-      bottom: '2%',
-      itemGap: 12,
-      textStyle: { color: '#235833', fontSize: 10 },
+      bottom: '1%',
+      itemGap: 10,
+      textStyle: { color: '#235833', fontSize: 9 },
     },
     series: [
       {
@@ -141,9 +141,19 @@ export const BenchmarkGovernanceHub = () => {
 
   const aciDriftOption = {
     backgroundColor: 'transparent',
-    tooltip: { trigger: 'axis' },
-    legend: { data: ['Population Drift Index', 'Calibrated Risk Threshold', 'Target Risk Tolerance (1.0%)'], bottom: 0, textStyle: { color: '#235833', fontSize: 10 } },
-    grid: { left: '8%', right: '5%', top: '12%', bottom: '18%' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: { 
+      data: [
+        'Total Variation d_TV',
+        'KS Drift D_KS = sup|F_t - F_cal|',
+        'Critical Bound D_crit (0.045)',
+        'Adaptive Risk Threshold (α_t)',
+        'Target Risk Tolerance (1.0%)'
+      ], 
+      bottom: 0, 
+      textStyle: { color: '#235833', fontSize: 10 } 
+    },
+    grid: { left: '8%', right: '8%', top: '12%', bottom: '20%' },
     xAxis: {
       type: 'category',
       data: ['t=0 (Calib)', 't=5k', 't=10k', 't=20k (Burst Shift)', 't=30k', 't=40k (Holiday Peak)', 't=50k', 't=60k', 't=70k (Offshore Inflow)', 't=80k', 't=90k', 't=100k'],
@@ -152,15 +162,15 @@ export const BenchmarkGovernanceHub = () => {
     yAxis: [
       {
         type: 'value',
-        name: 'Drift Index',
+        name: 'Drift Statistic (D_KS, d_TV)',
         min: 0,
-        max: 0.25,
+        max: 0.22,
         axisLabel: { color: '#64748b', fontSize: 9, fontFamily: 'monospace' },
         splitLine: { lineStyle: { color: 'rgba(27, 94, 52, 0.1)' } }
       },
       {
         type: 'value',
-        name: 'Tolerance',
+        name: 'Conformal Risk (α_t)',
         min: 0.005,
         max: 0.020,
         axisLabel: { color: '#64748b', fontSize: 9, fontFamily: 'monospace' },
@@ -169,14 +179,28 @@ export const BenchmarkGovernanceHub = () => {
     ],
     series: [
       {
-        name: 'Population Drift Index',
+        name: 'Total Variation d_TV',
         type: 'line',
         data: [0.012, 0.015, 0.018, 0.142, 0.082, 0.168, 0.074, 0.041, 0.185, 0.062, 0.038, 0.024],
         itemStyle: { color: '#F59E0B' },
         lineStyle: { width: 2 }
       },
       {
-        name: 'Calibrated Risk Threshold',
+        name: 'KS Drift D_KS = sup|F_t - F_cal|',
+        type: 'line',
+        data: [0.010, 0.014, 0.019, 0.068, 0.038, 0.079, 0.042, 0.025, 0.084, 0.035, 0.022, 0.016],
+        itemStyle: { color: '#3B82F6' },
+        lineStyle: { width: 2 }
+      },
+      {
+        name: 'Critical Bound D_crit (0.045)',
+        type: 'line',
+        data: [0.045, 0.045, 0.045, 0.045, 0.045, 0.045, 0.045, 0.045, 0.045, 0.045, 0.045, 0.045],
+        itemStyle: { color: '#EF4444' },
+        lineStyle: { type: 'dashed', color: '#EF4444', width: 1.5 }
+      },
+      {
+        name: 'Adaptive Risk Threshold (α_t)',
         type: 'line',
         yAxisIndex: 1,
         data: [0.010, 0.010, 0.0102, 0.0078, 0.0089, 0.0072, 0.0094, 0.0098, 0.0069, 0.0092, 0.0099, 0.010],
@@ -188,7 +212,7 @@ export const BenchmarkGovernanceHub = () => {
         type: 'line',
         yAxisIndex: 1,
         data: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
-        lineStyle: { type: 'dashed', color: '#94a3b8', width: 1 }
+        lineStyle: { type: 'dotted', color: '#94a3b8', width: 1.5 }
       }
     ]
   };
@@ -407,7 +431,7 @@ export const BenchmarkGovernanceHub = () => {
                 <Target className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Multidimensional SOTA Radar</span>
               </span>
-              <div className="h-52 sm:h-56 mt-1">
+              <div className="h-56 sm:h-64 mt-1">
                 <ReactECharts option={radarOption} style={{ height: '100%', width: '100%' }} />
               </div>
             </div>
@@ -427,14 +451,14 @@ export const BenchmarkGovernanceHub = () => {
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
               <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
                 <Activity className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span>Adaptive Risk Tolerance & Macro Distribution Drift Tracker</span>
+                <span>Adaptive Risk Tolerance, KS Drift (D_KS) & Total Variation (d_TV) Tracker</span>
               </span>
               <span className="text-[9px] sm:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-semibold">
                 Coverage Guaranteed &ge; 99.0%
               </span>
             </div>
 
-            <div className="h-72 sm:h-80 w-full mt-1">
+            <div className="h-72 sm:h-84 w-full mt-1">
               <ReactECharts option={aciDriftOption} style={{ height: '100%', width: '100%' }} />
             </div>
           </div>

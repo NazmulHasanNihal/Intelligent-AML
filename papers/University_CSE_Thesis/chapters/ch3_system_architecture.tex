@@ -16,7 +16,7 @@ Figure~\ref{fig:ch3_detailed_pipeline} illustrates the six interconnected module
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/fig6_system_architecture.pdf}
+\includegraphics[width=\textwidth]{figures/fig3_1_tensor_flow.pdf}
 \caption{End-to-End Architectural Dataflow of C-STGB v2, detailing data ingestion, continuous-time temporal encoding, learnable edge-trust gating, latent manifold oversampling, evidence-adaptive fusion, and conformal risk control.}
 \label{fig:ch3_detailed_pipeline}
 \end{figure}
@@ -40,10 +40,22 @@ Financial laundering operations must balance incoming and outgoing capital flows
 \begin{equation}
 \Phi_{\text{flow}}(u, t) = \frac{\sum_{e \in \mathcal{E}_{\text{out}}(u, t)} \text{Amount}(e)}{\sum_{e \in \mathcal{E}_{\text{in}}(u, t)} \text{Amount}(e) + \epsilon}
 \end{equation}
-where $\epsilon = 10^{-5}$ prevents division by zero. Pass-through mule accounts and smurfing consolidators exhibit $\Phi_{\text{flow}} \approx 1.0$, whereas terminal sinks exhibit $\Phi_{\text{flow}} \to 0$ and source faucets exhibit $\Phi_{\text{flow}} \to \infty$. To prevent heavy-tailed numerical instability, we apply symmetric logarithmic normalization:
+where $\epsilon = 10^{-5}$ prevents division by zero. Pass-through mule accounts and smurfing consolidators exhibit $\Phi_{\text{flow}} \approx 1.0$, whereas terminal sinks exhibit $\Phi_{\text{flow}} \to 0$ and source faucets exhibit $\Phi_{\text{flow}} \to \infty$. To prevent heavy-tailed numerical instability, we apply monotonic logarithmic normalization:
 \begin{equation}
-\tilde{\Phi}_{\text{flow}}(u, t) = \text{sign}\left(\Phi_{\text{flow}} - 1\right) \cdot \ln\left(1 + |\Phi_{\text{flow}} - 1|\right)
+\tilde{\Phi}_{\text{flow}}(u, t) = \ln\left(1 + \Phi_{\text{flow}}(u, t)\right)
 \end{equation}
+
+\begin{lemma}[Conservation of Flow in Pass-Through Conduit Chains]
+\label{lem:flow_conservation}
+Let $\mathcal{P}_{\text{chain}} = (v_0, v_1, \dots, v_K)$ denote an ordered layering chain with amounts $A(v_{k-1}, v_k)$ and retention loss rate $\epsilon_k \in [0, 1)$ at each hop. If intermediate nodes $v_k$ ($1 \le k < K$) act as pass-through conduits, then:
+\begin{equation}
+\Phi_{\text{flow}}(v_k, t) = \frac{\sum_{e \in \mathcal{E}_{\text{out}}(v_k)} A(e)}{\sum_{e \in \mathcal{E}_{\text{in}}(v_k)} A(e) + \epsilon} \in \left[ 1 - \bar{\epsilon}, 1.0 \right]
+\end{equation}
+where $\bar{\epsilon} = \max_k \epsilon_k < 0.15$. Consequently, $\tilde{\Phi}_{\text{flow}}(v_k, t) = \ln(1 + \Phi_{\text{flow}}(v_k, t)) \in [\ln(2 - \bar{\epsilon}), \ln(2)] \approx [0.615, 0.693]$, forming a bounded topological signature invariant to arbitrary graph scale and entity degree.
+\end{lemma}
+\begin{proof}
+By intermediate conduit definition in money laundering layering (BSA 31 CFR \S 1010.100), net retained capital $R(v_k) = \sum_{\text{in}} A - \sum_{\text{out}} A \le \epsilon_k \sum_{\text{in}} A$. Thus $\sum_{\text{out}} A = (1 - \epsilon_k) \sum_{\text{in}} A$. Dividing by $\sum_{\text{in}} A$ yields $\Phi_{\text{flow}}(v_k, t) = 1 - \epsilon_k \in [1 - \bar{\epsilon}, 1.0]$. The monotonic logarithmic transform preserves this bounded invariant range.
+\end{proof}
 
 \subsubsection{Group 2: Degree Inflow/Outflow Structural Asymmetry ($\Psi_{\text{asym}} \in [-1, 1]$)}
 To separate fan-in smurfing aggregation trees from fan-out peeling disbursement structures, we define directional degree asymmetry:
@@ -92,7 +104,7 @@ We capture the distribution of historical transaction amounts and inter-arrival 
 
 The concatenated 12-dimensional invariant representation:
 \begin{equation}
-\mathbf{z}_{\text{inv}}(u, t) = \left[ \tilde{\Phi}_{\text{flow}}, \Psi_{\text{asym}}, \lambda_u(t), \mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}, \mu_A, \sigma_A^2, \gamma_A, \kappa_A, \nu_{\text{io}}, \sigma_{\Delta t}, \text{deg}(u, t) \right]^T \in \mathbb{R}^{12}
+\mathbf{z}_{\text{inv}}(u, t) = \left[ \tilde{\Phi}_{\text{flow}}, \Psi_{\text{asym}}, \lambda_u(t), \mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}, \mu_A, \sigma_A^2, \gamma_A, \kappa_A, v_A, \nu_{\text{io}}, \sigma_{\Delta t} \right]^T \in \mathbb{R}^{12}
 \end{equation}
 provides a universal, schema-agnostic feature foundation.
 
@@ -185,6 +197,23 @@ For any synthesized node $\mathbf{h}_{\text{syn}}$, synthetic transaction amount
 \end{equation}
 This mathematical constraint strictly guarantees that the physical mass-balance flow conservation ratio $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) \approx 1.0$, preserving realistic domain invariants. All synthetic nodes and edges are strictly quarantined to $\mathcal{D}_{\text{train}}$, ensuring zero data leakage into validation or testing splits.
 
+\begin{lemma}[Chronological Isolation of Latent Topological Oversampling]
+\label{lem:graphsmote_causality}
+Let $\mathcal{D}_{\text{train}} = \mathcal{G}_{[0, t_{\text{train}}]}$, $\mathcal{D}_{\text{val}} = \mathcal{G}_{(t_{\text{train}}, t_{\text{val}}]}$, $\mathcal{D}_{\text{cal}} = \mathcal{G}_{(t_{\text{val}}, t_{\text{cal}}]}$, and $\mathcal{D}_{\text{test}} = \mathcal{G}_{(t_{\text{cal}}, t_{\text{test}}]}$. Synthetic representations $\mathbf{h}_{\text{syn}}$ generated via seed nodes $u, v \in \mathcal{C}_k \subseteq \mathcal{V}_{\text{train}}$ with $t_{\text{syn}} = \max(t_u, t_v) \le t_{\text{train}}$ and causal indicator $\hat{\mathbf{A}}_{\text{syn}, w} = \sigma(\mathbf{h}_{\text{syn}}^T \mathbf{W}_{\text{edge}} \mathbf{h}_w) \cdot \mathbb{I}(t_w \le t_{\text{syn}})$ satisfy:
+$\mathcal{V}(\tilde{\mathcal{G}}_{\text{train}}) \cap \big(\mathcal{V}_{\text{val}} \cup \mathcal{V}_{\text{cal}} \cup \mathcal{V}_{\text{test}}\big) = \emptyset$, and $\forall (i, j) \in \mathcal{E}(\tilde{\mathcal{G}}_{\text{train}}), \max(t_i, t_j) \le t_{\text{train}}$. Consequently, synthetic edge formation induces zero forward lookahead bias and zero gradient flow into prospective partitions.
+\end{lemma}
+\begin{proof}
+Parent seed nodes satisfy $t_u, t_v \le t_{\text{train}}$, implying $t_{\text{syn}} \le t_{\text{train}}$. The causal indicator $\mathbb{I}(t_w \le t_{\text{syn}})$ evaluates to 0 for any $t_w > t_{\text{syn}}$, enforcing $\hat{\mathbf{A}}_{\text{syn}, w} = 0$. Because $t_{\text{syn}} \le t_{\text{train}} < t_{\text{val}} < t_{\text{cal}} < t_{\text{test}}$, no candidate $w \in \mathcal{V}_{\text{val}} \cup \mathcal{V}_{\text{cal}} \cup \mathcal{V}_{\text{test}}$ can satisfy $t_w \le t_{\text{syn}}$. Furthermore, synthetic representations and virtual edges are discarded prior to evaluation on $\mathcal{D}_{\text{val}}, \mathcal{D}_{\text{cal}}, \mathcal{D}_{\text{test}}$. Hence, mutual information satisfies $I(\tilde{\mathcal{G}}_{\text{train}}; \mathcal{D}_{\text{test}} \mid \mathcal{D}_{\text{train}}) = 0$.
+\end{proof}
+
+\begin{proposition}[Convex Combination Flow Invariant Preservation]
+\label{prop:graphsmote_flow_preservation}
+Let $u, v \in \mathcal{C}_k$ be two parent pass-through accounts in the same latent typology cluster with inflows $I_u, I_v > 0$ and outflows $O_u = \Phi_u I_u, O_v = \Phi_v I_v$, where $\Phi_u, \Phi_v \in [1 - \bar{\epsilon}, 1.0]$. Synthetic representation $\mathbf{h}_{\text{syn}} = \lambda \mathbf{h}_u + (1 - \lambda) \mathbf{h}_v$ ($\lambda \in [0, 1]$) linearly interpolates flows: $I_{\text{syn}} = \lambda I_u + (1 - \lambda) I_v$ and $O_{\text{syn}} = \lambda O_u + (1 - \lambda) O_v$. Then the synthetic flow conservation ratio satisfies $\min(\Phi_u, \Phi_v) \le \Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) = \frac{O_{\text{syn}}}{I_{\text{syn}}} \le \max(\Phi_u, \Phi_v)$, and in particular $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) \in [1 - \bar{\epsilon}, 1.0]$.
+\end{proposition}
+\begin{proof}
+Assume $\Phi_u \le \Phi_v$. Since $\lambda \in [0, 1]$ and $I_u, I_v > 0$: $\Phi_u I_{\text{syn}} \le O_{\text{syn}} = \lambda \Phi_u I_u + (1 - \lambda) \Phi_v I_v \le \Phi_v I_{\text{syn}}$. Dividing throughout by $I_{\text{syn}} > 0$ yields $\Phi_u \le \frac{O_{\text{syn}}}{I_{\text{syn}}} \le \Phi_v \in [1 - \bar{\epsilon}, 1.0]$, preserving bounded flow conservation without monetary mass-balance violation.
+\end{proof}
+
 \section{Module 4: Evidence-Adaptive Graph-Tabular Fusion}
 Newly registered accounts and pass-through stubs lack relational graph neighbors ($\deg(u) = 0$). To prevent GNN performance collapse on isolated nodes, C-STGB dynamically balances tabular domain invariants against structural embeddings.
 
@@ -197,7 +226,7 @@ The unified anomaly representation $\mathbf{h}_u^*$ dynamically fuses graph embe
 \begin{equation}
 \mathbf{h}_u^* = \alpha_u \mathbf{h}_u^{(L)} + (1 - \alpha_u) \left[ \mathbf{z}_{\text{inv}}(u, t) \,\|\, \mathbf{x}_u \right]
 \end{equation}
-When graph evidence is sparse ($\deg(u) \to 0$), $\alpha_u \to 0$, causing C-STGB to gracefully fall back on robust domain invariants, boosting zero-degree account F1-score by $+72.2\text{ pp}$ over pure GNN baselines.
+When graph evidence is sparse ($\deg(u) \to 0$), $\alpha_u \to 0$, causing C-STGB to gracefully fall back on robust domain invariants, boosting zero-degree account F1-score to $89.60\%$ F1 ($+71.20\text{ pp}$ over standalone GNN's $18.40\%$ F1).
 
 \section{Module 5: Cost-Sensitive Risk Optimization Head}
 Anomaly risk probabilities are predicted via a multi-layer perceptron:
@@ -245,8 +274,8 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 \Require Directed graph $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, Entity features $\mathbf{X}$, Target coverage $1-\alpha$, Loss weights $\gamma_1, \gamma_2$.
 \Ensure Trained model parameters $\Theta$, Calibrated threshold $\tau^*$, Conformal quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$.
 \State Compute 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u)$ for all $u \in \mathcal{V}_{\text{train}}$.
-\State Cluster minority nodes into latent typologies $C_1, \dots, C_K$ via Eq.~(3.17).
-\State Synthesize minority representations $\mathbf{h}_{\text{syn}}$ and bilinear edges $\mathbf{\hat{A}}_{\text{syn}}$ via Eq.~(3.18)--(3.19).
+\State Cluster minority nodes into latent typologies $C_1, \dots, C_K$ via Eq.~(3.19).
+\State Synthesize minority representations $\mathbf{h}_{\text{syn}}$ and bilinear edges $\mathbf{\hat{A}}_{\text{syn}}$ via Eq.~(3.20)--(3.21).
 \State Mine hard-negative commercial hubs into batch bank $\mathcal{B}_{\text{hard}}$.
 \For{epoch $= 1$ to $N_{\text{epochs}}$}
     \State Compute harmonic temporal embeddings $\Phi_{\text{time}}(\Delta t_{ij})$ and tri-band weights $w_{ij}(t)$.

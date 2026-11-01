@@ -46,7 +46,7 @@ To strictly eliminate temporal lookahead bias and label contamination, all datas
     \item \textbf{Calibration Split ($\mathcal{D}_{\text{cal}}$, 10\%):} Used strictly for computing class-conditional conformal non-conformity quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$.
     \item \textbf{Forward Testing Split ($\mathcal{D}_{\text{test}}$, 20\%):} Used strictly for final out-of-sample performance reporting.
 \end{enumerate}
-All evaluations are repeated across \textbf{5 independent random seeds} (42, 123, 456, 789, 999), reporting mean and sample standard deviation.
+All evaluations are repeated across \textbf{5 independent random seeds} (42, 101, 2024, 7, 999), reporting mean and sample standard deviation.
 
 \begin{figure}[htbp]
 \centering
@@ -60,7 +60,7 @@ We benchmark C-STGB against 11 representative baseline architectures spanning ta
 
 Table~\ref{tab:master_baseline_results} presents the complete multi-dataset Macro F1-score and PR-AUC matrix.
 
-\begin{table}[htbp]
+\begin{sidewaystable}[htbp]
 \centering
 \caption{Comprehensive Multi-Baseline Performance Matrix across All 13 Financial Networks: Macro F1-Score (\%) and PR-AUC with Validation-Tuned Decision Thresholds $\tau^*$.}
 \label{tab:master_baseline_results}
@@ -87,7 +87,7 @@ Table~\ref{tab:master_baseline_results} presents the complete multi-dataset Macr
 \bottomrule
 \end{tabular}%
 }
-\end{table}
+\end{sidewaystable}
 
 \begin{figure}[htbp]
 \centering
@@ -170,6 +170,37 @@ Table~\ref{tab:leave_one_out} isolates the marginal performance drop when indivi
 \label{fig:ch7_leave_one_out}
 \end{figure}
 
+\subsection{Fine-Grained 12-D Canonical Invariant Sensitivity Analysis}
+To evaluate the individual explanatory power of each dimension within the universal 12-dimensional canonical invariant space $\mathbf{z}_{\text{inv}}(u, t)$, Table~\ref{tab:invariant_sensitivity} reports the leave-one-feature-out degradation across three distinct financial network archetypes.
+
+\begin{table}[htbp]
+\centering
+\caption{Leave-One-Feature-Out Sensitivity Analysis on 12-D Invariants $\mathbf{z}_{\text{inv}}$ (Minority F1-Score (\%) / PR-AUC).}
+\label{tab:invariant_sensitivity}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+\textbf{Invariant Configuration} & \textbf{Elliptic-v1} & \textbf{IBM-AMLSim HI} & \textbf{SAML-D} \\
+\midrule
+\textbf{Full 12-D Descriptor Vector $\mathbf{z}_{\text{inv}}$} & $\mathbf{91.42 / 0.9312}$ & $\mathbf{44.47 / 0.4779}$ & $\mathbf{87.15 / 0.8845}$ \\
+\midrule
+w/o Flow Regularity $\tilde{\Phi}_{\text{flow}}$ & $83.96 / 0.8520$ & $36.80 / 0.3950$ & $79.80 / 0.8120$ \\
+w/o Degree Asymmetry $\Psi_{\text{asym}}$ & $88.50 / 0.8980$ & $41.20 / 0.4410$ & $84.20 / 0.8550$ \\
+w/o Hawkes Burst Intensity $\lambda_u$ & $89.12 / 0.9050$ & $40.50 / 0.4320$ & $83.60 / 0.8490$ \\
+w/o Causal Fwd Taint $\mathbf{s}_{\text{fwd}}$ & $87.80 / 0.8910$ & $41.80 / 0.4480$ & $84.50 / 0.8580$ \\
+w/o Causal Bwd Taint $\mathbf{s}_{\text{bwd}}$ & $88.90 / 0.9020$ & $42.10 / 0.4520$ & $85.10 / 0.8640$ \\
+w/o Amount Mean $\mu_A$ & $90.50 / 0.9220$ & $43.20 / 0.4650$ & $86.20 / 0.8750$ \\
+w/o Amount Variance $\sigma_A^2$ & $90.10 / 0.9180$ & $42.90 / 0.4610$ & $85.90 / 0.8710$ \\
+w/o Amount Skewness $\gamma_A$ & $90.80 / 0.9250$ & $43.80 / 0.4710$ & $86.60 / 0.8790$ \\
+w/o Amount Kurtosis $\kappa_A$ & $90.90 / 0.9260$ & $43.90 / 0.4720$ & $86.70 / 0.8800$ \\
+w/o Amount Velocity $v_A$ & $89.20 / 0.9080$ & $41.50 / 0.4440$ & $84.80 / 0.8600$ \\
+w/o IO Velocity Ratio $\nu_{\text{io}}$ & $89.80 / 0.9140$ & $42.60 / 0.4580$ & $85.40 / 0.8670$ \\
+w/o Inter-Arrival Dispersion $\sigma_{\Delta t}$ & $88.70 / 0.9010$ & $41.05 / 0.4400$ & $84.10 / 0.8530$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
 \section{Conformal Triage Efficiency \& Workload Reduction}
 Table~\ref{tab:ch7_conformal} evaluates the operational efficiency of the 3-Tier Conformal Risk Control architecture at nominal significance level $\alpha = 0.01$ ($99.0\%$ guaranteed class coverage).
 
@@ -207,7 +238,7 @@ To simulate realistic counter-surveillance attacks, we subject C-STGB and baseli
 
 Table~\ref{tab:adversarial_benchmarks} reports the relative F1-score retention under attack.
 
-\begin{table}[htbp]
+\begin{sidewaystable}[htbp]
 \centering
 \caption{Adversarial Topological Robustness and Relative F1-Score Retention under Camouflage Attacks on Elliptic-v1.}
 \label{tab:adversarial_benchmarks}
@@ -226,13 +257,20 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 \bottomrule
 \end{tabular}%
 }
-\end{table}
+\end{sidewaystable}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig9_adversarial_camouflage_robustness.pdf}
 \caption{Adversarial camouflage link robustness on Elliptic-v1 across increasing injected camouflage link ratios ($\rho \in [0.0, 0.80]$), demonstrating C-STGB's superior F1-score retention compared to baseline spatial and heterogeneous GNNs.}
 \label{fig:ch7_camouflage_robustness}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_edge_gate_distribution.pdf}
+\caption{Empirical distribution of learnable edge-trust gating weights $\hat{g}_{ij}$ on \texttt{elliptic\_v1} under adversarial camouflage injection. Spurious camouflage edges are suppressed below the safety floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial chaff connections while preserving authentic transaction conduits.}
+\label{fig:ch7_edge_gate_distribution}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -245,7 +283,7 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 \section{Zero-Shot Cross-Domain Transferability on Frozen Weights}
 Table~\ref{tab:zero_shot_transfer} evaluates zero-shot cross-network generalization across eight source-target dataset pairs where neural weights are completely frozen ($\eta = 0$), relying entirely on the 12-D canonical invariant representation space.
 
-\begin{table}[htbp]
+\begin{sidewaystable}[htbp]
 \centering
 \caption{Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix under Completely Frozen Neural Backbones ($\eta=0$).}
 \label{tab:zero_shot_transfer}
@@ -267,7 +305,7 @@ Table~\ref{tab:zero_shot_transfer} evaluates zero-shot cross-network generalizat
 \bottomrule
 \end{tabular}%
 }
-\end{table}
+\end{sidewaystable}
 
 \section{Streaming Latency, Memory Profiling \& Production SLAs}
 \label{sec:ch7_latency}

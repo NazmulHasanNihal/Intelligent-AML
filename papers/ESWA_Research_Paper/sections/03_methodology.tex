@@ -36,9 +36,9 @@ We formalize financial crime surveillance over a continuous-time dynamic transac
     with $\epsilon = 10^{-5}$. Intermediate mules operate near unity ($\Phi_{\text{flow}} \approx 1.0$), whereas legitimate commercial accounts exhibit accumulation or disbursement variance. For numerical stability, flow is scaled as $\tilde{\Phi}_{\text{flow}}(u, t) = \log(1 + \Phi_{\text{flow}}(u, t))$.
     \item \textbf{Hawkes Point Process Arrival Intensity:}
     \begin{equation}
-    \lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha_{\text{hwk}} \exp\left(-\beta_{\text{hwk}} \frac{t - t_i}{24.0}\right)
+    \lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha_H \exp\left(-\beta_H (t - t_i)\right)
     \end{equation}
-    parameterized over causal event history $[t - \Delta T, t]$ to model transaction burst acceleration. We enforce sub-critical branching $\alpha_{\text{hwk}} / \beta_{\text{hwk}} < 1.0$ and clamp $\tilde{\lambda}_u(t) = \log \min(\max(\lambda_u(t), 10^{-5}), 10^4)$.
+    parameterized over causal event history $[t - \Delta T, t]$ to model transaction burst acceleration, with baseline intensity $\mu_u \ge 0$, excitation parameter $\alpha_H > 0$, and decay parameter $\beta_H > 0$. We enforce sub-critical branching $\alpha_H / \beta_H < 1.0$ and clamp $\tilde{\lambda}_u(t) = \log \min(\max(\lambda_u(t), 10^{-5}), 10^4)$.
     \item \textbf{Causal Historical Taint Propagation (Zero-Leakage):}
     \begin{align}
     \mathbf{s}_{\text{fwd}} &= (1 - \alpha_{\text{ppr}}) (\mathbf{I} - \alpha_{\text{ppr}} \mathbf{P}^T)^{-1} \mathbf{s}_{\text{seed}}, \\
@@ -156,9 +156,9 @@ where non-conformity scores are $s_i^{(y)} = 1 - \hat{p}_i(y)$.
     \item \textbf{Guarantee B (Non-Asymptotic Bound under Total Variation Drift):} Under streaming distribution shift between calibration $\mathcal{P}_{\text{cal}}^{(y)}$ and test $\mathcal{P}_t^{(y)}$, coverage degradation decomposes via maximal coupling into TV shift and empirical process concentration:
     \begin{align}
     &\big| \mathbb{P}_{t}(Y \in \Gamma(X) \mid Y=y) - (1 - \alpha_y) \big| \notag \\
-    &\quad \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) + \sqrt{\tfrac{\ln(2/\delta)}{2 n_y}} + \tfrac{1}{n_y}
+    &\quad \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) + \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} + \frac{1}{n(y)}
     \end{align}
-    with probability $\ge 1 - \delta$, where $n_y = |\mathcal{D}_{\text{cal}}^{(y)}|$.
+    with probability $\ge 1 - \delta$, where $n(y) = |\mathcal{D}_{\text{cal}}^{(y)}|$.
     \item \textbf{Guarantee C (Long-Run Martingale Convergence under Delay):} Ground-truth confirmation incurs investigative delay $\Delta T_{\text{delay}} \in [30, 90]$\,days. Streaming Adaptive Conformal Inference (ACI) updates online target quantiles over the confirmed observation queue:
     \begin{equation}
     \alpha_t \leftarrow \alpha_{t-1} + \gamma (\alpha - \text{err}_{t - \tau(t)})

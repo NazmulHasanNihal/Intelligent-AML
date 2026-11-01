@@ -33,19 +33,19 @@ Edges with optimized mask weights $M_e \ge \tau_{\text{mask}}$ ($\tau_{\text{mas
 The extracted causal subgraph $\mathcal{G}_{\text{sub}}$ and 12-D invariant vectors $\mathbf{z}_{\text{inv}}$ are dispatched to an autonomous 4-agent forensic swarm:
 
 \begin{enumerate}
-    \item \textbf{Lead Forensic Coordinator Agent:} Ingests Tier-1/Tier-2 conformal alerts, initializes forensic case contexts, and coordinates inter-agent task delegation.
-    \item \textbf{Subgraph Topology Specialist Agent:} Analyzes graph structural motifs, computes flow conservation ratios ($\Phi_{\text{flow}}$), identifies laundering typology classifications (Smurfing, Layering, Circular Wash, Dormant Mule), and extracts causal hop sequences.
-    \item \textbf{FinCEN SAR Drafter Agent:} Synthesizes natural-language executive summaries and structured FinCEN Form 111 XML narratives from verified topological facts.
-    \item \textbf{Compliance Rule Verifier Agent:} Enforces statutory AST grammar specifications, Pydantic schema validation, and SR 26-2-aligned cryptographic Merkle tree receipt generation.
+    \item \textbf{Lead Forensic Coordinator:} Ingests Tier-1/Tier-2 conformal alerts, initializes forensic case contexts, and coordinates inter-agent task delegation.
+    \item \textbf{Subgraph Topology Specialist:} Analyzes graph structural motifs, computes flow conservation ratios ($\Phi_{\text{flow}}$), identifies laundering typology classifications (Smurfing, Layering, Circular Wash, Dormant Mule), and extracts causal hop sequences.
+    \item \textbf{Legal SAR Drafter:} Synthesizes natural-language executive summaries and structured FinCEN Form 111 XML narratives from verified topological facts.
+    \item \textbf{Compliance Rule Verifier:} Enforces statutory AST grammar specifications, Pydantic schema validation, and SR 26-2-aligned cryptographic Merkle tree receipt generation.
 \end{enumerate}
 
 \section{Abstract Syntax Tree (AST) Grammar \& Schema Specification}
 To eliminate Large Language Model (LLM) entity hallucinations (e.g., inventing fake account IDs or fabricated transaction amounts), the compliance agent compiles generated narratives into a formal Abstract Syntax Tree.
 
 \subsection{Extended Backus-Naur Form (EBNF) Grammar ($\mathcal{G}_{\text{SAR}}$)}
-All generated narratives must strictly conform to the following formal grammar:
-\begin{small}
-\begin{verbatim}
+All generated narratives must strictly conform to the formal grammar formalized in Listing~\ref{lst:sar_ebnf}:
+
+\begin{lstlisting}[caption={Extended Backus-Naur Form (EBNF) Grammar for Deterministic SAR Generation ($\mathcal{G}_{\text{SAR}}$).}, label={lst:sar_ebnf}]
 SAR_Document       ::= Header SubjectSection ActivitySection 
                        EvidenceSection AuditTrailer
 Header             ::= "<SAR_Form111" " Version='2.0'>" 
@@ -63,16 +63,15 @@ CausalChain        ::= "<Hop" " Seq='" Integer "'>" SourceNode "-->" TargetNode
                        Amount Timestamp EdgeTrust "</Hop>"
 FlowConservation   ::= "<FlowConservation" " Inflow='" Real "' Outflow='" Real 
                        "' Ratio='" Real "/>"
-AuditTrailer       ::= "<Fed_SR11_7_Receipt>" MerkleRoot SHA256Proof Timestamp 
-                       "</Fed_SR11_7_Receipt>"
+AuditTrailer       ::= "<Fed_SR26_2_Receipt>" MerkleRoot SHA256Proof Timestamp 
+                       "</Fed_SR26_2_Receipt>"
 EntityID           ::= [a-zA-Z0-9_]{1,64}
-\end{verbatim}
-\end{small}
+\end{lstlisting}
 
 \subsection{Pydantic Runtime Schema Specification ($\mathcal{S}_{\text{AML}}$)}
-Before regulatory submission, the payload is validated against strict Pydantic schemas:
-\begin{small}
-\begin{verbatim}
+Before regulatory submission, the payload is validated against strict Pydantic schemas formalized in Listing~\ref{lst:pydantic_schema}:
+
+\begin{lstlisting}[language=Python, caption={Pydantic Runtime Strict Validation Schema ($\mathcal{S}_{\text{AML}}$).}, label={lst:pydantic_schema}]
 class CausalHopSchema(BaseModel):
     hop_seq: int = Field(..., ge=1, le=10)
     source_entity_id: str = Field(..., min_length=1)
@@ -98,8 +97,7 @@ class SARDocumentSchema(BaseModel):
             assert v[i].target_entity_id == v[i+1].source_entity_id, \
                 "Disconnected non-causal topological chain detected."
         return v
-\end{verbatim}
-\end{small}
+\end{lstlisting}
 
 \section{Deterministic Anti-Hallucination Proof}
 
@@ -135,16 +133,14 @@ An originating illicit entity (\texttt{ACC\_9941}) initiates a high-velocity smu
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/causal_subgraph_case_study.pdf}
-\caption{Forensic dissection of a 15-node smurfing ring extracted via GNNExplainer: red edges denote the high-velocity smurfing fan-out, purple edges indicate the circular wash cycle ($C_3$), and dashed gray links indicate camouflaged merchant chaff successfully pruned by edge-trust gating ($\hat{g}_{ij} < 0.10$).}
+\caption{Forensic dissection of a 15-node smurfing ring extracted via GNNExplainer: red edges denote the high-velocity smurfing fan-out, orange edges indicate the circular wash cycle ($C_3$), and dashed gray links indicate camouflaged merchant chaff successfully pruned by edge-trust gating ($\hat{g}_{ij} < 0.10$).}
 \label{fig:ch6_case_study_subgraph}
 \end{figure}
 
 \subsection{Compiled FinCEN Form 111 XML Dossier}
-\label{lst:fincen_xml_sample}
 Listing~\ref{lst:fincen_xml_sample} provides the finalized, schema-validated FinCEN Form 111 XML document autonomously generated by the multi-agent compliance swarm.
 
-\begin{footnotesize}
-\begin{verbatim}
+\begin{lstlisting}[language=XML, caption={Compiled and Schema-Validated FinCEN Form 111 XML Dossier.}, label={lst:fincen_xml_sample}]
 <?xml version='1.0' encoding='UTF-8'?>
 <SAR_Form111 Version='2.0' Standard='BSA_AML_FinCEN'>
   <FilingHeader>
@@ -182,8 +178,7 @@ Listing~\ref{lst:fincen_xml_sample} provides the finalized, schema-validated Fin
     <Timestamp>2026-08-28T14:32:01.452Z</Timestamp>
   </Model_Governance_SR26_2_Receipt>
 </SAR_Form111>
-\end{verbatim}
-\end{footnotesize}
+\end{lstlisting}
 
 \section{Chapter Summary}
 This chapter detailed the explainable AI architecture of C-STGB, presenting GNNExplainer topological extraction, the autonomous multi-agent forensic swarm, formal EBNF grammar specifications, Pydantic runtime schema validation, the deterministic anti-hallucination proof, SR 26-2-aligned Merkle tree receipts, and an end-to-end case study on a 15-node smurfing ring. The next chapter presents the comprehensive experimental evaluation across all 13 financial benchmark networks.

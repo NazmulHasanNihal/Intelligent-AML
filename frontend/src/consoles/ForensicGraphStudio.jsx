@@ -276,18 +276,34 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
             />
           </form>
 
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-[var(--text-muted)]">Noise Filter (Threshold: {(camouflageThreshold * 100).toFixed(0)}%):</span>
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0B152B] border border-cyan-500/30">
+            <button
+              type="button"
+              onClick={() => setCourtPruningActive(prev => !prev)}
+              className="flex items-center gap-1.5 cursor-pointer text-[10px] font-mono font-bold"
+              title="Toggle learnable edge-trust gating (Eq. 3.13): filters synthetic camouflage chaff"
+            >
+              <Shield className={`w-3 h-3 ${courtPruningActive ? 'text-cyan-400' : 'text-slate-500'}`} />
+              <span className={courtPruningActive ? 'text-cyan-300' : 'text-slate-400'}>
+                Edge Gate:
+              </span>
+            </button>
+            <span className="text-[10px] text-slate-300 font-mono">
+              ĝᵢⱼ &lt; <b className="text-amber-400">{camouflageThreshold.toFixed(2)}</b>
+            </span>
             <input 
               type="range"
-              min="0.00"
-              max="0.40"
-              step="0.02"
+              min="0.02"
+              max="0.30"
+              step="0.01"
               value={camouflageThreshold}
               onChange={(e) => setCamouflageThreshold(parseFloat(e.target.value))}
-              className="w-20 sm:w-28 accent-cyan-400 cursor-pointer"
+              className="w-16 sm:w-24 accent-cyan-400 cursor-pointer"
+              title="Calibrated safety floor delta_floor = 0.10: prunes 65.9% of adversarial chaff connections"
             />
-            <span className="text-[10px] font-bold text-cyan-300 font-mono">{(camouflageThreshold * 100).toFixed(0)}%</span>
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono font-bold">
+              {courtPruningActive ? '65.9% Pruned' : 'Bypass'}
+            </span>
           </div>
         </div>
       </div>

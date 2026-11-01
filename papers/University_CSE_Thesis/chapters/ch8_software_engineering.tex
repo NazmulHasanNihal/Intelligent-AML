@@ -8,7 +8,7 @@ Figure~\ref{fig:ch8_microservice} illustrates the enterprise microservice topolo
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/arch_triband.pdf}
+\includegraphics[width=\textwidth]{figures/fig8_1_fastapi_k8s_topology.pdf}
 \caption{Enterprise microservice deployment topology of Intelligent-AML: (1) High-Throughput Ingestion Gateway; (2) DuckDB / Arrow In-Memory Analytical Engine; (3) PyTorch Geometric C-STGB Inference Worker Pool; (4) Multi-Agent SAR Compliance Engine; and (5) Model Governance (SR 26-2) Cryptographic Audit Ledger.}
 \label{fig:ch8_microservice}
 \end{figure}
@@ -39,11 +39,9 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 \end{table}
 
 \subsection{FastAPI Ingestion Implementation Snippet}
-\label{lst:fastapi_code}
 Listing~\ref{lst:fastapi_code} illustrates the asynchronous transaction scoring endpoint.
 
-\begin{footnotesize}
-\begin{verbatim}
+\begin{lstlisting}[language=Python, caption={FastAPI Asynchronous Transaction Scoring Endpoint.}, label={lst:fastapi_code}]
 @router.post("/api/v1/inference/score", response_model=TriageResponse)
 async def score_transaction(
     tx: TransactionPayload,
@@ -75,16 +73,15 @@ async def score_transaction(
         triage_action=action,
         latency_ms=latency_ms
     )
-\end{verbatim}
-\end{footnotesize}
+\end{lstlisting}
 
 \section{Containerization, Kubernetes \& CI/CD Infrastructure}
 To guarantee reproducible deployment across on-premise banking mainframes, cloud Kubernetes clusters (AWS EKS, Google Cloud GKE), and local edge environments, the entire platform is packaged via Docker and orchestrated with Kubernetes.
 
 \subsection{Production Containerization (Dockerfile)}
-The multi-stage production Docker container builds on Debian-slim Python 3.11 with optimized PyTorch C++ extensions and zero-copy Arrow memory bindings:
-\begin{footnotesize}
-\begin{verbatim}
+The multi-stage production Docker container builds on Debian-slim Python 3.11 with optimized PyTorch C++ extensions and zero-copy Arrow memory bindings formalized in Listing~\ref{lst:dockerfile}:
+
+\begin{lstlisting}[caption={Multi-Stage Production Dockerfile for C-STGB Platform.}, label={lst:dockerfile}]
 FROM python:3.11-slim
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PIP_NO_CACHE_DIR=1
 WORKDIR /app
@@ -98,15 +95,12 @@ COPY src/ ./src/
 COPY configs/ ./configs/
 ENTRYPOINT ["intelligent-aml"]
 CMD ["demo"]
-\end{verbatim}
-\end{footnotesize}
+\end{lstlisting}
 
 \subsection{Kubernetes Deployment and Auto-Scaling Configuration}
-\label{lst:k8s_deployment}
 Listing~\ref{lst:k8s_deployment} provides the production Kubernetes deployment specification with Horizontal Pod Autoscaling (HPA) configured to trigger on P99 latency and inference queue depth.
 
-\begin{small}
-\begin{verbatim}
+\begin{lstlisting}[caption={Kubernetes Deployment and Horizontal Pod Autoscaler (HPA) Specification.}, label={lst:k8s_deployment}]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -162,8 +156,7 @@ spec:
       target:
         type: Utilization
         averageUtilization: 75
-\end{verbatim}
-\end{small}
+\end{lstlisting}
 
 \subsection{Prometheus Metrics \& Real-Time Telemetry}
 The microservice exposes Prometheus `/metrics` telemetry for real-time operations:

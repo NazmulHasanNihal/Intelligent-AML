@@ -308,7 +308,14 @@ Crucially, C-STGB demonstrates statistically significant superiority over deep G
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.68\textwidth,height=3.6cm,keepaspectratio]{figures/fig_all_datasets_pr_curves.pdf}
+\includegraphics[width=0.98\textwidth]{figures/fig18_graphsmote_synthesis_pipeline.pdf}
+\caption{Typology-Clustered Latent GraphSMOTE \& Parametric Bilinear Edge Generation Architecture: Minority instances are partitioned into $K=4$ topological clusters ($\mathcal{C}_k$) via spectral graph clustering, interpolated in latent embedding space $\mathbf{h}_{\text{syn}} = \rho \mathbf{h}_u + (1-\rho)\mathbf{h}_v$, and connected via learned bilinear link probability $\hat{A}_{uw} = \sigma(\mathbf{h}_{\text{syn}}^T \mathbf{W}_{\text{edge}} \mathbf{h}_w)$, strictly preserving 12-D flow conservation invariants without temporal lookahead leakage.}
+\label{fig:supp_graphsmote_pipeline}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig_all_datasets_pr_curves.pdf}
 \caption{Comprehensive Precision-Recall and ROC evaluation curves across the benchmark financial transaction networks over five locked random seeds.}
 \label{fig:supp_s2}
 \end{figure*}
@@ -368,7 +375,7 @@ $0.8$ & $\mathbf{89.63}$ & $63.30$ & $27.65$ & $6.73$ \\
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.78\columnwidth,height=3.4cm,keepaspectratio]{figures/fig_edge_gate_distribution.pdf}
+\includegraphics[width=0.92\columnwidth]{figures/fig_edge_gate_distribution.pdf}
 \caption{Empirical distribution of learnable edge-trust gating weights $g_{ij}$ on \texttt{elliptic\_v1} under adversarial camouflage injection. Spurious camouflage edges are suppressed below the safety floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial connections while preserving authentic high-confidence transaction ties.}
 \label{fig:supp_s3}
 \end{figure}
@@ -376,12 +383,12 @@ $0.8$ & $\mathbf{89.63}$ & $63.30$ & $27.65$ & $6.73$ \\
 \subsection{Auxiliary Multi-Agent Compliance Decision-Support Architecture}
 \label{sec:supp_multi_agent_arch}
 
-Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision-support prototype operating downstream of the core spatio-temporal GNN under Federal Reserve SR 11-7 model risk management guidance~\citep{fed2011sr117}. The auxiliary architecture coordinates three specialized, asynchronous micro-agents: (1)~\textbf{Auditor Agent:} Interrogates flagged entities against international sanction databases (OFAC SDN, EU, UN Consolidated lists) and evaluates sanction graph proximities within $0.08$\,s; (2)~\textbf{Investigator Agent:} Traverses directed transaction lineages up to 2 hops via DuckDB, extracting temporal smurfing subgraphs and identifying synthetic cycle topologies ($0.15$\,s); and (3)~\textbf{Drafter Agent:} Compiles structured narrative dossiers conforming to FinCEN Form 111 XML specifications, attaching SHA-256 Merkle tree hashes for immutable evidential provenance ($28.4$\,s). All automated drafts require mandatory human BSA Officer review and sign-off prior to statutory filing; autonomous filing is architecturally prohibited. In a pilot evaluation across $N=200$ audit dossiers (100 manual, 100 prototype-assisted), drafts achieved $99.2\%$ statutory concordance ($\kappa = 1.0$ typology, $\kappa = 0.98$ factual grounding) in $28.4$\,s per case (vs. 45.0 min manual baseline).
+Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision-support prototype operating downstream of the core spatio-temporal GNN under Federal Reserve SR 26-2 / SR 11-7 model risk management guidance~\citep{fed2011sr117}. The auxiliary architecture coordinates four specialized micro-agents: (1)~\textbf{Orchestrator Agent:} Coordinates multi-agent lifecycle and verifies chained SHA-256 Merkle audit receipts ($0.05$\,s); (2)~\textbf{Investigator Agent:} Traverses directed transaction lineages up to 2 hops via DuckDB, extracting temporal smurfing subgraphs and identifying synthetic cycle topologies ($0.15$\,s); (3)~\textbf{Forensic Auditor Agent:} Interrogates flagged entities against international sanction databases (OFAC SDN, EU, UN Consolidated lists) and evaluates sanction graph proximities within $0.08$\,s; and (4)~\textbf{Compliance Drafter Agent:} Compiles structured narrative dossiers conforming to FinCEN Form 111 XML specifications ($28.4$\,s). All automated drafts require mandatory human BSA Officer review and sign-off prior to statutory filing; autonomous filing is architecturally prohibited. In a pilot evaluation across $N=200$ audit dossiers (100 manual, 100 prototype-assisted), drafts achieved $99.2\%$ statutory concordance ($\kappa = 1.0$ typology, $\kappa = 0.98$ factual grounding) in $28.4$\,s per case (vs. 45.0 min manual baseline).
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.88\columnwidth,height=3.8cm,keepaspectratio]{figures/fig20_multi_agent_forensic_swarm.pdf}
-\caption{Auxiliary Multi-Agent Compliance Decision-Support Architecture coordinating Auditor, Investigator, and Drafter micro-agents under human-in-the-loop oversight to compile FinCEN Form~111 dossiers.}
+\includegraphics[width=0.95\columnwidth]{figures/fig20_multi_agent_forensic_swarm.pdf}
+\caption{Auxiliary Multi-Agent Compliance Decision-Support Architecture coordinating Orchestrator, Investigator, Forensic Auditor, and Compliance Drafter micro-agents under human-in-the-loop oversight to compile FinCEN Form~111 dossiers.}
 \label{fig:supp_s4}
 \end{figure}
 
@@ -530,13 +537,13 @@ w/o Inter-Arrival Dispersion $\sigma_{\Delta t}$ & $97.40 / 0.9810$ & $34.10 / 0
 \begin{figure*}[!t]
 \begin{minipage}[b]{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=2.5cm,keepaspectratio]{figures/fig_canonical_invariants.pdf}
+\includegraphics[width=\textwidth]{figures/fig_canonical_invariants.pdf}
 \caption{Empirical distribution and discriminative separability of the 12-dimensional canonical invariant descriptors $\mathbf{z}_{\text{inv}}(u, t)$ across illicit versus benign entities.}
 \label{fig:supp_s5}
 \end{minipage}\hfill
 \begin{minipage}[b]{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=2.5cm,keepaspectratio]{figures/fig22_triband_spectral_coldstart.pdf}
+\includegraphics[width=\textwidth]{figures/fig22_triband_spectral_coldstart.pdf}
 \caption{Evidence-adaptive gating dynamics $\alpha_u$ and spectral cold-start representation analysis across network density regimes.}
 \label{fig:supp_s6}
 \end{minipage}

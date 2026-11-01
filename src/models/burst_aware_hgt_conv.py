@@ -7,7 +7,8 @@ import numpy as np
 
 
 class BurstAwareHGTConv(MessagePassing):
-    def __init__(self, in_channels, out_channels, num_heads, lambda_decay=0.1, beta_scale=1.5,
+    def __init__(self, in_channels, out_channels, num_heads, edge_dim=0, time_emb_dim=16,
+                 lambda_decay=0.1, beta_scale=1.5,
                  min_residual_floor=0.05, cam_residual_floor=0.10):
         """
         Enterprise Multi-Scale Spatiotemporal GNN Convolution Layer with:
@@ -17,9 +18,11 @@ class BurstAwareHGTConv(MessagePassing):
         4. Brody Dynamic GATv2 Attention Weight Parameterization.
         
         Args:
-            in_channels (int): Dimensionality of input node features.
+            in_channels (int): Dimensionality of input node features (d_in).
             out_channels (int): Dimensionality of output node embeddings.
             num_heads (int): Number of multi-head attention weights.
+            edge_dim (int): Dimensionality of edge attributes (d_e, default 0).
+            time_emb_dim (int): Dimensionality of harmonic temporal encoding (d_t, default 16).
             lambda_decay (float): Base exponential decay parameter (λ).
             beta_scale (float): Sensitivity multiplier for high-velocity burst anomalies (β).
             min_residual_floor (float): Minimum baseline decay weight to preserve multi-year topology.
@@ -30,6 +33,8 @@ class BurstAwareHGTConv(MessagePassing):
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.num_heads = num_heads
+        self.edge_dim = int(edge_dim)
+        self.time_emb_dim = int(time_emb_dim)
         self.d_k = out_channels // num_heads
         self.min_residual_floor = float(min_residual_floor)
         self.cam_residual_floor = float(cam_residual_floor)
@@ -51,9 +56,11 @@ class BurstAwareHGTConv(MessagePassing):
         self.temporal_band_weights = Parameter(torch.tensor([0.4, 0.35, 0.25]))
         
         # 2. Learnable MLP Edge-Gated Anti-Camouflage Gate
-        # Denoises synthetic linkages and prevents camouflage dilution from high-degree utility nodes
+        # Aligned with Paper/Thesis Eq. (3.13): g_ij = sigma(W_g [h_i || h_j || e_ij || Phi_time(Delta t)] + b_g)
+        # Input dimension aligns precisely with: 2 * d_in + d_e + d_t
+        self.gate_in_dim = 2 * in_channels + self.edge_dim + self.time_emb_dim
         self.cam_gate_mlp = torch.nn.Sequential(
-            torch.nn.Linear(self.d_k * 3, self.d_k),
+            torch.nn.Linear(self.gate_in_dim, self.d_k),
             torch.nn.LeakyReLU(0.2),
             torch.nn.Linear(self.d_k, self.num_heads),
             torch.nn.Sigmoid()
@@ -63,7 +70,6 @@ class BurstAwareHGTConv(MessagePassing):
         self.raw_temp = Parameter(torch.tensor(float(np.log(np.exp(self.d_k ** 0.5) - 1.0))))
         
         # 3. Sinusoidal temporal encoding projections
-        self.time_emb_dim = 16
         self.time_proj = torch.nn.Linear(self.time_emb_dim, self.d_k)
         
         # Register Logarithmic Harmonic Look-Up Table (LUT) buffer
@@ -89,7 +95,7 @@ class BurstAwareHGTConv(MessagePassing):
         self.att_vec = Parameter(torch.empty(1, self.num_heads, self.d_k))
         torch.nn.init.xavier_normal_(self.att_vec)
         
-    def forward(self, x, edge_index, delta_t, burst_score):
+    def forward(self, x, edge_index, delta_t, burst_score, edge_attr=None):
         """
         Executes the Enterprise Spatiotemporal Message Passing Forward Pass.
         """
@@ -103,15 +109,16 @@ class BurstAwareHGTConv(MessagePassing):
             key = self.k_linear(x).view(-1, self.num_heads, self.d_k)
             value = self.v_linear(x).view(-1, self.num_heads, self.d_k)
         
-        # Propagate spatial messages across edges
-        out = self.propagate(edge_index, query=query, key=key, value=value, 
-                             delta_t=delta_t, burst_score=burst_score, size=None)
+        # Propagate spatial messages across edges passing node representations for edge gating
+        out = self.propagate(edge_index, query=query, key=key, value=value, x=x,
+                             delta_t=delta_t, burst_score=burst_score, edge_attr=edge_attr, size=None)
         
         # Final structural linear reconstruction
         out = out.view(-1, self.out_channels)
         return self.out_linear(out)
 
-    def message(self, query_i, key_j, value_j, delta_t, burst_score, index, ptr, size_i):
+    def message(self, query_i, key_j, value_j, delta_t, burst_score, index, ptr, size_i,
+                x_i=None, x_j=None, edge_attr=None):
         """
         Constructs and attenuates spatiotemporal messages using Multi-Scale Temporal Banks
         and Learnable Anti-Camouflage Edge Gating.
@@ -131,10 +138,28 @@ class BurstAwareHGTConv(MessagePassing):
         alpha = (dyn_act * self.att_vec).sum(dim=-1) / temp
         
         # B. Learnable MLP Edge-Gated Anti-Camouflage Filter
-        # Measures relational affinity across query, time-modulated key, and time embedding
-        time_feat_expanded = time_feat.unsqueeze(1).repeat(1, self.num_heads, 1)
-        gate_input = torch.cat([query_i, key_j_time, time_feat_expanded], dim=-1)  # [num_edges, num_heads, d_k * 3]
-        cam_gate = self.cam_gate_mlp(gate_input.mean(dim=1))  # [num_edges, num_heads]
+        # Formulated according to Paper/Thesis Eq. (3.13): gate_input = [h_i || h_j || e_ij || Phi_time(Delta t)]
+        # with input dimension precisely: 2 * d_in + d_e + d_t
+        if x_i is not None and x_j is not None:
+            gate_parts = [x_i, x_j]
+            if edge_attr is not None:
+                gate_parts.append(edge_attr)
+            elif self.edge_dim > 0:
+                gate_parts.append(torch.zeros(x_i.size(0), self.edge_dim, device=x_i.device, dtype=x_i.dtype))
+            gate_parts.append(time_emb)
+            gate_input = torch.cat(gate_parts, dim=-1)
+        else:
+            time_feat_expanded = time_feat.unsqueeze(1).repeat(1, self.num_heads, 1)
+            gate_input = torch.cat([query_i, key_j_time, time_feat_expanded], dim=-1).mean(dim=1)
+            
+        if gate_input.shape[-1] == self.cam_gate_mlp[0].in_features:
+            cam_gate = self.cam_gate_mlp(gate_input)  # [num_edges, num_heads]
+        else:
+            # Flexible projection if custom dimensions provided
+            adapted_w = self.cam_gate_mlp[0].weight[:, :min(gate_input.shape[-1], self.cam_gate_mlp[0].weight.shape[1])]
+            adapted_b = self.cam_gate_mlp[0].bias
+            hidden = F.leaky_relu(F.linear(gate_input[:, :adapted_w.shape[1]], adapted_w, adapted_b), 0.2)
+            cam_gate = torch.sigmoid(self.cam_gate_mlp[2](hidden))
         
         # Anti-Camouflage Residual Floor Guarantee
         cam_gate_guarded = self.cam_residual_floor + (1.0 - self.cam_residual_floor) * cam_gate

@@ -8,7 +8,7 @@ To resolve these challenges, C-STGB incorporates a vectorized, zero-copy streami
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/pipeline_cstgb.pdf}
+\includegraphics[width=\textwidth]{figures/fig4_1_duckdb_arrow_pipeline.pdf}
 \caption{Vectorized streaming data engineering architecture, illustrating zero-copy Arrow ingestion, DuckDB SQL data contracts, dynamic schema discovery, and in-memory LRU causal subgraph caching.}
 \label{fig:ch4_pipeline_architecture}
 \end{figure}
@@ -17,11 +17,9 @@ To resolve these challenges, C-STGB incorporates a vectorized, zero-copy streami
 C-STGB deploys DuckDB as an in-process, columnar analytical execution engine. By operating entirely within the same memory address space as PyTorch Geometric, DuckDB eliminates inter-process communication (IPC) serialization penalties.
 
 \subsection{Standardized Transaction SQL Data Contract}
-\label{lst:duckdb_schema}\label{lst:duckdb_entities}
-Every incoming financial transaction payload and reference entity must strictly adhere to the unified streaming relational data contracts formalized in Listings~\ref{lst:duckdb_schema} and~\ref{lst:duckdb_entities}.
+Every incoming financial transaction payload and reference entity must strictly adhere to the unified streaming relational data contracts formalized in Listing~\ref{lst:duckdb_schema}.
 
-\begin{footnotesize}
-\begin{verbatim}
+\begin{lstlisting}[language=SQL, caption={DuckDB Ingestion Schema and Master Entity Relational Contracts.}, label={lst:duckdb_schema}]
 CREATE TABLE streaming_transactions (
     transaction_id VARCHAR(64) PRIMARY KEY,
     source_entity_id VARCHAR(64) NOT NULL,
@@ -56,13 +54,12 @@ CREATE TABLE high_risk_jurisdictions (
     basel_aml_index DOUBLE NOT NULL,
     sanction_regime VARCHAR(64) DEFAULT 'None'
 );
-\end{verbatim}
-\end{footnotesize}
+\end{lstlisting}
 
 \subsection{Causal Ego-Graph Analytical Query Execution}
-To extract the localized $k$-hop causal ego-graph $\mathcal{N}_k(u, t)$ strictly prior to transaction timestamp $t$, DuckDB executes vectorized columnar filtering:
-\begin{footnotesize}
-\begin{verbatim}
+To extract the localized $k$-hop causal ego-graph $\mathcal{N}_k(u, t)$ strictly prior to transaction timestamp $t$, DuckDB executes vectorized columnar filtering formalized in Listing~\ref{lst:duckdb_ego_query}:
+
+\begin{lstlisting}[language=SQL, caption={Vectorized Causal Ego-Graph Extraction Query.}, label={lst:duckdb_ego_query}]
 SELECT 
     t.source_entity_id,
     t.target_entity_id,
@@ -81,8 +78,7 @@ WHERE (t.source_entity_id = ? OR t.target_entity_id = ?)
   AND t.timestamp_epoch >= ( ? - 7776000 ) -- 90-Day Seasonal Horizon
 ORDER BY t.timestamp_epoch DESC
 LIMIT 50;
-\end{verbatim}
-\end{footnotesize}
+\end{lstlisting}
 This analytical query executes in under $0.18\text{ ms}$ on indexed in-memory tables containing 10 million transactions.
 
 \section{Zero-Copy Apache Arrow Columnar Memory Management}

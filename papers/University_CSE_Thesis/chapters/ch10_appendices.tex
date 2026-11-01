@@ -4,35 +4,25 @@
 
 \section{Proof of DKW Coverage Bounds under Total Variation Drift}
 \label{app:proof_dkw}
-\begin{theorem}[Non-Asymptotic Coverage under Temporal Drift]
-Let $\mathcal{P}_{\text{cal}}$ and $\mathcal{P}_{\text{test}}$ be two probability measures defined on sample space $\mathcal{Z} = \mathcal{X} \times \mathcal{Y}$ such that their Total Variation distance satisfies $\mathrm{TV}(\mathcal{P}_{\text{cal}}, \mathcal{P}_{\text{test}}) = \frac{1}{2} \int |\, d\mathcal{P}_{\text{cal}} - d\mathcal{P}_{\text{test}} \,| \le \epsilon_{\text{drift}}$. Then for any non-conformity score function $S: \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$ with continuous non-atomic marginal CDF $F(s)$, the class-conditional conformal prediction set $\Gamma(X) = \{y \mid S(X, y) \le \hat{q}^{(y)}\}$ calibrated at level $\alpha \in (0, 1)$ on $n$ exchangeable samples from $\mathcal{P}_{\text{cal}}$ satisfies:
+\begin{theorem}[Non-Asymptotic Coverage under Temporal Class-Conditional TV Drift]
+Let $\mathcal{P}_{\text{cal}}^{(y)}$ and $\mathcal{P}_{\text{test}}^{(y)}$ be the class-conditional probability measures defined on $\mathcal{X} \times \{y\}$ such that their class-conditional Total Variation distance satisfies $d_{\mathrm{TV}}(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) = \frac{1}{2} \int |\, d\mathcal{P}_{\text{test}}^{(y)} - d\mathcal{P}_{\text{cal}}^{(y)} \,| \le \epsilon_{\text{drift}}$. Then for any non-conformity score function $S: \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$ with continuous non-atomic marginal CDF $F(s)$, the class-conditional conformal prediction set $\Gamma(X) = \{y \mid S(X, y) \le \hat{q}^{(y)}\}$ calibrated at level $\alpha \in (0, 1)$ on $n(y)$ exchangeable samples from $\mathcal{P}_{\text{cal}}^{(y)}$ satisfies:
 \begin{equation}
-\left| \mathbb{P}_{\mathcal{P}_{\text{test}}}\left( Y \in \Gamma(X) \mid Y=y \right) - (1 - \alpha) \right| \le 2 \epsilon_{\text{drift}} + \sqrt{\frac{\ln(2/\delta)}{2 n(y)}}
+\left| \mathbb{P}_{\mathcal{P}_{\text{test}}}\left( Y \in \Gamma(X) \mid Y=y \right) - (1 - \alpha) \right| \le d_{\mathrm{TV}}\left(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}\right) + \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} + \frac{1}{n(y)}
 \end{equation}
-with probability at least $1 - \delta$ over the randomness of the calibration split $\mathcal{D}_{\text{cal}}$.
+with probability at least $1 - \delta$ over the randomness of the calibration split $\mathcal{D}_{\text{cal}}^{(y)}$.
 \end{theorem}
 
 \begin{proof}
-Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{test}}}(S(X, y) \le s \mid Y=y)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{cal}}}(S(X, y) \le s \mid Y=y)$.
-Let $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$ denote the empirical CDF.
-By the triangle inequality on the uniform supremum norm:
+Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{test}}}(S(X, y) \le s \mid Y=y)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{cal}}}(S(X, y) \le s \mid Y=y)$ denote the true class-conditional cumulative distribution functions under test distribution $\mathcal{P}_{\text{test}}$ and calibration distribution $\mathcal{P}_{\text{cal}}^{(y)}$, with empirical CDF $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$. By definition of calibrated quantile $\hat{q}^{(y)}$, test coverage evaluates to $\mathbb{P}_{\mathcal{P}_{\text{test}}}(Y \in \Gamma(X) \mid Y=y) = F_{\text{test}}^{(y)}(\hat{q}^{(y)})$. Applying the triangle inequality on the uniform supremum norm:
 \begin{equation}
 \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| \le \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| + \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right|
 \end{equation}
-For any event $E \in \sigma(\mathcal{Z})$, $|\mathcal{P}_{\text{test}}(E) - \mathcal{P}_{\text{cal}}(E)| \le \mathrm{TV}(\mathcal{P}_{\text{test}}, \mathcal{P}_{\text{cal}}) \le \epsilon_{\text{drift}}$.
-Conditioning on $Y=y$, since $\mathbb{P}(Y=y) \ge \pi_{\text{min}} > 0$:
+By maximal coupling of total variation distance on conditional measures, $\sup_{s \in \mathbb{R}} |F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s)| \le d_{\mathrm{TV}}(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$.
+By the classical Dvoretzky-Kiefer-Wolfowitz (DKW) inequality with optimal Massart constant applied to exchangeable sample $\mathcal{D}_{\text{cal}}^{(y)}$:
 \begin{equation}
-\sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| \le 2 \cdot \mathrm{TV}(\mathcal{P}_{\text{test}}, \mathcal{P}_{\text{cal}}) \le 2 \epsilon_{\text{drift}}
+\mathbb{P}\left( \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| > \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} \right) \le \delta
 \end{equation}
-By the classical Dvoretzky-Kiefer-Wolfowitz (DKW) inequality with the optimal Massart constant:
-\begin{equation}
-\mathbb{P}\left( \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| > \epsilon \right) \le 2 \exp\left( -2 n(y) \epsilon^2 \right)
-\end{equation}
-Setting the right-hand side equal to $\delta$ and solving for $\epsilon$:
-\begin{equation}
-\epsilon = \sqrt{\frac{\ln(2/\delta)}{2 n(y)}}
-\end{equation}
-Since $\hat{q}^{(y)}$ is chosen such that $\hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \ge 1 - \alpha$, substituting $\hat{q}^{(y)}$ into the inequality establishes the non-asymptotic bound with confidence $1 - \delta$.
+The discretization residual of finite calibration sample size satisfies $|\hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - (1 - \alpha)| \le \frac{1}{n(y)}$. Substituting $\hat{q}^{(y)}$ yields the non-asymptotic bound with confidence $1 - \delta$.
 \end{proof}
 
 \chapter{Extended Benchmark Schemas \& ETL Pipelines}
@@ -82,10 +72,10 @@ All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator
 \midrule
 \multirow{4}{*}{\textbf{C-STGB (Ours)}} & Learning Rate ($\eta$) & $[10^{-4}, 10^{-2}]$ & $1.2 \times 10^{-3}$ \\
 & Edge Trust Threshold ($\tau_{\text{gate}}$) & $[0.05, 0.30]$ & $0.10$ \\
-& Latent Typology Clusters ($K$) & $\{3, 5, 8, 12\}$ & $5$ \\
+& Latent Typology Clusters ($K$) & $\{2, 4, 8, 12\}$ & $4$ \\
 & Conformal Significance ($\alpha$) & $[0.005, 0.05]$ & $0.010$ \\
 & Hawkes Base Rate ($\mu_0$) & $[0.1, 5.0]$ & $1.20$ \\
-& Multi-Task Weights ($\gamma_1, \gamma_2$) & $[0.05, 0.50]$ & $\gamma_1=0.20, \gamma_2=0.10$ \\
+& Multi-Task Weights ($\gamma_1, \gamma_2$) & $[0.05, 0.50]$ & $\gamma_1=0.50, \gamma_2=0.10$ \\
 \midrule
 \multirow{3}{*}{\textbf{XGBoost}} & Max Tree Depth & $\{4, 6, 8, 10, 12\}$ & $8$ \\
 & Learning Rate & $[0.01, 0.30]$ & $0.05$ \\
@@ -124,7 +114,7 @@ The user interface is structured into six dedicated operational desks, designed 
     \end{itemize}
     Includes a drag-and-drop batch CSV ingestion gateway supporting Elliptic Bitcoin UTXO, SAML-D inter-bank clearing, and corporate ACH payroll schemas.
     \item \textbf{3D Multi-Hop Counterparty Forensic Graph Studio:} Renders court-admissible directed causal subgraphs. Incorporates learnable edge-trust gating ($g_{ij} \ge \tau_{\text{gate}}$) to filter up to $65.9\%$ of adversarial camouflage chaff while isolating 3-hop and 4-hop wash trading rings and smurfing dispersal trees.
-    \item \textbf{Multi-Agent SAR \& Notice Workbench:} Orchestrates a 4-agent autonomous swarm (Lead Investigator AI, Forensic Graph Analyst AI, Typology Specialist AI, and Compliance Auditor AI) to synthesize multi-jurisdictional filings within 28 seconds:
+    \item \textbf{Multi-Agent SAR \& Notice Workbench:} Orchestrates a 4-agent autonomous swarm (Lead Forensic Coordinator, Subgraph Topology Specialist, Legal SAR Drafter, and Compliance Rule Verifier) to synthesize multi-jurisdictional filings within 28 seconds:
     \begin{itemize}
         \item \textit{FinCEN Form 111 XML} (United States 31 CFR \S\ 1010.311).
         \item \textit{UN goAML v4.0 XML} (United Nations Office on Drugs and Crime standard).
@@ -135,35 +125,59 @@ The user interface is structured into six dedicated operational desks, designed 
     \item \textbf{Model Governance \& Benchmark Hub (SR 26-2):} Hosts immutable SHA-256 Merkle audit receipts, monitors streaming non-conformity Kolmogorov-Smirnov drift statistics, and displays comprehensive comparative benchmarks across all 13 financial networks.
 \end{enumerate}
 
+\subsection{Operational Dashboard UI Visualizations}
+Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_case_management} illustrate the real-time production interface desks operating on live transaction feeds.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/01_surveillance_desk.png}
+\caption{Real-Time Surveillance Desk and Alert Triage Queue, displaying streaming ingestion telemetry, non-conformity drift distribution, and class-conditional conformal triage tiers ($\Gamma(u)$).}
+\label{fig:app_surveillance_desk}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/02_network_topology.png}
+\caption{3D Multi-Hop Counterparty Forensic Graph Studio (Three.js WebGL rendering) visualizing directed laundering conduits with real-time edge-trust camouflage filtering ($\hat{g}_{ij} \ge 0.10$).}
+\label{fig:app_graph_studio}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/03_case_management.png}
+\caption{Autonomous Multi-Agent Case Management Desk, illustrating autonomous SAR narrative synthesis, Grounds of Suspicion breakdown, and SR 26-2 cryptographic Merkle tree audit logging.}
+\label{fig:app_case_management}
+\end{figure}
+
 \section{End-to-End Forensic Investigation Lifecycle}
 Figure~\ref{app_fig:workflow_lifecycle} formalizes the complete operator lifecycle from raw wire arrival to statutory filing.
 
 \begin{figure}[htbp]
 \centering
 \fbox{
-\begin{minipage}{0.92\textwidth}
+\begin{minipage}{0.95\textwidth}
 \small
 \textbf{Step 1: Streaming Ingestion \& Fast-Path Scoring ($<0.45\,\text{ms}$)} \\
-Incoming MT103/UTXO transaction payload is converted into a 12-dimensional canonical invariant vector. DuckDB causal table retrieves the 2-hop ego-network.
+Incoming MT103/UTXO transaction payload is converted into a 12-dimensional canonical invariant vector $\mathbf{z}_{\text{inv}}(u,t)$. The embedded DuckDB engine fetches the 2-hop causal ego-network from the LRU cache.
 
-\vspace{0.2cm}
+\vspace{0.25cm}
 \textbf{Step 2: Conformal Risk Tri-Tier Triage} \\
-C-STGB generates non-conformity score $S(u)$. Calibrated quantile $\hat{q}^{(y)}$ determines prediction set $\Gamma(u)$. If $\Gamma=\{0\}$, transaction auto-clears. If $\Gamma=\{1\}$, funds are frozen instantly.
+C-STGB generates non-conformity score $S(u)$. Calibrated quantile $\hat{q}^{(y)}$ constructs conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$. If $\Gamma=\{0\}$, payment auto-clears. If $\Gamma=\{1\}$, assets are quarantined instantly. If $\Gamma=\{0, 1\}$, alert is routed to senior officer review.
 
-\vspace{0.2cm}
-\textbf{Step 3: Camouflage Pruning \& Subgraph Extraction} \\
-Edge-trust gating $g_{ij} = \sigma(\mathbf{W}_g [\mathbf{h}_i \,\|\, \mathbf{h}_j \,\|\, \mathbf{e}_{ij}])$ removes merchant camouflage noise, isolating directed laundering cycles ($\Phi_{\text{flow}} \approx 1.0$).
+\vspace{0.25cm}
+\textbf{Step 3: Camouflage Pruning \& Subgraph Extraction (Eq.~(3.13)--(3.16))} \\
+Edge-trust gating $\hat{g}_{ij} = \delta_{\text{fl}} + (1 - \delta_{\text{fl}}) g_{ij}$ evaluates context gate $g_{ij} = \sigma(\mathbf{W}_g [\mathbf{h}_i \,\|\, \mathbf{h}_j \,\|\, \mathbf{e}_{ij} \,\|\, \Phi_{\text{time}}(\Delta t)] + b_g)$ and mass-balance flow filter $\delta_{\text{fl}} = \mathbb{I}(|\Phi_{\text{flow}}(i) - 1.0| < \epsilon_{\text{flow}})$, pruning $65.9\%$ of adversarial camouflage chaff while isolating circular wash conduits ($\Phi_{\text{flow}} \approx 1.0$).
 
-\vspace{0.2cm}
+\vspace{0.25cm}
 \textbf{Step 4: Autonomous Multi-Agent Dossier Generation} \\
-Swarm agents formulate grounds of suspicion, verify OFAC/PEP sanctions, calculate Hawkes point process intensities, and generate FinCEN Form 111 XML and customer remediation notices.
+Autonomous 4-agent swarm (Lead Forensic Coordinator, Subgraph Topology Specialist, Legal SAR Drafter, Compliance Rule Verifier) formulates grounds of suspicion, verifies OFAC/PEP sanctions, and compiles schema-validated FinCEN Form 111 XML.
 
-\vspace{0.2cm}
+\vspace{0.25cm}
 \textbf{Step 5: Cryptographic Merkle Sealing under SR 26-2} \\
-The complete inference state, model weights hash, and decision tree are hashed into a SHA-256 Merkle tree leaf, yielding an immutable receipt for central bank regulatory examination.
+The complete inference state, model weights hash, and decision tree are hashed into an immutable SHA-256 Merkle tree leaf $h_{\text{leaf}}$, committed to an append-only WORM ledger for central bank regulatory examination.
 \end{minipage}
 }
-\caption{End-to-end operator investigation lifecycle enforced by the Intelligent-AML platform.}
+\caption{End-to-end operator investigation lifecycle enforced by the Intelligent-AML platform matching Eq.~(3.13)--(3.16).}
 \label{app_fig:workflow_lifecycle}
 \end{figure}
 

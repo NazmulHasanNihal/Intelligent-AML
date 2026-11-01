@@ -29,10 +29,11 @@ We analyze a cold-start mixer stub in \texttt{ibm\_\allowbreak amlsim\_\allowbre
 
 \subsection{Auxiliary Decision-Support Prototype (Multi-Agent SAR Drafting)}
 \label{sec:xai_sar_drafting}
-To bridge detections into compliance workflows under Federal Reserve SR 11-7 model risk management guidance \citep{fed2011sr117}, C-STGB incorporates an \textbf{Auxiliary Decision-Support Prototype} decoupled from the core GNN. The pipeline coordinates:
+To bridge detections into compliance workflows under Federal Reserve SR 26-2 / SR 11-7 model risk management guidance \citep{fed2011sr117}, C-STGB incorporates an \textbf{Auxiliary Decision-Support Prototype} decoupled from the core GNN. The pipeline coordinates four specialized micro-agents:
 \begin{enumerate}
-    \item an \textit{Auditor Agent} checking OFAC sanctions lists;
-    \item an \textit{Investigator Agent} extracting 2-hop causal subgraphs; and
-    \item a \textit{Drafter Agent} compiling XML dossiers under FinCEN Form 111 with SHA-256 Merkle audit receipts.
+    \item an \textit{Orchestrator Agent} scheduling investigative workflows and verifying chained SHA-256 Merkle provenance receipts;
+    \item an \textit{Investigator Agent} extracting 2-hop causal historical subgraphs and computing motif topologies;
+    \item a \textit{Forensic Auditor Agent} evaluating sanction lists (OFAC SDN, EU, UN Consolidated) and calculating institutional risk proximities; and
+    \item a \textit{Compliance Drafter Agent} compiling formal XML dossiers under FinCEN Form 111 specifications.
 \end{enumerate}
 Autonomous filing is strictly prohibited; filing authority resides exclusively with a certified Bank Secrecy Act (BSA) compliance officer. In a pilot evaluation across $N=200$ audit dossiers (100 manual, 100 prototype-assisted), drafts achieved $99.2\%$ statutory concordance ($\kappa = 1.0$ typology, $\kappa = 0.98$ factual grounding) in $28.4$\,s per case (vs. 45.0 min manual baseline).

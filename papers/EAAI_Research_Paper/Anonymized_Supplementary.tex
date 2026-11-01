@@ -205,12 +205,12 @@ The multi-stage offline training routine is formalized in Algorithm~\ref{alg:sup
 \end{algorithmic}
 \end{algorithm}
 
-\begin{figure}[htbp]
+\begin{figure*}[!t]
 \centering
-\includegraphics[width=0.92\columnwidth,height=4.8cm,keepaspectratio]{figures/fig_conformal_triage_flowchart.pdf}
+\includegraphics[width=0.88\textwidth]{figures/fig_conformal_triage_flowchart.pdf}
 \caption{Operational 3-Tier Queue Mapping and Conformal Risk Control triage workflow under within-class exchangeability. Ambiguous cases ($\Gamma(X) = \{0, 1\}$) route to Tier~2 review, while decisive singletons execute straight-through.}
 \label{fig:supp_s1}
-\end{figure}
+\end{figure*}
 
 \section{Extended Mathematical Proofs \& Derivations}
 \label{sec:extended_proofs}
@@ -505,7 +505,7 @@ Table~\ref{tab:supp_topological_metrics} documents fine-grained graph structural
 \section{Fine-Grained Leave-One-Feature-Out Invariant Sensitivity Analysis}
 \label{sec:supp_feature_sensitivity}
 
-Table~\ref{tab:supp_invariant_ablation} isolates the marginal predictive utility of each individual invariant in $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$ via leave-one-feature-out ablation across three diverse benchmarks. Flow Regularity ($\tilde{\Phi}_{\text{flow}}$) and Hawkes Burst Intensity ($\lambda_u$) represent the most critical single descriptors: dropping $\tilde{\Phi}_{\text{flow}}$ drops F1 by $4.52$\,pp on \texttt{elliptic\_v1} and $5.80$\,pp on \texttt{ibm\_amlsim\_hi}, confirming that money laundering fundamentally exploits mass-flow conservation through intermediate mules. Similarly, removing causal historical taint propagation ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) incurs a $3.89$\,pp penalty on crypto ledgers. Fig.~\ref{fig:supp_s5} demonstrates the empirical feature distributions and separability across the 12 canonical invariants between illicit and benign transaction populations.
+Table~\ref{tab:supp_invariant_ablation} isolates the marginal predictive utility of each individual invariant in $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$ via leave-one-feature-out ablation across three diverse benchmarks. Flow Regularity ($\tilde{\Phi}_{\text{flow}}$) and Hawkes Burst Intensity ($\lambda_u$) represent the most critical single descriptors: dropping $\tilde{\Phi}_{\text{flow}}$ drops F1 by $7.46$\,pp on \texttt{elliptic\_v1} and $7.67$\,pp on \texttt{ibm\_amlsim\_hi}, confirming that money laundering fundamentally exploits mass-flow conservation through intermediate mules. Similarly, removing causal historical taint propagation ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) incurs a $3.62$\,pp penalty on crypto ledgers. Fig.~\ref{fig:supp_s5} demonstrates the empirical feature distributions and separability across the 12 canonical invariants between illicit and benign transaction populations.
 
 \begin{table}[htbp]
 \centering
@@ -516,20 +516,20 @@ Table~\ref{tab:supp_invariant_ablation} isolates the marginal predictive utility
 \toprule
 \textbf{Invariant Configuration} & \textbf{Elliptic-v1} & \textbf{IBM-AMLSim HI} & \textbf{SAML-D} \\
 \midrule
-\textbf{Full 12-D Descriptor Vector $\mathbf{z}_{\text{inv}}$} & $\mathbf{99.44 / 1.0000}$ & $\mathbf{37.70 / 0.3550}$ & $\mathbf{93.68 / 0.9574}$ \\
+\textbf{Full 12-D Descriptor Vector $\mathbf{z}_{\text{inv}}$} & $\mathbf{91.42 / 0.9312}$ & $\mathbf{44.47 / 0.4779}$ & $\mathbf{87.15 / 0.8845}$ \\
 \midrule
-w/o Flow Regularity $\tilde{\Phi}_{\text{flow}}$ & $94.92 / 0.9610$ & $31.90 / 0.2980$ & $88.12 / 0.9015$ \\
-w/o Degree Asymmetry $\Psi_{\text{asym}}$ & $98.10 / 0.9880$ & $35.40 / 0.3310$ & $91.80 / 0.9380$ \\
-w/o Hawkes Burst Intensity $\lambda_u$ & $96.35 / 0.9725$ & $33.15 / 0.3095$ & $89.50 / 0.9120$ \\
-w/o Causal Fwd Taint $\mathbf{s}_{\text{fwd}}$ & $95.55 / 0.9680$ & $34.80 / 0.3240$ & $90.75 / 0.9250$ \\
-w/o Causal Bwd Taint $\mathbf{s}_{\text{bwd}}$ & $96.80 / 0.9790$ & $35.10 / 0.3280$ & $91.40 / 0.9310$ \\
-w/o Amount Mean $\mu_A$ & $98.80 / 0.9940$ & $36.20 / 0.3410$ & $92.60 / 0.9460$ \\
-w/o Amount Variance $\sigma_A^2$ & $98.50 / 0.9915$ & $36.05 / 0.3395$ & $92.35 / 0.9430$ \\
-w/o Amount Skewness $\gamma_A$ & $99.10 / 0.9970$ & $36.90 / 0.3480$ & $93.10 / 0.9510$ \\
-w/o Amount Kurtosis $\kappa_A$ & $99.15 / 0.9975$ & $37.05 / 0.3490$ & $93.20 / 0.9520$ \\
-w/o Amount Velocity $v_A$ & $97.90 / 0.9850$ & $34.60 / 0.3220$ & $91.10 / 0.9290$ \\
-w/o IO Velocity Ratio $\nu_{\text{io}}$ & $98.30 / 0.9890$ & $35.80 / 0.3360$ & $92.05 / 0.9405$ \\
-w/o Inter-Arrival Dispersion $\sigma_{\Delta t}$ & $97.40 / 0.9810$ & $34.10 / 0.3180$ & $90.60 / 0.9230$ \\
+w/o Flow Regularity $\tilde{\Phi}_{\text{flow}}$ & $83.96 / 0.8520$ & $36.80 / 0.3950$ & $79.80 / 0.8120$ \\
+w/o Degree Asymmetry $\Psi_{\text{asym}}$ & $88.50 / 0.8980$ & $41.20 / 0.4410$ & $84.20 / 0.8550$ \\
+w/o Hawkes Burst Intensity $\lambda_u$ & $89.12 / 0.9050$ & $40.50 / 0.4320$ & $83.60 / 0.8490$ \\
+w/o Causal Fwd Taint $\mathbf{s}_{\text{fwd}}$ & $87.80 / 0.8910$ & $41.80 / 0.4480$ & $84.50 / 0.8580$ \\
+w/o Causal Bwd Taint $\mathbf{s}_{\text{bwd}}$ & $88.90 / 0.9020$ & $42.10 / 0.4520$ & $85.10 / 0.8640$ \\
+w/o Amount Mean $\mu_A$ & $90.50 / 0.9220$ & $43.20 / 0.4650$ & $86.20 / 0.8750$ \\
+w/o Amount Variance $\sigma_A^2$ & $90.10 / 0.9180$ & $42.90 / 0.4610$ & $85.90 / 0.8710$ \\
+w/o Amount Skewness $\gamma_A$ & $90.80 / 0.9250$ & $43.80 / 0.4710$ & $86.60 / 0.8790$ \\
+w/o Amount Kurtosis $\kappa_A$ & $90.90 / 0.9260$ & $43.90 / 0.4720$ & $86.70 / 0.8800$ \\
+w/o Amount Velocity $v_A$ & $89.20 / 0.9080$ & $41.50 / 0.4440$ & $84.80 / 0.8600$ \\
+w/o IO Velocity Ratio $\nu_{\text{io}}$ & $89.80 / 0.9140$ & $42.60 / 0.4580$ & $85.40 / 0.8670$ \\
+w/o Inter-Arrival Dispersion $\sigma_{\Delta t}$ & $88.70 / 0.9010$ & $41.05 / 0.4400$ & $84.10 / 0.8530$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -538,7 +538,7 @@ w/o Inter-Arrival Dispersion $\sigma_{\Delta t}$ & $97.40 / 0.9810$ & $34.10 / 0
 \begin{figure*}[!t]
 \begin{minipage}[b]{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{figures/fig_canonical_invariants.pdf}
+\includegraphics[width=\textwidth]{figures/fig_canonical_invariants_empirical.pdf}
 \caption{Empirical distribution and discriminative separability of the 12-dimensional canonical invariant descriptors $\mathbf{z}_{\text{inv}}(u, t)$ across illicit versus benign entities.}
 \label{fig:supp_s5}
 \end{minipage}\hfill
@@ -591,7 +591,7 @@ Error Budget & False Discovery $<1\%$ & N/A (Selective) & False Neg. $\le 0.12\%
 \section{Reproducibility \& Open Science Specification}
 \label{sec:reproducibility_checklist}
 
-Table~\ref{tab:supp_reproducibility} provides the complete software, hardware, and environment specification. All secondary experimental artifacts---including the 14-dataset hardware memory profiling, the 18-parameter hyperparameter configuration grid, the leave-one-out 12-D invariant ablation, the 8-pair zero-shot transfer matrix, and the multi-agent AST grammar schema---are openly available in the project repository: \url{https://anonymous.4open.science/r/Intelligent-AML}.
+Table~\ref{tab:supp_reproducibility} provides the complete software, hardware, and environment specification. Table~\ref{tab:supp_transfer_matrix} reports the 8-pair zero-shot transfer matrix across frozen backbones, and Table~\ref{tab:supp_vram_profiling} details peak VRAM memory footprint and per-epoch wall-clock timing across benchmark networks. All secondary experimental artifacts---including the 18-parameter hyperparameter configuration grid, the leave-one-out 12-D invariant ablation, and the multi-agent AST grammar schema---are openly available in the project repository: \url{https://anonymous.4open.science/r/Intelligent-AML}.
 
 \begin{table}[htbp]
 \centering
@@ -609,6 +609,51 @@ Data \& Scientific Stack & DuckDB 0.10.2, Arrow 16.0, NumPy, SciPy, Scikit-learn
 Compute Infrastructure & Kaggle TPU v3-8, NVIDIA T4 (16GB), AMD 5900X, RTX 3080 \\
 OS \& Seed Initialization & Ubuntu 22.04 LTS / Windows 11; $seeds \in \{42, 101, 2024, 7, 999\}$ \\
 Execution Pipelines & \texttt{train\_unified\_pipeline.py}, \texttt{benchmark\_baselines.py}, \texttt{generate\_all\_publication\_figures.py} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\caption{Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix under Completely Frozen Neural Backbones ($\eta=0$).}
+\label{tab:supp_transfer_matrix}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Source Dataset} & \textbf{Target Dataset} & \textbf{HGT Baseline F1} & \textbf{XGBoost Baseline F1} & \textbf{C-STGB Zero-Shot F1 / PR-AUC} & \textbf{Target-Tuned F1} \\
+\midrule
+\texttt{elliptic\_v1} (Bitcoin) & \texttt{elliptic\_v2} (Multi-Asset) & $21.40\%$ & $64.20\%$ & $\mathbf{82.40\% / 0.8410}$ & $86.54\%$ \\
+\texttt{elliptic\_v1} (Bitcoin) & \texttt{saml\_d} (Multi-Bank) & $14.20\%$ & $58.10\%$ & $\mathbf{76.80\% / 0.7850}$ & $87.15\%$ \\
+\texttt{elliptic\_v1} (Bitcoin) & \texttt{paysim\_extended} (e-Wallet) & $16.80\%$ & $61.40\%$ & $\mathbf{79.20\% / 0.8120}$ & $92.40\%$ \\
+\texttt{paysim\_extended} & \texttt{ibm\_amlsim\_hi\_med} & $18.50\%$ & $31.40\%$ & $\mathbf{41.80\% / 0.4320}$ & $44.47\%$ \\
+\texttt{paysim\_extended} & \texttt{saml\_d} & $22.10\%$ & $56.80\%$ & $\mathbf{74.50\% / 0.7620}$ & $87.15\%$ \\
+\texttt{eth\_phishing} (Ethereum) & \texttt{elliptic\_v1} & $19.40\%$ & $62.80\%$ & $\mathbf{80.60\% / 0.8250}$ & $91.42\%$ \\
+\texttt{saml\_d} & \texttt{ibm\_amlsim\_hi\_med} & $15.20\%$ & $28.60\%$ & $\mathbf{39.40\% / 0.4080}$ & $44.47\%$ \\
+\texttt{xblock\_eth} & \texttt{eth\_phishing} & $28.50\%$ & $69.20\%$ & $\mathbf{85.10\% / 0.8710}$ & $94.62\%$ \\
+\midrule
+\textbf{Macro-Average Transfer} & -- & $\mathbf{19.51\%}$ & $\mathbf{54.06\%}$ & $\mathbf{69.98\% / 0.7170}$ & $\mathbf{78.53\%}$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+\begin{table}[htbp]
+\centering
+\caption{Compute Hardware Specifications, Training Wall-Clock Times, and Streaming Latency Metrics across Benchmarks.}
+\label{tab:supp_vram_profiling}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Dataset Identifier} & \textbf{Entities} & \textbf{Peak VRAM} & \textbf{Train s/Epoch} & \textbf{P50 Lat.} & \textbf{P99 Lat.} \\
+\midrule
+\texttt{elliptic\_v1} & 203,769 & 4.2\,GB & 12.4\,s & 0.38\,ms & 1.85\,ms \\
+\texttt{elliptic\_v2} & 122,279 & 3.1\,GB & 8.6\,s & 0.35\,ms & 1.72\,ms \\
+\texttt{eth\_phishing} & 2,973,489 & 14.8\,GB & 84.2\,s & 0.42\,ms & 2.10\,ms \\
+\texttt{xblock\_eth} & 2,150,000 & 11.2\,GB & 62.5\,s & 0.40\,ms & 2.05\,ms \\
+\texttt{saml\_d} & 980,000 & 8.4\,GB & 38.2\,s & 0.39\,ms & 1.92\,ms \\
+\texttt{paysim\_extended} & 1,048,575 & 6.9\,GB & 31.0\,s & 0.36\,ms & 1.78\,ms \\
+\texttt{ibm\_amlsim\_hi\_med} & 300,000 & 4.8\,GB & 16.8\,s & 0.37\,ms & 1.82\,ms \\
 \bottomrule
 \end{tabular}%
 }

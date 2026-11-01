@@ -128,13 +128,20 @@ The resulting root hash $h_{\text{root}}$ and cryptographic proof are logged to 
 To demonstrate the end-to-end operation of C-STGB and the Multi-Agent Forensic Swarm, we present a real-world case study extracted from the \texttt{saml\_d} multi-bank financial network.
 
 \subsection{Topological Anomaly Profile}
-An originating illicit entity (\texttt{ACC\_9941}) initiates a high-velocity smurfing campaign, dispersing $\$485,000\,\text{USD}$ across 14 intermediary mule accounts within a 12-minute window (Hawkes arrival intensity $\lambda_u = 74.2\,\text{events/h} \gg \mu_0 = 1.2$). The mule accounts route funds through 3 successive peeling hops before aggregating at an offshore holding entity (\texttt{ACC\_OFFSHORE\_08}).
+An originating illicit source entity $S_0$ (\texttt{ACC\_9941}) initiates a high-velocity smurfing campaign, dispersing $\$485,000\,\text{USD}$ across intermediary mule accounts $M_1$--$M_5$ (e.g., $M_2$ as \texttt{ACC\_MULE\_02}) within a 12-minute window (Hawkes arrival intensity $\lambda_u = 74.2\,\text{events/h} \gg \mu_0 = 1.2$). The mule accounts route structured tranches through layering intermediaries $L_1$--$L_5$ and cyclic wash accounts $C_1$--$C_3$ before aggregating at an offshore holding sink $C_4$ (\texttt{ACC\_OFFSHORE\_08}).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/causal_subgraph_case_study.pdf}
-\caption{Forensic dissection of a 15-node smurfing ring extracted via GNNExplainer: red edges denote the high-velocity smurfing fan-out, orange edges indicate the circular wash cycle ($C_3$), and dashed gray links indicate camouflaged merchant chaff successfully pruned by edge-trust gating ($\hat{g}_{ij} < 0.10$).}
+\caption{Forensic dissection of a 15-node smurfing ring extracted via GNNExplainer: red edges denote the high-velocity smurfing fan-out from source $S_0$, orange edges indicate the circular wash cycle ($C_1 \to C_2 \to C_3 \to C_1$), and dashed gray links indicate camouflaged merchant chaff successfully pruned by edge-trust gating ($\hat{g}_{ij} < 0.10$).}
 \label{fig:ch6_case_study_subgraph}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_single_alert_timeline.pdf}
+\caption{Single-alert chronological forensic event timeline of the 15-node smurfing and peeling incident mapping discrete transaction timestamps, dollar velocities, and conformal risk escalation.}
+\label{fig:single_alert_timeline}
 \end{figure}
 
 \subsection{Compiled FinCEN Form 111 XML Dossier}
@@ -181,4 +188,4 @@ Listing~\ref{lst:fincen_xml_sample} provides the finalized, schema-validated Fin
 \end{lstlisting}
 
 \section{Chapter Summary}
-This chapter detailed the explainable AI architecture of C-STGB, presenting GNNExplainer topological extraction, the autonomous multi-agent forensic swarm, formal EBNF grammar specifications, Pydantic runtime schema validation, the deterministic anti-hallucination proof, SR 26-2-aligned Merkle tree receipts, and an end-to-end case study on a 15-node smurfing ring. The next chapter presents the comprehensive experimental evaluation across all 13 financial benchmark networks.
+This chapter detailed the explainable AI architecture of C-STGB, presenting GNNExplainer topological extraction, the autonomous multi-agent forensic swarm, formal EBNF grammar specifications, Pydantic runtime schema validation, the deterministic anti-hallucination proof, SR 26-2-aligned Merkle tree receipts, and an end-to-end case study on a 15-node smurfing ring. The next chapter presents the comprehensive experimental evaluation across all 14 financial benchmark networks.

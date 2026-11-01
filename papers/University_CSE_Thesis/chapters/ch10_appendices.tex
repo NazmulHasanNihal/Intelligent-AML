@@ -29,11 +29,11 @@ The discretization residual of finite calibration sample size satisfies $|\hat{F
 \label{app:schemas}
 
 \section{Universal Ingestion Schema Mapping Specification}
-Table~\ref{app_tab:all_schemas} details the full attribute mapping specification across all 13 evaluated benchmark networks into C-STGB's 12-dimensional canonical invariant space.
+Table~\ref{app_tab:all_schemas} details the full attribute mapping specification across all 14 evaluated benchmark networks into C-STGB's 12-dimensional canonical invariant space.
 
 \begin{table}[htbp]
 \centering
-\caption{Comprehensive Ingestion Schema Mappings across All 13 Datasets.}
+\caption{Comprehensive Ingestion Schema Mappings across All 14 Datasets.}
 \label{app_tab:all_schemas}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccc}
@@ -47,7 +47,9 @@ Table~\ref{app_tab:all_schemas} details the full attribute mapping specification
 \texttt{mtgox\_leaked} & MTGOX Account ID & UNIX Timestamp & JPY / USD Scaled & $1=\text{Willy Bot / Markus}, 0=\text{Trader}$ \\
 \texttt{saml\_d} & Bank IBAN (\texttt{DE.../US...}) & ISO 8601 UTC & USD Amount & $1=\text{SAR Confirmed}, 0=\text{Benign}$ \\
 \texttt{paysim\_extended} & e-Wallet Customer ID (\texttt{C.../M...}) & Simulation Step ($1\,\text{h}$) & Local Fiat & $1=\text{Fraudulent}, 0=\text{Benign}$ \\
+\texttt{paysim1} & Mobile Money ID (\texttt{C.../M...}) & Simulation Step ($1\,\text{h}$) & Local Fiat Currency & $1=\text{Transfer/Cashout Fraud}, 0=\text{Benign}$ \\
 \texttt{ibm\_amlsim} & Account Number (\texttt{ACC\_...}) & Epoch Days & USD Amount & $1=\text{SAR Pattern Match}, 0=\text{Normal}$ \\
+\texttt{dgraphfin} & Financial User ID (Hex) & Epoch Day Timestamp & Feature Standardized & $1=\text{Overdue Fraudster}, 0=\text{Standard}$ \\
 \texttt{data\_generator} & Node UUID & Continuous Epoch & USD Normalized & $1=\text{Laundering Subgraph}, 0=\text{Noise}$ \\
 \texttt{cc\_transactions} & Card Transaction Hash & Time Seconds ($0\text{--}172800$) & Euro Amount & $1=\text{Card Fraud}, 0=\text{Legitimate}$ \\
 \bottomrule
@@ -122,11 +124,11 @@ The user interface is structured into six dedicated operational desks, designed 
         \item \textit{FCRA Adverse Action Customer Notices} providing statutory transparency.
     \end{itemize}
     \item \textbf{Algorithmic Recourse \& Customer Remediation Sandbox:} Solves counterfactual feature perturbations to determine the minimal, cost-optimal modifications required for falsely flagged customers to achieve legitimate clearance, guaranteeing statutory compliance with CFPB and FCRA fair lending mandates.
-    \item \textbf{Model Governance \& Benchmark Hub (SR 26-2):} Hosts immutable SHA-256 Merkle audit receipts, monitors streaming non-conformity Kolmogorov-Smirnov drift statistics, and displays comprehensive comparative benchmarks across all 13 financial networks.
+    \item \textbf{Model Governance \& Benchmark Hub (SR 26-2):} Hosts immutable SHA-256 Merkle audit receipts, monitors streaming non-conformity Kolmogorov-Smirnov drift statistics, and displays comprehensive comparative benchmarks across all 14 financial networks.
 \end{enumerate}
 
 \subsection{Operational Dashboard UI Visualizations}
-Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_case_management} illustrate the real-time production interface desks operating on live transaction feeds.
+Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} illustrate the real-time production interface desks operating on live transaction feeds.
 
 \begin{figure}[htbp]
 \centering
@@ -149,33 +151,61 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_case_management} illustrat
 \label{fig:app_case_management}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/04_case_detail_four_eyes.png}
+\caption{Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console: displaying dual-investigator concurrence workflows, calibrated non-conformity scores, and counterfactual recourse action paths.}
+\label{fig:app_case_detail_four_eyes}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/05_multi_agent_sar.png}
+\caption{Multi-Agent SAR Narrative Generation Console: displaying real-time collaborative draft synthesis across the 4-agent swarm, FinCEN Form 111 XML validation, and Grounds of Suspicion breakdown.}
+\label{fig:app_multi_agent_sar}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/06_model_governance_drift.png}
+\caption{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 26-2.}
+\label{fig:app_model_governance_drift}
+\end{figure}
+
 \section{End-to-End Forensic Investigation Lifecycle}
 Figure~\ref{app_fig:workflow_lifecycle} formalizes the complete operator lifecycle from raw wire arrival to statutory filing.
 
 \begin{figure}[htbp]
 \centering
-\fbox{
+\fcolorbox{black!20}{black!2}{%
 \begin{minipage}{0.95\textwidth}
 \small
-\textbf{Step 1: Streaming Ingestion \& Fast-Path Scoring ($<0.45\,\text{ms}$)} \\
+\vspace{0.2cm}
+\textbf{\large Operational Surveillance \& Enforcement Pipeline}
+\vspace{0.3cm}
+\hrule
+\vspace{0.3cm}
+
+\textbf{\textcolor{blue!70!black}{Step 1: Streaming Ingestion \& Fast-Path Scoring ($<0.45\,\text{ms}$)}} \\
 Incoming MT103/UTXO transaction payload is converted into a 12-dimensional canonical invariant vector $\mathbf{z}_{\text{inv}}(u,t)$. The embedded DuckDB engine fetches the 2-hop causal ego-network from the LRU cache.
 
 \vspace{0.25cm}
-\textbf{Step 2: Conformal Risk Tri-Tier Triage} \\
+\textbf{\textcolor{blue!70!black}{Step 2: Conformal Risk Tri-Tier Triage}} \\
 C-STGB generates non-conformity score $S(u)$. Calibrated quantile $\hat{q}^{(y)}$ constructs conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$. If $\Gamma=\{0\}$, payment auto-clears. If $\Gamma=\{1\}$, assets are quarantined instantly. If $\Gamma=\{0, 1\}$, alert is routed to senior officer review.
 
 \vspace{0.25cm}
-\textbf{Step 3: Camouflage Pruning \& Subgraph Extraction (Eq.~(3.13)--(3.16))} \\
+\textbf{\textcolor{blue!70!black}{Step 3: Camouflage Pruning \& Subgraph Extraction (Eq.~(3.13)--(3.16))}} \\
 Edge-trust gating $\hat{g}_{ij} = \delta_{\text{fl}} + (1 - \delta_{\text{fl}}) g_{ij}$ evaluates context gate $g_{ij} = \sigma(\mathbf{W}_g [\mathbf{h}_i \,\|\, \mathbf{h}_j \,\|\, \mathbf{e}_{ij} \,\|\, \Phi_{\text{time}}(\Delta t)] + b_g)$ and mass-balance flow filter $\delta_{\text{fl}} = \mathbb{I}(|\Phi_{\text{flow}}(i) - 1.0| < \epsilon_{\text{flow}})$, pruning $65.9\%$ of adversarial camouflage chaff while isolating circular wash conduits ($\Phi_{\text{flow}} \approx 1.0$).
 
 \vspace{0.25cm}
-\textbf{Step 4: Autonomous Multi-Agent Dossier Generation} \\
+\textbf{\textcolor{blue!70!black}{Step 4: Autonomous Multi-Agent Dossier Generation}} \\
 Autonomous 4-agent swarm (Lead Forensic Coordinator, Subgraph Topology Specialist, Legal SAR Drafter, Compliance Rule Verifier) formulates grounds of suspicion, verifies OFAC/PEP sanctions, and compiles schema-validated FinCEN Form 111 XML.
 
 \vspace{0.25cm}
-\textbf{Step 5: Cryptographic Merkle Sealing under SR 26-2} \\
+\textbf{\textcolor{blue!70!black}{Step 5: Cryptographic Merkle Sealing under SR 26-2}} \\
 The complete inference state, model weights hash, and decision tree are hashed into an immutable SHA-256 Merkle tree leaf $h_{\text{leaf}}$, committed to an append-only WORM ledger for central bank regulatory examination.
-\end{minipage}
+\vspace{0.2cm}
+\end{minipage}%
 }
 \caption{End-to-end operator investigation lifecycle enforced by the Intelligent-AML platform matching Eq.~(3.13)--(3.16).}
 \label{app_fig:workflow_lifecycle}

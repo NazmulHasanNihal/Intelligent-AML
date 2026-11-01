@@ -134,6 +134,13 @@ where $\mathcal{B} = \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ represen
 \end{enumerate}
 The minimum floor parameter $w_{\min} = 0.05$ ensures that historical topological connectivity is never completely erased, preventing the vanishing gradient problem on long-dormant edges.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_triband_decay_comparison.pdf}
+\caption{Multi-scale tri-band continuous harmonic temporal attention kernel decay curve contrasting burst, diurnal (24h/48h resonance), and macro dormancy bands against standard monotonic exponential decay.}
+\label{fig:triband_decay_comparison}
+\end{figure}
+
 \section{Module 2: Context-Aware Adaptive Edge-Trust Filter}
 To neutralize adversarial topological camouflage (routing illicit funds through high-degree merchant, utility, or exchange nodes to induce GNN over-smoothing), C-STGB incorporates a learnable edge-trust gating mechanism.
 

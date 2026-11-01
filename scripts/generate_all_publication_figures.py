@@ -69,21 +69,13 @@ C_SYNTH  = "#FF8C00"     # Dark Orange (Synthesized)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ieee_fig_dir = BASE_DIR / "papers" / "IEEE_Research_Paper" / "figures"
-if not (BASE_DIR / "papers" / "IEEE_Research_Paper").exists() and (BASE_DIR / "IEEE_Research_Paper").exists():
-    ieee_fig_dir = BASE_DIR / "IEEE_Research_Paper" / "figures"
-
 thesis_fig_dir = BASE_DIR / "papers" / "University_CSE_Thesis" / "figures"
-if not (BASE_DIR / "papers" / "University_CSE_Thesis").exists() and (BASE_DIR / "University_CSE_Thesis").exists():
-    thesis_fig_dir = BASE_DIR / "University_CSE_Thesis" / "figures"
-
-eswa_fig_dir = BASE_DIR / "papers" / "ESWA_Research_Paper" / "figures"
+eaai_fig_dir = BASE_DIR / "papers" / "EAAI_Research_Paper" / "figures"
 
 OUT_DIRS = [
     BASE_DIR / "data" / "outputs" / "figures",
-    ieee_fig_dir,
     thesis_fig_dir,
-    eswa_fig_dir,
+    eaai_fig_dir,
 ]
 
 for d in OUT_DIRS:
@@ -796,7 +788,7 @@ for u, v, etype in edges:
 for node, (x, y) in pos.items():
     if "ACC_9941" in node:
         color = "#b71c1c"
-        label_text = "S0\n9941"
+        label_text = "S0"
     elif "M" in node:
         color = "#e53935"
         label_text = node
@@ -805,14 +797,14 @@ for node, (x, y) in pos.items():
         label_text = node
     elif "OFF_08" in node:
         color = "#1b5e20"
-        label_text = "C4\nOFF_08"
+        label_text = "C4"
     else:
         color = "#2e7d32"
         label_text = node
     
-    circle = plt.Circle((x, y), 0.042, facecolor=color, edgecolor="black", linewidth=0.8, zorder=5)
+    circle = plt.Circle((x, y), 0.046, facecolor=color, edgecolor="black", linewidth=0.8, zorder=5)
     ax.add_patch(circle)
-    ax.text(x, y, label_text, ha="center", va="center", fontsize=5.8, fontweight="bold", color="white", zorder=6)
+    ax.text(x, y, label_text, ha="center", va="center", fontsize=6.8, fontweight="bold", color="white", zorder=6)
 
 ax.set_title("15-Node Forensic Smurfing Subgraph Case Study", fontweight="bold", fontsize=9.5, y=0.98)
 

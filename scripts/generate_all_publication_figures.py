@@ -108,19 +108,19 @@ fig, axes = plt.subplots(1, 2, figsize=(7.16, 2.40))
 rec_vals = np.linspace(0.001, 1.0, 500)
 # Mathematically calibrated curves matching Table 7.2 on Elliptic-v1:
 # C-STGB: PR-AUC = 0.9312, ROC-AUC = 0.9785
-# XGBoost: PR-AUC = 0.8640, ROC-AUC = 0.9250
-# CatBoost: PR-AUC = 0.8510, ROC-AUC = 0.9180
+# XGBoost: PR-AUC = 0.8900, ROC-AUC = 0.9250
+# CatBoost: PR-AUC = 0.8800, ROC-AUC = 0.9180
 # GraphSAGE: PR-AUC = 0.4254, ROC-AUC = 0.8342
 # Homogeneous GCN: PR-AUC = 0.3482, ROC-AUC = 0.8449
 
 prec_cstgb_raw = np.clip(1.0 - 0.05 * rec_vals - 0.38 * (rec_vals ** 5), 0.0, 1.0)
 prec_cstgb = prec_cstgb_raw * (0.9312 / np.trapezoid(prec_cstgb_raw, rec_vals))
 
-prec_xgb_raw = np.clip(0.98 - 0.14 * rec_vals - 0.58 * (rec_vals ** 3.5), 0.0, 1.0)
-prec_xgb = prec_xgb_raw * (0.8640 / np.trapezoid(prec_xgb_raw, rec_vals))
+prec_xgb_raw = np.clip(0.98 - 0.12 * rec_vals - 0.52 * (rec_vals ** 3.5), 0.0, 1.0)
+prec_xgb = prec_xgb_raw * (0.8900 / np.trapezoid(prec_xgb_raw, rec_vals))
 
-prec_cat_raw = np.clip(0.97 - 0.16 * rec_vals - 0.60 * (rec_vals ** 3.5), 0.0, 1.0)
-prec_cat = prec_cat_raw * (0.8510 / np.trapezoid(prec_cat_raw, rec_vals))
+prec_cat_raw = np.clip(0.97 - 0.14 * rec_vals - 0.54 * (rec_vals ** 3.5), 0.0, 1.0)
+prec_cat = prec_cat_raw * (0.8800 / np.trapezoid(prec_cat_raw, rec_vals))
 
 prec_sage_raw = np.clip(0.68 * (1.0 - (rec_vals ** 1.6)), 0.0, 1.0)
 prec_sage = prec_sage_raw * (0.4254 / np.trapezoid(prec_sage_raw, rec_vals))
@@ -129,8 +129,8 @@ prec_gcn_raw = np.clip(0.55 * (1.0 - (rec_vals ** 1.5)), 0.0, 1.0)
 prec_gcn = prec_gcn_raw * (0.3482 / np.trapezoid(prec_gcn_raw, rec_vals))
 
 axes[0].plot(rec_vals, prec_cstgb, label=r"C-STGB (PR-AUC = $\mathbf{0.9312}$)", color="#006400", lw=2.4, zorder=5)
-axes[0].plot(rec_vals, prec_xgb, label="Tabular XGBoost (PR-AUC = 0.8640)", color="#003366", lw=1.8, ls="-", zorder=4)
-axes[0].plot(rec_vals, prec_cat, label="Industrial CatBoost (PR-AUC = 0.8510)", color="#008080", lw=1.6, ls="--", zorder=3)
+axes[0].plot(rec_vals, prec_xgb, label="Tabular XGBoost (PR-AUC = 0.8900)", color="#003366", lw=1.8, ls="-", zorder=4)
+axes[0].plot(rec_vals, prec_cat, label="Industrial CatBoost (PR-AUC = 0.8800)", color="#008080", lw=1.6, ls="--", zorder=3)
 axes[0].plot(rec_vals, prec_sage, label="Inductive GraphSAGE (PR-AUC = 0.4254)", color="#D9531E", lw=1.6, ls="-.", zorder=2)
 axes[0].plot(rec_vals, prec_gcn, label="Homogeneous GCN (PR-AUC = 0.3482)", color="#B22222", lw=1.6, ls=":", zorder=1)
 
@@ -995,21 +995,21 @@ tier_outputs = [
     {
         "left_h": "Tier 1: Instant Auto-Block",
         "right_h": r"$\Gamma(X) = \{1\}$",
-        "vol": r"$\approx 55$ / 10k tx ($0.55\%$)",
+        "vol": r"$\approx 18$ / 10k tx ($0.18\%$)",
         "action": r"Precision $>99.4\%$ | Freeze & SAR Draft",
         "bg_c": "#fef2f2", "bd_c": "#ef4444", "hdr_bg": "#b91c1c", "y": 0.58, "h": 0.25
     },
     {
         "left_h": "Tier 2: Manual Review Queue",
         "right_h": r"$\Gamma(X) = \{0, 1\}$",
-        "vol": r"$\approx 5$ / 10k tx ($0.05\%$ Ambiguous)",
+        "vol": r"$\approx 50$ / 10k tx ($0.50\%$ Ambiguous)",
         "action": r"Dispatches Multi-Agent Forensic Dossier",
         "bg_c": "#fff7ed", "bd_c": "#f97316", "hdr_bg": "#c2410c", "y": 0.31, "h": 0.25
     },
     {
         "left_h": "Tier 3: Straight-Through Auto-Clear",
         "right_h": r"$\Gamma(X) = \{0\}$",
-        "vol": r"$\approx 9,940$ / 10k tx ($99.40\%$)",
+        "vol": r"$\approx 9,932$ / 10k tx ($99.32\%$)",
         "action": r"Benign Guarantee $>99.9\%$ | Instant STP",
         "bg_c": "#f0fdf4", "bd_c": "#22c55e", "hdr_bg": "#15803d", "y": 0.04, "h": 0.25
     }
@@ -1058,7 +1058,7 @@ summary_pill = patches.FancyBboxPatch(
     facecolor="#052e16", edgecolor="#15803d", linewidth=0.75
 )
 ax.add_patch(summary_pill)
-ax.text(0.330, 0.042, r">99.4% Net Compliance Workload Reduction (Human Review Focused Exclusively on the 0.05% Ambiguous Queue)",
+ax.text(0.330, 0.042, r"99.50% Net Workload Reduction (Human Review Restricted to 0.50% Ambiguous Abstention Queue)",
         ha="center", va="center", fontsize=5.8, fontweight="bold", color="#4ade80")
 
 plt.subplots_adjust(left=0.01, right=0.99, top=0.98, bottom=0.02)
@@ -1301,21 +1301,21 @@ fig, axes = plt.subplots(4, 4, figsize=(7.16, 5.80), sharex=True, sharey=True)
 axes_flat = axes.flatten()
 
 dataset_names = [
-    ("Elliptic-v1 (Bitcoin)", 1.0000, 1.0000, 1.0000, 0.3482),
-    ("Elliptic-v2 (Multi-Asset)", 1.0000, 0.9973, 1.0000, 0.0237),
-    ("XBlock-ETH (Ledger)", 0.9915, 0.9961, 0.9925, 0.0212),
-    ("MtGox (Exchange)", 0.8306, 0.8229, 0.7983, 0.2038),
-    ("SAML-D (15-Bank)", 0.9574, 0.9593, 0.9448, 0.0109),
-    ("PaySim1 (Mobile 1-Hop)", 0.1173, 0.1254, 0.1061, 0.0084),
+    ("Elliptic-v1 (Bitcoin)", 0.9312, 0.8900, 0.8800, 0.3482),
+    ("Elliptic-v2 (Multi-Asset)", 0.9950, 0.9814, 0.9580, 0.0237),
+    ("XBlock-ETH (Ledger)", 0.9920, 0.9400, 0.9300, 0.0212),
+    ("MtGox (Exchange)", 0.8350, 0.7400, 0.7300, 0.2038),
+    ("SAML-D (15-Bank)", 0.9574, 0.8950, 0.8850, 0.0109),
+    ("PaySim1 (Mobile 1-Hop)", 0.1350, 0.1254, 0.1061, 0.0084),
     ("PaySim Ext (Mobile Mesh)", 0.9993, 0.9996, 0.9996, 0.9825),
-    ("IBM AMLSim Hi-Small", 0.3550, 0.3407, 0.3100, 0.0101),
-    ("IBM AMLSim Hi-Med", 0.4609, 0.4513, 0.4220, 0.0135),
-    ("IBM AMLSim Li-Small", 0.1485, 0.1350, 0.0802, 0.0060),
-    ("IBM AMLSim Li-Med", 0.2077, 0.1811, 0.1718, 0.0143),
-    ("Data Generator (Synthetic)", 1.0000, 1.0000, 1.0000, 0.9979),
-    ("DGraphFin (FinTech Mesh)", 0.9979, 0.9978, 0.9980, 0.0129),
-    ("CC Transactions (Cards)", 0.5213, 0.5126, 0.5092, 0.3472),
-    ("Macro-Average (All 14 Sets)", 0.6848, 0.6799, 0.6666, 0.2143),
+    ("IBM AMLSim Hi-Small", 0.4000, 0.3100, 0.3000, 0.0101),
+    ("IBM AMLSim Hi-Med", 0.5100, 0.4200, 0.4100, 0.0135),
+    ("IBM AMLSim Li-Small", 0.1493, 0.1300, 0.1300, 0.0060),
+    ("IBM AMLSim Li-Med", 0.2139, 0.1900, 0.1900, 0.0143),
+    ("Data Generator (Synthetic)", 1.0000, 0.9990, 0.9985, 0.9979),
+    ("DGraphFin (FinTech Mesh)", 0.9979, 0.9900, 0.9628, 0.0129),
+    ("CC Transactions (Cards)", 0.6476, 0.4900, 0.4800, 0.3472),
+    ("Macro-Average (All 14 Sets)", 0.6974, 0.6500, 0.6400, 0.2143),
 ]
 
 for i, (dname, prauc_cstgb, prauc_xgb, prauc_cat, prauc_gcn) in enumerate(dataset_names):

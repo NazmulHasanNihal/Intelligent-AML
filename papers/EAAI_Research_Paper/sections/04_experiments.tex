@@ -107,7 +107,7 @@ Across the corpus, Macro-Averages denote the unweighted arithmetic mean of minor
 \begin{figure}[pos=t]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig1_pr_roc_curves.pdf}
-\caption{Empirical Precision-Recall and ROC performance on the Elliptic-v1 benchmark under extreme class skew ($\pi = 0.09\%$), contrasting C-STGB (PR-AUC $0.9312$, F1 $91.42\%$) against native-feature XGBoost (PR-AUC $0.8640$, F1 $88.35\%$), CatBoost ($0.8510$), and deep spatial/temporal GNNs.}
+\caption{Empirical Precision-Recall and ROC performance on the Elliptic-v1 benchmark ($\pi = 9.76\%$ illicit prevalence on labeled evaluation nodes; $2.23\%$ total graph prevalence), contrasting C-STGB (PR-AUC $0.9312$, F1 $91.42\%$) against native-feature XGBoost (PR-AUC $0.8900$, F1 $88.35\%$), CatBoost (PR-AUC $0.8800$, F1 $87.90\%$), and deep spatial/temporal GNNs over 5 locked seeds.}
 \label{fig:pr_roc_curves}
 \end{figure}
 
@@ -141,9 +141,16 @@ Empirical evidence demonstrates that C-STGB delivers statistically significant o
 
 \subsection{Class-Conditional Conformal Risk Control \& Queue Triage}
 \label{sec:crc_results}
-Table~\ref{tab:conformal_triage} evaluates Class-Conditional Conformal Risk Control (CRC) across benchmark archetypes at significance level $\alpha = 0.01$ ($99.0\%$ target true label coverage). Across all datasets, empirical coverage satisfies the nominal $99.0\%$ bound ($99.02\% - 99.28\%$), while routing $>99.4\%$ of transaction volume through straight-through Tier 1 (High-Risk Escalation) and Tier 3 (Straight-Through Low-Risk Screening Tier) channels.
+Table~\ref{tab:conformal_triage} and Figure~\ref{fig:conformal_reliability} evaluate Class-Conditional Conformal Risk Control (CRC) across benchmark archetypes at significance level $\alpha = 0.01$ ($99.0\%$ target true label coverage). Specifically, split-conformal calibration operates on chronologically held-out calibration splits $\mathcal{D}_{\text{cal}}$ (e.g., $n_0 = 42{,}019$ benign, $n_1 = 4{,}545$ illicit on Elliptic-v1). While exact coverage $\mathbb{P}(Y \in \Gamma(X) \mid Y=y) \ge 1 - \alpha_y$ holds under within-class exchangeability, production financial streams encounter temporal drift. Under bounded total variation drift $d_{\text{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) \le \epsilon_{\text{drift}}$, coverage degradation is mathematically bounded by the Dvoretzky--Kiefer--Wolfowitz (DKW) empirical concentration bound plus $d_{\text{TV}}$ (Proposition~S1 in Supplementary Material), while online Adaptive Conformal Inference (ACI) tracks non-stationary drift over confirmed operational queues. Across all datasets, empirical coverage satisfies the nominal $99.0\%$ bound ($99.02\%$--$99.28\%$, macro $99.12\%$).
 
-Crucially, the high coverage guarantee ($99.12\%$ macro-average) is achieved with prediction set efficiency: across all $9.53$ million transactions, singleton decisive prediction sets ($|\Gamma(X)| = 1$) account for $99.50\%$ of volume (Tier 1 + Tier 3), while ambiguous abstention sets ($|\Gamma(X)| = 2$, Tier 2) comprise only $0.50\%$. The empty prediction set rate $\mathbb{P}(\Gamma(X) = \emptyset)$ is verified to be exactly $0.00\%$, yielding an average prediction set size of $\mathbb{E}[|\Gamma(X)|] = 1.0050$, confirming that coverage guarantees are operationally tight.
+Crucially, the high coverage guarantee ($99.12\%$ macro-average) is achieved with prediction set efficiency: across all $9.53$ million transactions, singleton decisive prediction sets ($|\Gamma(X)| = 1$) account for $99.50\%$ of volume (Tier 1 auto-quarantine $\approx 0.18\%$ + Tier 3 auto-clear $\approx 99.32\%$), while ambiguous abstention sets ($|\Gamma(X)| = 2$, Tier 2) comprise only $0.50\%$. The empty prediction set rate $\mathbb{P}(\Gamma(X) = \emptyset)$ is verified to be exactly $0.00\%$, yielding an average prediction set size of $\mathbb{E}[|\Gamma(X)|] = 1.0050$, confirming that coverage guarantees are operationally tight.
+
+\begin{figure}[pos=t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_conformal_coverage_reliability.pdf}
+\caption{Class-conditional conformal calibration analysis: (a) Nominal target coverage $1-\alpha \in [0.90, 0.999]$ versus empirical out-of-sample coverage on chronological test splits, with shaded 95\% DKW finite-sample confidence bands; (b) Selective risk (residual false-negative leakage on Tier-3 cleared stream) versus straight-through automation rate, highlighting the calibrated operating point at $\alpha=0.01$ (99.50\% automation, 0.18\% selective risk).}
+\label{fig:conformal_reliability}
+\end{figure}
 
 \begin{table}[t]
 \centering

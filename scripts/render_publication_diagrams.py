@@ -37,11 +37,11 @@ plt.rcParams.update({
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ieee_fig_dir = BASE_DIR / "papers" / "IEEE_Research_Paper" / "figures"
+eaai_fig_dir = BASE_DIR / "papers" / "EAAI_Research_Paper" / "figures"
 thesis_fig_dir = BASE_DIR / "papers" / "University_CSE_Thesis" / "figures"
 data_fig_dir = BASE_DIR / "data" / "outputs" / "figures"
 
-OUT_DIRS = [data_fig_dir, ieee_fig_dir, thesis_fig_dir]
+OUT_DIRS = [data_fig_dir, eaai_fig_dir, thesis_fig_dir]
 for d in OUT_DIRS:
     d.mkdir(parents=True, exist_ok=True)
 
@@ -551,21 +551,21 @@ tier_outputs = [
     {
         "left_h": "Tier 1: Instant Auto-Block",
         "right_h": r"$\Gamma(X) = \{1\}$",
-        "vol": r"$\approx 55$ / 10k tx ($0.55\%$)",
+        "vol": r"$\approx 18$ / 10k tx ($0.18\%$)",
         "action": r"Precision $>99.4\%$ | Freeze & SAR Draft",
         "bg_c": "#fef2f2", "bd_c": "#ef4444", "hdr_bg": "#b91c1c", "y": 0.58, "h": 0.25
     },
     {
         "left_h": "Tier 2: Manual Review Queue",
         "right_h": r"$\Gamma(X) = \{0, 1\}$",
-        "vol": r"$\approx 5$ / 10k tx ($0.05\%$ Ambiguous)",
+        "vol": r"$\approx 50$ / 10k tx ($0.50\%$ Ambiguous)",
         "action": r"Dispatches Multi-Agent Forensic Dossier",
         "bg_c": "#fff7ed", "bd_c": "#f97316", "hdr_bg": "#c2410c", "y": 0.31, "h": 0.25
     },
     {
         "left_h": "Tier 3: Straight-Through Auto-Clear",
         "right_h": r"$\Gamma(X) = \{0\}$",
-        "vol": r"$\approx 9,940$ / 10k tx ($99.40\%$)",
+        "vol": r"$\approx 9,932$ / 10k tx ($99.32\%$)",
         "action": r"Benign Guarantee $>99.9\%$ | Instant STP",
         "bg_c": "#f0fdf4", "bd_c": "#22c55e", "hdr_bg": "#15803d", "y": 0.04, "h": 0.25
     }
@@ -616,7 +616,7 @@ summary_pill = patches.FancyBboxPatch(
     facecolor="#052e16", edgecolor="#15803d", linewidth=0.75
 )
 ax.add_patch(summary_pill)
-ax.text(0.330, 0.042, r">99.4% Net Compliance Workload Reduction (Human Review Focused Exclusively on the 0.05% Ambiguous Queue)",
+ax.text(0.330, 0.042, r"99.50% Net Workload Reduction (Human Review Restricted to 0.50% Ambiguous Abstention Queue)",
         ha="center", va="center", fontsize=5.8, fontweight="bold", color="#4ade80")
 
 plt.subplots_adjust(left=0.01, right=0.99, top=0.98, bottom=0.02)

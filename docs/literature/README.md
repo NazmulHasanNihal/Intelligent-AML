@@ -4,7 +4,7 @@ This directory outlines the theoretical and empirical literature underpinning **
 
 > [!NOTE]
 > **Copyright & Open-Source Hygiene:**  
-> In accordance with IEEE, ACM, Springer Nature, Elsevier copyright policies and GitHub open-science standards, third-party publisher PDF binaries are excluded from version control. Complete mathematical analyses, architectural dissections, and equation extractions for all 75 papers are independently authored and maintained in [`docs/paper_profiles/`](../paper_profiles/). Full BibTeX citations and DOIs are maintained in [`papers/IEEE_Research_Paper/references.bib`](../../papers/IEEE_Research_Paper/references.bib) and [`papers/University_CSE_Thesis/references.bib`](../../papers/University_CSE_Thesis/references.bib).
+> In accordance with IEEE, ACM, Springer Nature, Elsevier copyright policies and GitHub open-science standards, third-party publisher PDF binaries are excluded from version control. Complete mathematical analyses, architectural dissections, and equation extractions for all 75 papers are independently authored and maintained in [`docs/paper_profiles/`](../paper_profiles/). Full BibTeX citations and DOIs are maintained in [`papers/EAAI_Research_Paper/references.bib`](../../papers/EAAI_Research_Paper/references.bib) and [`papers/University_CSE_Thesis/references.bib`](../../papers/University_CSE_Thesis/references.bib).
 
 ---
 
@@ -76,5 +76,5 @@ The literature base is organized across eight core research pillars:
 | :--- | :--- | :--- |
 | **Individual Paper Profiles** | [`docs/paper_profiles/`](../paper_profiles/) | Detailed markdown dossiers for all 75 surveyed works. |
 | **Literature Summary Table** | [`docs/paper_profiles/00_summary_table.md`](../paper_profiles/00_summary_table.md) | Compact matrix comparing algorithms, tasks, datasets, and venues. |
-| **IEEE Paper Bibliography** | [`papers/IEEE_Research_Paper/references.bib`](../../papers/IEEE_Research_Paper/references.bib) | Camera-ready BibTeX citations used in the IEEE TIFS submission. |
+| **EAAI Journal Paper Bibliography** | [`papers/EAAI_Research_Paper/references.bib`](../../papers/EAAI_Research_Paper/references.bib) | Camera-ready BibTeX citations used in the Elsevier EAAI submission. |
 | **Thesis Bibliography** | [`papers/University_CSE_Thesis/references.bib`](../../papers/University_CSE_Thesis/references.bib) | Comprehensive 75+ reference BibTeX database for the University Thesis. |

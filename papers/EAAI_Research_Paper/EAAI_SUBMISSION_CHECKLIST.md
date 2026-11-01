@@ -9,7 +9,7 @@
 
 ---
 
-## 🏆 Summary of Files in the EAAI Submission Suite (`papers/ESWA_Research_Paper/`)
+## 🏆 Summary of Files in the EAAI Submission Suite (`papers/EAAI_Research_Paper/`)
 
 | File | Description | Purpose in Elsevier Portal |
 |---|---|---|
@@ -131,3 +131,4 @@ When prompted by the Elsevier portal regarding Open Access vs. Subscription:
    - Verify all figures and tables render sharply.
    - Check that line numbering appears in the margins.
 4. Click **"I accept"** and **"Submit Manuscript to Journal"**.
+

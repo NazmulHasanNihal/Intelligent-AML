@@ -5,7 +5,7 @@
 [![React 18](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite-61DAFB.svg?logo=react&logoColor=black)](frontend/)
 [![Tests Passing](https://img.shields.io/badge/Tests-175%2F175%20Passing-brightgreen.svg)](tests/)
 [![Regulatory Compliance](https://img.shields.io/badge/Compliance-FinCEN_%7C_BFIU_%7C_goAML-purple.svg)](src/agents/sar_drafter_agent.py)
-[![Research Under Review](https://img.shields.io/badge/Elsevier-ESWA%20Under%20Review-orange.svg)](papers/ESWA_Research_Paper/)
+[![Research Under Review](https://img.shields.io/badge/Elsevier-EAAI%20Under%20Review-blue.svg)](papers/EAAI_Research_Paper/)
 [![Hardware: CPU-Native](https://img.shields.io/badge/Hardware-Commodity_CPU_Native-blue.svg)](#-empirical-performance--latency-benchmarks)
 [![Showcase: 9 Screens](https://img.shields.io/badge/UI_Showcase-9_Live_Screens-success.svg)](#4-interactive-visual-platform-showcase--screen-by-screen-walkthrough)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -634,7 +634,7 @@ Intelligent-AML/
 ├── scripts/                             # Benchmark runners, demo simulations & figure generators
 ├── comparing_models/                    # Comparative baseline model implementations (GAT, GCN, etc.)
 ├── papers/                              # Peer-reviewed research & thesis monograph
-│   ├── ESWA_Research_Paper/             # Elsevier Expert Systems with Applications manuscript
+│   ├── EAAI_Research_Paper/             # Elsevier Engineering Applications of Artificial Intelligence manuscript
 │   └── University_CSE_Thesis/           # National University B.Sc. (Engg.) CSE thesis monograph
 ├── docs/                                # Documentation, guides & visual assets
 │   ├── PLAIN_ENGLISH_GUIDE.md           # Dedicated handbook for non-technical compliance users
@@ -657,12 +657,12 @@ This platform represents the open-source reference implementation of research co
 
 If you utilize this codebase, models, or architectural framework in your research, please cite:
 
-### 1. Journal Manuscript (Elsevier ESWA)
+### 1. Journal Manuscript (Elsevier EAAI)
 ```bibtex
 @article{nazmul2026riskcontrolled,
   title={Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering Under Extreme Imbalance and Topological Camouflage},
   author={Nazmul, Md. and Gungun, Musrat Jahan and Ahmed, Maheli},
-  journal={Expert Systems with Applications},
+  journal={Engineering Applications of Artificial Intelligence},
   year={2026},
   note={Under Peer Review}
 }
@@ -696,4 +696,4 @@ If you utilize this codebase, models, or architectural framework in your researc
 ## ⚖️ License & Research Availability
 
 * **Software Codebase:** The Intelligent-AML software platform and implementation scripts are licensed under the **[MIT License](LICENSE)** (Copyright © 2025–2026 Md. Nazmul). You are free to inspect, execute, adapt, and build upon this platform for academic, industrial, or commercial use with appropriate attribution.
-* **Open Science & Research Reproducibility:** The academic manuscripts and thesis monograph ([Elsevier ESWA](papers/ESWA_Research_Paper/) and [National University CSE Thesis](papers/University_CSE_Thesis/)) adhere to open science principles. This repository serves as the official open-source companion codebase supporting reproducible evaluation and benchmarking.
+* **Open Science & Research Reproducibility:** The academic manuscripts and thesis monograph ([Elsevier EAAI](papers/EAAI_Research_Paper/) and [National University CSE Thesis](papers/University_CSE_Thesis/)) adhere to open science principles. This repository serves as the official open-source companion codebase supporting reproducible evaluation and benchmarking.

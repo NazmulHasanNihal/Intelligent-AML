@@ -445,3 +445,4 @@ plt.tight_layout()
 save_all(fig, "fig_canonical_invariants_empirical")
 
 print("\n>>> All 8 Extra Publication Figures Successfully Generated!")
+

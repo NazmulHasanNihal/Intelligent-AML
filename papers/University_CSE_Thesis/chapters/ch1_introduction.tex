@@ -11,8 +11,8 @@ In response to increasingly sophisticated evasion tactics, global supranational 
 \begin{enumerate}
     \item \textbf{The Financial Action Task Force (FATF) 40 Recommendations:} Serving as the global standard for combating money laundering and terrorist financing (AML/CFT), FATF Recommendations 10 (Customer Due Diligence), 16 (Wire Transfers / Travel Rule), and 20 (Suspicious Transaction Reporting) mandate that designated reporting entities monitor continuous transaction flows, verify beneficial ownership, and maintain auditable customer transaction histories.
     \item \textbf{The European Union 6th Anti-Money Laundering Directive (6AMLD):} Enacted to harmonize criminal liability across member states, 6AMLD introduced dual-liability prosecution for corporate enablers, standardized 22 predicate offences (including cybercrime and environmental crime), and mandated severe criminal penalties for negligent compliance failures.
-    \item \textbf{FinCEN Bank Secrecy Act (BSA) \& Federal Reserve Model Risk Guidance (SR 26-2):} In the United States, the Financial Crimes Enforcement Network enforces the Bank Secrecy Act (BSA) and the Anti-Money Laundering Act of 2020 (AMLA 2020). Concurrently, interagency guidance on Model Risk Management (SR 26-2, issued April 2026 to supersede SR 11-7 and SR 21-8) enforces strict model risk governance standards, requiring that algorithmic systems utilized for risk surveillance possess rigorous conceptual soundness, ongoing outcome verification, and deterministic explainability.
-    \item \textbf{Bangladesh Financial Intelligence Unit (BFIU) \& Emerging MFS Regulations:} In rapidly growing developing economies, financial inclusion is propelled by Mobile Financial Services (MFS) platforms such as bKash, Nagad, and Rocket, alongside nationwide agent banking networks. Under BFIU Circular No. 26 (Guidelines on Prevention of Money Laundering and Terrorist Financing for MFS), domestic institutions must monitor high-velocity peer-to-peer (P2P), cash-in/cash-out agent aggregation, and cross-border digital remittances under stringent sub-second latency constraints.
+    \item \textbf{FinCEN Bank Secrecy Act (BSA) \& Federal Reserve Model Risk Guidance (SR 11-7 / SR 21-8):} In the United States, the Financial Crimes Enforcement Network enforces the Bank Secrecy Act (BSA) and the Anti-Money Laundering Act of 2020 (AMLA 2020). Concurrently, interagency supervisory guidance on Model Risk Management (Federal Reserve SR 11-7 and SR 21-8) enforces strict model risk governance standards, requiring that algorithmic systems utilized for risk surveillance possess rigorous conceptual soundness, ongoing outcome verification, and deterministic explainability.
+    \item \textbf{Bangladesh Financial Intelligence Unit (BFIU) \& Emerging MFS Regulations:} In rapidly growing developing economies, financial inclusion is propelled by Mobile Financial Services (MFS) platforms such as bKash, Nagad, and Rocket, alongside nationwide agent banking networks. Under the BFIU AML/CFT Master Guidelines for Mobile Financial Services (MFS), domestic financial institutions must monitor high-velocity peer-to-peer (P2P), cash-in/cash-out agent aggregation, and cross-border digital remittances under stringent sub-second latency constraints.
 \end{enumerate}
 
 \subsection{The Operational Crisis of Legacy Surveillance Architectures}
@@ -33,6 +33,13 @@ Financial laundering operates across three classically defined phases, each exhi
 
 With the rise of decentralized finance (DeFi), automated cross-chain bridges, and peer-to-peer (P2P) mobile wallets, criminal syndicates have transitioned from simple linear layering chains to complex, dynamic spatio-temporal graphs that actively evade heuristic detection.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig_benign_vs_smurfing_topology.pdf}
+\caption{Topological contrast between legitimate commercial banking flows and structured money laundering syndicates: (a) Benign retail merchant star topology with high inbound degree ($\deg \approx 85$) but minimal outbound forwarding ($\tilde{\Phi}_{\text{flow}} \approx 0.02$); (b) Multi-stage adversarial laundering syndicate exhibiting fan-out smurfing from placement source S0 ($485\text{k}$), circular wash loops across layering accounts (L1--L3), and eventual integration into offshore sink C4 ($\tilde{\Phi}_{\text{flow}} \approx 0.994$, Hawkes burst arrival $\lambda_u = 74.2$).}
+\label{fig:ch1_topology_contrast}
+\end{figure}
+
 \section{Limitations of Existing Analytical Paradigms}
 Prior research in automated anti-money laundering surveillance falls into two broad categories, both of which exhibit fundamental theoretical and operational shortcomings:
 
@@ -49,11 +56,14 @@ GNNs capture topological connectivity and structural neighborhood contexts. Howe
 \section{The Five Foundational Failure Modes of Standard GNNs}
 \label{sec:failure_modes}
 
+% High-level architectural overview cross-referenced to detailed formulation in Chapter 3
+To address these industrial challenges, this thesis develops \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost), an applied intelligent decision-support system operating across high-throughput financial transaction streams under strict regulatory governance mandates (Figure~\ref{fig:ch1_operational_flowchart}).
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/fig6_system_architecture.pdf}
-\caption{Comprehensive 6-module architecture of C-STGB: (1) Continuous-Time Multi-Scale Temporal Graph Encoder; (2) Adaptive Edge Trust Filter; (3) Typology-Aware Minority Graph Augmentation with Hard-Negative Mining; (4) Evidence-Adaptive Graph-Tabular Fusion for Cold-Start Resolution; (5) Cost-Sensitive Risk Optimization; and (6) Class-Conditional Conformal Risk Control with Selective Abstention Triage.}
-\label{fig:ch1_architecture}
+\includegraphics[width=0.98\textwidth]{figures/fig1_operational_architecture_flowchart.pdf}
+\caption{Operational architecture and real-time triage dataflow of the C-STGB financial surveillance platform: (1) Streaming transaction ingestion via Apache Arrow and DuckDB with 12-D physical mass-flow invariants; (2) C-STGB neural core combining continuous-time 3-band harmonic temporal attention, learnable edge-trust gating ($\hat{g}_{ij} \ge \delta_{\text{floor}}$), typology-clustered latent GraphSMOTE, evidence-adaptive fusion ($\alpha_u$), and cost-sensitive Bayes risk calibration ($\tau^* = 0.18$); and (3) Class-conditional Conformal Risk Control (CRC) decision diamond ($1-\alpha \ge 99\%$) routing streaming transactions across 3 operational tiers (Tier 1 High-Risk Quarantine with SHA-256 Merkle audit receipts, Tier 2 Human Compliance Review Desk, Tier 3 Automated Straight-Through Clearing) satisfying a 0.45\,ms Fast-Path SLA.}
+\label{fig:ch1_operational_flowchart}
 \end{figure}
 
 \begin{enumerate}
@@ -95,19 +105,29 @@ In this dissertation, we introduce \textbf{C-STGB} (\underline{C}onformal \under
     \item \textbf{Evidence-Adaptive Graph-Tabular Fusion:} We formulate a learnable gating parameter $\alpha_u \in [0, 1]$ that dynamically balances tabular domain invariants against structural GNN embeddings, resolving the zero-degree cold-start entity problem and boosting isolated account F1-score to $89.60\%$ F1 ($+71.20\text{ pp}$ over standalone GNN's $18.40\%$ F1).
     \item \textbf{Class-Conditional Conformal Risk Control (CRC):} We establish a 3-tier selective abstention triage architecture that delivers finite-sample statistical coverage ($\ge 99.0\%$) for both benign and illicit classes under non-stationary temporal drift, validated via Dvoretzky-Kiefer-Wolfowitz (DKW) bounds.
     \item \textbf{Massive 14-Dataset Cross-Domain Benchmark:} We execute the largest comparative AML benchmark to date across 14 datasets ($9,534,980$ entities, $9,528,355$ transactions) over 5 independent seeds, achieving a macro-average F1-score of $68.05\%$ ($0.6974$ PR-AUC), outperforming prior state-of-the-art GNN baselines by $+12.27\text{ pp}$ to $+54.16\text{ pp}$.
-    \item \textbf{Multi-Agent Forensic Swarm with Cryptographic Auditability:} We implement an autonomous multi-agent swarm that drafts regulatory FinCEN Form 111 XML narratives with zero entity hallucinations, verified via deterministic AST grammar validators and Merkle tree SHA-256 cryptographic audit receipts aligned with interagency model risk management guidance (SR 26-2, superseding SR 11-7).
+    \item \textbf{Multi-Agent Forensic Swarm with Cryptographic Auditability:} We implement an autonomous multi-agent swarm that drafts regulatory FinCEN Form 111 XML narratives with zero entity hallucinations, verified via deterministic AST grammar validators and Merkle tree SHA-256 cryptographic audit receipts aligned with interagency model risk management guidance (Federal Reserve SR 11-7 and SR 21-8).
 \end{enumerate}
 
 \section{Dissertation Structure}
+
+\subsection{How to Read This Thesis}
+To facilitate engagement for examiners across machine learning, computational mathematics, and enterprise software engineering disciplines, this dissertation is structured into four thematic tracks:
+\begin{itemize}
+    \item \textbf{Regulatory Imperative \& Literature Foundations (Chapters~\ref{ch:introduction}--\ref{ch:literature}):} Establishes the multi-trillion-dollar economic impact of money laundering, statutory supervisory mandates (FATF, 6AMLD, SR 11-7, BFIU), and an exhaustive 25-paper comparative taxonomy.
+    \item \textbf{Mathematical Foundations \& Theoretical Proofs (Chapters~\ref{ch:architecture}, \ref{ch:conformal}, \ref{ch:xai}):} Formulates the 6-module C-STGB architecture, proving mass-flow invariance (Lemma~\ref{lem:flow_conservation}), DKW non-asymptotic total-variation drift coverage bounds (Theorem~\ref{thm:conformal_tv_bound}), and deterministic multi-agent anti-hallucination guarantees (Proposition~\ref{prop:anti_hallucination}).
+    \item \textbf{High-Throughput Vectorized Systems Engineering (Chapters~\ref{ch:data_pipeline}, \ref{ch:software}):} Details the DuckDB embedded analytical contracts, Apache Arrow zero-copy memory pipelines, LRU subgraph caches, and Kubernetes microservice topology achieving 0.45\,ms Fast-Path SLAs.
+    \item \textbf{Empirical Campaigns \& Industrial Deployment (Chapters~\ref{ch:experiments}, \ref{ch:conclusion}):} Delivers the 14-dataset comparative benchmark ($9.53\text{M}$ entities, $9.53\text{M}$ transactions), ablation waterfalls, adversarial stress-testing, threats to validity, and a 26-week enterprise production roadmap.
+\end{itemize}
+
 The remainder of this dissertation is organized into eight core technical chapters followed by extended mathematical derivations and ETL schema appendices:
 \begin{itemize}
     \item \textbf{Chapter~\ref{ch:literature}} presents an exhaustive literature review, theoretical taxonomies, and a 25-paper comparative analysis.
     \item \textbf{Chapter~\ref{ch:architecture}} details the step-by-step tensor formulations, harmonic embeddings, and mathematical proofs of the C-STGB architecture.
     \item \textbf{Chapter~\ref{ch:data_pipeline}} outlines the vectorized streaming data engineering pipeline, DuckDB SQL data contracts, and in-memory LRU caching.
     \item \textbf{Chapter~\ref{ch:conformal}} develops the mathematical foundations of Class-Conditional Conformal Risk Control, DKW bounds under temporal drift, and ethical non-discrimination audits.
-    \item \textbf{Chapter~\ref{ch:xai}} presents the multi-agent forensic swarm, GNNExplainer topological extraction, and SR 26-2-aligned compliance logging.
+    \item \textbf{Chapter~\ref{ch:xai}} presents the multi-agent forensic swarm, GNNExplainer topological extraction, and SR 11-7 / SR 21-8-aligned compliance logging.
     \item \textbf{Chapter~\ref{ch:experiments}} reports comprehensive experimental campaigns, baseline matrices, ablation studies, and adversarial robustness benchmarks.
     \item \textbf{Chapter~\ref{ch:software}} details the enterprise software engineering architecture, asynchronous FastAPI streaming endpoints, and deployment specifications.
     \item \textbf{Chapter~\ref{ch:conclusion}} synthesizes research conclusions, discusses structural limitations, and outlines future research pathways.
-    \item \textbf{Appendices~\ref{app:proofs}--\ref{app:schemas}} provide extended non-asymptotic DKW drift bounds, ACI martingale proofs, and full ingestion attribute schema mappings across all 13 evaluated networks.
+    \item \textbf{Appendices~\ref{app:proofs}--\ref{app:schemas}} provide extended non-asymptotic DKW drift bounds, ACI martingale proofs, and full ingestion attribute schema mappings across all 14 evaluated networks.
 \end{itemize}

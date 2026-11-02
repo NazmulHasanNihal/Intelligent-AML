@@ -2,6 +2,58 @@
 \label{ch:architecture}
 
 \section{Architectural Overview and Neuro-Symbolic Philosophy}
+
+\subsection{Reader's Guide: Architectural Roadmap}
+To guide the reader through the mathematical derivations, Table~\ref{tab:ch3_roadmap} maps each core research challenge to its corresponding C-STGB module and mathematical theorem. Furthermore, Table~\ref{tab:ch3_notations} establishes the universal mathematical notations and tensor dimensions employed throughout this dissertation.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Reader's Architectural Roadmap: Mapping Operational AML Bottlenecks to C-STGB Innovations.}
+\label{tab:ch3_roadmap}
+\begin{tabularx}{\textwidth}{llcX}
+\toprule
+\textbf{Operational Failure Mode} & \textbf{C-STGB Solution Module} & \textbf{Section} & \textbf{Key Mathematical Guarantee} \\
+\midrule
+Continuous-Time Velocity Evasion & Continuous Temporal Encoder (Mod 1) & \S\ref{sec:ch3_mod1} & Harmonic tri-band kernel $w(\Delta t)$ + Hawkes intensity $\lambda_u(t)$ \\
+Adversarial Camouflage & Context-Aware Edge Trust (Mod 2) & \S\ref{sec:ch3_mod2} & Learnable gate $\hat{g}_{ij} \in (0, 1)$ suppressing $>65\%$ of chaff \\
+Extreme Class Skew ($\pi < 0.05\%$) & Typology GraphSMOTE (Mod 3) & \S\ref{sec:ch3_mod3} & Mass-flow invariant preservation (Lemma~\ref{lem:flow_conservation}) \\
+Cold-Start Account Sparsity & Evidence-Adaptive Fusion (Mod 4) & \S\ref{sec:ch3_mod4} & Degree-adaptive safety gate $\alpha_u$ bridging stubs \\
+Bayes Risk Miscalibration & Cost-Sensitive Optimization (Mod 5) & \S\ref{sec:ch3_mod5} & Bayes risk threshold $\tau^* = \arg\min \mathcal{R}_{\text{Bayes}}(\tau)$ \\
+Uncalibrated Alert Workload & Class-Conditional CRC (Mod 6) & Chapter~\ref{ch:conformal} & Non-asymptotic DKW finite-sample bound (Theorem~\ref{thm:conformal_tv_bound}) \\
+Black-Box Compliance Deficit & Autonomous Multi-Agent SAR Swarm & Chapter~\ref{ch:xai} & Deterministic anti-hallucination proof (Prop.~\ref{prop:anti_hallucination}) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Summary of Universal Mathematical Notations, Tensor Dimensions, and Operator Types.}
+\label{tab:ch3_notations}
+\begin{tabularx}{\textwidth}{llcX}
+\toprule
+\textbf{Symbol} & \textbf{Mathematical Definition} & \textbf{Dimension / Type} & \textbf{Physical Meaning / Role} \\
+\midrule
+$\mathcal{G} = (\mathcal{V}, \mathcal{E})$ & Streaming directed multigraph & Dynamic Graph & Multi-bank transaction network \\
+$\mathbf{x}_u \in \mathbb{R}^{d_v}$ & Entity static profile attribute vector & Real vector & KYC risk tier, account age, jurisdiction \\
+$\mathbf{e}_{uv} \in \mathbb{R}^{d_e}$ & Directed transaction feature vector & Real vector & Transfer amount, payment channel, fee ratio \\
+$\Delta t_{uv}$ & Inter-transaction time delta ($t_v - t_u \ge 0$) & Scalar $\in \mathbb{R}^+$ & Continuous elapsed physical time \\
+$\Phi_{\text{time}}(\Delta t)$ & Harmonic Fourier temporal embedding & $\mathbb{R}^{d_t}$ vector & Multi-scale frequency representation \\
+$w(\Delta t)$ & Tri-band continuous temporal weight & Scalar $\in [0, 1]$ & Multi-scale decay (burst, diurnal, macro) \\
+$\hat{g}_{ij}$ & Context-aware adaptive edge-trust gate & Scalar $\in (0, 1)$ & Topological camouflage attenuation gate \\
+$\mathbf{z}_{\text{inv}}(u, t)$ & Canonical spatio-temporal invariant vector & $\mathbb{R}^{12}$ vector & Universal schema-agnostic descriptor \\
+$\tilde{\Phi}_{\text{flow}}(u, t)$ & Log-normalized mass-flow ratio & Scalar $\in \mathbb{R}$ & Kirchhoff fund-conservation balance \\
+$\lambda_u(t)$ & Hawkes point process arrival intensity & Scalar $\in \mathbb{R}^+$ & Self-exciting transaction velocity \\
+$\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$ & Time-causal forward and backward PPR taint & $\mathbb{R}^{|\mathcal{V}|}$ vectors & Proximity to past confirmed illicit seeds \\
+$\mathcal{C}_k$ & Latent typology cluster manifold & Submanifold $k$ & Smurfing, peeling, wash, or fan-in clusters \\
+$\alpha_u \in [0, 1]$ & Evidence-adaptive graph-tabular gate & Scalar & Graph vs.\ tabular invariant balance \\
+$\tau^*$ & Cost-sensitive Bayes risk threshold & Scalar $\in (0, 1)$ & Imbalance-calibrated point boundary \\
+$\Gamma(u)$ & Class-conditional conformal prediction set & Discrete $\subseteq \{0, 1\}$ & $\{0\}, \{1\}, \{0, 1\}$ or $\emptyset$ triage set \\
+$\alpha$ & Nominal significance error budget & Scalar $\in (0, 1)$ & User-specified risk ceiling (e.g., $0.01$) \\
+\bottomrule
+\end{tabularx}
+\end{table}
 The core architectural thesis of \textbf{C-STGB} is that robust, enterprise-grade Anti-Money Laundering (AML) surveillance requires a unified neuro-symbolic design: deep relational message passing to learn emergent structural patterns, fused dynamically with domain-specific spatio-temporal invariants and statistically calibrated risk bounds.
 
 Figure~\ref{fig:ch3_detailed_pipeline} illustrates the six interconnected modules of the C-STGB end-to-end architecture:
@@ -89,7 +141,13 @@ To trace proximity to known illicit seed entities without introducing future inf
 \begin{equation}
 \mathbf{s}_{\text{bwd}}^{(k+1)} = (1 - \alpha_{\text{PPR}}) \mathbf{s}_{\text{seed}} + \alpha_{\text{PPR}} \mathbf{\tilde{A}}_{\text{causal}} \mathbf{D}_{\text{in}}^{-1} \mathbf{s}_{\text{bwd}}^{(k)}
 \end{equation}
-where $\alpha_{\text{PPR}} = 0.85$, and $\mathbf{\tilde{A}}_{\text{causal}}$ is strictly restricted to edges occurring prior to time $t$ ($t_e < t$). In testing and zero-shot transfer splits, all validation and test nodes are assigned $\mathbf{s}_{\text{seed}} = 0.0$, strictly enforcing zero-leakage evaluation.
+where $\alpha_{\text{PPR}} = 0.85$, and $\mathbf{\tilde{A}}_{\text{causal}}$ is strictly restricted to edges occurring prior to time $t$ ($t_e < t$). \paragraph{Zero-Leakage Streaming Inference Protocol for Taint Invariants:}
+A critical methodological requirement in production deployment is preventing label contamination during inference when future ground-truth labels are unavailable. C-STGB enforces a strict chronological protocol:
+\begin{enumerate}
+    \item \textbf{Historical Seed Conditioning ($t_e < t$):} Taint propagation initializes exclusively from entities confirmed illicit \textit{prior} to current time $t$ via historical regulatory filings or confirmed alert investigations ($\mathbf{s}_{\text{seed}}(u) = 1.0$).
+    \item \textbf{Prospective Zero-Seed Assignment:} For all prospective transactions arriving at time $t$ (including all validation, calibration, and test evaluations), the evaluation entities are strictly assigned $\mathbf{s}_{\text{seed}}(u) = 0.0$. Taint features $\mathbf{s}_{\text{fwd}}$ and $\mathbf{s}_{\text{bwd}}$ thus measure purely incoming or outgoing multi-hop topological exposure to known past offenders, strictly eliminating label leakage.
+    \item \textbf{Zero-Shot Cold-Start Fallback:} In cold-start institutions or newly launched crypto-ledgers where zero historical seeds exist ($\mathbf{s}_{\text{seed}} \equiv \mathbf{0}$), both taint vectors collapse to uninformative zeros. Under this condition, C-STGB's Evidence-Adaptive Fusion Gate ($\alpha_u$, Section~\ref{sec:ch3_mod4}) shifts feature importance dynamically to the 10 physical flow and temporal invariants ($\tilde{\Phi}_{\text{flow}}, \Psi_{\text{asym}}, \lambda_u, \mu_A, \sigma_{\Delta t}, \dots$), which operate completely unsupervised without requiring any seed annotations.
+\end{enumerate}
 
 \subsubsection{Group 5: 5-Moment Causal Ego-Statistics ($\mu_A, \sigma_A^2, \gamma_A, \kappa_A, \nu_{\text{io}}, \sigma_{\Delta t}$)}
 We capture the distribution of historical transaction amounts and inter-arrival intervals via causal statistical moments:
@@ -111,38 +169,29 @@ provides a universal, schema-agnostic feature foundation. Table~\ref{tab:12d_inv
 \begin{table}[htbp]
 \centering
 \small
-\caption{Taxonomy and Formal Specification of the 12-Dimensional Canonical Spatio-Temporal Invariant Vector $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$.}
+\caption{Compact Formal Specification of the 12-Dimensional Canonical Invariant Vector $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$.}
 \label{tab:12d_invariants_spec}
-\begin{tabularx}{\textwidth}{llcX}
+\begin{tabularx}{\textwidth}{clllcX}
 \toprule
-\textbf{Feature Group} & \textbf{Symbol} & \textbf{Dim} & \textbf{Operational Financial AML Meaning} \\
+\textbf{\#} & \textbf{Symbol} & \textbf{Mathematical Definition} & \textbf{Operational Detection Target} & \textbf{Dim} & \textbf{Typical Range} \\
 \midrule
-\multirow{2}{*}{\textbf{Group 1: Mass Flow Balance}} 
-& $\tilde{\Phi}_{\text{flow}}(u, t)$ & 1 & Log-normalized flow conservation ratio; identifies conduit mule accounts ($\approx 1.0$) vs.\ sinks ($\to 0$) and sources. \\
-& $\Psi_{\text{asym}}(u, t)$ & 1 & Degree asymmetry; distinguishes structuring fan-in consolidators from fan-out dispersal hubs. \\
-\midrule
-\textbf{Group 2: Hawkes Arrival} 
-& $\lambda_u(t)$ & 1 & Continuous self-exciting Hawkes point process intensity; flags velocity bursts in smurfing and peeling chains. \\
-\midrule
-\multirow{2}{*}{\textbf{Group 3: Causal Taint}} 
-& $\mathbf{s}_{\text{fwd}}(u)$ & 1 & Downstream personalized PageRank proximity to known illicit seed clusters. \\
-& $\mathbf{s}_{\text{bwd}}(u)$ & 1 & Reverse causal taint tracking upstream provenance and origin of laundering capital. \\
-\midrule
-\multirow{5}{*}{\textbf{Group 4: Amount Moments}} 
-& $\mu_A(u, t)$ & 1 & Mean ego-transaction amount; establishes financial operational scale. \\
-& $\sigma_A^2(u, t)$ & 1 & Variance of transaction values; captures structured smurfing homogeneity. \\
-& $\gamma_A(u, t)$ & 1 & Amount distribution skewness; detects asymmetric high-value outlier spikes. \\
-& $\kappa_A(u, t)$ & 1 & Amount distribution kurtosis; identifies heavy-tailed structuring distributions. \\
-& $\nu_{\text{io}}(u, t)$ & 1 & Continuous net log inflow-outflow velocity differential. \\
-\midrule
-\multirow{2}{*}{\textbf{Group 5: Arrival Dynamics}} 
-& $\sigma_{\Delta t}(u, t)$ & 1 & Inter-arrival timing jitter; separates scripted automated bots from manual retail activity. \\
-& $v_A(u, t)$ & 1 & Capital transmission velocity through the ego-network ($A_{\text{total}} / \Delta t_{\text{span}}$). \\
+1 & $\tilde{\Phi}_{\text{flow}}$ & $\ln(1 + \sum A_{\text{out}} / (\sum A_{\text{in}} + \epsilon))$ & Pass-through mule conduits ($\approx 0.69$) & 1 & $[0.0, \infty)$ \\
+2 & $\Psi_{\text{asym}}$ & $(\deg_{\text{in}} - \deg_{\text{out}}) / (\deg_{\text{in}} + \deg_{\text{out}} + \epsilon)$ & Structuring fan-in vs.\ fan-out dispersal & 1 & $[-1.0, 1.0]$ \\
+3 & $\lambda_u(t)$ & $\mu_u + \sum_{t_i < t} \alpha_H \exp(-\beta_H(t - t_i))$ & High-frequency micro-burst smurfing & 1 & $[0, 10^4]\,\text{ev/h}$ \\
+4 & $\mathbf{s}_{\text{fwd}}$ & $(1-\alpha_{\text{PPR}})\mathbf{s}_{\text{seed}} + \alpha_{\text{PPR}}\mathbf{\tilde{A}}_{\text{causal}}^T \mathbf{D}_{\text{out}}^{-1}\mathbf{s}_{\text{fwd}}$ & Downstream proximity to known illicit seeds & 1 & $[0.0, 1.0]$ \\
+5 & $\mathbf{s}_{\text{bwd}}$ & $(1-\alpha_{\text{PPR}})\mathbf{s}_{\text{seed}} + \alpha_{\text{PPR}}\mathbf{\tilde{A}}_{\text{causal}}\mathbf{D}_{\text{in}}^{-1}\mathbf{s}_{\text{bwd}}$ & Upstream source origin and taint provenance & 1 & $[0.0, 1.0]$ \\
+6 & $\mu_A$ & $\frac{1}{|\mathcal{E}_u|}\sum_{e \in \mathcal{E}_u} \text{Amount}(e)$ & Baseline financial transaction scale & 1 & $\mathbb{R}^+$ \\
+7 & $\sigma_A^2$ & $\frac{1}{|\mathcal{E}_u|}\sum_{e \in \mathcal{E}_u} (\text{Amount}(e) - \mu_A)^2$ & Structured smurfing amount homogeneity & 1 & $\mathbb{R}^+$ \\
+8 & $\gamma_A$ & $\frac{1}{|\mathcal{E}_u|}\sum_{e} ((\text{Amount}(e) - \mu_A)/\sigma_A)^3$ & Asymmetric high-value outlier spikes & 1 & $\mathbb{R}$ \\
+9 & $\kappa_A$ & $\frac{1}{|\mathcal{E}_u|}\sum_{e} ((\text{Amount}(e) - \mu_A)/\sigma_A)^4$ & Heavy-tailed structuring distributions & 1 & $\mathbb{R}^+$ \\
+10 & $\nu_{\text{io}}$ & $\ln(1 + \sum A_{\text{in}}) - \ln(1 + \sum A_{\text{out}})$ & Inflow-to-outflow velocity imbalance & 1 & $\mathbb{R}$ \\
+11 & $\sigma_{\Delta t}$ & $\sqrt{\text{Var}(\{t_k - t_{k-1}\})}$ & Scripted automated bots vs.\ retail jitter & 1 & $\mathbb{R}^+$ \\
+12 & $v_A$ & $\sum_{e \in \mathcal{E}_u} \text{Amount}(e) / (t_{\max} - t_{\min} + \epsilon)$ & Rapid capital transmission speed & 1 & $\mathbb{R}^+$ \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\section{Module 1: Continuous-Time Multi-Scale Temporal Graph Encoder}
+\section{Module 1: Continuous-Time Multi-Scale Temporal Graph Encoder}\label{sec:ch3_mod1}
 To simultaneously capture microsecond smurfing bursts and 90-day dormant holding patterns, C-STGB employs continuous harmonic positional embeddings combined with a tri-band multi-frequency decay kernel.
 
 \subsection{Continuous Harmonic Fourier Temporal Encodings}
@@ -158,7 +207,7 @@ where $k \in \{0, 1, \dots, \frac{d_t}{2} - 1\}$. This continuous formulation en
 \subsection{Tri-Band Continuous Decay Attention Kernel}
 We synthesize three orthogonal temporal velocity regimes through a tri-band decay function:
 \begin{equation}
-w(\Delta t) = \sum_{b \in \mathcal{B}} \pi_b \left[ w_{\min} + (1 - w_{\min}) \exp(-\lambda_b \Delta t) \right] \times \left(1 + \tanh(\gamma_b \lambda_u(t))\right)
+w(\Delta t) = \sum_{b \in \mathcal{B}} \pi_{\text{mix},b} \left[ w_{\min} + (1 - w_{\min}) \exp(-\lambda_b \Delta t) \right] \times \left(1 + \tanh(\gamma_b \lambda_u(t))\right)
 \end{equation}
 where $\mathcal{B} = \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ represents the three operational velocity regimes:
 \begin{enumerate}
@@ -175,7 +224,7 @@ The minimum floor parameter $w_{\min} = 0.05$ ensures that historical topologica
 \label{fig:triband_decay_comparison}
 \end{figure}
 
-\section{Module 2: Context-Aware Adaptive Edge-Trust Filter}
+\section{Module 2: Context-Aware Adaptive Edge-Trust Filter}\label{sec:ch3_mod2}
 To neutralize adversarial topological camouflage (routing illicit funds through high-degree merchant, utility, or exchange nodes to induce GNN over-smoothing), C-STGB incorporates a learnable edge-trust gating mechanism.
 
 \subsection{Edge-Trust Formulation}
@@ -188,7 +237,7 @@ The learnable edge-trust gate $\mathbf{g}_{ij} \in (0, 1)$ is computed via a 2-l
 \mathbf{z}_{ij} = \text{LeakyReLU}\left( \mathbf{W}_{g1} \mathbf{c}_{ij} + \mathbf{b}_{g1} \right)
 \end{equation}
 \begin{equation}
-\mathbf{g}_{ij} = \sigma\left( \mathbf{W}_{g2} \mathbf{z}_{ij} + b_{g2} \right)
+\mathbf{g}_{ij} = \sigma\left( \mathbf{W}_{g2} \mathbf{z}_{ij} + \mathbf{b}_{g2} \right)
 \end{equation}
 To preserve stable backpropagation while filtering camouflage noise, we apply a lower floor $\delta_{\text{floor}} = 0.10$:
 \begin{equation}
@@ -205,7 +254,7 @@ To maintain sub-millisecond streaming SLAs, we enforce a strict top-$K$ degree c
 \mathbf{h}_u^{(l+1)} = \sigma\left( \sum_{v \in \mathcal{N}_K(u)} \tilde{\alpha}_{uv}^{(t)} \mathbf{W}_V \mathbf{h}_v^{(l)} \right)
 \end{equation}
 
-\section{Module 3: Typology-Clustered Latent GraphSMOTE}
+\section{Module 3: Typology-Clustered Latent GraphSMOTE}\label{sec:ch3_mod3}
 Under extreme class skew ($\pi < 0.05\%$), naïve SMOTE oversampling blurs distinct criminal typologies. C-STGB partitions minority training nodes into latent typology clusters before synthesis.
 
 \begin{figure}[htbp]
@@ -259,7 +308,7 @@ Let $u, v \in \mathcal{C}_k$ be two parent pass-through accounts in the same lat
 Assume $\Phi_u \le \Phi_v$. Since $\lambda \in [0, 1]$ and $I_u, I_v > 0$: $\Phi_u I_{\text{syn}} \le O_{\text{syn}} = \lambda \Phi_u I_u + (1 - \lambda) \Phi_v I_v \le \Phi_v I_{\text{syn}}$. Dividing throughout by $I_{\text{syn}} > 0$ yields $\Phi_u \le \frac{O_{\text{syn}}}{I_{\text{syn}}} \le \Phi_v \in [1 - \bar{\epsilon}, 1.0]$, preserving bounded flow conservation without monetary mass-balance violation.
 \end{proof}
 
-\section{Module 4: Evidence-Adaptive Graph-Tabular Fusion}
+\section{Module 4: Evidence-Adaptive Graph-Tabular Fusion}\label{sec:ch3_mod4}
 Newly registered accounts and pass-through stubs lack relational graph neighbors ($\deg(u) = 0$). To prevent GNN performance collapse on isolated nodes, C-STGB dynamically balances tabular domain invariants against structural embeddings.
 
 \subsection{Gating Parameter Formulation}
@@ -273,7 +322,7 @@ The unified anomaly representation $\mathbf{h}_u^*$ dynamically fuses graph embe
 \end{equation}
 When graph evidence is sparse ($\deg(u) \to 0$), $\alpha_u \to 0$, causing C-STGB to gracefully fall back on robust domain invariants, boosting zero-degree account F1-score to $89.60\%$ F1 ($+71.20\text{ pp}$ over standalone GNN's $18.40\%$ F1).
 
-\section{Module 5: Cost-Sensitive Risk Optimization Head}
+\section{Module 5: Cost-Sensitive Risk Optimization Head}\label{sec:ch3_mod5}
 Anomaly risk probabilities are predicted via a multi-layer perceptron:
 \begin{equation}
 \hat{p}_u = \sigma\left( \text{MLP}(\mathbf{h}_u^*) \right)
@@ -367,3 +416,17 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 
 \section{Chapter Summary}
 This chapter delivered the complete mathematical formulation of the C-STGB architecture, detailing continuous harmonic time encodings, Hawkes point process intensities, context-aware edge gating, typology-aware latent GraphSMOTE, evidence-adaptive graph-tabular fusion, and multi-task loss optimization. The next chapter presents the vectorized streaming data engineering pipeline.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig_canonical_invariants_empirical.pdf}
+\caption{Empirical separability distributions of the 12 canonical physical and temporal invariants $\mathbf{z}_{\text{inv}}(u, t)$ contrasting confirmed illicit entities ($y=1$, red) versus benign accounts ($y=0$, green) across benchmark datasets. Invariants such as flow regularity $\tilde{\Phi}_{\text{flow}}$, Hawkes burst arrival rate $\lambda_u$, and causal taints ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) provide decisive orthogonal discriminatory power even on isolated, cold-start nodes.}
+\label{fig:ch3_invariant_violins}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig22_triband_spectral_coldstart.pdf}
+\caption{Evidence-adaptive gating dynamics $\alpha_u \in [0, 1]$ and spectral cold-start representation behavior across network density regimes. When entities possess sparse topological neighborhoods ($\deg(u) \le 1$), the learnable gating mechanism suppresses unreliable message aggregation ($\alpha_u \to 0$, empirically $\alpha_u \in [0.08, 0.12]$), transferring inductive reliance to the 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u, t)$ and securing $89.60\%$ F1 on newly created accounts. As local connectivity expands into dense multi-hop transaction clusters, $\alpha_u \to 1.0$, harnessing high-order spatio-temporal graph structures.}
+\label{fig:ch3_spectral_coldstart}
+\end{figure}
+

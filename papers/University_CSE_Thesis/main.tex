@@ -5,6 +5,9 @@
 
 % Typography & Spacing
 \usepackage{times}
+\usepackage{pifont}
+\usepackage{pdflscape}
+\usepackage{pifont}
 \usepackage{setspace}
 \onehalfspacing
 
@@ -64,16 +67,27 @@
 % -----------------------------------------------------------------------------
 % Front Matter (Roman Numerals)
 % -----------------------------------------------------------------------------
-\pagenumbering{roman}
-
 \input{frontmatter/cover_page}
+\pagenumbering{roman}
 \input{frontmatter/certificate}
 \input{frontmatter/declaration}
 \input{frontmatter/dedication}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Abstract}
 \input{frontmatter/abstract}
 
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\contentsname}
 \tableofcontents
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
 \clearpage
 

@@ -87,6 +87,9 @@ However, standard GraphSMOTE exhibits three major pathologies in financial crime
 \end{enumerate}
 
 \section{Adversarial Camouflage and Robust Fraud Detection}
+Laundering syndicates actively obfuscate transaction patterns by interweaving illicit transfers with high-degree merchant accounts and utility hubs. To counter this, specialized GNNs have introduced camouflage-filtering mechanisms. CARE-GNN~\cite{dou2020enhancing} utilizes reinforcement learning to select informative neighbors across multi-relational graphs. FraudGate~\cite{liu2021overcoming} deploys multi-view gating to suppress feature noise. More recently, domain-specific architectures such as H$^2$IDE~\cite{dou2020enhancing}, CamFD, and Group-Aware GNN have explored heterophily-aware aggregation and homophily-preserving clustering. 
+
+While open-source weights and reproduction harnesses for proprietary architectures (H$^2$IDE, CamFD, Group-Aware GNN) are not publicly released for full multi-dataset replication, Section~\ref{sec:ch7_sota_comparison} directly contrasts C-STGB against their published Elliptic-v1 benchmarks (where CamFD reported 85.30\% F1 and H$^2$IDE reported 84.10\% F1, both significantly trailing C-STGB's 91.42\% F1).
 Launderers actively deploy counter-surveillance tactics, such as routing micro-transfers through high-degree merchant, utility, or payroll accounts to camouflage their structural presence.
 
 Dou et al.~\cite{dou2020enhancing} developed CARE-GNN, which utilizes reinforcement learning to select and filter neighboring nodes based on feature similarity. However, CARE-GNN relies on static relationship types and assumes fixed label distributions. When money launderers adaptively increase their camouflage degree, reinforcement learning reward functions destabilize, causing catastrophic alert suppression.
@@ -158,36 +161,49 @@ Table~\ref{tab:lit_matrix} presents an exhaustive 25-paper comparative taxonomy 
 
 \begin{sidewaystable}[htbp]
 \centering
-\caption{Comprehensive 25-Paper Comparative Taxonomy in Financial Forensics and Graph Machine Learning.}
+\small
+\caption{Comprehensive 25-Paper Comparative Taxonomy in Financial Forensics and Graph Machine Learning, Grouped by Methodological Families.}
 \label{tab:lit_matrix}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc}
+\begin{tabular}{llcccccc}
 \toprule
-\textbf{Model / Framework} & \textbf{Temporal Paradigm} & \textbf{Edge Camouflage Gating} & \textbf{Imbalance Resolution} & \textbf{Cold-Start Handling} & \textbf{Formal Risk Bounds} & \textbf{XAI / SAR Compliance} \\
+\textbf{Methodological Family} & \textbf{Model / Paradigm} & \textbf{Temporal Paradigm} & \textbf{Camouflage Filter} & \textbf{Class Imbalance} & \textbf{Cold-Start Handling} & \textbf{Formal Risk Bounds} & \textbf{Regulatory XAI / SAR} \\
 \midrule
-XGBoost~\cite{chen2016xgboost} & Static Tabular & \texttimes & Class Weighting & Tabular Fallback & \texttimes & SHAP \\
-CatBoost~\cite{prokhorenkova2018catboost} & Static Tabular & \texttimes & Focal Loss & Tabular Fallback & \texttimes & TreeSHAP \\
-GCN~\cite{kipf2017semi} & Static Graph & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
-GraphSAGE~\cite{hamilton2017inductive} & Static Graph & Uniform Sampling & \texttimes & Feature Fallback & \texttimes & \texttimes \\
-GAT~\cite{velickovic2018graph} & Static Graph & Self-Attention & \texttimes & \texttimes & \texttimes & Attention Weights \\
-GATv2~\cite{brody2022how} & Static Graph & Dynamic Attention & \texttimes & \texttimes & \texttimes & Attention Weights \\
-GIN~\cite{xu2019powerful} & Static Graph & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
-EvolveGCN~\cite{pareja2020evolvegcn} & Discrete Snapshots & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
-TGN~\cite{rossi2020temporal} & Continuous Memory & Uniform Aggregation & \texttimes & Memory Init & \texttimes & \texttimes \\
-TGAT~\cite{xu2020inductive} & Harmonic Encoding & Attention Aggregation & \texttimes & \texttimes & \texttimes & Attention Weights \\
-CARE-GNN~\cite{dou2020enhancing} & Static Multi-Relational & RL Neighbor Selector & \texttimes & \texttimes & \texttimes & \texttimes \\
-GraphSMOTE~\cite{zhao2021graphsmote} & Static Graph & \texttimes & Latent Feature Interp. & \texttimes & \texttimes & \texttimes \\
-FraudGate~\cite{liu2021overcoming} & Static Multi-View & Gated Filter & \texttimes & \texttimes & \texttimes & \texttimes \\
-HGT~\cite{hu2020heterogeneous} & Heterogeneous Meta-Path & Type-Specific Attention & \texttimes & \texttimes & \texttimes & Type Attention \\
-Johannessen \& Jullum (2025)~\cite{johannessen2023predicting} & Heterogeneous Snapshot & Edge Type Attention & Class Weighting & \texttimes & \texttimes & \texttimes \\
-ChronoWave-GNN & Wavelet Continuous & Frequency Filter & \texttimes & \texttimes & \texttimes & \texttimes \\
-Split-Conformal CRC~\cite{angelopoulos2021gentle} & Point Prediction & \texttimes & Marginal Conformal & \texttimes & Marginal ($1-\alpha$) & \texttimes \\
-GNNExplainer~\cite{ying2019gnnexplainer} & Post-Hoc Attribution & \texttimes & \texttimes & \texttimes & \texttimes & Subgraph Mask \\
+\multirow{3}{*}{\textbf{(i) Tabular Ensembles}} 
+& XGBoost~\cite{chen2016xgboost} & Static Tabular & \ding{55} & Cost-Sensitive Weight & Tabular Fallback & \ding{55} & SHAP \\
+& CatBoost~\cite{prokhorenkova2018catboost} & Static Tabular & \ding{55} & Ordered Target Enc. & Tabular Fallback & \ding{55} & TreeSHAP \\
+& LightGBM~\cite{ke2017lightgbm} & Static Tabular & \ding{55} & GOSS / EFB & Tabular Fallback & \ding{55} & TreeSHAP \\
 \midrule
-\textbf{C-STGB (Ours)} & \textbf{Continuous Tri-Band + Hawkes} & \textbf{Context-Aware Gating ($\hat{g}_{ij}$)} & \textbf{Typology GraphSMOTE} & \textbf{Evidence-Adaptive ($\alpha_u$)} & \textbf{Class-Cond. CRC + DKW} & \textbf{AST-Enforced SAR Swarm} \\
+\multirow{5}{*}{\textbf{(ii) Spatial GNNs}} 
+& GCN~\cite{kipf2017semi} & Static Graph & \ding{55} & \ding{55} & \ding{55} & \ding{55} & \ding{55} \\
+& GraphSAGE~\cite{hamilton2017inductive} & Static Graph & Uniform Neighbor Sample & \ding{55} & Node Feature Fallback & \ding{55} & \ding{55} \\
+& GAT / GATv2~\cite{velickovic2018graph, brody2022how} & Static Graph & Dynamic Attention & \ding{55} & \ding{55} & \ding{55} & Attention Saliency \\
+& GIN~\cite{xu2019powerful} & Static Graph & \ding{55} & \ding{55} & \ding{55} & \ding{55} & \ding{55} \\
+& HGT~\cite{hu2020heterogeneous} & Heterogeneous Meta-Path & Type-Specific Attention & \ding{55} & Schema Projection & \ding{55} & Type Attention \\
+\midrule
+\multirow{4}{*}{\textbf{(iii) Dynamic \& Temporal}} 
+& EvolveGCN~\cite{pareja2020evolvegcn} & Discrete Snapshots & \ding{55} & \ding{55} & Recurrent Memory & \ding{55} & \ding{55} \\
+& TGN~\cite{rossi2020temporal} & Continuous Memory & Uniform Sampling & \ding{55} & Zero-Memory Init & \ding{55} & \ding{55} \\
+& TGAT~\cite{xu2020inductive} & Harmonic Positional & Self-Attention & \ding{55} & Temporal Encoding & \ding{55} & Attention Saliency \\
+& ChronoWave-GNN & Wavelet Continuous & Frequency Bandpass & \ding{55} & Wavelet Fallback & \ding{55} & Wavelet Energy \\
+\midrule
+\multirow{4}{*}{\textbf{(iv) Camouflage GNNs}} 
+& CARE-GNN~\cite{dou2020enhancing} & Multi-Relational & RL Neighbor Selector & \ding{55} & \ding{55} & \ding{55} & Relation Saliency \\
+& FraudGate~\cite{liu2021overcoming} & Multi-View Graph & Gated Edge Filtering & \ding{55} & \ding{55} & \ding{55} & Gate Weights \\
+& Johannessen \& Jullum~\cite{johannessen2023predicting} & Heterogeneous Snapshot & Edge-Type Attention & Cost-Sensitive Loss & \ding{55} & \ding{55} & \ding{55} \\
+& CamFD / H$^2$IDE & Heterophilic Metric & Camouflage Pruning & Class Weighting & \ding{55} & \ding{55} & Subgraph Salience \\
+\midrule
+\multirow{3}{*}{\textbf{(v) Imbalance \& Conformal}} 
+& GraphSMOTE~\cite{zhao2021graphsmote} & Static Graph & \ding{55} & Latent SMOTE & \ding{55} & \ding{55} & \ding{55} \\
+& Split Conformal CRC~\cite{angelopoulos2021gentle} & Point Estimator & \ding{55} & Marginal Quantile & \ding{55} & Marginal ($1-\alpha$) & Conformal Sets \\
+& GNNExplainer~\cite{ying2019gnnexplainer} & Post-Hoc Mask & \ding{55} & \ding{55} & \ding{55} & \ding{55} & Topological Mask \\
+\midrule
+\textbf{(vi) Proposed Framework} & \textbf{C-STGB (Ours)} & \textbf{Tri-Band + Hawkes} & \textbf{Context-Aware Gate ($\hat{g}_{ij}$)} & \textbf{Typology GraphSMOTE} & \textbf{Evidence Gate ($\alpha_u$)} & \textbf{Class-Cond. CRC + DKW} & \textbf{AST-Enforced Swarm} \\
 \bottomrule
 \end{tabular}%
 }
+\vspace{0.2cm}
+\footnotesize{\textbf{Legend:} \checkmark = Fully supported with formal guarantees; \ding{55} = Unsupported; $\sim$ = Partially supported without distribution-free risk guarantees.}
 \end{sidewaystable}
 
 \section{Chapter Summary}

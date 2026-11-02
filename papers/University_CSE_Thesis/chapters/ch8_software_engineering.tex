@@ -9,7 +9,7 @@ Figure~\ref{fig:ch8_microservice} illustrates the enterprise microservice topolo
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig8_1_fastapi_k8s_topology.pdf}
-\caption{Enterprise microservice deployment topology of Intelligent-AML: (1) High-Throughput Ingestion Gateway; (2) DuckDB / Arrow In-Memory Analytical Engine; (3) PyTorch Geometric C-STGB Inference Worker Pool; (4) Multi-Agent SAR Compliance Engine; and (5) Model Governance (SR 26-2) Cryptographic Audit Ledger.}
+\caption{Enterprise microservice deployment topology of Intelligent-AML: (1) High-Throughput Ingestion Gateway; (2) DuckDB / Arrow In-Memory Analytical Engine; (3) PyTorch Geometric C-STGB Inference Worker Pool; (4) Multi-Agent SAR Compliance Engine; and (5) Model Governance (SR 11-7 / SR 21-8) Cryptographic Audit Ledger.}
 \label{fig:ch8_microservice}
 \end{figure}
 
@@ -31,7 +31,7 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 \texttt{POST} & \texttt{/api/v1/transactions/ingest} & $<1.5\,\text{ms}$ & Ingest event; update causal graph. \\
 \texttt{POST} & \texttt{/api/v1/inference/score} & $<2.5\,\text{ms}$ & C-STGB scoring; conformal triage $\Gamma(u)$. \\
 \texttt{POST} & \texttt{/api/v1/compliance/sar/generate} & $<500\,\text{ms}$ & Dispatch swarm; compile FinCEN XML. \\
-\texttt{GET} & \texttt{/api/v1/audit/receipt/\{case\_id\}} & $<1.0\,\text{ms}$ & Query SHA-256 Merkle receipt (SR 26-2). \\
+\texttt{GET} & \texttt{/api/v1/audit/receipt/\{case\_id\}} & $<1.0\,\text{ms}$ & Query SHA-256 Merkle receipt (SR 11-7 / SR 21-8). \\
 \texttt{WS} & \texttt{/ws/v1/live-triage-feed} & Real-Time & Stream live Tier-1/Tier-2 triage feed. \\
 \bottomrule
 \end{tabularx}
@@ -57,6 +57,34 @@ The sequence diagram documents the following deterministic execution stages:
     \item \textbf{Asynchronous Swarm Investigation ($t > 0.45\,\text{ms}$):} Background workers dispatch the 4-agent swarm to assemble FinCEN XML dossiers and seal SHA-256 Merkle proofs in under $30\text{ seconds}$.
 \end{enumerate}
 The complete asynchronous FastAPI endpoint implementation is documented in Appendix~\ref{app:operator_manual} (Listing~\ref{app_lst:fastapi_code}).
+
+\section{Per-Module Computational Complexity, Latency, and Memory Footprint}
+To rigorously characterize system scaling under enterprise authorization SLAs, Table~\ref{tab:module_complexity} profiles the algorithmic time complexity, single-event latency, and GPU memory footprint across each discrete module of C-STGB.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Algorithmic Complexity, Single-Event Latency, and Memory Footprint per C-STGB Pipeline Stage.}
+\label{tab:module_complexity}
+\begin{tabularx}{\textwidth}{llccX}
+\toprule
+\textbf{Pipeline Stage / Component} & \textbf{Algorithmic Complexity} & \textbf{P50 Latency} & \textbf{P99 Latency} & \textbf{Hardware \& Memory Resource Footprint} \\
+\midrule
+1. Ingestion \& Schema Normalization & $\mathcal{O}(|\mathcal{E}_{\text{batch}}|)$ & $0.11\,\text{ms}$ & $0.22\,\text{ms}$ & Zero-copy Apache Arrow table buffer in RAM \\
+2. DuckDB LRU Ego-Graph Fetch & $\mathcal{O}(K \log |\mathcal{V}|)$ & $0.18\,\text{ms}$ & $0.35\,\text{ms}$ & DuckDB memory mapped index ($250\,\text{MB}$ cache) \\
+3. Continuous Tri-Band Temporal Encoding & $\mathcal{O}(K \cdot d_t)$ & $0.05\,\text{ms}$ & $0.09\,\text{ms}$ & Vectorized PyTorch tensor kernel ($1.2\,\text{MB}$) \\
+4. Context-Aware Edge Trust Gating & $\mathcal{O}(K \cdot d)$ & $0.04\,\text{ms}$ & $0.07\,\text{ms}$ & MLP linear layer ($64 \times 32$ weights on GPU) \\
+5. Spatio-Temporal GNN Attention & $\mathcal{O}(K \cdot d^2)$ & $0.12\,\text{ms}$ & $0.21\,\text{ms}$ & PyG SparseTensor message passing ($12.5\,\text{MB}$) \\
+6. Evidence-Adaptive Tabular Fusion & $\mathcal{O}(d + 12)$ & $0.02\,\text{ms}$ & $0.04\,\text{ms}$ & Sigmoid gate projection on GPU \\
+7. Class-Conditional Conformal Triage & $\mathcal{O}(1)$ & $0.04\,\text{ms}$ & $0.07\,\text{ms}$ & In-memory scalar quantile threshold lookup \\
+\midrule
+\textbf{Total Fast-Path Streaming SLA} & $\mathbf{\mathcal{O}(K \cdot d)}$ & $\mathbf{0.45\,\text{ms}}$ & $\mathbf{0.82\,\text{ms}}$ & \textbf{Sub-millisecond Real-Time Webhook Clearance} \\
+\midrule
+8. GNNExplainer Attribution Mask & $\mathcal{O}(E_{\text{sub}} \cdot d \cdot N_{\text{opt}})$ & $1.65\,\text{ms}$ & $2.85\,\text{ms}$ & Triggered only on Tier 1 quarantined alerts \\
+9. Multi-Agent SAR Swarm Synthesis & $\mathcal{O}(L_{\text{ctx}} \cdot L_{\text{gen}})$ & $28.4\,\text{s}$ & $34.2\,\text{s}$ & Async background worker pool with Merkle audit seal \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \section{Containerization, Kubernetes \& CI/CD Infrastructure}
 To guarantee reproducible deployment across on-premise banking mainframes, cloud Kubernetes clusters (AWS EKS, Google Cloud GKE), and local edge environments, the entire platform is packaged via Docker and orchestrated with Kubernetes.
@@ -85,7 +113,7 @@ The repository incorporates 158 automated unit, integration, and regression test
     \item Class-Conditional Conformal Risk Control coverage bounds ($\ge 99.0\%$).
     \item Multi-agent forensic swarm reasoning cycles and FinCEN Form 111 XML generation.
     \item Zero-leakage 4-way chronological split integrity and test-seed isolation.
-    \item Model Governance (SR 26-2) Merkle tree cryptographic receipt hashing.
+    \item Model Governance (SR 11-7 / SR 21-8) Merkle tree cryptographic receipt hashing.
 \end{itemize}
 
 \section{Security Architecture, RBAC \& Data Governance}

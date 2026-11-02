@@ -1,4 +1,37 @@
 \appendix
+\chapter{Comprehensive Financial Crime \& Graph Learning Glossary}
+\label{app:glossary}
+
+To facilitate cross-disciplinary clarity across academic examiners, quantitative researchers, and banking compliance officers, Table~\ref{app_tab:glossary} defines foundational terms across financial crime surveillance, graph machine learning, and conformal risk theory.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Comprehensive Cross-Disciplinary Glossary of Financial Crime, Graph ML, and Conformal Risk Terminology.}
+\label{app_tab:glossary}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Terminology} & \textbf{Formal Operational Definition in Financial Surveillance} \\
+\midrule
+\textbf{Smurfing / Structuring} & The illegal practice of breaking a large illicit transaction into multiple micro-transfers below statutory reporting thresholds (e.g., $\$9,900$ to evade the $\$10,000$ CTR limit). \\
+\textbf{Peeling Chain} & A sequence of rapid crypto or fiat transfers where a source address sends funds through intermediary nodes, "peeling" off a small amount at each hop while forwarding the remainder. \\
+\textbf{Mule Account} & An account utilized as a pass-through conduit to receive and immediately disburse illicit funds, obscuring the beneficial ownership trail ($\Phi_{\text{flow}} \approx 1.0$). \\
+\textbf{Camouflage Chaff} & The strategic injection of benign, high-degree merchant or utility payments to induce graph over-smoothing and disguise illicit relationships. \\
+\textbf{Hawkes Intensity} & A continuous-time self-exciting point process $\lambda(t)$ modeling transactional arrival rates where past events momentarily elevate future arrival probabilities. \\
+\textbf{Personalized PageRank} & A random-walk algorithm with restart probability $\alpha_{\text{PPR}}$ measuring topological proximity and forward/backward taint exposure to confirmed illicit seeds. \\
+\textbf{Dirichlet Energy} & A spectral measure $\mathcal{E}(\mathbf{H})$ of graph smoothness; exponential decay to zero indicates complete feature over-smoothing and anomaly signal loss. \\
+\textbf{GraphSMOTE} & An algorithmic framework synthesizing synthetic minority nodes in latent GNN representation space paired with localized edge-generator reconstruction. \\
+\textbf{Conformal Risk Control} & A distribution-free statistical framework providing finite-sample risk coverage guarantees $\mathbb{P}(Y \in \Gamma(X)) \ge 1 - \alpha$ under within-class exchangeability. \\
+\textbf{Adaptive Conformal Inference} & An online conformal calibration technique dynamically updating the significance level $\alpha_t$ via martingale convergence under temporal concept drift. \\
+\textbf{Selective Abstention} & The routing of ambiguous model predictions ($\Gamma(u) = \{0, 1\}$) to human compliance analysts while clearing decisive instances automatically. \\
+\textbf{Fast-Path Inference} & Sub-millisecond single-event transaction scoring ($0.45\,\text{ms}$) utilizing in-memory LRU caches and vectorized DuckDB/Arrow analytical tables. \\
+\textbf{FinCEN Form 111} & The statutory Suspicious Activity Report (SAR) XML specification mandated by the United States Treasury for documenting suspicious financial transactions. \\
+\textbf{AST Grammar Compiler} & A deterministic parser enforcing Extended Backus-Naur Form ($\mathcal{G}_{\text{SAR}}$) syntactic and semantic validity over LLM narrative outputs. \\
+\textbf{Merkle Audit Tree} & A cryptographic hash tree anchoring forensic dossiers into an immutable, tamper-evident audit ledger compliant with Federal Reserve SR 11-7. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \chapter{Extended Mathematical Proofs \& Derivations}
 \label{app:proofs}
 
@@ -123,11 +156,42 @@ ORDER BY t.timestamp_epoch DESC
 LIMIT 50;
 \end{lstlisting}
 
-\chapter{Hyperparameter Search Grids \& Optimization Protocols}
+\chapter{Hyperparameter Search Grids \& Formal Reproducibility Checklist}
 \label{app:hyperparams}
+
+\section{Official Reproducibility Checklist}
+In compliance with international open-science reproducibility standards, Table~\ref{app_tab:reproducibility} provides the complete empirical disclosure checklist.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Comprehensive Open-Science Empirical Reproducibility Checklist.}
+\label{app_tab:reproducibility}
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Checklist Item} & \textbf{Status} & \textbf{Repository Location / Verification Reference} \\
+\midrule
+Open Code Repository & Verified & Persistent repository: \url{https://anonymous.4open.science/r/Intelligent-AML} \\
+Pretrained Model Checkpoints & Verified & Checkpoints for all 14 networks deposited in repository \texttt{/models} \\
+Hardware Specification & Disclosed & Dual AMD EPYC 7763, 512 GB RAM, 4x NVIDIA A100 (80 GB) in Table~\ref{tab:compute_budget} \\
+Software Stack Versions & Disclosed & Python 3.10+, PyTorch 2.4, PyG 2.5, DuckDB 1.0, Apache Arrow 16.0 \\
+Locked Random Seeds & Disclosed & Five locked seeds: $\{42, 1337, 2024, 777, 999\}$ for all runs \\
+Data Chronological Splits & Disclosed & Zero-leakage chronological 60/10/10/20\% protocol in Section~\ref{sec:ch7_splits} \\
+Hyperparameter Grid & Disclosed & Complete search spaces and optimal configurations in Table~\ref{app_tab:hyperparam_grid} \\
+Automated Test Suites & Disclosed & 158 automated unit, integration, and regression tests passing with exit code 0 \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \section{Detailed Hyperparameter Sweeps across 13 Baselines}
 All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator (TPE) over 50 Bayesian optimization trials on the validation split $\mathcal{D}_{\text{val}}$.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig_hyperparam_sensitivity_4panel.pdf}
+\caption{Four-panel hyperparameter sensitivity analysis of the C-STGB framework: (a) Macro F1 stability across edge-trust floor thresholds $\delta_{\text{floor}} \in [0.02, 0.30]$, peaking at $\delta_{\text{floor}}=0.10$; (b) Precision versus recall frontier across regulatory asymmetric cost ratios $C_{\text{FN}}/C_{\text{FP}} \in [5, 30]$, stabilizing at the calibrated 15:1 ratio; (c) Minority F1-score and inference latency scaling across neighborhood degree caps $K \in [5, 30]$, establishing $K=15$ as the optimal Pareto operating knee ($0.45$\,ms latency); (d) Finite-sample empirical coverage reliability under non-stationary temporal drift across Adaptive Conformal Inference (ACI) step sizes $\gamma \in [0.001, 0.05]$.}
+\label{fig:app_hyperparam_sensitivity}
+\end{figure}
+
 
 \begin{table}[htbp]
 \centering
@@ -225,7 +289,7 @@ The user interface is structured into six dedicated operational desks, designed 
         \item \textit{FCRA Adverse Action Customer Notices} providing statutory transparency.
     \end{itemize}
     \item \textbf{Algorithmic Recourse \& Customer Remediation Sandbox:} Solves counterfactual feature perturbations to determine the minimal, cost-optimal modifications required for falsely flagged customers to achieve legitimate clearance, guaranteeing statutory compliance with CFPB and FCRA fair lending mandates.
-    \item \textbf{Model Governance \& Benchmark Hub (SR 26-2):} Hosts immutable SHA-256 Merkle audit receipts, monitors streaming non-conformity Kolmogorov-Smirnov drift statistics, and displays comprehensive comparative benchmarks across all 14 financial networks.
+    \item \textbf{Model Governance \& Benchmark Hub (SR 11-7 / SR 21-8):} Hosts immutable SHA-256 Merkle audit receipts, monitors streaming non-conformity Kolmogorov-Smirnov drift statistics, and displays comprehensive comparative benchmarks across all 14 financial networks.
 \end{enumerate}
 
 \subsection{Operational Dashboard UI Visualizations}
@@ -248,7 +312,7 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} il
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/03_case_management.png}
-\caption{Autonomous Multi-Agent Case Management Desk, illustrating autonomous SAR narrative synthesis, Grounds of Suspicion breakdown, and SR 26-2 cryptographic Merkle tree audit logging.}
+\caption{Autonomous Multi-Agent Case Management Desk, illustrating autonomous SAR narrative synthesis, Grounds of Suspicion breakdown, and SR 11-7 / SR 21-8 cryptographic Merkle tree audit logging.}
 \label{fig:app_case_management}
 \end{figure}
 
@@ -269,7 +333,7 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} il
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/06_model_governance_drift.png}
-\caption{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 26-2.}
+\caption{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 11-7 / SR 21-8.}
 \label{fig:app_model_governance_drift}
 \end{figure}
 
@@ -303,7 +367,7 @@ Edge-trust gating $\hat{g}_{ij} = \delta_{\text{fl}} + (1 - \delta_{\text{fl}}) 
 Autonomous 4-agent swarm (Lead Forensic Coordinator, Subgraph Topology Specialist, Legal SAR Drafter, Compliance Rule Verifier) formulates grounds of suspicion, verifies OFAC/PEP sanctions, and compiles schema-validated FinCEN Form 111 XML.
 
 \vspace{0.25cm}
-\textbf{\textcolor{blue!70!black}{Step 5: Cryptographic Merkle Sealing under SR 26-2}} \\
+\textbf{\textcolor{blue!70!black}{Step 5: Cryptographic Merkle Sealing under SR 11-7 / SR 21-8}} \\
 The complete inference state, model weights hash, and decision tree are hashed into an immutable SHA-256 Merkle tree leaf $h_{\text{leaf}}$, committed to an append-only WORM ledger for central bank regulatory examination.
 \vspace{0.2cm}
 \end{minipage}%
@@ -371,8 +435,10 @@ Listing~\ref{app_lst:fincen_xml_sample} provides the finalized, schema-validated
     <FlowConservation Ratio='0.9942'>BALANCED_PASSTHROUGH</FlowConservation>
   </SubjectEntity>
 
+  <CampaignSummary TotalHops='49' AggregatedAmount='485000.00'
+                   StructuringThreshold='10000.00' WindowMinutes='12'/>
   <TopologicalEvidence SubgraphNodes='15' SubgraphEdges='18'>
-    <CausalChain Hops='3'>
+    <CausalChain Hops='3' ExemplarPathAmount='29350.00'>
       <Hop Seq='1' Src='ACC_9941' Dst='ACC_MULE_02'
            Amount='9850.00' Timestamp='14:19:12Z' EdgeTrust='0.94'/>
       <Hop Seq='2' Src='ACC_MULE_02' Dst='ACC_MULE_08'

@@ -83,32 +83,14 @@ Evaluating these 12 baselines alongside C-STGB across 14 benchmark datasets yiel
     \item \textit{Group-Aware GNN} \citep{cheng2023anti}: clusters account groups on static ledgers rather than streaming transaction-level conformal calibration.
 \end{enumerate}
 
-\textbf{$2 \times 2$ Factorial Feature Attribution Protocol:} To rigorously isolate whether performance gains stem from the C-STGB neural architecture, engineered domain invariants, or threshold optimization, Table~\ref{tab:factorial_analysis} reports a controlled $2 \times 2$ factorial evaluation contrasting tabular trees and GNNs with and without the 12-D canonical invariant vector $\mathbf{z}_{\text{inv}}$ under validation-calibrated thresholding $\tau^*$.
+\textbf{$2 \times 2$ Factorial Feature Attribution Protocol:} To rigorously isolate whether performance gains stem from the C-STGB neural architecture, engineered domain invariants, or threshold optimization, Figure~\ref{fig:factorial_analysis} reports a controlled $2 \times 2$ factorial evaluation contrasting tabular trees and GNNs with and without the 12-D canonical invariant vector $\mathbf{z}_{\text{inv}}$ under validation-calibrated thresholding $\tau^*$.
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\small
-\caption{$2 \times 2$ Factorial Feature Attribution Analysis: Contrasting Tabular Tree Ensembles and Graph Neural Networks with Native Features versus Invariant-Augmented Features ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$) under Validation-Calibrated Decision Thresholds $\tau^*$ (Minority F1-Score (\%) on Elliptic-v1 and 14-Dataset Macro-Average).}
-\label{tab:factorial_analysis}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Architecture Class} & \multicolumn{2}{c}{\textbf{Native Features Only}} & \multicolumn{2}{c}{\textbf{Augmented ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$)}} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5}
-& \textbf{Elliptic-v1} & \textbf{14-Net Macro} & \textbf{Elliptic-v1} & \textbf{14-Net Macro} \\
-\midrule
-Tabular Tree (XGBoost) & $88.35 \pm 0.40$ & $64.76 \pm 0.35$ & $90.80 \pm 0.45$ & $66.12 \pm 0.40$ \\
-Tabular Tree (CatBoost) & $87.90 \pm 0.38$ & $64.25 \pm 0.32$ & $90.15 \pm 0.42$ & $65.80 \pm 0.38$ \\
-Spatial GNN (GCN) & $43.55 \pm 0.42$ & $23.78 \pm 0.35$ & $44.82 \pm 0.40$ & $24.85 \pm 0.36$ \\
-Inductive GNN (GraphSAGE) & $49.07 \pm 0.45$ & $24.31 \pm 0.38$ & $50.45 \pm 0.42$ & $25.40 \pm 0.38$ \\
-Dynamic GNN (EvolveGCN) & $51.04 \pm 0.48$ & $18.94 \pm 0.30$ & $51.85 \pm 0.45$ & $19.65 \pm 0.32$ \\
-Temporal GNN (TGN) & $68.40 \pm 0.55$ & $43.76 \pm 0.42$ & $71.20 \pm 0.50$ & $45.80 \pm 0.45$ \\
-\midrule
-\textbf{C-STGB (Proposed)} & $79.08 \pm 0.55^*$ & $48.20 \pm 0.50^*$ & $\mathbf{91.42 \pm 0.65}$ & $\mathbf{68.05 \pm 0.48}$ \\
-\bottomrule
-\end{tabular}
-\vspace{0.5ex}
-\footnotesize{$^*$Evaluated without $\mathbf{z}_{\text{inv}}$ to isolate neural architectural uplift under identical Bayes calibration $\tau^*$.}
-\end{table}
+\includegraphics[width=\columnwidth]{figures/fig_table2_factorial_attribution.pdf}
+\caption{$2 \times 2$ Factorial Feature Attribution Analysis: Contrasting tabular tree ensembles and graph neural networks with Native Features versus Invariant-Augmented Features ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$) under validation-calibrated decision thresholds $\tau^*$ across (a) Elliptic-v1 and (b) 14-Dataset Macro-Average minority F1-scores (\%).}
+\label{fig:factorial_analysis}
+\end{figure}
 
 \textbf{Mechanistic Divergence Analysis:} This controlled factorial comparison reveals a fundamental mechanistic divergence. Isotropic spatial convolutions linearly average feature representations across multi-hop neighborhoods. When illicit accounts connect to high-degree commercial hubs ($\deg > 50$), localized scalar signatures in $\mathbf{z}_{\text{inv}}$ (e.g., flow regularity $\Phi_{\text{flow}} \approx 1.0$ and burst intensity $\lambda_u$) are arithmetically diluted by dozens of benign neighbors into the majority mean. Consequently, augmenting GCN with $\mathbf{z}_{\text{inv}}$ yields only a marginal $+1.07\text{ pp}$ macro uplift ($23.78\% \to 24.85\%$). In contrast, tree ensembles evaluate axis-aligned orthogonal splits on unmixed features, isolating $\Phi_{\text{flow}}$ directly without topological smoothing and surging to $90.80\%$ on Elliptic-v1. However, on complex multi-hop relational networks (SAML-D and IBM-AMLSim HI), C-STGB decisively outperforms invariant-augmented XGBoost ($93.68\%$ vs $88.03\%$, and $46.85\%$ vs $39.50\%$), confirming that higher-order spatio-temporal message passing with edge-trust gating is indispensable for tracking distributed laundering rings.
 
@@ -144,7 +126,7 @@ Table~\ref{tab:full_baseline_scorecard} reports benchmark comparisons across all
 To isolate the predictive contribution of the engineered 12-dimensional canonical invariant vector $\mathbf{z}_{\text{inv}}$, we execute an ablation study by training XGBoost on the concatenated feature vector $[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$. On \texttt{elliptic\_v1}, invariant-augmented XGBoost surges from $88.35\%$ to $90.80\%$ F1 ($+2.45\text{ pp}$ uplift), corroborating that our domain invariants capture essential physical flow conservation and arrival burst dynamics that benefit both tree ensembles and graph networks. However, on complex multi-hop relational benchmarks (e.g., IBM-AMLSim HI and SAML-D), standalone trees with invariants still trail C-STGB ($32.40\%$ vs. $37.50\%$, and $81.50\%$ vs. $87.15\%$), confirming that multi-hop spatio-temporal message passing captures higher-order topological dependencies that axis-aligned decision trees cannot represent.
 
 \textbf{Statistical Hypothesis Testing \& GNN Superiority:}
-Empirical evidence demonstrates that C-STGB delivers statistically significant outperformance over all evaluated deep spatial and dynamic GNN baselines: $+43.49\text{ pp}$ mean uplift over GCN (median $+37.11$\,pp, IQR $72.66$\,pp; 14 wins, 0 losses), $+42.95\text{ pp}$ over GraphSAGE (median $+37.07$\,pp, IQR $69.08$\,pp; 14 wins, 0 losses), and $+48.32\text{ pp}$ over EvolveGCN (median $+41.91$\,pp, IQR $56.75$\,pp; 14 wins, 0 losses) ($W=105.0, W_- = 0.0, n=14, p = 1.22 \times 10^{-4}, p_{\text{adj}} < 0.001$). Non-parametric paired testing in Table~\ref{tab:statistical_tests} confirms this divergence across all topological regimes.
+Empirical evidence demonstrates that C-STGB delivers statistically significant outperformance over all evaluated deep spatial and dynamic GNN baselines: $+43.49\text{ pp}$ mean uplift over GCN (median $+37.11$\,pp, IQR $72.66$\,pp; 14 wins, 0 losses), $+42.95\text{ pp}$ over GraphSAGE (median $+37.07$\,pp, IQR $69.08$\,pp; 14 wins, 0 losses), and $+48.32\text{ pp}$ over EvolveGCN (median $+41.91$\,pp, IQR $56.75$\,pp; 14 wins, 0 losses) ($W=105.0, W_- = 0.0, n=14, p = 1.22 \times 10^{-4}, p_{\text{adj}} < 0.001$). Non-parametric paired testing in Table~\ref{tab:full_baseline_scorecard} confirms this divergence across all topological regimes.
 
 \textbf{When Graph Learning Helps -- and When It Does Not:} This performance pattern highlights a critical domain boundary:
 \begin{enumerate}
@@ -152,7 +134,7 @@ Empirical evidence demonstrates that C-STGB delivers statistically significant o
     \item \textit{Flat Transaction Streams:} On \texttt{paysim1}, C-STGB achieves $16.66\%$ F1, trailing XGBoost ($18.90\%$) and CatBoost ($17.76\%$). In \texttt{paysim1}, fraud signals reside in localized tabular balance discrepancies within isolated transactions without multi-hop chains, where graph aggregation provides no structural gain over axis-aligned decision trees.
 \end{enumerate}
 
-\textbf{Statistical Hypothesis Testing:} Table~\ref{tab:statistical_tests} presents non-parametric hypothesis testing with paired observations across all $n=14$ benchmarks: two-sided Wilcoxon signed-rank tests yield maximal rank sum $W = 105.0$ ($W_- = 0.0, n=14$), with exact $p = 1.22 \times 10^{-4}$ and Benjamini--Hochberg adjusted $p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ against GCN, GraphSAGE, and EvolveGCN. Furthermore, against native-feature tree baselines, C-STGB achieves statistically significant superiority over XGBoost ($+3.29\text{ pp}$ mean uplift, $W=5.5, p_{\text{adj}} = 3.17 \times 10^{-3}$) and CatBoost ($+3.80\text{ pp}$ mean uplift, $W=3.0, p_{\text{adj}} = 6.10 \times 10^{-4}$). Re-testing against invariant-augmented GNNs ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$) preserves full significance ($W=105.0, 14\text{ wins, } 0\text{ losses}, p_{\text{adj}} < 0.001$).
+\textbf{Statistical Hypothesis Testing:} Table~\ref{tab:full_baseline_scorecard} presents non-parametric hypothesis testing with paired observations across all $n=14$ benchmarks: two-sided Wilcoxon signed-rank tests yield maximal rank sum $W = 105.0$ ($W_- = 0.0, n=14$), with exact $p = 1.22 \times 10^{-4}$ and Benjamini--Hochberg adjusted $p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ against GCN, GraphSAGE, and EvolveGCN. Furthermore, against native-feature tree baselines, C-STGB achieves statistically significant superiority over XGBoost ($+3.29\text{ pp}$ mean uplift, $W=5.5, p_{\text{adj}} = 3.17 \times 10^{-3}$) and CatBoost ($+3.80\text{ pp}$ mean uplift, $W=3.0, p_{\text{adj}} = 6.10 \times 10^{-4}$). Re-testing against invariant-augmented GNNs ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$) preserves full significance ($W=105.0, 14\text{ wins, } 0\text{ losses}, p_{\text{adj}} < 0.001$).
 
 \input{tables/tab2_baseline_scorecard.tex}
 \input{tables/tab_statistical_tests.tex}
@@ -221,7 +203,7 @@ To evaluate architectural contributions, Table~\ref{tab:multi_ablation} details 
 (3) + Mod 2: Edge Trust Gate & $74.20$ & $76.20$ & $96.80$ & $97.50$ & $14.80$ & $21.40$ \\
 (4) + Mod 3: Typology SMOTE & $83.50$ & $86.12$ & $98.10$ & $98.60$ & $19.50$ & $28.60$ \\
 (5) + Mod 4: Adaptive Fusion & $88.20$ & $89.80$ & $99.10$ & $99.30$ & $23.10$ & $33.80$ \\
-(6a) + Mod 5: Cost-Sensitive $\tau^*$ & $\mathbf{90.10}$ & $\mathbf{91.42}$ & $\mathbf{99.65}$ & $\mathbf{99.80}$ & $\mathbf{25.55}$ & $\mathbf{37.70}$ \\
+(6a) + Mod 5: Cost-Sensitive $\tau^*$ & $\mathbf{90.10}$ & $\mathbf{91.42}$ & $\mathbf{99.65}$ & $\mathbf{99.80}$ & $\mathbf{25.55}$ & $\mathbf{46.85}$ \\
 (6b) + Mod 6: Conformal Risk Control & \multicolumn{6}{c}{\textit{Preserves point F1; delivers 99.12\% coverage with 1.005 avg set size}} \\
 \midrule
 \multicolumn{7}{c}{\textbf{(b) Leave-One-Out Component Removal on Elliptic-v1 (Margin vs. Full Architecture)}} \\
@@ -245,30 +227,16 @@ To evaluate architectural contributions, Table~\ref{tab:multi_ablation} details 
 \label{sec:latency_results}
 To avoid confounding model capacity with operational latency, we explicitly distinguish two operational configurations:
 \begin{enumerate}
-    \item \textbf{C-STGB-Fast (Streaming Triage):} Designed for wire-speed inline transaction scoring. Evaluates degree-capped 1-hop causal neighborhoods ($K \le 15$) with pre-computed DuckDB descriptors. Achieves a streaming single-event latency of $0.45$\,ms (P99: $0.82$\,ms) and $428$\,MB peak VRAM ($31,200\text{ tx/s}$, Table~\ref{tab:systems_latency}). For real-time streaming scoring, Monte Carlo dropout is deactivated ($\text{eval mode}$), ensuring single-pass deterministic inference.
+    \item \textbf{C-STGB-Fast (Streaming Triage):} Designed for wire-speed inline transaction scoring. Evaluates degree-capped 1-hop causal neighborhoods ($K \le 15$) with pre-computed DuckDB descriptors. Achieves a streaming single-event latency of $0.45$\,ms (P99: $0.82$\,ms) and $428$\,MB peak VRAM ($31,200\text{ tx/s}$, Figure~\ref{fig:systems_latency}). For real-time streaming scoring, Monte Carlo dropout is deactivated ($\text{eval mode}$), ensuring single-pass deterministic inference.
     \item \textbf{C-STGB-Full (Full Forensics):} Uses multi-scale tri-band attention with 2-hop neighborhood expansion, achieving the benchmark accuracy in Table~\ref{tab:full_baseline_scorecard}. Single-event streaming latency is $2.10$\,ms ($3.30$\,ms batch-64 latency) with $894$\,MB peak VRAM and $19,400\text{ tx/s}$ throughput.
 \end{enumerate}
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{Operational Systems Scaling and Latency Profile across Model Configurations on Benchmark Hardware.}
-\label{tab:systems_latency}
-\renewcommand{\arraystretch}{0.85}
-\setlength{\tabcolsep}{3.0pt}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Configuration} & \textbf{Streaming Mean (P99)} & \textbf{Batch-64 Latency} & \textbf{Throughput} & \textbf{Peak VRAM} \\
-\midrule
-XGBoost (Tabular) & $0.18$\,ms & $0.95$\,ms & $68,400\text{ tx/s}$ & $112$\,MB \\
-\textbf{C-STGB (Fast-Path)} & $\mathbf{0.45\,\text{ms}~(0.82)}$ & $\mathbf{2.10\,\text{ms}}$ & $\mathbf{31,200\text{ tx/s}}$ & $\mathbf{428\,\text{MB}}$ \\
-\textbf{C-STGB (Full Tri-Band)} & $\mathbf{2.10\,\text{ms}~(3.30)}$ & $\mathbf{3.30\,\text{ms}}$ & $\mathbf{19,400\text{ tx/s}}$ & $\mathbf{894\,\text{MB}}$ \\
-Vanilla HGT (2020) & $8.40$\,ms & $18.20$\,ms & $3,500\text{ tx/s}$ & $1,420$\,MB \\
-TGN (Rossi \textit{et al.}) & $22.40$\,ms & $41.80$\,ms & $1,520\text{ tx/s}$ & $3,280$\,MB \\
-\bottomrule
-\end{tabular}%
-}
-\end{table}
+\includegraphics[width=\columnwidth]{figures/fig_table7_latency_pareto.pdf}
+\caption{Operational Systems Scaling and Latency Profile: Streaming single-event latency versus peak VRAM memory footprint and event throughput across evaluated configurations on benchmark hardware.}
+\label{fig:systems_latency}
+\end{figure}
 
 \subsection{Adversarial Threat Model \& Topological Camouflage Defense}
 \label{sec:robustness_results}

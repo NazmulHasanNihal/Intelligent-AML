@@ -13,7 +13,7 @@ The primary theoretical, empirical, and engineering milestones achieved in this 
     \item \textbf{Elimination of Imbalance Recall Collapse:} Raising standalone minority recall from $10.33\%$ to $90.10\%$ under extreme class skew ($\pi < 0.05\%$) via typology-clustered latent GraphSMOTE, $O(K_{\text{cand}} \cdot d)$ localized bilinear edge synthesis, and mass-balance flow conservation invariant enforcement.
     \item \textbf{Mathematical Finite-Sample Risk Guarantees:} Delivering distribution-free coverage guarantees ($\ge 99.0\%$) per class under non-stationary temporal drift via Class-Conditional CRC and Dvoretzky-Kiefer-Wolfowitz bounds, slashing human compliance review queues by \textbf{$>99.4\%$}.
     \item \textbf{Massive 14-Dataset Cross-Domain Benchmark:} Establishing top state-of-the-art performance across 9.53M+ entities and 9.53M+ transactions ($68.05\%$ Macro F1), outperforming prior GNN baselines by $+12.27\text{ pp}$ to $+54.16\text{ pp}$.
-    \item \textbf{Zero-Hallucination Multi-Agent Compliance Swarms:} Automating FinCEN Form 111 XML narrative generation with zero entity hallucinations, verified via deterministic AST grammar validators and Merkle tree SHA-256 cryptographic audit receipts aligned with interagency model risk management guidance (SR 26-2, superseding SR 11-7).
+    \item \textbf{Zero-Hallucination Multi-Agent Compliance Swarms:} Automating FinCEN Form 111 XML narrative generation with zero entity hallucinations, verified via deterministic AST grammar validators and Merkle tree SHA-256 cryptographic audit receipts aligned with interagency model risk management guidance (Federal Reserve SR 11-7 and SR 21-8).
 \end{enumerate}
 
 \section{Methodological and Regulatory Implications for Tier-1 Banking}
@@ -21,7 +21,7 @@ The findings of this research have profound implications for global financial in
 
 \begin{itemize}
     \item \textbf{Operational Cost Transformation:} By routing $>99.4\%$ of transactions through automated Straight-Through Clear (Tier 3) and High-Confidence Quarantine (Tier 1) tiers, C-STGB reduces operational compliance overhead by an estimated \$20M+ annually for a typical Tier-1 banking institution.
-    \item \textbf{Statutory Regulatory Determinism:} The replacement of heuristic black-box scoring with mathematically grounded conformal prediction sets ($\Gamma(u)$) and cryptographic Merkle tree receipts provides an auditable evidentiary trail that satisfies interagency model risk management guidance (SR 26-2) and EU AI Act compliance mandates.
+    \item \textbf{Statutory Regulatory Determinism:} The replacement of heuristic black-box scoring with mathematically grounded conformal prediction sets ($\Gamma(u)$) and cryptographic Merkle tree receipts provides an auditable evidentiary trail that satisfies interagency model risk management guidance (SR 11-7 / SR 21-8) and EU AI Act compliance mandates.
     \item \textbf{Real-Time Payment SLA Compliance:} With a streaming P99 latency of $2.10\text{ ms}$ ($0.45\text{ ms}$ Fast-Path mode) and peak memory consumption under $900\,\text{MB}$, C-STGB proves that deep spatio-temporal graph neural networks can be deployed within sub-10 ms real-time payment authorization webhooks.
 \end{itemize}
 
@@ -46,7 +46,7 @@ To transition C-STGB from research prototype to production core banking infrastr
 \begin{itemize}
     \item \textbf{Tier 3 Automated Clearance:} Authorize $>99.38\%$ of transactions for instantaneous Straight-Through Processing (STP) without human intervention.
     \item \textbf{Tier 1 Autonomous Quarantine:} Enforce automated asset holds on high-confidence illicit nodes ($\Gamma(u) = \{1\}$), autonomously generating FinCEN Form 111 XML filings with cryptographic Merkle receipts.
-    \item \textbf{Continuous Auditability:} Provide internal audit committees and regulatory examiners with append-only cryptographic verification logs satisfying interagency model risk management guidance (SR 26-2).
+    \item \textbf{Continuous Auditability:} Provide internal audit committees and regulatory examiners with append-only cryptographic verification logs satisfying interagency model risk management guidance (SR 11-7 / SR 21-8).
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -72,7 +72,7 @@ FATF Rec.~16 (Travel Rule) & Continuous originator/beneficiary tracing & Time-ca
 FATF Rec.~20 (SAR Filings) & Timely reporting of peeling transactions & Multi-agent FinCEN Form 111 XML engine \\
 EU AI Act (Arts.~13--15) & High-risk transparency \& oversight & Class-conditional CRC + GNNExplainer masks \\
 EU GDPR (Article 22) & Automated decision right to explanation & Conformal Tier-2 abstention + recourse sandbox \\
-US Guidance SR 26-2 & Formal model risk governance & DKW drift bounds + SHA-256 Merkle receipts \\
+US Guidance SR 11-7 / SR 21-8 & Formal model risk governance & DKW drift bounds + SHA-256 Merkle receipts \\
 US Bank Secrecy Act & Detection of sub-\$10k smurfing & Multi-scale tri-band attention + Hawkes process \\
 BFIU Circular 26 (MFS) & Sub-second agent banking surveillance & Sub-millisecond Fast-Path inference ($0.45\,\text{ms}$) \\
 \bottomrule
@@ -83,7 +83,7 @@ BFIU Circular 26 (MFS) & Sub-second agent banking surveillance & Sub-millisecond
 While C-STGB achieves exceptional empirical performance, a rigorous scientific assessment requires acknowledging its structural boundaries and operational assumptions:
 
 \subsection{The Multi-Institution Banking Observability Gap}
-A key empirical observation in our benchmark scorecard is the performance disparity between public blockchain datasets (\texttt{elliptic\_v1}, \texttt{elliptic\_v2}, \texttt{eth\_phishing}, where F1 exceeds $86.5\%$--$94.6\%$) and multi-bank fiat rails (\texttt{ibm\_amlsim\_li}, where F1 ranges from $15.8\%$ to $23.7\%$). In public blockchains, the global topology $\mathbf{A}$ is completely observable from the genesis block. In contrast, commercial banking privacy regulations (GDPR, GLBA, BSA) restrict individual institutions to observing only their internal 1-hop transactions, causing inter-bank laundering chains to appear as truncated, disconnected stubs. While canonical motif invariants ($\mathbf{z}_{\text{inv}}$) partially recover detection capacity, full resolution requires privacy-preserving cross-bank federated graph architectures.
+A key empirical observation in our benchmark scorecard is the performance disparity between public blockchain datasets (\texttt{elliptic\_v1}, \texttt{elliptic\_v2}, \texttt{dgraphfin}, where F1 exceeds $86.5\%$--$94.6\%$) and multi-bank fiat rails (\texttt{ibm\_amlsim\_li}, where F1 ranges from $15.8\%$ to $23.7\%$). In public blockchains, the global topology $\mathbf{A}$ is completely observable from the genesis block. In contrast, commercial banking privacy regulations (GDPR, GLBA, BSA) restrict individual institutions to observing only their internal 1-hop transactions, causing inter-bank laundering chains to appear as truncated, disconnected stubs. While canonical motif invariants ($\mathbf{z}_{\text{inv}}$) partially recover detection capacity, full resolution requires privacy-preserving cross-bank federated graph architectures.
 
 \subsection{Cold-Start Entities with Zero Historical Connectivity}
 GNN message passing inherently relies on relational neighborhood topology $\mathcal{N}(u)$. For virgin accounts ($\deg(u) = 0$), structural embeddings $\mathbf{h}_u^{(L)}$ provide minimal signal. While Evidence-Adaptive Graph-Tabular Fusion mitigates this by transferring inference weight to canonical flow invariants ($\alpha_u \to 0$, maintaining $89.60\%$ F1, a $+71.20\text{ pp}$ boost over standalone GNN's $18.40\%$ F1), virgin accounts with neither graph nor tabular history must rely on initial KYC risk scores.
@@ -95,24 +95,65 @@ Table~\ref{tab:limitations_future_work} provides a systematic taxonomy summarizi
 
 \begin{table}[htbp]
 \centering
+\small
 \caption{Systematic Taxonomy of Architectural Limitations, Operational Threats, Mitigations, and Research Horizons.}
 \label{tab:limitations_future_work}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{3.2cm}p{3.8cm}p{4.2cm}p{3.8cm}}
+\begin{tabularx}{\textwidth}{p{4.2cm}X}
 \toprule
-\textbf{Architectural Limitation} & \textbf{Operational Risk / Threat} & \textbf{Mitigation in C-STGB} & \textbf{Remaining Research Horizon} \\
+\textbf{Architectural Limitation} & \textbf{Operational Threat, Current C-STGB Mitigation, and Remaining Horizon} \\
 \midrule
-Inter-Bank Visibility Gap & Incomplete subgraphs across partitioned banking silos & 12-D canonical flow invariants ($\mathbf{z}_{\text{inv}}$) detect local structuring stubs & Privacy-preserving federated Split-GNN with differential privacy \\
+\textbf{1. Inter-Bank Visibility Gap} & \textit{Threat:} Fragmented, incomplete subgraphs across isolated commercial banking silos. \newline
+\textit{Mitigation:} 12-D canonical flow invariants ($\mathbf{z}_{\text{inv}}$) detect local structuring stubs ($+71.2\,\text{pp}$ F1). \newline
+\textit{Remaining Horizon:} Privacy-preserving federated Split-GNN with homomorphic encryption. \\
 \midrule
-Cold-Start / Virgin Accounts ($\deg(u) = 0$) & Vanishing neighborhood representation in early life & Evidence-adaptive gating transfers weight to tabular invariants ($\alpha_u \to 0$) & Contrastive identity priors from onboarding KYC \& behavioral telemetry \\
+\textbf{2. Cold-Start Virgin Accounts} & \textit{Threat:} Vanishing relational neighborhood representations for accounts with zero history ($\deg=0$). \newline
+\textit{Mitigation:} Evidence-adaptive gating transfers weight dynamically to tabular physical invariants ($\alpha_u \to 0$). \newline
+\textit{Remaining Horizon:} Contrastive self-supervised identity priors pre-trained on onboarding KYC metadata. \\
 \midrule
-Cross-Chain / DEX Bridging & Graph topological disconnections across blockchain protocols & Multi-band temporal harmonic kernel tracks off-chain latency matching & Dynamic cross-chain hypergraph entity resolution \\
+\textbf{3. Cross-Chain DEX Bridging} & \textit{Threat:} Topological disconnections across heterogeneous blockchain ledgers and mixing pools. \newline
+\textit{Mitigation:} Multi-band continuous harmonic attention tracks off-chain temporal latency matching. \newline
+\textit{Remaining Horizon:} Dynamic cross-chain hypergraph alignment and multi-rail causal reconciliation. \\
 \midrule
-Extreme Concept Drift \& Adversarial Shifts & Calibration degradation under novel structural laundering attacks & Rolling Class-Conditional CRC calibration with DKW non-conformity drift bounds & Continuous self-supervised online graph adaptation without human labels \\
+\textbf{4. Non-Stationary Concept Drift} & \textit{Threat:} Statistical miscalibration under emerging, previously unobserved laundering typologies. \newline
+\textit{Mitigation:} Rolling class-conditional ACI calibration with DKW finite-sample drift guarantees. \newline
+\textit{Remaining Horizon:} Continuous online graph meta-learning without requiring manual investigative labels. \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabularx}
 \end{table}
+
+\section{Consolidated Threats to Validity}
+Table~\ref{tab:threats_validity} consolidates the threats to empirical and construct validity identified throughout this research, detailing their classification and corresponding architectural mitigations.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Consolidated Methodological Threats to Validity and Architectural Mitigations.}
+\label{tab:threats_validity}
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Threat Domain} & \textbf{Specific Threat Description} & \textbf{C-STGB Architectural Mitigation} \\
+\midrule
+\textbf{Internal Validity} & Temporal lookahead bias and label leakage & Strict 4-way chronological splitting ($\mathcal{D}_{\text{train}} < \mathcal{D}_{\text{val}} < \mathcal{D}_{\text{cal}} < \mathcal{D}_{\text{test}}$); prospective seeds assigned $\mathbf{s}_{\text{seed}} \equiv 0.0$. \\
+& Hyperparameter tuning overfitting & All baselines and C-STGB tuned via Tree-Structured Parzen Estimator (TPE) over 50 Bayesian trials restricted to $\mathcal{D}_{\text{val}}$. \\
+\midrule
+\textbf{External Validity} & Synthetic vs.\ real-world data fidelity & Validated across 14 networks spanning public UTXO/EVM blockchains, live fiat banking simulators, and credit card fraud streams. \\
+& Generalization to unobserved banks & Evaluated across multi-bank rails (\texttt{saml\_d}, \texttt{dgraphfin}) and zero-shot cross-domain transfer tasks. \\
+\midrule
+\textbf{Construct Validity} & Minority class evaluation metric distortion & Mandatory reporting of Precision-Recall AUC (PR-AUC) and minority F1-score rather than distorted ROC-AUC or accuracy. \\
+& Uncalibrated point risk thresholds & Elimination of heuristic $\tau=0.50$ via Bayes risk optimization and class-conditional Conformal Risk Control. \\
+\midrule
+\textbf{Conclusion Validity} & Random seed selection anomalies & Compulsory evaluation over 5 independent locked seeds; significance certified via paired Wilcoxon tests ($W=105.0, p < 0.001$). \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Negative Results and Architectural Explorations}
+To foster transparent scientific inquiry, we document three plausible architectural hypotheses that failed during initial experimental prototyping:
+\begin{enumerate}
+    \item \textbf{Graph Attention Networks (GAT / GATv2) Over-Smoothing under Camouflage:} We hypothesized that multi-head self-attention would automatically learn to discount camouflage edges. Empirically, GAT allocated up to $42\%$ of attention weight to high-degree utility hubs, aggravating feature over-smoothing and collapsing minority F1 to $31.35\%$ on Elliptic-v1. Explicit MLP edge-trust filtering ($\hat{g}_{ij}$) proved strictly necessary.
+    \item \textbf{Standard Marginal Conformal Prediction under Class Skew:} Marginal conformal prediction proved completely non-viable for industrial compliance. Because the marginal non-conformity quantile is dominated by the $99.95\%$ benign majority, the coverage guarantee held almost exclusively for benign accounts ($99.92\%$) while illicit coverage collapsed to $84.20\%$, while inflating ambiguous prediction sets to $18.40\%$ of volume. Only class-conditional calibration ($\hat{q}^{(1)}$) achieved statutory compliance.
+    \item \textbf{Static Exponential Time Decay on Dormant Layering:} Standard exponential kernels ($\exp(-\lambda \Delta t)$) completely vanished on 30- to 90-day dormant holding chains ($\exp(-0.25 \times 720) \to 0$). Only the continuous tri-band harmonic attention kernel ($w(\Delta t)$) successfully bridged extended multi-month dormancy without losing high-frequency micro-burst sensitivity.
+\end{enumerate}
 
 \section{Future Research Roadmap}
 Building upon the theoretical and empirical foundations established in this dissertation, we outline four promising directions for future inquiry:

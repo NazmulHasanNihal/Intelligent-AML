@@ -36,7 +36,7 @@ if not TECTONIC_EXE.exists():
 EAAI_TARGETS = [
     {
         "suite": "Elsevier EAAI",
-        "name": "EAAI Blinded Main Manuscript (cas-sc)",
+        "name": "EAAI Blinded Main Manuscript (cas-dc)",
         "cwd": BASE_DIR / "papers" / "EAAI_Research_Paper",
         "file": "Anonymized_Manuscript.tex",
         "out_pdf": BASE_DIR / "papers" / "EAAI_Research_Paper" / "Anonymized_Manuscript.pdf"

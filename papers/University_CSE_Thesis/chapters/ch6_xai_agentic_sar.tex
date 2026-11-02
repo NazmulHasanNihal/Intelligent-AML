@@ -4,13 +4,14 @@
 \section{The Explainability and Regulatory Auditability Imperative}
 In statutory Anti-Money Laundering (AML) enforcement, raw classification scores are legally insufficient for asset seizure or regulatory filings. Regulatory mandates—including the interagency supervisory guidance on Model Risk Management (Federal Reserve SR 11-7 and SR 21-8), the European Union AI Act (High-Risk AI Systems Requirements), and Financial Crimes Enforcement Network (FinCEN) regulations—mandate that every Suspicious Activity Report (SAR) must contain an auditable, human-interpretable narrative detailing the factual transaction chain, typological indicators, and mathematical rationale.
 
-To bridge machine learning predictions with statutory legal compliance, C-STGB integrates a post-hoc \textbf{GNNExplainer topological attribution engine} coupled with an \textbf{autonomous Multi-Agent Forensic Swarm} governed by deterministic Abstract Syntax Tree (AST) grammar validators and cryptographic SHA-256 Merkle tree audit trails.
+To bridge machine learning predictions with statutory legal compliance, C-STGB integrates a post-hoc \textbf{GNNExplainer topological attribution engine} coupled with an \textbf{autonomous Multi-Agent Forensic Swarm} governed by deterministic Abstract Syntax Tree (AST) grammar validators and cryptographic SHA-256 Merkle tree audit trails (Figure~\ref{fig:forensic-swarm}).
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/fig20_multi_agent_forensic_swarm.pdf}
-\caption{Autonomous Multi-Agent Forensic Swarm sequence communication protocol: (1) Lead Forensic Coordinator; (2) Subgraph Topology Specialist; (3) FinCEN SAR Drafter Agent; and (4) Compliance Rule Verifier Agent with deterministic AST grammar parsing, Pydantic validation retry loop, and SHA-256 Merkle audit receipts under Federal Reserve SR 11-7 and SR 21-8 model risk governance.}
-\label{fig:ch6_swarm_architecture}
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig_forensic_swarm.pdf}
+  \caption{Multi-agent forensic reasoning and dual-governance pipeline. The orchestrator hydrates the alert context for the Investigator, Drafter and Auditor agents. The AST compiler accepts a dossier only if every entity is grounded in the evidence subgraph ($V(T)\subseteq V_{\mathrm{sub}}$, Proposition~\ref{prop:anti_hallucination}); rejected drafts return to the Drafter. Verified dossiers pass the maker--checker gate and are sealed in the WORM vault.}
+  \label{fig:forensic-swarm}
+  \label{fig:ch6_swarm_architecture}
 \end{figure}
 
 \section{Post-Hoc Topological Attribution with GNNExplainer}

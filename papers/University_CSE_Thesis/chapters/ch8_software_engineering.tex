@@ -4,13 +4,14 @@
 \section{Introduction and Production System Architecture}
 Deploying deep graph neural networks in enterprise Tier-1 financial institutions requires strict adherence to software engineering standards, high availability, sub-millisecond streaming throughput, comprehensive automated testing, and statutory compliance auditing. 
 
-Figure~\ref{fig:ch8_microservice} illustrates the enterprise microservice topology of the \textbf{Intelligent-AML (C-STGB)} production deployment.
+Figure~\ref{fig:system-architecture} illustrates the enterprise system architecture of the \textbf{Intelligent-AML (C-STGB)} production deployment.
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/fig8_1_fastapi_k8s_topology.pdf}
-\caption{Enterprise microservice deployment topology of Intelligent-AML: (1) High-Throughput Ingestion Gateway; (2) DuckDB / Arrow In-Memory Analytical Engine; (3) PyTorch Geometric C-STGB Inference Worker Pool; (4) Multi-Agent SAR Compliance Engine; and (5) Model Governance (SR 11-7 / SR 21-8) Cryptographic Audit Ledger.}
-\label{fig:ch8_microservice}
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig_system_architecture.pdf}
+  \caption{System architecture of Intelligent-AML. Payment rails stream through Redpanda/Kafka into the DuckDB + PyArrow engine, which computes the 12-D canonical invariants and serves the LRU ego-graph cache. The C-STGB core scores each entity, class-conditional CRC routes it to Tier~1/2/3, and Tier~1/2 escalations go to the four-agent forensic swarm and the governance and WORM-vault layer.}
+  \label{fig:system-architecture}
+  \label{fig:ch8_microservice}
 \end{figure}
 
 \section{Asynchronous FastAPI Streaming Ingestion Endpoints}

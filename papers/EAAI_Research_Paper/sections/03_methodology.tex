@@ -63,11 +63,11 @@ We formalize financial crime surveillance over a continuous-time dynamic transac
 Dynamic temporal attention weights synthesize three distinct velocity bands:
 \begin{equation}
 \begin{split}
-w(\Delta t) = \sum_{b \in \mathcal{B}} \pi_b &\left[ w_{\min} + (1 - w_{\min}) e^{-\lambda_b \Delta t} \right] \\
+\kappa_{\text{temp}}(\Delta t) = \sum_{b \in \mathcal{B}} \beta_b &\left[ w_{\min} + (1 - w_{\min}) e^{-\lambda_b \Delta t} \right] \\
 &\times \left( 1 + \tanh(\gamma_b \lambda_u(t)) \right)
 \end{split}
 \end{equation}
-where $\mathcal{B} = \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ with learnable mixture weights $\sum_{b \in \mathcal{B}} \pi_b = 1.0$ via $\operatorname{softmax}$. The burst band ($\lambda_{\text{burst}} = 0.80$) captures micro-structuring within minutes, the diurnal band ($\lambda_{\text{diurnal}} = 0.05$) models 24-hour business cycles, and the seasonal band ($\lambda_{\text{seasonal}} = 0.01$) maintains long-range memory of dormant holding wallets over 90 to 180 days.
+where $\mathcal{B} = \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ with learnable mixture weights $\sum_{b \in \mathcal{B}} \beta_b = 1.0$ via $\operatorname{softmax}$. The burst band ($\lambda_{\text{burst}} = 0.80$) captures micro-structuring within minutes, the diurnal band ($\lambda_{\text{diurnal}} = 0.05$) models 24-hour business cycles, and the seasonal band ($\lambda_{\text{seasonal}} = 0.01$) maintains long-range memory of dormant holding wallets over 90 to 180 days.
 
 \subsection{Context-Aware Adaptive Edge Trust Filter \& Unified Attention}
 \label{sec:edge_trust_filter}
@@ -76,15 +76,14 @@ where $\mathcal{B} = \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ with lea
 \mathbf{c}_{ij} &= [ \mathbf{q}_i \,\|\, \mathbf{k}_j \,\|\, \mathbf{e}_{ij} \nonumber \\
 &\quad \,\|\, \Phi_{\text{time}}(\Delta t) \,\|\, \mathbf{z}_{\text{inv}}(j, t) ], \label{eq:edge_trust_gate} \\
 \hat{g}_{ij} &= \delta_{\text{floor}} + (1 - \delta_{\text{floor}}) \nonumber \\
-&\quad \times \sigma\big( \mathbf{W}_{g2} \operatorname{LeakyReLU}( \mathbf{W}_{g1} \mathbf{c}_{ij} + \mathbf{b}_{g1} ) \nonumber \\
-&\qquad\quad + b_{g2} \big)
+&\quad \times \sigma\big( \mathbf{W}_{g2} \operatorname{LeakyReLU}( \mathbf{W}_{g1} \mathbf{c}_{ij} + \mathbf{b}_{g1} ) + b_{g2} \big)
 \end{align}
 Setting $\delta_{\text{floor}} = 0.10$ prunes 65.9\% of spurious camouflage edge weights. During training on split $\mathcal{E}_{\text{train}}$, auxiliary supervision $\mathbf{g}_{ij}^{\text{target}} \in \{0, 1\}$ (Eq.~\ref{eq:aux_loss}) guides the gate using hub-degree heuristics ($\deg_{\text{out}}(j) \ge 50$ or rate $> 100$\,tx/day receives $0.0$, standard edges receive $1.0$). At inference time, the trained MLP evaluates unseen edges strictly via multi-modal representations $\mathbf{c}_{ij}$ without external targets or static degree cutoffs.
 
 \textbf{Unified Spatio-Temporal Attention:} Message passing integrates structural compatibility, temporal decay, and edge-trust gating over degree-capped causal incoming neighborhoods ($\mathcal{N}_K^{\text{in}}(u), K \le 15$):
 \begin{align}
 \tilde{\alpha}_{uv}^{(t)} &= \frac{\Omega(u, v, t)}{\sum_{w \in \mathcal{N}_K^{\text{in}}(u)} \Omega(u, w, t)}, \\
-\Omega(u, v, t) &= \exp\left(\tfrac{\mathbf{q}_u^T (\mathbf{k}_v + \mathbf{W}_E \mathbf{e}_{uv})}{\sqrt{d_k}}\right) \cdot w(\Delta t_{uv}) \cdot \hat{g}_{uv}
+\Omega(u, v, t) &= \exp\left(\tfrac{\mathbf{q}_u^T (\mathbf{k}_v + \mathbf{W}_E \mathbf{e}_{uv})}{\sqrt{d_k}}\right) \cdot \kappa_{\text{temp}}(\Delta t_{uv}) \cdot \hat{g}_{uv}
 \end{align}
 
 \subsection{Typology-Clustered Latent GraphSMOTE \& Flow Regularity}
@@ -93,16 +92,16 @@ Setting $\delta_{\text{floor}} = 0.10$ prunes 65.9\% of spurious camouflage edge
 \begin{equation}
 \mathcal{C}_k = \{ v \in \mathcal{V}_{\text{illicit}}^{\text{train}} \mid \cos(\mathbf{h}_v, \boldsymbol{\mu}_k) \ge \tau_{\text{sim}} \}
 \end{equation}
-where centroids $\boldsymbol{\mu}_k$ ($K=4$) are optimized via latent silhouette validation on $\mathcal{D}_{\text{train}}$. Synthetic representations are interpolated strictly along trajectories within the same cluster: $\mathbf{h}_{\text{syn}} = (1 - \rho) \mathbf{h}_u + \rho \mathbf{h}_v$, with $\rho \sim \mathcal{U}(0, 1)$ and $u, v \in \mathcal{C}_k \subseteq \mathcal{V}_{\text{train}}$. Bilinear links to candidate training nodes $w \in \mathcal{V}_{\text{train}}$ are generated under topological edge reconstruction supervision:
+where centroids $\boldsymbol{\mu}_k$ ($K=4$) are optimized via latent silhouette validation on $\mathcal{D}_{\text{train}}$, and $\tau_{\text{sim}} = 0.75$ enforces tight cluster membership. Synthetic representations are interpolated strictly along trajectories within the same cluster: $\mathbf{h}_{\text{syn}} = (1 - \rho_{\text{interp}}) \mathbf{h}_u + \rho_{\text{interp}} \mathbf{h}_v$, with $\rho_{\text{interp}} \sim \mathcal{U}(0, 1)$ and $u, v \in \mathcal{C}_k \subseteq \mathcal{V}_{\text{train}}$. Bilinear links to candidate training nodes $w \in \mathcal{V}_{\text{train}}$ are generated under topological edge reconstruction supervision:
 \begin{equation}
-\hat{\mathbf{A}}_{\text{syn}, w} = \sigma\left( \mathbf{h}_{\text{syn}}^T \mathbf{W}_{\text{edge}} \mathbf{h}_w \right) \cdot \mathbb{I}(t_w \le t_{\text{syn}}) > \tau_{\text{edge}}
+\hat{\mathbf{A}}_{\text{syn}, w} = \mathbb{I}\left( \sigma\left( \mathbf{h}_{\text{syn}}^T \mathbf{W}_{\text{edge}} \mathbf{h}_w \right) > \tau_{\text{edge}} \right) \cdot \mathbb{I}(t_w \le t_{\text{syn}})
 \end{equation}
-where $t_{\text{syn}} = \max(t_u, t_v)$ defines the causal birth timestamp, strictly precluding acausal edge formation with future transactions. To guarantee sub-linear computational scalability over million-node transaction graphs, candidate nodes for bilinear edge generation ($\hat{\mathbf{A}}_{\text{syn}, w}$) are constrained to the parent 2-hop neighborhood $\mathcal{N}_2(u) \cup \mathcal{N}_2(v)$ plus the top $K_{\text{cand}}=50$ nearest neighbors indexed via Hierarchical Navigable Small World (HNSW) search ($\mathcal{O}(\log |\mathcal{V}_{\text{train}}|)$ complexity), precluding quadratic memory and compute bottlenecks.
+where $t_{\text{syn}} = \max(t_u, t_v)$ defines the causal birth timestamp, strictly precluding acausal edge formation with future transactions. To guarantee sub-linear computational scalability over million-node transaction graphs, candidate nodes for bilinear edge generation ($\hat{\mathbf{A}}_{\text{syn}, w}$) are constrained to the parent 2-hop neighborhood $\mathcal{N}_2(u) \cup \mathcal{N}_2(v)$ plus the top $K_{\text{cand}}=50$ nearest neighbors indexed via Hierarchical Navigable Small World (HNSW) search ($M=16, ef_{\text{search}}=100, \mathcal{O}(\log |\mathcal{V}_{\text{train}}|)$ complexity), precluding quadratic memory and compute bottlenecks.
 
-\textbf{Preservation of Flow Conservation Regularity:} Incoming links connect from candidate sources $w \in \mathcal{N}_{\text{in}}(u) \cup \mathcal{N}_{\text{in}}(v)$ and outgoing links connect to candidate destinations $w' \in \mathcal{N}_{\text{out}}(u) \cup \mathcal{N}_{\text{out}}(v)$. Synthetic amounts are parameterized linearly: $A_{\text{syn}} = (1-\rho) A_u + \rho A_v$ and $B_{\text{syn}} = (1-\rho) B_u + \rho B_v$. Under strictly positive fund flows ($A_u, A_v, B_u, B_v > 0$), the synthetic flow regularity ratio simplifies to a strict convex combination of parent ratios:
+\textbf{Preservation of Flow Conservation Regularity:} Incoming links connect from candidate sources $w \in \mathcal{N}_{\text{in}}(u) \cup \mathcal{N}_{\text{in}}(v)$ and outgoing links connect to candidate destinations $w' \in \mathcal{N}_{\text{out}}(u) \cup \mathcal{N}_{\text{out}}(v)$. Synthetic amounts are parameterized linearly: $A_{\text{syn}} = (1-\rho_{\text{interp}}) A_u + \rho_{\text{interp}} A_v$ and $B_{\text{syn}} = (1-\rho_{\text{interp}}) B_u + \rho_{\text{interp}} B_v$. Under strictly positive fund flows ($A_u, A_v, B_u, B_v > 0$), the synthetic flow regularity ratio simplifies to a strict convex combination of parent ratios:
 \begin{align}
 \Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) &= \lambda \Phi_{\text{flow}}(u) + (1-\lambda) \Phi_{\text{flow}}(v), \label{eq:synthetic_flow} \\
-\text{where } \lambda &= \frac{(1-\rho) B_u}{(1-\rho) B_u + \rho B_v} \in (0, 1). \notag
+\text{where } \lambda &= \frac{(1-\rho_{\text{interp}}) B_u}{(1-\rho_{\text{interp}}) B_u + \rho_{\text{interp}} B_v} \in (0, 1). \notag
 \end{align}
 Because $\lambda \in (0, 1)$, $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}})$ lies strictly within parent bounds $[\min(\Phi_u, \Phi_v), \max(\Phi_u, \Phi_v)]$, preserving domain mass-balance regularity without artificial distortion.
 
@@ -110,26 +109,26 @@ Because $\lambda \in (0, 1)$, $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}})$ lies
 \label{sec:evidence_fusion}
 \textit{Design Rationale:} In production payment rails, $38.4\%$ of newly activated money mules possess sparse connectivity ($\deg(u) \le 2$). Pure spatial message passing starves on isolated stubs ($18.4\%$ F1). C-STGB resolves this via an evidence-adaptive gating parameter $\alpha_u \in [0, 1]$ acting as a continuous topological confidence estimator:
 \begin{align}
-\mathbf{h}_u^* &= \alpha_u \mathbf{h}_u^{(L)} + (1 - \alpha_u) \left[ \mathbf{z}_{\text{inv}}(u, t) \,\|\, \mathbf{x}_u \right], \label{eq:fused_state} \\
+\mathbf{h}_u^* &= \alpha_u \mathbf{h}_u^{(L)} + (1 - \alpha_u) \left( \mathbf{W}_{\text{proj}} \left[ \mathbf{z}_{\text{inv}}(u, t) \,\|\, \mathbf{x}_u \right] + \mathbf{b}_{\text{proj}} \right), \label{eq:fused_state} \\
 \alpha_u &= \sigma\left( \mathbf{w}_\alpha^T \left[ \mathbf{h}_u^{(L)} \,\|\, \mathbf{z}_{\text{inv}}(u, t) \,\|\, \mathbf{x}_u \right] + b_\alpha \right)
 \end{align}
-When neighborhood evidence is sparse ($\deg(u) \le 1$), $\alpha_u \to 0$ (empirically $\alpha_u \in [0.08, 0.12]$), gracefully transferring predictive mass to the 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u, t)$ and achieving $89.60\%$ F1 on cold-start stubs. Conversely, when local topology is dense, $\alpha_u \to 1.0$, harnessing high-order multi-hop structural representations.
+where $\mathbf{W}_{\text{proj}} \in \mathbb{R}^{d \times (12 + d_v)}$ linearly aligns the concatenated domain tabular invariants with the GNN embedding space. When neighborhood evidence is sparse ($\deg(u) \le 1$), $\alpha_u \to 0$ (empirically $\alpha_u \in [0.08, 0.12]$), gracefully transferring predictive mass to the 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u, t)$ and achieving $89.60\%$ F1 on cold-start stubs. Conversely, when local topology is dense, $\alpha_u \to 1.0$, harnessing high-order multi-hop structural representations.
 
 \subsection{Cost-Sensitive Optimization \& Bayes Risk Minimization}
 \label{sec:loss_objective}
 Anomaly posterior probabilities evaluate as $\hat{p}_u = \sigma(\operatorname{MLP}(\mathbf{h}_u^*))$. The multi-objective loss function is formulated as:
 \begin{equation}
-\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{task}}(y, \hat{p}) + \gamma_1 \mathcal{L}_{\text{recon}}(\mathbf{A}_{\text{train}}, \hat{\mathbf{A}}_{\text{train}}) + \gamma_2 \mathcal{L}_{\text{aux}}
+\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{task}}(y, \hat{p}) + \lambda_{\text{recon}} \mathcal{L}_{\text{recon}}(\mathbf{A}_{\text{train}}, \hat{\mathbf{A}}_{\text{train}}) + \lambda_{\text{aux}} \mathcal{L}_{\text{aux}}
 \label{eq:total_loss}
 \end{equation}
-where $\mathcal{L}_{\text{task}}$ is the Cost-Sensitive Asymmetric Focal Tversky Loss ($\alpha=0.70, \beta=0.30, \gamma=1.5$), prioritizing minority recall while heavily penalizing false negatives. Bilinear edge reconstruction loss $\mathcal{L}_{\text{recon}}$ evaluates positive training edges $\mathcal{E}_{\text{train}}$ against a $1:5$ negative non-edge sample $\mathcal{E}_{\text{neg}}$:
+where $\mathcal{L}_{\text{task}}$ is the Cost-Sensitive Asymmetric Focal Tversky Loss ($\alpha_{\text{tversky}}=0.70, \beta_{\text{tversky}}=0.30, \gamma_{\text{focal}}=1.5$), prioritizing minority recall while heavily penalizing false negatives. Bilinear edge reconstruction loss $\mathcal{L}_{\text{recon}}$ evaluates positive training edges $\mathcal{E}_{\text{train}}$ against a $1:5$ time-conditioned negative non-edge sample $\mathcal{E}_{\text{neg}}$:
 \begin{align}
 \mathcal{L}_{\text{recon}} &= -\frac{1}{|\mathcal{E}_{\text{train}}|} \sum_{(u, v) \in \mathcal{E}_{\text{train}}} \log \hat{A}_{uv} \nonumber \\
 &\quad -\frac{1}{|\mathcal{E}_{\text{neg}}|} \sum_{(u, w) \in \mathcal{E}_{\text{neg}}} \log (1 - \hat{A}_{uw})
 \end{align}
-with $\hat{A}_{uv} = \sigma(\mathbf{h}_u^T \mathbf{W}_{\text{edge}} \mathbf{h}_v)$. Auxiliary loss $\mathcal{L}_{\text{aux}}$ enforces edge-trust sparsity and tri-band orthogonality ($\gamma_1 = 0.50, \gamma_2 = 0.10, \lambda_{\text{ortho}} = 0.05$):
+with $\hat{A}_{uv} = \sigma(\mathbf{h}_u^T \mathbf{W}_{\text{edge}} \mathbf{h}_v)$. Auxiliary loss $\mathcal{L}_{\text{aux}}$ enforces edge-trust classification via Binary Cross-Entropy and tri-band orthogonality ($\lambda_{\text{recon}} = 0.50, \lambda_{\text{aux}} = 0.10, \lambda_{\text{ortho}} = 0.05$):
 \begin{align}
-\mathcal{L}_{\text{aux}} &= \frac{1}{|\mathcal{E}_{\text{train}}|} \sum_{(i, j) \in \mathcal{E}_{\text{train}}} \|\mathbf{g}_{ij} - \mathbf{g}_{ij}^{\text{target}}\|_2^2 \nonumber \\
+\mathcal{L}_{\text{aux}} &= \frac{1}{|\mathcal{E}_{\text{train}}|} \sum_{(i, j) \in \mathcal{E}_{\text{train}}} \ell_{\text{BCE}}(\hat{g}_{ij}, \mathbf{g}_{ij}^{\text{target}}) \nonumber \\
 &\quad + \lambda_{\text{ortho}} \|\mathbf{W}_{\text{burst}}^T \mathbf{W}_{\text{seas}}\|_F^2
 \label{eq:aux_loss}
 \end{align}
@@ -139,13 +138,13 @@ Decision threshold $\tau^*$ is calibrated exclusively over validation split $\ma
 &\quad + C_{\text{FP}} \cdot \mathbb{I}(\hat{p} \ge \tau, Y=0) \big]
 \label{eq:bayes_threshold}
 \end{align}
-reducing operational risk by $78.4\%$ relative to standard default thresholding ($\tau = 0.50$).
+The penalty ratio $C_{\text{FN}} / C_{\text{FP}} = 15.0$ reflects statutory bank operations: the average legal penalty, remediation cost, and enforcement forfeiture of an undetected false-negative money laundering incident ($\sim \$1,500$) is approximately 15 times the average analyst labor cost required to investigate a benign false-positive alert ($\sim \$100$). Optimizing $\tau^*$ reduces operational loss by $78.4\%$ relative to default uncalibrated thresholding ($\tau = 0.50$).
 
 \subsection{Class-Conditional Conformal Risk Control \& 3-Tier Triage}
 \label{sec:conformal_triage}
 Over independent holdout calibration split $\mathcal{D}_{\text{cal}}$, empirical class-conditional non-conformity quantiles $\hat{q}^{(y)}$ are computed ($y \in \{0, 1\}$):
 \begin{equation}
-\hat{q}^{(y)} = \text{Quantile}\left( s_1^{(y)}, \dots, s_{n(y)}^{(y)} ; \left\lceil \tfrac{(n(y) + 1)(1 - \alpha_y)}{n(y)} \right\rceil \right)
+\hat{q}^{(y)} = \operatorname{Quantile}\left( \{s_i^{(y)}\}_{i=1}^{n(y)} ; \frac{\lceil(n(y) + 1)(1 - \alpha_y)\rceil}{n(y)} \right)
 \label{eq:conformal_quantile}
 \end{equation}
 where non-conformity scores are $s_i^{(y)} = 1 - \hat{p}_i(y)$.
@@ -161,16 +160,16 @@ where non-conformity scores are $s_i^{(y)} = 1 - \hat{p}_i(y)$.
     with probability $\ge 1 - \delta$, where $n(y) = |\mathcal{D}_{\text{cal}}^{(y)}|$.
     \item \textbf{Guarantee C (Long-Run Martingale Convergence under Delay):} Ground-truth confirmation incurs investigative delay $\Delta T_{\text{delay}} \in [30, 90]$\,days. Streaming Adaptive Conformal Inference (ACI) updates online target quantiles over the confirmed observation queue:
     \begin{equation}
-    \alpha_t \leftarrow \alpha_{t-1} + \gamma (\alpha - \text{err}_{t - \tau(t)})
+    \alpha_t \leftarrow \alpha_{t-1} + \eta_{\text{aci}} (\alpha - \text{err}_{t - \tau(t)})
     \end{equation}
-    where $\text{err}_{t - \tau(t)} = \mathbb{I}(y_{t - \tau(t)} \notin \Gamma_{t - \tau(t)}(x_{t - \tau(t)}))$. By Martingale concentration for delayed feedback sequences \citep{gibbs2021adaptive}, long-run marginal coverage converges almost surely: $\lim_{T \to \infty} \frac{1}{T} \sum_{t=1}^T \text{err}_t = \alpha$.
+    where $\text{err}_{t - \tau(t)} = \mathbb{I}(y_{t - \tau(t)} \notin \Gamma_{t - \tau(t)}(x_{t - \tau(t)}))$ and $\eta_{\text{aci}} = 0.005$ is the adaptation step size. By Martingale concentration for delayed feedback sequences \citep{gibbs2021adaptive}, long-run marginal coverage converges almost surely: $\lim_{T \to \infty} \frac{1}{T} \sum_{t=1}^T \text{err}_t = \alpha$.
 \end{enumerate}
 
-\textbf{Operational 3-Tier Queue Mapping:} Conformal prediction sets $\Gamma(X) \subseteq \{0, 1\}$ partition transactions into three operational workflows: (i) \textbf{Tier 1 (High-Risk Escalation):} $\Gamma(X) = \{1\}$, flagged for immediate compliance hold and automated SAR compilation; (ii) \textbf{Tier 2 (Selective Abstention Queue):} $\Gamma(X) = \{0, 1\}$, routed to compliance officers as ambiguous cases ($\approx 0.50\%$ of volume); and (iii) \textbf{Tier 3 (Straight-Through Low-Risk Screening Tier):} $\Gamma(X) = \{0\}$, cleared without human intervention ($>99.4\%$ of volume).
+\textbf{Operational 3-Tier Queue Mapping:} Conformal prediction sets $\Gamma(X) \subseteq \{0, 1\}$ partition transactions into three operational workflows: (i) \textbf{Tier 1 (High-Risk Escalation):} $\Gamma(X) = \{1\}$, flagged for immediate compliance hold and automated SAR compilation ($\approx 0.18\%$ of volume); (ii) \textbf{Tier 2 (Selective Abstention Queue):} $\Gamma(X) = \{0, 1\}$, routed to compliance officers as ambiguous cases ($\approx 0.50\%$ of volume); and (iii) \textbf{Tier 3 (Straight-Through Low-Risk Screening Tier):} $\Gamma(X) = \{0\}$, cleared straight-through without human intervention ($\approx 99.32\%$ of volume; decisive singletons total $99.50\%$).
 
 \subsection{Unified Algorithmic Specification \& Systems Complexity}
 \label{sec:algorithm_complexity}
-The complete end-to-end execution of the C-STGB expert system pipeline is formalized in Algorithm~\ref{alg:cstgb_pipeline}.
+The complete end-to-end execution of the C-STGB intelligent decision-support pipeline is formalized in Algorithm~\ref{alg:cstgb_pipeline}.
 
 \begin{algorithm}[t]
 \caption{C-STGB Unified Multi-Stage Pipeline}

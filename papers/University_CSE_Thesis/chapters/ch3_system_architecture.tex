@@ -106,7 +106,41 @@ The concatenated 12-dimensional invariant representation:
 \begin{equation}
 \mathbf{z}_{\text{inv}}(u, t) = \left[ \tilde{\Phi}_{\text{flow}}, \Psi_{\text{asym}}, \lambda_u(t), \mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}, \mu_A, \sigma_A^2, \gamma_A, \kappa_A, v_A, \nu_{\text{io}}, \sigma_{\Delta t} \right]^T \in \mathbb{R}^{12}
 \end{equation}
-provides a universal, schema-agnostic feature foundation.
+provides a universal, schema-agnostic feature foundation. Table~\ref{tab:12d_invariants_spec} formalizes the complete structural, dimensional, and operational taxonomy of all 12 canonical invariants.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Taxonomy and Formal Specification of the 12-Dimensional Canonical Spatio-Temporal Invariant Vector $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$.}
+\label{tab:12d_invariants_spec}
+\begin{tabularx}{\textwidth}{llcX}
+\toprule
+\textbf{Feature Group} & \textbf{Symbol} & \textbf{Dim} & \textbf{Operational Financial AML Meaning} \\
+\midrule
+\multirow{2}{*}{\textbf{Group 1: Mass Flow Balance}} 
+& $\tilde{\Phi}_{\text{flow}}(u, t)$ & 1 & Log-normalized flow conservation ratio; identifies conduit mule accounts ($\approx 1.0$) vs.\ sinks ($\to 0$) and sources. \\
+& $\Psi_{\text{asym}}(u, t)$ & 1 & Degree asymmetry; distinguishes structuring fan-in consolidators from fan-out dispersal hubs. \\
+\midrule
+\textbf{Group 2: Hawkes Arrival} 
+& $\lambda_u(t)$ & 1 & Continuous self-exciting Hawkes point process intensity; flags velocity bursts in smurfing and peeling chains. \\
+\midrule
+\multirow{2}{*}{\textbf{Group 3: Causal Taint}} 
+& $\mathbf{s}_{\text{fwd}}(u)$ & 1 & Downstream personalized PageRank proximity to known illicit seed clusters. \\
+& $\mathbf{s}_{\text{bwd}}(u)$ & 1 & Reverse causal taint tracking upstream provenance and origin of laundering capital. \\
+\midrule
+\multirow{5}{*}{\textbf{Group 4: Amount Moments}} 
+& $\mu_A(u, t)$ & 1 & Mean ego-transaction amount; establishes financial operational scale. \\
+& $\sigma_A^2(u, t)$ & 1 & Variance of transaction values; captures structured smurfing homogeneity. \\
+& $\gamma_A(u, t)$ & 1 & Amount distribution skewness; detects asymmetric high-value outlier spikes. \\
+& $\kappa_A(u, t)$ & 1 & Amount distribution kurtosis; identifies heavy-tailed structuring distributions. \\
+& $\nu_{\text{io}}(u, t)$ & 1 & Continuous net log inflow-outflow velocity differential. \\
+\midrule
+\multirow{2}{*}{\textbf{Group 5: Arrival Dynamics}} 
+& $\sigma_{\Delta t}(u, t)$ & 1 & Inter-arrival timing jitter; separates scripted automated bots from manual retail activity. \\
+& $v_A(u, t)$ & 1 & Capital transmission velocity through the ego-network ($A_{\text{total}} / \Delta t_{\text{span}}$). \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \section{Module 1: Continuous-Time Multi-Scale Temporal Graph Encoder}
 To simultaneously capture microsecond smurfing bursts and 90-day dormant holding patterns, C-STGB employs continuous harmonic positional embeddings combined with a tri-band multi-frequency decay kernel.
@@ -184,22 +218,26 @@ Under extreme class skew ($\pi < 0.05\%$), naïve SMOTE oversampling blurs disti
 \subsection{Manifold Typology Partitioning}
 Minority illicit training nodes $\mathcal{V}_{\text{illicit}}^{\text{train}}$ are clustered in latent embedding space into $K$ typology clusters $C_1, \dots, C_K$:
 \begin{equation}
+\label{eq:typology_clustering}
 C_k = \left\{ v \in \mathcal{V}_{\text{illicit}}^{\text{train}} \mid \cos(\mathbf{h}_v, \boldsymbol{\mu}_k) \ge \tau_{\text{sim}} \right\}
 \end{equation}
 where $\boldsymbol{\mu}_k$ represents the cluster centroid and $\tau_{\text{sim}} = 0.75$. Synthetic representations $\mathbf{h}_{\text{syn}}$ are generated strictly within cluster boundaries:
 \begin{equation}
+\label{eq:graphsmote_interp}
 \mathbf{h}_{\text{syn}} = (1 - \rho) \mathbf{h}_u + \rho \mathbf{h}_v, \quad \rho \sim \mathcal{U}(0, 1), \quad u, v \in C_k \subseteq \mathcal{V}_{\text{train}}
 \end{equation}
 
 \subsection{Localized $O(K_{\text{cand}} \cdot d)$ Bilinear Link Reconstruction Head}
 To avoid the global $O(|\mathcal{V}_{\text{syn}}| \cdot |\mathcal{V}_{\text{train}}| \cdot d)$ Cartesian evaluation bottleneck, candidate target nodes $\mathcal{C}_{\text{cand}}(\mathbf{h}_{\text{syn}})$ are restricted to: (1) 2-hop topological receptive fields $\mathcal{N}_2(u) \cup \mathcal{N}_2(v)$ of parent seed nodes; and (2) top-$K_{\text{cand}}$ ($K_{\text{cand}} = 50$) nearest neighbors indexed via Hierarchical Navigable Small World (HNSW) search in latent space. Bilinear links are predicted via:
 \begin{equation}
+\label{eq:bilinear_link}
 \hat{\mathbf{A}}_{\text{syn}, w} = \sigma\left( \mathbf{h}_{\text{syn}}^T \mathbf{W}_{\text{edge}} \mathbf{h}_w \right) > \tau_{\text{edge}}, \quad w \in \mathcal{C}_{\text{cand}}(\mathbf{h}_{\text{syn}})
 \end{equation}
 
 \subsection{Mass-Balance Flow Conservation Invariant Enforcement}
 For any synthesized node $\mathbf{h}_{\text{syn}}$, synthetic transaction amounts are assigned via linear interpolation:
 \begin{equation}
+\label{eq:amount_interp}
 \text{Amount}_{\text{syn}}(w, \mathbf{h}_{\text{syn}}) = (1 - \rho) \text{Amount}(w, u) + \rho \text{Amount}(w, v)
 \end{equation}
 This mathematical constraint strictly guarantees that the physical mass-balance flow conservation ratio $\Phi_{\text{flow}}(\mathbf{h}_{\text{syn}}) \approx 1.0$, preserving realistic domain invariants. All synthetic nodes and edges are strictly quarantined to $\mathcal{D}_{\text{train}}$, ensuring zero data leakage into validation or testing splits.
@@ -281,8 +319,8 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 \Require Directed graph $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, Entity features $\mathbf{X}$, Target coverage $1-\alpha$, Loss weights $\gamma_1, \gamma_2$.
 \Ensure Trained model parameters $\Theta$, Calibrated threshold $\tau^*$, Conformal quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$.
 \State Compute 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u)$ for all $u \in \mathcal{V}_{\text{train}}$.
-\State Cluster minority nodes into latent typologies $C_1, \dots, C_K$ via Eq.~(3.19).
-\State Synthesize minority representations $\mathbf{h}_{\text{syn}}$ and bilinear edges $\mathbf{\hat{A}}_{\text{syn}}$ via Eq.~(3.20)--(3.21).
+\State Cluster minority nodes into latent typologies $C_1, \dots, C_K$ via \eqref{eq:typology_clustering}.
+\State Synthesize minority representations $\mathbf{h}_{\text{syn}}$ and bilinear edges $\mathbf{\hat{A}}_{\text{syn}}$ via \eqref{eq:graphsmote_interp}--\eqref{eq:bilinear_link}.
 \State Mine hard-negative commercial hubs into batch bank $\mathcal{B}_{\text{hard}}$.
 \For{epoch $= 1$ to $N_{\text{epochs}}$}
     \State Compute harmonic temporal embeddings $\Phi_{\text{time}}(\Delta t_{ij})$ and tri-band weights $w_{ij}(t)$.
@@ -323,7 +361,7 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_algorithm1_flowchart.pdf}
-\caption{End-to-end execution flowchart of C-STGB Algorithm~\ref{alg:cstgb_training}, illustrating the unified pipeline: data ingestion and 12-D invariant extraction, continuous temporal encoding, learnable edge-trust gating, typology-aware GraphSMOTE, evidence-adaptive fusion, loss optimization, and class-conditional conformal risk control.}
+\caption{Dual-lane execution lifecycle of C-STGB: Lane 1 (top) illustrates offline batch model training on historical transactions $\mathcal{D}_{\text{train}} \cup \mathcal{D}_{\text{cal}}$ with latent GraphSMOTE oversampling and conformal calibration; Lane 2 (bottom) formalizes the real-time online streaming fast-path inference pipeline executing under $0.45\,\text{ms}$ SLA with 3-tier selective triage dispatch.}
 \label{fig:ch3_algorithm1_flowchart}
 \end{figure}
 

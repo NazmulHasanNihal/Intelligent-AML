@@ -61,23 +61,22 @@ Table~\ref{tab:regulatory_matrix} synthesizes the direct alignment between C-STG
 
 \begin{table}[htbp]
 \centering
+\small
 \caption{Global Regulatory Compliance Matrix across Major Statutory Frameworks.}
 \label{tab:regulatory_matrix}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{p{3.5cm} p{5.0cm} X}
 \toprule
-\textbf{Regulatory Authority / Mandate} & \textbf{Statutory Requirement} & \textbf{C-STGB Architectural Solution} \\
+\textbf{Regulatory Authority} & \textbf{Statutory Requirement} & \textbf{C-STGB Architectural Solution} \\
 \midrule
-FATF Recommendation 16 (Travel Rule) & Continuous originator/beneficiary tracing across chains & Time-causal continuous harmonic temporal encoding \\
-FATF Recommendation 20 (SAR Filings) & Timely reporting of structured and peeling transactions & Automated FinCEN Form 111 XML narrative generator \\
-EU AI Act (Articles 13--15) & High-risk AI transparency, human oversight, accuracy & Class-Conditional CRC + GNNExplainer Subgraph Masks \\
-EU GDPR (Article 22) & Automated Decision-Making Right to Explanation & Conformal Tier-2 Selective Abstention + Counterfactual Recourse Sandbox \\
-US Interagency Guidance SR 26-2 & Rigorous Model Risk Management (superseding SR 11-7) & Formal DKW drift bounds + SHA-256 Merkle tree receipts \\
-US Bank Secrecy Act (BSA) & Detection of structuring and smurfing below \$10,000 & Multi-Scale Tri-Band Attention + Hawkes Point Process \\
-BFIU Circular 26 (Bangladesh MFS) & Sub-second transaction monitoring on agent banking & Sub-millisecond Fast-Path inference ($0.45\,\text{ms}$) \\
+FATF Rec.~16 (Travel Rule) & Continuous originator/beneficiary tracing & Time-causal harmonic temporal encoding \\
+FATF Rec.~20 (SAR Filings) & Timely reporting of peeling transactions & Multi-agent FinCEN Form 111 XML engine \\
+EU AI Act (Arts.~13--15) & High-risk transparency \& oversight & Class-conditional CRC + GNNExplainer masks \\
+EU GDPR (Article 22) & Automated decision right to explanation & Conformal Tier-2 abstention + recourse sandbox \\
+US Guidance SR 26-2 & Formal model risk governance & DKW drift bounds + SHA-256 Merkle receipts \\
+US Bank Secrecy Act & Detection of sub-\$10k smurfing & Multi-scale tri-band attention + Hawkes process \\
+BFIU Circular 26 (MFS) & Sub-second agent banking surveillance & Sub-millisecond Fast-Path inference ($0.45\,\text{ms}$) \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabularx}
 \end{table}
 
 \section{Structural Limitations \& Threats to Validity}

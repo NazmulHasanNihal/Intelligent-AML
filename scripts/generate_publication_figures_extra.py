@@ -247,42 +247,59 @@ save_all(fig, "fig_invariant_importance_tornado")
 # 5. Single-Alert Forensic Chronological Timeline Diagram
 # =====================================================================
 print("[5/8] Generating Single-Alert Chronological Timeline...")
-fig, ax = plt.subplots(figsize=(7.16, 2.30))
+fig, ax = plt.subplots(figsize=(7.16, 2.70))
 ax.axis("off")
 ax.set_xlim([-0.02, 1.02])
-ax.set_ylim([-0.10, 1.15])
+ax.set_ylim([-0.02, 1.06])
 
-# Horizontal base timeline arrow
-ax.annotate("", xy=(0.98, 0.40), xytext=(0.02, 0.40),
+# Horizontal base timeline arrow in center
+y_axis = 0.50
+ax.annotate("", xy=(0.98, y_axis), xytext=(0.02, y_axis),
             arrowprops=dict(arrowstyle="->,head_width=0.25,head_length=0.35", color="#334155", lw=2.0))
-ax.text(0.98, 0.48, "Time (UTC)", ha="right", va="bottom", fontsize=8.0, fontweight="bold", color="#334155")
+ax.text(0.98, y_axis - 0.055, "Time (UTC)", ha="right", va="top", fontsize=7.5, fontweight="bold", color="#334155")
 
 events = [
-    (0.08, "14:15:02", "Deposit $485k", "Source S0 ($ACC_9941)\nFunds received via wire", "#1e3a8a"),
-    (0.28, "14:19:12", "Smurfing Fan-Out", "Dispersal to mules M1-M5\n12-min window, $\\lambda=74.2$", "#b91c1c"),
-    (0.48, "14:23:01", "Layering Wash", "Wash cycle (L1-L3)\nChaff filtered ($g_{ij}<0.10$)", "#ea580c"),
-    (0.68, "14:27:45", "Aggregation", "Offshore sink C4\nFlow ratio $\\Phi_{\\text{flow}} \\approx 0.994$", "#047857"),
-    (0.88, "14:28:12", "Conformal Alert", "Tier 1 Quarantine $\\Gamma={1}$\nFinCEN XML generated", "#7c3aed"),
+    (0.09, "14:15:02", "Deposit $485k", "Source S0 (ACC_9941)\nFunds received via wire", "#1e3a8a", "above"),
+    (0.28, "14:19:12", "Smurfing Fan-Out", "Dispersal to mules M1–M5\n12-min window, λ=74.2", "#b91c1c", "below"),
+    (0.48, "14:23:01", "Layering Wash", "Wash cycle (L1–L3)\nChaff filtered (g_ij<0.10)", "#ea580c", "above"),
+    (0.68, "14:27:45", "Aggregation", "Offshore sink C4\nFlow ratio Φ_flow ≈ 0.994", "#047857", "below"),
+    (0.88, "14:28:12", "Conformal Alert", "Tier 1 Quarantine Γ={1}\nFinCEN XML generated", "#7c3aed", "above"),
 ]
 
-for x_pt, time_str, title_str, desc_str, clr in events:
-    # Pin marker
-    ax.plot([x_pt, x_pt], [0.35, 0.45], color=clr, lw=2.2)
-    circle = patches.Circle((x_pt, 0.40), 0.016, facecolor=clr, edgecolor="black", lw=0.8, zorder=5)
+for x_pt, time_str, title_str, desc_str, clr, pos in events:
+    # Pin marker on timeline
+    circle = patches.Circle((x_pt, y_axis), 0.016, facecolor=clr, edgecolor="black", lw=0.8, zorder=5)
     ax.add_patch(circle)
-    # Time label (below line)
-    ax.text(x_pt, 0.28, time_str, ha="center", va="top", fontsize=7.2, fontweight="bold", color="#0f172a")
-    # Event box (above line)
-    y_box = 0.55
-    bbox = patches.FancyBboxPatch((x_pt - 0.085, y_box), 0.170, 0.46,
-                                  boxstyle="round,pad=0.01", facecolor="#ffffff",
-                                  edgecolor=clr, lw=1.2, zorder=4)
-    ax.add_patch(bbox)
-    ax.text(x_pt, y_box + 0.38, title_str, ha="center", va="top", fontsize=7.4, fontweight="bold", color=clr)
-    ax.text(x_pt, y_box + 0.06, desc_str, ha="center", va="bottom", fontsize=6.0, color="#475569", linespacing=1.2)
+    
+    if pos == "above":
+        # Pin line extending up
+        ax.plot([x_pt, x_pt], [y_axis, 0.57], color=clr, lw=1.8)
+        # Event box above
+        y_box = 0.58
+        bbox = patches.FancyBboxPatch((x_pt - 0.082, y_box), 0.164, 0.38,
+                                      boxstyle="round,pad=0.008", facecolor="#ffffff",
+                                      edgecolor=clr, lw=1.2, zorder=4)
+        ax.add_patch(bbox)
+        ax.text(x_pt, y_box + 0.31, title_str, ha="center", va="top", fontsize=7.2, fontweight="bold", color=clr)
+        ax.text(x_pt, y_box + 0.06, desc_str, ha="center", va="bottom", fontsize=5.8, color="#475569", linespacing=1.2)
+        # Time label below pin
+        ax.text(x_pt, y_axis - 0.045, time_str, ha="center", va="top", fontsize=6.8, fontweight="bold", color="#0f172a")
+    else:
+        # Pin line extending down
+        ax.plot([x_pt, x_pt], [y_axis, 0.43], color=clr, lw=1.8)
+        # Event box below
+        y_box = 0.05
+        bbox = patches.FancyBboxPatch((x_pt - 0.082, y_box), 0.164, 0.38,
+                                      boxstyle="round,pad=0.008", facecolor="#ffffff",
+                                      edgecolor=clr, lw=1.2, zorder=4)
+        ax.add_patch(bbox)
+        ax.text(x_pt, y_box + 0.31, title_str, ha="center", va="top", fontsize=7.2, fontweight="bold", color=clr)
+        ax.text(x_pt, y_box + 0.06, desc_str, ha="center", va="bottom", fontsize=5.8, color="#475569", linespacing=1.2)
+        # Time label above pin
+        ax.text(x_pt, y_axis + 0.045, time_str, ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#0f172a")
 
 ax.set_title("Single-Alert Chronological Forensic Timeline: 15-Node Smurfing and Peeling Incident",
-             fontweight="bold", fontsize=9.8, pad=7)
+             fontweight="bold", fontsize=9.6, pad=6)
 plt.tight_layout()
 save_all(fig, "fig_single_alert_timeline")
 
@@ -348,7 +365,7 @@ tasks = [
     ("Phase 3: Tier 1 Autonomous SAR Merkle Seal", 21, 26, "#c62828")
 ]
 
-fig, ax = plt.subplots(figsize=(7.16, 2.75))
+fig, ax = plt.subplots(figsize=(7.16, 2.95))
 y_pos = np.arange(len(tasks))[::-1]
 
 for idx, (t_name, start_w, end_w, clr) in enumerate(tasks):
@@ -365,16 +382,22 @@ ax.set_xlim([0, 26])
 ax.set_xticks(np.arange(0, 27, 2))
 ax.grid(True, axis="x", linestyle=":", alpha=0.6)
 
-# Phase boundaries
+# Phase boundaries with elevated pill banners
 ax.axvline(12, color="#616161", linestyle="--", lw=1.0)
-ax.text(6, 7.6, "Phase 1: Shadow", ha="center", fontsize=7.8, fontweight="bold", color="#1565c0")
 ax.axvline(20, color="#616161", linestyle="--", lw=1.0)
-ax.text(16, 7.6, "Phase 2: Pilot", ha="center", fontsize=7.8, fontweight="bold", color="#00796b")
-ax.text(23, 7.6, "Phase 3: STP", ha="center", fontsize=7.8, fontweight="bold", color="#c62828")
 
-ax.set_ylim([-0.6, len(tasks) - 0.2])
+ax.add_patch(patches.FancyBboxPatch((1.5, 7.85), 9.0, 0.65, boxstyle="round,pad=0.08", facecolor="#dbeafe", edgecolor="#1565c0", lw=0.8))
+ax.text(6.0, 8.17, "Phase 1: Shadow (W1–W12)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#1565c0")
+
+ax.add_patch(patches.FancyBboxPatch((12.5, 7.85), 7.0, 0.65, boxstyle="round,pad=0.08", facecolor="#ccfbf1", edgecolor="#00796b", lw=0.8))
+ax.text(16.0, 8.17, "Phase 2: Pilot (W13–W20)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#00796b")
+
+ax.add_patch(patches.FancyBboxPatch((20.5, 7.85), 5.0, 0.65, boxstyle="round,pad=0.08", facecolor="#fee2e2", edgecolor="#c62828", lw=0.8))
+ax.text(23.0, 8.17, "Phase 3: STP (W21–W26)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#c62828")
+
+ax.set_ylim([-0.6, 9.0])
 ax.set_title("26-Week Enterprise Integration Roadmap for Tier-1 Banking Core Surveillance",
-             fontweight="bold", fontsize=9.8, pad=8)
+             fontweight="bold", fontsize=9.8, pad=12)
 plt.tight_layout()
 save_all(fig, "fig_26week_roadmap_gantt")
 
@@ -517,5 +540,200 @@ ax_risk.legend(loc='upper left', fontsize=6.8, framealpha=0.92)
 plt.tight_layout()
 save_all(fig, "fig_conformal_coverage_reliability")
 
-print("\n>>> All 9 Extra Publication Figures Successfully Generated!")
+
+# =====================================================================
+# 10. Stepwise Cumulative Ablation Waterfall Chart (7.16" x 3.00")
+# =====================================================================
+print("[10/12] Generating Stepwise Cumulative Ablation Waterfall Chart...")
+fig, ax = plt.subplots(figsize=(7.16, 3.00))
+
+steps = [
+    "Base GCN\n(τ=0.50)",
+    "+ 12-D\nInvariants",
+    "+ Hawkes\nTemporal",
+    "+ Edge-Trust\nGating",
+    "+ Typology\nGraphSMOTE",
+    "+ Adaptive\nFusion",
+    "+ Bayes\nRisk Head",
+    "Full C-STGB\n(Final)"
+]
+
+# Baseline start, incremental deltas, final total
+deltas = [10.33, 35.22, 14.65, 10.84, 19.06, 0.82, 0.50]
+# Cumulative values:
+# 10.33 -> 45.55 -> 60.20 -> 71.04 -> 90.10 -> 90.92 -> 91.42
+
+bottoms = [0.0]
+heights = [deltas[0]]
+current = deltas[0]
+
+for d in deltas[1:]:
+    bottoms.append(current)
+    heights.append(d)
+    current += d
+
+# Final summary bar
+bottoms.append(0.0)
+heights.append(current)
+
+colors_wf = ["#64748b", "#1e40af", "#0f766e", "#0284c7", "#ea580c", "#6d28d9", "#15803d", "#b91c1c"]
+
+x_pos = np.arange(len(steps))
+bars = ax.bar(x_pos, heights, bottom=bottoms, color=colors_wf, edgecolor="black", lw=0.6, width=0.58)
+
+# Connect tops of deltas with dotted guide lines
+for i in range(len(deltas) - 1):
+    y_top = bottoms[i+1] + heights[i+1]
+    ax.plot([x_pos[i+1] - 0.29, x_pos[i+2] + 0.29], [y_top, y_top], color="#94a3b8", linestyle=":", lw=0.9)
+
+# Value annotations
+for i, (b, h) in enumerate(zip(bottoms, heights)):
+    if i == 0:
+        ax.text(x_pos[i], h + 1.2, f"{h:.2f}%", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#1e293b")
+    elif i == len(steps) - 1:
+        ax.text(x_pos[i], h + 1.2, f"{h:.2f}%\n(+81.09 pp)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
+    else:
+        ax.text(x_pos[i], b + h + 1.2, f"+{h:.2f}\n({b+h:.1f}%)", ha="center", va="bottom", fontsize=6.2, fontweight="bold", color=colors_wf[i])
+
+ax.set_xticks(x_pos)
+ax.set_xticklabels(steps, fontsize=7.6)
+ax.set_ylabel("Elliptic-v1 F1 Score (%)", fontsize=9.0)
+ax.set_ylim([0, 108])
+ax.grid(True, axis="y", linestyle=":", alpha=0.5)
+ax.set_title("Stepwise Cumulative Architectural Ablation Progression on Elliptic-v1",
+             fontweight="bold", fontsize=9.8, pad=8)
+
+plt.tight_layout()
+save_all(fig, "fig_ablation_waterfall")
+
+
+# =====================================================================
+# 11. Fast-Path vs Full Streaming Latency Comparison (3.50" x 2.80")
+# =====================================================================
+print("[11/12] Generating Fast-Path vs Streaming Latency Comparison...")
+fig, ax = plt.subplots(figsize=(3.50, 2.80))
+
+modes = ["Fast-Path\n(LRU Hit)", "Full Streaming\n(Deep GNN)", "Tier-1 SLA\nThreshold"]
+lat_vals = [0.45, 2.10, 10.00]
+p99_vals = [0.82, 3.67, 10.00]
+colors_lat = ["#15803d", "#0284c7", "#dc2626"]
+
+bars = ax.bar(modes, lat_vals, color=colors_lat, edgecolor="black", lw=0.7, width=0.50, alpha=0.92)
+
+# P99 error bars on first two
+ax.errorbar([0, 1], [0.45, 2.10], yerr=[[0, 0], [0.82 - 0.45, 3.67 - 2.10]],
+            fmt='none', ecolor='#1e293b', capsize=3.5, lw=1.2)
+
+ax.text(0, 0.82 + 0.35, "0.45 ms\n(P99: 0.82)", ha="center", va="bottom", fontsize=6.5, fontweight="bold", color="#15803d")
+ax.text(1, 3.67 + 0.35, "2.10 ms\n(P99: 3.67)", ha="center", va="bottom", fontsize=6.5, fontweight="bold", color="#0284c7")
+ax.text(2, 10.00 + 0.35, "10.00 ms\n(Max Allowed)", ha="center", va="bottom", fontsize=6.5, fontweight="bold", color="#dc2626")
+
+ax.set_ylabel("Transaction Scoring Latency (ms)", fontsize=8.5)
+ax.set_ylim([0, 13.5])
+ax.grid(True, axis="y", linestyle=":", alpha=0.5)
+ax.set_title("Streaming Transaction Latency vs. Banking SLA", fontweight="bold", fontsize=8.8, pad=8)
+
+plt.tight_layout()
+save_all(fig, "fig_fastpath_latency_comparison")
+
+
+# =====================================================================
+# 12. Worked 15-Node Forensic Progression: Raw -> Flagged -> SAR Dossier (7.16" x 2.70")
+# =====================================================================
+print("[12/12] Generating Worked 15-Node Forensic Progression...")
+fig, axes = plt.subplots(1, 3, figsize=(7.16, 2.70))
+
+for ax in axes:
+    ax.axis("off")
+    ax.set_xlim([-0.05, 1.05])
+    ax.set_ylim([-0.05, 1.05])
+
+# Panel (a): Raw Ingested Network
+ax_a = axes[0]
+ax_a.add_patch(patches.FancyBboxPatch((0.00, 0.00), 1.00, 1.00, boxstyle="round,pad=0.01", facecolor="#f8fafc", edgecolor="#cbd5e1", lw=0.8))
+ax_a.text(0.50, 0.94, "(a) Raw Ingested Graph", ha="center", va="center", fontsize=7.8, fontweight="bold", color="#0f172a")
+
+# Simulated nodes: Source S0 at (0.2, 0.5), Mules at (0.5, y), Chaff nodes at random
+np.random.seed(99)
+node_coords = {
+    "S0": np.array([0.15, 0.50]),
+    "M1": np.array([0.45, 0.75]),
+    "M2": np.array([0.45, 0.50]),
+    "M3": np.array([0.45, 0.25]),
+    "L1": np.array([0.70, 0.65]),
+    "L2": np.array([0.70, 0.35]),
+    "Sink": np.array([0.90, 0.50]),
+}
+# Chaff nodes
+chaff_coords = [np.array([0.25, 0.80]), np.array([0.30, 0.18]), np.array([0.60, 0.85]), np.array([0.80, 0.15])]
+
+# Raw edges: legitimate + chaff
+all_edges = [
+    ("S0", "M1"), ("S0", "M2"), ("S0", "M3"),
+    ("M1", "L1"), ("M2", "L2"), ("M3", "L2"),
+    ("L1", "Sink"), ("L2", "Sink"),
+]
+for src, dst in all_edges:
+    ax_a.annotate("", xy=node_coords[dst], xytext=node_coords[src],
+                  arrowprops=dict(arrowstyle="->,head_width=0.15,head_length=0.20", color="#64748b", lw=1.1))
+
+for c_pt in chaff_coords:
+    ax_a.scatter(c_pt[0], c_pt[1], color="#94a3b8", s=32, zorder=4)
+    # connect to random nodes
+    ax_a.annotate("", xy=c_pt, xytext=node_coords["S0"], arrowprops=dict(arrowstyle="->", color="#cbd5e1", lw=0.8, ls=":"))
+    ax_a.annotate("", xy=node_coords["Sink"], xytext=c_pt, arrowprops=dict(arrowstyle="->", color="#cbd5e1", lw=0.8, ls=":"))
+
+for name, pt in node_coords.items():
+    ax_a.scatter(pt[0], pt[1], color="#0284c7", s=50, zorder=5, edgecolor="black", lw=0.5)
+    ax_a.text(pt[0], pt[1] - 0.065, name, ha="center", va="top", fontsize=5.8, color="#0f172a", fontweight="bold")
+
+ax_a.text(0.50, 0.05, "15 Entities | 24 Raw Transactions\nHigh Camouflage Chaff", ha="center", va="center", fontsize=6.2, color="#475569")
+
+# Panel (b): Causal Explainer Attribution
+ax_b = axes[1]
+ax_b.add_patch(patches.FancyBboxPatch((0.00, 0.00), 1.00, 1.00, boxstyle="round,pad=0.01", facecolor="#fef2f2", edgecolor="#fca5a5", lw=0.8))
+ax_b.text(0.50, 0.94, "(b) Causal Attribution Mask", ha="center", va="center", fontsize=7.8, fontweight="bold", color="#b91c1c")
+
+# Dim chaff
+for c_pt in chaff_coords:
+    ax_b.scatter(c_pt[0], c_pt[1], color="#e2e8f0", s=25, zorder=3)
+
+# Highlight causal edges in bold crimson
+for src, dst in all_edges:
+    ax_b.annotate("", xy=node_coords[dst], xytext=node_coords[src],
+                  arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#dc2626", lw=1.6))
+
+for name, pt in node_coords.items():
+    ax_b.scatter(pt[0], pt[1], color="#b91c1c" if name in ["S0", "Sink"] else "#ea580c", s=58, zorder=5, edgecolor="black", lw=0.6)
+    ax_b.text(pt[0], pt[1] - 0.065, name, ha="center", va="top", fontsize=5.8, color="#7f1d1d", fontweight="bold")
+
+ax_b.text(0.50, 0.05, "GNNExplainer Mask (M_e ≥ 0.65)\n65.9% Chaff Pruned | Causal Core", ha="center", va="center", fontsize=6.2, color="#991b1b")
+
+# Panel (c): FinCEN SAR Filing Dossier
+ax_c = axes[2]
+ax_c.add_patch(patches.FancyBboxPatch((0.00, 0.00), 1.00, 1.00, boxstyle="round,pad=0.01", facecolor="#f0fdf4", edgecolor="#86efac", lw=0.8))
+ax_c.text(0.50, 0.94, "(c) Certified FinCEN SAR", ha="center", va="center", fontsize=7.8, fontweight="bold", color="#15803d")
+
+sar_fields = [
+    ("Case Identifier", "SAR-2026-B8F91A04", "#0f172a"),
+    ("Primary Subject", "ACC_9941 (Source S0)", "#b91c1c"),
+    ("Triage Set", "Tier 1: Quarantine Hold", "#b91c1c"),
+    ("Primary Typology", "Smurfing & Peeling Chain", "#c2410c"),
+    ("Mass Flow Balance", "Φ_flow = 0.9942 (Pass-Through)", "#0f766e"),
+    ("Merkle Receipt Seal", "SHA-256 e3b0c4... (Verified)", "#15803d"),
+    ("Compliance Standard", "Fed SR 26-2 & BSA Aligned", "#4338ca")
+]
+
+y_field = 0.82
+for label, val, c_val in sar_fields:
+    ax_c.text(0.06, y_field, label + ":", ha="left", va="center", fontsize=5.6, fontweight="bold", color="#334155")
+    ax_c.text(0.94, y_field, val, ha="right", va="center", fontsize=5.6, fontweight="bold", color=c_val)
+    y_field -= 0.105
+
+ax_c.text(0.50, 0.05, "Autonomous 4-Agent Generation\n100% AST Grammar Validated", ha="center", va="center", fontsize=6.2, color="#166534")
+
+plt.tight_layout()
+save_all(fig, "fig_15node_forensic_progression")
+
+print("\n>>> All 12 Extra Publication Figures Successfully Generated!")
 

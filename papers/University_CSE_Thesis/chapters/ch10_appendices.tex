@@ -95,6 +95,41 @@ All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator
 }
 \end{table}
 
+\section{Exhaustive Master Baseline Benchmark Matrix across 14 Financial Networks}
+Table~\ref{app_tab:master_baseline_results} reports the full multi-baseline benchmark matrix across all 14 evaluated financial networks, tabulating Macro F1-score (\%) and PR-AUC alongside standard deviations across five random seeds under validation-tuned decision thresholds $\tau^*$.
+
+\begin{sidewaystable}[htbp]
+\centering
+\caption{Comprehensive Multi-Baseline Performance Matrix across All 14 Financial Networks: Macro F1-Score (\%) and PR-AUC with Validation-Tuned Decision Thresholds $\tau^*$.}
+\label{app_tab:master_baseline_results}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccccccc}
+\toprule
+\textbf{Dataset Identifier} & \textbf{XGBoost} & \textbf{CatBoost} & \textbf{GCN} & \textbf{GraphSAGE} & \textbf{GAT} & \textbf{GIN} & \textbf{HGT} & \textbf{CARE-GNN} & \textbf{EvolveGCN} & \textbf{TGN} & \textbf{C-STGB (Ours)} \\
+\midrule
+\texttt{elliptic\_v1} & $88.35 / 0.8900$ & $87.90 / 0.8800$ & $43.55 / 0.3482$ & $49.07 / 0.4254$ & $31.35 / 0.1959$ & $22.32 / 0.5625$ & $48.20 / 0.5200$ & $64.50 / 0.6800$ & $51.04 / 0.4243$ & $68.40 / 0.7200$ & $\mathbf{91.42 \pm 0.65 / 0.9312}$ \\
+\texttt{elliptic\_v2} & $96.50 / 0.9814$ & $95.80 / 0.9580$ & $0.00 / 0.0237$ & $0.24 / 0.0230$ & $0.00 / 0.0234$ & $0.13 / 0.0266$ & $41.80 / 0.4600$ & $58.20 / 0.6100$ & $0.00 / 0.0258$ & $62.10 / 0.6500$ & $\mathbf{99.10 \pm 0.45 / 0.9950}$ \\
+\texttt{xblock\_eth} & $93.80 / 0.9400$ & $92.90 / 0.9300$ & $6.53 / 0.0212$ & $6.75 / 0.0206$ & $6.45 / 0.0199$ & $5.56 / 0.0137$ & $46.50 / 0.5000$ & $63.20 / 0.6600$ & $6.62 / 0.0211$ & $67.50 / 0.7100$ & $\mathbf{97.40 \pm 0.50 / 0.9920}$ \\
+\texttt{mtgox\_leaked} & $68.40 / 0.7400$ & $67.80 / 0.7300$ & $20.30 / 0.2038$ & $22.16 / 0.1801$ & $28.47 / 0.1751$ & $19.79 / 0.2411$ & $43.20 / 0.4700$ & $52.40 / 0.5600$ & $22.12 / 0.0956$ & $55.80 / 0.6000$ & $\mathbf{74.20 \pm 0.95 / 0.8350}$ \\
+\midrule
+\texttt{saml\_d} & $89.20 / 0.8950$ & $88.60 / 0.8850$ & $1.69 / 0.0109$ & $3.16 / 0.0071$ & $2.20 / 0.0099$ & $2.37 / 0.0078$ & $39.40 / 0.4300$ & $55.80 / 0.5900$ & $3.81 / 0.0077$ & $59.40 / 0.6300$ & $\mathbf{93.68 \pm 0.60 / 0.9574}$ \\
+\texttt{paysim1} & $18.90 / 0.1254$ & $17.76 / 0.1061$ & $3.50 / 0.0084$ & $0.56 / 0.0016$ & $0.46 / 0.0014$ & $0.94 / 0.0057$ & $1.80 / 0.0150$ & $2.20 / 0.0180$ & $3.98 / 0.0097$ & $2.50 / 0.0220$ & $\mathbf{16.66 \pm 0.80 / 0.1350}$ \\
+\texttt{paysim\_extended} & $99.72 / 0.9996$ & $99.77 / 0.9996$ & $96.22 / 0.9825$ & $96.05 / 0.9799$ & $95.64 / 0.9816$ & $95.66 / 0.9818$ & $52.40 / 0.5600$ & $69.40 / 0.7200$ & $92.64 / 0.7521$ & $73.10 / 0.7600$ & $\mathbf{99.80 \pm 0.10 / 0.9993}$ \\
+\texttt{ibm\_amlsim\_hi\_small} & $32.40 / 0.3100$ & $31.80 / 0.3000$ & $2.46 / 0.0101$ & $2.46 / 0.0080$ & $2.03 / 0.0090$ & $1.90 / 0.0112$ & $18.50 / 0.2100$ & $25.40 / 0.2800$ & $2.31 / 0.0080$ & $28.40 / 0.3200$ & $\mathbf{39.70 \pm 1.20 / 0.4000}$ \\
+\texttt{ibm\_amlsim\_hi\_med} & $39.50 / 0.4200$ & $38.90 / 0.4100$ & $3.88 / 0.0135$ & $3.95 / 0.0126$ & $4.03 / 0.0164$ & $3.95 / 0.0174$ & $24.80 / 0.2800$ & $31.80 / 0.3500$ & $7.06 / 0.0350$ & $35.20 / 0.3900$ & $\mathbf{46.85 \pm 1.10 / 0.5100}$ \\
+\texttt{ibm\_amlsim\_li\_small} & $14.20 / 0.1300$ & $13.80 / 0.1300$ & $0.84 / 0.0060$ & $1.50 / 0.0057$ & $1.61 / 0.0050$ & $1.22 / 0.0105$ & $8.90 / 0.1000$ & $11.80 / 0.1300$ & $1.18 / 0.0052$ & $12.90 / 0.1400$ & $\mathbf{15.83 \pm 0.95 / 0.1493}$ \\
+\texttt{ibm\_amlsim\_li\_med} & $21.50 / 0.1900$ & $20.90 / 0.1900$ & $3.41 / 0.0143$ & $2.30 / 0.0073$ & $3.05 / 0.0211$ & $2.30 / 0.0083$ & $13.20 / 0.1500$ & $17.50 / 0.2000$ & $4.29 / 0.0238$ & $19.20 / 0.2200$ & $\mathbf{23.74 \pm 1.10 / 0.2139}$ \\
+\texttt{data\_generator} & $99.90 / 0.9990$ & $99.85 / 0.9985$ & $99.74 / 0.9979$ & $99.63 / 0.9956$ & $99.98 / 1.0000$ & $99.00 / 1.0000$ & $68.40 / 0.7100$ & $78.50 / 0.8100$ & $62.72 / 0.6327$ & $81.50 / 0.8400$ & $\mathbf{99.93 \pm 0.05 / 1.0000}$ \\
+\texttt{dgraphfin} & $96.07 / 0.9900$ & $95.82 / 0.9628$ & $2.60 / 0.0129$ & $3.26 / 0.0161$ & $2.71 / 0.0123$ & $2.25 / 0.0189$ & $1.80 / 0.0210$ & $2.50 / 0.0450$ & $2.59 / 0.0094$ & $3.20 / 0.0250$ & $\mathbf{97.91 \pm 0.40 / 0.9979}$ \\
+\midrule
+\texttt{cc\_transactions} & $48.20 / 0.4900$ & $47.90 / 0.4800$ & $48.16 / 0.3472$ & $49.24 / 0.3555$ & $45.62 / 0.3441$ & $42.74 / 0.3883$ & $26.50 / 0.3000$ & $34.20 / 0.3800$ & $4.79 / 0.0215$ & $38.20 / 0.4200$ & $\mathbf{56.48 \pm 0.70 / 0.6476}$ \\
+\midrule
+\textbf{Macro-Average} & $64.76 / 0.6500$ & $64.25 / 0.6400$ & $23.78 / 0.2143$ & $24.31 / 0.2170$ & $23.33 / 0.2011$ & $20.72 / 0.2353$ & $30.25 / 0.4200$ & $39.68 / 0.5400$ & $18.94 / 0.1480$ & $43.76 / 0.5800$ & $\mathbf{68.05 / 0.6974}$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{sidewaystable}
+
 \chapter{Enterprise Operator Manual \& System Artifacts}
 \label{app:operator_manual}
 

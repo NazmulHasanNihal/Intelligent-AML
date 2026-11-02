@@ -990,117 +990,120 @@ ax.text(0.527, 0.50, "• Dual Quantiles:\n" +
                      r"  DKW Bound $+ \sqrt{|\mathcal{D}_{\mathrm{cal}}|}$",
         ha="center", va="center", fontsize=5.8, color="#0f172a", linespacing=1.35)
 
-# Output Channels (3 Tiers on the right)
-tier_outputs = [
-    {
-        "left_h": "Tier 1: Instant Auto-Block",
-        "right_h": r"$\Gamma(X) = \{1\}$",
-        "vol": r"$\approx 18$ / 10k tx ($0.18\%$)",
-        "action": r"Precision $>99.4\%$ | Freeze & SAR Draft",
-        "bg_c": "#fef2f2", "bd_c": "#ef4444", "hdr_bg": "#b91c1c", "y": 0.58, "h": 0.25
-    },
-    {
-        "left_h": "Tier 2: Manual Review Queue",
-        "right_h": r"$\Gamma(X) = \{0, 1\}$",
-        "vol": r"$\approx 50$ / 10k tx ($0.50\%$ Ambiguous)",
-        "action": r"Dispatches Multi-Agent Forensic Dossier",
-        "bg_c": "#fff7ed", "bd_c": "#f97316", "hdr_bg": "#c2410c", "y": 0.31, "h": 0.25
-    },
-    {
-        "left_h": "Tier 3: Straight-Through Auto-Clear",
-        "right_h": r"$\Gamma(X) = \{0\}$",
-        "vol": r"$\approx 9,932$ / 10k tx ($99.32\%$)",
-        "action": r"Benign Guarantee $>99.9\%$ | Instant STP",
-        "bg_c": "#f0fdf4", "bd_c": "#22c55e", "hdr_bg": "#15803d", "y": 0.04, "h": 0.25
-    }
-]
-
-for t in tier_outputs:
-    y0 = t["y"]
-    h0 = t["h"]
-    box = patches.FancyBboxPatch(
-        (0.665, y0), 0.320, h0,
-        boxstyle="round,pad=0.008",
-        facecolor=t["bg_c"], edgecolor=t["bd_c"], linewidth=1.0
-    )
-    ax.add_patch(box)
-    
-    hdr = patches.FancyBboxPatch(
-        (0.670, y0 + h0 - 0.080), 0.310, 0.072,
-        boxstyle="round,pad=0.004",
-        facecolor=t["hdr_bg"], edgecolor=t["hdr_bg"], linewidth=0.5
-    )
-    ax.add_patch(hdr)
-    ax.text(0.678, y0 + h0 - 0.044, t["left_h"], ha="left", va="center", fontsize=6.1, fontweight="bold", color="#ffffff")
-    ax.text(0.970, y0 + h0 - 0.044, t["right_h"], ha="right", va="center", fontsize=6.1, fontweight="bold", color="#fef08a")
-    
-    ax.text(0.678, y0 + 0.108, r"• Volume: " + t["vol"], ha="left", va="center", fontsize=5.8, color="#1e293b")
-    ax.text(0.678, y0 + 0.045, r"• Action: " + t["action"], ha="left", va="center", fontsize=5.4, fontweight="bold", color=t["hdr_bg"])
-
-# Flow arrows
-ax.annotate("", xy=(0.205, 0.44), xytext=(0.180, 0.44),
-            arrowprops=dict(arrowstyle="->,head_width=0.22,head_length=0.30", lw=1.5, color="#0f172a"))
-ax.annotate("", xy=(0.410, 0.44), xytext=(0.385, 0.44),
-            arrowprops=dict(arrowstyle="->,head_width=0.22,head_length=0.30", lw=1.5, color="#0f172a"))
-
-# Branching arrows to 3 tiers
-ax.annotate("", xy=(0.665, 0.70), xytext=(0.645, 0.48),
-            arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.28", lw=1.4, color="#b91c1c"))
-ax.annotate("", xy=(0.665, 0.435), xytext=(0.645, 0.44),
-            arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.28", lw=1.4, color="#c2410c"))
-ax.annotate("", xy=(0.665, 0.165), xytext=(0.645, 0.40),
-            arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.28", lw=1.4, color="#15803d"))
-
-# Bottom Callout Summary Pill
-summary_pill = patches.FancyBboxPatch(
-    (0.015, 0.015), 0.630, 0.055,
-    boxstyle="round,pad=0.005",
-    facecolor="#052e16", edgecolor="#15803d", linewidth=0.75
-)
-ax.add_patch(summary_pill)
-ax.text(0.330, 0.042, r"99.50% Net Workload Reduction (Human Review Restricted to 0.50% Ambiguous Abstention Queue)",
-        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#4ade80")
-
-plt.subplots_adjust(left=0.01, right=0.99, top=0.98, bottom=0.02)
-save_all_formats(fig, "fig_conformal_triage_flowchart")
+# ======================================================================
+# FIGURE 12: Deterministic 3-Tier Conformal Operational Triage Flowchart
+# ======================================================================
+# Maintained by render_publication_diagrams.py (Decision Tree & 10k Stacked Bar)
+print("[12/22] Figure 12: Generated via render_publication_diagrams.py")
 
 
 # ======================================================================
-# FIGURE 13: Algorithm 1 Pipeline Flowchart (Double Column: 7.16" x 2.60")
+# FIGURE 13: Two-Lane Architecture: Training vs. Real-Time Inference (7.16" x 2.85")
 # ======================================================================
-print("[13/22] Generating Figure 13: Algorithm 1 Pipeline Flowchart...")
-fig, ax = plt.subplots(figsize=(7.16, 2.60))
+print("[13/22] Generating Figure 13: Two-Lane Pipeline Flowchart (Training vs. Inference)...")
+fig, ax = plt.subplots(figsize=(7.16, 2.85))
 ax.axis('off')
-ax.set_xlim([-0.02, 1.02])
-ax.set_ylim([-0.05, 1.05])
+ax.set_xlim([-0.010, 1.010])
+ax.set_ylim([-0.015, 1.015])
 
-stages = [
-    ("1. Ingestion &\n12-D Invariants", "Stream $\\mathcal{G}$, $K \\leq 15$\nExtract $\\mathbf{z}_{\\text{inv}}(u)$", 0.010, 0.06, 0.145, 0.74, "#e3f2fd", "#1565c0"),
-    ("2. Tri-Band HGT\n& Edge Gate", "Continuous $w(\\Delta t)$\nFilter $g_{ij} < 0.10$", 0.178, 0.06, 0.145, 0.74, "#e8f5e9", "#2e7d32"),
-    ("3. Typology-Clust.\nGraphSMOTE", "Clusters $\\mathcal{C}_k$\nBilinear $\\hat{\\mathbf{A}}_{\\text{syn}}$", 0.346, 0.06, 0.145, 0.74, "#fff3e0", "#e65100"),
-    ("4. Evidence-Adapt.\nTabular Fusion", "Cold-start $\\alpha_u \\in [0, 1]$\nUnified $\\mathbf{h}_u^*$ vector", 0.514, 0.06, 0.145, 0.74, "#e0f2f1", "#00796b"),
-    ("5. Loss Optim.\n& Bayes $\\tau^*$", "Asym. Focal Tversky\nOptimal policy $\\tau^*$", 0.682, 0.06, 0.145, 0.74, "#f3e5f5", "#7b1fa2"),
-    ("6. Conformal CRC\n3-Tier Triage", "Quantiles $\\hat{q}^{(0)}, \\hat{q}^{(1)}$\nTriage $\\Gamma(X) \\subseteq \\{0, 1\\}$", 0.850, 0.06, 0.145, 0.74, "#ffebee", "#c62828"),
+# Top Master Banner
+ax.add_patch(patches.FancyBboxPatch(
+    (0.010, 0.910), 0.980, 0.080,
+    boxstyle="round,pad=0.003,rounding_size=0.006",
+    facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
+))
+ax.text(0.50, 0.950, "C-STGB Two-Lane Execution Lifecycle: Offline Training vs. Online Real-Time Inference",
+        ha="center", va="center", fontsize=8.6, fontweight="bold", color="#ffffff")
+
+# Top Lane: Offline Training Split (D_train & D_cal)
+lane1_card = patches.FancyBboxPatch(
+    (0.010, 0.505), 0.980, 0.385,
+    boxstyle="round,pad=0.004,rounding_size=0.006",
+    facecolor="#f8fafc", edgecolor="#93c5fd", linewidth=1.0
+)
+ax.add_patch(lane1_card)
+
+# Lane 1 Title Pill
+ax.add_patch(patches.FancyBboxPatch(
+    (0.015, 0.835), 0.320, 0.048,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#1e40af", edgecolor="#1e40af", linewidth=0.3
+))
+ax.text(0.175, 0.859, r"LANE 1: OFFLINE BATCH TRAINING ($\mathcal{D}_{\mathrm{train}} \cup \mathcal{D}_{\mathrm{cal}}$)",
+        ha="center", va="center", fontsize=6.2, fontweight="bold", color="#ffffff")
+
+train_boxes = [
+    ("1. Batch Ingest & Invariants", "Historical transaction log\nKirchhoff flow & Hawkes rates", 0.020, 0.520, 0.225, 0.290, "#eff6ff", "#1e40af"),
+    ("2. Latent GraphSMOTE", "Typology clustering & interp.\nLocalized bilinear edge synthesis", 0.265, 0.520, 0.225, 0.290, "#fff7ed", "#c2410c"),
+    ("3. Joint GNN-Tree Training", "Harmonic attention & edge gate\nAsymmetric Bayes risk loss", 0.510, 0.520, 0.225, 0.290, "#faf5ff", "#6d28d9"),
+    ("4. Conformal Calibration", "Non-conformity quantiles on $\\mathcal{D}_{\\mathrm{cal}}$\n$\\hat{q}^{(0)}, \\hat{q}^{(1)} \\to 1-\\alpha \\geq 99\%$", 0.755, 0.520, 0.225, 0.290, "#f0fdf4", "#15803d")
 ]
 
-for title, body, x0, y0, w, h, bg_c, border_c in stages:
-    rect = patches.FancyBboxPatch((x0, y0), w, h, boxstyle="round,pad=0.015",
-                                  facecolor=bg_c, edgecolor=border_c, linewidth=1.2)
-    ax.add_patch(rect)
-    ax.text(x0 + w/2, y0 + h - 0.10, title, ha="center", va="top", fontsize=7.8, fontweight="bold", color=border_c)
-    ax.text(x0 + w/2, y0 + 0.12, body, ha="center", va="bottom", fontsize=7.0, color="#37474f", linespacing=1.30)
+for t_head, t_body, x_b, y_b, w_b, h_b, c_bg, c_fg in train_boxes:
+    ax.add_patch(patches.FancyBboxPatch(
+        (x_b, y_b), w_b, h_b, boxstyle="round,pad=0.003,rounding_size=0.005",
+        facecolor=c_bg, edgecolor=c_fg, linewidth=0.85
+    ))
+    ax.text(x_b + w_b/2, y_b + h_b - 0.055, t_head, ha="center", va="top", fontsize=6.8, fontweight="bold", color=c_fg)
+    ax.text(x_b + w_b/2, y_b + 0.055, t_body, ha="center", va="bottom", fontsize=5.8, color="#334155", linespacing=1.25)
 
-arr_kw = dict(arrowstyle="->,head_width=0.22,head_length=0.28", lw=1.5, color="#003366")
-ax.annotate("", xy=(0.178, 0.43), xytext=(0.155, 0.43), arrowprops=arr_kw)
-ax.annotate("", xy=(0.346, 0.43), xytext=(0.323, 0.43), arrowprops=arr_kw)
-ax.annotate("", xy=(0.514, 0.43), xytext=(0.491, 0.43), arrowprops=arr_kw)
-ax.annotate("", xy=(0.682, 0.43), xytext=(0.659, 0.43), arrowprops=arr_kw)
-ax.annotate("", xy=(0.850, 0.43), xytext=(0.827, 0.43), arrowprops=arr_kw)
+# Connect Train Boxes with arrows
+for x_arr in [0.247, 0.492, 0.737]:
+    ax.annotate("", xy=(x_arr + 0.016, 0.665), xytext=(x_arr - 0.002, 0.665),
+                arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#64748b", lw=1.2))
 
-ax.text(0.50, 0.95, "Unified Multi-Layer C-STGB End-to-End Pipeline Execution Flow (Algorithms 1 & 2)",
-        ha="center", va="center", fontsize=9.8, fontweight="bold", color="#003366")
+# Center Vertical Bridge: Model Artifacts Exported to Serving
+ax.add_patch(patches.FancyBboxPatch(
+    (0.280, 0.435), 0.440, 0.052,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
+))
+ax.text(0.50, 0.461, r"Frozen Weights $\Theta^*$, Bayes Cut $\tau^*$, Quantiles $\hat{q} \longrightarrow$ Production Serving",
+        ha="center", va="center", fontsize=6.2, fontweight="bold", color="#ffffff")
 
-plt.tight_layout()
+# Downward Bridge Arrows
+ax.annotate("", xy=(0.380, 0.415), xytext=(0.380, 0.518),
+            arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#1e40af", lw=1.3, linestyle=":"))
+ax.annotate("", xy=(0.620, 0.415), xytext=(0.620, 0.518),
+            arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#15803d", lw=1.3, linestyle=":"))
+
+# Bottom Lane: Online Streaming Fast-Path Inference (<0.45 ms SLA)
+lane2_card = patches.FancyBboxPatch(
+    (0.010, 0.015), 0.980, 0.400,
+    boxstyle="round,pad=0.004,rounding_size=0.006",
+    facecolor="#f8fafc", edgecolor="#86efac", linewidth=1.0
+)
+ax.add_patch(lane2_card)
+
+# Lane 2 Title Pill
+ax.add_patch(patches.FancyBboxPatch(
+    (0.015, 0.355), 0.340, 0.048,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#15803d", edgecolor="#15803d", linewidth=0.3
+))
+ax.text(0.185, 0.379, "LANE 2: ONLINE STREAMING FAST-PATH INFERENCE (<0.45 ms SLA)",
+        ha="center", va="center", fontsize=6.1, fontweight="bold", color="#ffffff")
+
+infer_boxes = [
+    ("1. Live Ingest & Top-15", "Zero-copy Arrow RecordBatch\n15-hop dynamic ego-graph cache", 0.020, 0.035, 0.225, 0.300, "#f0fdf4", "#15803d"),
+    ("2. Incremental Invariants", "Flow conservation $\\Phi_{\\mathrm{flow}}$\nHawkes burst rate $\\lambda_u(t)$", 0.265, 0.035, 0.225, 0.300, "#f0fdfa", "#0f766e"),
+    ("3. Frozen GNN & Bayes", "Forward pass on cached weights\nRisk score $\\hat{p}_u \\in [0, 1]$", 0.510, 0.035, 0.225, 0.300, "#faf5ff", "#6d28d9"),
+    ("4. 3-Tier CRC Triage", "Dual-quantile dispatch $\\Gamma(u)$\nT1 Quarantine / T2 Rev / T3 STP", 0.755, 0.035, 0.225, 0.300, "#fef2f2", "#b91c1c")
+]
+
+for i_head, i_body, x_b, y_b, w_b, h_b, c_bg, c_fg in infer_boxes:
+    ax.add_patch(patches.FancyBboxPatch(
+        (x_b, y_b), w_b, h_b, boxstyle="round,pad=0.003,rounding_size=0.005",
+        facecolor=c_bg, edgecolor=c_fg, linewidth=0.85
+    ))
+    ax.text(x_b + w_b/2, y_b + h_b - 0.055, i_head, ha="center", va="top", fontsize=6.8, fontweight="bold", color=c_fg)
+    ax.text(x_b + w_b/2, y_b + 0.055, i_body, ha="center", va="bottom", fontsize=5.8, color="#334155", linespacing=1.25)
+
+for x_arr in [0.247, 0.492, 0.737]:
+    ax.annotate("", xy=(x_arr + 0.016, 0.185), xytext=(x_arr - 0.002, 0.185),
+                arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#64748b", lw=1.2))
+
+plt.subplots_adjust(left=0.005, right=0.995, top=0.985, bottom=0.010)
 save_all_formats(fig, "fig_algorithm1_flowchart")
 
 
@@ -1146,150 +1149,10 @@ save_all_formats(fig, "fig_leave_one_out_impact")
 
 
 # ======================================================================
-# FIGURE 15: 12-D Canonical Invariant Mechanism (Double Column: 7.16" x 2.45")
+# FIGURE 15: 12-D Canonical Invariant Mechanism
 # ======================================================================
-print("[15/22] Generating Figure 15: 12-D Canonical Invariant Projection Mechanism...")
-fig, ax = plt.subplots(figsize=(7.16, 2.45))
-ax.axis('off')
-ax.set_xlim([-0.015, 1.015])
-ax.set_ylim([-0.02, 1.02])
-
-# Outer canvas
-ax.add_patch(patches.FancyBboxPatch(
-    (0.00, 0.00), 1.00, 0.98,
-    boxstyle="round,pad=0.015",
-    facecolor="#f8fafc", edgecolor="#cbd5e1", linewidth=0.8
-))
-
-# Top Title Banner
-ax.add_patch(patches.FancyBboxPatch(
-    (0.02, 0.88), 0.96, 0.08,
-    boxstyle="round,pad=0.008",
-    facecolor="#064e3b", edgecolor="#064e3b", linewidth=0.5
-))
-ax.text(0.50, 0.92, "Canonical 12-D Spatio-Temporal Feature Projection for Zero-Shot Cross-Network Transfer",
-        ha="center", va="center", fontsize=8.8, fontweight="bold", color="#ffffff")
-
-# Panel 1: Raw Heterogeneous Financial Schemas (Left)
-p1 = patches.FancyBboxPatch(
-    (0.015, 0.035), 0.220, 0.815,
-    boxstyle="round,pad=0.012",
-    facecolor="#f1f5f9", edgecolor="#94a3b8", linewidth=1.1
-)
-ax.add_patch(p1)
-
-ax.add_patch(patches.FancyBboxPatch(
-    (0.022, 0.690), 0.206, 0.145,
-    boxstyle="round,pad=0.006",
-    facecolor="#334155", edgecolor="#334155", linewidth=0.5
-))
-ax.text(0.125, 0.785, "Raw Heterogeneous", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
-ax.text(0.125, 0.725, "Financial Schemas", ha="center", va="center", fontsize=6.8, color="#cbd5e1")
-
-schemas = [
-    ("Bitcoin UTXO (DAG)", "166-D Raw Attributes", "#b45309", "#fef3c7"),
-    ("Ethereum EVM (Calls)", "14-D Smart Contracts", "#4338ca", "#e0e7ff"),
-    ("PaySim (Mobile Money)", "9-D High-Velocity Tree", "#047857", "#d1fae5"),
-    ("SAML-D (Multi-Bank)", "12-D Wire Mesh", "#b91c1c", "#fee2e2"),
-]
-y_sch = 0.585
-for name, desc, c_bd, c_bg in schemas:
-    sch_box = patches.FancyBboxPatch(
-        (0.022, y_sch), 0.206, 0.095,
-        boxstyle="round,pad=0.005",
-        facecolor=c_bg, edgecolor=c_bd, linewidth=0.75
-    )
-    ax.add_patch(sch_box)
-    ax.text(0.030, y_sch + 0.062, name, ha="left", va="center", fontsize=6.0, fontweight="bold", color=c_bd)
-    ax.text(0.030, y_sch + 0.025, desc, ha="left", va="center", fontsize=5.3, color="#475569")
-    y_sch -= 0.118
-
-# Panel 2: 12-D Canonical Invariant Projection Space (Center)
-p2 = patches.FancyBboxPatch(
-    (0.260, 0.035), 0.485, 0.815,
-    boxstyle="round,pad=0.012",
-    facecolor="#ecfdf5", edgecolor="#6ee7b7", linewidth=1.1
-)
-ax.add_patch(p2)
-
-ax.add_patch(patches.FancyBboxPatch(
-    (0.268, 0.690), 0.469, 0.145,
-    boxstyle="round,pad=0.006",
-    facecolor="#047857", edgecolor="#047857", linewidth=0.5
-))
-ax.text(0.502, 0.785, r"12-D Canonical Invariant Projection Space ($\mathbf{z}_{\mathrm{inv}} \in \mathbf{R}^{12}$)",
-        ha="center", va="center", fontsize=7.6, fontweight="bold", color="#ffffff")
-ax.text(0.502, 0.725, "Physical Mass-Conservation & Causal Graph Topological Invariants",
-        ha="center", va="center", fontsize=6.2, color="#a7f3d0")
-
-invariants_list = [
-    (r"1. Flow Conservation: $\Phi_{\mathrm{flow}}(u, t) = \Sigma A_{\mathrm{out}} / (\Sigma A_{\mathrm{in}} + \epsilon)$",
-     r"$\rightarrow$ Layering Mule Flow Balance (~1.0 unity ratio)"),
-    (r"2. Degree Asymmetry: $\Psi_{\mathrm{asym}}(u, t) = |d_{\mathrm{in}} - d_{\mathrm{out}}| / (d_{\mathrm{in}} + d_{\mathrm{out}} + \epsilon)$",
-     r"$\rightarrow$ Conduit vs High-Degree Structural In/Out Skew"),
-    (r"3. Hawkes Arrival: $\lambda_u(t) = \mu_0 + \Sigma \alpha e^{-\beta (t - t_i)}$",
-     r"$\rightarrow$ Continuous-Time Micro-Burst Velocity Acceleration"),
-    (r"4-5. PPR Taint: $(\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{bwd}}) = (1-\alpha_{\mathrm{ppr}})(\mathbf{I} - \alpha_{\mathrm{ppr}}\mathbf{P})^{-1}\mathbf{s}_{\mathrm{seed}}$",
-     r"$\rightarrow$ Causal Illicit Taint Network Proximity (Bi-Directional)"),
-    (r"6-12. 5-Moment & Jitter: $(\mu_A, \sigma_A^2, \gamma_A, \kappa_A, \nu_{\mathrm{io}}, \sigma_{\Delta t}, v_A)$",
-     r"$\rightarrow$ Higher-Order Ego Distribution Statistics & Temporal Dispersion"),
-]
-
-y_inv = 0.575
-for line1_txt, line2_txt in invariants_list:
-    inv_box = patches.FancyBboxPatch(
-        (0.268, y_inv), 0.469, 0.098,
-        boxstyle="round,pad=0.005",
-        facecolor="#ffffff", edgecolor="#a7f3d0", linewidth=0.6
-    )
-    ax.add_patch(inv_box)
-    ax.text(0.276, y_inv + 0.065, line1_txt, ha="left", va="center", fontsize=5.8, color="#064e3b")
-    ax.text(0.276, y_inv + 0.022, line2_txt, ha="left", va="center", fontsize=5.2, style="italic", color="#047857")
-    y_inv -= 0.112
-
-# Panel 3: Frozen GNN Backbone & Target Transfer (Right)
-p3 = patches.FancyBboxPatch(
-    (0.768, 0.035), 0.218, 0.815,
-    boxstyle="round,pad=0.012",
-    facecolor="#eff6ff", edgecolor="#93c5fd", linewidth=1.1
-)
-ax.add_patch(p3)
-
-ax.add_patch(patches.FancyBboxPatch(
-    (0.775, 0.690), 0.204, 0.145,
-    boxstyle="round,pad=0.006",
-    facecolor="#1e40af", edgecolor="#1e40af", linewidth=0.5
-))
-ax.text(0.877, 0.785, "Frozen GNN Backbone", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
-ax.text(0.877, 0.725, "& Target Transfer", ha="center", va="center", fontsize=6.8, color="#bfdbfe")
-
-transfer_points = [
-    ("100% Frozen Weights", r"Zero target fine-tuning ($\eta=0$)", "#1e3a8a"),
-    ("Universal Alignment", "Cross-rail canonical basis", "#0284c7"),
-    ("Target Transfer F1", "82.40% Macro F1 Score", "#059669"),
-    ("Invariant Advantage", "+28.20 pp vs Raw Projection", "#b91c1c")
-]
-
-y_tr = 0.585
-for h_txt, b_txt, c_clr in transfer_points:
-    tr_box = patches.FancyBboxPatch(
-        (0.775, y_tr), 0.204, 0.095,
-        boxstyle="round,pad=0.005",
-        facecolor="#ffffff", edgecolor="#bfdbfe", linewidth=0.75
-    )
-    ax.add_patch(tr_box)
-    ax.text(0.783, y_tr + 0.062, h_txt, ha="left", va="center", fontsize=6.0, fontweight="bold", color=c_clr)
-    ax.text(0.783, y_tr + 0.025, b_txt, ha="left", va="center", fontsize=5.3, color="#475569")
-    y_tr -= 0.118
-
-# Connection arrows
-ax.annotate("", xy=(0.260, 0.44), xytext=(0.235, 0.44),
-            arrowprops=dict(arrowstyle="->,head_width=0.22,head_length=0.30", lw=1.5, color="#0f172a"))
-ax.annotate("", xy=(0.768, 0.44), xytext=(0.745, 0.44),
-            arrowprops=dict(arrowstyle="->,head_width=0.22,head_length=0.30", lw=1.5, color="#0f172a"))
-
-plt.subplots_adjust(left=0.01, right=0.99, top=0.98, bottom=0.02)
-save_all_formats(fig, "fig_canonical_invariants")
+# Maintained by render_publication_diagrams.py (Funnel Architecture)
+print("[15/22] Figure 15: Generated via render_publication_diagrams.py")
 
 
 # ======================================================================
@@ -1399,46 +1262,107 @@ save_all_formats(fig, "fig_edge_gate_distribution")
 
 
 # ======================================================================
-# FIGURE 18: Typology GraphSMOTE & Bilinear Synthesis Pipeline (Double Column: 7.16" x 3.20")
+# FIGURE 18: Typology GraphSMOTE & Bilinear Synthesis Pipeline (Double Column: 7.16" x 3.10")
 # ======================================================================
 print("[18/22] Generating Figure 18: Typology GraphSMOTE & Bilinear Synthesis Pipeline...")
-fig, ax = plt.subplots(figsize=(7.16, 3.20))
-ax.axis('off')
-ax.set_xlim([-0.02, 1.02])
-ax.set_ylim([-0.04, 1.04])
+fig = plt.figure(figsize=(7.16, 3.10))
+# Create grid with left panel for latent sketch, right panel for 3 steps
+gs = fig.add_gridspec(1, 2, width_ratios=[0.38, 0.62], wspace=0.18, left=0.06, right=0.98, top=0.88, bottom=0.10)
 
-b_step1 = ("Step 1:\nTypology Clustering", 
-           "• Minority illicit partition\n• Cluster into $\\mathcal{C}_1, \\dots, \\mathcal{C}_K$\n• Preserves distinct rings\n• Prevents mode collapse",
-           0.015, 0.06, 0.225, 0.82, "#fff3e0", "#e65100")
+ax_sketch = fig.add_subplot(gs[0])
+ax_steps = fig.add_subplot(gs[1])
+ax_steps.axis('off')
 
-b_step2 = ("Step 2:\nLatent Manifold Interp.", 
-           "• Sample $u, v \\in \\mathcal{C}_k$ in train set\n• $\\mathbf{h}_{\\text{syn}} = (1-\\rho)\\mathbf{h}_u + \\rho \\mathbf{h}_v$\n• $\\rho \\sim \\mathcal{U}(0, 1)$ on manifold\n• Generates realistic mules",
-           0.265, 0.06, 0.225, 0.82, "#e8f5e9", "#2e7d32")
+# Left Panel: 2D Latent Manifold Topology Scatter Sketch
+np.random.seed(42)
+# Cluster 1: Smurfing Rings (Blue)
+c1_center = np.array([2.0, 3.0])
+c1_pts = c1_center + np.random.randn(25, 2) * 0.45
+# Cluster 2: Peeling Chains (Green)
+c2_center = np.array([4.2, 1.8])
+c2_pts = c2_center + np.random.randn(25, 2) * 0.42
 
-b_step3 = ("Step 3:\nBilinear Link Gen.", 
-           "• Link to real node $w \\in \\mathcal{V}_{\\text{train}}$\n• $\\hat{\\mathbf{A}}_{\\text{syn}, w} = \\sigma(\\mathbf{h}_{\\text{syn}}^T \\mathbf{W}_{\\text{edge}} \\mathbf{h}_w)$\n• Threshold $\\tau_{\\text{edge}} = 0.60$\n• Reconstructs flow graph",
-           0.515, 0.06, 0.225, 0.82, "#e1f5fe", "#0288d1")
+ax_sketch.scatter(c1_pts[:, 0], c1_pts[:, 1], color="#1e40af", alpha=0.65, s=28, label=r"$\mathcal{C}_1$: Smurfing Ring")
+ax_sketch.scatter(c2_pts[:, 0], c2_pts[:, 1], color="#0f766e", alpha=0.65, s=28, label=r"$\mathcal{C}_2$: Peeling Chain")
 
-b_step4 = ("Step 4:\nZero-Leakage Barrier", 
-           "• 100% confined to $\\mathcal{D}_{\\text{train}}$\n• 0 edges to $\\mathcal{D}_{\\text{cal}}$ or $\\mathcal{D}_{\\text{test}}$\n• Standalone GNN recall:\n  $\\mathbf{10.33\\% \\to 90.10\\%}$\n  (+79.77 pp boost)",
-           0.765, 0.06, 0.225, 0.82, "#f3e5f5", "#7b1fa2")
+# Interpolated synthetic nodes strictly inside Cluster 1
+syn_c1 = []
+for _ in range(6):
+    idx_u, idx_v = np.random.choice(len(c1_pts), 2, replace=False)
+    rho = np.random.uniform(0.25, 0.75)
+    syn_pt = (1 - rho) * c1_pts[idx_u] + rho * c1_pts[idx_v]
+    syn_c1.append(syn_pt)
+    ax_sketch.plot([c1_pts[idx_u, 0], c1_pts[idx_v, 0]], [c1_pts[idx_u, 1], c1_pts[idx_v, 1]], 
+                   color="#f97316", linestyle=":", lw=1.0, alpha=0.7)
+syn_c1 = np.array(syn_c1)
+ax_sketch.scatter(syn_c1[:, 0], syn_c1[:, 1], color="#ea580c", marker="*", s=85, edgecolor="black", lw=0.6,
+                  label=r"$\mathbf{h}_{\mathrm{syn}}$ (Intra-Cluster)", zorder=5)
 
-for title, body, x0, y0, w, h, bg_color, header_color in [b_step1, b_step2, b_step3, b_step4]:
-    rect = patches.FancyBboxPatch((x0, y0), w, h, boxstyle="round,pad=0.015",
-                                  facecolor=bg_color, edgecolor=header_color, linewidth=1.2)
-    ax.add_patch(rect)
-    ax.text(x0 + w/2, y0 + h - 0.06, title, ha="center", va="top", fontsize=8.2, fontweight="bold", color=header_color)
-    ax.text(x0 + 0.012, y0 + h - 0.22, body, ha="left", va="top", fontsize=7.4, color="#212121", linespacing=1.38)
+# Interpolated synthetic nodes strictly inside Cluster 2
+syn_c2 = []
+for _ in range(5):
+    idx_u, idx_v = np.random.choice(len(c2_pts), 2, replace=False)
+    rho = np.random.uniform(0.25, 0.75)
+    syn_pt = (1 - rho) * c2_pts[idx_u] + rho * c2_pts[idx_v]
+    syn_c2.append(syn_pt)
+    ax_sketch.plot([c2_pts[idx_u, 0], c2_pts[idx_v, 0]], [c2_pts[idx_u, 1], c2_pts[idx_v, 1]], 
+                   color="#f97316", linestyle=":", lw=1.0, alpha=0.7)
+syn_c2 = np.array(syn_c2)
+ax_sketch.scatter(syn_c2[:, 0], syn_c2[:, 1], color="#ea580c", marker="*", s=85, edgecolor="black", lw=0.6, zorder=5)
 
-arr_kw = dict(arrowstyle="->,head_width=0.28,head_length=0.38", lw=1.8, color="#003366")
-ax.annotate("", xy=(0.265, 0.46), xytext=(0.240, 0.46), arrowprops=arr_kw)
-ax.annotate("", xy=(0.515, 0.46), xytext=(0.490, 0.46), arrowprops=arr_kw)
-ax.annotate("", xy=(0.765, 0.46), xytext=(0.740, 0.46), arrowprops=arr_kw)
+# Cluster boundary hulls/circles
+c1_circle = patches.Circle(c1_center, 1.15, fill=False, edgecolor="#1e40af", linestyle="--", lw=1.1, alpha=0.8)
+c2_circle = patches.Circle(c2_center, 1.10, fill=False, edgecolor="#0f766e", linestyle="--", lw=1.1, alpha=0.8)
+ax_sketch.add_patch(c1_circle)
+ax_sketch.add_patch(c2_circle)
 
-ax.text(0.50, 0.96, "Typology-Clustered Latent GraphSMOTE & Parametric Bilinear Edge Generation",
-        ha="center", va="center", fontsize=10.8, fontweight="bold", color="#003366")
+# Cross-cluster forbidden line
+ax_sketch.plot([2.8, 3.4], [1.2, 3.8], color="#dc2626", linestyle="-.", lw=1.5, alpha=0.85)
+ax_sketch.text(3.1, 2.5, "Forbidden Cross-Interp.\n(Zero Typology Blur)", ha="center", va="center",
+               fontsize=5.6, fontweight="bold", color="#b91c1c", bbox=dict(boxstyle="round,pad=0.15", facecolor="#fee2e2", edgecolor="#dc2626", lw=0.5))
 
-plt.tight_layout()
+ax_sketch.set_title("Latent Manifold Topology Space", fontsize=8.2, fontweight="bold", pad=4)
+ax_sketch.set_xlabel("Latent Dim 1", fontsize=7.2)
+ax_sketch.set_ylabel("Latent Dim 2", fontsize=7.2)
+ax_sketch.tick_params(labelsize=6.5)
+ax_sketch.grid(True, linestyle=":", alpha=0.5)
+ax_sketch.legend(loc="upper left", fontsize=5.8, framealpha=0.90, handletextpad=0.2, borderpad=0.2)
+
+# Right Panel: Exactly 3 Steps matching the caption
+steps_data = [
+    ("Step 1: Latent Typology Partitioning",
+     "• Minority illicit nodes clustered into $\\mathcal{C}_1, \\dots, \\mathcal{C}_K$\n"
+     "• Cosine similarity threshold $\\tau_{\\mathrm{sim}} \\geq 0.75$\n"
+     "• Preserves distinct criminal topological signatures",
+     0.00, 0.68, 0.98, 0.30, "#eff6ff", "#1e40af"),
+    ("Step 2: Intra-Cluster Latent Interpolation",
+     "• Sample seed pair $u, v \\in \\mathcal{C}_k$ within same cluster\n"
+     "• Convex combination: $\\mathbf{h}_{\\mathrm{syn}} = (1-\\rho)\\mathbf{h}_u + \\rho\\mathbf{h}_v$\n"
+     "• Generates realistic synthetic minority representations",
+     0.00, 0.35, 0.98, 0.30, "#fff7ed", "#c2410c"),
+    ("Step 3: Bilinear Edge Gen. & Flow Invariants",
+     "• Localized bilinear link head: $\\hat{\\mathbf{A}}_{\\mathrm{syn}, w} = \\sigma(\\mathbf{h}_{\\mathrm{syn}}^T \\mathbf{W}_{\\mathrm{edge}} \\mathbf{h}_w)$\n"
+     "• Linear transaction amount interp: preserves $\\Phi_{\\mathrm{flow}} \\approx 1.0$\n"
+     "• 100% quarantined to $\\mathcal{D}_{\\mathrm{train}}$: zero lookahead or test leakage",
+     0.00, 0.02, 0.98, 0.30, "#f0fdf4", "#15803d")
+]
+
+for s_title, s_body, sx, sy, sw, sh, s_bg, s_fg in steps_data:
+    ax_steps.add_patch(patches.FancyBboxPatch(
+        (sx, sy), sw, sh, boxstyle="round,pad=0.003,rounding_size=0.005",
+        facecolor=s_bg, edgecolor=s_fg, linewidth=0.9
+    ))
+    ax_steps.text(sx + 0.025, sy + sh - 0.065, s_title, ha="left", va="center", fontsize=7.2, fontweight="bold", color=s_fg)
+    ax_steps.text(sx + 0.025, sy + 0.095, s_body, ha="left", va="center", fontsize=6.2, color="#1e293b", linespacing=1.28)
+
+# Connect 3 steps with downward arrows
+for y_conn in [0.66, 0.33]:
+    ax_steps.annotate("", xy=(0.49, y_conn), xytext=(0.49, y_conn + 0.03),
+                      arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#64748b", lw=1.2))
+
+fig.suptitle("Three-Step Typology-Clustered Latent GraphSMOTE & Bilinear Edge Synthesis Pipeline",
+             fontsize=9.6, fontweight="bold", color="#0f172a", y=0.97)
+
 save_all_formats(fig, "fig18_graphsmote_synthesis_pipeline")
 
 
@@ -1489,46 +1413,108 @@ save_all_formats(fig, "fig19_conformal_risk_mechanism")
 
 
 # ======================================================================
-# FIGURE 20: Multi-Agent Swarm & Fed SR 26-2 Audit Trail (Double Column: 7.16" x 3.20")
+# FIGURE 20: Multi-Agent Swarm Sequence & Fed SR 26-2 Audit Trail (Double Column: 7.16" x 3.30")
 # ======================================================================
-print("[20/22] Generating Figure 20: Multi-Agent Forensic Swarm & Fed SR 26-2 Audit Trail...")
-fig, ax = plt.subplots(figsize=(7.16, 3.20))
+print("[20/22] Generating Figure 20: Multi-Agent Forensic Swarm Sequence Diagram...")
+fig, ax = plt.subplots(figsize=(7.16, 3.30))
 ax.axis('off')
-ax.set_xlim([-0.02, 1.02])
-ax.set_ylim([-0.04, 1.04])
+ax.set_xlim([-0.010, 1.010])
+ax.set_ylim([-0.020, 1.020])
 
-b_agent1 = ("1. Lead Forensic\nCoordinator", 
-            "• Triage & alert ingestion\n• Causal context dispatch\n• Four-Eyes orchestration\n• Case SLA lifecycle tracking", 
-            0.015, 0.06, 0.225, 0.82, "#e3f2fd", "#0288d1")
+# Top Master Banner
+ax.add_patch(patches.FancyBboxPatch(
+    (0.010, 0.915), 0.980, 0.075,
+    boxstyle="round,pad=0.003,rounding_size=0.006",
+    facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
+))
+ax.text(0.50, 0.952, "Autonomous Multi-Agent Forensic Swarm Sequence Protocol & Fed SR 26-2 Audit Trail",
+        ha="center", va="center", fontsize=8.6, fontweight="bold", color="#ffffff")
 
-b_agent2 = ("2. Subgraph Topology\nSpecialist", 
-            "• GNNExplainer extraction\n• Causal 2-hop ego-net\n• Multi-hop wash cycles\n• Flow conservation check", 
-            0.265, 0.06, 0.225, 0.82, "#fff3e0", "#e65100")
+# 4 Agent Columns / Lifelines
+agents = [
+    ("1. Lead Coordinator", "Four-Eyes Orchestrator", 0.125, "#1e40af", "#eff6ff"),
+    ("2. Subgraph Specialist", "GNNExplainer Attribution", 0.375, "#0f766e", "#f0fdfa"),
+    ("3. Legal SAR Drafter", "FinCEN Form 111 XML", 0.625, "#c2410c", "#fff7ed"),
+    ("4. Compliance Verifier", "AST Validator & SR 26-2", 0.875, "#6d28d9", "#faf5ff")
+]
 
-b_agent3 = ("3. Legal SAR\nDrafter", 
-            "• FinCEN Form 111 XML\n• Narrative auto-drafter\n• Grounds of suspicion\n• UN goAML export", 
-            0.515, 0.06, 0.225, 0.82, "#e8f5e9", "#2e7d32")
+for name, role, x_c, c_fg, c_bg in agents:
+    # Header Card
+    ax.add_patch(patches.FancyBboxPatch(
+        (x_c - 0.110, 0.815), 0.220, 0.085,
+        boxstyle="round,pad=0.003,rounding_size=0.005",
+        facecolor=c_bg, edgecolor=c_fg, linewidth=0.9
+    ))
+    ax.text(x_c, 0.865, name, ha="center", va="center", fontsize=6.8, fontweight="bold", color=c_fg)
+    ax.text(x_c, 0.835, role, ha="center", va="center", fontsize=5.8, color="#475569")
+    
+    # Vertical Lifeline
+    ax.plot([x_c, x_c], [0.100, 0.815], color=c_fg, linestyle="--", lw=0.9, alpha=0.45)
 
-b_agent4 = ("4. Compliance Rule\nVerifier (SR 26-2)", 
-            "• AST grammar validator\n• Pydantic anti-hallucination\n• SHA-256 Merkle tree seal\n• Tamper-proof WORM ledger", 
-            0.765, 0.06, 0.225, 0.82, "#f3e5f5", "#7b1fa2")
+# Protocol Messages and Handoffs down the timeline:
+# 1. Coord -> Spec: Dispatch Alert
+ax.annotate("", xy=(0.365, 0.740), xytext=(0.135, 0.740),
+            arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#1e40af", lw=1.2))
+ax.text(0.250, 0.758, "1. Dispatch CRC Alert (Case ID)", ha="center", va="bottom", fontsize=5.8, fontweight="bold", color="#1e40af")
 
-for title, body, x0, y0, w, h, bg_color, header_color in [b_agent1, b_agent2, b_agent3, b_agent4]:
-    rect = patches.FancyBboxPatch((x0, y0), w, h, boxstyle="round,pad=0.015",
-                                  facecolor=bg_color, edgecolor=header_color, linewidth=1.2)
-    ax.add_patch(rect)
-    ax.text(x0 + w/2, y0 + h - 0.06, title, ha="center", va="top", fontsize=8.2, fontweight="bold", color=header_color)
-    ax.text(x0 + 0.012, y0 + h - 0.22, body, ha="left", va="top", fontsize=7.4, color="#212121", linespacing=1.40)
+# Spec Action Box: GNNExplainer
+ax.add_patch(patches.FancyBboxPatch(
+    (0.320, 0.655), 0.110, 0.065, boxstyle="round,pad=0.002,rounding_size=0.003",
+    facecolor="#f0fdfa", edgecolor="#0f766e", linewidth=0.8
+))
+ax.text(0.375, 0.687, "GNNExplainer Mask\n" + r"$M_e \geq 0.65$", ha="center", va="center", fontsize=5.5, color="#0f766e", fontweight="bold")
 
-arr_kw = dict(arrowstyle="->,head_width=0.28,head_length=0.38", lw=1.8, color="#003366")
-ax.annotate("", xy=(0.265, 0.46), xytext=(0.240, 0.46), arrowprops=arr_kw)
-ax.annotate("", xy=(0.515, 0.46), xytext=(0.490, 0.46), arrowprops=arr_kw)
-ax.annotate("", xy=(0.765, 0.46), xytext=(0.740, 0.46), arrowprops=arr_kw)
+# 2. Spec -> Coord: Return Subgraph
+ax.annotate("", xy=(0.135, 0.610), xytext=(0.365, 0.610),
+            arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#0f766e", lw=1.2))
+ax.text(0.250, 0.628, r"2. Causal Subgraph $\mathcal{G}_{\mathrm{sub}}$", ha="center", va="bottom", fontsize=5.8, fontweight="bold", color="#0f766e")
 
-ax.text(0.50, 0.96, "Multi-Agent Autonomous Forensic Swarm & Fed SR 26-2 Cryptographic Audit Pipeline",
-        ha="center", va="center", fontsize=10.2, fontweight="bold", color="#003366")
+# 3. Coord -> Drafter: Forward Evidence
+ax.annotate("", xy=(0.615, 0.520), xytext=(0.135, 0.520),
+            arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#1e40af", lw=1.2))
+ax.text(0.375, 0.538, r"3. Forward Subgraph & 12-D Invariants $\mathbf{z}_{\mathrm{inv}}$", ha="center", va="bottom", fontsize=5.8, fontweight="bold", color="#1e40af")
 
-plt.tight_layout()
+# Drafter Action Box: Synthesize XML
+ax.add_patch(patches.FancyBboxPatch(
+    (0.570, 0.435), 0.110, 0.065, boxstyle="round,pad=0.002,rounding_size=0.003",
+    facecolor="#fff7ed", edgecolor="#c2410c", linewidth=0.8
+))
+ax.text(0.625, 0.467, "FinCEN Form 111\nXML Auto-Drafter", ha="center", va="center", fontsize=5.5, color="#c2410c", fontweight="bold")
+
+# 4. Drafter -> Verifier: Submit XML
+ax.annotate("", xy=(0.865, 0.390), xytext=(0.635, 0.390),
+            arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#c2410c", lw=1.2))
+ax.text(0.750, 0.408, "4. Submit Form 111 XML Dossier", ha="center", va="bottom", fontsize=5.8, fontweight="bold", color="#c2410c")
+
+# Verifier Action Box: AST & Pydantic Check
+ax.add_patch(patches.FancyBboxPatch(
+    (0.815, 0.285), 0.120, 0.075, boxstyle="round,pad=0.002,rounding_size=0.003",
+    facecolor="#faf5ff", edgecolor="#6d28d9", linewidth=0.8
+))
+ax.text(0.875, 0.322, "AST Grammar Validator\n& Pydantic Schema", ha="center", va="center", fontsize=5.4, color="#6d28d9", fontweight="bold")
+
+# Verifier Self-Loop Retry Arrow
+ax.annotate("", xy=(0.880, 0.270), xytext=(0.880, 0.245),
+            arrowprops=dict(arrowstyle="->,head_width=0.15,head_length=0.20", color="#dc2626", lw=1.0))
+ax.plot([0.880, 0.945, 0.945, 0.880], [0.270, 0.270, 0.245, 0.245], color="#dc2626", lw=0.9, linestyle=":")
+ax.text(0.950, 0.257, "Retry on AST fault\n(0% hallucination)", ha="left", va="center", fontsize=5.0, color="#b91c1c")
+
+# 5. Verifier -> Coord: Merkle Receipt & Certified Dossier
+ax.annotate("", xy=(0.135, 0.150), xytext=(0.865, 0.150),
+            arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#6d28d9", lw=1.3))
+ax.text(0.500, 0.168, "5. Commit SHA-256 Merkle Root to WORM Vault & Certify Legal Dossier",
+        ha="center", va="bottom", fontsize=5.8, fontweight="bold", color="#6d28d9")
+
+# Bottom Compliance Certification Banner
+ax.add_patch(patches.FancyBboxPatch(
+    (0.015, 0.012), 0.970, 0.065,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
+))
+ax.text(0.50, 0.044, "Statutory Alignment: US Interagency SR 26-2 (Model Risk Management) & EU AI Act Art. 14 Human-in-the-Loop Oversight",
+        ha="center", va="center", fontsize=6.2, fontweight="bold", color="#38bdf8")
+
+plt.subplots_adjust(left=0.005, right=0.995, top=0.985, bottom=0.010)
 save_all_formats(fig, "fig20_multi_agent_forensic_swarm")
 
 

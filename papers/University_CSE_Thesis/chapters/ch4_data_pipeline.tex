@@ -39,7 +39,8 @@ CREATE INDEX idx_target_time ON streaming_transactions (target_entity_id, timest
 
 CREATE TABLE entities_master (
     entity_id VARCHAR(64) PRIMARY KEY,
-    entity_type VARCHAR(32) NOT NULL, -- 'individual', 'merchant', 'financial_institution', 'smart_contract'
+    -- 'individual', 'merchant', 'bank', 'smart_contract'
+    entity_type VARCHAR(32) NOT NULL,
     country_iso VARCHAR(3) NOT NULL,
     kyc_risk_tier INTEGER DEFAULT 1,  -- 1 (Low) to 5 (Critical)
     is_pep BOOLEAN DEFAULT FALSE,     -- Politically Exposed Person
@@ -50,7 +51,8 @@ CREATE TABLE entities_master (
 
 CREATE TABLE high_risk_jurisdictions (
     country_iso VARCHAR(3) PRIMARY KEY,
-    fatf_status VARCHAR(16) NOT NULL, -- 'black_list', 'grey_list', 'standard'
+    -- 'black_list', 'grey_list', 'standard'
+    fatf_status VARCHAR(16) NOT NULL,
     basel_aml_index DOUBLE NOT NULL,
     sanction_regime VARCHAR(64) DEFAULT 'None'
 );

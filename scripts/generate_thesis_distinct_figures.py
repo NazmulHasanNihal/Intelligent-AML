@@ -47,134 +47,12 @@ def save_fig(fig, stem):
 
 
 # ==============================================================================
-# 1. FIG 3.1: TENSOR FLOW & COMPUTATIONAL DATA-PATH (7.16" x 3.40")
 # ==============================================================================
-print("Generating Fig 3.1: C-STGB Tensor Flow...")
-fig, ax = plt.subplots(figsize=(7.16, 3.40))
-ax.axis('off')
-ax.set_xlim([-0.005, 1.005])
-ax.set_ylim([-0.008, 1.008])
+# 1. FIG 3.1: MASTER PIPELINE FLOWCHART
+# ==============================================================================
+# Maintained by render_publication_diagrams.py
+print("Fig 3.1: Maintained by render_publication_diagrams.py")
 
-# Base border
-ax.add_patch(patches.FancyBboxPatch(
-    (0.00, 0.00), 1.00, 1.00,
-    boxstyle='round,pad=0.004,rounding_size=0.008',
-    facecolor='#ffffff', edgecolor='#cbd5e1', linewidth=0.8
-))
-
-# Header banner
-ax.add_patch(patches.FancyBboxPatch(
-    (0.008, 0.916), 0.984, 0.076,
-    boxstyle='round,pad=0.003,rounding_size=0.006',
-    facecolor='#0f172a', edgecolor='#0f172a', linewidth=0.5
-))
-ax.text(0.50, 0.954, 'C-STGB Computational Tensor Flow: End-to-End Deep Architectural Pipeline',
-        ha='center', va='center', fontsize=9.2, fontweight='bold', color='#ffffff')
-
-stages_31 = [
-    {
-        'id': 'STEP 1: INVARIANT TENSORS',
-        'title': '12-D Canonical Space',
-        'badge_bg': '#1e3a8a', 'badge_fg': '#dbeafe', 'card_bg': '#f8fafc', 'border': '#93c5fd',
-        'x': 0.010, 'w': 0.233,
-        'blocks': [
-            {'head': 'Graph Ingress & History', 'math': r'$G_t = (V_t, E_t), \; \mathbf{X} \in \mathbb{R}^{|V| \times d_v}$', 'desc': 'Chronological window slicing'},
-            {'head': 'Kirchhoff Mass Balance', 'math': r'$\tilde{\Phi}_{\mathrm{flow}} = \log(1 + \Phi_{\mathrm{flow}}(u,t))$', 'desc': 'Conduit flow conservation'},
-            {'head': 'Hawkes Burst & Taint', 'math': r'$\lambda_u(t) = \mu_u + \sum \alpha e^{-\beta \Delta t}$', 'desc': 'Forward/reverse PageRank taint'}
-        ],
-        'out': r'$\mathbf{z}_{\mathrm{inv}}(u,t) \in \mathbb{R}^{12}$',
-        'tag': 'Canonical Physics-Guided Invariants'
-    },
-    {
-        'id': 'STEP 2: TEMPORAL GNN',
-        'title': 'BurstAwareHGT & Edge Gate',
-        'badge_bg': '#065f46', 'badge_fg': '#dcfce7', 'card_bg': '#f8fafc', 'border': '#86efac',
-        'x': 0.256, 'w': 0.233,
-        'blocks': [
-            {'head': 'Tri-Band Harmonic Kernel', 'math': r'$\Phi_{\mathrm{time}}(\Delta t), \; w(\Delta t) \in \mathbb{R}^3$', 'desc': 'Seconds to 90-day dormancy'},
-            {'head': 'Context Edge-Trust Gate', 'math': r'$\hat{g}_{ij} = \delta_{\mathrm{fl}} + (1 - \delta_{\mathrm{fl}}) g_{ij}$', 'desc': 'Prunes 65.9% camouflage chaff'},
-            {'head': 'Brody GATv2 Convolutions', 'math': r'$\mathbf{h}_u^{(l+1)} = \sigma(\sum \alpha_{uv} \mathbf{W}_V \mathbf{h}_v^{(l)})$', 'desc': 'Jumping Knowledge JK-cat'}
-        ],
-        'out': r'$\mathbf{h}_u^{(L)} \in \mathbb{R}^d$ (Graph Latent)',
-        'tag': 'Spatiotemporal Representation'
-    },
-    {
-        'id': 'STEP 3: GRAPH-SMOTE & FUSION',
-        'title': 'Bilinear Link & Adaptive Gate',
-        'badge_bg': '#9a3412', 'badge_fg': '#ffedd5', 'card_bg': '#f8fafc', 'border': '#fdba74',
-        'x': 0.502, 'w': 0.233,
-        'blocks': [
-            {'head': 'Typology Latent SMOTE', 'math': r'$\mathbf{h}_{\mathrm{syn}} = (1-\rho)\mathbf{h}_u + \rho\mathbf{h}_v, \; u,v \in C_k$', 'desc': 'Minority manifold clustering'},
-            {'head': 'Bilinear Link Predictor', 'math': r'$\hat{\mathbf{A}}_{\mathrm{syn}} = \sigma(\mathbf{h}_{\mathrm{syn}}^T \mathbf{W}_{\mathrm{edge}} \mathbf{h}_w)$', 'desc': 'Quarantined to Train Split'},
-            {'head': 'Evidence Fusion Gate', 'math': r'$\alpha_u = \sigma(\mathbf{w}_\alpha^T [\mathbf{h}_u \,\|\, \mathbf{z}_{\mathrm{inv}}] + b_\alpha)$', 'desc': 'Cold-start: 89.60% F1 preserved'}
-        ],
-        'out': r'$\mathbf{h}_u^* = \alpha_u \mathbf{h}_u + (1-\alpha_u)\mathbf{z}_{\mathrm{inv}}$',
-        'tag': 'Fused Cold-Start Immune Space'
-    },
-    {
-        'id': 'STEP 4: META-STACK & CRC',
-        'title': 'ResMLPNet & 3-Tier CRC',
-        'badge_bg': '#4c1d95', 'badge_fg': '#f3e8ff', 'card_bg': '#f8fafc', 'border': '#d8b4fe',
-        'x': 0.748, 'w': 0.242,
-        'blocks': [
-            {'head': 'ResMLPNet Meta-Learner', 'math': r'18-D Meta: $\mathrm{KL}(p_{\mathrm{tree}} \,\|\, p_{\mathrm{gnn}})$', 'desc': 'Stream 1 + Stream 2 + Stream 3'},
-            {'head': 'Cost-Sensitive Bayes Head', 'math': r'$\tau^* = \arg\min_\tau (15 \cdot \mathrm{FN} + 1 \cdot \mathrm{FP})$', 'desc': 'Asymmetric legal risk loss'},
-            {'head': 'Class-Conditional CRC', 'math': r'$\hat{q}^{(0)}, \hat{q}^{(1)} \to 1-\alpha \geq 0.99$', 'desc': '3-Tier: T1 / T2 Review / T3 STP'}
-        ],
-        'out': r'$\hat{p}_u \in [0, 1], \; \Gamma(u) \subseteq \{0, 1\}$',
-        'tag': 'Finite-Sample Conformal Triage'
-    }
-]
-
-y_bottom = 0.018
-card_h = 0.885
-
-for s in stages_31:
-    x0, w0 = s['x'], s['w']
-    ax.add_patch(patches.FancyBboxPatch(
-        (x0, y_bottom), w0, card_h,
-        boxstyle='round,pad=0.005,rounding_size=0.008',
-        facecolor=s['card_bg'], edgecolor=s['border'], linewidth=1.1
-    ))
-    ax.add_patch(patches.FancyBboxPatch(
-        (x0 + 0.005, y_bottom + card_h - 0.088), w0 - 0.010, 0.082,
-        boxstyle='round,pad=0.003,rounding_size=0.006',
-        facecolor=s['badge_bg'], edgecolor=s['badge_bg'], linewidth=0.5
-    ))
-    ax.text(x0 + w0/2, y_bottom + card_h - 0.028, s['id'], ha='center', va='center', fontsize=6.5, fontweight='bold', color='#ffffff')
-    ax.text(x0 + w0/2, y_bottom + card_h - 0.062, s['title'], ha='center', va='center', fontsize=5.8, color=s['badge_fg'], style='italic')
-
-    block_h = 0.208
-    y_top = y_bottom + card_h - 0.102
-    for i, b in enumerate(s['blocks']):
-        y_blk = y_top - (i * (block_h + 0.014)) - block_h
-        ax.add_patch(patches.FancyBboxPatch(
-            (x0 + 0.006, y_blk), w0 - 0.012, block_h,
-            boxstyle='round,pad=0.003,rounding_size=0.005',
-            facecolor='#ffffff', edgecolor='#cbd5e1', linewidth=0.65
-        ))
-        ax.plot([x0 + 0.014], [y_blk + block_h - 0.032], marker='s', markersize=3.0, color=s['badge_bg'])
-        ax.text(x0 + 0.022, y_blk + block_h - 0.032, b['head'], ha='left', va='center', fontsize=5.8, fontweight='bold', color='#0f172a')
-        ax.text(x0 + w0/2, y_blk + block_h - 0.104, b['math'], ha='center', va='center', fontsize=5.7, color='#0f172a',
-                bbox=dict(boxstyle='round,pad=0.12', facecolor='#f8fafc', edgecolor='#e2e8f0', lw=0.4))
-        ax.text(x0 + w0/2, y_blk + 0.034, b['desc'], ha='center', va='center', fontsize=5.1, color='#475569')
-
-    y_out = y_bottom + 0.052
-    ax.add_patch(patches.FancyBboxPatch((x0 + 0.006, y_out), w0 - 0.012, 0.046, boxstyle='round,pad=0.003,rounding_size=0.004', facecolor='#f1f5f9', edgecolor='#cbd5e1', linewidth=0.6))
-    ax.text(x0 + 0.014, y_out + 0.023, 'Out:', ha='left', va='center', fontsize=5.4, fontweight='bold', color='#334155')
-    ax.text(x0 + w0/2 + 0.008, y_out + 0.023, s['out'], ha='center', va='center', fontsize=5.6, fontweight='bold', color='#0f172a')
-
-    y_tag = y_bottom + 0.010
-    ax.add_patch(patches.FancyBboxPatch((x0 + 0.006, y_tag), w0 - 0.012, 0.036, boxstyle='round,pad=0.002,rounding_size=0.004', facecolor='#ffffff', edgecolor=s['border'], linewidth=0.7))
-    ax.text(x0 + w0/2, y_tag + 0.018, s['tag'], ha='center', va='center', fontsize=5.1, fontweight='bold', color=s['badge_bg'])
-
-arrow_y = y_bottom + card_h / 2
-for x_start, x_end in [(0.243, 0.255), (0.489, 0.501), (0.735, 0.747)]:
-    ax.annotate('', xy=(x_end, arrow_y), xytext=(x_start, arrow_y),
-                arrowprops=dict(arrowstyle='->', color='#64748b', lw=1.2, mutation_scale=9))
-
-plt.subplots_adjust(left=0.005, right=0.995, top=0.99, bottom=0.01)
-save_fig(fig, "fig3_1_tensor_flow")
 
 
 # ==============================================================================
@@ -255,6 +133,9 @@ stages_41 = [
     }
 ]
 
+y_bottom = 0.018
+card_h = 0.885
+
 for s in stages_41:
     x0, w0 = s['x'], s['w']
     ax.add_patch(patches.FancyBboxPatch(
@@ -287,8 +168,7 @@ for s in stages_41:
 
     y_out = y_bottom + 0.052
     ax.add_patch(patches.FancyBboxPatch((x0 + 0.006, y_out), w0 - 0.012, 0.046, boxstyle='round,pad=0.003,rounding_size=0.004', facecolor='#f1f5f9', edgecolor='#cbd5e1', linewidth=0.6))
-    ax.text(x0 + 0.014, y_out + 0.023, 'Out:', ha='left', va='center', fontsize=5.4, fontweight='bold', color='#334155')
-    ax.text(x0 + w0/2 + 0.008, y_out + 0.023, s['out'], ha='center', va='center', fontsize=5.6, fontweight='bold', color='#0f172a')
+    ax.text(x0 + 0.012, y_out + 0.023, f"Out: {s['out']}", ha='left', va='center', fontsize=5.3, fontweight='bold', color='#0f172a')
 
     y_tag = y_bottom + 0.010
     ax.add_patch(patches.FancyBboxPatch((x0 + 0.006, y_tag), w0 - 0.012, 0.036, boxstyle='round,pad=0.002,rounding_size=0.004', facecolor='#ffffff', edgecolor=s['border'], linewidth=0.7))
@@ -413,8 +293,7 @@ for s in stages_81:
 
     y_out = y_bottom + 0.052
     ax.add_patch(patches.FancyBboxPatch((x0 + 0.006, y_out), w0 - 0.012, 0.046, boxstyle='round,pad=0.003,rounding_size=0.004', facecolor='#f1f5f9', edgecolor='#cbd5e1', linewidth=0.6))
-    ax.text(x0 + 0.014, y_out + 0.023, 'Out:', ha='left', va='center', fontsize=5.4, fontweight='bold', color='#334155')
-    ax.text(x0 + w0/2 + 0.008, y_out + 0.023, s['out'], ha='center', va='center', fontsize=5.6, fontweight='bold', color='#0f172a')
+    ax.text(x0 + 0.012, y_out + 0.023, f"Out: {s['out']}", ha='left', va='center', fontsize=5.3, fontweight='bold', color='#0f172a')
 
     y_tag = y_bottom + 0.010
     ax.add_patch(patches.FancyBboxPatch((x0 + 0.006, y_tag), w0 - 0.012, 0.036, boxstyle='round,pad=0.002,rounding_size=0.004', facecolor='#ffffff', edgecolor=s['border'], linewidth=0.7))

@@ -21,21 +21,20 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 
 \begin{table}[htbp]
 \centering
+\small
 \caption{Enterprise RESTful and WebSocket API Endpoint Specifications.}
 \label{tab:fastapi_endpoints}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llcl}
+\begin{tabularx}{\textwidth}{l p{4.8cm} c X}
 \toprule
-\textbf{HTTP Method} & \textbf{Endpoint Path} & \textbf{SLA Latency} & \textbf{Functional Description} \\
+\textbf{Method} & \textbf{Endpoint Path} & \textbf{SLA} & \textbf{Core Function} \\
 \midrule
-\texttt{POST} & \texttt{/api/v1/transactions/ingest} & $<1.5\,\text{ms}$ & Ingests streaming transaction event and updates in-memory causal graph. \\
-\texttt{POST} & \texttt{/api/v1/inference/score} & $<2.5\,\text{ms}$ & Executes C-STGB inference and returns conformal triage action ($\Gamma(u)$). \\
-\texttt{POST} & \texttt{/api/v1/compliance/sar/generate} & $<500\,\text{ms}$ & Dispatches Multi-Agent Swarm to compile FinCEN Form 111 XML dossier. \\
-\texttt{GET} & \texttt{/api/v1/audit/receipt/\{case\_id\}} & $<1.0\,\text{ms}$ & Retrieves cryptographic SHA-256 Merkle tree receipt under SR 26-2 governance. \\
-\texttt{WS} & \texttt{/ws/v1/live-triage-feed} & Real-Time & Real-time streaming WebSocket feed broadcasting Tier-1/Tier-2 triage alerts. \\
+\texttt{POST} & \texttt{/api/v1/transactions/ingest} & $<1.5\,\text{ms}$ & Ingest event; update causal graph. \\
+\texttt{POST} & \texttt{/api/v1/inference/score} & $<2.5\,\text{ms}$ & C-STGB scoring; conformal triage $\Gamma(u)$. \\
+\texttt{POST} & \texttt{/api/v1/compliance/sar/generate} & $<500\,\text{ms}$ & Dispatch swarm; compile FinCEN XML. \\
+\texttt{GET} & \texttt{/api/v1/audit/receipt/\{case\_id\}} & $<1.0\,\text{ms}$ & Query SHA-256 Merkle receipt (SR 26-2). \\
+\texttt{WS} & \texttt{/ws/v1/live-triage-feed} & Real-Time & Stream live Tier-1/Tier-2 triage feed. \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabularx}
 \end{table}
 
 \subsection{FastAPI Ingestion Implementation Snippet}

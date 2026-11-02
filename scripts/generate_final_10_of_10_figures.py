@@ -94,10 +94,10 @@ ax.add_patch(patches.FancyBboxPatch(
     facecolor="#1e40af", edgecolor="#1e40af"
 ))
 ax.text(0.093, 0.860, "1. Streaming Ingest", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
-ax.text(0.093, 0.795, "SWIFT / bKash / Kafka\nApache Arrow Buffers", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#1e40af")
-ax.text(0.093, 0.730, "Time-Causal Ingestion\nDuckDB Micro-Batches\nt_e <= t_eval (No Leak)", ha="center", va="center", fontsize=5.8, color="#334155")
-ax.text(0.093, 0.640, "12-D Canonical Invariants:\nPhi_flow, Hawkes lambda_u,\ns_fwd, s_bwd, [mu_A, sigma_A^2]", ha="center", va="center", fontsize=5.6, color="#0f766e")
-ax.text(0.093, 0.440, "Single-event: 0.11 ms", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#1e40af")
+ax.text(0.093, 0.800, "SWIFT / bKash / Kafka\nApache Arrow Buffers", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#1e40af")
+ax.text(0.093, 0.715, "Time-Causal Ingestion\nDuckDB Micro-Batches\nt_e <= t_eval (No Leak)", ha="center", va="center", fontsize=5.8, color="#334155")
+ax.text(0.093, 0.615, "12-D Canonical Invariants:\nPhi_flow, Hawkes lambda_u,\ns_fwd, s_bwd, [mu_A, sigma_A^2]", ha="center", va="center", fontsize=5.5, color="#0f766e")
+ax.text(0.093, 0.425, "Single-event: 0.11 ms", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#1e40af")
 
 # Arrow 1 -> 2
 ax.annotate("", xy=(0.210, 0.635), xytext=(0.178, 0.635),
@@ -115,11 +115,11 @@ ax.add_patch(patches.FancyBboxPatch(
     facecolor="#0f766e", edgecolor="#0f766e"
 ))
 ax.text(0.322, 0.860, "2. C-STGB Neural Core", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
-ax.text(0.322, 0.795, "3-Band Harmonic Temporal GNN\n+ Context Edge Gate g_ij", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#0f766e")
-ax.text(0.322, 0.725, "Prunes Chaff Camouflage\n(delta_floor >= 0.10, 92.1% Ret.)", ha="center", va="center", fontsize=5.8, color="#334155")
-ax.text(0.322, 0.640, "Latent GraphSMOTE C_k\nEvidence Adaptive Fusion alpha_u\n89.60% Cold-Start Minority F1", ha="center", va="center", fontsize=5.6, color="#6d28d9")
-ax.text(0.322, 0.525, "Cost-Sensitive Head:\ntau* = 0.18 (15:1 Cost Ratio)", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#b45309")
-ax.text(0.322, 0.440, "Inference: 0.16 ms", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#0f766e")
+ax.text(0.322, 0.800, "3-Band Harmonic Temporal GNN\n+ Context Edge Gate g_ij", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#0f766e")
+ax.text(0.322, 0.715, "Prunes Chaff Camouflage\n(delta_floor >= 0.10, 92.1% Ret.)", ha="center", va="center", fontsize=5.8, color="#334155")
+ax.text(0.322, 0.615, "Latent GraphSMOTE C_k\nEvidence Adaptive Fusion alpha_u\n89.60% Cold-Start Minority F1", ha="center", va="center", fontsize=5.5, color="#6d28d9")
+ax.text(0.322, 0.515, "Cost-Sensitive Head:\ntau* = 0.18 (15:1 Cost Ratio)", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#b45309")
+ax.text(0.322, 0.425, "Inference: 0.16 ms", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#0f766e")
 
 # Arrow 2 -> Diamond
 ax.annotate("", xy=(0.465, 0.635), xytext=(0.432, 0.635),
@@ -127,7 +127,7 @@ ax.annotate("", xy=(0.465, 0.635), xytext=(0.432, 0.635),
 
 # Decision Diamond (Conformal Risk Control)
 diam_x, diam_y = 0.530, 0.635
-dw, dh = 0.058, 0.130
+dw, dh = 0.064, 0.135
 diamond_pts = np.array([
     [diam_x, diam_y + dh],
     [diam_x + dw, diam_y],
@@ -135,10 +135,10 @@ diamond_pts = np.array([
     [diam_x - dw, diam_y]
 ])
 ax.add_patch(patches.Polygon(diamond_pts, facecolor="#fef3c7", edgecolor="#d97706", linewidth=1.4))
-ax.text(diam_x, diam_y + 0.035, "Class-Cond.", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#92400e")
-ax.text(diam_x, diam_y + 0.005, "CRC Triage", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#b45309")
-ax.text(diam_x, diam_y - 0.032, r"$1-\alpha \geqq 99\%$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#92400e")
-ax.text(diam_x, diam_y - 0.060, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", va="center", fontsize=5.5, color="#78350f")
+ax.text(diam_x, diam_y + 0.038, "Class-Cond.", ha="center", va="center", fontsize=5.5, fontweight="bold", color="#92400e")
+ax.text(diam_x, diam_y + 0.008, "CRC Triage", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#b45309")
+ax.text(diam_x, diam_y - 0.028, r"$1-\alpha \geq 99\%$", ha="center", va="center", fontsize=5.5, fontweight="bold", color="#92400e")
+ax.text(diam_x, diam_y - 0.056, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", va="center", fontsize=5.2, color="#78350f")
 
 # Three Routing Branches
 # Branch 1 (Top): Tier 1 Quarantine Gamma={1}
@@ -147,7 +147,7 @@ ax.text(diam_x, diam_y - 0.060, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", 
 tiers = [
     {
         "tier": "Tier 1: High-Risk Quarantine", "set": r"$\Gamma = \{1\}$",
-        "action": "Immediate Quarantine Hold | Auto FinCEN SAR Package",
+        "action": "Immediate Quarantine Hold | Assisted FinCEN SAR Dossier",
         "stat": "18 alerts / 10,000 tx  (0.18%)  |  SHA-256 Merkle Audit Receipt",
         "badge_bg": "#b91c1c", "card_bg": "#fef2f2", "border": "#fca5a5",
         "y": 0.725, "clr": "#b91c1c"
@@ -219,7 +219,7 @@ print("2. GENERATING 2-PANEL FACTORIAL ATTRIBUTION GROUPED BAR CHART")
 print("======================================================================")
 # Data from Table 2:
 models_f = ["GCN", "GraphSAGE", "EvolveGCN", "TGN", "CatBoost", "XGBoost", "C-STGB"]
-native_elliptic = [43.55, 49.07, 51.04, 68.40, 87.90, 88.35, 79.08]
+native_elliptic = [43.55, 49.07, 51.04, 68.40, 87.90, 88.35, 83.96]
 aug_elliptic =    [44.82, 50.45, 51.85, 71.20, 90.15, 90.80, 91.42]
 
 native_macro = [23.78, 24.31, 18.94, 43.76, 64.25, 64.76, 48.20]
@@ -295,11 +295,13 @@ pareto_vram = [112, 428, 894, 1420, 3280]
 ax.plot(pareto_lat, pareto_vram, color="#64748b", linestyle="--", lw=1.1, zorder=2, label="Empirical Frontier")
 
 # Shaded Bank SLA zone (< 1 ms latency)
-ax.axvspan(0.1, 1.0, color="#dcfce7", alpha=0.35, label=r"Core Banking Fast SLA ($<1$\,ms)")
+ax.axvspan(0.1, 1.0, color="#dcfce7", alpha=0.35, label="Core Banking Fast SLA (< 1 ms)")
 ax.axvline(1.0, color="#15803d", linestyle=":", lw=1.2)
 
 ax.set_xscale("log")
 ax.set_yscale("log")
+ax.set_xlim([0.10, 35.0])
+ax.set_ylim([60, 6500])
 ax.set_xlabel("Streaming Single-Event Latency (ms)", fontsize=8.5)
 ax.set_ylabel("Peak VRAM Footprint (MB)", fontsize=8.5)
 ax.set_title("Latency vs. Peak VRAM & Throughput", fontweight="bold", fontsize=9.2)
@@ -359,9 +361,10 @@ ax_risk.plot(auto_rate, cstgb_risk, color='#047857', lw=2.2, label='C-STGB Class
 
 ax_risk.axvline(99.50, color='#0f172a', ls=':', lw=1.2)
 ax_risk.scatter([99.50], [0.18], color='#047857', s=55, zorder=6, edgecolors='black')
-ax_risk.annotate('Operational Point:\n99.50% STP, 0.18% Risk', xy=(99.50, 0.18), xytext=(84.0, 1.30),
+ax_risk.annotate('Operational Point:\n99.32% Tier-3 STP | 99.50% Singletons\n(Selective Risk 0.18%)',
+                 xy=(99.50, 0.18), xytext=(80.5, 1.45),
                  arrowprops=dict(arrowstyle="->", color="#047857", lw=1.1),
-                 fontsize=6.8, fontweight='bold', color='#047857')
+                 fontsize=6.4, fontweight='bold', color='#047857')
 
 ax_risk.set_title("(b) Selective Risk vs. Straight-Through Rate", fontweight="bold", fontsize=9.0)
 ax_risk.set_xlabel("Automated Straight-Through Processing (%)", fontsize=8.5)

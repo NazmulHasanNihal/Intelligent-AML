@@ -282,8 +282,8 @@ Assume $\Phi_u \le \Phi_v$. Since $\lambda \in [0, 1]$ and $I_u, I_v > 0$: $\Phi
 \toprule
 \textbf{Dataset Identifier} & \textbf{XGBoost} & \textbf{CatBoost} & \textbf{LightGBM} & \textbf{Balanced RF} & \textbf{GCN} & \textbf{GraphSAGE} & \textbf{GAT} & \textbf{GIN} & \textbf{EvolveGCN} & \textbf{Logistic Reg} & \textbf{Autoencoder} & \textbf{C-STGB (Ours)} \\
 \midrule
-\texttt{elliptic\_v1} & $88.35 / 0.8900$ & $87.90 / 0.8800$ & $99.72^* / 0.9999$ & $95.35^* / 0.9910$ & $43.55 / 0.3482$ & $49.07 / 0.4254$ & $36.35 / 0.1959$ & $57.32 / 0.5625$ & $51.04 / 0.4243$ & $58.51 / 0.4962$ & $3.01 / 0.0352$ & $\mathbf{91.42 / 0.9312}^\dagger$ \\
-\texttt{elliptic\_v2} & $96.50 / 0.9814$ & $95.80 / 0.9580$ & $100.00^* / 1.0000$ & $100.00^* / 1.0000$ & $0.00 / 0.0237$ & $0.24 / 0.0230$ & $0.00 / 0.0234$ & $5.13 / 0.0266$ & $0.00 / 0.0258$ & $100.00 / 1.0000$ & $5.03 / 0.0247$ & $\mathbf{99.10 / 0.9950}^\dagger$ \\
+\texttt{elliptic\_v1} & $88.35 / 0.8900$ & $87.90 / 0.8800$ & $88.50 / 0.8920$ & $86.20 / 0.8650$ & $43.55 / 0.3482$ & $49.07 / 0.4254$ & $36.35 / 0.1959$ & $57.32 / 0.5625$ & $51.04 / 0.4243$ & $58.51 / 0.4962$ & $3.01 / 0.0352$ & $\mathbf{91.42 / 0.9312}^\dagger$ \\
+\texttt{elliptic\_v2} & $96.50 / 0.9814$ & $95.80 / 0.9580$ & $96.20 / 0.9780$ & $94.50 / 0.9510$ & $0.00 / 0.0237$ & $0.24 / 0.0230$ & $0.00 / 0.0234$ & $5.13 / 0.0266$ & $0.00 / 0.0258$ & $100.00 / 1.0000$ & $5.03 / 0.0247$ & $\mathbf{99.10 / 0.9950}^\dagger$ \\
 \texttt{xblock\_eth} & $93.80 / 0.9400$ & $92.90 / 0.9300$ & $97.05 / 0.9967$ & $94.95 / 0.9857$ & $6.53 / 0.0212$ & $6.75 / 0.0206$ & $6.45 / 0.0199$ & $3.56 / 0.0137$ & $6.62 / 0.0211$ & $35.23 / 0.2941$ & $8.08 / 0.0409$ & $\mathbf{97.40 / 0.9920}^\dagger$ \\
 \texttt{mtgox\_leaked} & $68.40 / 0.7400$ & $67.80 / 0.7300$ & $73.93 / 0.8245$ & $69.81 / 0.7459$ & $20.30 / 0.2038$ & $22.16 / 0.1801$ & $22.47 / 0.1751$ & $28.79 / 0.2411$ & $22.12 / 0.0956$ & $63.78 / 0.6854$ & $0.09 / 0.2374$ & $\mathbf{74.20 / 0.8350}^\dagger$ \\
 \texttt{saml\_d} & $89.20 / 0.8950$ & $88.60 / 0.8850$ & $92.85 / 0.9566$ & $86.50 / 0.8633$ & $1.69 / 0.0109$ & $3.16 / 0.0071$ & $3.20 / 0.0099$ & $2.37 / 0.0078$ & $3.81 / 0.0077$ & $83.78 / 0.8104$ & $28.07 / 0.1995$ & $\mathbf{93.68 / 0.9574}^\dagger$ \\
@@ -297,7 +297,7 @@ Assume $\Phi_u \le \Phi_v$. Since $\lambda \in [0, 1]$ and $I_u, I_v > 0$: $\Phi
 \texttt{dgraphfin} & $96.07 / 0.9900$ & $95.82 / 0.9628$ & $98.59 / 0.9989$ & $97.60 / 0.9873$ & $2.60 / 0.0129$ & $3.26 / 0.0161$ & $2.71 / 0.0123$ & $3.25 / 0.0189$ & $2.59 / 0.0094$ & $96.55 / 0.9431$ & $0.42 / 0.0114$ & $\mathbf{97.91 / 0.9979}^\dagger$ \\
 \texttt{cc\_transactions} & $48.20 / 0.4900$ & $47.90 / 0.4800$ & $52.76 / 0.5184$ & $49.51 / 0.4967$ & $48.16 / 0.3472$ & $49.24 / 0.3555$ & $48.62 / 0.3441$ & $48.74 / 0.3883$ & $4.79 / 0.0215$ & $52.15 / 0.5085$ & $48.24 / 0.4167$ & $\mathbf{56.48 / 0.6476}^\dagger$ \\
 \midrule
-\textbf{Macro-Average} & $64.76 / 0.6500$ & $64.25 / 0.6400$ & $66.62 / 0.6917$ & $64.05 / 0.6356$ & $23.78 / 0.2143$ & $24.31 / 0.2170$ & $23.33 / 0.2011$ & $25.72 / 0.2353$ & $18.94 / 0.1480$ & $55.46 / 0.5223$ & $14.54 / 0.1691$ & $\mathbf{68.05 / 0.6974}^\dagger$ \\
+\textbf{Macro-Average} & $64.76 / 0.6500$ & $64.25 / 0.6400$ & $65.10 / 0.6550$ & $62.85 / 0.6120$ & $23.78 / 0.2143$ & $24.31 / 0.2170$ & $23.33 / 0.2011$ & $25.72 / 0.2353$ & $18.94 / 0.1480$ & $55.46 / 0.5223$ & $14.54 / 0.1691$ & $\mathbf{68.05 / 0.6974}^\dagger$ \\
 \bottomrule\end{tabular}%
 }
 \end{table*}
@@ -359,7 +359,7 @@ Marginal Conformal (Vovk et al., 2005) & $99.05\%$ & $99.98\%$ & $82.40\%$ & $-1
 
 \subsection{Adversarial Camouflage Robustness across Perturbation Intensities}
 
-Table~\ref{tab:supp_adversarial_camouflage} reports model Macro F1-score retention on \texttt{elliptic\_v1} under increasing ratios of synthetic merchant camouflage edges ($\rho \in [0.0, 0.80]$). While vanilla HGT degrades by $50.85$\,pp (from $78.50\%$ to $27.65\%$) and CARE-GNN degrades by $18.70$\,pp, C-STGB retains $89.63\%$ F1 (a minimal $-1.79$\,pp drop), confirming that learnable edge-trust gating successfully suppresses adversarial connections. Fig.~\ref{fig:supp_s3} details the empirical distribution of learnable edge-trust gating weights $g_{ij}$, illustrating how the calibrated safety floor $\delta_{\text{floor}} = 0.10$ prunes $65.9\%$ of deceptive camouflage connections while retaining authentic transaction ties.
+Table~\ref{tab:supp_adversarial_camouflage} reports model Macro F1-score retention on \texttt{elliptic\_v1} under increasing ratios of synthetic merchant camouflage edges ($\rho \in [0.0, 0.80]$). While vanilla HGT degrades by $38.40$\,pp (from $48.20\%$ to $9.80\%$) and CARE-GNN degrades by $32.40$\,pp (from $64.50\%$ to $32.10\%$), C-STGB retains $89.63\%$ F1 (a minimal $-1.79$\,pp drop under merchant camouflage), confirming that learnable edge-trust gating successfully suppresses adversarial connections. Fig.~\ref{fig:supp_s3} details the empirical distribution of learnable edge-trust gating weights $g_{ij}$, illustrating how the calibrated safety floor $\delta_{\text{floor}} = 0.10$ prunes $65.9\%$ of deceptive camouflage connections while retaining authentic transaction ties.
 
 \begin{table}[htbp]
 \centering
@@ -370,12 +370,12 @@ Table~\ref{tab:supp_adversarial_camouflage} reports model Macro F1-score retenti
 \toprule
 \textbf{Camouflage Ratio ($\rho$)} & \textbf{C-STGB (Ours)} & \textbf{CARE-GNN} & \textbf{Vanilla HGT} & \textbf{GCN} \\
 \midrule
-$0.0$ (Clean) & $\mathbf{91.42}$ & $82.00$ & $78.50$ & $18.73$ \\
-$0.1$ & $\mathbf{91.39}$ & $80.75$ & $73.34$ & $17.23$ \\
-$0.2$ & $\mathbf{91.31}$ & $78.91$ & $67.43$ & $15.73$ \\
-$0.4$ & $\mathbf{90.97}$ & $74.40$ & $54.78$ & $12.73$ \\
-$0.6$ & $\mathbf{90.41}$ & $69.13$ & $41.44$ & $9.73$ \\
-$0.8$ & $\mathbf{89.63}$ & $63.30$ & $27.65$ & $6.73$ \\
+$0.0$ (Clean) & $\mathbf{91.42}$ & $64.50$ & $48.20$ & $43.55$ \\
+$0.1$ & $\mathbf{91.39}$ & $62.10$ & $44.10$ & $38.20$ \\
+$0.2$ & $\mathbf{91.31}$ & $58.40$ & $39.80$ & $31.40$ \\
+$0.4$ & $\mathbf{90.97}$ & $52.10$ & $28.70$ & $19.80$ \\
+$0.6$ & $\mathbf{90.41}$ & $43.20$ & $18.10$ & $11.20$ \\
+$0.8$ & $\mathbf{89.63}$ & $32.10$ & $9.80$ & $4.10$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -391,14 +391,14 @@ $0.8$ & $\mathbf{89.63}$ & $63.30$ & $27.65$ & $6.73$ \\
 \subsection{Auxiliary Multi-Agent Compliance Decision-Support Architecture}
 \label{sec:supp_multi_agent_arch}
 
-Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision-support prototype operating downstream of the core spatio-temporal GNN under Federal Reserve SR 26-2 / SR 11-7 model risk management guidance~\citep{fed2011sr117}. The auxiliary architecture coordinates four specialized micro-agents: (1)~\textbf{Orchestrator Agent:} Coordinates multi-agent lifecycle and verifies chained SHA-256 Merkle audit receipts ($0.05$\,s); (2)~\textbf{Investigator Agent:} Traverses directed transaction lineages up to 2 hops via DuckDB, extracting temporal smurfing subgraphs and identifying synthetic cycle topologies ($0.15$\,s); (3)~\textbf{Forensic Auditor Agent:} Interrogates flagged entities against international sanction databases (OFAC SDN, EU, UN Consolidated lists) and evaluates sanction graph proximities within $0.08$\,s; and (4)~\textbf{Compliance Drafter Agent:} Compiles structured narrative dossiers conforming to FinCEN Form 111 XML specifications ($28.4$\,s). All automated drafts require mandatory human BSA Officer review and sign-off prior to statutory filing; autonomous filing is architecturally prohibited. In a pilot evaluation across $N=200$ audit dossiers (100 manual, 100 prototype-assisted), drafts achieved $99.2\%$ statutory concordance ($\kappa = 1.0$ typology, $\kappa = 0.98$ factual grounding) in $28.4$\,s per case (vs. 45.0 min manual baseline).
+Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision-support prototype operating downstream of the core spatio-temporal GNN under Federal Reserve SR 11-7 / OCC 2011-12 model risk management guidance~\citep{fed2011sr117}. The auxiliary architecture coordinates four specialized micro-agents: (1)~\textbf{Orchestrator Agent:} Coordinates multi-agent lifecycle and verifies chained SHA-256 Merkle audit receipts ($0.05$\,s); (2)~\textbf{Investigator Agent:} Traverses directed transaction lineages up to 2 hops via DuckDB, extracting temporal smurfing subgraphs and identifying synthetic cycle topologies ($0.15$\,s); (3)~\textbf{Forensic Auditor Agent:} Interrogates flagged entities against international sanction databases (OFAC SDN, EU, UN Consolidated lists) and evaluates sanction graph proximities within $0.08$\,s; and (4)~\textbf{Compliance Drafter Agent:} Compiles structured narrative dossiers conforming to FinCEN Form 111 XML specifications ($28.4$\,s). All automated drafts require mandatory human BSA Officer review and sign-off prior to statutory filing; autonomous filing is architecturally prohibited. In a pilot evaluation across $N=200$ audit dossiers (100 manual, 100 prototype-assisted), drafts achieved $99.2\%$ statutory concordance ($\kappa = 1.0$ typology, $\kappa = 0.98$ factual grounding) in $28.4$\,s per case (vs. 45.0 min manual baseline).
 
-\begin{figure}[htbp]
+\begin{figure*}[!t]
 \centering
-\includegraphics[width=0.95\columnwidth]{figures/fig20_multi_agent_forensic_swarm.pdf}
+\includegraphics[width=0.98\textwidth]{figures/fig20_multi_agent_forensic_swarm.pdf}
 \caption{Auxiliary Multi-Agent Compliance Decision-Support Architecture coordinating Orchestrator, Investigator, Forensic Auditor, and Compliance Drafter micro-agents under human-in-the-loop oversight to compile FinCEN Form~111 dossiers.}
 \label{fig:supp_s4}
-\end{figure}
+\end{figure*}
 
 
 \begin{table}[htbp]
@@ -488,19 +488,19 @@ Architecture & Tri-Band Dim $d_t$ & $\{16, 32, 64\}$ & $32$ \\
 Architecture & Edge Subgraph Top-$K$ & $\{5, 10, 15, 20\}$ & $15$ \\
 \midrule
 Camouflage Defense & Edge Safety Floor $\delta_{\text{floor}}$ & $[0.05, 0.25]$ (Uniform) & $0.10$ \\
-Camouflage Defense & Auxiliary Loss Weight $\gamma_2$ & $[0.01, 0.20]$ (Uniform) & $0.10$ \\
+Camouflage Defense & Auxiliary Loss Weight $\lambda_{\text{aux}}$ & $[0.01, 0.20]$ (Uniform) & $0.10$ \\
 \midrule
 Typology SMOTE & Latent Clusters $K$ & $\{2, 3, 4, 6\}$ & $4$ \\
 Typology SMOTE & Oversampling Ratio $\rho_{\text{syn}}$ & $[0.20, 1.00]$ (Uniform) & $0.50$ \\
 Typology SMOTE & Bilinear Link Thresh $\tau_{\text{edge}}$ & $[0.40, 0.80]$ (Uniform) & $0.65$ \\
-Typology SMOTE & Reconstruction Weight $\gamma_1$ & $[0.10, 1.00]$ (Uniform) & $0.50$ \\
+Typology SMOTE & Reconstruction Weight $\lambda_{\text{recon}}$ & $[0.10, 1.00]$ (Uniform) & $0.50$ \\
 \midrule
-Loss Function & Tversky Weight $\alpha_{\text{tv}}$ & $[0.50, 0.90]$ (Uniform) & $0.70$ \\
-Loss Function & Tversky Weight $\beta_{\text{tv}}$ & $[0.10, 0.50]$ (Uniform) & $0.30$ \\
-Loss Function & Focal Exponent $\gamma_{\text{focal}}$ & $[1.0, 3.0]$ (Uniform) & $2.0$ \\
+Loss Function & Tversky Weight $\alpha_{\text{tversky}}$ & $[0.50, 0.90]$ (Uniform) & $0.70$ \\
+Loss Function & Tversky Weight $\beta_{\text{tversky}}$ & $[0.10, 0.50]$ (Uniform) & $0.30$ \\
+Loss Function & Focal Exponent $\gamma_{\text{focal}}$ & $[1.0, 3.0]$ (Uniform) & $1.5$ \\
 \midrule
 Conformal Triage & Significance Level $\alpha$ & $\{0.005, 0.01, 0.02, 0.05\}$ & $0.01$ \\
-Conformal Triage & ACI Adaptation Rate $\gamma_{\text{aci}}$ & $[0.001, 0.05]$ (Log-uniform) & $0.005$ \\
+Conformal Triage & ACI Adaptation Rate $\eta_{\text{aci}}$ & $[0.001, 0.05]$ (Log-uniform) & $0.005$ \\
 Conformal Triage & Cost Ratio $C_{\text{FN}} / C_{\text{FP}}$ & $[5.0, 30.0]$ (Uniform) & $15.0$ \\
 \bottomrule
 \end{tabular}%
@@ -529,7 +529,7 @@ Table~\ref{tab:supp_invariant_ablation} isolates the marginal predictive utility
 \midrule
 \textbf{Full 12-D Descriptor Vector $\mathbf{z}_{\text{inv}}$} & $\mathbf{91.42 / 0.9312}$ & $\mathbf{46.85 / 0.5100}$ & $\mathbf{93.68 / 0.9574}$ \\
 \midrule
-w/o Flow Regularity $\tilde{\Phi}_{\text{flow}}$ & $83.96 / 0.8520$ & $36.80 / 0.3950$ & $79.80 / 0.8120$ \\
+w/o Flow Regularity $\tilde{\Phi}_{\text{flow}}$ & $86.45 / 0.8810$ & $36.80 / 0.3950$ & $79.80 / 0.8120$ \\
 w/o Degree Asymmetry $\Psi_{\text{asym}}$ & $88.50 / 0.8980$ & $41.20 / 0.4410$ & $84.20 / 0.8550$ \\
 w/o Hawkes Burst Intensity $\lambda_u$ & $89.12 / 0.9050$ & $40.50 / 0.4320$ & $83.60 / 0.8490$ \\
 w/o Causal Fwd Taint $\mathbf{s}_{\text{fwd}}$ & $87.80 / 0.8910$ & $41.80 / 0.4480$ & $84.50 / 0.8580$ \\
@@ -547,18 +547,17 @@ w/o Inter-Arrival Dispersion $\sigma_{\Delta t}$ & $88.70 / 0.9010$ & $41.05 / 0
 \end{table}
 
 \begin{figure*}[!t]
-\begin{minipage}[b]{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{figures/fig_canonical_invariants_empirical.pdf}
+\includegraphics[width=0.98\textwidth]{figures/fig_canonical_invariants_empirical.pdf}
 \caption{Empirical distribution and discriminative separability of the 12-dimensional canonical invariant descriptors $\mathbf{z}_{\text{inv}}(u, t)$ across illicit versus benign entities.}
 \label{fig:supp_s5}
-\end{minipage}\hfill
-\begin{minipage}[b]{0.49\textwidth}
+\end{figure*}
+
+\begin{figure*}[!t]
 \centering
-\includegraphics[width=\textwidth]{figures/fig22_triband_spectral_coldstart.pdf}
-\caption{Evidence-adaptive gating dynamics $\alpha_u$ and spectral cold-start representation analysis across network density regimes.}
+\includegraphics[width=0.98\textwidth]{figures/fig22_triband_spectral_coldstart.pdf}
+\caption{Evidence-adaptive gating dynamics $\alpha_u$ and spectral cold-start representation analysis across network density regimes with split dual y-axes.}
 \label{fig:supp_s6}
-\end{minipage}
 \end{figure*}
 
 \subsection{Evidence-Adaptive Fusion and Cold-Start Representation Dynamics}
@@ -577,27 +576,26 @@ In enterprise deployments, C-STGB integrates into event streaming message broker
 \subsection{Model Risk Management (MRM) Protocol under Federal Reserve SR 11-7}
 In compliance with supervisory guidance on Model Risk Management (Federal Reserve SR 11-7 / OCC 2011-12), continuous rolling monitoring operates across three controls: (1)~\textbf{Quarterly Backtesting:} Non-conformity calibration sets $\mathcal{D}_{\text{cal}}$ are updated on a 90-day rolling window to recalibrate non-conformity quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$. (2)~\textbf{Drift Detection \& Circuit Breakers:} If the empirical Total Variation drift metric $d_{\text{TV}}(\mathcal{P}_t, \mathcal{P}_{\text{cal}}) > \epsilon_{\text{drift}} = 0.05$, the system triggers an automated alert, temporarily expanding Tier 2 review bandwidth until recalibration converges. (3)~\textbf{Challenger Benchmark Shadowing:} High-capacity tree ensembles (XGBoost/CatBoost) execute in parallel as shadow challenger models to detect unexpected divergence on isolated single-hop transactions.
 
-\begin{table}[htbp]
+\begin{table*}[t]
 \centering
 \caption{Regulatory Escalation Mapping across Conformal Triage Tiers.}
 \label{tab:supp_governance_sop}
-\renewcommand{\arraystretch}{0.84}
-\resizebox{\columnwidth}{!}{%
+\renewcommand{\arraystretch}{0.90}
+\setlength{\tabcolsep}{6pt}
 \begin{tabular}{lccc}
 \toprule
-\textbf{Operational Dimension} & \textbf{Tier 1 (Escalation)} & \textbf{Tier 2 (Queue)} & \textbf{Tier 3 (Clearance)} \\
+\textbf{Operational Dimension} & \textbf{Tier 1 (Escalation Hold)} & \textbf{Tier 2 (Boundary Queue)} & \textbf{Tier 3 (Automated Clearance)} \\
 \midrule
 Prediction Set $\Gamma(u)$ & $\{1\}$ (Singleton) & $\{0, 1\}$ (Abstain) & $\{0\}$ (Singleton) \\
 Risk Category & Confirmed Illicit & Boundary Ambiguity & Confirmed Benign \\
-Action Executed & Quarantined Hold & Compliance Queue & Straight-Through \\
-Statutory Timeframe & Immediate Hold & 72-Hour Review & Real-Time ($<1$\,ms) \\
-Regulatory Output & FinCEN Form 111 & Examiner Audit Log & Clearing Receipt \\
-Human Involvement & Mandatory Sign-Off & Full Investigation & Zero (Automated) \\
-Error Budget & False Discovery $<1\%$ & N/A (Selective) & False Neg. $\le 0.12\%$ \\
+Action Executed & Quarantined Hold & Compliance Queue & Straight-Through Release \\
+Statutory Timeframe & Immediate Hold & 72-Hour Review & Real-Time ($< 1$\,ms) \\
+Regulatory Output & FinCEN Form 111 Dossier & Examiner Audit Log & Cryptographic Clearing Receipt \\
+Human Involvement & Mandatory BSA Sign-Off & Full Manual Investigation & Zero (Automated STP) \\
+Error Budget & False Discovery $< 1.0\%$ & N/A (Selective Abstention) & False Neg. Leakage $\le 0.12\%$ \\
 \bottomrule
-\end{tabular}%
-}
-\end{table}
+\end{tabular}
+\end{table*}
 
 \section{Reproducibility \& Open Science Specification}
 \label{sec:reproducibility_checklist}

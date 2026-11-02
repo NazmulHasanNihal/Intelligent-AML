@@ -31,8 +31,9 @@ plt.rcParams.update({
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 thesis_fig_dir = BASE_DIR / "papers" / "University_CSE_Thesis" / "figures"
+eaai_fig_dir = BASE_DIR / "papers" / "EAAI_Research_Paper" / "figures"
 data_fig_dir = BASE_DIR / "data" / "outputs" / "figures"
-TARGET_DIRS = [thesis_fig_dir, data_fig_dir]
+TARGET_DIRS = [thesis_fig_dir, eaai_fig_dir, data_fig_dir]
 
 for d in TARGET_DIRS:
     d.mkdir(parents=True, exist_ok=True)
@@ -124,12 +125,12 @@ stages_41 = [
         'badge_bg': '#047857', 'badge_fg': '#d1fae5', 'card_bg': '#f8fafc', 'border': '#6ee7b7',
         'x': 0.748, 'w': 0.242,
         'blocks': [
-            {'head': '2-Hop Ego In-Memory Cache', 'math': '100k Node Capacity, LRU', 'desc': '88.4% Cache hit rate in live tests'},
+            {'head': 'Fast-Path 2-Hop LRU Cache', 'math': '100k Node Capacity, LRU', 'desc': '88.4% Cache hit rate in live tests'},
             {'head': 'Sub-Millisecond Fast-Path', 'math': 'Latency: 0.45 ms Hit vs 2.1 ms', 'desc': 'Thread-safe RLock concurrency'},
             {'head': 'Online Graph Eviction', 'math': 'OrderedDict + Adjacency Index', 'desc': 'Continuous streaming state'}
         ],
         'out': r'Ego Subgraph $G_t^{(K)}(u)$',
-        'tag': 'Sub-10ms Banking SLA Guaranteed'
+        'tag': '88.4% Hit Rate | Sub-10ms SLA'
     }
 ]
 
@@ -240,7 +241,7 @@ stages_81 = [
         'x': 0.502, 'w': 0.233,
         'blocks': [
             {'head': 'C-STGB Neural Pods', 'math': 'Triton / TorchScript Inference', 'desc': 'Zero-GPU commodity CPU native'},
-            {'head': 'Autonomous 4-Agent Swarm', 'math': r'Investigator $\to$ Drafter $\to$ Auditor', 'desc': 'Sub-30s regulatory dossier'},
+            {'head': 'Assisted 4-Agent Swarm', 'math': r'Investigator $\to$ Drafter $\to$ Auditor', 'desc': 'Sub-30s regulatory dossier'},
             {'head': 'Compiler AST Grammar', 'math': r'$\mathcal{V}(\mathcal{T}) \subseteq \mathcal{V}_{\mathrm{sub}}$ (Prop 6.1)', 'desc': '0% AI entity hallucination'}
         ],
         'out': 'Sealed SAR/STR Regulatory Dossier',

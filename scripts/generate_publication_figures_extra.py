@@ -128,10 +128,10 @@ w_triband = np.clip(w_triband, 0.0, 1.0)
 
 ax.plot(dt, decay_std_fast, label="Standard Exponential Decay (Fast: $\\lambda=0.25$)", color="#9e9e9e", lw=1.6, ls="--")
 ax.plot(dt, decay_std_slow, label="Standard Exponential Decay (Slow: $\\lambda=0.03$)", color="#616161", lw=1.6, ls=":")
-ax.plot(dt, w_triband, label=r"\textbf{C-STGB Tri-Band Harmonic Attention} $w(\Delta t)$ (Ours)", color="#006400", lw=2.4)
+ax.plot(dt, w_triband, label="C-STGB Tri-Band Harmonic Attention $w(\Delta t)$ (Ours)", color="#006400", lw=2.4)
 
 ax.axvline(24.0, color="#1565c0", linestyle="-.", alpha=0.6, lw=1.0)
-ax.text(24.3, 0.75, "24h Diurnal Resonance", fontsize=7.5, color="#1565c0", fontweight="bold")
+ax.text(24.3, 0.68, "24h Diurnal Resonance", fontsize=7.5, color="#1565c0", fontweight="bold")
 ax.axvline(48.0, color="#1565c0", linestyle="-.", alpha=0.6, lw=1.0)
 ax.text(48.3, 0.55, "48h Harmonic", fontsize=7.5, color="#1565c0", fontweight="bold")
 
@@ -256,14 +256,14 @@ ax.set_ylim([-0.02, 1.06])
 y_axis = 0.50
 ax.annotate("", xy=(0.98, y_axis), xytext=(0.02, y_axis),
             arrowprops=dict(arrowstyle="->,head_width=0.25,head_length=0.35", color="#334155", lw=2.0))
-ax.text(0.98, y_axis - 0.055, "Time (UTC)", ha="right", va="top", fontsize=7.5, fontweight="bold", color="#334155")
+ax.text(0.99, y_axis - 0.055, "Time (UTC)", ha="right", va="top", fontsize=7.5, fontweight="bold", color="#334155")
 
 events = [
-    (0.09, "14:15:02", "Deposit $485k", "Source S0 (ACC_9941)\nFunds received via wire", "#1e3a8a", "above"),
-    (0.28, "14:19:12", "Smurfing Fan-Out", "Dispersal to mules M1–M5\n12-min window, λ=74.2", "#b91c1c", "below"),
-    (0.48, "14:23:01", "Layering Wash", "Wash cycle (L1–L3)\nChaff filtered (g_ij<0.10)", "#ea580c", "above"),
-    (0.68, "14:27:45", "Aggregation", "Offshore sink C4\nFlow ratio Φ_flow ≈ 0.994", "#047857", "below"),
-    (0.88, "14:28:12", "Conformal Alert", "Tier 1 Quarantine Γ={1}\nFinCEN XML generated", "#7c3aed", "above"),
+    (0.09, "14:15:02", "Stage 1: Influx $485k", "Source S0 (ACC_9941)\nFunds received via wire", "#1e3a8a", "above"),
+    (0.28, "14:19:12", "Stage 2: Smurfing", "Dispersal to mules M1–M5\n12-min window, λ=74.2", "#b91c1c", "below"),
+    (0.48, "14:23:01", "Stage 3: Layering Wash", "Wash cycle (L1–L3)\nChaff filtered (g_ij<0.10)", "#ea580c", "above"),
+    (0.68, "14:27:45", "Stage 4: Aggregation", "Offshore sink C4\nFlow ratio Φ_flow ≈ 0.994", "#047857", "below"),
+    (0.88, "14:28:12", "Stage 5: Conformal Triage", "Tier 1 Quarantine Γ={1}\nAssisted SAR generated", "#7c3aed", "above"),
 ]
 
 for x_pt, time_str, title_str, desc_str, clr, pos in events:
@@ -340,9 +340,9 @@ ax.grid(True, axis="y", linestyle=":", alpha=0.6)
 
 for bar, l_val, p_val in zip(bars, latencies, p99_lat):
     ax.annotate(f"{l_val:.2f} ms\n(P99:{p_val:.2f})",
-                (bar.get_x() + bar.get_width() / 2, bar.get_height()),
-                xytext=(0, 4), textcoords="offset points", ha="center", va="bottom",
-                fontsize=6.5, fontweight="bold", linespacing=1.1)
+                (bar.get_x() + bar.get_width() / 2, p_val),
+                xytext=(0, 3), textcoords="offset points", ha="center", va="bottom",
+                fontsize=6.2, fontweight="bold", linespacing=1.05)
 
 ax.set_title("Stage-by-Stage Streaming Latency Breakdown: Fast-Path vs. Full Forensics Path",
              fontweight="bold", fontsize=9.8, pad=8)
@@ -386,13 +386,13 @@ ax.grid(True, axis="x", linestyle=":", alpha=0.6)
 ax.axvline(12, color="#616161", linestyle="--", lw=1.0)
 ax.axvline(20, color="#616161", linestyle="--", lw=1.0)
 
-ax.add_patch(patches.FancyBboxPatch((1.5, 7.85), 9.0, 0.65, boxstyle="round,pad=0.08", facecolor="#dbeafe", edgecolor="#1565c0", lw=0.8))
-ax.text(6.0, 8.17, "Phase 1: Shadow (W1–W12)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#1565c0")
+ax.add_patch(patches.FancyBboxPatch((1.0, 7.85), 9.5, 0.65, boxstyle="round,pad=0.08", facecolor="#dbeafe", edgecolor="#1565c0", lw=0.8))
+ax.text(5.75, 8.17, "Phase 1: Shadow (W1–W12)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#1565c0")
 
-ax.add_patch(patches.FancyBboxPatch((12.5, 7.85), 7.0, 0.65, boxstyle="round,pad=0.08", facecolor="#ccfbf1", edgecolor="#00796b", lw=0.8))
-ax.text(16.0, 8.17, "Phase 2: Pilot (W13–W20)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#00796b")
+ax.add_patch(patches.FancyBboxPatch((12.2, 7.85), 7.2, 0.65, boxstyle="round,pad=0.08", facecolor="#ccfbf1", edgecolor="#00796b", lw=0.8))
+ax.text(15.8, 8.17, "Phase 2: Pilot (W13–W20)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#00796b")
 
-ax.add_patch(patches.FancyBboxPatch((20.5, 7.85), 5.0, 0.65, boxstyle="round,pad=0.08", facecolor="#fee2e2", edgecolor="#c62828", lw=0.8))
+ax.add_patch(patches.FancyBboxPatch((20.4, 7.85), 5.2, 0.65, boxstyle="round,pad=0.08", facecolor="#fee2e2", edgecolor="#c62828", lw=0.8))
 ax.text(23.0, 8.17, "Phase 3: STP (W21–W26)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#c62828")
 
 ax.set_ylim([-0.6, 9.0])
@@ -558,10 +558,10 @@ steps = [
     "Full C-STGB\n(Final)"
 ]
 
-# Baseline start, incremental deltas, final total
-deltas = [10.33, 35.22, 14.65, 10.84, 19.06, 0.82, 0.50]
+# Baseline start, incremental deltas, final total exactly matching Table 7.4
+deltas = [26.40, 28.40, 13.70, 7.70, 9.92, 3.68, 1.62]
 # Cumulative values:
-# 10.33 -> 45.55 -> 60.20 -> 71.04 -> 90.10 -> 90.92 -> 91.42
+# 26.40 -> 54.80 -> 68.50 -> 76.20 -> 86.12 -> 89.80 -> 91.42
 
 bottoms = [0.0]
 heights = [deltas[0]]
@@ -591,7 +591,7 @@ for i, (b, h) in enumerate(zip(bottoms, heights)):
     if i == 0:
         ax.text(x_pos[i], h + 1.2, f"{h:.2f}%", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#1e293b")
     elif i == len(steps) - 1:
-        ax.text(x_pos[i], h + 1.2, f"{h:.2f}%\n(+81.09 pp)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
+        ax.text(x_pos[i], h + 1.2, f"{h:.2f}%\n(+65.02 pp)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
     else:
         ax.text(x_pos[i], b + h + 1.2, f"+{h:.2f}\n({b+h:.1f}%)", ha="center", va="bottom", fontsize=6.2, fontweight="bold", color=colors_wf[i])
 
@@ -718,19 +718,19 @@ sar_fields = [
     ("Case Identifier", "SAR-2026-B8F91A04", "#0f172a"),
     ("Primary Subject", "ACC_9941 (Source S0)", "#b91c1c"),
     ("Triage Set", "Tier 1: Quarantine Hold", "#b91c1c"),
-    ("Primary Typology", "Smurfing & Peeling Chain", "#c2410c"),
-    ("Mass Flow Balance", "Φ_flow = 0.9942 (Pass-Through)", "#0f766e"),
-    ("Merkle Receipt Seal", "SHA-256 e3b0c4... (Verified)", "#15803d"),
-    ("Compliance Standard", "Fed SR 26-2 & BSA Aligned", "#4338ca")
+    ("Typology", "Smurfing & Peeling Chain", "#c2410c"),
+    ("Flow Balance", "Pass-Through (0.994)", "#0f766e"),
+    ("Merkle Seal", "SHA-256 e3b0c4... (WORM)", "#15803d"),
+    ("Compliance", "Fed SR 26-2 & BSA Aligned", "#4338ca")
 ]
 
 y_field = 0.82
 for label, val, c_val in sar_fields:
-    ax_c.text(0.06, y_field, label + ":", ha="left", va="center", fontsize=5.6, fontweight="bold", color="#334155")
-    ax_c.text(0.94, y_field, val, ha="right", va="center", fontsize=5.6, fontweight="bold", color=c_val)
+    ax_c.text(0.05, y_field, label + ":", ha="left", va="center", fontsize=5.3, fontweight="bold", color="#334155")
+    ax_c.text(0.95, y_field, val, ha="right", va="center", fontsize=5.3, fontweight="bold", color=c_val)
     y_field -= 0.105
 
-ax_c.text(0.50, 0.05, "Autonomous 4-Agent Generation\n100% AST Grammar Validated", ha="center", va="center", fontsize=6.2, color="#166534")
+ax_c.text(0.50, 0.05, "Assisted 4-Agent Generation\n100% AST Grammar Validated", ha="center", va="center", fontsize=6.2, color="#166534")
 
 plt.tight_layout()
 save_all(fig, "fig_15node_forensic_progression")

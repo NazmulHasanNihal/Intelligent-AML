@@ -124,7 +124,7 @@ modules = [
         "num": "M6", "title": "Conformal Triage",
         "badge_bg": "#b91c1c", "badge_fg": "#fef2f2", "card_bg": "#f8fafc", "border": "#fecaca",
         "headline": "99.50% STP Cut", "hl_bg": "#fee2e2", "hl_fg": "#b91c1c",
-        "bullets": ["Dual-quantile threshold", "Autonomous FinCEN SAR"],
+        "bullets": ["Dual-quantile threshold", "Assisted FinCEN SAR Dossier"],
         "out": r"$\Gamma(u) \subseteq \{0, 1\}$",
         "x": 0.832, "w": 0.156
     }
@@ -191,7 +191,7 @@ for i, m in enumerate(modules):
                     arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.28", lw=1.3, color="#64748b"))
 
 plt.subplots_adjust(left=0.005, right=0.995, top=0.985, bottom=0.015)
-save_fig_all(fig, ["fig6_system_architecture", "pipeline_cstgb", "fig3_1_tensor_flow"])
+save_fig_all(fig, ["fig6_system_architecture", "pipeline_cstgb"])
 
 
 # ==============================================================================

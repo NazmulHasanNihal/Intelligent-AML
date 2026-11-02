@@ -16,72 +16,32 @@ To resolve these challenges, C-STGB incorporates a vectorized, zero-copy streami
 \section{DuckDB Embedded Analytical Engine \& SQL Data Contracts}
 C-STGB deploys DuckDB as an in-process, columnar analytical execution engine. By operating entirely within the same memory address space as PyTorch Geometric, DuckDB eliminates inter-process communication (IPC) serialization penalties.
 
-\subsection{Standardized Transaction SQL Data Contract}
-Every incoming financial transaction payload and reference entity must strictly adhere to the unified streaming relational data contracts formalized in Listing~\ref{lst:duckdb_schema}.
+\subsection{Relational Entity-Relationship Model \& Causal Index Architecture}
+Every incoming financial transaction payload and reference entity is structured into an optimized, normalized relational schema that directly maps into our directed multigraph representation space. Figure~\ref{fig:ch4_database_erd} illustrates the Crow's Foot Entity-Relationship Diagram (ERD), composite time-causal indexing structures, and the materialized 12-dimensional canonical invariant view (\texttt{v\_canonical\_invariants\_12d}).
 
-\begin{lstlisting}[language=SQL, caption={DuckDB Ingestion Schema and Master Entity Relational Contracts.}, label={lst:duckdb_schema}]
-CREATE TABLE streaming_transactions (
-    transaction_id VARCHAR(64) PRIMARY KEY,
-    source_entity_id VARCHAR(64) NOT NULL,
-    target_entity_id VARCHAR(64) NOT NULL,
-    timestamp_epoch DOUBLE NOT NULL,
-    amount_raw DOUBLE NOT NULL,
-    amount_usd DOUBLE NOT NULL,
-    currency_code VARCHAR(8) NOT NULL,
-    channel_type VARCHAR(16) NOT NULL,
-    fee_amount DOUBLE DEFAULT 0.0,
-    is_sar_alert BOOLEAN DEFAULT FALSE,
-    ingest_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_2_database_erd.pdf}
+\caption{Relational Database Schema (ERD), time-causal composite indexing architecture, and materialized 12-dimensional canonical invariant view (\texttt{v\_canonical\_invariants\_12d}) mapping relational transaction tables into a directed multigraph.}
+\label{fig:ch4_database_erd}
+\end{figure}
 
-CREATE INDEX idx_source_time ON streaming_transactions (source_entity_id, timestamp_epoch);
-CREATE INDEX idx_target_time ON streaming_transactions (target_entity_id, timestamp_epoch);
+The database schema connects three primary relational tables:
+\begin{enumerate}
+    \item \textbf{\texttt{entities\_master} (Primary Key: \texttt{entity\_id}):} Stores core entity demographics, account risk profiles (KYC tiers 1--5), politically exposed person (PEP) status, and ISO 3166-1 alpha-2 jurisdiction references.
+    \item \textbf{\texttt{streaming\_transactions} (Primary Key: \texttt{transaction\_id}):} Captures high-frequency payment movements with foreign keys \texttt{source\_entity\_id} and \texttt{target\_entity\_id} referencing \texttt{entities\_master} (1-to-many cardinality). Each record maintains microsecond UTC timestamps, USD-normalized amounts, and payment rail identifiers.
+    \item \textbf{\texttt{high\_risk\_jurisdictions} (Primary Key: \texttt{country\_iso}):} Holds Financial Action Task Force (FATF) black-list and grey-list classifications and Basel AML Index risk metrics.
+\end{enumerate}
 
-CREATE TABLE entities_master (
-    entity_id VARCHAR(64) PRIMARY KEY,
-    -- 'individual', 'merchant', 'bank', 'smart_contract'
-    entity_type VARCHAR(32) NOT NULL,
-    country_iso VARCHAR(3) NOT NULL,
-    kyc_risk_tier INTEGER DEFAULT 1,  -- 1 (Low) to 5 (Critical)
-    is_pep BOOLEAN DEFAULT FALSE,     -- Politically Exposed Person
-    is_sanctioned BOOLEAN DEFAULT FALSE,
-    registration_timestamp TIMESTAMP NOT NULL,
-    last_active_timestamp TIMESTAMP NOT NULL
-);
+\subsection{Causal Ego-Graph Analytical Query Execution \& Zero-Lookahead Invariant}
+To prevent temporal data leakage, transaction neighborhoods must be strictly time-bounded: an ego-graph $\mathcal{N}_k(u, t)$ evaluated at continuous time $t$ can only incorporate edges $e \in \mathcal{E}$ satisfying $t_e \le t$. 
 
-CREATE TABLE high_risk_jurisdictions (
-    country_iso VARCHAR(3) PRIMARY KEY,
-    -- 'black_list', 'grey_list', 'standard'
-    fatf_status VARCHAR(16) NOT NULL,
-    basel_aml_index DOUBLE NOT NULL,
-    sanction_regime VARCHAR(64) DEFAULT 'None'
-);
-\end{lstlisting}
-
-\subsection{Causal Ego-Graph Analytical Query Execution}
-To extract the localized $k$-hop causal ego-graph $\mathcal{N}_k(u, t)$ strictly prior to transaction timestamp $t$, DuckDB executes vectorized columnar filtering formalized in Listing~\ref{lst:duckdb_ego_query}:
-
-\begin{lstlisting}[language=SQL, caption={Vectorized Causal Ego-Graph Extraction Query.}, label={lst:duckdb_ego_query}]
-SELECT 
-    t.source_entity_id,
-    t.target_entity_id,
-    t.amount_usd,
-    t.timestamp_epoch,
-    ( ? - t.timestamp_epoch ) AS delta_time,
-    e_src.kyc_risk_tier AS src_risk,
-    e_dst.kyc_risk_tier AS dst_risk,
-    j_dst.fatf_status AS dst_jurisdiction_status
-FROM streaming_transactions t
-JOIN entities_master e_src ON t.source_entity_id = e_src.entity_id
-JOIN entities_master e_dst ON t.target_entity_id = e_dst.entity_id
-LEFT JOIN high_risk_jurisdictions j_dst ON e_dst.country_iso = j_dst.country_iso
-WHERE (t.source_entity_id = ? OR t.target_entity_id = ?)
-  AND t.timestamp_epoch <= ?
-  AND t.timestamp_epoch >= ( ? - 7776000 ) -- 90-Day Seasonal Horizon
-ORDER BY t.timestamp_epoch DESC
-LIMIT 50;
-\end{lstlisting}
-This analytical query executes in under $0.18\text{ ms}$ on indexed in-memory tables containing 10 million transactions.
+To achieve sub-millisecond execution over tables containing tens of millions of records, C-STGB establishes composite B-tree indexes:
+\begin{itemize}
+    \item \texttt{idx\_source\_time} on \texttt{streaming\_transactions(source\_entity\_id, timestamp\_epoch DESC)}
+    \item \texttt{idx\_target\_time} on \texttt{streaming\_transactions(target\_entity\_id, timestamp\_epoch DESC)}
+\end{itemize}
+These composite indexes reduce the 2-hop causal ego-graph extraction time to under $0.18\text{ ms}$, operating directly within memory. The complete executable SQL DDL contracts and parameterized analytical queries are documented in Appendix~\ref{app:schemas} (Listing~\ref{app_lst:duckdb_schema} and Listing~\ref{app_lst:duckdb_ego_query}).
 
 \section{Zero-Copy Apache Arrow Columnar Memory Management}
 To bridge analytical SQL querying with PyTorch tensor representations without data copying, C-STGB utilizes the Apache Arrow C Data Interface. 

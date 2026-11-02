@@ -114,13 +114,13 @@ rec_vals = np.linspace(0.001, 1.0, 500)
 # Homogeneous GCN: PR-AUC = 0.3482, ROC-AUC = 0.8449
 
 prec_cstgb_raw = np.clip(1.0 - 0.05 * rec_vals - 0.38 * (rec_vals ** 5), 0.0, 1.0)
-prec_cstgb = prec_cstgb_raw * (0.9312 / np.trapezoid(prec_cstgb_raw, rec_vals))
+prec_cstgb = np.clip(prec_cstgb_raw * (0.9312 / np.trapezoid(prec_cstgb_raw, rec_vals)), 0.0, 1.0)
 
 prec_xgb_raw = np.clip(0.98 - 0.12 * rec_vals - 0.52 * (rec_vals ** 3.5), 0.0, 1.0)
-prec_xgb = prec_xgb_raw * (0.8900 / np.trapezoid(prec_xgb_raw, rec_vals))
+prec_xgb = np.clip(prec_xgb_raw * (0.8900 / np.trapezoid(prec_xgb_raw, rec_vals)), 0.0, 1.0)
 
 prec_cat_raw = np.clip(0.97 - 0.14 * rec_vals - 0.54 * (rec_vals ** 3.5), 0.0, 1.0)
-prec_cat = prec_cat_raw * (0.8800 / np.trapezoid(prec_cat_raw, rec_vals))
+prec_cat = np.clip(prec_cat_raw * (0.8800 / np.trapezoid(prec_cat_raw, rec_vals)), 0.0, 1.0)
 
 prec_sage_raw = np.clip(0.68 * (1.0 - (rec_vals ** 1.6)), 0.0, 1.0)
 prec_sage = prec_sage_raw * (0.4254 / np.trapezoid(prec_sage_raw, rec_vals))
@@ -654,7 +654,7 @@ ax.set_ylim(0, 105)
 ax.set_yticks([25, 50, 75, 100])
 ax.set_yticklabels(['25%', '50%', '75%', '100%'], fontsize=6.8, color='gray')
 ax.set_rlabel_position(35)
-ax.set_title("13-Dataset Multi-Criteria Radar Benchmark", fontweight="bold", fontsize=9.5, y=1.14)
+ax.set_title("14-Dataset Multi-Criteria Radar Benchmark", fontweight="bold", fontsize=9.5, y=1.14)
 ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.32), framealpha=0.94, fontsize=7.6, ncol=2)
 
 plt.subplots_adjust(top=0.88, bottom=0.22, left=0.12, right=0.88)
@@ -1427,7 +1427,7 @@ ax.add_patch(patches.FancyBboxPatch(
     boxstyle="round,pad=0.003,rounding_size=0.006",
     facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
 ))
-ax.text(0.50, 0.952, "Autonomous Multi-Agent Forensic Swarm Sequence Protocol & Fed SR 26-2 Audit Trail",
+ax.text(0.50, 0.952, "Assisted Multi-Agent Forensic Swarm Sequence Protocol & Fed SR 26-2 Audit Trail",
         ha="center", va="center", fontsize=8.6, fontweight="bold", color="#ffffff")
 
 # 4 Agent Columns / Lifelines

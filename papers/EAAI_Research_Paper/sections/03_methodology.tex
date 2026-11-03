@@ -12,8 +12,8 @@
 \label{sec:system_profiles}
 To satisfy diverse deployment constraints across financial infrastructures, C-STGB is instantiated into two operational configurations:
 \begin{enumerate}
-    \item \textbf{C-STGB-Fast (Real-Time Authorization Path):} Tailored for high-throughput transactional authorization ({,}200$\,tx/s multi-partition throughput, single-event latency of .45$\,ms, P99: .82$\,ms). It executes cached 1-hop subgraph retrieval, quantized tri-band temporal projections, and evaluates the streaming fast path without offline multi-hop GraphSMOTE expansion (.85\%$ F1 on \texttt{elliptic\_v1}).
-    \item \textbf{C-STGB-Full (Forensic Investigation Path):} Tailored for deep forensic investigation and batch reconciliation (.10$\,ms latency, achieving maximum accuracy of .42\%$ F1 on \texttt{elliptic\_v1}). It executes comprehensive 2-hop causal subgraph retrieval, multi-scale continuous Hawkes dynamics, and full latent GraphSMOTE oversampling.
+    \item \textbf{C-STGB-Fast (Real-Time Authorization Path):} Tailored for high-throughput transactional authorization (31,200\,tx/s multi-partition throughput, single-event latency of 0.45\,ms, P99: 0.82\,ms). It executes cached 1-hop subgraph retrieval, quantized tri-band temporal projections, and evaluates the streaming fast path without offline multi-hop GraphSMOTE expansion (90.85\% F1 on \texttt{elliptic\_v1}).
+    \item \textbf{C-STGB-Full (Forensic Investigation Path):} Tailored for deep forensic investigation and batch reconciliation (2.10\,ms latency, achieving maximum accuracy of 91.42\% F1 on \texttt{elliptic\_v1}). It executes comprehensive 2-hop causal subgraph retrieval, multi-scale continuous Hawkes dynamics, and full latent GraphSMOTE oversampling.
 \end{enumerate}
 Unless explicitly designated as C-STGB-Fast, benchmark scorecards (Table~\ref{tab:full_baseline_scorecard}) evaluate C-STGB-Full, while operational triage funnels (Figure~\ref{fig:architecture_blueprint}) and production latency profiles document C-STGB-Fast.
 

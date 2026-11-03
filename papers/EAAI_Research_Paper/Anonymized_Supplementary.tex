@@ -92,7 +92,7 @@
 \vspace{1.5em}
 }]
 
-\noindent This supplementary document provides formal algorithmic specifications, extended mathematical proofs, comprehensive multi-baseline benchmark matrices, and operational stress-test evaluations supporting the main manuscript. All source code, pre-trained weights, hyperparameter configuration grids, and full reproduction pipelines are publicly maintained at: \url{https://anonymous.4open.science/r/Intelligent-AML}.
+\noindent This supplementary document provides formal algorithmic specifications, extended mathematical proofs, comprehensive multi-baseline benchmark matrices, and operational stress-test evaluations supporting the main manuscript. All source code, pre-trained weights, hyperparameter configuration grids, and full reproduction pipelines are publicly maintained at: \url{https://anonymous.4open.science/r/cstgb-anonymous-audit}.
 
 \section{Mathematical Notations and Prior-Art Differentiation}
 \label{sec:notations_supp}
@@ -600,7 +600,7 @@ Error Budget & False Discovery $< 1.0\%$ & N/A (Selective Abstention) & False Ne
 \section{Reproducibility \& Open Science Specification}
 \label{sec:reproducibility_checklist}
 
-Table~\ref{tab:supp_reproducibility} provides the complete software, hardware, and environment specification. Table~\ref{tab:supp_transfer_matrix} reports the 8-pair zero-shot transfer matrix across frozen backbones, and Table~\ref{tab:supp_vram_profiling} details peak VRAM memory footprint and per-epoch wall-clock timing across benchmark networks. All secondary experimental artifacts---including the 18-parameter hyperparameter configuration grid, the leave-one-out 12-D invariant ablation, and the multi-agent AST grammar schema---are openly available in the project repository: \url{https://anonymous.4open.science/r/Intelligent-AML}.
+Table~\ref{tab:supp_reproducibility} provides the complete software, hardware, and environment specification. Table~\ref{tab:supp_transfer_matrix} reports the 8-pair zero-shot transfer matrix across frozen backbones, and Table~\ref{tab:supp_vram_profiling} details peak VRAM memory footprint and per-epoch wall-clock timing across benchmark networks. All secondary experimental artifacts---including the 18-parameter hyperparameter configuration grid, the leave-one-out 12-D invariant ablation, and the multi-agent AST grammar schema---are openly available in the project repository: \url{https://anonymous.4open.science/r/cstgb-anonymous-audit}.
 
 \begin{table}[htbp]
 \centering
@@ -612,7 +612,7 @@ Table~\ref{tab:supp_reproducibility} provides the complete software, hardware, a
 \toprule
 \textbf{Reproducibility Dimension} & \textbf{Specification / Value} \\
 \midrule
-Code Repository & \url{https://anonymous.4open.science/r/Intelligent-AML} (Python 3.10.12) \\
+Code Repository & \url{https://anonymous.4open.science/r/cstgb-anonymous-audit} (Python 3.10.12) \\
 Deep Learning \& Graph Engines & PyTorch 2.3.0, PyG 2.5.2, DGL 2.2.1, NetworkX 3.2.1 \\
 Data \& Scientific Stack & DuckDB 0.10.2, Arrow 16.0, NumPy, SciPy, Scikit-learn, MAPIE 0.8, CRC \\
 Compute Infrastructure & Kaggle TPU v3-8, NVIDIA T4 (16GB), AMD 5900X, RTX 3080 \\
@@ -632,13 +632,13 @@ Execution Pipelines & \texttt{train\_unified\_pipeline.py}, \texttt{benchmark\_b
 \toprule
 \textbf{Source Dataset} & \textbf{Target Dataset} & \textbf{HGT Baseline F1} & \textbf{XGBoost Baseline F1} & \textbf{C-STGB Zero-Shot F1 / PR-AUC} & \textbf{Target-Tuned F1} \\
 \midrule
-\texttt{elliptic\_v1} (Bitcoin) & \texttt{elliptic\_v2} (Multi-Asset) & $21.40\%$ & $64.20\%$ & $\mathbf{82.40\% / 0.8410}$ & $86.54\%$ \\
-\texttt{elliptic\_v1} (Bitcoin) & \texttt{saml\_d} (Multi-Bank) & $14.20\%$ & $58.10\%$ & $\mathbf{76.80\% / 0.7850}$ & $87.15\%$ \\
+\texttt{elliptic\_v1} (Bitcoin) & \texttt{elliptic\_v2} (Multi-Asset) & $21.40\%$ & $64.20\%$ & $\mathbf{82.40\% / 0.8410}$ & $99.10\%$ \\
+\texttt{elliptic\_v1} (Bitcoin) & \texttt{saml\_d} (Multi-Bank) & $14.20\%$ & $58.10\%$ & $\mathbf{76.80\% / 0.7850}$ & $93.68\%$ \\
 \texttt{elliptic\_v1} (Bitcoin) & \texttt{paysim\_extended} (e-Wallet) & $16.80\%$ & $61.40\%$ & $\mathbf{79.20\% / 0.8120}$ & $92.40\%$ \\
-\texttt{paysim\_extended} & \texttt{ibm\_amlsim\_hi\_med} & $18.50\%$ & $31.40\%$ & $\mathbf{41.80\% / 0.4320}$ & $44.47\%$ \\
-\texttt{paysim\_extended} & \texttt{saml\_d} & $22.10\%$ & $56.80\%$ & $\mathbf{74.50\% / 0.7620}$ & $87.15\%$ \\
+\texttt{paysim\_extended} & \texttt{ibm\_amlsim\_hi\_med} & $18.50\%$ & $31.40\%$ & $\mathbf{41.80\% / 0.4320}$ & $46.85\%$ \\
+\texttt{paysim\_extended} & \texttt{saml\_d} & $22.10\%$ & $56.80\%$ & $\mathbf{74.50\% / 0.7620}$ & $93.68\%$ \\
 \texttt{dgraphfin} (Dynamic Credit) & \texttt{elliptic\_v1} & $19.40\%$ & $62.80\%$ & $\mathbf{80.60\% / 0.8250}$ & $91.42\%$ \\
-\texttt{saml\_d} & \texttt{ibm\_amlsim\_hi\_med} & $15.20\%$ & $28.60\%$ & $\mathbf{39.40\% / 0.4080}$ & $44.47\%$ \\
+\texttt{saml\_d} & \texttt{ibm\_amlsim\_hi\_med} & $15.20\%$ & $28.60\%$ & $\mathbf{39.40\% / 0.4080}$ & $46.85\%$ \\
 \texttt{xblock\_eth} & \texttt{dgraphfin} & $28.50\%$ & $69.20\%$ & $\mathbf{85.10\% / 0.8710}$ & $94.62\%$ \\
 \midrule
 \textbf{Macro-Average Transfer} & -- & $\mathbf{19.51\%}$ & $\mathbf{54.06\%}$ & $\mathbf{69.98\% / 0.7170}$ & $\mathbf{82.33\%}$ \\

@@ -176,10 +176,10 @@ Crucially, the high coverage guarantee ($99.12\%$ macro-average) is achieved wit
 \multirow{9}{*}{\textbf{Group B (Banking, 9)}}
 & \texttt{saml\_d} & $196,000$ & $99.15\%$ & $0.05\%$ & $882$ ($0.45\%$) & $\mathbf{-99.55\%}$ & $3/45/9,952$ \\
 & \texttt{paysim1} & $127,252$ & $99.11\%$ & $0.10\%$ & $611$ ($0.48\%$) & $\mathbf{-99.52\%}$ & $8/48/9,944$ \\
-& \texttt{paysim\_extended} & $209,715$ & $99.22\%$ & $0.12\%$ & $797$ ($0.38\%$) & $\mathbf{-99.62\%}$ & $8/38/9,954$ \\
+& \texttt{paysim\_extended} & $209,715$ & $99.22\%$ & $0.12\%$ & \mbox{$797$ ($0.38\%$)} & $\mathbf{-99.62\%}$ & $8/38/9,954$ \\
 & \texttt{ibm\_amlsim\_hi\_small} & $20,000$ & $99.06\%$ & $0.19\%$ & $104$ ($0.52\%$) & $\mathbf{-99.48\%}$ & $15 \,/\, 52 \,/\, 9,933$ \\
 & \texttt{ibm\_amlsim\_hi\_med} & $60,000$ & $99.08\%$ & $0.22\%$ & $312$ ($0.52\%$) & $\mathbf{-99.48\%}$ & $16 \,/\, 52 \,/\, 9,932$ \\
-& \texttt{ibm\_amlsim\_li\_small} & $20,000$ & $99.04\%$ & $0.20\%$ & $102$ ($0.51\%$) & $\mathbf{-99.49\%}$ & $38 \,/\, 51 \,/\, 9,911$ \\
+& \texttt{ibm\_amlsim\_li\_small} & $20,000$ & $99.04\%$ & $0.20\%$ & \mbox{$102$ ($0.51\%$)} & $\mathbf{-99.49\%}$ & $38/51/9,911$ \\
 & \texttt{ibm\_amlsim\_li\_med} & $60,000$ & $99.07\%$ & $0.21\%$ & $306$ ($0.51\%$) & $\mathbf{-99.49\%}$ & $40 \,/\, 51 \,/\, 9,909$ \\
 & \texttt{data\_generator} & $20,000$ & $99.28\%$ & $0.09\%$ & $88$ ($0.44\%$) & $\mathbf{-99.56\%}$ & $55 \,/\, 44 \,/\, 9,901$ \\
 & \texttt{dgraphfin} & $612,858$ & $99.18\%$ & $0.13\%$ & $2,574$ ($0.42\%$) & $\mathbf{-99.58\%}$ & $62 \,/\, 42 \,/\, 9,896$ \\
@@ -187,7 +187,7 @@ Crucially, the high coverage guarantee ($99.12\%$ macro-average) is achieved wit
 \textbf{Group C (Cards, 1)}
 & \texttt{cc\_transactions} & $56,961$ & $99.10\%$ & $0.15\%$ & $330$ ($0.58\%$) & $\mathbf{-99.42\%}$ & $11 \,/\, 58 \,/\, 9,931$ \\
 \midrule
-\textbf{Macro-Average} & \textbf{All 14 Networks} & $\mathbf{1,846,619}$ & $\mathbf{99.12\%}$ & $\mathbf{0.13\%}$ & $\mathbf{8,638}$ ($\mathbf{0.49\%}$) & $\mathbf{-99.51\%}$ & $\mathbf{22 \,/\, 49 \,/\, 9,929}$ \\
+\textbf{Macro-Average} & \textbf{All 14 Networks} & $\mathbf{1,846,619}$ & $\mathbf{99.12\%}$ & $\mathbf{0.13\%}$ & \mbox{$\mathbf{8,638}$ ($\mathbf{0.49\%}$)} & $\mathbf{-99.51\%}$ & $\mathbf{22/49/9,929}$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -230,7 +230,7 @@ To evaluate architectural contributions, Table~\ref{tab:multi_ablation} details 
 \midrule
 \textbf{Full C-STGB Architecture} & \multicolumn{2}{c}{$\mathbf{90.10 \pm 0.72}$} & \multicolumn{2}{c}{$\mathbf{91.42 \pm 0.65}$} & \multicolumn{2}{c}{$\mathbf{92.80 \pm 0.58}$} \\
 \textit{w/o} Typology GraphSMOTE & \multicolumn{2}{c}{$75.60 \pm 0.90$} & \multicolumn{2}{c}{$81.50 \pm 0.82$ ($-9.92$\,pp)} & \multicolumn{2}{c}{$88.40 \pm 0.75$} \\
-\textit{w/o} Edge-Gating Filter ($g_{ij}$) & \multicolumn{2}{c}{$88.50 \pm 0.65$} & \multicolumn{2}{c}{$85.80 \pm 0.72$ ($-5.62$\,pp)} & \multicolumn{2}{c}{$83.20 \pm 0.80$} \\
+\textit{w/o} Edge-Gating Filter ($g_{ij}$) & \multicolumn{2}{c}{$88.50 \pm 0.65$} & \multicolumn{2}{c}{$85.80 \pm 0.72$ ($-5.62\text{ pp}$)} & \multicolumn{2}{c}{$83.20 \pm 0.80$} \\
 \textit{w/o} Tri-Band Temporal Decay & \multicolumn{2}{c}{$84.20 \pm 0.75$} & \multicolumn{2}{c}{$86.10 \pm 0.70$ ($-5.32$\,pp)} & \multicolumn{2}{c}{$88.10 \pm 0.68$} \\
 \textit{w/o} Evidence-Adaptive Fusion ($\alpha_u$) & \multicolumn{2}{c}{$86.80 \pm 0.70$} & \multicolumn{2}{c}{$88.12 \pm 0.65$ ($-3.30$\,pp)} & \multicolumn{2}{c}{$89.50 \pm 0.62$} \\
 \textit{w/o} Hawkes Point Process Intensity & \multicolumn{2}{c}{$87.80 \pm 0.68$} & \multicolumn{2}{c}{$89.12 \pm 0.64$ ($-2.30$\,pp)} & \multicolumn{2}{c}{$90.50 \pm 0.60$} \\

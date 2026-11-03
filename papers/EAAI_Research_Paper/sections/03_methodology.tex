@@ -131,10 +131,11 @@ Anomaly posterior probabilities evaluate as $\hat{p}_u = \sigma(\operatorname{ML
 \label{eq:total_loss}
 \end{equation}
 where $\mathcal{L}_{\text{task}}$ is the Asymmetric Focal Tversky Loss prioritizing minority recall:
-\begin{equation}
-\mathcal{L}_{\text{task}}(y, \hat{p}) = \left( 1 - \frac{\sum_i y_i \hat{p}_i + \epsilon}{\sum_i y_i \hat{p}_i + \alpha_{\text{tversky}} \sum_i y_i (1 - \hat{p}_i) + \beta_{\text{tversky}} \sum_i (1 - y_i) \hat{p}_i + \epsilon} \right)^{\gamma_{\text{focal}}}
-\label{eq:focal_tversky_loss}
-\end{equation}
+\begin{align}
+\mathcal{L}_{\text{task}}(y, \hat{p}) &= \left( 1 - \frac{\text{TP} + \epsilon}{\text{TP} + \alpha_{\text{tversky}} \text{FN} + \beta_{\text{tversky}} \text{FP} + \epsilon} \right)^{\gamma_{\text{focal}}}, \label{eq:focal_tversky_loss} \\
+\text{where } \text{TP} &= \sum_i y_i \hat{p}_i, \quad \text{FN} = \sum_i y_i (1 - \hat{p}_i), \notag \\
+\text{FP} &= \sum_i (1 - y_i) \hat{p}_i, \notag
+\end{align}
 parameterized by $\alpha_{\text{tversky}}=0.70, \beta_{\text{tversky}}=0.30, \gamma_{\text{focal}}=1.5$, heavily penalizing false negatives. Bilinear edge reconstruction loss $\mathcal{L}_{\text{recon}}$ evaluates positive training edges $\mathcal{E}_{\text{train}}$ against a $1:5$ time-conditioned negative non-edge sample $\mathcal{E}_{\text{neg}}$:
 \begin{align}
 \mathcal{L}_{\text{recon}} &= -\frac{1}{|\mathcal{E}_{\text{train}}|} \sum_{(u, v) \in \mathcal{E}_{\text{train}}} \log \hat{A}_{uv} \nonumber \\

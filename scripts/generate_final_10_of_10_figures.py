@@ -55,13 +55,13 @@ TARGET_DIRS = [data_fig_dir, thesis_fig_dir, eaai_fig_dir]
 for d in TARGET_DIRS:
     d.mkdir(parents=True, exist_ok=True)
 
-def save_fig(fig, stems):
+def save_fig(fig, stems, pad_inches=0.03):
     if isinstance(stems, str):
         stems = [stems]
     for stem in stems:
         for d in TARGET_DIRS:
-            fig.savefig(d / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.03)
-            fig.savefig(d / f"{stem}.png", dpi=300, bbox_inches="tight", pad_inches=0.03)
+            fig.savefig(d / f"{stem}.pdf", bbox_inches="tight", pad_inches=pad_inches)
+            fig.savefig(d / f"{stem}.png", dpi=300, bbox_inches="tight", pad_inches=pad_inches)
         print(f"   [OK] Saved: {stem}.pdf & .png")
     plt.close(fig)
 
@@ -71,7 +71,7 @@ print("======================================================================")
 fig, ax = plt.subplots(figsize=(7.16, 2.95))
 ax.axis('off')
 ax.set_xlim([-0.010, 1.010])
-ax.set_ylim([-0.015, 1.035])
+ax.set_ylim([-0.020, 1.050])
 
 # Top Master Banner
 ax.add_patch(patches.FancyBboxPatch(
@@ -94,10 +94,10 @@ ax.add_patch(patches.FancyBboxPatch(
     facecolor="#1e40af", edgecolor="#1e40af"
 ))
 ax.text(0.093, 0.869, "1. Streaming Ingest", ha="center", va="center", fontsize=7.0, fontweight="bold", color="#ffffff")
-ax.text(0.093, 0.805, "SWIFT / ISO-20022 / Kafka\nApache Arrow Buffers", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#1e40af")
-ax.text(0.093, 0.718, "Time-Causal Ingestion\nDuckDB Micro-Batches\nt_e <= t_eval (No Leak)", ha="center", va="center", fontsize=5.3, color="#334155")
-ax.text(0.093, 0.610, "12-D Canonical Invariants:\nPhi_flow, Hawkes lambda_u,\ns_fwd, s_bwd, [mu_A, sigma_A^2]", ha="center", va="center", fontsize=5.0, color="#0f766e")
-ax.text(0.093, 0.420, "Single-event: 0.11 ms", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#1e40af")
+ax.text(0.093, 0.775, "SWIFT / ISO-20022 / Kafka\nApache Arrow Buffers", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#1e40af")
+ax.text(0.093, 0.690, "Time-Causal Ingestion\nDuckDB Micro-Batches\nt_e <= t_eval (No Leak)", ha="center", va="center", fontsize=5.3, color="#334155")
+ax.text(0.093, 0.585, "12-D Canonical Invariants:\nPhi_flow, Hawkes lambda_u,\ns_fwd, s_bwd, [mu_A, sigma_A^2]", ha="center", va="center", fontsize=5.0, color="#0f766e")
+ax.text(0.093, 0.415, "Single-event: 0.11 ms", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#1e40af")
 
 # Arrow 1 -> 2
 ax.annotate("", xy=(0.210, 0.640), xytext=(0.178, 0.640),
@@ -115,11 +115,11 @@ ax.add_patch(patches.FancyBboxPatch(
     facecolor="#0f766e", edgecolor="#0f766e"
 ))
 ax.text(0.322, 0.869, "2. C-STGB Neural Core", ha="center", va="center", fontsize=7.0, fontweight="bold", color="#ffffff")
-ax.text(0.322, 0.805, "3-Band Harmonic Temporal GNN\n+ Context Edge Gate g_ij", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f766e")
-ax.text(0.322, 0.722, "Prunes Chaff Camouflage\n(delta_floor >= 0.10, 92.1% Ret.)", ha="center", va="center", fontsize=5.3, color="#334155")
-ax.text(0.322, 0.625, "Latent GraphSMOTE C_k\nEvidence Adaptive Fusion alpha_u\n89.60% Cold-Start Minority F1", ha="center", va="center", fontsize=5.0, color="#6d28d9")
-ax.text(0.322, 0.518, "Cost-Sensitive Bayes Threshold:\ntau* = 0.18 (15:1 Cost Ratio)", ha="center", va="center", fontsize=5.3, fontweight="bold", color="#b45309")
-ax.text(0.322, 0.420, "Inference: 0.16 ms", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f766e")
+ax.text(0.322, 0.775, "3-Band Harmonic Temporal GNN\n+ Context Edge Gate g_ij", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f766e")
+ax.text(0.322, 0.695, "Prunes Chaff Camouflage\n(delta_floor >= 0.10, 92.1% Ret.)", ha="center", va="center", fontsize=5.3, color="#334155")
+ax.text(0.322, 0.605, "Latent GraphSMOTE C_k\nEvidence Adaptive Fusion alpha_u\n89.60% Cold-Start Minority F1", ha="center", va="center", fontsize=5.0, color="#6d28d9")
+ax.text(0.322, 0.505, "Cost-Sensitive Bayes Threshold:\ntau* = 0.18 (15:1 Cost Ratio)", ha="center", va="center", fontsize=5.3, fontweight="bold", color="#b45309")
+ax.text(0.322, 0.415, "Inference: 0.16 ms", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f766e")
 
 # Arrow 2 -> Diamond
 ax.annotate("", xy=(0.460, 0.640), xytext=(0.432, 0.640),
@@ -209,7 +209,7 @@ ax.text(0.515, 0.192, r"Class-Cond. CRC: $\hat{q}^{(y)} = \mathrm{Quantile}_{1-\
 ax.text(0.515, 0.126, r"Triage Dispatch: $\Gamma(u) = \{y : s_u^{(y)} \leq \hat{q}^{(y)}\}, \;\; \mathbf{E}[|\Gamma|] = 1.0050, \;\; \mathbf{P}(\Gamma = \emptyset) = 0.00\%$", fontsize=5.1, color="#b91c1c")
 ax.text(0.515, 0.058, r"Fast-Path Latency: $0.45\,\text{ms} < 10\,\text{ms}$ SLA | Queue: $-99.50\%$ Workload Cut | Peak VRAM: $428\,\text{MB}$", fontsize=5.1, fontweight="bold", color="#15803d")
 
-save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"])
+save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"], pad_inches=0.08)
 
 print("======================================================================")
 print("2. GENERATING 2-PANEL FACTORIAL ATTRIBUTION GROUPED BAR CHART")

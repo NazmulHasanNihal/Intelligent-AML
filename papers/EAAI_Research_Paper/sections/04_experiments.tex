@@ -174,9 +174,9 @@ Crucially, the high coverage guarantee ($99.12\%$ macro-average) is achieved wit
 & \texttt{mtgox\_leaked} & $29,000$ & $99.08\%$ & $0.14\%$ & $145$ ($0.50\%$) & $\mathbf{-99.50\%}$ & $25 \,/\, 50 \,/\, 9,925$ \\
 \midrule
 \multirow{9}{*}{\textbf{Group B (Banking, 9)}}
-& \texttt{saml\_d} & $196,000$ & $99.15\%$ & $0.05\%$ & $882$ ($0.45\%$) & $\mathbf{-99.55\%}$ & $3 \,/\, 45 \,/\, 9,952$ \\
-& \texttt{paysim1} & $127,252$ & $99.11\%$ & $0.10\%$ & $611$ ($0.48\%$) & $\mathbf{-99.52\%}$ & $8 \,/\, 48 \,/\, 9,944$ \\
-& \texttt{paysim\_extended} & $209,715$ & $99.22\%$ & $0.12\%$ & $797$ ($0.38\%$) & $\mathbf{-99.62\%}$ & $8 \,/\, 38 \,/\, 9,954$ \\
+& \texttt{saml\_d} & $196,000$ & $99.15\%$ & $0.05\%$ & $882$ ($0.45\%$) & $\mathbf{-99.55\%}$ & $3/45/9,952$ \\
+& \texttt{paysim1} & $127,252$ & $99.11\%$ & $0.10\%$ & $611$ ($0.48\%$) & $\mathbf{-99.52\%}$ & $8/48/9,944$ \\
+& \texttt{paysim\_extended} & $209,715$ & $99.22\%$ & $0.12\%$ & $797$ ($0.38\%$) & $\mathbf{-99.62\%}$ & $8/38/9,954$ \\
 & \texttt{ibm\_amlsim\_hi\_small} & $20,000$ & $99.06\%$ & $0.19\%$ & $104$ ($0.52\%$) & $\mathbf{-99.48\%}$ & $15 \,/\, 52 \,/\, 9,933$ \\
 & \texttt{ibm\_amlsim\_hi\_med} & $60,000$ & $99.08\%$ & $0.22\%$ & $312$ ($0.52\%$) & $\mathbf{-99.48\%}$ & $16 \,/\, 52 \,/\, 9,932$ \\
 & \texttt{ibm\_amlsim\_li\_small} & $20,000$ & $99.04\%$ & $0.20\%$ & $102$ ($0.51\%$) & $\mathbf{-99.49\%}$ & $38 \,/\, 51 \,/\, 9,911$ \\
@@ -226,16 +226,16 @@ To evaluate architectural contributions, Table~\ref{tab:multi_ablation} details 
 \midrule
 \multicolumn{7}{c}{\textbf{(b) Leave-One-Out Component Removal on Elliptic-v1 (Margin vs. Full Architecture)}} \\
 \midrule
-\textbf{Ablated Component} & \multicolumn{2}{c}{\textbf{Recall (\%)}} & \multicolumn{2}{c}{\textbf{Precision (\%)}} & \multicolumn{2}{c}{\textbf{F1-Score (\%)}} \\
+\textbf{Ablated Component} & \multicolumn{2}{c}{\textbf{Recall (\%)}} & \multicolumn{2}{c}{\textbf{F1-Score (\%)}} & \multicolumn{2}{c}{\textbf{Precision (\%)}} \\
 \midrule
-\textbf{Full C-STGB Architecture} & \multicolumn{2}{c}{$\mathbf{90.10 \pm 0.72}$} & \multicolumn{2}{c}{$\mathbf{92.80 \pm 0.58}$} & \multicolumn{2}{c}{$\mathbf{91.42 \pm 0.65}$} \\
-\textit{w/o} Typology GraphSMOTE & \multicolumn{2}{c}{$75.60 \pm 0.90$} & \multicolumn{2}{c}{$88.40 \pm 0.75$} & \multicolumn{2}{c}{$81.50 \pm 0.82$ ($-9.92$\,pp)} \\
-\textit{w/o} Edge-Gating Filter ($g_{ij}$) & \multicolumn{2}{c}{$88.50 \pm 0.65$} & \multicolumn{2}{c}{$83.20 \pm 0.80$} & \multicolumn{2}{c}{$85.80 \pm 0.72$ ($-5.62$\,pp)} \\
-\textit{w/o} Tri-Band Temporal Decay & \multicolumn{2}{c}{$84.20 \pm 0.75$} & \multicolumn{2}{c}{$88.10 \pm 0.68$} & \multicolumn{2}{c}{$86.10 \pm 0.70$ ($-5.32$\,pp)} \\
-\textit{w/o} Evidence-Adaptive Fusion ($\alpha_u$) & \multicolumn{2}{c}{$86.80 \pm 0.70$} & \multicolumn{2}{c}{$89.50 \pm 0.62$} & \multicolumn{2}{c}{$88.12 \pm 0.65$ ($-3.30$\,pp)} \\
-\textit{w/o} Hawkes Point Process Intensity & \multicolumn{2}{c}{$87.80 \pm 0.68$} & \multicolumn{2}{c}{$90.50 \pm 0.60$} & \multicolumn{2}{c}{$89.12 \pm 0.64$ ($-2.30$\,pp)} \\
-\textit{w/o} 12-D Domain Descriptors ($\mathbf{z}_{\text{inv}}$) & \multicolumn{2}{c}{$82.40 \pm 0.85$} & \multicolumn{2}{c}{$85.60 \pm 0.78$} & \multicolumn{2}{c}{$83.96 \pm 0.80$ ($-7.46$\,pp)} \\
-\textit{w/o} Cost-Sensitive Threshold ($\tau^*$) & \multicolumn{2}{c}{$76.20 \pm 0.85$} & \multicolumn{2}{c}{$82.40 \pm 0.90$} & \multicolumn{2}{c}{$79.16 \pm 0.80$ ($-12.26$\,pp)} \\
+\textbf{Full C-STGB Architecture} & \multicolumn{2}{c}{$\mathbf{90.10 \pm 0.72}$} & \multicolumn{2}{c}{$\mathbf{91.42 \pm 0.65}$} & \multicolumn{2}{c}{$\mathbf{92.80 \pm 0.58}$} \\
+\textit{w/o} Typology GraphSMOTE & \multicolumn{2}{c}{$75.60 \pm 0.90$} & \multicolumn{2}{c}{$81.50 \pm 0.82$ ($-9.92$\,pp)} & \multicolumn{2}{c}{$88.40 \pm 0.75$} \\
+\textit{w/o} Edge-Gating Filter ($g_{ij}$) & \multicolumn{2}{c}{$88.50 \pm 0.65$} & \multicolumn{2}{c}{$85.80 \pm 0.72$ ($-5.62$\,pp)} & \multicolumn{2}{c}{$83.20 \pm 0.80$} \\
+\textit{w/o} Tri-Band Temporal Decay & \multicolumn{2}{c}{$84.20 \pm 0.75$} & \multicolumn{2}{c}{$86.10 \pm 0.70$ ($-5.32$\,pp)} & \multicolumn{2}{c}{$88.10 \pm 0.68$} \\
+\textit{w/o} Evidence-Adaptive Fusion ($\alpha_u$) & \multicolumn{2}{c}{$86.80 \pm 0.70$} & \multicolumn{2}{c}{$88.12 \pm 0.65$ ($-3.30$\,pp)} & \multicolumn{2}{c}{$89.50 \pm 0.62$} \\
+\textit{w/o} Hawkes Point Process Intensity & \multicolumn{2}{c}{$87.80 \pm 0.68$} & \multicolumn{2}{c}{$89.12 \pm 0.64$ ($-2.30$\,pp)} & \multicolumn{2}{c}{$90.50 \pm 0.60$} \\
+\textit{w/o} 12-D Domain Descriptors ($\mathbf{z}_{\text{inv}}$) & \multicolumn{2}{c}{$82.40 \pm 0.85$} & \multicolumn{2}{c}{$83.96 \pm 0.80$ ($-7.46$\,pp)} & \multicolumn{2}{c}{$85.60 \pm 0.78$} \\
+\textit{w/o} Cost-Sensitive Threshold ($\tau^*$) & \multicolumn{2}{c}{$76.20 \pm 0.85$} & \multicolumn{2}{c}{$79.16 \pm 0.80$ ($-12.26$\,pp)} & \multicolumn{2}{c}{$82.40 \pm 0.90$} \\
 \bottomrule
 \end{tabular}%
 }

@@ -616,7 +616,7 @@ for d in OUT_DIRS:
 print("[7/22] Generating Figure 7: Multi-Dataset Radar Chart (Normalized Axes)...")
 categories = [
     'PR-AUC\n(Mean %)', 
-    'F1-Score\n(Macro %)', 
+    'Illicit F1\n(Elliptic-v1 %)', 
     'Recall\n(Catch %)', 
     'Imbalance\nRobustness', 
     'Camouflage\nRetention', 
@@ -628,13 +628,13 @@ angles += angles[:1]
 
 fig, ax = plt.subplots(figsize=(3.50, 4.20), subplot_kw=dict(polar=True))
 
-cstgb_vals = [91.4, 91.4, 90.1, 98.5, 96.8, 100.0]
+cstgb_vals = [93.1, 91.4, 90.1, 98.5, 96.8, 100.0]
 cstgb_vals += cstgb_vals[:1]
 
 xgb_vals = [88.5, 88.4, 85.2, 72.0, 60.5, 98.0]
 xgb_vals += xgb_vals[:1]
 
-care_vals = [65.2, 62.0, 58.0, 68.0, 84.5, 24.1]
+care_vals = [68.0, 64.5, 58.0, 68.0, 84.5, 24.1]
 care_vals += care_vals[:1]
 
 hgt_vals = [76.4, 48.2, 55.0, 52.0, 48.2, 45.0]

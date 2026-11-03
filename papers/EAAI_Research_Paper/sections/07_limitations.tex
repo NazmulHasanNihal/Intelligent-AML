@@ -7,7 +7,7 @@ Fiat banking operates under statutory secrecy frameworks (e.g., Right to Financi
 
 \subsection{Ground-Truth Boundaries in Benchmark Ledgers}
 \label{sec:limitations_ground_truth}
-Near-perfect empirical scores on public crypto benchmarks reflect that ground-truth labels originate from law enforcement seizures of Darknet marketplaces (e.g., Silk Road, AlphaBay). These entities form dense, homophilic topological clusters with high edge homophily $h = \frac{|\{(u, v) \in \mathcal{E} : y_u = y_v = 1\}|}{|\{(u, v) \in \mathcal{E} : y_u = 1 \lor y_v = 1\}|} > 0.92$, validating algorithmic robustness under structural transparency rather than unconstrained real-world informal value transfer evasion (such as Hawala or trade-based money laundering).
+High empirical scores on public crypto benchmarks reflect that ground-truth labels follow the category taxonomy established by \citet{weber2019anti}, which classifies entities into illicit categories (scams, ransomware, malware, darknet marketplaces) and licit commercial services (exchanges, wallet providers, miners, financial service merchants). These entities form dense, homophilic topological clusters with high edge homophily $h = 0.924$ ($h = \frac{|\{(u, v) \in \mathcal{E} : y_u = y_v = 1\}|}{|\{(u, v) \in \mathcal{E} : y_u = 1 \lor y_v = 1\}|} = 0.924$), validating algorithmic robustness under structural transparency rather than unconstrained real-world informal value transfer evasion (such as Hawala or trade-based money laundering).
 
 \subsection{Label Confirmation Latency and Calibration Buffers}
 \label{sec:limitations_label_latency}
@@ -23,4 +23,4 @@ Edge-trust training uses hub thresholds ($\deg_{\text{out}} \ge 50$) on split $\
 
 \subsection{Model Governance and System Boundaries}
 \label{sec:limitations_governance}
-The auxiliary LLM-assisted SAR drafting module is strictly an experimental decision-support prototype. Autonomous filing is legally prohibited under BSA regulations and Interagency Guidance on Model Risk Management (Federal Reserve SR 11-7 / OCC 2011-12) \citep{fed2011sr117}. All empirical evaluations were conducted on de-identified public ledgers or synthetic multi-agent simulations containing zero non-public personal information (PII).
+The auxiliary LLM-assisted SAR drafting module is strictly an experimental decision-support prototype. Autonomous filing is legally prohibited under BSA regulations and Interagency Guidance on Model Risk Management (Federal Reserve SR 26-2 / OCC 2011-12) \citep{fed2026sr262, occ201112}. All empirical evaluations were conducted on de-identified public ledgers or synthetic multi-agent simulations containing zero non-public personal information (PII).

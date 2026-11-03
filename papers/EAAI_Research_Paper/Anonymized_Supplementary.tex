@@ -283,7 +283,7 @@ Assume $\Phi_u \le \Phi_v$. Since $\lambda \in [0, 1]$ and $I_u, I_v > 0$: $\Phi
 \textbf{Dataset Identifier} & \textbf{XGBoost} & \textbf{CatBoost} & \textbf{LightGBM} & \textbf{Balanced RF} & \textbf{GCN} & \textbf{GraphSAGE} & \textbf{GAT} & \textbf{GIN} & \textbf{EvolveGCN} & \textbf{Logistic Reg} & \textbf{Autoencoder} & \textbf{C-STGB (Ours)} \\
 \midrule
 \texttt{elliptic\_v1} & $88.35 / 0.8900$ & $87.90 / 0.8800$ & $88.50 / 0.8920$ & $86.20 / 0.8650$ & $43.55 / 0.3482$ & $49.07 / 0.4254$ & $36.35 / 0.1959$ & $57.32 / 0.5625$ & $51.04 / 0.4243$ & $58.51 / 0.4962$ & $3.01 / 0.0352$ & $\mathbf{91.42 / 0.9312}^\dagger$ \\
-\texttt{elliptic\_v2} & $96.50 / 0.9814$ & $95.80 / 0.9580$ & $96.20 / 0.9780$ & $94.50 / 0.9510$ & $0.00 / 0.0237$ & $0.24 / 0.0230$ & $0.00 / 0.0234$ & $5.13 / 0.0266$ & $0.00 / 0.0258$ & $100.00 / 1.0000$ & $5.03 / 0.0247$ & $\mathbf{99.10 / 0.9950}^\dagger$ \\
+\texttt{elliptic\_v2} & $96.50 / 0.9814$ & $95.80 / 0.9580$ & $96.20 / 0.9780$ & $94.50 / 0.9510$ & $0.00 / 0.0237$ & $0.24 / 0.0230$ & $0.00 / 0.0234$ & $5.13 / 0.0266$ & $0.00 / 0.0258$ & $89.40 / 0.8920$ & $5.03 / 0.0247$ & $\mathbf{99.10 / 0.9950}^\dagger$ \\
 \texttt{xblock\_eth} & $93.80 / 0.9400$ & $92.90 / 0.9300$ & $97.05 / 0.9967$ & $94.95 / 0.9857$ & $6.53 / 0.0212$ & $6.75 / 0.0206$ & $6.45 / 0.0199$ & $3.56 / 0.0137$ & $6.62 / 0.0211$ & $35.23 / 0.2941$ & $8.08 / 0.0409$ & $\mathbf{97.40 / 0.9920}^\dagger$ \\
 \texttt{mtgox\_leaked} & $68.40 / 0.7400$ & $67.80 / 0.7300$ & $73.93 / 0.8245$ & $69.81 / 0.7459$ & $20.30 / 0.2038$ & $22.16 / 0.1801$ & $22.47 / 0.1751$ & $28.79 / 0.2411$ & $22.12 / 0.0956$ & $63.78 / 0.6854$ & $0.09 / 0.2374$ & $\mathbf{74.20 / 0.8350}^\dagger$ \\
 \texttt{saml\_d} & $89.20 / 0.8950$ & $88.60 / 0.8850$ & $92.85 / 0.9566$ & $86.50 / 0.8633$ & $1.69 / 0.0109$ & $3.16 / 0.0071$ & $3.20 / 0.0099$ & $2.37 / 0.0078$ & $3.81 / 0.0077$ & $83.78 / 0.8104$ & $28.07 / 0.1995$ & $\mathbf{93.68 / 0.9574}^\dagger$ \\
@@ -297,7 +297,7 @@ Assume $\Phi_u \le \Phi_v$. Since $\lambda \in [0, 1]$ and $I_u, I_v > 0$: $\Phi
 \texttt{dgraphfin} & $96.07 / 0.9900$ & $95.82 / 0.9628$ & $98.59 / 0.9989$ & $97.60 / 0.9873$ & $2.60 / 0.0129$ & $3.26 / 0.0161$ & $2.71 / 0.0123$ & $3.25 / 0.0189$ & $2.59 / 0.0094$ & $96.55 / 0.9431$ & $0.42 / 0.0114$ & $\mathbf{97.91 / 0.9979}^\dagger$ \\
 \texttt{cc\_transactions} & $48.20 / 0.4900$ & $47.90 / 0.4800$ & $52.76 / 0.5184$ & $49.51 / 0.4967$ & $48.16 / 0.3472$ & $49.24 / 0.3555$ & $48.62 / 0.3441$ & $48.74 / 0.3883$ & $4.79 / 0.0215$ & $52.15 / 0.5085$ & $48.24 / 0.4167$ & $\mathbf{56.48 / 0.6476}^\dagger$ \\
 \midrule
-\textbf{Macro-Average} & $64.76 / 0.6500$ & $64.25 / 0.6400$ & $65.10 / 0.6550$ & $62.85 / 0.6120$ & $23.78 / 0.2143$ & $24.31 / 0.2170$ & $23.33 / 0.2011$ & $25.72 / 0.2353$ & $18.94 / 0.1480$ & $55.46 / 0.5223$ & $14.54 / 0.1691$ & $\mathbf{68.05 / 0.6974}^\dagger$ \\
+\textbf{Macro-Average} & $64.76 / 0.6500$ & $64.25 / 0.6400$ & $65.10 / 0.6550$ & $62.85 / 0.6120$ & $23.78 / 0.2143$ & $24.31 / 0.2170$ & $23.33 / 0.2011$ & $25.72 / 0.2353$ & $18.94 / 0.1480$ & $54.69 / 0.5146$ & $14.54 / 0.1691$ & $\mathbf{68.05 / 0.6974}^\dagger$ \\
 \bottomrule\end{tabular}%
 }
 \end{table*}
@@ -338,20 +338,20 @@ Table~\ref{tab:supp_conformal_comparison} compares Class-Conditional Conformal R
 \begin{table}[htbp]
 \centering
 \setlength{\tabcolsep}{2.5pt}
-\caption{Comparative Evaluation of Conformal Risk Control against Calibration and Conformal Baselines on Elliptic-v1 ($\alpha=0.01$, Nominal Coverage $99.0\%$).}
+\caption{Comparative Evaluation of Class-Conditional Conformal Prediction against Calibration and Conformal Baselines on Elliptic-v1 ($\alpha=0.01$, Nominal Coverage $99.0\%$; Overall Coverage evaluates prevalence-weighted average $C_{\text{overall}} = (1-\pi) C_0 + \pi C_1$ with labeled prevalence $\pi = 9.76\%$).}
 \label{tab:supp_conformal_comparison}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 \textbf{Calibration / Conformal Method} & \textbf{Overall Cov.} & \textbf{Benign Cov.} & \textbf{Illicit Cov.} & \textbf{Illicit Error} & \textbf{Mean $|\Gamma|$} & \textbf{Empty (\%)} \\
 \midrule
-Uncalibrated Cutoff ($\tau=0.50$) & $91.42\%$ & $99.85\%$ & $90.10\%$ & $-8.90$\,pp & $1.000$ & $0.00\%$ \\
-Temperature Scaling (Guo et al., 2017) & $94.20\%$ & $99.70\%$ & $92.80\%$ & $-6.20$\,pp & $1.000$ & $0.00\%$ \\
-Isotonic Regression (Zadrozny \& Elkan, 2002) & $96.10\%$ & $99.65\%$ & $94.50\%$ & $-4.50$\,pp & $1.000$ & $0.00\%$ \\
-Marginal Conformal (Vovk et al., 2005) & $99.05\%$ & $99.98\%$ & $82.40\%$ & $-16.60$\,pp & $1.001$ & $0.00\%$ \\
+Uncalibrated Cutoff ($\tau=0.50$) & $98.90\%$ & $99.85\%$ & $90.10\%$ & $-8.90$\,pp & $1.000$ & $0.00\%$ \\
+Temperature Scaling (Guo et al., 2017) & $99.03\%$ & $99.70\%$ & $92.80\%$ & $-6.20$\,pp & $1.000$ & $0.00\%$ \\
+Isotonic Regression (Zadrozny \& Elkan, 2002) & $99.15\%$ & $99.65\%$ & $94.50\%$ & $-4.50$\,pp & $1.000$ & $0.00\%$ \\
+Marginal Conformal (Vovk et al., 2005) & $98.26\%$ & $99.98\%$ & $82.40\%$ & $-16.60$\,pp & $1.001$ & $0.00\%$ \\
 \midrule
-\textbf{Class-Conditional CRC (Ours)} & $\mathbf{99.05\%}$ & $\mathbf{99.05\%}$ & $\mathbf{99.12\%}$ & $\mathbf{+0.12\,\text{pp}}$ & $\mathbf{1.005}$ & $\mathbf{0.00\%}$ \\
-\textbf{Streaming Adaptive ACI (Ours)} & $\mathbf{99.04\%}$ & $\mathbf{99.06\%}$ & $\mathbf{99.08\%}$ & $\mathbf{+0.08\,\text{pp}}$ & $\mathbf{1.006}$ & $\mathbf{0.00\%}$ \\
+\textbf{Class-Conditional CP (Ours)} & $\mathbf{99.06\%}$ & $\mathbf{99.05\%}$ & $\mathbf{99.12\%}$ & $\mathbf{+0.12\,\text{pp}}$ & $\mathbf{1.005}$ & $\mathbf{0.00\%}$ \\
+\textbf{Streaming Adaptive ACI (Ours)} & $\mathbf{99.06\%}$ & $\mathbf{99.06\%}$ & $\mathbf{99.08\%}$ & $\mathbf{+0.08\,\text{pp}}$ & $\mathbf{1.006}$ & $\mathbf{0.00\%}$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -391,7 +391,7 @@ $0.8$ & $\mathbf{89.63}$ & $32.10$ & $9.80$ & $4.10$ \\
 \subsection{Auxiliary Multi-Agent Compliance Decision-Support Architecture}
 \label{sec:supp_multi_agent_arch}
 
-Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision-support prototype operating downstream of the core spatio-temporal GNN under Federal Reserve SR 11-7 / OCC 2011-12 model risk management guidance~\citep{fed2011sr117}. The auxiliary architecture coordinates four specialized micro-agents: (1)~\textbf{Orchestrator Agent:} Coordinates multi-agent lifecycle and verifies chained SHA-256 Merkle audit receipts ($0.05$\,s); (2)~\textbf{Investigator Agent:} Traverses directed transaction lineages up to 2 hops via DuckDB, extracting temporal smurfing subgraphs and identifying synthetic cycle topologies ($0.15$\,s); (3)~\textbf{Forensic Auditor Agent:} Interrogates flagged entities against international sanction databases (OFAC SDN, EU, UN Consolidated lists) and evaluates sanction graph proximities within $0.08$\,s; and (4)~\textbf{Compliance Drafter Agent:} Compiles structured narrative dossiers conforming to FinCEN Form 111 XML specifications ($28.4$\,s). All automated drafts require mandatory human BSA Officer review and sign-off prior to statutory filing; autonomous filing is architecturally prohibited. In a pilot evaluation across $N=200$ audit dossiers (100 manual, 100 prototype-assisted), drafts achieved $99.2\%$ statutory concordance ($\kappa = 1.0$ typology, $\kappa = 0.98$ factual grounding) in $28.4$\,s per case (vs. 45.0 min manual baseline).
+Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision-support prototype operating downstream of the core spatio-temporal GNN under Federal Reserve SR 26-2 / SR 11-7 and OCC 2011-12 model risk guidance~\citep{fed2026sr262, occ201112}. The auxiliary architecture coordinates four specialized micro-agents: (1)~\textbf{Orchestrator Agent:} Coordinates multi-agent lifecycle and verifies chained SHA-256 Merkle audit receipts ($0.05$\,s); (2)~\textbf{Investigator Agent:} Traverses directed transaction lineages up to 2 hops via DuckDB, extracting temporal smurfing subgraphs and identifying synthetic cycle topologies ($0.15$\,s); (3)~\textbf{Forensic Auditor Agent:} Interrogates flagged entities against international sanction databases (OFAC SDN, EU, UN Consolidated lists) and evaluates sanction graph proximities within $0.08$\,s; and (4)~\textbf{Compliance Drafter Agent:} Compiles structured narrative dossiers conforming to FinCEN Form 111 XML specifications ($28.4$\,s). All automated drafts require mandatory human BSA Officer review and sign-off prior to statutory filing; autonomous filing is architecturally prohibited. In a pilot evaluation across $N=200$ audit dossiers (100 manual, 100 prototype-assisted), drafts achieved $99.2\%$ statutory concordance ($\kappa = 1.0$ typology, $\kappa = 0.98$ factual grounding) in $28.4$\,s per case (vs. 45.0 min manual baseline).
 
 \begin{figure*}[!t]
 \centering
@@ -470,7 +470,7 @@ Model hyperparameter tuning for C-STGB is conducted via Tree-Structured Parzen E
 
 \begin{table}[htbp]
 \centering
-\caption{Hyperparameter Search Space and Optimal Configuration Grid.}
+\caption{Hyperparameter Search Space and Optimal Configuration Grid (18 Tuned Architectural Hyperparameters alongside Operational Governance Constants).}
 \label{tab:supp_hyperparams}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{llcc}

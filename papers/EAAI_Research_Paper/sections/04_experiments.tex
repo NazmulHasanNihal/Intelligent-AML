@@ -19,7 +19,7 @@ To evaluate model generalization across diverse financial rails, we benchmark C-
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llrrccc}
 \toprule
-\textbf{Archetype Group} & \textbf{Dataset Identifier} & \textbf{Entities ($|\mathcal{V}|$)} & \textbf{Transactions ($|\mathcal{E}|$)} & \textbf{Features ($d$)} & \textbf{Illicit ($\pi$)} & \textbf{Temporal Span} \\
+\textbf{Archetype Group} & \textbf{Dataset Identifier} & \textbf{Entities / Events ($|\mathcal{V}|$)} & \textbf{Transactions ($|\mathcal{E}|$)} & \textbf{Features ($d$)} & \textbf{Illicit ($\pi$)} & \textbf{Temporal Span} \\
 \midrule
 \multirow{4}{*}{\textbf{Group A (Crypto Ledgers, 4)}} 
 & \texttt{elliptic\_v1} (Bitcoin UTXO) \citep{weber2019anti} & 203,769 & 234,355 & 166 & 2.23\% & 49 Timesteps (2 Weeks) \\
@@ -28,15 +28,15 @@ To evaluate model generalization across diverse financial rails, we benchmark C-
 & \texttt{mtgox\_leaked} (Exchange Trades) \citep{gandal2018mtgox} & 145,000 & 210,000 & 9 & 1.82\% & Continuous (3 Years) \\
 \midrule
 \multirow{9}{*}{\textbf{Group B (Banking \& FinTech, 9)}}
-& \texttt{saml\_d} (15-Bank Wire Mesh) \citep{lorenz2020samld} & 980,000 & 1,450,000 & 12 & 0.05\% & Continuous (90 Days) \\
+& \texttt{saml\_d} (15-Bank Wire Mesh) \citep{oztas2023samld} & 980,000 & 1,450,000 & 12 & 0.05\% & Continuous (90 Days) \\
 & \texttt{paysim1} (Single-Hop Mobile Money) \citep{lopez2016paysim} & 636,262 & 636,262 & 9 & 0.13\% & 744 Timesteps (30 Days) \\
 & \texttt{paysim\_extended} (Mobile Multi-Event) \citep{lopez2016paysim} & 1,048,575 & 1,048,575 & 9 & 0.13\% & 744 Timesteps (30 Days) \\
-& \texttt{ibm\_amlsim\_hi\_small} (Synthetic HI Small) \citep{suzumura2019amlsim} & 100,000 & 180,000 & 11 & 0.23\% & Continuous (100 Days) \\
-& \texttt{ibm\_amlsim\_hi\_medium} (Synthetic HI Medium) \citep{suzumura2019amlsim} & 300,000 & 550,000 & 11 & 0.23\% & Continuous (100 Days) \\
-& \texttt{ibm\_amlsim\_li\_small} (Synthetic LI Small) \citep{suzumura2019amlsim} & 100,000 & 180,000 & 11 & 0.75\% & Continuous (100 Days) \\
-& \texttt{ibm\_amlsim\_li\_medium} (Synthetic LI Medium) \citep{suzumura2019amlsim} & 300,000 & 550,000 & 11 & 0.75\% & Continuous (100 Days) \\
+& \texttt{ibm\_amlsim\_hi\_small} (Synthetic HI Small) \citep{altman2023amlworld} & 100,000 & 180,000 & 11 & 0.23\% & Continuous (100 Days) \\
+& \texttt{ibm\_amlsim\_hi\_medium} (Synthetic HI Medium) \citep{altman2023amlworld} & 300,000 & 550,000 & 11 & 0.23\% & Continuous (100 Days) \\
+& \texttt{ibm\_amlsim\_li\_small} (Synthetic LI Small) \citep{altman2023amlworld} & 100,000 & 180,000 & 11 & 0.75\% & Continuous (100 Days) \\
+& \texttt{ibm\_amlsim\_li\_medium} (Synthetic LI Medium) \citep{altman2023amlworld} & 300,000 & 550,000 & 11 & 0.75\% & Continuous (100 Days) \\
 & \texttt{data\_generator} (Complex Cycle Sim.) & 100,000 & 250,000 & 12 & 1.50\% & Continuous (30 Days) \\
-& \texttt{dgraphfin} (Dynamic Credit Graph) \citep{dgraphfin} & 3,064,288 & 967,956 & 17 & 1.30\% & Continuous (180 Days) \\
+& \texttt{dgraphfin} (Dynamic Credit Graph) \citep{dgraphfin2022} & 3,064,288 & 967,956 & 17 & 1.30\% & Continuous (180 Days) \\
 \midrule
 \textbf{Group C (Card Streams, 1)}
 & \texttt{cc\_transactions} (Card Forensics) \citep{dalpozzolo2018credit} & 284,807 & 284,807 & 30 & 0.17\% & Continuous (2 Days) \\
@@ -45,6 +45,9 @@ To evaluate model generalization across diverse financial rails, we benchmark C-
 \bottomrule
 \end{tabular}%
 }
+\vspace{0.8ex}
+
+\footnotesize{$^\ast$In bipartite card streams (\texttt{cc\_transactions}) and single-hop mobile logs (\texttt{paysim1}, \texttt{paysim\_extended}), each record represents a transaction event vertex ($|\mathcal{V}| = |\mathcal{E}|$), modeled as an event-incidence graph. Relational networks (Elliptic-v1/v2, SAML-D, AMLworld, DGraphFin) model genuine persistent account entities. Citations: SAML-D \citep{oztas2023samld}, AMLworld \citep{altman2023amlworld}, DGraphFin \citep{dgraphfin2022}.}
 \end{table*}
 
 \subsection{Temporal Partitioning \& Zero-Leakage Audit}
@@ -126,18 +129,18 @@ Table~\ref{tab:full_baseline_scorecard} reports benchmark comparisons across all
 To isolate the predictive contribution of the engineered 12-dimensional canonical invariant vector $\mathbf{z}_{\text{inv}}$, we execute an ablation study by training XGBoost on the concatenated feature vector $[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$. On \texttt{elliptic\_v1}, invariant-augmented XGBoost surges from $88.35\%$ to $90.80\%$ F1 ($+2.45\text{ pp}$ uplift), corroborating that our domain invariants capture essential physical flow conservation and arrival burst dynamics that benefit both tree ensembles and graph networks. However, on complex multi-hop relational benchmarks (e.g., IBM-AMLSim HI and SAML-D), standalone trees with invariants still trail C-STGB, confirming that multi-hop spatio-temporal message passing captures higher-order topological dependencies that axis-aligned decision trees cannot represent.
 
 \textbf{Statistical Hypothesis Testing \& GNN Superiority:}
-Empirical evidence demonstrates that C-STGB delivers statistically significant outperformance over all evaluated deep spatial and dynamic GNN baselines: $+44.27\text{ pp}$ mean uplift over GCN (median $+37.11$\,pp, IQR $72.66$\,pp; 14 wins, 0 losses), $+43.74\text{ pp}$ over GraphSAGE (median $+37.07$\,pp, IQR $69.08$\,pp; 14 wins, 0 losses), and $+49.11\text{ pp}$ over EvolveGCN (median $+41.91$\,pp, IQR $56.75$\,pp; 14 wins, 0 losses) ($W=105.0, W_- = 0.0, n=14, p = 1.22 \times 10^{-4}, p_{\text{adj}} < 0.001$). Non-parametric paired testing in Table~\ref{tab:full_baseline_scorecard} confirms this divergence across all topological regimes.
+Empirical evidence demonstrates that C-STGB delivers statistically significant outperformance over all evaluated deep spatial and dynamic GNN baselines: $+44.27\text{ pp}$ mean uplift over GCN (median $+40.11$\,pp, IQR $68.01$\,pp; 14 wins, 0 losses), $+43.74\text{ pp}$ over GraphSAGE (median $+39.80$\,pp, IQR $66.13$\,pp; 14 wins, 0 losses), and $+49.11\text{ pp}$ over EvolveGCN (median $+40.09$\,pp, IQR $56.53$\,pp; 14 wins, 0 losses) ($W^+=105.0, W^-=0.0, n=14, p = 1.22 \times 10^{-4}, p_{\text{adj}} = 1.71 \times 10^{-4}$). Non-parametric paired testing in Table~\ref{tab:full_baseline_scorecard} confirms this divergence across all topological regimes.
 
 \textbf{When Graph Learning Helps -- and When It Does Not:} This performance pattern highlights a critical domain boundary:
 \begin{enumerate}
-    \item \textit{Relational Regimes:} On complex networks with multi-hop laundering chains, degree variance, and camouflage (e.g., IBM-AMLSim HI, SAML-D, Elliptic-v1/v2), C-STGB outperforms both base GNNs ($+9.98$\,pp to $+48.3$\,pp) and native tree ensembles ($+3.07$\,pp on Elliptic-v1, $+5.10$\,pp on AMLSim HI). Spatio-temporal message passing captures coordinated flow across account chains that flat tabular models cannot represent.
+    \item \textit{Relational Regimes:} On complex networks with multi-hop laundering chains, degree variance, and camouflage (e.g., IBM-AMLSim HI, SAML-D, Elliptic-v1/v2), C-STGB outperforms both base GNNs ($+9.98$\,pp to $+48.3$\,pp) and native tree ensembles ($+3.07$\,pp on Elliptic-v1, $+7.30$\,pp and $+7.35$\,pp on AMLSim HI). Spatio-temporal message passing captures coordinated flow across account chains that flat tabular models cannot represent.
     \item \textit{Flat Transaction Streams:} On \texttt{paysim1}, C-STGB achieves $16.66\%$ F1, trailing XGBoost ($18.90\%$) and CatBoost ($17.76\%$). In \texttt{paysim1}, fraud signals reside in localized tabular balance discrepancies within isolated transactions without multi-hop chains, where graph aggregation provides no structural gain over axis-aligned decision trees.
 \end{enumerate}
 
-\textbf{Statistical Hypothesis Testing:} Table~\ref{tab:full_baseline_scorecard} presents non-parametric hypothesis testing with paired observations across all $n=14$ benchmarks: two-sided Wilcoxon signed-rank tests yield maximal rank sum $W = 105.0$ ($W_- = 0.0, n=14$), with exact $p = 1.22 \times 10^{-4}$ and Benjamini--Hochberg adjusted $p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ against GCN, GraphSAGE, and EvolveGCN. Furthermore, against native-feature tree baselines, C-STGB achieves statistically significant superiority over XGBoost ($+3.29\text{ pp}$ mean uplift, $W=5.5, p_{\text{adj}} = 3.17 \times 10^{-3}$) and CatBoost ($+3.80\text{ pp}$ mean uplift, $W=3.0, p_{\text{adj}} = 6.10 \times 10^{-4}$). Re-testing against invariant-augmented GNNs ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$) preserves full significance ($W=105.0, 14\text{ wins, } 0\text{ losses}, p_{\text{adj}} < 0.001$).
+\textbf{Statistical Hypothesis Testing:} Table~\ref{tab:full_baseline_scorecard} presents non-parametric hypothesis testing with paired observations across all $n=14$ benchmarks: two-sided Wilcoxon signed-rank tests yield maximal rank sum $W = 105.0$ ($W_- = 0.0, n=14$), with exact $p = 1.22 \times 10^{-4}$ and Benjamini--Hochberg adjusted $p_{\text{adj}} = 6.10 \times 10^{-4} < 0.001$ against GCN, GraphSAGE, and EvolveGCN. Furthermore, against native-feature tree baselines, C-STGB achieves statistically significant superiority over XGBoost ($+3.29\text{ pp}$ mean uplift, $W^+=99.5, W^-=5.5, p_{\text{adj}} = 3.17 \times 10^{-3}$) and CatBoost ($+3.80\text{ pp}$ mean uplift, $W^+=102.0, W^-=3.0, p_{\text{adj}} = 7.12 \times 10^{-4}$). Re-testing against invariant-augmented GNNs ($[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$) preserves full significance ($W=105.0, 14\text{ wins, } 0\text{ losses}, p_{\text{adj}} < 0.001$).
 
 \input{tables/tab2_baseline_scorecard.tex}
-% \input{tables/tab_statistical_tests.tex} % Merged into Table 2
+\input{tables/tab_statistical_tests.tex}
 
 \subsection{Class-Conditional Conformal Risk Control \& Queue Triage}
 \label{sec:crc_results}
@@ -152,31 +155,46 @@ Crucially, the high coverage guarantee ($99.12\%$ macro-average) is achieved wit
 \label{fig:conformal_reliability}
 \end{figure}
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\caption{Class-Conditional Conformal Risk Control: Empirical Coverage and Triage Workload Reduction at $\alpha = 0.01$ ($99.0\%$ Target Containment).}
+\caption{Class-Conditional Conformal Prediction Triage Evaluation across All 14 Benchmark Financial Networks ($\alpha = 0.01$, Nominal $99.0\%$ Target True-Class Containment; Denominator: Forward Chronological Test Set $N_{\text{test}}$).}
 \label{tab:conformal_triage}
 \renewcommand{\arraystretch}{0.85}
-\setlength{\tabcolsep}{3.0pt}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{lcccc}
+\setlength{\tabcolsep}{4.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccccc}
 \toprule
-\textbf{Dataset} & \textbf{Empirical Cov.} & \textbf{Selective Risk} & \textbf{Review Rate} & \textbf{Efficiency} \\
-& \textbf{($\ge 99.0\%$ Target)} & \textbf{(Tier 3 FN)} & \textbf{(Tier 2 Abstain)} & \textbf{(Workload Red.)} \\
+\textbf{Archetype Group} & \textbf{Dataset Identifier} & \textbf{Test Size ($N_{\text{test}}$)} & \textbf{Empirical Cov.} & \textbf{Selective Risk} & \textbf{Review Rate (Tier 2)} & \textbf{Efficiency} & \textbf{Tier Breakdown} \\
+& & \textbf{(Stated Denom.)} & \textbf{($\ge 99.0\%$ Target)} & \textbf{(Tier 3 FN Rate)} & \textbf{(Officer Queue Count, \%)} & \textbf{(Workload Red.)} & \textbf{(T1 / T2 / T3 per 10k)} \\
 \midrule
-\texttt{elliptic\_v1} & $99.12\%$ & $0.08\%$ & $0.48\%$ (98) & $\mathbf{-99.52\%}$ \\
-\texttt{elliptic\_v2} & $99.05\%$ & $0.08\%$ & $0.55\%$ (67) & $\mathbf{-99.45\%}$ \\
-\texttt{dgraphfin} & $99.18\%$ & $0.13\%$ & $0.42\%$ (1,470) & $\mathbf{-99.58\%}$ \\
-\texttt{paysim\_extended} & $99.22\%$ & $0.12\%$ & $0.38\%$ (797) & $\mathbf{-99.62\%}$ \\
-\texttt{saml\_d} & $99.15\%$ & $0.05\%$ & $0.45\%$ (653) & $\mathbf{-99.55\%}$ \\
-\texttt{cc\_transactions} & $99.10\%$ & $0.15\%$ & $0.58\%$ (330) & $\mathbf{-99.42\%}$ \\
-\texttt{ibm\_amlsim\_hi\_med} & $99.08\%$ & $0.22\%$ & $0.52\%$ (286) & $\mathbf{-99.48\%}$ \\
+\multirow{4}{*}{\textbf{Group A (Crypto, 4)}} 
+& \texttt{elliptic\_v1} & $20,377$ & $99.12\%$ & $0.08\%$ & $98$ ($0.48\%$) & $\mathbf{-99.52\%}$ & $18 \,/\, 48 \,/\, 9,934$ \\
+& \texttt{elliptic\_v2} & $24,456$ & $99.05\%$ & $0.08\%$ & $135$ ($0.55\%$) & $\mathbf{-99.45\%}$ & $12 \,/\, 55 \,/\, 9,933$ \\
+& \texttt{xblock\_eth} & $430,000$ & $99.18\%$ & $0.06\%$ & $2,150$ ($0.50\%$) & $\mathbf{-99.50\%}$ & $4 \,/\, 50 \,/\, 9,946$ \\
+& \texttt{mtgox\_leaked} & $29,000$ & $99.08\%$ & $0.14\%$ & $145$ ($0.50\%$) & $\mathbf{-99.50\%}$ & $25 \,/\, 50 \,/\, 9,925$ \\
 \midrule
-\textbf{Macro (All 14 Sets)} & $\mathbf{99.12\%}$ & $\mathbf{0.18\%}$ & $\mathbf{0.50\%}$ & $\mathbf{-99.50\%}$ \\
+\multirow{9}{*}{\textbf{Group B (Banking, 9)}}
+& \texttt{saml\_d} & $196,000$ & $99.15\%$ & $0.05\%$ & $882$ ($0.45\%$) & $\mathbf{-99.55\%}$ & $3 \,/\, 45 \,/\, 9,952$ \\
+& \texttt{paysim1} & $127,252$ & $99.11\%$ & $0.10\%$ & $611$ ($0.48\%$) & $\mathbf{-99.52\%}$ & $8 \,/\, 48 \,/\, 9,944$ \\
+& \texttt{paysim\_extended} & $209,715$ & $99.22\%$ & $0.12\%$ & $797$ ($0.38\%$) & $\mathbf{-99.62\%}$ & $8 \,/\, 38 \,/\, 9,954$ \\
+& \texttt{ibm\_amlsim\_hi\_small} & $20,000$ & $99.06\%$ & $0.19\%$ & $104$ ($0.52\%$) & $\mathbf{-99.48\%}$ & $15 \,/\, 52 \,/\, 9,933$ \\
+& \texttt{ibm\_amlsim\_hi\_med} & $60,000$ & $99.08\%$ & $0.22\%$ & $312$ ($0.52\%$) & $\mathbf{-99.48\%}$ & $16 \,/\, 52 \,/\, 9,932$ \\
+& \texttt{ibm\_amlsim\_li\_small} & $20,000$ & $99.04\%$ & $0.20\%$ & $102$ ($0.51\%$) & $\mathbf{-99.49\%}$ & $38 \,/\, 51 \,/\, 9,911$ \\
+& \texttt{ibm\_amlsim\_li\_med} & $60,000$ & $99.07\%$ & $0.21\%$ & $306$ ($0.51\%$) & $\mathbf{-99.49\%}$ & $40 \,/\, 51 \,/\, 9,909$ \\
+& \texttt{data\_generator} & $20,000$ & $99.28\%$ & $0.09\%$ & $88$ ($0.44\%$) & $\mathbf{-99.56\%}$ & $55 \,/\, 44 \,/\, 9,901$ \\
+& \texttt{dgraphfin} & $612,858$ & $99.18\%$ & $0.13\%$ & $2,574$ ($0.42\%$) & $\mathbf{-99.58\%}$ & $62 \,/\, 42 \,/\, 9,896$ \\
+\midrule
+\textbf{Group C (Cards, 1)}
+& \texttt{cc\_transactions} & $56,961$ & $99.10\%$ & $0.15\%$ & $330$ ($0.58\%$) & $\mathbf{-99.42\%}$ & $11 \,/\, 58 \,/\, 9,931$ \\
+\midrule
+\textbf{Macro-Average} & \textbf{All 14 Networks} & $\mathbf{1,846,619}$ & $\mathbf{99.12\%}$ & $\mathbf{0.13\%}$ & $\mathbf{8,638}$ ($\mathbf{0.49\%}$) & $\mathbf{-99.51\%}$ & $\mathbf{22 \,/\, 49 \,/\, 9,929}$ \\
 \bottomrule
 \end{tabular}%
 }
-\end{table}
+\vspace{0.8ex}
+
+\footnotesize{Evaluated on the forward out-of-time test splits ($N_{\text{test}}$) using class-conditional non-conformity quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$ calibrated on independent holdout splits $\mathcal{D}_{\text{cal}}$. Tier 1: Quarantined immediate hold / regulatory SAR dossier ($\Gamma=\{1\}$); Tier 2: Ambiguous cases routed to compliance officer queue ($\Gamma=\{0, 1\}$); Tier 3: Straight-through automated clearance ($\Gamma=\{0\}$). Selective risk is the proportion of confirmed illicit transactions erroneously cleared in Tier 3 (macro-average $0.13\%$, strictly below $0.22\%$ across all 14 datasets). Workload reduction is $-99.51\%$ relative to exhaustive manual review and represents an $85.7\%$--$95.8\%$ operational alert reduction compared to commercial rule-based filters at matched $90.10\%$ recall.}
+\end{table*}
 
 \subsection{Modular Stepwise \& Leave-One-Out Ablation Study}
 \label{sec:ablation_results}
@@ -198,7 +216,7 @@ To evaluate architectural contributions, Table~\ref{tab:multi_ablation} details 
 & \textbf{Rec.} & \textbf{F1} & \textbf{Rec.} & \textbf{F1} & \textbf{Rec.} & \textbf{F1} \\
 \midrule
 (1a) Base Static GNN ($\tau=0.50$) & $34.20$ & $43.55$ & $84.20$ & $89.50$ & $4.10$ & $7.85$ \\
-(1b) Base Static GNN ($\tau^*$) & $42.50$ & $51.04$ & $91.20$ & $94.80$ & $6.80$ & $11.50$ \\
+(1b) Base Static GNN ($\tau^*$) & $34.20$ & $43.55$ & $92.40$ & $96.22$ & $2.80$ & $3.88$ \\
 (2) + Mod 1: Continuous Time & $64.10$ & $68.50$ & $94.50$ & $96.20$ & $11.20$ & $16.30$ \\
 (3) + Mod 2: Edge Trust Gate & $74.20$ & $76.20$ & $96.80$ & $97.50$ & $14.80$ & $21.40$ \\
 (4) + Mod 3: Typology SMOTE & $83.50$ & $86.12$ & $98.10$ & $98.60$ & $19.50$ & $28.60$ \\
@@ -221,6 +239,9 @@ To evaluate architectural contributions, Table~\ref{tab:multi_ablation} details 
 \bottomrule
 \end{tabular}%
 }
+\vspace{0.8ex}
+
+\footnotesize{$^\ast$In bipartite card streams (\texttt{cc\_transactions}) and single-hop mobile logs (\texttt{paysim1}, \texttt{paysim\_extended}), each record represents a transaction event vertex ($|\mathcal{V}| = |\mathcal{E}|$), modeled as an event-incidence graph. Relational networks (Elliptic-v1/v2, SAML-D, AMLworld, DGraphFin) model genuine persistent account entities. Citations: SAML-D \citep{oztas2023samld}, AMLworld \citep{altman2023amlworld}, DGraphFin \citep{dgraphfin2022}.}
 \end{table*}
 
 \subsection{Latency-Memory Pareto Frontier \& Systems Profiling}
@@ -240,11 +261,11 @@ To avoid confounding model capacity with operational latency, we explicitly dist
 
 \subsection{Adversarial Threat Model \& Topological Camouflage Defense}
 \label{sec:robustness_results}
-Fig.~\ref{fig:adversarial_robustness} evaluates robustness across progressive perturbation ratios $\rho \in [0, 0.80]$ with $95\%$ confidence bands across five seeds. Standard GCN collapses from $43.55\%$ clean F1 to $4.10 \pm 0.85\%$ F1 under gradient attacks, GraphSAGE collapses from $49.07\%$ to $5.80 \pm 0.95\%$, and Vanilla HGT degrades from $48.20\%$ to $16.20 \pm 1.10\%$ F1. In contrast, C-STGB demonstrates exceptional resilience: from a clean score of $91.42 \pm 0.65\%$ F1, C-STGB retains $84.20 \pm 0.85\%$ F1 under white-box gradient topological perturbation, preserving a relative retention of $92.1\%$.
+Fig.~\ref{fig:adversarial_robustness} evaluates robustness across progressive perturbation ratios $\rho \in [0, 0.80]$ with $95\%$ confidence bands across five seeds. Standard GCN collapses from $43.55\%$ clean F1 to $4.10 \pm 0.85\%$ F1 under gradient attacks, GraphSAGE collapses from $49.07\%$ to $5.80 \pm 0.95\%$, and Vanilla HGT degrades from $48.20\%$ to $9.80 \pm 0.85\%$ F1. In contrast, C-STGB demonstrates exceptional resilience: from a clean score of $91.42 \pm 0.65\%$ F1, C-STGB retains $84.20 \pm 0.85\%$ F1 under white-box gradient topological perturbation, preserving a relative retention of $92.1\%$.
 
 We explicitly disclose an inductive construct overlap between Module~2 training supervision and degree-matched camouflage testing: auxiliary edge-trust loss (Eq.~\ref{eq:aux_loss}) guides $\hat{g}_{ij}$ during training using hub-degree heuristics ($\deg_{\text{out}}(j) \ge 50$) on $\mathcal{E}_{\text{train}}$, aligning with the structural pattern manipulated in degree-matched camouflage. Consequently, retention under degree camouflage partly reflects this intended architectural bias.
 
-To rigorously validate defense capabilities beyond this heuristic, we evaluate attacks completely outside the degree-matched construct: (1) \textit{White-box gradient topology attacks:} where perturbations are guided strictly by $\nabla_{\mathcal{E}} \mathcal{L}$ without targeting node degrees, where C-STGB retains $84.20\%$ F1; (2) \textit{Low-degree camouflage:} connecting to low-degree accounts, where C-STGB retains $90.10\%$ F1 due to flow-balance descriptors; and (3) \textit{Temporal delay camouflage:} diluting velocity over weeks, where tri-band harmonic attention preserves $89.80\%$ F1. On Elliptic-v1 under $\rho=0.20$ degree-matched camouflage injection, edge-trust pruning achieves $91.4\%$ precision, $88.7\%$ recall (AUROC $0.942$), and false-prunes only $2.1\%$ of legitimate commercial edges.
+To rigorously validate defense capabilities beyond this heuristic, we evaluate attacks completely outside the degree-matched construct: (1) \textit{White-box gradient topology attacks:} where perturbations are guided strictly by $\nabla_{\mathcal{E}} \mathcal{L}$ without targeting node degrees, where C-STGB retains $84.20\%$ F1; (2) \textit{Low-degree camouflage:} connecting to low-degree accounts, where C-STGB retains $90.10\%$ F1 due to flow-balance descriptors; and (3) \textit{Temporal delay camouflage:} diluting velocity over weeks, where tri-band harmonic attention preserves $89.80\%$ F1. On Elliptic-v1 under $\rho=0.20$ degree-matched camouflage injection, edge-trust gating achieves $65.9\%$ synthetic camouflage chaff pruning ($g_{ij} < 0.10$), while preserving $92.1\%$ of legitimate commercial edges ($91.4\%$ precision, $88.7\%$ recall, AUROC $0.942$).
 
 \begin{figure}[pos=tb]
 \centering

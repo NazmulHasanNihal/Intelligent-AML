@@ -94,7 +94,7 @@ ax.add_patch(patches.FancyBboxPatch(
     facecolor="#1e40af", edgecolor="#1e40af"
 ))
 ax.text(0.093, 0.860, "1. Streaming Ingest", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
-ax.text(0.093, 0.800, "SWIFT / bKash / Kafka\nApache Arrow Buffers", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#1e40af")
+ax.text(0.093, 0.800, "SWIFT / ISO-20022 / Kafka\nApache Arrow Buffers", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#1e40af")
 ax.text(0.093, 0.715, "Time-Causal Ingestion\nDuckDB Micro-Batches\nt_e <= t_eval (No Leak)", ha="center", va="center", fontsize=5.8, color="#334155")
 ax.text(0.093, 0.615, "12-D Canonical Invariants:\nPhi_flow, Hawkes lambda_u,\ns_fwd, s_bwd, [mu_A, sigma_A^2]", ha="center", va="center", fontsize=5.5, color="#0f766e")
 ax.text(0.093, 0.425, "Single-event: 0.11 ms", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#1e40af")

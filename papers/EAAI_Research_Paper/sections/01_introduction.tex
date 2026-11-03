@@ -8,15 +8,10 @@ To modernize financial surveillance, recent research has explored Graph Neural N
     \item \textbf{Adversarial Topological Camouflage:} Illicit entities deliberately route high-degree synthetic transaction chaff to legitimate commercial hubs (e.g., merchant gateways and centralized exchanges), inducing severe feature over-smoothing during neighborhood message aggregation \citep{dou2020enhancing}.
     \item \textbf{Extreme Class Imbalance:} Operational financial streams exhibit severe minority class skew ($\pi < 0.05\%$ on inter-bank wire rails and retail payment networks, compared to $2.23\%$ total and $9.76\%$ labeled evaluation prevalence on \texttt{elliptic\_v1}), inducing severe posterior score attenuation that triggers near-complete recall collapse under default decision cutoffs ($\tau = 0.50$).
     \item \textbf{Cold-Start Graph Isolation ($d(u) \le 2$):} Newly activated accounts possess sparse connectivity, receiving uninformative or noisy neighborhood aggregation vectors under pure spatial message passing.
-    \item \textbf{Uncalibrated Decision Uncertainty:} Black-box anomaly scores lack distribution-free statistical risk guarantees under non-stationary temporal distribution drift, exposing financial institutions to regulatory non-compliance under statutory model risk management audits.
+    \item \textbf{Uncalibrated Decision Uncertainty:} Black-box anomaly scores lack distribution-free statistical risk guarantees under non-stationary temporal distribution drift, exposing financial institutions to regulatory non-compliance under statutory model risk management audits (e.g., Federal Reserve SR 26-2 / OCC Bulletin 2011-12 supervisory guidance \citep{fed2026sr262, occ201112}).
 \end{enumerate}
 
-To overcome these foundational hurdles, this study investigates three central research hypotheses:
-\begin{itemize}
-    \item ($H_1$) \textit{Camouflage Suppression:} Multi-scale continuous harmonic temporal attention coupled with learnable edge-trust filtering suppresses camouflage chaff across burst and dormancy cycles, mitigating feature over-smoothing and preserving minority discriminability relative to static and single-decay dynamic GNNs.
-    \item ($H_2$) \textit{Flow-Conserving Latent Oversampling:} Interpolating synthetic minority instances strictly within latent topological typology clusters ($\mathcal{C}_k$) restores minority recall without elevating false alarms on commercial hubs, while formally preserving point-level fund conservation regularity.
-    \item ($H_3$) \textit{Risk Guarantees:} Class-conditional Conformal Risk Control (CRC) establishes finite-sample label coverage ($\ge 99.0\%$) under within-class exchangeability with bounded temporal drift degradation, routing $>99.4\%$ of transaction volume into decisive singleton prediction sets.
-\end{itemize}
+To overcome these foundational hurdles, this study investigates the operational boundaries and synergy between graph learning and tree ensembles under production surveillance constraints.
 
 A critical empirical finding of this work is that graph neural networks do not uniformly surpass optimized gradient-boosted decision trees across all financial transaction streams. Rather, their performance advantage is heavily concentrated in graph-rich, multi-hop relational laundering environments, whereas tree ensembles remain highly competitive or superior on predominantly flat, single-hop transactional ledgers.
 

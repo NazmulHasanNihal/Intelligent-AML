@@ -1,23 +1,25 @@
 \begin{table}[t]
 \centering
-\caption{Non-Parametric Statistical Significance and Distributional Effect Sizes of C-STGB vs. Baselines across All $n=14$ Benchmark Networks (Two-Sided Wilcoxon Signed-Rank Test with Dataset-Level Paired Observations and Benjamini--Hochberg FDR Correction).}
+\caption{Non-Parametric Statistical Significance and Distributional Effect Sizes of C-STGB vs. Baselines across All $n=14$ Benchmark Networks (Two-Sided Paired Wilcoxon Signed-Rank Test with Benjamini--Hochberg FDR Correction across $m=7$ Comparisons).}
 \label{tab:statistical_tests}
 \renewcommand{\arraystretch}{0.85}
-\setlength{\tabcolsep}{3.0pt}
+\setlength{\tabcolsep}{2.5pt}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lccccc}
 \toprule
-\textbf{Baseline} & \textbf{W / T / L} & \textbf{Mean $\Delta$} & \textbf{Median [IQR]} & \textbf{$W$ Stat} & \textbf{Adjusted $p_{\text{adj}}$} \\
+\textbf{Baseline} & \textbf{W / T / L} & \textbf{Mean $\Delta$} & \textbf{Median [IQR]} & \textbf{$W^+, W^-$} & \textbf{Adjusted $p_{\text{adj}}$} \\
 \midrule
-XGBoost (Tabular) & $13 \,/\, 0 \,/\, 1$ & $+3.29$\,pp & $+2.84$\,[3.79]\,pp & $5.5$ & $\mathbf{3.17 \times 10^{-3}}^{\ast\ast}$ \\
-CatBoost (Industrial) & $13 \,/\, 0 \,/\, 1$ & $+3.80$\,pp & $+3.41$\,[4.03]\,pp & $3.0$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
-GCN (Spatial) & $14 \,/\, 0 \,/\, 0$ & $+43.49$\,pp & $+37.11$\,[72.66]\,pp & $105.0$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
-GraphSAGE (Inductive) & $14 \,/\, 0 \,/\, 0$ & $+42.95$\,pp & $+37.07$\,[69.08]\,pp & $105.0$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
-EvolveGCN (Dynamic) & $14 \,/\, 0 \,/\, 0$ & $+48.32$\,pp & $+41.91$\,[56.75]\,pp & $105.0$ & $\mathbf{6.10 \times 10^{-4}}^{\ast\ast\ast}$ \\
+XGBoost (Tabular) & $13 \,/\, 0 \,/\, 1$ & $+3.29$\,pp & $+2.84$\,[3.79]\,pp & $99.5, 5.5$ & $\mathbf{3.17 \times 10^{-3}}^{\ast\ast}$ \\
+CatBoost (Industrial) & $13 \,/\, 0 \,/\, 1$ & $+3.80$\,pp & $+3.41$\,[4.03]\,pp & $102.0, 3.0$ & $\mathbf{7.12 \times 10^{-4}}^{\ast\ast\ast}$ \\
+GCN (Spatial) & $14 \,/\, 0 \,/\, 0$ & $+44.27$\,pp & $+40.11$\,[68.01]\,pp & $105.0, 0.0$ & $\mathbf{1.71 \times 10^{-4}}^{\ast\ast\ast}$ \\
+GraphSAGE (Inductive) & $14 \,/\, 0 \,/\, 0$ & $+43.74$\,pp & $+39.80$\,[66.13]\,pp & $105.0, 0.0$ & $\mathbf{1.71 \times 10^{-4}}^{\ast\ast\ast}$ \\
+CARE-GNN (Camouflage) & $14 \,/\, 0 \,/\, 0$ & $+27.52$\,pp & $+22.04$\,[18.64]\,pp & $105.0, 0.0$ & $\mathbf{1.71 \times 10^{-4}}^{\ast\ast\ast}$ \\
+EvolveGCN (Dynamic) & $14 \,/\, 0 \,/\, 0$ & $+49.11$\,pp & $+40.09$\,[56.53]\,pp & $105.0, 0.0$ & $\mathbf{1.71 \times 10^{-4}}^{\ast\ast\ast}$ \\
+TGN (Continuous Time) & $14 \,/\, 0 \,/\, 0$ & $+24.66$\,pp & $+18.42$\,[16.82]\,pp & $105.0, 0.0$ & $\mathbf{1.71 \times 10^{-4}}^{\ast\ast\ast}$ \\
 \bottomrule
 \end{tabular}%
 }
 \vspace{1.0ex}
 
-\footnotesize{$^\ast$Under invariant representations $[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$, C-STGB preserves $14/0/0$ wins ($W=105.0, p_{\text{adj}} < 0.001$; full 14-dataset paired matrix in the supplementary material).}
+\footnotesize{$^\ast$Under invariant representations $[\mathbf{x}_u \,\|\, \mathbf{z}_{\text{inv}}]$, C-STGB preserves $14/0/0$ wins over standard GNNs ($W^+=105.0, W^-=0.0, p_{\text{adj}} < 0.001$). Full per-dataset evaluation matrix is provided in Supplementary Material Table~S3.}
 \end{table}

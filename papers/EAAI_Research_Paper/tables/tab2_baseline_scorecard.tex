@@ -1,6 +1,6 @@
 \begin{table*}[t]
 \centering
-\caption{Comprehensive Benchmark Comparison across All 14 Financial Networks: Minority (Illicit) Class F1-Score (\%) and PR-AUC with Validation-Tuned Thresholds $\tau^*$ under Asymmetric Operational Loss against Literature Baselines ($^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W=105.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all 14 benchmark networks).}
+\caption{Comprehensive Benchmark Comparison across All 14 Financial Networks: Minority (Illicit) Class F1-Score (\%) and PR-AUC with Validation-Tuned Thresholds $\tau^*$ under Asymmetric Operational Loss against Literature Baselines ($^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W^+=105.0, W^-=0.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all 14 benchmark networks).}
 \label{tab:full_baseline_scorecard}
 \renewcommand{\arraystretch}{0.85}
 \setlength{\tabcolsep}{3.2pt}
@@ -34,13 +34,14 @@
 \multicolumn{9}{l}{\textbf{Non-Parametric Statistical Testing \& Effect Sizes vs. C-STGB ($n=14$ Benchmark Networks)}} \\
 \textbf{Wins / Ties / Losses} & $13 \,/\, 0 \,/\, 1$ & $13 \,/\, 0 \,/\, 1$ & $14 \,/\, 0 \,/\, 0$ & $14 \,/\, 0 \,/\, 0$ & $14 \,/\, 0 \,/\, 0$ & $14 \,/\, 0 \,/\, 0$ & $14 \,/\, 0 \,/\, 0$ & -- \\
 \textbf{Mean Advantage ($\Delta$)} & $+3.29$\,pp & $+3.80$\,pp & $+44.27$\,pp & $+43.74$\,pp & $+27.52$\,pp & $+49.11$\,pp & $+24.66$\,pp & -- \\
-\textbf{Median [IQR] $\Delta$} & $+2.84$\,[3.79]\,pp & $+3.41$\,[4.03]\,pp & $+37.11$\,[72.66]\,pp & $+37.07$\,[69.08]\,pp & $+25.40$\,[38.10]\,pp & $+41.91$\,[56.75]\,pp & $+22.50$\,[35.20]\,pp & -- \\
-\textbf{Wilcoxon $W$ Stat} & $99.5$ & $102.0$ & $105.0$ & $105.0$ & $105.0$ & $105.0$ & $105.0$ & -- \\
-\textbf{Adjusted $p_{\text{adj}}$} & $\mathbf{3.17 \times 10^{-3}}$ & $\mathbf{6.10 \times 10^{-4}}$ & $\mathbf{6.10 \times 10^{-4}}$ & $\mathbf{6.10 \times 10^{-4}}$ & $\mathbf{6.10 \times 10^{-4}}$ & $\mathbf{6.10 \times 10^{-4}}$ & $\mathbf{6.10 \times 10^{-4}}$ & -- \\
+\textbf{Median [IQR] $\Delta$} & $+2.84$\,[3.79]\,pp & $+3.41$\,[4.03]\,pp & $+40.11$\,[68.01]\,pp & $+39.80$\,[66.13]\,pp & $+22.04$\,[18.64]\,pp & $+40.09$\,[56.53]\,pp & $+18.42$\,[16.82]\,pp & -- \\
+\textbf{Wilcoxon $W^+, W^-$} & $99.5, 5.5$ & $102.0, 3.0$ & $105.0, 0.0$ & $105.0, 0.0$ & $105.0, 0.0$ & $105.0, 0.0$ & $105.0, 0.0$ & -- \\
+\textbf{Raw $p$-value} & $3.17 \times 10^{-3}$ & $6.10 \times 10^{-4}$ & $1.22 \times 10^{-4}$ & $1.22 \times 10^{-4}$ & $1.22 \times 10^{-4}$ & $1.22 \times 10^{-4}$ & $1.22 \times 10^{-4}$ & -- \\
+\textbf{Adjusted $p_{\text{adj}}$} & $\mathbf{3.17 \times 10^{-3}}$ & $\mathbf{7.12 \times 10^{-4}}$ & $\mathbf{1.71 \times 10^{-4}}$ & $\mathbf{1.71 \times 10^{-4}}$ & $\mathbf{1.71 \times 10^{-4}}$ & $\mathbf{1.71 \times 10^{-4}}$ & $\mathbf{1.71 \times 10^{-4}}$ & -- \\
 \bottomrule
 \end{tabular}%
 }
 \vspace{0.8ex}
 
-\footnotesize{Minority F1-Score evaluates harmonic precision and recall on confirmed illicit transactions ($y=1$) under validation-calibrated threshold $\tau^*$; Macro-Average represents the unweighted arithmetic mean across benchmark dataset scores, alongside median and interquartile range. Tabular tree models (XGBoost, CatBoost) are reported on native transaction features ($64.76\%$ and $64.25\%$ macro F1); augmenting XGBoost with the 12-D flow invariants $\mathbf{z}_{\text{inv}}$ elevates its score to $90.80\%$ on Elliptic-v1 as detailed in Section~\ref{sec:benchmark_results}. $^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W=105.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all benchmark networks. Group A: 4 Public Crypto Ledgers; Group B: 9 Multi-Bank, Mobile \& FinTech Networks; Group C: 1 Bipartite Card Stream.}
+\footnotesize{Minority (illicit) class F1-Score evaluates harmonic precision and recall on confirmed illicit transactions ($y=1$) under validation-calibrated threshold $\tau^*$; Macro-Average represents the unweighted arithmetic mean across benchmark dataset scores, alongside median and interquartile range. Tabular tree models (XGBoost, CatBoost) are reported on native transaction features ($64.76\%$ and $64.25\%$ macro F1); augmenting XGBoost with the 12-D flow invariants $\mathbf{z}_{\text{inv}}$ elevates its score to $90.80\%$ on Elliptic-v1 as detailed in Section~\ref{sec:benchmark_results}. $^\dagger$ indicates statistically significant corpus-wide improvement over deep GNNs at $W^+=105.0, W^-=0.0, p_{\text{adj}} < 0.001$ under two-sided Wilcoxon signed-rank test across all 14 benchmark networks with Benjamini--Hochberg FDR correction across $m=7$ comparisons. Group A: 4 Public Crypto Ledgers; Group B: 9 Multi-Bank, Mobile \& FinTech Networks; Group C: 1 Bipartite Card Stream.}
 \end{table*}

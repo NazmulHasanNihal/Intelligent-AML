@@ -71,7 +71,7 @@ print("======================================================================")
 fig, ax = plt.subplots(figsize=(7.16, 2.95))
 ax.axis('off')
 ax.set_xlim([-0.010, 1.010])
-ax.set_ylim([-0.020, 1.050])
+ax.set_ylim([-0.025, 1.060])
 
 # Top Master Banner
 ax.add_patch(patches.FancyBboxPatch(
@@ -135,10 +135,10 @@ diamond_pts = np.array([
     [diam_x - dw, diam_y]
 ])
 ax.add_patch(patches.Polygon(diamond_pts, facecolor="#fef3c7", edgecolor="#d97706", linewidth=1.4))
-ax.text(diam_x, diam_y + 0.038, "Class-Cond.", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#92400e")
-ax.text(diam_x, diam_y + 0.010, "CRC Triage", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#b45309")
-ax.text(diam_x, diam_y - 0.020, r"$1-\alpha \geq 99\%$", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#92400e")
-ax.text(diam_x, diam_y - 0.046, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", va="center", fontsize=5.0, color="#78350f")
+ax.text(diam_x, diam_y + 0.042, "Class-Cond.", ha="center", va="center", fontsize=3.7, fontweight="bold", color="#92400e")
+ax.text(diam_x, diam_y + 0.016, "CRC Triage", ha="center", va="center", fontsize=4.7, fontweight="bold", color="#b45309")
+ax.text(diam_x, diam_y - 0.014, r"$1-\alpha \geq 99\%$", ha="center", va="center", fontsize=3.7, fontweight="bold", color="#92400e")
+ax.text(diam_x, diam_y - 0.044, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", va="center", fontsize=3.5, color="#78350f")
 
 # Three Routing Branches
 tiers = [
@@ -209,7 +209,7 @@ ax.text(0.515, 0.192, r"Class-Cond. CRC: $\hat{q}^{(y)} = \mathrm{Quantile}_{1-\
 ax.text(0.515, 0.126, r"Triage Dispatch: $\Gamma(u) = \{y : s_u^{(y)} \leq \hat{q}^{(y)}\}, \;\; \mathbf{E}[|\Gamma|] = 1.0050, \;\; \mathbf{P}(\Gamma = \emptyset) = 0.00\%$", fontsize=5.1, color="#b91c1c")
 ax.text(0.515, 0.058, r"Fast-Path Latency: $0.45\,\text{ms} < 10\,\text{ms}$ SLA | Queue: $-99.50\%$ Workload Cut | Peak VRAM: $428\,\text{MB}$", fontsize=5.1, fontweight="bold", color="#15803d")
 
-save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"], pad_inches=0.08)
+save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"], pad_inches=0.12)
 
 print("======================================================================")
 print("2. GENERATING 2-PANEL FACTORIAL ATTRIBUTION GROUPED BAR CHART")

@@ -336,11 +336,11 @@ Crucially, C-STGB demonstrates statistically significant superiority over deep G
 Table~\ref{tab:supp_conformal_comparison} compares Class-Conditional Conformal Risk Control against standard calibration and conformal baselines on \texttt{elliptic\_v1} at target significance $\alpha=0.01$ (nominal coverage: $99.0\%$). Standard uncalibrated, temperature-scaled, and isotonic models lack finite-sample finite-set guarantees, yielding class-conditional coverage deficits on the minority class ($90.10\%$--$94.50\%$). Marginal conformal prediction satisfies aggregate coverage ($99.05\%$) by over-covering majority benign transactions ($99.98\%$) while severely under-covering minority illicit transactions ($82.40\%$, a $16.60$\,pp violation). In contrast, C-STGB guarantees $\ge 99.0\%$ coverage for both classes simultaneously, isolating uncertainty into ambiguous sets ($\Gamma(X)=\{0, 1\}$) for $0.50\%$ of transactions with zero empty sets.
 
 % --- TABLE S4 (Page 6) ---
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption{Comparative Evaluation of Class-Conditional Conformal Prediction against Calibration and Conformal Baselines on Elliptic-v1 ($\alpha = 0.01$, Nominal Coverage $99.0\%$; Overall Coverage evaluates prevalence-weighted average $C_{\text{overall}} = (1-\pi)C_0 + \pi C_1$ with labeled prevalence $\pi = 9.76\%$).}
 \label{tab:supp_conformal_comparison}\label{tab:s4_conformal}
-\resizebox{\columnwidth}{!}{%
+\resizebox{0.92\textwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 \textbf{Calibration / Conformal Method} & \textbf{Overall Cov.} & \textbf{Benign Cov.} & \textbf{Illicit Cov.} & \textbf{Illicit Error} & \textbf{Mean $|\Gamma|$} & \textbf{Empty (\%)} \\
@@ -355,7 +355,7 @@ Marginal Conformal (Vovk et al., 2005) & 98.26\% & 99.98\% & 82.40\% & $-16.60\t
 \bottomrule
 \end{tabular}%
 }
-\end{table}
+\end{table*}
 
 \subsection{Adversarial Camouflage Robustness across Perturbation Intensities}
 
@@ -402,11 +402,11 @@ Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision
 
 
 % --- TABLE S6 (Page 6) ---
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption{Fine-Grained Structural and Topological Properties of the 14 Evaluated Financial Transaction Networks.}
 \label{tab:supp_topological_metrics}\label{tab:s6_topology}
-\resizebox{\columnwidth}{!}{%
+\resizebox{0.92\textwidth}{!}{%
 \begin{tabular}{lrrrrrrr}
 \toprule
 \textbf{Dataset Identifier} & \textbf{Entities $|\mathcal{V}|$} & \textbf{Trans. $|\mathcal{E}|$} & \textbf{Density} & \textbf{Clust. $C$} & \textbf{Assort. $r$} & \textbf{Diam. $D$} & \textbf{Skew $\pi$} \\
@@ -430,7 +430,7 @@ Fig.~\ref{fig:supp_s4} illustrates the decoupled multi-agent compliance decision
 \bottomrule
 \end{tabular}%
 }
-\end{table}
+\end{table*}
 
 \subsection{Disentangled Streaming Latency Profiling}
 
@@ -466,11 +466,11 @@ Table~\ref{tab:supp_latency_disentangled} reports the itemized computational bud
 Model hyperparameter tuning for C-STGB is conducted via Tree-Structured Parzen Estimator (TPE) Bayesian optimization using Optuna across $N=50$ trials per benchmark dataset on the training split $\mathcal{D}_{\text{train}}$. Table~\ref{tab:supp_hyperparams} reports the 18-parameter search space, prior distribution archetypes, and globally optimal calibrated parameters. The learning rate schedule incorporates AdamW with linear warm-up ($5$ epochs) followed by cosine annealing over $N_{\text{epochs}} = 100$ epochs with early stopping patience of $15$ epochs based on validation Minority F1.
 
 % --- TABLE S8 (Page 7) ---
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption{Hyperparameter Search Space and Optimal Configuration Grid (18 Tuned Architectural Hyperparameters alongside Operational Governance Constants).}
 \label{tab:supp_hyperparams}\label{tab:s8_hyperparams}
-\resizebox{\columnwidth}{!}{%
+\resizebox{0.92\textwidth}{!}{%
 \begin{tabular}{lllc}
 \toprule
 \textbf{Module / Component} & \textbf{Hyperparameter} & \textbf{Search Interval / Set} & \textbf{Optimal Value} \\
@@ -503,7 +503,7 @@ Conformal Triage & Cost Ratio $C_{\text{FN}} / C_{\text{FP}}$ & $[5.0, 30.0]$ (U
 \bottomrule
 \end{tabular}%
 }
-\end{table}
+\end{table*}
 
 \section{Graph Topological Metrics \& Structural Sparsity}
 \label{sec:supp_graph_topologies}

@@ -68,66 +68,195 @@ def save_fig(fig, stems, pad_inches=0.03):
 print("======================================================================")
 print("1. GENERATING OPERATIONAL DECISION-DIAMOND FLOWCHART (Fig 1 / Fig 1.1)")
 print("======================================================================")
-fig, ax = plt.subplots(figsize=(7.16, 2.95))
+fig, ax = plt.subplots(figsize=(7.16, 3.55))
 ax.axis('off')
-ax.set_xlim([-0.010, 1.010])
-ax.set_ylim([-0.025, 1.060])
+ax.set_xlim([0.0, 1.0])
+ax.set_ylim([0.0, 1.0])
 
-# Top Master Banner
+# -------------------------------------------------------------
+# 1. TOP MASTER BANNER (Navy)
+# -------------------------------------------------------------
+banner_y = 0.932
+banner_h = 0.060
 ax.add_patch(patches.FancyBboxPatch(
-    (0.005, 0.930), 0.990, 0.080,
-    boxstyle="round,pad=0.003,rounding_size=0.006",
+    (0.008, banner_y), 0.984, banner_h,
+    boxstyle="round,pad=0.002,rounding_size=0.006",
     facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
 ))
-ax.text(0.50, 0.970, "C-STGB Real-Time Financial Surveillance Architecture & Conformal Triage Pipeline",
-        ha="center", va="center", fontsize=8.6, fontweight="bold", color="#ffffff")
+ax.text(0.50, banner_y + 0.038, "C-STGB: Real-Time Financial Surveillance Architecture & Conformal Triage Pipeline",
+        ha="center", va="center", fontsize=8.8, fontweight="bold", color="#ffffff")
+ax.text(0.50, banner_y + 0.014, r"Zero-Copy Streaming Ingestion  $\rightarrow$  Continuous-Time Tri-Band GNN  $\rightarrow$  Conformal CRC Triage  $\rightarrow$  3-Tier Operational Dispatch",
+        ha="center", va="center", fontsize=6.2, color="#94a3b8")
 
-# 1. Ingestion Box (Left)
+# -------------------------------------------------------------
+# 2. STAGE 1: STREAMING INGESTION & 12-D INVARIANTS (Blue Theme)
+# -------------------------------------------------------------
+s1_x, s1_w = 0.008, 0.232
+s1_y, s1_h = 0.178, 0.742
+
+# Outer Stage 1 Container
 ax.add_patch(patches.FancyBboxPatch(
-    (0.008, 0.380), 0.170, 0.520,
+    (s1_x, s1_y), s1_w, s1_h,
     boxstyle="round,pad=0.003,rounding_size=0.006",
-    facecolor="#f8fafc", edgecolor="#1e40af", linewidth=1.1
+    facecolor="#f8fafc", edgecolor="#2563eb", linewidth=1.1
 ))
+# Stage 1 Header Pill
 ax.add_patch(patches.FancyBboxPatch(
-    (0.012, 0.845), 0.162, 0.048,
+    (s1_x + 0.004, s1_y + s1_h - 0.046), s1_w - 0.008, 0.042,
     boxstyle="round,pad=0.002,rounding_size=0.004",
     facecolor="#1e40af", edgecolor="#1e40af"
 ))
-ax.text(0.093, 0.869, "1. Streaming Ingest", ha="center", va="center", fontsize=7.0, fontweight="bold", color="#ffffff")
-ax.text(0.093, 0.775, "SWIFT / ISO-20022 / Kafka\nApache Arrow Buffers", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#1e40af")
-ax.text(0.093, 0.690, "Time-Causal Ingestion\nDuckDB Micro-Batches\nt_e <= t_eval (No Leak)", ha="center", va="center", fontsize=5.3, color="#334155")
-ax.text(0.093, 0.585, "12-D Canonical Invariants:\nPhi_flow, Hawkes lambda_u,\ns_fwd, s_bwd, [mu_A, sigma_A^2]", ha="center", va="center", fontsize=5.0, color="#0f766e")
-ax.text(0.093, 0.415, "Single-event: 0.11 ms", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#1e40af")
+ax.text(s1_x + s1_w / 2, s1_y + s1_h - 0.025, "1. Streaming Ingest & Invariants",
+        ha="center", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
 
-# Arrow 1 -> 2
-ax.annotate("", xy=(0.210, 0.640), xytext=(0.178, 0.640),
-            arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.28", color="#0f172a", lw=1.3))
-
-# 2. Neural Core (Center)
+# Stage 1 - Card A: Wire Sources & DuckDB
+ca_y, ca_h = s1_y + s1_h - 0.250, 0.194
 ax.add_patch(patches.FancyBboxPatch(
-    (0.212, 0.380), 0.220, 0.520,
-    boxstyle="round,pad=0.003,rounding_size=0.006",
-    facecolor="#f8fafc", edgecolor="#0f766e", linewidth=1.1
+    (s1_x + 0.006, ca_y), s1_w - 0.012, ca_h,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.7
 ))
+ax.text(s1_x + s1_w / 2, ca_y + ca_h - 0.022, "Wire Protocols & Memory",
+        ha="center", va="center", fontsize=6.5, fontweight="bold", color="#1e40af")
+ax.text(s1_x + s1_w / 2, ca_y + ca_h - 0.058, "SWIFT MT103 \u2022 ISO-20022 \u2022 Kafka\nUTXO Blockchains (Bitcoin, Eth)",
+        ha="center", va="center", fontsize=5.8, color="#0f172a")
+ax.text(s1_x + s1_w / 2, ca_y + ca_h - 0.110, "DuckDB Micro-Batches\nApache Arrow Zero-Copy Buffer",
+        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#334155")
+ax.text(s1_x + s1_w / 2, ca_y + 0.026, r"Causal Ordering: $t_e \leq t_{\mathrm{eval}}$ (No Leak)",
+        ha="center", va="center", fontsize=5.6, color="#0369a1")
+
+# Stage 1 - Card B: 12-D Canonical Invariants
+cb_y, cb_h = s1_y + s1_h - 0.468, 0.208
 ax.add_patch(patches.FancyBboxPatch(
-    (0.216, 0.845), 0.212, 0.048,
+    (s1_x + 0.006, cb_y), s1_w - 0.012, cb_h,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.7
+))
+ax.text(s1_x + s1_w / 2, cb_y + cb_h - 0.022, r"12-D Physical Invariants ($\mathbf{z}_{\mathrm{inv}}$)",
+        ha="center", va="center", fontsize=6.5, fontweight="bold", color="#0f766e")
+ax.text(s1_x + s1_w / 2, cb_y + cb_h - 0.062, r"Mass Flow: $\Phi_{\mathrm{flow}} = \ln(1 + \frac{A_{\mathrm{out}}}{A_{\mathrm{in}} + \epsilon})$",
+        ha="center", va="center", fontsize=5.9, color="#0f172a")
+ax.text(s1_x + s1_w / 2, cb_y + cb_h - 0.114, r"Hawkes: $\lambda_u(t) = \mu_u + \sum \alpha e^{-\beta \Delta t}$",
+        ha="center", va="center", fontsize=5.9, color="#0f172a")
+ax.text(s1_x + s1_w / 2, cb_y + 0.030, r"Directed Taint: $s_{\mathrm{fwd}}, s_{\mathrm{bwd}}, [\mu_A, \sigma_A^2]$",
+        ha="center", va="center", fontsize=5.7, color="#334155")
+
+# Stage 1 - Card C: Fast-Path Feature Output
+cc_y, cc_h = s1_y + 0.050, 0.198
+ax.add_patch(patches.FancyBboxPatch(
+    (s1_x + 0.006, cc_y), s1_w - 0.012, cc_h,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#eff6ff", edgecolor="#bfdbfe", linewidth=0.7
+))
+ax.text(s1_x + s1_w / 2, cc_y + cc_h - 0.024, "Dynamic Subgraph Sampler",
+        ha="center", va="center", fontsize=6.3, fontweight="bold", color="#1e40af")
+ax.text(s1_x + s1_w / 2, cc_y + cc_h - 0.070, r"Top-$K$ Causal Neighborhood ($K \leq 15$)",
+        ha="center", va="center", fontsize=5.8, color="#1e3a8a")
+ax.text(s1_x + s1_w / 2, cc_y + cc_h - 0.120, r"Tensor Output: $\mathbf{x}_u \in \mathbb{R}^{d_0}, \; \mathbf{z}_{\mathrm{inv}} \in \mathbb{R}^{12}$",
+        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f172a")
+ax.text(s1_x + s1_w / 2, cc_y + 0.024, "Fast-Path 1-Hop Cache Hit: 99.4%",
+        ha="center", va="center", fontsize=5.6, color="#047857")
+
+# Stage 1 - Bottom SLA Pill
+ax.add_patch(patches.FancyBboxPatch(
+    (s1_x + 0.006, s1_y + 0.008), s1_w - 0.012, 0.034,
+    boxstyle="round,pad=0.002,rounding_size=0.003",
+    facecolor="#1e3a8a", edgecolor="#1e3a8a"
+))
+ax.text(s1_x + s1_w / 2, s1_y + 0.025, "Ingestion Latency SLA: 0.11 ms",
+        ha="center", va="center", fontsize=6.2, fontweight="bold", color="#ffffff")
+
+# Arrow Stage 1 -> Stage 2
+ax.annotate("", xy=(0.264, 0.550), xytext=(0.243, 0.550),
+            arrowprops=dict(arrowstyle="->,head_width=0.22,head_length=0.28", color="#0f172a", lw=1.5))
+
+# -------------------------------------------------------------
+# 3. STAGE 2: C-STGB NEURAL CORE & RISK CALIBRATION (Teal Theme)
+# -------------------------------------------------------------
+s2_x, s2_w = 0.266, 0.280
+s2_y, s2_h = 0.178, 0.742
+
+# Outer Stage 2 Container
+ax.add_patch(patches.FancyBboxPatch(
+    (s2_x, s2_y), s2_w, s2_h,
+    boxstyle="round,pad=0.003,rounding_size=0.006",
+    facecolor="#f8fafc", edgecolor="#0d9488", linewidth=1.1
+))
+# Stage 2 Header Pill
+ax.add_patch(patches.FancyBboxPatch(
+    (s2_x + 0.004, s2_y + s2_h - 0.046), s2_w - 0.008, 0.042,
     boxstyle="round,pad=0.002,rounding_size=0.004",
     facecolor="#0f766e", edgecolor="#0f766e"
 ))
-ax.text(0.322, 0.869, "2. C-STGB Neural Core", ha="center", va="center", fontsize=7.0, fontweight="bold", color="#ffffff")
-ax.text(0.322, 0.775, "3-Band Harmonic Temporal GNN\n+ Context Edge Gate g_ij", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f766e")
-ax.text(0.322, 0.695, "Prunes Chaff Camouflage\n(delta_floor >= 0.10, 92.1% Ret.)", ha="center", va="center", fontsize=5.3, color="#334155")
-ax.text(0.322, 0.605, "Latent GraphSMOTE C_k\nEvidence Adaptive Fusion alpha_u\n89.60% Cold-Start Minority F1", ha="center", va="center", fontsize=5.0, color="#6d28d9")
-ax.text(0.322, 0.505, "Cost-Sensitive Bayes Threshold:\ntau* = 0.18 (15:1 Cost Ratio)", ha="center", va="center", fontsize=5.3, fontweight="bold", color="#b45309")
-ax.text(0.322, 0.415, "Inference: 0.16 ms", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f766e")
+ax.text(s2_x + s2_w / 2, s2_y + s2_h - 0.025, "2. C-STGB Spatio-Temporal Neural Core",
+        ha="center", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
 
-# Arrow 2 -> Diamond
-ax.annotate("", xy=(0.460, 0.640), xytext=(0.432, 0.640),
-            arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.28", color="#0f172a", lw=1.3))
+# Stage 2 - Card A: Tri-Band Attention & Edge Gating
+c2a_y, c2a_h = s2_y + s2_h - 0.250, 0.194
+ax.add_patch(patches.FancyBboxPatch(
+    (s2_x + 0.006, c2a_y), s2_w - 0.012, c2a_h,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.7
+))
+ax.text(s2_x + s2_w / 2, c2a_y + c2a_h - 0.022, "3-Band Temporal GNN & Edge Gate",
+        ha="center", va="center", fontsize=6.5, fontweight="bold", color="#0f766e")
+ax.text(s2_x + s2_w / 2, c2a_y + c2a_h - 0.060, r"Tri-Band Attention: $\tau_1=2.4\,\mathrm{h}, \tau_2=24\,\mathrm{h}, \tau_3=168\,\mathrm{h}$",
+        ha="center", va="center", fontsize=5.8, color="#0f172a")
+ax.text(s2_x + s2_w / 2, c2a_y + c2a_h - 0.106, r"Learnable Edge Gate: $\hat{g}_{ij} = \sigma(\mathbf{w}_g^\top [\mathbf{h}_i \,\|\, \mathbf{h}_j \,\|\, \mathbf{e}_{ij}])$",
+        ha="center", va="center", fontsize=5.8, color="#0f172a")
+ax.text(s2_x + s2_w / 2, c2a_y + 0.026, r"Prunes 65.9% Chaff Camouflage ($\hat{g}_{ij} \geq \delta_{\mathrm{floor}}$)",
+        ha="center", va="center", fontsize=5.7, fontweight="bold", color="#047857")
 
-# Decision Diamond (Conformal Risk Control)
-diam_x, diam_y = 0.535, 0.640
-dw, dh = 0.072, 0.140
+# Stage 2 - Card B: GraphSMOTE & Adaptive Fusion
+c2b_y, c2b_h = s2_y + s2_h - 0.468, 0.208
+ax.add_patch(patches.FancyBboxPatch(
+    (s2_x + 0.006, c2b_y), s2_w - 0.012, c2b_h,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.7
+))
+ax.text(s2_x + s2_w / 2, c2b_y + c2b_h - 0.022, "Typology SMOTE & Adaptive Fusion",
+        ha="center", va="center", fontsize=6.5, fontweight="bold", color="#6b21a8")
+ax.text(s2_x + s2_w / 2, c2b_y + c2b_h - 0.062, r"Typology Latent SMOTE: $\mathbf{h}_{\mathrm{syn}} = (1-\rho)\mathbf{h}_u + \rho \mathbf{h}_v \;\; (u,v \in \mathcal{C}_k)$",
+        ha="center", va="center", fontsize=5.8, color="#0f172a")
+ax.text(s2_x + s2_w / 2, c2b_y + c2b_h - 0.114, r"Evidence Fusion: $\mathbf{h}_u^* = \alpha_u \mathbf{h}_u + (1-\alpha_u)[\mathbf{z}_{\mathrm{inv}} \,\|\, \mathbf{x}_u]$",
+        ha="center", va="center", fontsize=5.8, color="#0f172a")
+ax.text(s2_x + s2_w / 2, c2b_y + 0.030, r"Cold-Start Guarded: 89.60% F1 for $\mathrm{deg}(u) \leq 2$",
+        ha="center", va="center", fontsize=5.7, fontweight="bold", color="#6b21a8")
+
+# Stage 2 - Card C: Bayes Risk Calibration
+c2c_y, c2c_h = s2_y + 0.050, 0.198
+ax.add_patch(patches.FancyBboxPatch(
+    (s2_x + 0.006, c2c_y), s2_w - 0.012, c2c_h,
+    boxstyle="round,pad=0.002,rounding_size=0.004",
+    facecolor="#fefce8", edgecolor="#fde047", linewidth=0.7
+))
+ax.text(s2_x + s2_w / 2, c2c_y + c2c_h - 0.024, "Cost-Sensitive Bayes Risk Head",
+        ha="center", va="center", fontsize=6.3, fontweight="bold", color="#854d0e")
+ax.text(s2_x + s2_w / 2, c2c_y + c2c_h - 0.070, r"Asymmetric Risk: $\tau^* = \arg\min_\tau (15 \cdot \mathrm{FN} + 1 \cdot \mathrm{FP})$",
+        ha="center", va="center", fontsize=5.8, color="#713f12")
+ax.text(s2_x + s2_w / 2, c2c_y + c2c_h - 0.120, r"Calibrated Decision Threshold: $\tau^* = 0.18$ ($15:1$ Cost Ratio)",
+        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#b45309")
+ax.text(s2_x + s2_w / 2, c2c_y + 0.024, r"Posterior Risk Output: $\hat{p}_u = \sigma(\mathbf{w}^\top \mathbf{h}_u^* + b) \in [0, 1]$",
+        ha="center", va="center", fontsize=5.6, color="#0f172a")
+
+# Stage 2 - Bottom SLA Pill
+ax.add_patch(patches.FancyBboxPatch(
+    (s2_x + 0.006, s2_y + 0.008), s2_w - 0.012, 0.034,
+    boxstyle="round,pad=0.002,rounding_size=0.003",
+    facecolor="#0f766e", edgecolor="#0f766e"
+))
+ax.text(s2_x + s2_w / 2, s2_y + 0.025, "Inference Latency SLA: 0.16 ms",
+        ha="center", va="center", fontsize=6.2, fontweight="bold", color="#ffffff")
+
+# Arrow Stage 2 -> Conformal Diamond
+ax.annotate("", xy=(0.574, 0.550), xytext=(0.548, 0.550),
+            arrowprops=dict(arrowstyle="->,head_width=0.22,head_length=0.28", color="#0f172a", lw=1.5))
+
+# -------------------------------------------------------------
+# 4. DECISION GATE: CONFORMAL RISK CONTROL (CRC) DIAMOND
+# -------------------------------------------------------------
+diam_x, diam_y = 0.628, 0.550
+dw, dh = 0.046, 0.122
 diamond_pts = np.array([
     [diam_x, diam_y + dh],
     [diam_x + dw, diam_y],
@@ -135,81 +264,152 @@ diamond_pts = np.array([
     [diam_x - dw, diam_y]
 ])
 ax.add_patch(patches.Polygon(diamond_pts, facecolor="#fef3c7", edgecolor="#d97706", linewidth=1.4))
-ax.text(diam_x, diam_y + 0.042, "Class-Cond.", ha="center", va="center", fontsize=3.7, fontweight="bold", color="#92400e")
-ax.text(diam_x, diam_y + 0.016, "CRC Triage", ha="center", va="center", fontsize=4.7, fontweight="bold", color="#b45309")
-ax.text(diam_x, diam_y - 0.014, r"$1-\alpha \geq 99\%$", ha="center", va="center", fontsize=3.7, fontweight="bold", color="#92400e")
-ax.text(diam_x, diam_y - 0.044, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", va="center", fontsize=3.5, color="#78350f")
 
-# Three Routing Branches
+ax.text(diam_x, diam_y + 0.052, "Class-Cond.", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#92400e")
+ax.text(diam_x, diam_y + 0.020, "CRC Gate", ha="center", va="center", fontsize=6.6, fontweight="bold", color="#b45309")
+ax.text(diam_x, diam_y - 0.018, r"$1-\alpha \geq 99\%$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#92400e")
+ax.text(diam_x, diam_y - 0.052, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#78350f")
+
+# Label above diamond
+ax.text(diam_x, diam_y + dh + 0.022, "Conformal Triage", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#92400e")
+# Label below diamond
+ax.text(diam_x, diam_y - dh - 0.020, r"$\mathcal{D}_{\mathrm{cal}}$ Holdout", ha="center", va="center", fontsize=5.8, color="#78350f")
+
+# -------------------------------------------------------------
+# 5. STAGE 3: OPERATIONAL 3-TIER DISPATCH CARDS (Right)
+# -------------------------------------------------------------
+tier_x, tier_w = 0.706, 0.286
 tiers = [
     {
-        "tier": "Tier 1: High-Risk Quarantine", "set": r"$\Gamma = \{1\}$",
-        "action": "Immediate Quarantine Hold | Assisted FinCEN SAR Dossier",
-        "stat": "18 alerts / 10,000 tx  (0.18%)  |  SHA-256 Merkle Audit Receipt",
-        "badge_bg": "#b91c1c", "card_bg": "#fef2f2", "border": "#fca5a5",
-        "y": 0.730, "clr": "#b91c1c"
+        "tier_num": "Tier 1: High-Risk Quarantine",
+        "set_math": r"$\Gamma(u) = \{1\}$",
+        "badge_bg": "#b91c1c", "card_bg": "#fef2f2", "border": "#f87171",
+        "stat": "18 / 10,000 tx (0.18%)",
+        "action": "Immediate Quarantine Hold \u2022 Wire Freeze",
+        "protocol": "Automated FinCEN Form 111 SAR Dossier Draft",
+        "audit": "GNNExplainer Subgraph \u2022 SHA-256 Merkle Receipt",
+        "y": 0.690, "h": 0.230, "arrow_dest": 0.805
     },
     {
-        "tier": "Tier 2: Boundary Review Desk", "set": r"$\Gamma = \{0, 1\}$",
-        "action": "Abstention Set: Escalate to Senior Compliance Examiner",
-        "stat": "50 alerts / 10,000 tx  (0.50%)  |  4-Eyes AML Review Desk",
-        "badge_bg": "#d97706", "card_bg": "#fffbeb", "border": "#fde68a",
-        "y": 0.545, "clr": "#d97706"
+        "tier_num": "Tier 2: Compliance Review Desk",
+        "set_math": r"$\Gamma(u) = \{0, 1\}$",
+        "badge_bg": "#d97706", "card_bg": "#fffbeb", "border": "#fbbf24",
+        "stat": "49 / 10,000 tx (0.49%)",
+        "action": "4-Eyes AML Review Desk \u2022 Senior Examiner Queue",
+        "protocol": "Abstention Set: Ambiguous Boundary Triage",
+        "audit": "Active Learning Queue \u2022 Workload Cut: -99.51%",
+        "y": 0.434, "h": 0.230, "arrow_dest": 0.549
     },
     {
-        "tier": "Tier 3: Straight-Through Clear", "set": r"$\Gamma = \{0\}$",
-        "action": "Automated Wire-Speed Release (STP) | Residual Leak <0.12%",
-        "stat": "9,932 tx / 10,000 tx  (99.32%)  |  Zero Latency Impact",
-        "badge_bg": "#15803d", "card_bg": "#f0fdf4", "border": "#86efac",
-        "y": 0.360, "clr": "#15803d"
+        "tier_num": "Tier 3: Straight-Through Clear",
+        "set_math": r"$\Gamma(u) = \{0\}$",
+        "badge_bg": "#15803d", "card_bg": "#f0fdf4", "border": "#4ade80",
+        "stat": "9,933 / 10,000 tx (99.33%)",
+        "action": "Automated Wire-Speed Release (STP Clearing)",
+        "protocol": "Zero Manual Friction \u2022 Continuous Risk Guard",
+        "audit": "Bounded Selective Risk: Residual FN < 0.13%",
+        "y": 0.178, "h": 0.230, "arrow_dest": 0.293
     }
 ]
 
 for t in tiers:
-    y_t = t["y"]
+    ty = t["y"]
+    th = t["h"]
+    # Card body
     ax.add_patch(patches.FancyBboxPatch(
-        (0.640, y_t), 0.360, 0.160,
+        (tier_x, ty), tier_w, th,
         boxstyle="round,pad=0.003,rounding_size=0.005",
         facecolor=t["card_bg"], edgecolor=t["border"], linewidth=1.1
     ))
+    # Header Badge
     ax.add_patch(patches.FancyBboxPatch(
-        (0.644, y_t + 0.108), 0.100, 0.044,
+        (tier_x + 0.005, ty + th - 0.046), tier_w - 0.010, 0.040,
         boxstyle="round,pad=0.002,rounding_size=0.004",
         facecolor=t["badge_bg"], edgecolor=t["badge_bg"]
     ))
-    ax.text(0.694, y_t + 0.130, t["set"], ha="center", va="center", fontsize=6.8, fontweight="bold", color="#ffffff")
-    ax.text(0.752, y_t + 0.130, t["tier"], ha="left", va="center", fontsize=6.8, fontweight="bold", color=t["badge_bg"])
-    ax.text(0.648, y_t + 0.068, t["action"], ha="left", va="center", fontsize=5.8, color="#0f172a")
-    ax.text(0.648, y_t + 0.023, t["stat"], ha="left", va="center", fontsize=5.8, fontweight="bold", color=t["clr"])
-    
-    # Connecting arrows from diamond
-    ax.annotate("", xy=(0.638, y_t + 0.080), xytext=(diam_x + dw, diam_y),
-                arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color=t["badge_bg"], lw=1.3))
+    ax.text(tier_x + 0.014, ty + th - 0.026, t["tier_num"],
+            ha="left", va="center", fontsize=6.8, fontweight="bold", color="#ffffff")
+    ax.text(tier_x + tier_w - 0.014, ty + th - 0.026, t["set_math"],
+            ha="right", va="center", fontsize=6.8, fontweight="bold", color="#ffffff")
 
-# Bottom Panel: Separate Mathematical Formulation & Latency SLA Strip
+    # Lines of text inside card
+    ax.text(tier_x + 0.012, ty + th - 0.076, t["action"],
+            ha="left", va="center", fontsize=5.8, fontweight="bold", color="#0f172a")
+    ax.text(tier_x + 0.012, ty + th - 0.120, t["protocol"],
+            ha="left", va="center", fontsize=5.6, color="#334155")
+    ax.text(tier_x + 0.012, ty + th - 0.162, t["audit"],
+            ha="left", va="center", fontsize=5.6, color="#475569")
+
+    # Bottom stat pill
+    ax.add_patch(patches.FancyBboxPatch(
+        (tier_x + 0.006, ty + 0.008), tier_w - 0.012, 0.034,
+        boxstyle="round,pad=0.002,rounding_size=0.003",
+        facecolor="#ffffff", edgecolor=t["border"], linewidth=0.7
+    ))
+    ax.text(tier_x + tier_w / 2, ty + 0.025, f"Operational Rate: {t['stat']}",
+            ha="center", va="center", fontsize=5.8, fontweight="bold", color=t["badge_bg"])
+
+    # Connecting directional arrow from Diamond to Tier Card
+    ax.annotate("", xy=(tier_x - 0.004, t["arrow_dest"]), xytext=(diam_x + dw, diam_y),
+                arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.26",
+                                color=t["badge_bg"], lw=1.4))
+
+# -------------------------------------------------------------
+# 6. BOTTOM STRIP: PRODUCTION SLAS, STATISTICAL BOUNDS & AUDIT
+# -------------------------------------------------------------
+bot_y, bot_h = 0.012, 0.150
 ax.add_patch(patches.FancyBboxPatch(
-    (0.005, 0.010), 0.990, 0.295,
+    (0.008, bot_y), 0.984, bot_h,
     boxstyle="round,pad=0.003,rounding_size=0.006",
     facecolor="#f8fafc", edgecolor="#94a3b8", linewidth=0.9
 ))
+# Bottom Header Bar
 ax.add_patch(patches.FancyBboxPatch(
-    (0.010, 0.255), 0.980, 0.042,
-    boxstyle="round,pad=0.002,rounding_size=0.004",
-    facecolor="#334155", edgecolor="#334155"
+    (0.012, bot_y + bot_h - 0.034), 0.976, 0.030,
+    boxstyle="round,pad=0.002,rounding_size=0.003",
+    facecolor="#1e293b", edgecolor="#1e293b"
 ))
-ax.text(0.50, 0.276, "MATHEMATICAL FORMULATIONS, RISK BOUNDS & REAL-TIME SYSTEM PERFORMANCE SLAS",
+ax.text(0.50, bot_y + bot_h - 0.019,
+        "REAL-TIME PRODUCTION SLAS \u2022 STATISTICAL CONVERGENCE GUARANTEES \u2022 REGULATORY GOVERNANCE",
         ha="center", va="center", fontsize=6.6, fontweight="bold", color="#ffffff")
 
-# 2 Balanced Math Strip Columns with generous margins
-ax.text(0.020, 0.192, r"Tri-Band Temporal: $\Phi_{\mathrm{time}}(\Delta t) = [\cos(\omega_k \Delta t), \sin(\omega_k \Delta t)]_{k=1}^3$", fontsize=5.3, fontweight="bold", color="#1e40af")
-ax.text(0.020, 0.126, r"Edge Trust Filter: $\hat{g}_{ij} = \sigma(\mathbf{w}_g^\top [\mathbf{h}_i \,\|\, \mathbf{h}_j \,\|\, \mathbf{e}_{ij}]), \;\; \mathbf{A}_{\mathrm{pruned}} = \mathbf{A} \odot \mathbf{I}(\hat{g}_{ij} \geq \delta_{\mathrm{floor}})$", fontsize=5.1, color="#0f766e")
-ax.text(0.020, 0.058, r"12-D Flow Dynamics: $\tilde{\Phi}_{\mathrm{flow}} = \ln(1 + \sum A_{\text{out}}/(\sum A_{\text{in}} + \epsilon)), \;\; \lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha e^{-\beta(t - t_i)}$", fontsize=5.1, color="#334155")
+# 4 Metric Cards across bottom
+cols = [
+    {
+        "x": 0.014, "w": 0.236, "title": "Latency Performance", "color": "#1e40af",
+        "stat": "0.45 ms Fast-Path", "desc": "P99: 0.82 ms \u2022 Throughput: 31,200 tx/s\nStrict compliance with <10 ms SLA"
+    },
+    {
+        "x": 0.260, "w": 0.236, "title": "Workload Reduction", "color": "#0f766e",
+        "stat": "-99.51% Queue Cut", "desc": "Only 49 of 10,000 tx need review\n85.7%--95.8% fewer false alerts"
+    },
+    {
+        "x": 0.506, "w": 0.236, "title": "Statistical Safety", "color": "#b45309",
+        "stat": r"$\geq 99.0\%$ Coverage", "desc": "Simultaneous minority class safety\n0.00% empty sets \u2022 Avg size: 1.005"
+    },
+    {
+        "x": 0.752, "w": 0.236, "title": "Governance & Audit", "color": "#6b21a8",
+        "stat": "OCC & SR 26-2 Ready", "desc": "Zero-hallucination graph evidence\nCryptographic SHA-256 Merkle trail"
+    }
+]
 
-ax.text(0.515, 0.192, r"Class-Cond. CRC: $\hat{q}^{(y)} = \mathrm{Quantile}_{1-\alpha_y}(\{s_i^{(y)}\}), \;\; \mathbf{P}(Y \in \Gamma(X) \mid Y=y) \geq 1 - \alpha$", fontsize=5.3, fontweight="bold", color="#92400e")
-ax.text(0.515, 0.126, r"Triage Dispatch: $\Gamma(u) = \{y : s_u^{(y)} \leq \hat{q}^{(y)}\}, \;\; \mathbf{E}[|\Gamma|] = 1.0050, \;\; \mathbf{P}(\Gamma = \emptyset) = 0.00\%$", fontsize=5.1, color="#b91c1c")
-ax.text(0.515, 0.058, r"Fast-Path Latency: $0.45\,\text{ms} < 10\,\text{ms}$ SLA | Queue: $-99.50\%$ Workload Cut | Peak VRAM: $428\,\text{MB}$", fontsize=5.1, fontweight="bold", color="#15803d")
+for col in cols:
+    cx, cw = col["x"], col["w"]
+    cy, ch = bot_y + 0.008, bot_h - 0.046
+    ax.add_patch(patches.FancyBboxPatch(
+        (cx, cy), cw, ch,
+        boxstyle="round,pad=0.002,rounding_size=0.004",
+        facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.6
+    ))
+    ax.text(cx + cw / 2, cy + ch - 0.020, col["title"],
+            ha="center", va="center", fontsize=6.2, fontweight="bold", color=col["color"])
+    ax.text(cx + cw / 2, cy + ch - 0.048, col["stat"],
+            ha="center", va="center", fontsize=6.8, fontweight="bold", color="#0f172a")
+    ax.text(cx + cw / 2, cy + 0.018, col["desc"],
+            ha="center", va="center", fontsize=5.4, color="#475569")
 
-save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"], pad_inches=0.12)
+
+save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"], pad_inches=0.03)
 
 print("======================================================================")
 print("2. GENERATING 2-PANEL FACTORIAL ATTRIBUTION GROUPED BAR CHART")

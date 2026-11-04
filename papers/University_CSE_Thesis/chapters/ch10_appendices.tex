@@ -9,7 +9,7 @@ To facilitate cross-disciplinary clarity across academic examiners, quantitative
 \small
 \caption[Cross-Disciplinary Financial Crime and Graph ML Glossary]{Comprehensive Cross-Disciplinary Glossary of Financial Crime, Graph ML, and Conformal Risk Terminology.}
 \label{app_tab:glossary}
-\begin{tabularx}{\textwidth}{lX}
+\begin{tabularx}{\textwidth}{>{\RaggedRight\bfseries}p{4.2cm} >{\RaggedRight}X}
 \toprule
 \textbf{Terminology} & \textbf{Formal Operational Definition in Financial Surveillance} \\
 \midrule
@@ -167,7 +167,8 @@ In compliance with international open-science reproducibility standards, Table~\
 \small
 \caption[Open-Science Empirical Reproducibility Checklist]{Comprehensive Open-Science Empirical Reproducibility Checklist.}
 \label{app_tab:reproducibility}
-\begin{tabularx}{\textwidth}{llX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll}
 \toprule
 \textbf{Checklist Item} & \textbf{Status} & \textbf{Repository Location / Verification Reference} \\
 \midrule
@@ -180,7 +181,8 @@ Data Chronological Splits & Disclosed & Zero-leakage chronological 60/10/10/20\%
 Hyperparameter Grid & Disclosed & Complete search spaces and optimal configurations in Table~\ref{app_tab:hyperparam_grid} \\
 Automated Test Suites & Disclosed & 158 automated unit, integration, and regression tests passing with exit code 0 \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \section{Detailed Hyperparameter Sweeps across 13 Baselines}
@@ -228,11 +230,12 @@ All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator
 \section{Exhaustive Master Baseline Benchmark Matrix across 14 Financial Networks}
 Table~\ref{app_tab:master_baseline_results} reports the full multi-baseline benchmark matrix across all 14 evaluated financial networks, tabulating Macro F1-score (\%) and PR-AUC alongside standard deviations across five random seeds under validation-tuned decision thresholds $\tau^*$.
 
-\begin{sidewaystable}[htbp]
+\begin{landscape}
+\begin{table}[htbp]
 \centering
 \caption[Comprehensive Multi-Baseline Benchmark Matrix across 14 Networks]{Comprehensive Multi-Baseline Performance Matrix across All 14 Financial Networks: Macro F1-Score (\%) and PR-AUC with Validation-Tuned Decision Thresholds $\tau^*$.}
 \label{app_tab:master_baseline_results}
-\resizebox{\textwidth}{!}{%
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{lccccccccccc}
 \toprule
 \textbf{Dataset Identifier} & \textbf{XGBoost} & \textbf{CatBoost} & \textbf{GCN} & \textbf{GraphSAGE} & \textbf{GAT} & \textbf{GIN} & \textbf{HGT} & \textbf{CARE-GNN} & \textbf{EvolveGCN} & \textbf{TGN} & \textbf{C-STGB (Ours)} \\
@@ -258,7 +261,8 @@ Table~\ref{app_tab:master_baseline_results} reports the full multi-baseline benc
 \bottomrule
 \end{tabular}%
 }
-\end{sidewaystable}
+\end{table}
+\end{landscape}
 
 \chapter{Enterprise Operator Manual \& System Artifacts}
 \label{app:operator_manual}
@@ -368,8 +372,7 @@ Autonomous 4-agent swarm (Lead Forensic Coordinator, Subgraph Topology Specialis
 
 \vspace{0.25cm}
 \textbf{\textcolor{blue!70!black}{Step 5: Cryptographic Merkle Sealing under SR 11-7 / SR 21-8}} \\
-The complete inference state, model weights hash, and decision tree are hashed into an immutable SHA-256 Merkle tree leaf $h_{\text{leaf}}$, committed to an append-only WORM ledger for central bank regulatory examination.
-\vspace{0.2cm}
+The complete inference state, model weights hash, and decision tree are hashed into an immutable SHA-256 Merkle tree leaf $h_{\text{leaf}}$, committed to an append-only WORM ledger for central bank regulatory examination.\par
 \end{minipage}%
 }
 \caption[End-to-End Enterprise Operator Investigation Lifecycle]{End-to-end operator investigation lifecycle enforced by the Intelligent-AML platform matching Eq.~(3.13)--(3.16).}
@@ -495,7 +498,7 @@ async def score_transaction(
     )
 \end{lstlisting}
 
-\subsection{Production Containerization \& Kubernetes Deployment Manifests}
+\subsection[Production Containerization and Kubernetes Manifests]{Production Containerization and Kubernetes Deployment Manifests}
 Listings~\ref{app_lst:dockerfile} and~\ref{app_lst:k8s_deployment} detail the production containerization and orchestration manifests.
 
 \begin{lstlisting}[caption={Multi-Stage Production Dockerfile for C-STGB Platform.}, label={app_lst:dockerfile}]

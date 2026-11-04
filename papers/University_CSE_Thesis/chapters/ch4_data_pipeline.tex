@@ -32,7 +32,7 @@ Every incoming financial transaction payload and reference entity is structured 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig4_2_database_erd.pdf}
-\caption[Relational Database Schema and Causal Index Architecture]{Relational Database Schema (ERD), time-causal composite indexing architecture, and materialized 12-dimensional canonical invariant view (\texttt{v\_canonical\_invariants\_12d}) mapping relational transaction tables into a directed multigraph.}
+\caption[Relational Database Schema and Causal Index Architecture]{Relational Database Schema (ERD), time-causal composite indexing architecture, and materialized 12-dimensional canonical invariant view (\path|v_canonical_invariants_12d|) mapping relational transaction tables into a directed multigraph.}
 \label{fig:ch4_database_erd}
 \end{figure}
 
@@ -48,8 +48,8 @@ To prevent temporal data leakage, transaction neighborhoods must be strictly tim
 
 To achieve sub-millisecond execution over tables containing tens of millions of records, C-STGB establishes composite B-tree indexes:
 \begin{itemize}
-    \item \texttt{idx\_source\_time} on \texttt{streaming\_transactions(source\_entity\_id, timestamp\_epoch DESC)}
-    \item \texttt{idx\_target\_time} on \texttt{streaming\_transactions(target\_entity\_id, timestamp\_epoch DESC)}
+    \item \texttt{idx\_source\_time} on column pair \path|streaming_transactions(source_entity_id, timestamp_epoch DESC)|
+    \item \texttt{idx\_target\_time} on column pair \path|streaming_transactions(target_entity_id, timestamp_epoch DESC)|
 \end{itemize}
 These composite indexes reduce the 2-hop causal ego-graph extraction time to under $0.18\text{ ms}$, operating directly within memory. The complete executable SQL DDL contracts and parameterized analytical queries are documented in Appendix~\ref{app:schemas} (Listing~\ref{app_lst:duckdb_schema} and Listing~\ref{app_lst:duckdb_ego_query}).
 

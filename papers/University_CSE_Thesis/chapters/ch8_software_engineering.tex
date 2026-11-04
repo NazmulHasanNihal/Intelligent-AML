@@ -35,7 +35,8 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 \small
 \caption[Enterprise RESTful and WebSocket API Endpoint Specifications]{Enterprise RESTful and WebSocket API Endpoint Specifications.}
 \label{tab:fastapi_endpoints}
-\begin{tabularx}{\textwidth}{l p{5.8cm} c X}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcl}
 \toprule
 \textbf{Method} & \textbf{Endpoint Path} & \textbf{SLA} & \textbf{Core Function} \\
 \midrule
@@ -45,7 +46,8 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 \texttt{GET} & \texttt{/api/v1/audit/receipt/\{case\_id\}} & $<1.0\,\text{ms}$ & Query SHA-256 Merkle receipt (SR 11-7 / SR 21-8). \\
 \texttt{WS} & \texttt{/ws/v1/live-triage-feed} & Real-Time & Stream live Tier-1/Tier-2 triage feed. \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \subsection{Operational Execution Lifeline \& Latency Distribution}
@@ -77,7 +79,8 @@ To rigorously characterize system scaling under enterprise authorization SLAs, T
 \small
 \caption[Algorithmic Complexity, Latency, and Memory Footprint]{Algorithmic Complexity, Single-Event Latency, and Memory Footprint per C-STGB Pipeline Stage.}
 \label{tab:module_complexity}
-\begin{tabularx}{\textwidth}{llccX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccl}
 \toprule
 \textbf{Pipeline Stage / Component} & \textbf{Algorithmic Complexity} & \textbf{P50 Latency} & \textbf{P99 Latency} & \textbf{Hardware \& Memory Resource Footprint} \\
 \midrule
@@ -94,7 +97,8 @@ To rigorously characterize system scaling under enterprise authorization SLAs, T
 8. GNNExplainer Attribution Mask & $\mathcal{O}(E_{\text{sub}} \cdot d \cdot N_{\text{opt}})$ & $1.65\,\text{ms}$ & $2.85\,\text{ms}$ & Triggered only on Tier 1 quarantined alerts \\
 9. Multi-Agent SAR Swarm Synthesis & $\mathcal{O}(L_{\text{ctx}} \cdot L_{\text{gen}})$ & $28.4\,\text{s}$ & $34.2\,\text{s}$ & Async background worker pool with Merkle audit seal \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \section{Containerization, Kubernetes \& CI/CD Infrastructure}
@@ -120,7 +124,7 @@ The microservice exposes Prometheus `/metrics` telemetry for real-time operation
     \item \texttt{cstgb\_conformal\_triage\_total}: Counter tracking total events classified by operational tier (\texttt{tier1\_quarantine}, \texttt{tier2\_abstention}, \texttt{tier3\_clear}).
     \item \texttt{cstgb\_edge\_trust\_filter\_ratio}: Gauge monitoring the percentage of raw edges filtered by context-aware gating.
     \item \texttt{cstgb\_lru\_cache\_hit\_ratio}: Gauge tracking the hit rate of the in-memory causal subgraph cache.
-    \item \texttt{cstgb\_streaming\_drift\_pvalue}: Gauge recording the two-sample Kolmogorov-Smirnov test statistic on streaming non-conformity scores.
+    \item \path|cstgb_streaming_drift_pvalue|: Gauge recording two-sample Kolmogorov-Smirnov statistics on streaming non-conformity scores.
 \end{itemize}
 
 \subsection{Automated Test Verification Suite (158 Tests)}

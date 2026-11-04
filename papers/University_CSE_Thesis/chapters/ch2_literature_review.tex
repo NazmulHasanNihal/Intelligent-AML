@@ -184,12 +184,13 @@ Table~\ref{tab:lit_matrix} presents an exhaustive 25-paper comparative taxonomy 
 \label{fig:ch2_lit_evolution}
 \end{figure}
 
-\begin{sidewaystable}[htbp]
+\begin{landscape}
+\begin{table}[htbp]
 \centering
 \small
 \caption[Comprehensive 25-Paper Financial Forensics and Graph ML Taxonomy]{Comprehensive 25-Paper Comparative Taxonomy in Financial Forensics and Graph Machine Learning, Grouped by Methodological Families.}
 \label{tab:lit_matrix}
-\resizebox{\textwidth}{!}{%
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{llcccccc}
 \toprule
 \textbf{Methodological Family} & \textbf{Model / Paradigm} & \textbf{Temporal Paradigm} & \textbf{Camouflage Filter} & \textbf{Class Imbalance} & \textbf{Cold-Start Handling} & \textbf{Formal Risk Bounds} & \textbf{Regulatory XAI / SAR} \\
@@ -229,7 +230,8 @@ Table~\ref{tab:lit_matrix} presents an exhaustive 25-paper comparative taxonomy 
 }
 \vspace{0.2cm}
 \footnotesize{\textbf{Legend:} \checkmark = Fully supported with formal guarantees; \ding{55} = Unsupported; $\sim$ = Partially supported without distribution-free risk guarantees.}
-\end{sidewaystable}
+\end{table}
+\end{landscape}
 
 \section{Chapter Summary}
 This chapter established the theoretical foundation and literature taxonomy across GNN architectures, temporal representation models, imbalanced graph oversampling, spectral over-smoothing dynamics, and distribution-free conformal inference. The comparative analysis demonstrated that existing approaches address individual failure modes in isolation, leaving severe operational gaps. The next chapter presents the complete mathematical formulation and tensor derivations of the unified C-STGB architecture.

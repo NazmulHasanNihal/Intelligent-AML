@@ -5,10 +5,18 @@
 
 % Typography & Spacing
 \usepackage{times}
+\usepackage{microtype}
+\usepackage{ragged2e}
 \usepackage{pifont}
 \usepackage{pdflscape}
 \usepackage{setspace}
 \onehalfspacing
+
+% Micro-Typographical Parameters for 1.5-inch Left-Bound Margins
+\tolerance=2000
+\emergencystretch=3em
+\hfuzz=1pt
+\hbadness=2000
 
 % Mathematics & Algorithms
 \usepackage{amsmath,amssymb,amsfonts,bm,mathtools}
@@ -113,6 +121,7 @@
 \usepackage{cite}
 \usepackage{hyperref}
 \hypersetup{
+  breaklinks=true,
   colorlinks=true,
   linkcolor=blue!75!black,
   citecolor=teal!70!black,

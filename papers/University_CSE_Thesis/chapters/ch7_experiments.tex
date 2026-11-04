@@ -67,7 +67,8 @@ Table~\ref{tab:dataset_licenses} details the formal licensing, public repositori
 \small
 \caption[Dataset Provenance and Open Academic Licenses]{Dataset Provenance, Open Academic Licenses, and Permanent Repository Records.}
 \label{tab:dataset_licenses}
-\begin{tabularx}{\textwidth}{lllcX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllcl}
 \toprule
 \textbf{Dataset} & \textbf{Governing Source / Creator} & \textbf{License Type} & \textbf{Redistribution} & \textbf{Repository URL / Permanent DOI} \\
 \midrule
@@ -83,7 +84,8 @@ Table~\ref{tab:dataset_licenses} details the formal licensing, public repositori
 \texttt{data\_generator} & C-STGB Typology Generator & MIT License & Yes & Open Codebase Repository \\
 \texttt{cc\_transactions} & ULB / Dal Pozzolo et al.~\cite{dalpozzolo2018credit} & DbCL Open Data & Yes & \url{https://www.kaggle.com/mlg-ulb/creditcardfraud} \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \begin{table}[htbp]
@@ -91,7 +93,8 @@ Table~\ref{tab:dataset_licenses} details the formal licensing, public repositori
 \small
 \caption[Comprehensive Compute Budget and Hardware Specifications]{Comprehensive Compute Budget, Hardware Specifications, and Environmental Footprint.}
 \label{tab:compute_budget}
-\begin{tabularx}{\textwidth}{llcX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcl}
 \toprule
 \textbf{Hardware / Cluster Component} & \textbf{Specification} & \textbf{Quantity} & \textbf{Operational Allocation} \\
 \midrule
@@ -105,7 +108,8 @@ Total GPU Wall-Clock Time & NVIDIA A100 GPU Hours & 342.5 Hours & Equivalent to 
 Total Energy Consumption & Measured PDU Consumption & 108.4 kWh & Cluster average including idle cool-down \\
 Carbon Footprint Offset & Regional Grid Factor (0.398 kg CO$_2$/kWh) & 43.1 kg CO$_2$ & Mitigated via certified green hosting credits \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \subsection{Zero-Leakage 4-Way Chronological Splitting Protocol}\label{sec:ch7_splits}
@@ -148,7 +152,8 @@ To address baseline coverage for proprietary industrial architectures whose comp
 \small
 \caption[Comparative Performance on Elliptic-v1 vs. Literature Baselines]{Comparative Performance on Elliptic-v1 against Reported Literature SOTA Baselines.}
 \label{tab:sota_reported_comparison}
-\begin{tabularx}{\textwidth}{llccX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccl}
 \toprule
 \textbf{Model Architecture} & \textbf{Reference / Source} & \textbf{Elliptic-v1 F1} & \textbf{PR-AUC} & \textbf{Key Methodological Architectural Focus} \\
 \midrule
@@ -163,7 +168,8 @@ XGBoost (Native Features) & Native Tabular Baseline & $88.35 \pm 0.45\%$ & $0.89
 \midrule
 \textbf{C-STGB (Proposed)} & \textbf{This Dissertation} & $\mathbf{91.42 \pm 0.65\%}$ & $\mathbf{0.9312}$ & \textbf{Tri-Band Hawkes + Typology GraphSMOTE + CRC} \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \begin{table}[htbp]
@@ -171,6 +177,7 @@ XGBoost (Native Features) & Native Tabular Baseline & $88.35 \pm 0.45\%$ & $0.89
 \small
 \caption[Overall Performance Summary and Mean Rank across 14 Networks]{Overall Benchmark Performance Summary and Mean Rank across All 14 Financial Networks (Contrasting 11 Model Families).}
 \label{tab:master_baseline_summary}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{llccccc}
 \toprule
 \textbf{Model Family} & \textbf{Algorithm} & \textbf{Macro F1 (\%)} & \textbf{PR-AUC} & \textbf{Mean Rank} & \textbf{Latency (ms)} & \textbf{Adv. Retention} \\
@@ -192,7 +199,8 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.9$ & $8.40$ & $29.5\%
 & GAT & $23.33$ & $0.2011$ & $10.1$ & $3.20$ & $21.9\%$ \\
 & GIN & $20.72$ & $0.2353$ & $10.8$ & $2.40$ & $20.5\%$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \begin{table}[htbp]
@@ -201,7 +209,8 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.9$ & $8.40$ & $29.5\%
 \caption[Grouped Performance Matrix: Crypto Ledgers vs. Multi-Bank Rails]{Grouped Performance Matrix: Public Crypto Ledgers vs.\ Commercial Multi-Bank Rails and Simulators (Macro F1 / PR-AUC).}
 \label{tab:grouped_baseline_results}
 \setlength{\tabcolsep}{6pt}
-\begin{tabularx}{\textwidth}{lXXX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
 \toprule
 \textbf{Benchmark Network} & \textbf{Best GNN (TGN / CARE)} & \textbf{Best Tree (XGBoost)} & \textbf{C-STGB (Proposed)} \\
 \midrule
@@ -225,7 +234,8 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.9$ & $8.40$ & $29.5\%
 \midrule
 \textbf{Macro-Average} & $43.76\,/\,0.5800$ & $64.76\,/\,0.6500$ & $\mathbf{68.05\,/\,0.6974}$ \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \begin{figure}[htbp]
@@ -260,7 +270,7 @@ Achieving $W = 105.0$ signifies that C-STGB outperforms the respective baseline 
 \subsection{Human Compliance Examiner Baseline Comparison}
 In commercial banking Financial Intelligence Units (FIUs), manual alert review yields an estimated precision of $12\%$--$18\%$ and an F1-score of approximately $35\%$--$45\%$, severely impaired by investigative fatigue and the overwhelming volume of legacy rule-based false positives ($>95\%$). In contrast, C-STGB delivers a macro-average F1 of $68.05\%$ ($91.42\%$ on Elliptic-v1) while slashing manual caseloads by $>99.4\%$, demonstrating transformative operational efficacy.
 
-\subsection{Sensitivity Analyses for Core Hyperparameters ($\alpha, K, \tau_{\text{sim}}, \delta_{\text{floor}}$)}
+\subsection[Sensitivity Analyses for Core Hyperparameters]{Sensitivity Analyses for Core Hyperparameters}
 To examine stability across deployment configurations, we systematically ablate C-STGB's key hyperparameters:
 \begin{enumerate}
     \item \textbf{Significance Budget $\alpha \in \{0.001, 0.005, 0.01, 0.02, 0.05, 0.10\}$:} Empirical coverage strictly maintains $\mathbb{P}(Y \in \Gamma(X)) \ge 1 - \alpha$ across all settings, while manual review volume scales monotonically from $0.21\%$ at $\alpha=0.05$ to $0.85\%$ at $\alpha=0.001$.
@@ -464,7 +474,7 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 \label{fig:ch7_tsne_separation}
 \end{figure}
 
-\section{Zero-Shot Cross-Domain Transferability on Frozen Weights}
+\section{Zero-Shot Cross-Domain Generalization on Frozen Backbones}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_zero_shot_transfer_heatmap.pdf}
@@ -474,7 +484,7 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 
 Table~\ref{tab:zero_shot_transfer} evaluates zero-shot cross-network generalization across eight source-target dataset pairs where neural weights are completely frozen ($\eta = 0$), relying entirely on the 12-D canonical invariant representation space.
 
-\begin{sidewaystable}[htbp]
+\begin{table}[htbp]
 \centering
 \caption[Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix]{Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix under Completely Frozen Neural Backbones ($\eta=0$).}
 \label{tab:zero_shot_transfer}
@@ -496,7 +506,7 @@ Table~\ref{tab:zero_shot_transfer} evaluates zero-shot cross-network generalizat
 \bottomrule
 \end{tabular}%
 }
-\end{sidewaystable}
+\end{table}
 
 \section{Streaming Latency, Memory Profiling \& Production SLAs}
 \label{sec:ch7_latency}

@@ -74,7 +74,7 @@ Let $S_1^{(y)}, \dots, S_{n(y)}^{(y)}, S_{n(y)+1}^{(y)}$ denote the sequence of 
 which establishes the exact finite-sample coverage bound.
 \end{proof}
 
-\section{Non-Exchangeable Conformal Risk under Non-Stationary Temporal Drift}
+\section[Conformal Risk under Non-Stationary Temporal Drift]{Non-Exchangeable Conformal Risk under Temporal Drift}
 In live enterprise banking streams, macroeconomic fluctuations, regulatory policy changes, and evolving adversarial laundering typologies introduce continuous temporal covariate and concept drift, violating static exchangeability ($\mathcal{P}_{\text{cal}} \neq \mathcal{P}_{\text{test}}$).
 
 \subsection{Dvoretzky-Kiefer-Wolfowitz (DKW) Finite-Sample Bound under TV Drift}
@@ -92,7 +92,10 @@ where $n(y) = |\mathcal{D}_{\text{cal}}^{(y)}(t)|$ denotes the class-conditional
 \begin{proof}
 Let $F_t^{(y)}(s) = \mathbb{P}_t(S^{(y)} \le s)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\text{cal}}(S^{(y)} \le s)$ denote true CDFs under test distribution $\mathcal{P}_t$ and calibration distribution $\mathcal{P}_{\text{cal}}^{(y)}$, with empirical CDF $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$. By definition of calibrated quantile $\hat{q}^{(y)}$, test coverage evaluates to $\mathbb{P}_t(Y \in \Gamma(X) \mid Y=y) = F_t^{(y)}(\hat{q}^{(y)})$. Applying the triangle inequality:
 \begin{equation}
-\big| F_t^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big| \le \big| F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \big| + \big| F_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \big| + \big| \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big|
+\begin{split}
+\big| F_t^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big| \le & \big| F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \big| \\
+& + \big| F_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) \big| + \big| \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big|
+\end{split}
 \end{equation}
 By maximal coupling of total variation distance, $\big| \mathbb{P}_t(S^{(y)} \in A) - \mathbb{P}_{\text{cal}}(S^{(y)} \in A) \big| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$ for all Borel sets $A$, yielding $|F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)})| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$. Applying the Dvoretzky-Kiefer-Wolfowitz (DKW) inequality to the exchangeable calibration sample $\mathcal{D}_{\text{cal}}^{(y)}$ ensures:
 \begin{equation}

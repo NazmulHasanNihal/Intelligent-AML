@@ -22,7 +22,8 @@ To guide the reader through the mathematical derivations, Table~\ref{tab:ch3_roa
 \small
 \caption[Mapping Operational AML Bottlenecks to C-STGB Innovations]{Reader's Architectural Roadmap: Mapping Operational AML Bottlenecks to C-STGB Innovations.}
 \label{tab:ch3_roadmap}
-\begin{tabularx}{\textwidth}{llcX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcl}
 \toprule
 \textbf{Operational Failure Mode} & \textbf{C-STGB Solution Module} & \textbf{Section} & \textbf{Key Mathematical Guarantee} \\
 \midrule
@@ -34,7 +35,8 @@ Bayes Risk Miscalibration & Cost-Sensitive Optimization (Mod 5) & \S\ref{sec:ch3
 Uncalibrated Alert Workload & Class-Conditional CRC (Mod 6) & Chapter~\ref{ch:conformal} & Non-asymptotic DKW finite-sample bound (Theorem~\ref{thm:conformal_tv_bound}) \\
 Black-Box Compliance Deficit & Autonomous Multi-Agent SAR Swarm & Chapter~\ref{ch:xai} & Deterministic anti-hallucination proof (Prop.~\ref{prop:anti_hallucination}) \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \begin{table}[htbp]
@@ -42,7 +44,8 @@ Black-Box Compliance Deficit & Autonomous Multi-Agent SAR Swarm & Chapter~\ref{c
 \small
 \caption[Summary of Universal Mathematical Notations and Tensor Shapes]{Summary of Universal Mathematical Notations, Tensor Dimensions, and Operator Types.}
 \label{tab:ch3_notations}
-\begin{tabularx}{\textwidth}{llcX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcl}
 \toprule
 \textbf{Symbol} & \textbf{Mathematical Definition} & \textbf{Dimension / Type} & \textbf{Physical Meaning / Role} \\
 \midrule
@@ -63,7 +66,8 @@ $\tau^*$ & Cost-sensitive Bayes risk threshold & Scalar $\in (0, 1)$ & Imbalance
 $\Gamma(u)$ & Class-conditional conformal prediction set & Discrete $\subseteq \{0, 1\}$ & $\{0\}, \{1\}, \{0, 1\}$ or $\emptyset$ triage set \\
 $\alpha$ & Nominal significance error budget & Scalar $\in (0, 1)$ & User-specified risk ceiling (e.g., $0.01$) \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 The core architectural thesis of \textbf{C-STGB} is that robust, enterprise-grade Anti-Money Laundering (AML) surveillance requires a unified neuro-symbolic design: deep relational message passing to learn emergent structural patterns, fused dynamically with domain-specific spatio-temporal invariants and statistically calibrated risk bounds.
 
@@ -189,7 +193,8 @@ provides a universal, schema-agnostic feature foundation. Table~\ref{tab:12d_inv
 \small
 \caption[Formal Specification of the 12-Dimensional Canonical Invariants]{Compact Formal Specification of the 12-Dimensional Canonical Invariant Vector $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$.}
 \label{tab:12d_invariants_spec}
-\begin{tabularx}{\textwidth}{clllcX}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{clllcl}
 \toprule
 \textbf{\#} & \textbf{Symbol} & \textbf{Mathematical Definition} & \textbf{Operational Detection Target} & \textbf{Dim} & \textbf{Typical Range} \\
 \midrule
@@ -206,7 +211,8 @@ provides a universal, schema-agnostic feature foundation. Table~\ref{tab:12d_inv
 11 & $\sigma_{\Delta t}$ & $\sqrt{\text{Var}(\{t_k - t_{k-1}\})}$ & Scripted automated bots vs.\ retail jitter & 1 & $\mathbb{R}^+$ \\
 12 & $v_A$ & $\sum_{e \in \mathcal{E}_u} \text{Amount}(e) / (t_{\max} - t_{\min} + \epsilon)$ & Rapid capital transmission speed & 1 & $\mathbb{R}^+$ \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \section{Module 1: Continuous-Time Multi-Scale Temporal Graph Encoder}\label{sec:ch3_mod1}
@@ -369,7 +375,10 @@ where:
     \paragraph{Gradient Dynamics Analysis:}
     Differentiating $\mathcal{L}_{\text{task}}$ with respect to predicted logit $z_i$ ($p_i = \sigma(z_i)$) for an illicit entity ($y_i = 1$) yields:
     \begin{equation}
-    \frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i} = -\beta_{\text{FN}} \frac{\sum_j p_j y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon}{\left[ \sum_j p_j y_j + \beta_{\text{FN}} \sum_j (1 - p_j) y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon \right]^2} \cdot p_i (1 - p_i)
+    \begin{split}
+    \frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i} = & -\beta_{\text{FN}} \frac{\sum_j p_j y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon}{\left[ \sum_j p_j y_j + \beta_{\text{FN}} \sum_j (1 - p_j) y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon \right]^2} \\
+    & \quad \times p_i (1 - p_i)
+    \end{split}
     \end{equation}
     Because $\beta_{\text{FN}} = 0.85 \gg \beta_{\text{FP}} = 0.15$, the gradient magnitude for false negatives ($y_i=1, p_i \to 0$) is magnified by a factor of $\frac{\beta_{\text{FN}}}{\beta_{\text{FP}}} = 5.67\times$ relative to false positives, driving rapid parameter updates that aggressively pull minority illicit embeddings away from benign clusters.
     \item $\mathcal{L}_{\text{recon}}$ is the topological edge reconstruction loss:

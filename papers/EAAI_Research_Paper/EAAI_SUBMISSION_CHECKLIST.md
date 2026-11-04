@@ -42,14 +42,14 @@
   - **Md. Nazmul:** Conceptualization, Methodology, Software Architecture, Mathematical Derivations, Empirical Evaluation, Investigation, Writing – Original Draft, Visualization, Project Administration.
   - **Musrat Jahan Gungun:** Data Curation, Validation, Statistical Significance Testing, Baseline Benchmarking, Writing – Review & Editing.
   - **Maheli Ahmed:** Supervision, Resources, Funding Acquisition, Formal Analysis, Model Governance Alignment, Writing – Review & Editing.
-- [x] **10. Data Availability Statement:** Dedicated section in `Anonymized_Manuscript.tex` and `Title_Page.tex` meeting Elsevier requirements with persistent blinded repository link: `https://anonymous.4open.science/r/Intelligent-AML`.
+- [x] **10. Data Availability Statement:** Dedicated section in `Anonymized_Manuscript.tex` and `Title_Page.tex` meeting Elsevier requirements with persistent blinded repository link: `https://anonymous.4open.science/r/cstgb-anonymous-audit`.
 - [x] **11. Authorship Locked:** Confirmed at initial submission.
 
 ### C. Double-Blind Review Compliance
 - [x] **12. Completely Blinded Manuscript:** `Anonymized_Manuscript.tex` contains NO author names, affiliations, or institutional identifiers.
 - [x] **13. Separate Unblinded Title Page:** Provided in `Title_Page.tex` / `Title_Page.pdf`.
 - [x] **14. Self-Citations Neutral:** Refers to prior literature in third person.
-- [x] **15. Anonymized Code Repository:** Blinded URL used throughout: `https://anonymous.4open.science/r/Intelligent-AML`.
+- [x] **15. Anonymized Code Repository:** Blinded URL used throughout: `https://anonymous.4open.science/r/cstgb-anonymous-audit`.
 
 ### D. Formatting & Technical Standards
 - [x] **16. Highlights:** Exactly 5 bullets, each $\le 85$ characters including spaces.

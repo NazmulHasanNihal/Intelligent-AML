@@ -132,6 +132,13 @@ Table~\ref{tab:master_baseline_summary} and Table~\ref{tab:grouped_baseline_resu
 
 Table~\ref{tab:master_baseline_summary} summarizes the overall performance metrics, macro-averages, mean ranks, and inference SLAs across all evaluated model families. Table~\ref{tab:grouped_baseline_results} categorizes performance into public blockchains versus commercial bank networks. The exhaustive $14 \times 11$ master baseline results matrix across five locked seeds is provided in Appendix~\ref{app_tab:master_baseline_results}.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig_champion_vs_runnerup_delta.pdf}
+\caption[C-STGB Benchmark Superiority and F1 Lead across 14 Networks]{C-STGB benchmark superiority across 14 financial transaction networks: (Left) Executive performance badges confirming Global Mean Rank 1.07, +21.8\% average F1 lead, -99.51\% workload cut, and 0.45\,ms Fast-Path latency; (Right) Horizontal delta bar chart illustrating decisive F1 gains over the closest published baseline per network ($p < 0.001$).}
+\label{fig:ch7_champion_delta}
+\end{figure}
+
 \subsection{Comparative Analysis against Published SOTA Architectures}
 \label{sec:ch7_sota_comparison}
 To address baseline coverage for proprietary industrial architectures whose complete training harnesses are not openly accessible (H$^2$IDE, CamFD, and Group-Aware GNN), Table~\ref{tab:sota_reported_comparison} contrasts C-STGB against their published benchmark results on Elliptic-v1 as reported in the peer-reviewed literature.

@@ -16,6 +16,9 @@ In statutory Anti-Money Laundering (AML) enforcement, raw classification scores 
 
 To bridge machine learning predictions with statutory legal compliance, C-STGB integrates a post-hoc \textbf{GNNExplainer topological attribution engine} coupled with an \textbf{autonomous Multi-Agent Forensic Swarm} governed by deterministic Abstract Syntax Tree (AST) grammar validators and cryptographic SHA-256 Merkle tree audit trails (Figure~\ref{fig:forensic-swarm}).
 
+
+
+
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/fig_forensic_swarm.pdf}
@@ -52,6 +55,13 @@ The extracted causal subgraph $\mathcal{G}_{\text{sub}}$ and 12-D invariant vect
 
 \section{Abstract Syntax Tree (AST) Grammar \& Schema Specification}
 To eliminate Large Language Model (LLM) entity hallucinations (e.g., inventing fake account IDs or fabricated transaction amounts), the compliance agent compiles generated narratives into a formal Abstract Syntax Tree.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig_ast_grammar_pipeline.pdf}
+\caption[AST Grammar Compiler and Anti-Hallucination SAR Pipeline]{AST grammar compiler and schema verification pipeline: multi-agent forensic reasoning text is parsed via Extended Backus-Naur Form ($\mathcal{G}_{\text{SAR}}$) recursive descent rules and validated against strict Pydantic schemas, guaranteeing a 0.00\% hallucination rate in compiled FinCEN Form 111 XML filings.}
+\label{fig:ch6_ast_pipeline}
+\end{figure}
 
 \subsection{Extended Backus-Naur Form (EBNF) Grammar ($\mathcal{G}_{\text{SAR}}$)}
 All generated narratives must strictly conform to the formal grammar formalized in Listing~\ref{lst:sar_ebnf}:

@@ -68,7 +68,7 @@ def save_fig(fig, stems, pad_inches=0.03):
 print("======================================================================")
 print("1. GENERATING OPERATIONAL DECISION-DIAMOND FLOWCHART (Fig 1 / Fig 1.1)")
 print("======================================================================")
-fig, ax = plt.subplots(figsize=(7.16, 4.85))
+fig, ax = plt.subplots(figsize=(7.16, 5.25))
 ax.axis('off')
 ax.set_xlim([0.0, 1.0])
 ax.set_ylim([0.0, 1.0])
@@ -88,10 +88,9 @@ ax.text(0.50, top_y + 0.021,
         ha="center", va="center", fontsize=8.8, fontweight="bold", color="#ffffff")
 
 # =========================================================================
-# PANEL (a): NEURAL ARCHITECTURE & STREAMING PIPELINE (y: 0.518 -> 0.942)
+# PANEL (a): NEURAL ARCHITECTURE & STREAMING PIPELINE (y: 0.525 -> 0.942)
 # =========================================================================
-pa_y, pa_h = 0.518, 0.422
-# Panel (a) Container
+pa_y, pa_h = 0.525, 0.415
 ax.add_patch(patches.FancyBboxPatch(
     (0.006, pa_y), 0.988, pa_h,
     boxstyle="round,pad=0.003,rounding_size=0.006",
@@ -103,18 +102,19 @@ ax.add_patch(patches.FancyBboxPatch(
     boxstyle="round,pad=0.002,rounding_size=0.003",
     facecolor="#1e293b", edgecolor="#1e293b"
 ))
+# Left Title (50 chars)
 ax.text(0.020, pa_y + pa_h - 0.019,
-        "(a) End-to-End Streaming Ingestion & Deep Spatio-Temporal GraphBoost Neural Architecture",
+        "(a) Streaming Ingestion & Deep Spatio-Temporal GraphBoost Neural Core",
         ha="left", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
+# Right SLA Badge (35 chars) -> massive gap in between
 ax.text(0.980, pa_y + pa_h - 0.019,
-        "Real-Time Fast-Path Latency: 0.45 ms (P99: 0.82 ms) | 31,200 tx/s Throughput",
+        "Fast-Path Latency: 0.45 ms | Throughput: 31,200 tx/s",
         ha="right", va="center", fontsize=6.2, fontweight="bold", color="#38bdf8")
 
 # 4 Horizontal Columns in Panel (a)
 stages = [
     {
         "id": "Stage 1: Streaming Ingest",
-        "tag": "Wire & Zero-Copy Memory",
         "badge_bg": "#1e40af", "card_bg": "#f8fafc", "border": "#93c5fd",
         "x": 0.012, "w": 0.230,
         "items": [
@@ -122,50 +122,47 @@ stages = [
             ("UTXO Blockchains (Bitcoin, Eth)", "#334155", False),
             ("DuckDB Streaming Micro-Batches", "#1e40af", True),
             ("Apache Arrow Zero-Copy Buffer", "#334155", False),
-            ("Causal Split: $t_e \\leq t_{\\mathrm{eval}}$ (No Leak)", "#0369a1", True),
+            (r"Causal Split: $t_e \leq t_{\mathrm{eval}}$ (No Leak)", "#0369a1", True),
             ("Ingestion Latency SLA: 0.11 ms", "#1e40af", True),
         ]
     },
     {
         "id": "Stage 2: 12-D Invariants",
-        "tag": "Physical Flow & Hawkes",
         "badge_bg": "#0f766e", "card_bg": "#f8fafc", "border": "#5eead4",
         "x": 0.258, "w": 0.230,
         "items": [
             (r"Mass Flow: $\Phi_{\mathrm{flow}} = \ln(1 + \frac{A_{\mathrm{out}}}{A_{\mathrm{in}} + \epsilon})$", "#0f172a", True),
             ("Pass-Through Layering Detector", "#334155", False),
-            (r"Hawkes Arrival: $\lambda_u(t) = \mu_u + \sum \alpha e^{-\beta \Delta t}$", "#0f766e", True),
-            (r"Burst Acceleration Metric ($\mu_A, \sigma_A^2$)", "#334155", False),
-            (r"Directed Causal Taint: $s_{\mathrm{fwd}}, s_{\mathrm{bwd}}$", "#0f766e", True),
-            (r"Tensor Descriptor: $\mathbf{z}_{\mathrm{inv}} \in \mathbb{R}^{12}$", "#0f172a", True),
+            (r"Hawkes: $\lambda_u(t) = \mu_u + \sum \alpha e^{-\beta \Delta t}$", "#0f766e", True),
+            (r"Burst Acceleration ($\mu_A, \sigma_A^2$)", "#334155", False),
+            (r"Directed Taint: $s_{\mathrm{fwd}}, s_{\mathrm{bwd}}$", "#0f766e", True),
+            (r"Tensor: $\mathbf{z}_{\mathrm{inv}} \in \mathbb{R}^{12}$", "#0f172a", True),
         ]
     },
     {
         "id": "Stage 3: Temporal GNN",
-        "tag": "Tri-Band & Edge Gating",
         "badge_bg": "#047857", "card_bg": "#f8fafc", "border": "#86efac",
         "x": 0.504, "w": 0.230,
         "items": [
-            ("3-Band Harmonic Temporal Attention", "#0f172a", True),
-            (r"$\tau_1=2.4\,\mathrm{h}$ (burst), $\tau_2=24\,\mathrm{h}, \tau_3=168\,\mathrm{h}$", "#047857", False),
-            (r"Edge Gate: $\hat{g}_{ij} = \sigma(\mathbf{w}_g^\top [\mathbf{h}_i \parallel \mathbf{h}_j \parallel \mathbf{e}_{ij}])$", "#047857", True),
-            ("Prunes 65.9% Chaff Camouflage Links", "#334155", False),
-            (r"Typology GraphSMOTE on Clusters $\mathcal{C}_k$", "#047857", True),
+            ("3-Band Harmonic Attention", "#0f172a", True),
+            (r"$\tau_1=2.4\,\mathrm{h}, \tau_2=24\,\mathrm{h}, \tau_3=168\,\mathrm{h}$", "#047857", False),
+            (r"Edge Gate: $\hat{g}_{ij} \geq \delta_{\mathrm{floor}}$ (Prunes 65.9%)", "#047857", True),
+            ("Adversarial Chaff Link Suppression", "#334155", False),
+            (r"Typology Latent SMOTE on $\mathcal{C}_k$", "#047857", True),
             ("GNN Forward SLA: 0.16 ms", "#047857", True),
         ]
     },
     {
         "id": "Stage 4: Fusion & Risk",
-        "tag": "Adaptive Head & Bayes Tau*",
         "badge_bg": "#6b21a8", "card_bg": "#f8fafc", "border": "#d8b4fe",
         "x": 0.750, "w": 0.238,
         "items": [
-            (r"Adaptive Gate: $\alpha_u = \sigma(\mathbf{w}_\alpha^\top [\mathbf{h}_u \parallel \mathbf{z}_{\mathrm{inv}}])$", "#6b21a8", True),
-            (r"Unified Space: $\mathbf{h}_u^* = \alpha_u \mathbf{h}_u + (1-\alpha_u) \mathbf{z}_{\mathrm{inv}}$", "#0f172a", False),
+            (r"Evidence Gate $\alpha_u \in [0, 1]$", "#6b21a8", True),
+            (r"$\mathbf{h}_u^* = \alpha_u \mathbf{h}_u + (1-\alpha_u) \mathbf{z}_{\mathrm{inv}}$", "#0f172a", False),
             (r"Cold-Start: 89.60% F1 for $\mathrm{deg}(u) \leq 2$", "#6b21a8", True),
             (r"Cost-Sensitive Head: $\tau^* = 0.18$", "#b45309", True),
             (r"15:1 Asymmetric Ratio ($C_{\mathrm{FN}} / C_{\mathrm{FP}}$)", "#713f12", False),
-            (r"Minority Risk Output: $\hat{p}_u \in [0, 1]$", "#0f172a", True),
+            (r"Risk Output: $\hat{p}_u \in [0, 1]$", "#0f172a", True),
         ]
     }
 ]
@@ -181,19 +178,17 @@ for s in stages:
         boxstyle="round,pad=0.002,rounding_size=0.005",
         facecolor=s["card_bg"], edgecolor=s["border"], linewidth=1.0
     ))
-    # Header Badge
+    # Header Badge - SINGLE CRISP LINE
     ax.add_patch(patches.FancyBboxPatch(
-        (sx + 0.003, card_y + card_h - 0.040), sw - 0.006, 0.036,
+        (sx + 0.003, card_y + card_h - 0.034), sw - 0.006, 0.030,
         boxstyle="round,pad=0.002,rounding_size=0.003",
         facecolor=s["badge_bg"], edgecolor=s["badge_bg"]
     ))
-    ax.text(sx + sw / 2, card_y + card_h - 0.018, s["id"],
+    ax.text(sx + sw / 2, card_y + card_h - 0.019, s["id"],
             ha="center", va="center", fontsize=6.8, fontweight="bold", color="#ffffff")
-    ax.text(sx + sw / 2, card_y + card_h - 0.032, s["tag"],
-            ha="center", va="center", fontsize=5.4, color="#e2e8f0")
 
     # 6 Item Lines
-    y_lines = np.linspace(card_y + card_h - 0.062, card_y + 0.020, 6)
+    y_lines = np.linspace(card_y + card_h - 0.060, card_y + 0.022, 6)
     for idx, (txt, clr, is_bold) in enumerate(s["items"]):
         fw = "bold" if is_bold else "normal"
         ax.text(sx + sw / 2, y_lines[idx], txt,
@@ -205,9 +200,9 @@ for x_arr in [0.244, 0.490, 0.736]:
                 arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.24", color="#334155", lw=1.3))
 
 # =========================================================================
-# PANEL (b): CONFORMAL CRC TRIAGE & 3-TIER OPERATIONAL FUNNEL (y: 0.134 -> 0.506)
+# PANEL (b): CONFORMAL CRC TRIAGE & 3-TIER OPERATIONAL FUNNEL (y: 0.142 -> 0.515)
 # =========================================================================
-pb_y, pb_h = 0.134, 0.372
+pb_y, pb_h = 0.142, 0.370
 ax.add_patch(patches.FancyBboxPatch(
     (0.006, pb_y), 0.988, pb_h,
     boxstyle="round,pad=0.003,rounding_size=0.006",
@@ -219,15 +214,16 @@ ax.add_patch(patches.FancyBboxPatch(
     boxstyle="round,pad=0.002,rounding_size=0.003",
     facecolor="#1e293b", edgecolor="#1e293b"
 ))
+# Left Title
 ax.text(0.020, pb_y + pb_h - 0.019,
-        r"(b) Class-Conditional Conformal Risk Control (CRC) Triage Gate & 3-Tier Operational Dispatch",
+        "(b) Class-Conditional Conformal Risk Control (CRC) Triage Gate & Operational 3-Tier Clearing",
         ha="left", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
+# Right Guarantee (short, no collision)
 ax.text(0.980, pb_y + pb_h - 0.019,
-        r"Finite-Sample Risk Bound: $\mathbf{P}(Y \in \Gamma(X) \mid Y=y) \geq 99.0\%$ | 0.00% Empty Sets",
+        r"Coverage Guarantee: $\geq 99.0\%$ | Empty Sets: 0.00%",
         ha="right", va="center", fontsize=6.2, fontweight="bold", color="#fbbf24")
 
-# Left Section in Panel (b): Holdout Calibration & Decision Diamond
-# Calibration Info Card
+# Left Section: Holdout Calibration Card
 cal_x, cal_y, cal_w, cal_h = 0.014, pb_y + 0.012, 0.155, pb_h - 0.052
 ax.add_patch(patches.FancyBboxPatch(
     (cal_x, cal_y), cal_w, cal_h,
@@ -240,7 +236,7 @@ ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.055, r"Holdout Split: $\mathcal{D}_
         ha="center", va="center", fontsize=6.0, color="#713f12")
 ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.090, r"$n_0 = 3,306, \; n_1 = 372$",
         ha="center", va="center", fontsize=6.0, fontweight="bold", color="#0f172a")
-ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.135, r"Non-Conformity Scores:",
+ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.135, "Non-Conformity Scores:",
         ha="center", va="center", fontsize=5.8, color="#713f12")
 ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.170, r"$s_i^{(1)} = 1 - \hat{p}_i$",
         ha="center", va="center", fontsize=6.0, color="#b91c1c")
@@ -253,7 +249,7 @@ ax.text(cal_x + cal_w / 2, cal_y + 0.024, "Target Coverage: 99.0%",
 ax.annotate("", xy=(0.198, pb_y + (pb_h - 0.040) / 2), xytext=(cal_x + cal_w, pb_y + (pb_h - 0.040) / 2),
             arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.24", color="#334155", lw=1.3))
 
-# Conformal Decision Diamond (Centered at x=0.250)
+# Conformal Decision Diamond (Centered at x=0.252)
 diam_x, diam_y = 0.252, pb_y + (pb_h - 0.040) / 2
 dw, dh = 0.048, 0.115
 diamond_pts = np.array([
@@ -269,36 +265,33 @@ ax.text(diam_x, diam_y + 0.016, "CRC Triage", ha="center", va="center", fontsize
 ax.text(diam_x, diam_y - 0.018, r"$1-\alpha \geq 99\%$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#92400e")
 ax.text(diam_x, diam_y - 0.050, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#78350f")
 
-# 3 Wide Operational Tier Cards (Right, x: 0.330 -> 0.990, width: 0.654!)
+# 3 Wide Operational Tier Cards (Right, x: 0.334 -> 0.988, width: 0.654 = 4.7 inches!)
 t_x, t_w = 0.334, 0.652
 t_h = 0.096
 tiers = [
     {
-        "tier_num": "Tier 1: High-Risk Immediate Quarantine",
-        "set_math": r"$\Gamma(u) = \{1\}$  (Decisive Illicit)",
-        "rate": "18 alerts / 10,000 tx  (0.18%)",
+        "tier_header_left": r"Tier 1: High-Risk Quarantine  [$\Gamma = \{1\}$]",
+        "tier_header_right": "Rate: 18 / 10,000 tx (0.18%)",
         "action": "Immediate Quarantine Hold | Automated Wire Freeze",
-        "desc": "Generates FinCEN Form 111 SAR Dossier with GNNExplainer Attribution Subgraph & SHA-256 Merkle Audit Receipt",
+        "desc": "FinCEN Form 111 SAR Dossier Draft | GNNExplainer Attribution | SHA-256 Merkle Receipt",
         "badge_bg": "#b91c1c", "card_bg": "#fef2f2", "border": "#f87171", "clr": "#b91c1c",
         "y": pb_y + pb_h - 0.040 - t_h - 0.004,
         "arrow_target": pb_y + pb_h - 0.040 - t_h / 2 - 0.004
     },
     {
-        "tier_num": "Tier 2: Compliance Officer Review Desk",
-        "set_math": r"$\Gamma(u) = \{0, 1\}$  (Abstention Boundary)",
-        "rate": "49 alerts / 10,000 tx  (0.49%)  |  Workload Reduction: -99.51%",
+        "tier_header_left": r"Tier 2: Compliance Review Desk  [$\Gamma = \{0, 1\}$]",
+        "tier_header_right": "Rate: 49 / 10,000 tx (0.49%) | Queue Cut: -99.51%",
         "action": "Human-in-the-Loop 4-Eyes Compliance Review Queue",
-        "desc": "Ambiguous transactions routed to senior examiners; cuts false alarms by 85.7%--95.8% vs rules; feeds Active Learning loop",
+        "desc": "Ambiguous boundary triage routed to senior examiners | 85.7%--95.8% fewer false alerts vs rules",
         "badge_bg": "#d97706", "card_bg": "#fffbeb", "border": "#fbbf24", "clr": "#d97706",
         "y": pb_y + pb_h - 0.040 - 2 * t_h - 0.012,
         "arrow_target": pb_y + pb_h - 0.040 - 1.5 * t_h - 0.012
     },
     {
-        "tier_num": "Tier 3: Automated Straight-Through Clearing",
-        "set_math": r"$\Gamma(u) = \{0\}$  (Decisive Benign)",
-        "rate": "9,933 transactions / 10,000 tx  (99.33%)",
+        "tier_header_left": r"Tier 3: Straight-Through Automated Clear  [$\Gamma = \{0\}$]",
+        "tier_header_right": "Rate: 9,933 / 10,000 tx (99.33%)",
         "action": "Automated Wire-Speed Straight-Through Processing (STP)",
-        "desc": "Instantaneous clearance under 0.45 ms SLA with mathematically bounded selective risk (residual illicit leakage < 0.13%)",
+        "desc": "Wire-speed release under 0.45 ms SLA | Mathematically bounded selective risk (< 0.13% residual FN)",
         "badge_bg": "#15803d", "card_bg": "#f0fdf4", "border": "#4ade80", "clr": "#15803d",
         "y": pb_y + pb_h - 0.040 - 3 * t_h - 0.020,
         "arrow_target": pb_y + pb_h - 0.040 - 2.5 * t_h - 0.020
@@ -313,25 +306,24 @@ for t in tiers:
         boxstyle="round,pad=0.002,rounding_size=0.004",
         facecolor=t["card_bg"], edgecolor=t["border"], linewidth=1.0
     ))
-    # Left Accent Color Pill
+    # Left Accent Color Bar
     ax.add_patch(patches.FancyBboxPatch(
         (t_x + 0.003, ty + 0.006), 0.006, t_h - 0.012,
         boxstyle="round,pad=0.001,rounding_size=0.002",
         facecolor=t["badge_bg"], edgecolor=t["badge_bg"]
     ))
-    # Top Row: Title, Set Math & Operational Rate
-    ax.text(t_x + 0.016, ty + t_h - 0.022, t["tier_num"],
+    # Row 1: Left Title + Set Math (NO overlap possible)
+    ax.text(t_x + 0.016, ty + t_h - 0.022, t["tier_header_left"],
             ha="left", va="center", fontsize=6.8, fontweight="bold", color=t["clr"])
-    ax.text(t_x + 0.330, ty + t_h - 0.022, t["set_math"],
-            ha="left", va="center", fontsize=6.4, fontweight="bold", color="#334155")
-    ax.text(t_x + t_w - 0.012, ty + t_h - 0.022, t["rate"],
+    # Row 1: Right Operational Rate
+    ax.text(t_x + t_w - 0.014, ty + t_h - 0.022, t["tier_header_right"],
             ha="right", va="center", fontsize=6.2, fontweight="bold", color=t["clr"])
 
-    # Middle Row: Immediate Action
+    # Row 2: Immediate Action
     ax.text(t_x + 0.016, ty + t_h - 0.052, t["action"],
             ha="left", va="center", fontsize=6.0, fontweight="bold", color="#0f172a")
 
-    # Bottom Row: Full Description
+    # Row 3: Description & Protocols
     ax.text(t_x + 0.016, ty + 0.020, t["desc"],
             ha="left", va="center", fontsize=5.5, color="#475569")
 
@@ -341,9 +333,9 @@ for t in tiers:
                                 color=t["badge_bg"], lw=1.4))
 
 # =========================================================================
-# BOTTOM PRODUCTION SLA & GOVERNANCE STRIP (y: 0.008 -> 0.124)
+# BOTTOM PRODUCTION SLA & GOVERNANCE STRIP (y: 0.008 -> 0.134, height: 0.126)
 # =========================================================================
-bot_y, bot_h = 0.008, 0.116
+bot_y, bot_h = 0.008, 0.126
 ax.add_patch(patches.FancyBboxPatch(
     (0.006, bot_y), 0.988, bot_h,
     boxstyle="round,pad=0.003,rounding_size=0.006",
@@ -351,48 +343,58 @@ ax.add_patch(patches.FancyBboxPatch(
 ))
 # Bottom Header Bar
 ax.add_patch(patches.FancyBboxPatch(
-    (0.010, bot_y + bot_h - 0.028), 0.980, 0.024,
+    (0.010, bot_y + bot_h - 0.026), 0.980, 0.022,
     boxstyle="round,pad=0.002,rounding_size=0.003",
     facecolor="#1e293b", edgecolor="#1e293b"
 ))
-ax.text(0.50, bot_y + bot_h - 0.016,
+ax.text(0.50, bot_y + bot_h - 0.015,
         "REAL-TIME PRODUCTION SLAS | STATISTICAL SAFETY GUARANTEES | REGULATORY GOVERNANCE",
         ha="center", va="center", fontsize=6.4, fontweight="bold", color="#ffffff")
 
 cols = [
     {
         "x": 0.012, "w": 0.238, "title": "Latency Performance", "color": "#1e40af",
-        "stat": "0.45 ms Fast-Path", "desc": "P99: 0.82 ms | 31,200 tx/s Throughput\nStrict compliance with <10 ms SLA"
+        "stat": "0.45 ms Fast-Path",
+        "line1": "P99: 0.82 ms | 31,200 tx/s",
+        "line2": "Strict compliance with <10 ms SLA"
     },
     {
         "x": 0.258, "w": 0.238, "title": "Workload Efficiency", "color": "#0f766e",
-        "stat": "-99.51% Review Cut", "desc": "Only 49 of 10,000 transactions reviewed\n85.7%--95.8% fewer false alerts vs rules"
+        "stat": "-99.51% Review Cut",
+        "line1": "Only 49 of 10,000 tx reviewed",
+        "line2": "85.7%--95.8% fewer false alerts"
     },
     {
         "x": 0.504, "w": 0.238, "title": "Statistical Safety", "color": "#b45309",
-        "stat": r"$\geq 99.0\%$ Coverage", "desc": "Finite-sample exchangeability bound\n0.00% empty sets | Avg set size: 1.005"
+        "stat": r"$\geq 99.0\%$ Coverage",
+        "line1": "Finite-sample exchangeability bound",
+        "line2": "0.00% empty sets | Avg size: 1.005"
     },
     {
         "x": 0.750, "w": 0.238, "title": "Regulatory Governance", "color": "#6b21a8",
-        "stat": "SR 26-2 & OCC Ready", "desc": "Zero-hallucination graph evidence\nCryptographic SHA-256 Merkle audit trail"
+        "stat": "SR 26-2 & OCC Ready",
+        "line1": "Zero-hallucination graph evidence",
+        "line2": "SHA-256 Merkle cryptographic trail"
     }
 ]
 
 for col in cols:
     cx, cw = col["x"], col["w"]
-    cy, ch = bot_y + 0.006, bot_h - 0.038
+    cy, ch = bot_y + 0.006, bot_h - 0.034
     ax.add_patch(patches.FancyBboxPatch(
         (cx, cy), cw, ch,
         boxstyle="round,pad=0.002,rounding_size=0.003",
         facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.6
     ))
+    # 4 SEPARATE, EXPLICIT, UNAMBIGUOUS VERTICAL LINES:
     ax.text(cx + cw / 2, cy + ch - 0.018, col["title"],
             ha="center", va="center", fontsize=6.2, fontweight="bold", color=col["color"])
     ax.text(cx + cw / 2, cy + ch - 0.040, col["stat"],
-            ha="center", va="center", fontsize=6.6, fontweight="bold", color="#0f172a")
-    ax.text(cx + cw / 2, cy + 0.016, col["desc"],
-            ha="center", va="center", fontsize=5.2, color="#475569")
-
+            ha="center", va="center", fontsize=6.8, fontweight="bold", color="#0f172a")
+    ax.text(cx + cw / 2, cy + ch - 0.062, col["line1"],
+            ha="center", va="center", fontsize=5.3, color="#475569")
+    ax.text(cx + cw / 2, cy + ch - 0.080, col["line2"],
+            ha="center", va="center", fontsize=5.3, color="#475569")
 
 save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"], pad_inches=0.03)
 
@@ -458,7 +460,7 @@ fig, ax = plt.subplots(figsize=(3.50, 2.90))
 
 # Data from Table 7:
 configs = [
-    ("XGBoost", 0.18, 112, 68400, "#1e40af", "o", (8, 0)),
+    ("XGBoost", 0.18, 112, 68400, "#1e40af", "o", (10, -2)),
     ("C-STGB (Fast)", 0.45, 428, 31200, "#047857", "*", (6, -4)),
     ("C-STGB (Full)", 2.10, 894, 19400, "#0f766e", "P", (6, -4)),
     ("Vanilla HGT", 8.40, 1420, 3500, "#b45309", "^", (-30, 8)),

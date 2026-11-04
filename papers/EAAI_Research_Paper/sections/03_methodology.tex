@@ -3,7 +3,7 @@
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/fig1_operational_architecture_flowchart.pdf}
+\includegraphics[width=0.98\textwidth]{figures/fig6_system_architecture.pdf}
 \caption{End-to-end operational architecture and real-time triage workflow of the C-STGB financial surveillance platform: (1) Zero-copy streaming ingestion via Apache Arrow and DuckDB with 12-D physical mass-flow invariants; (2) C-STGB neural core combining continuous-time 3-band harmonic temporal attention, learnable edge-trust gating ($\hat{g}_{ij} \ge \delta_{\text{floor}}$), typology-clustered latent GraphSMOTE, evidence-adaptive fusion ($\alpha_u$), and cost-sensitive Bayes risk calibration ($\tau^* = 0.18$); and (3) Class-conditional Conformal Risk Control (CRC) decision diamond ($1-\alpha \ge 99\%$) routing streaming transactions across 3 operational tiers (Tier 1 High-Risk Quarantine with SHA-256 Merkle audit receipts, Tier 2 Compliance Review Desk, Tier 3 Automated Straight-Through Clearing) under a 0.45\,ms Fast-Path authorization SLA.}
 \label{fig:architecture_blueprint}
 \end{figure*}

@@ -207,7 +207,7 @@ The multi-stage offline training routine is formalized in Algorithm~\ref{alg:sup
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.88\textwidth]{figures/fig_conformal_triage_flowchart.pdf}
+\includegraphics[width=0.88\textwidth]{figures/fig6_system_architecture.pdf}
 \caption{Operational 3-Tier Queue Mapping and Conformal Risk Control triage workflow under within-class exchangeability. Ambiguous cases ($\Gamma(X) = \{0, 1\}$) route to Tier~2 review, while decisive singletons execute straight-through.}
 \label{fig:supp_s1}
 \end{figure*}
@@ -633,11 +633,11 @@ Hyperparameter Tuning & Optuna 3.6.0 (TPE Sampler), Fixed Seeds $\{42, 101, 2024
 \toprule
 \textbf{Source Dataset} & \textbf{Target Dataset} & \textbf{HGT Baseline F1} & \textbf{XGBoost Baseline F1} & \textbf{C-STGB Zero-Shot F1 / PR-AUC} & \textbf{Target-Tuned F1} \\
 \midrule
-\texttt{elliptic\_v1} (Bitcoin) & \texttt{elliptic\_v2} (Multi-Asset) & $21.40\%$ & $64.20\%$ & $\mathbf{82.40\% / 0.8410}$ & $99.10\%$ \\
+\texttt{elliptic\_v1} (Bitcoin) & \texttt{elliptic\_v2} (Multi-Asset) & $21.40\%$ & $64.20\%$ & $\mathbf{82.40\%/0.8410}$ & $99.10\%$ \\
 \texttt{elliptic\_v1} (Bitcoin) & \texttt{saml\_d} (Multi-Bank) & $14.20\%$ & $58.10\%$ & $\mathbf{76.80\% / 0.7850}$ & $93.68\%$ \\
 \texttt{elliptic\_v1} (Bitcoin) & \texttt{paysim\_extended} (e-Wallet) & $16.80\%$ & $61.40\%$ & $\mathbf{79.20\% / 0.8120}$ & $92.40\%$ \\
 \texttt{paysim\_extended} & \texttt{ibm\_amlsim\_hi\_med} & $18.50\%$ & $31.40\%$ & $\mathbf{41.80\% / 0.4320}$ & $46.85\%$ \\
-\texttt{paysim\_extended} & \texttt{saml\_d} & $22.10\%$ & $56.80\%$ & $\mathbf{74.50\% / 0.7620}$ & $93.68\%$ \\
+\texttt{paysim\_extended} & \texttt{saml\_d} & $22.10\%$ & $56.80\%$ & $\mathbf{74.50\%/0.7620}$ & $93.68\%$ \\
 \texttt{dgraphfin} (Dynamic Credit) & \texttt{elliptic\_v1} & $19.40\%$ & $62.80\%$ & $\mathbf{80.60\% / 0.8250}$ & $91.42\%$ \\
 \texttt{saml\_d} & \texttt{ibm\_amlsim\_hi\_med} & $15.20\%$ & $28.60\%$ & $\mathbf{39.40\% / 0.4080}$ & $46.85\%$ \\
 \texttt{xblock\_eth} & \texttt{dgraphfin} & $28.50\%$ & $69.20\%$ & $\mathbf{85.10\% / 0.8710}$ & $94.62\%$ \\
@@ -657,13 +657,13 @@ Hyperparameter Tuning & Optuna 3.6.0 (TPE Sampler), Fixed Seeds $\{42, 101, 2024
 \toprule
 \textbf{Dataset Identifier} & \textbf{Entities} & \textbf{Peak VRAM} & \textbf{Train s/Epoch} & \textbf{P50 Lat.} & \textbf{P99 Lat.} \\
 \midrule
-\texttt{elliptic\_v1} & 203,769 & 4.2\,GB & 12.4\,s & 0.38\,ms & 1.85\,ms \\
-\texttt{elliptic\_v2} & 122,279 & 3.1\,GB & 8.6\,s & 0.35\,ms & 1.72\,ms \\
-\texttt{dgraphfin} & 3,064,288 & 15.2\,GB & 88.4\,s & 0.43\,ms & 2.14\,ms \\
+\texttt{elliptic\_v1} & 203,769 & 4.2\,GB & 12.4s & 0.38\,ms & 1.85\,ms \\
+\texttt{elliptic\_v2} & 122,279 & 3.1\,GB & 8.6s & 0.35\,ms & 1.72\,ms \\
+\texttt{dgraphfin} & 3,064,288 & 15.2\,GB & 88.4s & 0.43\,ms & 2.14\,ms \\
 \texttt{xblock\_eth} & 2,150,000 & 11.2\,GB & 62.5s & 0.40\,ms & 2.05\,ms \\
-\texttt{saml\_d} & 980,000 & 8.4\,GB & 38.2\,s & 0.39\,ms & 1.92\,ms \\
-\texttt{paysim\_extended} & 1,048,575 & 6.9\,GB & 31.0\,s & 0.36\,ms & 1.78\,ms \\
-\texttt{ibm\_amlsim\_hi\_med} & 300,000 & 4.8\,GB & 16.8\,s & 0.37\,ms & 1.82\,ms \\
+\texttt{saml\_d} & 980,000 & 8.4\,GB & 38.2s & 0.39\,ms & 1.92\,ms \\
+\texttt{paysim\_extended} & 1,048,575 & 6.9\,GB & 31.0s & 0.36\,ms & 1.78\,ms \\
+\texttt{ibm\_amlsim\_hi\_med} & 300,000 & 4.8\,GB & 16.8s & 0.37\,ms & 1.82\,ms \\
 \bottomrule
 \end{tabular}%
 }

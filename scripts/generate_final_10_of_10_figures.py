@@ -102,14 +102,13 @@ ax.add_patch(patches.FancyBboxPatch(
     boxstyle="round,pad=0.002,rounding_size=0.003",
     facecolor="#1e293b", edgecolor="#1e293b"
 ))
-# Left Title (50 chars)
+# Left Title & Right Metric with 1.67-inch middle gap (zero collision)
 ax.text(0.020, pa_y + pa_h - 0.019,
-        "(a) Streaming Ingestion & Deep Spatio-Temporal GraphBoost Neural Core",
-        ha="left", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
-# Right SLA Badge (35 chars) -> massive gap in between
+        "(a) Streaming Ingest & Spatio-Temporal GNN",
+        ha="left", va="center", fontsize=7.0, fontweight="bold", color="#ffffff")
 ax.text(0.980, pa_y + pa_h - 0.019,
-        "Fast-Path Latency: 0.45 ms | Throughput: 31,200 tx/s",
-        ha="right", va="center", fontsize=6.2, fontweight="bold", color="#38bdf8")
+        "0.45 ms SLA | 31.2k tx/s",
+        ha="right", va="center", fontsize=6.4, fontweight="bold", color="#38bdf8")
 
 # 4 Horizontal Columns in Panel (a)
 stages = [
@@ -122,7 +121,7 @@ stages = [
             ("UTXO Blockchains (Bitcoin, Eth)", "#334155", False),
             ("DuckDB Streaming Micro-Batches", "#1e40af", True),
             ("Apache Arrow Zero-Copy Buffer", "#334155", False),
-            (r"Causal Split: $t_e \leq t_{\mathrm{eval}}$ (No Leak)", "#0369a1", True),
+            (r"Causal Split: $t_e \leq t_{\mathrm{eval}}$ (Anti-Leak)", "#0369a1", True),
             ("Ingestion Latency SLA: 0.11 ms", "#1e40af", True),
         ]
     },
@@ -131,11 +130,11 @@ stages = [
         "badge_bg": "#0f766e", "card_bg": "#f8fafc", "border": "#5eead4",
         "x": 0.258, "w": 0.230,
         "items": [
-            (r"Mass Flow: $\Phi_{\mathrm{flow}} = \ln(1 + \frac{A_{\mathrm{out}}}{A_{\mathrm{in}} + \epsilon})$", "#0f172a", True),
+            (r"Mass Flow: $\Phi = \ln(1 + A_{\mathrm{out}} / [A_{\mathrm{in}} + \epsilon])$", "#0f172a", True),
             ("Pass-Through Layering Detector", "#334155", False),
             (r"Hawkes: $\lambda_u(t) = \mu_u + \sum \alpha e^{-\beta \Delta t}$", "#0f766e", True),
             (r"Burst Acceleration ($\mu_A, \sigma_A^2$)", "#334155", False),
-            (r"Directed Taint: $s_{\mathrm{fwd}}, s_{\mathrm{bwd}}$", "#0f766e", True),
+            ("Directed Causal Taint Tracing", "#0f766e", True),
             (r"Tensor: $\mathbf{z}_{\mathrm{inv}} \in \mathbb{R}^{12}$", "#0f172a", True),
         ]
     },
@@ -147,7 +146,7 @@ stages = [
             ("3-Band Harmonic Attention", "#0f172a", True),
             (r"$\tau_1=2.4\,\mathrm{h}, \tau_2=24\,\mathrm{h}, \tau_3=168\,\mathrm{h}$", "#047857", False),
             (r"Edge Gate: $\hat{g}_{ij} \geq \delta_{\mathrm{floor}}$ (Prunes 65.9%)", "#047857", True),
-            ("Adversarial Chaff Link Suppression", "#334155", False),
+            ("Adversarial Chaff Suppression", "#334155", False),
             (r"Typology Latent SMOTE on $\mathcal{C}_k$", "#047857", True),
             ("GNN Forward SLA: 0.16 ms", "#047857", True),
         ]
@@ -161,7 +160,7 @@ stages = [
             (r"$\mathbf{h}_u^* = \alpha_u \mathbf{h}_u + (1-\alpha_u) \mathbf{z}_{\mathrm{inv}}$", "#0f172a", False),
             (r"Cold-Start: 89.60% F1 for $\mathrm{deg}(u) \leq 2$", "#6b21a8", True),
             (r"Cost-Sensitive Head: $\tau^* = 0.18$", "#b45309", True),
-            (r"15:1 Asymmetric Ratio ($C_{\mathrm{FN}} / C_{\mathrm{FP}}$)", "#713f12", False),
+            ("15:1 Asymmetric Cost Ratio", "#713f12", False),
             (r"Risk Output: $\hat{p}_u \in [0, 1]$", "#0f172a", True),
         ]
     }
@@ -214,17 +213,16 @@ ax.add_patch(patches.FancyBboxPatch(
     boxstyle="round,pad=0.002,rounding_size=0.003",
     facecolor="#1e293b", edgecolor="#1e293b"
 ))
-# Left Title
+# Left Title & Right Metric with 1.50-inch middle gap (zero collision)
 ax.text(0.020, pb_y + pb_h - 0.019,
-        "(b) Class-Conditional Conformal Risk Control (CRC) Triage Gate & Operational 3-Tier Clearing",
-        ha="left", va="center", fontsize=7.2, fontweight="bold", color="#ffffff")
-# Right Guarantee (short, no collision)
+        "(b) Conformal CRC Triage & 3-Tier Dispatch",
+        ha="left", va="center", fontsize=7.0, fontweight="bold", color="#ffffff")
 ax.text(0.980, pb_y + pb_h - 0.019,
-        r"Coverage Guarantee: $\geq 99.0\%$ | Empty Sets: 0.00%",
-        ha="right", va="center", fontsize=6.2, fontweight="bold", color="#fbbf24")
+        r"Coverage $\geq 99.0\%$ | 0% Empty",
+        ha="right", va="center", fontsize=6.4, fontweight="bold", color="#fbbf24")
 
-# Left Section: Holdout Calibration Card
-cal_x, cal_y, cal_w, cal_h = 0.014, pb_y + 0.012, 0.155, pb_h - 0.052
+# Left Section: Holdout Calibration Card (x: 0.012 -> 0.190, width: 0.178)
+cal_x, cal_y, cal_w, cal_h = 0.012, pb_y + 0.012, 0.178, pb_h - 0.052
 ax.add_patch(patches.FancyBboxPatch(
     (cal_x, cal_y), cal_w, cal_h,
     boxstyle="round,pad=0.002,rounding_size=0.004",
@@ -232,26 +230,22 @@ ax.add_patch(patches.FancyBboxPatch(
 ))
 ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.024, "Holdout Calibration",
         ha="center", va="center", fontsize=6.6, fontweight="bold", color="#854d0e")
-ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.055, r"Holdout Split: $\mathcal{D}_{\mathrm{cal}}$",
-        ha="center", va="center", fontsize=6.0, color="#713f12")
-ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.090, r"$n_0 = 3,306, \; n_1 = 372$",
-        ha="center", va="center", fontsize=6.0, fontweight="bold", color="#0f172a")
-ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.135, "Non-Conformity Scores:",
+ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.054, r"Calibration: $\mathcal{D}_{\mathrm{cal}}$",
         ha="center", va="center", fontsize=5.8, color="#713f12")
-ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.170, r"$s_i^{(1)} = 1 - \hat{p}_i$",
-        ha="center", va="center", fontsize=6.0, color="#b91c1c")
-ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.205, r"$s_i^{(0)} = \hat{p}_i$",
-        ha="center", va="center", fontsize=6.0, color="#15803d")
-ax.text(cal_x + cal_w / 2, cal_y + 0.024, "Target Coverage: 99.0%",
-        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#854d0e")
+ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.088, r"$n_0 = 3,306, \; n_1 = 372$",
+        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f172a")
+ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.126, "Non-Conformity Scores:",
+        ha="center", va="center", fontsize=5.5, color="#713f12")
+ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.156, r"$s_i^{(1)} = 1 - \hat{p}_i$  (Illicit)",
+        ha="center", va="center", fontsize=5.6, color="#b91c1c")
+ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.186, r"$s_i^{(0)} = \hat{p}_i$  (Benign)",
+        ha="center", va="center", fontsize=5.6, color="#15803d")
+ax.text(cal_x + cal_w / 2, cal_y + 0.022, r"Target: $1 - \alpha \geq 99.0\%$",
+        ha="center", va="center", fontsize=5.6, fontweight="bold", color="#854d0e")
 
-# Arrow Cal -> Diamond
-ax.annotate("", xy=(0.198, pb_y + (pb_h - 0.040) / 2), xytext=(cal_x + cal_w, pb_y + (pb_h - 0.040) / 2),
-            arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.24", color="#334155", lw=1.3))
-
-# Conformal Decision Diamond (Centered at x=0.252)
+# Conformal Decision Diamond (Centered at x=0.252, dw=0.058, dh=0.120)
 diam_x, diam_y = 0.252, pb_y + (pb_h - 0.040) / 2
-dw, dh = 0.048, 0.115
+dw, dh = 0.058, 0.120
 diamond_pts = np.array([
     [diam_x, diam_y + dh],
     [diam_x + dw, diam_y],
@@ -260,38 +254,42 @@ diamond_pts = np.array([
 ])
 ax.add_patch(patches.Polygon(diamond_pts, facecolor="#fef3c7", edgecolor="#d97706", linewidth=1.4))
 
-ax.text(diam_x, diam_y + 0.048, "Class-Cond.", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#92400e")
-ax.text(diam_x, diam_y + 0.016, "CRC Triage", ha="center", va="center", fontsize=6.8, fontweight="bold", color="#b45309")
-ax.text(diam_x, diam_y - 0.018, r"$1-\alpha \geq 99\%$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#92400e")
-ax.text(diam_x, diam_y - 0.050, r"$\hat{q}^{(0)}, \hat{q}^{(1)}$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#78350f")
+# Arrow Cal -> Diamond
+ax.annotate("", xy=(diam_x - dw, diam_y), xytext=(cal_x + cal_w, diam_y),
+            arrowprops=dict(arrowstyle="->,head_width=0.20,head_length=0.24", color="#334155", lw=1.3))
 
-# 3 Wide Operational Tier Cards (Right, x: 0.334 -> 0.988, width: 0.654 = 4.7 inches!)
-t_x, t_w = 0.334, 0.652
+# 3 Clean, Centered Lines inside Diamond (Each with >= 25px breathing margin)
+ax.text(diam_x, diam_y + 0.026, "Class-Cond.", ha="center", va="center", fontsize=5.4, fontweight="bold", color="#92400e")
+ax.text(diam_x, diam_y + 0.000, "CRC Triage", ha="center", va="center", fontsize=6.6, fontweight="bold", color="#b45309")
+ax.text(diam_x, diam_y - 0.026, r"$1-\alpha \geq 0.99$", ha="center", va="center", fontsize=5.6, fontweight="bold", color="#92400e")
+
+# 3 Wide Operational Tier Cards (Right, x: 0.320 -> 0.986, width: 0.666 = 4.77 inches!)
+t_x, t_w = 0.320, 0.666
 t_h = 0.096
 tiers = [
     {
-        "tier_header_left": r"Tier 1: High-Risk Quarantine  [$\Gamma = \{1\}$]",
-        "tier_header_right": "Rate: 18 / 10,000 tx (0.18%)",
-        "action": "Immediate Quarantine Hold | Automated Wire Freeze",
-        "desc": "FinCEN Form 111 SAR Dossier Draft | GNNExplainer Attribution | SHA-256 Merkle Receipt",
+        "header_left": "Tier 1: High-Risk Quarantine",
+        "header_right": "0.18% (18 / 10k tx)",
+        "row2": r"Prediction Set: $\Gamma(u) = \{1\}$  |  Action: Immediate Wire Freeze & Quarantine Hold",
+        "row3": "FinCEN Form 111 SAR Dossier Draft  |  GNNExplainer Attribution  |  SHA-256 Merkle Audit Receipt",
         "badge_bg": "#b91c1c", "card_bg": "#fef2f2", "border": "#f87171", "clr": "#b91c1c",
         "y": pb_y + pb_h - 0.040 - t_h - 0.004,
         "arrow_target": pb_y + pb_h - 0.040 - t_h / 2 - 0.004
     },
     {
-        "tier_header_left": r"Tier 2: Compliance Review Desk  [$\Gamma = \{0, 1\}$]",
-        "tier_header_right": "Rate: 49 / 10,000 tx (0.49%) | Queue Cut: -99.51%",
-        "action": "Human-in-the-Loop 4-Eyes Compliance Review Queue",
-        "desc": "Ambiguous boundary triage routed to senior examiners | 85.7%--95.8% fewer false alerts vs rules",
+        "header_left": "Tier 2: Compliance Review Queue",
+        "header_right": "0.49% (49 / 10k tx)",
+        "row2": r"Prediction Set: $\Gamma(u) = \{0, 1\}$ (Borderline Triage)  |  Workload Queue Cut: -99.51%",
+        "row3": "Human-in-the-Loop 4-Eyes Review  |  85.7%--95.8% Fewer False Alerts vs Rules  |  Active Learning",
         "badge_bg": "#d97706", "card_bg": "#fffbeb", "border": "#fbbf24", "clr": "#d97706",
         "y": pb_y + pb_h - 0.040 - 2 * t_h - 0.012,
         "arrow_target": pb_y + pb_h - 0.040 - 1.5 * t_h - 0.012
     },
     {
-        "tier_header_left": r"Tier 3: Straight-Through Automated Clear  [$\Gamma = \{0\}$]",
-        "tier_header_right": "Rate: 9,933 / 10,000 tx (99.33%)",
-        "action": "Automated Wire-Speed Straight-Through Processing (STP)",
-        "desc": "Wire-speed release under 0.45 ms SLA | Mathematically bounded selective risk (< 0.13% residual FN)",
+        "header_left": "Tier 3: Straight-Through Processing",
+        "header_right": "99.33% (9,933 / 10k tx)",
+        "row2": r"Prediction Set: $\Gamma(u) = \{0\}$  |  Action: Automated Wire-Speed Processing (< 0.45 ms SLA)",
+        "row3": "Mathematically Bounded Selective Risk (< 0.13% Residual FN)  |  Zero Manual Review Friction",
         "badge_bg": "#15803d", "card_bg": "#f0fdf4", "border": "#4ade80", "clr": "#15803d",
         "y": pb_y + pb_h - 0.040 - 3 * t_h - 0.020,
         "arrow_target": pb_y + pb_h - 0.040 - 2.5 * t_h - 0.020
@@ -312,20 +310,20 @@ for t in tiers:
         boxstyle="round,pad=0.001,rounding_size=0.002",
         facecolor=t["badge_bg"], edgecolor=t["badge_bg"]
     ))
-    # Row 1: Left Title + Set Math (NO overlap possible)
-    ax.text(t_x + 0.016, ty + t_h - 0.022, t["tier_header_left"],
-            ha="left", va="center", fontsize=6.8, fontweight="bold", color=t["clr"])
-    # Row 1: Right Operational Rate
-    ax.text(t_x + t_w - 0.014, ty + t_h - 0.022, t["tier_header_right"],
+    # Row 1: Header Left
+    ax.text(t_x + 0.016, ty + t_h - 0.022, t["header_left"],
+            ha="left", va="center", fontsize=6.6, fontweight="bold", color=t["clr"])
+    # Row 1: Header Right -> MASSIVE GAP (> 1.6 to 2.1 INCHES)
+    ax.text(t_x + t_w - 0.014, ty + t_h - 0.022, t["header_right"],
             ha="right", va="center", fontsize=6.2, fontweight="bold", color=t["clr"])
 
-    # Row 2: Immediate Action
-    ax.text(t_x + 0.016, ty + t_h - 0.052, t["action"],
-            ha="left", va="center", fontsize=6.0, fontweight="bold", color="#0f172a")
+    # Row 2: Prediction Set Math & Immediate Action
+    ax.text(t_x + 0.016, ty + t_h - 0.052, t["row2"],
+            ha="left", va="center", fontsize=5.8, fontweight="bold", color="#0f172a")
 
     # Row 3: Description & Protocols
-    ax.text(t_x + 0.016, ty + 0.020, t["desc"],
-            ha="left", va="center", fontsize=5.5, color="#475569")
+    ax.text(t_x + 0.016, ty + 0.020, t["row3"],
+            ha="left", va="center", fontsize=5.3, color="#475569")
 
     # Connecting Arrow from Diamond to Tier Card
     ax.annotate("", xy=(t_x - 0.004, t["arrow_target"]), xytext=(diam_x + dw, diam_y),
@@ -386,7 +384,6 @@ for col in cols:
         boxstyle="round,pad=0.002,rounding_size=0.003",
         facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.6
     ))
-    # 4 SEPARATE, EXPLICIT, UNAMBIGUOUS VERTICAL LINES:
     ax.text(cx + cw / 2, cy + ch - 0.018, col["title"],
             ha="center", va="center", fontsize=6.2, fontweight="bold", color=col["color"])
     ax.text(cx + cw / 2, cy + ch - 0.040, col["stat"],
@@ -395,6 +392,7 @@ for col in cols:
             ha="center", va="center", fontsize=5.3, color="#475569")
     ax.text(cx + cw / 2, cy + ch - 0.080, col["line2"],
             ha="center", va="center", fontsize=5.3, color="#475569")
+
 
 save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"], pad_inches=0.03)
 

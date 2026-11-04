@@ -1,6 +1,17 @@
 \chapter{Empirical Evaluation, Benchmarking \& Experimental Campaigns}
 \label{ch:experiments}
 
+\begin{takeawaybox}{Chapter 7: Master Benchmark Campaigns \& Empirical Verification}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item \textbf{Master Benchmark Suite:} 14 financial transaction networks, 9,534,980 entities, 9,528,355 transactions, and 13 published baselines across public crypto and commercial banking rails.
+  \item \textbf{SOTA Superiority:} Achieves 91.42\% F1 on Elliptic-v1, 99.10\% on Elliptic-v2, and 68.05\% macro F1 globally ($p < 0.001$ via Wilcoxon signed-rank tests with Holm-Bonferroni correction).
+  \item \textbf{Factorial Ablations:} Stepwise progression and leave-one-out ablations isolate the precise marginal gain of each module, with GraphSMOTE and Edge-Gating contributing $+32.1\%$ and $+18.4\%$ F1.
+  \item \textbf{Camouflage \& Cold-Start Robustness:} Retains 86.4\% F1 under 50\% injected camouflage links; evidence-adaptive fusion yields 89.60\% F1 on zero-degree cold-start entities.
+  \item \textbf{Production SLAs:} Delivers 0.45\,ms Fast-Path P99 latency and 31,200 tx/sec throughput, meeting Tier-1 core-banking clearance requirements.
+\end{itemize}
+\end{takeawaybox}
+
+
 \section{Master Benchmark Suite \& Experimental Protocol}
 To comprehensively evaluate C-STGB without benchmark overfitting, we construct the largest multi-domain financial crime benchmark to date, spanning \textbf{14 distinct datasets} across four architectural archetypes: (1) Public Blockchains, (2) Multi-Bank Fiat Rails, (3) Synthetic Typology Simulators, and (4) High-Velocity Card Fraud Streams.
 
@@ -8,7 +19,7 @@ Table~\ref{tab:master_dataset_profiles} provides the structural characteristics 
 
 \begin{table}[htbp]
 \centering
-\caption{Comprehensive Structural Profiles and Extreme Class Skew Distributions across All 14 Benchmark Networks.}
+\caption[Comprehensive Structural Profiles across 14 Financial Networks]{Comprehensive Structural Profiles and Extreme Class Skew Distributions across All 14 Benchmark Networks.}
 \label{tab:master_dataset_profiles}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccccc}
@@ -44,7 +55,7 @@ Card Fraud Streams & \texttt{cc\_transactions}~\cite{dalpozzolo2018credit} & Poi
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_class_imbalance_log.pdf}
-\caption{Extreme class skew distribution (Illicit Ratio $\pi$, $\log_{10}$ scale) across all 14 evaluated financial networks, highlighting extreme minority imbalance down to $0.05\%$.}
+\caption[Extreme Class Skew Distribution across 14 Benchmarks]{Extreme class skew distribution (Illicit Ratio $\pi$, $\log_{10}$ scale) across all 14 evaluated financial networks, highlighting extreme minority imbalance down to $0.05\%$.}
 \label{fig:ch7_class_imbalance_log}
 \end{figure}
 
@@ -54,7 +65,7 @@ Table~\ref{tab:dataset_licenses} details the formal licensing, public repositori
 \begin{table}[htbp]
 \centering
 \small
-\caption{Dataset Provenance, Open Academic Licenses, and Permanent Repository Records.}
+\caption[Dataset Provenance and Open Academic Licenses]{Dataset Provenance, Open Academic Licenses, and Permanent Repository Records.}
 \label{tab:dataset_licenses}
 \begin{tabularx}{\textwidth}{lllcX}
 \toprule
@@ -78,7 +89,7 @@ Table~\ref{tab:dataset_licenses} details the formal licensing, public repositori
 \begin{table}[htbp]
 \centering
 \small
-\caption{Comprehensive Compute Budget, Hardware Specifications, and Environmental Footprint.}
+\caption[Comprehensive Compute Budget and Hardware Specifications]{Comprehensive Compute Budget, Hardware Specifications, and Environmental Footprint.}
 \label{tab:compute_budget}
 \begin{tabularx}{\textwidth}{llcX}
 \toprule
@@ -110,7 +121,7 @@ All evaluations are repeated across \textbf{5 independent random seeds} (42, 101
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig_temporal_split.pdf}
-\caption{Zero-leakage 4-way chronological dataset partitioning timeline: 60\% Training ($\mathcal{D}_{\text{train}}$), 10\% Validation ($\mathcal{D}_{\text{val}}$), 10\% Calibration ($\mathcal{D}_{\text{cal}}$), and 20\% Out-of-Time Forward Testing ($\mathcal{D}_{\text{test}}$).}
+\caption[Zero-Leakage 4-Way Chronological Dataset Split Timeline]{Zero-leakage 4-way chronological dataset partitioning timeline: 60\% Training ($\mathcal{D}_{\text{train}}$), 10\% Validation ($\mathcal{D}_{\text{val}}$), 10\% Calibration ($\mathcal{D}_{\text{cal}}$), and 20\% Out-of-Time Forward Testing ($\mathcal{D}_{\text{test}}$).}
 \label{fig:ch7_temporal_split}
 \end{figure}
 
@@ -128,7 +139,7 @@ To address baseline coverage for proprietary industrial architectures whose comp
 \begin{table}[htbp]
 \centering
 \small
-\caption{Comparative Performance on Elliptic-v1 against Reported Literature SOTA Baselines.}
+\caption[Comparative Performance on Elliptic-v1 vs. Literature Baselines]{Comparative Performance on Elliptic-v1 against Reported Literature SOTA Baselines.}
 \label{tab:sota_reported_comparison}
 \begin{tabularx}{\textwidth}{llccX}
 \toprule
@@ -151,7 +162,7 @@ XGBoost (Native Features) & Native Tabular Baseline & $88.35 \pm 0.45\%$ & $0.89
 \begin{table}[htbp]
 \centering
 \small
-\caption{Overall Benchmark Performance Summary and Mean Rank across All 14 Financial Networks (Contrasting 11 Model Families).}
+\caption[Overall Performance Summary and Mean Rank across 14 Networks]{Overall Benchmark Performance Summary and Mean Rank across All 14 Financial Networks (Contrasting 11 Model Families).}
 \label{tab:master_baseline_summary}
 \begin{tabular}{llccccc}
 \toprule
@@ -180,7 +191,7 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.9$ & $8.40$ & $29.5\%
 \begin{table}[htbp]
 \centering
 \small
-\caption{Grouped Performance Matrix: Public Crypto Ledgers vs.\ Commercial Multi-Bank Rails and Simulators (Macro F1 / PR-AUC).}
+\caption[Grouped Performance Matrix: Crypto Ledgers vs. Multi-Bank Rails]{Grouped Performance Matrix: Public Crypto Ledgers vs.\ Commercial Multi-Bank Rails and Simulators (Macro F1 / PR-AUC).}
 \label{tab:grouped_baseline_results}
 \setlength{\tabcolsep}{6pt}
 \begin{tabularx}{\textwidth}{lXXX}
@@ -213,7 +224,7 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.9$ & $8.40$ & $29.5\%
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_critical_difference_lollipop.pdf}
-\caption{Statistical significance and archetype-level performance synthesis across all 14 benchmark networks: (a) Wilcoxon-Holm Critical Difference (CD) rank diagram at significance level $\alpha=0.05$ ($\text{CD}=1.45$), confirming C-STGB (mean rank 1.07) significantly outperforms all deep GNN baselines; (b) Domain-grouped performance comparison across Public Crypto Ledgers (90.53\% F1), Commercial Multi-Bank Rails (59.34\% F1), Bipartite Card Streams (56.48\% F1), and Overall Benchmark Macro Mean (68.05\% F1 vs. 64.76\% XGBoost and 43.76\% TGN).}
+\caption[Statistical Significance and Archetype Performance Synthesis]{Statistical significance and archetype-level performance synthesis across all 14 benchmark networks: (a) Wilcoxon-Holm Critical Difference (CD) rank diagram at significance level $\alpha=0.05$ ($\text{CD}=1.45$), confirming C-STGB (mean rank 1.07) significantly outperforms all deep GNN baselines; (b) Domain-grouped performance comparison across Public Crypto Ledgers (90.53\% F1), Commercial Multi-Bank Rails (59.34\% F1), Bipartite Card Streams (56.48\% F1), and Overall Benchmark Macro Mean (68.05\% F1 vs. 64.76\% XGBoost and 43.76\% TGN).}
 \label{fig:ch7_critical_difference}
 \end{figure}
 
@@ -221,14 +232,14 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.9$ & $8.40$ & $29.5\%
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig7_multi_dataset_radar.pdf}
-\caption{Multi-criteria radar benchmark contrasting C-STGB against competitive tabular, spatial, and imbalanced baselines across PR-AUC, Macro F1, Recall, Imbalance Robustness, Camouflage Retention, and Banking SLA Compliance.}
+\caption[Multi-Criteria Radar Benchmark contrasting C-STGB vs. Baselines]{Multi-criteria radar benchmark contrasting C-STGB against competitive tabular, spatial, and imbalanced baselines across PR-AUC, Macro F1, Recall, Imbalance Robustness, Camouflage Retention, and Banking SLA Compliance.}
 \label{fig:ch7_radar_benchmark}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig1_pr_roc_curves.pdf}
-\caption{Comparative Precision-Recall (PR) and Receiver Operating Characteristic (ROC) frontiers on Elliptic-v1, demonstrating C-STGB's superior area under curve under extreme class skew.}
+\caption[Comparative PR and ROC Frontiers on Elliptic-v1]{Comparative Precision-Recall (PR) and Receiver Operating Characteristic (ROC) frontiers on Elliptic-v1, demonstrating C-STGB's superior area under curve under extreme class skew.}
 \label{fig:ch7_pr_roc_curves}
 \end{figure}
 
@@ -259,7 +270,7 @@ Table~\ref{tab:stepwise_ablation} tracks the performance evolution starting from
 
 \begin{table}[htbp]
 \centering
-\caption{Cumulative Stepwise Architectural Ablation Progression across Three Benchmark Archetypes.}
+\caption[Cumulative Stepwise Architectural Ablation Progression]{Cumulative Stepwise Architectural Ablation Progression across Three Benchmark Archetypes.}
 \label{tab:stepwise_ablation}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccc}
@@ -282,14 +293,14 @@ Table~\ref{tab:stepwise_ablation} tracks the performance evolution starting from
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig3_ablation_component_study.pdf}
-\caption{Stepwise architectural ablation progression across Elliptic-v1, SAML-D, and IBM-AMLSim benchmarks, illustrating cumulative F1 improvements from baseline GCN ($10.33\%$) to full C-STGB ($91.42\%$).}
+\caption[Stepwise Architectural Ablation across Three Benchmark Datasets]{Stepwise architectural ablation progression across Elliptic-v1, SAML-D, and IBM-AMLSim benchmarks, illustrating cumulative F1 improvements from baseline GCN ($10.33\%$) to full C-STGB ($91.42\%$).}
 \label{fig:ch7_ablation_progression}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.88\textwidth]{figures/fig_ablation_waterfall.pdf}
-\caption{Stepwise cumulative ablation waterfall progression, quantifying the marginal Macro F1 score uplift contributed by each sequential architectural module from baseline GCN ($10.33\%$) to the full C-STGB framework ($91.42\%$).}
+\caption[Stepwise Cumulative Ablation Waterfall Progression]{Stepwise cumulative ablation waterfall progression, quantifying the marginal Macro F1 score uplift contributed by each sequential architectural module from baseline GCN ($10.33\%$) to the full C-STGB framework ($91.42\%$).}
 \label{fig:ch7_ablation_waterfall}
 \end{figure}
 
@@ -298,7 +309,7 @@ Table~\ref{tab:leave_one_out} isolates the marginal performance drop when indivi
 
 \begin{table}[htbp]
 \centering
-\caption{Leave-One-Out Component Removal Ablation on Elliptic-v1 ($N=5$ Seeds).}
+\caption[Leave-One-Out Component Removal Ablation on Elliptic-v1]{Leave-One-Out Component Removal Ablation on Elliptic-v1 ($N=5$ Seeds).}
 \label{tab:leave_one_out}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccc}
@@ -321,7 +332,7 @@ Table~\ref{tab:leave_one_out} isolates the marginal performance drop when indivi
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig_leave_one_out_impact.pdf}
-\caption{Leave-one-out component ablation impact on Elliptic-v1, showing marginal degradation in percentage points when individual architectural mechanisms are deactivated.}
+\caption[Leave-One-Out Component Ablation Impact Waterfall]{Leave-one-out component ablation impact on Elliptic-v1, showing marginal degradation in percentage points when individual architectural mechanisms are deactivated.}
 \label{fig:ch7_leave_one_out}
 \end{figure}
 
@@ -330,7 +341,7 @@ To evaluate the individual explanatory power of each dimension within the univer
 
 \begin{table}[htbp]
 \centering
-\caption{Leave-One-Feature-Out Sensitivity Analysis on 12-D Invariants $\mathbf{z}_{\text{inv}}$ (Minority F1-Score (\%) Ranked Descending by Average Impact).}
+\caption[Leave-One-Feature-Out Sensitivity Analysis on 12-D Invariants]{Leave-One-Feature-Out Sensitivity Analysis on 12-D Invariants $\mathbf{z}_{\text{inv}}$ (Minority F1-Score (\%) Ranked Descending by Average Impact).}
 \label{tab:invariant_sensitivity}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccc}
@@ -362,7 +373,7 @@ To evaluate the individual explanatory power of each dimension within the univer
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_invariant_importance_tornado.pdf}
-\caption{Factorial importance tornado ranking of the 12 canonical invariants $\mathbf{z}_{\text{inv}}$, quantifying minority F1 degradation across public crypto (Elliptic-v1) and inter-bank wire meshes (IBM-AMLSim HI).}
+\caption[Factorial Importance Tornado Ranking of 12-D Invariants]{Factorial importance tornado ranking of the 12 canonical invariants $\mathbf{z}_{\text{inv}}$, quantifying minority F1 degradation across public crypto (Elliptic-v1) and inter-bank wire meshes (IBM-AMLSim HI).}
 \label{fig:ch7_invariant_tornado}
 \end{figure}
 
@@ -371,7 +382,7 @@ Table~\ref{tab:ch7_conformal} evaluates the operational efficiency of the 3-Tier
 
 \begin{table}[htbp]
 \centering
-\caption{Class-Conditional Conformal Risk Control (CRC) Triage Performance across All 14 Benchmarks at $\alpha = 0.01$.}
+\caption[Class-Conditional Conformal Risk Control Performance]{Class-Conditional Conformal Risk Control (CRC) Triage Performance across All 14 Benchmarks at $\alpha = 0.01$.}
 \label{tab:ch7_conformal}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccc}
@@ -406,7 +417,7 @@ Table~\ref{tab:adversarial_benchmarks} reports the relative F1-score retention u
 
 \begin{table}[htbp]
 \centering
-\caption{Adversarial Topological Robustness and Relative F1-Score Retention under Camouflage Attacks on Elliptic-v1.}
+\caption[Adversarial Topological Robustness under Camouflage Attacks]{Adversarial Topological Robustness and Relative F1-Score Retention under Camouflage Attacks on Elliptic-v1.}
 \label{tab:adversarial_benchmarks}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccc}
@@ -428,21 +439,21 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig9_adversarial_camouflage_robustness.pdf}
-\caption{Adversarial camouflage link robustness on Elliptic-v1 across increasing injected camouflage link ratios ($\rho \in [0.0, 0.80]$), demonstrating C-STGB's superior F1-score retention compared to baseline spatial and heterogeneous GNNs.}
+\caption[Adversarial Camouflage Link Robustness on Elliptic-v1]{Adversarial camouflage link robustness on Elliptic-v1 across increasing injected camouflage link ratios ($\rho \in [0.0, 0.80]$), demonstrating C-STGB's superior F1-score retention compared to baseline spatial and heterogeneous GNNs.}
 \label{fig:ch7_camouflage_robustness}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig_edge_gate_distribution.pdf}
-\caption{Empirical distribution of learnable edge-trust gating weights $\hat{g}_{ij}$ on \texttt{elliptic\_v1} under adversarial camouflage injection. Spurious camouflage edges are suppressed below the safety floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial chaff connections while preserving authentic transaction conduits.}
+\caption[Empirical Distribution of Learnable Edge-Trust Gating Weights]{Empirical distribution of learnable edge-trust gating weights $\hat{g}_{ij}$ on \texttt{elliptic\_v1} under adversarial camouflage injection. Spurious camouflage edges are suppressed below the safety floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial chaff connections while preserving authentic transaction conduits.}
 \label{fig:ch7_edge_gate_distribution}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig2_tsne_manifold_separation.pdf}
-\caption{t-SNE latent manifold visualization: (a) Baseline GNN Layer 2 representation suffering from severe feature over-smoothing across high-degree hubs; and (b) C-STGB fused manifold exhibiting clear separation between illicit smurfing clusters and benign merchant traffic.}
+\caption[t-SNE Latent Manifold Visualization: Baseline vs. C-STGB]{t-SNE latent manifold visualization: (a) Baseline GNN Layer 2 representation suffering from severe feature over-smoothing across high-degree hubs; and (b) C-STGB fused manifold exhibiting clear separation between illicit smurfing clusters and benign merchant traffic.}
 \label{fig:ch7_tsne_separation}
 \end{figure}
 
@@ -450,7 +461,7 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_zero_shot_transfer_heatmap.pdf}
-\caption{Zero-shot cross-domain generalization under completely frozen neural backbones ($\eta=0$) across eight source-target dataset pairs. Relying purely on the 12-D canonical invariant representation space, C-STGB retains an average transfer F1 of 69.98\% (approaching the 82.33\% target-tuned upper bound), decisively outperforming Vanilla HGT (19.51\% F1) and XGBoost (54.06\% F1).}
+\caption[Zero-Shot Cross-Domain Generalization on Frozen Weights]{Zero-shot cross-domain generalization under completely frozen neural backbones ($\eta=0$) across eight source-target dataset pairs. Relying purely on the 12-D canonical invariant representation space, C-STGB retains an average transfer F1 of 69.98\% (approaching the 82.33\% target-tuned upper bound), decisively outperforming Vanilla HGT (19.51\% F1) and XGBoost (54.06\% F1).}
 \label{fig:ch7_zero_shot_transfer}
 \end{figure}
 
@@ -458,7 +469,7 @@ Table~\ref{tab:zero_shot_transfer} evaluates zero-shot cross-network generalizat
 
 \begin{sidewaystable}[htbp]
 \centering
-\caption{Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix under Completely Frozen Neural Backbones ($\eta=0$).}
+\caption[Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix]{Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix under Completely Frozen Neural Backbones ($\eta=0$).}
 \label{tab:zero_shot_transfer}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llcccc}
@@ -487,14 +498,14 @@ Figure~\ref{fig:streaming_latency} profiles the empirical latency distribution a
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig_streaming_latency_waterfall.pdf}
-\caption{Empirical streaming latency distribution (P50, P90, P99) for Fast-Path cached inference ($0.45\text{ ms}$) versus Full GNN inference ($2.10\text{ ms}$), confirming compliance with sub-10 ms enterprise SLAs.}
+\caption[Empirical Streaming Latency Distribution for Fast-Path Inference]{Empirical streaming latency distribution (P50, P90, P99) for Fast-Path cached inference ($0.45\text{ ms}$) versus Full GNN inference ($2.10\text{ ms}$), confirming compliance with sub-10 ms enterprise SLAs.}
 \label{fig:streaming_latency}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.88\textwidth]{figures/fig_fastpath_latency_comparison.pdf}
-\caption{Comparative latency profile contrasting C-STGB Fast-Path cached inference ($0.45\text{ ms}$), Full GNN spatio-temporal inference ($2.10\text{ ms}$), and the strict Tier-1 banking real-time payment authorization SLA ($10.0\text{ ms}$).}
+\caption[Comparative Latency Profile: Fast-Path vs. SOTA Dynamic GNNs]{Comparative latency profile contrasting C-STGB Fast-Path cached inference ($0.45\text{ ms}$), Full GNN spatio-temporal inference ($2.10\text{ ms}$), and the strict Tier-1 banking real-time payment authorization SLA ($10.0\text{ ms}$).}
 \label{fig:ch7_fastpath_latency}
 \end{figure}
 
@@ -502,7 +513,7 @@ Table~\ref{tab:hardware_latencies} reports exact wall-clock training and inferen
 
 \begin{table}[htbp]
 \centering
-\caption{Compute Hardware Specifications, Training Wall-Clock Times, and Streaming Latency Metrics across Benchmarks.}
+\caption[Hardware Specifications, Training Times, and Streaming Latency]{Compute Hardware Specifications, Training Wall-Clock Times, and Streaming Latency Metrics across Benchmarks.}
 \label{tab:hardware_latencies}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccc}
@@ -526,7 +537,7 @@ This chapter delivered the comprehensive experimental campaign validating C-STGB
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_all_datasets_pr_curves.pdf}
-\caption{Comprehensive 14-dataset small-multiples Precision-Recall (PR) curves contrasting C-STGB against competitive gradient boosted decision trees (XGBoost, CatBoost) and spatial/dynamic GNN baselines across all evaluated public crypto, multi-bank wire, and mobile fintech networks. Across all 14 datasets, C-STGB dominates the precision-recall envelope, securing a macro-average PR-AUC of 0.6974 under extreme class skew.}
+\caption[Comprehensive 14-Dataset Precision-Recall Curves]{Comprehensive 14-dataset small-multiples Precision-Recall (PR) curves contrasting C-STGB against competitive gradient boosted decision trees (XGBoost, CatBoost) and spatial/dynamic GNN baselines across all evaluated public crypto, multi-bank wire, and mobile fintech networks. Across all 14 datasets, C-STGB dominates the precision-recall envelope, securing a macro-average PR-AUC of 0.6974 under extreme class skew.}
 \label{fig:ch7_all_pr_curves}
 \end{figure}
 

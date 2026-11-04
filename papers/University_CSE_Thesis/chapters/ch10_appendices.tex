@@ -7,7 +7,7 @@ To facilitate cross-disciplinary clarity across academic examiners, quantitative
 \begin{table}[htbp]
 \centering
 \small
-\caption{Comprehensive Cross-Disciplinary Glossary of Financial Crime, Graph ML, and Conformal Risk Terminology.}
+\caption[Cross-Disciplinary Financial Crime and Graph ML Glossary]{Comprehensive Cross-Disciplinary Glossary of Financial Crime, Graph ML, and Conformal Risk Terminology.}
 \label{app_tab:glossary}
 \begin{tabularx}{\textwidth}{lX}
 \toprule
@@ -66,7 +66,7 @@ Table~\ref{app_tab:all_schemas} details the full attribute mapping specification
 
 \begin{table}[htbp]
 \centering
-\caption{Comprehensive Ingestion Schema Mappings across All 14 Evaluated Financial Networks.}
+\caption[Universal Ingestion Schema Mappings across 14 Financial Networks]{Comprehensive Ingestion Schema Mappings across All 14 Evaluated Financial Networks.}
 \label{app_tab:all_schemas}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccc}
@@ -165,7 +165,7 @@ In compliance with international open-science reproducibility standards, Table~\
 \begin{table}[htbp]
 \centering
 \small
-\caption{Comprehensive Open-Science Empirical Reproducibility Checklist.}
+\caption[Open-Science Empirical Reproducibility Checklist]{Comprehensive Open-Science Empirical Reproducibility Checklist.}
 \label{app_tab:reproducibility}
 \begin{tabularx}{\textwidth}{llX}
 \toprule
@@ -188,14 +188,14 @@ All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_hyperparam_sensitivity_4panel.pdf}
-\caption{Four-panel hyperparameter sensitivity analysis of the C-STGB framework: (a) Macro F1 stability across edge-trust floor thresholds $\delta_{\text{floor}} \in [0.02, 0.30]$, peaking at $\delta_{\text{floor}}=0.10$; (b) Precision versus recall frontier across regulatory asymmetric cost ratios $C_{\text{FN}}/C_{\text{FP}} \in [5, 30]$, stabilizing at the calibrated 15:1 ratio; (c) Minority F1-score and inference latency scaling across neighborhood degree caps $K \in [5, 30]$, establishing $K=15$ as the optimal Pareto operating knee ($0.45$\,ms latency); (d) Finite-sample empirical coverage reliability under non-stationary temporal drift across Adaptive Conformal Inference (ACI) step sizes $\gamma \in [0.001, 0.05]$.}
+\caption[Four-Panel Hyperparameter Sensitivity Analysis]{Four-panel hyperparameter sensitivity analysis of the C-STGB framework: (a) Macro F1 stability across edge-trust floor thresholds $\delta_{\text{floor}} \in [0.02, 0.30]$, peaking at $\delta_{\text{floor}}=0.10$; (b) Precision versus recall frontier across regulatory asymmetric cost ratios $C_{\text{FN}}/C_{\text{FP}} \in [5, 30]$, stabilizing at the calibrated 15:1 ratio; (c) Minority F1-score and inference latency scaling across neighborhood degree caps $K \in [5, 30]$, establishing $K=15$ as the optimal Pareto operating knee ($0.45$\,ms latency); (d) Finite-sample empirical coverage reliability under non-stationary temporal drift across Adaptive Conformal Inference (ACI) step sizes $\gamma \in [0.001, 0.05]$.}
 \label{fig:app_hyperparam_sensitivity}
 \end{figure}
 
 
 \begin{table}[htbp]
 \centering
-\caption{Hyperparameter Search Space and Best Configurations for C-STGB and Key Baselines.}
+\caption[Hyperparameter Search Space and Optimal Configurations]{Hyperparameter Search Space and Best Configurations for C-STGB and Key Baselines.}
 \label{app_tab:hyperparam_grid}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llcc}
@@ -230,7 +230,7 @@ Table~\ref{app_tab:master_baseline_results} reports the full multi-baseline benc
 
 \begin{sidewaystable}[htbp]
 \centering
-\caption{Comprehensive Multi-Baseline Performance Matrix across All 14 Financial Networks: Macro F1-Score (\%) and PR-AUC with Validation-Tuned Decision Thresholds $\tau^*$.}
+\caption[Comprehensive Multi-Baseline Benchmark Matrix across 14 Networks]{Comprehensive Multi-Baseline Performance Matrix across All 14 Financial Networks: Macro F1-Score (\%) and PR-AUC with Validation-Tuned Decision Thresholds $\tau^*$.}
 \label{app_tab:master_baseline_results}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccccccccc}
@@ -298,42 +298,42 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} il
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/01_surveillance_desk.png}
-\caption{Real-Time Surveillance Desk and Alert Triage Queue, displaying streaming ingestion telemetry, non-conformity drift distribution, and class-conditional conformal triage tiers ($\Gamma(u)$).}
+\caption[Real-Time Surveillance Desk and Live Alert Triage Queue Console]{Real-Time Surveillance Desk and Alert Triage Queue, displaying streaming ingestion telemetry, non-conformity drift distribution, and class-conditional conformal triage tiers ($\Gamma(u)$).}
 \label{fig:app_surveillance_desk}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/02_network_topology.png}
-\caption{3D Multi-Hop Counterparty Forensic Graph Studio (Three.js WebGL rendering) visualizing directed laundering conduits with real-time edge-trust camouflage filtering ($\hat{g}_{ij} \ge 0.10$).}
+\caption[3D Multi-Hop Counterparty Forensic Graph Studio Console]{3D Multi-Hop Counterparty Forensic Graph Studio (Three.js WebGL rendering) visualizing directed laundering conduits with real-time edge-trust camouflage filtering ($\hat{g}_{ij} \ge 0.10$).}
 \label{fig:app_graph_studio}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/03_case_management.png}
-\caption{Autonomous Multi-Agent Case Management Desk, illustrating autonomous SAR narrative synthesis, Grounds of Suspicion breakdown, and SR 11-7 / SR 21-8 cryptographic Merkle tree audit logging.}
+\caption[Autonomous Multi-Agent Case Management Desk Console]{Autonomous Multi-Agent Case Management Desk, illustrating autonomous SAR narrative synthesis, Grounds of Suspicion breakdown, and SR 11-7 / SR 21-8 cryptographic Merkle tree audit logging.}
 \label{fig:app_case_management}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/04_case_detail_four_eyes.png}
-\caption{Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console: displaying dual-investigator concurrence workflows, calibrated non-conformity scores, and counterfactual recourse action paths.}
+\caption[Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console]{Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console: displaying dual-investigator concurrence workflows, calibrated non-conformity scores, and counterfactual recourse action paths.}
 \label{fig:app_case_detail_four_eyes}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/05_multi_agent_sar.png}
-\caption{Multi-Agent SAR Narrative Generation Console: displaying real-time collaborative draft synthesis across the 4-agent swarm, FinCEN Form 111 XML validation, and Grounds of Suspicion breakdown.}
+\caption[Multi-Agent SAR Narrative Generation Console]{Multi-Agent SAR Narrative Generation Console: displaying real-time collaborative draft synthesis across the 4-agent swarm, FinCEN Form 111 XML validation, and Grounds of Suspicion breakdown.}
 \label{fig:app_multi_agent_sar}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/06_model_governance_drift.png}
-\caption{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 11-7 / SR 21-8.}
+\caption[Model Governance and Drift Monitoring Console]{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 11-7 / SR 21-8.}
 \label{fig:app_model_governance_drift}
 \end{figure}
 
@@ -372,7 +372,7 @@ The complete inference state, model weights hash, and decision tree are hashed i
 \vspace{0.2cm}
 \end{minipage}%
 }
-\caption{End-to-end operator investigation lifecycle enforced by the Intelligent-AML platform matching Eq.~(3.13)--(3.16).}
+\caption[End-to-End Enterprise Operator Investigation Lifecycle]{End-to-end operator investigation lifecycle enforced by the Intelligent-AML platform matching Eq.~(3.13)--(3.16).}
 \label{app_fig:workflow_lifecycle}
 \end{figure}
 

@@ -1,6 +1,16 @@
 \chapter{Introduction \& Problem Formulation}
 \label{ch:introduction}
 
+\begin{takeawaybox}{Chapter 1: Key Contributions \& Defense Highlights}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item \textbf{The Global Challenge:} Transnational financial crime launders \$800B--\$2T annually (2\%--5\% of global GDP), while legacy static rule engines trigger crippling $>98\%$ false positive rates.
+  \item \textbf{Theoretical Failure Modes:} Identifies the five structural failure modes of standard GNNs: long-dwell hibernation evasion, adversarial camouflage, extreme class imbalance ($<0.05\%$), topological cold-start blindness, and uncalibrated black-box alert flooding.
+  \item \textbf{Proposed Solution (C-STGB):} Introduces Conformal Spatio-Temporal GraphBoost, uniting continuous harmonic temporal attention, context-aware edge-trust gating, latent GraphSMOTE, canonical physical mass-flow invariants, and distribution-free conformal risk control.
+  \item \textbf{Empirical Milestones:} 91.42\% F1 on Elliptic-v1, 99.10\% on Elliptic-v2, 0.45\,ms Fast-Path P99 latency, and a 99.51\% reduction in human analyst compliance queues.
+\end{itemize}
+\end{takeawaybox}
+
+
 \section{Global Economic Impact \& The Multi-Trillion-Dollar Laundering Challenge}
 Money laundering is an existential threat to the integrity, stability, and sovereignty of the global financial system. According to authoritative estimates by the United Nations Office on Drugs and Crime (UNODC), the annual volume of illicit capital laundered globally accounts for between \textbf{$2.0\%$ and $5.0\%$ of global Gross Domestic Product (GDP)}, representing an astronomical annual illicit flow of \textbf{$\$800\,\text{billion}$ to $\$2.0\,\text{trillion}$ USD}~\cite{weber2019anti}. 
 
@@ -36,7 +46,7 @@ With the rise of decentralized finance (DeFi), automated cross-chain bridges, an
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_benign_vs_smurfing_topology.pdf}
-\caption{Topological contrast between legitimate commercial banking flows and structured money laundering syndicates: (a) Benign retail merchant star topology with high inbound degree ($\deg \approx 85$) but minimal outbound forwarding ($\tilde{\Phi}_{\text{flow}} \approx 0.02$); (b) Multi-stage adversarial laundering syndicate exhibiting fan-out smurfing from placement source S0 ($485\text{k}$), circular wash loops across layering accounts (L1--L3), and eventual integration into offshore sink C4 ($\tilde{\Phi}_{\text{flow}} \approx 0.994$, Hawkes burst arrival $\lambda_u = 74.2$).}
+\caption[Topological Contrast Between Legitimate Flows and Smurfing Syndicates]{Topological contrast between legitimate commercial banking flows and structured money laundering syndicates: (a) Benign retail merchant star topology with high inbound degree ($\deg \approx 85$) but minimal outbound forwarding ($\tilde{\Phi}_{\text{flow}} \approx 0.02$); (b) Multi-stage adversarial laundering syndicate exhibiting fan-out smurfing from placement source S0 ($485\text{k}$), circular wash loops across layering accounts (L1--L3), and eventual integration into offshore sink C4 ($\tilde{\Phi}_{\text{flow}} \approx 0.994$, Hawkes burst arrival $\lambda_u = 74.2$).}
 \label{fig:ch1_topology_contrast}
 \end{figure}
 
@@ -62,7 +72,7 @@ To address these industrial challenges, this thesis develops \textbf{C-STGB} (\u
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig1_operational_architecture_flowchart.pdf}
-\caption{Operational architecture and real-time triage dataflow of the C-STGB financial surveillance platform: (1) Streaming transaction ingestion via Apache Arrow and DuckDB with 12-D physical mass-flow invariants; (2) C-STGB neural core combining continuous-time 3-band harmonic temporal attention, learnable edge-trust gating ($\hat{g}_{ij} \ge \delta_{\text{floor}}$), typology-clustered latent GraphSMOTE, evidence-adaptive fusion ($\alpha_u$), and cost-sensitive Bayes risk calibration ($\tau^* = 0.18$); and (3) Class-conditional Conformal Risk Control (CRC) decision diamond ($1-\alpha \ge 99\%$) routing streaming transactions across 3 operational tiers (Tier 1 High-Risk Quarantine with SHA-256 Merkle audit receipts, Tier 2 Human Compliance Review Desk, Tier 3 Automated Straight-Through Clearing) satisfying a 0.45\,ms Fast-Path SLA.}
+\caption[C-STGB Operational Architecture and Real-Time Conformal Triage Dataflow]{Operational architecture and real-time triage dataflow of the C-STGB financial surveillance platform: (1) Streaming transaction ingestion via Apache Arrow and DuckDB with 12-D physical mass-flow invariants; (2) C-STGB neural core combining continuous-time 3-band harmonic temporal attention, learnable edge-trust gating ($\hat{g}_{ij} \ge \delta_{\text{floor}}$), typology-clustered latent GraphSMOTE, evidence-adaptive fusion ($\alpha_u$), and cost-sensitive Bayes risk calibration ($\tau^* = 0.18$); and (3) Class-conditional Conformal Risk Control (CRC) decision diamond ($1-\alpha \ge 99\%$) routing streaming transactions across 3 operational tiers (Tier 1 High-Risk Quarantine with SHA-256 Merkle audit receipts, Tier 2 Human Compliance Review Desk, Tier 3 Automated Straight-Through Clearing) satisfying a 0.45\,ms Fast-Path SLA.}
 \label{fig:ch1_operational_flowchart}
 \end{figure}
 

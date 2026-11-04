@@ -1,6 +1,16 @@
 \chapter{Literature Review \& Theoretical Foundations}
 \label{ch:literature}
 
+\begin{takeawaybox}{Chapter 2: Theoretical Foundations \& Literature Taxonomy}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item \textbf{Methodological Taxonomy:} Synthesizes 25 foundational publications across tabular gradient boosters, spatial GNNs, continuous dynamic GNNs, and adversarial camouflage filters.
+  \item \textbf{Theoretical Expressiveness Bounds:} Analyzes Weisfeiler-Lehman (1-WL) graph expressiveness, Dirichlet energy over-smoothing under commercial merchant hubs, and marked Hawkes self-exciting point processes.
+  \item \textbf{Distribution-Free Uncertainty:} Formalizes split conformal prediction and class-conditional non-conformity quantiles under non-stationary distribution drift.
+  \item \textbf{Architectural Voids Resolved:} Identifies why no single existing framework simultaneously resolves multi-scale temporal decay, topological camouflage, extreme class imbalance, and strict regulatory auditability.
+\end{itemize}
+\end{takeawaybox}
+
+
 \section{Introduction and Historical Evolution}
 The automation of Anti-Money Laundering (AML) surveillance has evolved through three distinct algorithmic epochs: (1) deterministic rule-based expert systems (1970s--2000s), (2) tabular machine learning and gradient boosted decision trees (2010s), and (3) geometric deep learning and graph neural networks (2019--present). This chapter systematically reviews the theoretical foundations, architectural mechanisms, and operational limitations of these paradigms, positioning C-STGB within the state-of-the-art literature.
 
@@ -87,6 +97,14 @@ However, standard GraphSMOTE exhibits three major pathologies in financial crime
 \end{enumerate}
 
 \section{Adversarial Camouflage and Robust Fraud Detection}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig21_adversarial_camouflage_topology.pdf}
+\caption[Adversarial Camouflage Topology and Edge-Trust Filter Pruning]{Topological impact of adversarial camouflage and edge-trust pruning in financial networks: (a) Raw camouflaged transaction graph where an illicit laundering cycle (C4) deliberately injects over 50 spurious edges to high-degree legitimate merchant hubs to induce feature over-smoothing; (b) C-STGB context-aware edge-trust gating ($\hat{g}_{ij} \ge 0.92$), successfully filtering out 65.9\% of adversarial camouflage chaff to isolate the true laundering wash cycle.}
+\label{fig:ch2_camouflage_topology}
+\end{figure}
+
 Laundering syndicates actively obfuscate transaction patterns by interweaving illicit transfers with high-degree merchant accounts and utility hubs. To counter this, specialized GNNs have introduced camouflage-filtering mechanisms. CARE-GNN~\cite{dou2020enhancing} utilizes reinforcement learning to select informative neighbors across multi-relational graphs. FraudGate~\cite{liu2021overcoming} deploys multi-view gating to suppress feature noise. More recently, domain-specific architectures such as H$^2$IDE~\cite{dou2020enhancing}, CamFD, and Group-Aware GNN have explored heterophily-aware aggregation and homophily-preserving clustering. 
 
 While open-source weights and reproduction harnesses for proprietary architectures (H$^2$IDE, CamFD, Group-Aware GNN) are not publicly released for full multi-dataset replication, Section~\ref{sec:ch7_sota_comparison} directly contrasts C-STGB against their published Elliptic-v1 benchmarks (where CamFD reported 85.30\% F1 and H$^2$IDE reported 84.10\% F1, both significantly trailing C-STGB's 91.42\% F1).
@@ -162,7 +180,7 @@ Table~\ref{tab:lit_matrix} presents an exhaustive 25-paper comparative taxonomy 
 \begin{sidewaystable}[htbp]
 \centering
 \small
-\caption{Comprehensive 25-Paper Comparative Taxonomy in Financial Forensics and Graph Machine Learning, Grouped by Methodological Families.}
+\caption[Comprehensive 25-Paper Financial Forensics and Graph ML Taxonomy]{Comprehensive 25-Paper Comparative Taxonomy in Financial Forensics and Graph Machine Learning, Grouped by Methodological Families.}
 \label{tab:lit_matrix}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llcccccc}

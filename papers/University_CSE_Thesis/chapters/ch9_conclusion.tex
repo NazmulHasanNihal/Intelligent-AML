@@ -1,6 +1,16 @@
 \chapter{Conclusion, Limitations \& Future Research Directions}
 \label{ch:conclusion}
 
+\begin{takeawaybox}{Chapter 9: Synthesis, Limitations \& Enterprise Roadmap}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item \textbf{Scientific Synthesis:} Establishes C-STGB as the first mathematically guaranteed, real-time, explainable graph learning system for high-velocity financial crime surveillance.
+  \item \textbf{26-Week Deployment Roadmap:} Details a phased production integration for Tier-1 banks (Shadow Ingestion $\rightarrow$ Dual-Run Conformal Pilot $\rightarrow$ Straight-Through Autonomous Surveillance).
+  \item \textbf{Threats to Validity:} Methodically documents five structural boundaries: cross-institutional banking gaps, unobserved dark liquidity, cross-chain bridging, cold-start latency, and adversarial adaptation.
+  \item \textbf{Open Science:} Fully reproducible codebase with open-source benchmarks, container recipes, and pre-trained model weights.
+\end{itemize}
+\end{takeawaybox}
+
+
 \section{Synthesis of Scientific Contributions}
 This dissertation introduced \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost), an end-to-end neuro-symbolic framework designed to overcome the five foundational failure modes of graph representation learning in high-velocity Anti-Money Laundering (AML) surveillance.
 
@@ -52,7 +62,7 @@ To transition C-STGB from research prototype to production core banking infrastr
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_26week_roadmap_gantt.pdf}
-\caption{26-Week Enterprise Integration Roadmap for Tier-1 Banking Core Surveillance across Phase 1 (Shadow), Phase 2 (Pilot), and Phase 3 (STP Production).}
+\caption[26-Week Enterprise Integration Roadmap for Tier-1 Banking]{26-Week Enterprise Integration Roadmap for Tier-1 Banking Core Surveillance across Phase 1 (Shadow), Phase 2 (Pilot), and Phase 3 (STP Production).}
 \label{fig:26week_roadmap_gantt}
 \end{figure}
 
@@ -62,7 +72,7 @@ Table~\ref{tab:regulatory_matrix} synthesizes the direct alignment between C-STG
 \begin{table}[htbp]
 \centering
 \small
-\caption{Global Regulatory Compliance Matrix across Major Statutory Frameworks.}
+\caption[Global Regulatory Compliance Matrix across Statutory Frameworks]{Global Regulatory Compliance Matrix across Major Statutory Frameworks.}
 \label{tab:regulatory_matrix}
 \begin{tabularx}{\textwidth}{p{3.5cm} p{5.0cm} X}
 \toprule
@@ -96,7 +106,7 @@ Table~\ref{tab:limitations_future_work} provides a systematic taxonomy summarizi
 \begin{table}[htbp]
 \centering
 \small
-\caption{Systematic Taxonomy of Architectural Limitations, Operational Threats, Mitigations, and Research Horizons.}
+\caption[Systematic Taxonomy of Architectural Limitations and Mitigations]{Systematic Taxonomy of Architectural Limitations, Operational Threats, Mitigations, and Research Horizons.}
 \label{tab:limitations_future_work}
 \begin{tabularx}{\textwidth}{p{4.2cm}X}
 \toprule
@@ -127,7 +137,7 @@ Table~\ref{tab:threats_validity} consolidates the threats to empirical and const
 \begin{table}[htbp]
 \centering
 \small
-\caption{Consolidated Methodological Threats to Validity and Architectural Mitigations.}
+\caption[Consolidated Methodological Threats to Validity and Mitigations]{Consolidated Methodological Threats to Validity and Architectural Mitigations.}
 \label{tab:threats_validity}
 \begin{tabularx}{\textwidth}{llX}
 \toprule

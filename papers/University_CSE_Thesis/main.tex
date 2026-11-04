@@ -7,7 +7,6 @@
 \usepackage{times}
 \usepackage{pifont}
 \usepackage{pdflscape}
-\usepackage{pifont}
 \usepackage{setspace}
 \onehalfspacing
 
@@ -25,7 +24,71 @@
 \usepackage{rotating}
 \usepackage{xcolor}
 \usepackage{listings}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,skip=8pt}
 \graphicspath{{figures/}{figs/}}
+
+% Modern Callout Boxes & Visual Styling
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Table of Contents & Section Numbering Depth
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+% Professional Running Headers & Footers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyhead[R]{\small\nouppercase{\textit{C-STGB Thesis Monograph}}}
+\fancyfoot[C]{\textbf{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyfoot[C]{\textbf{\thepage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% Chapter Key Takeaway Callout Box
+\newtcolorbox{takeawaybox}[2][]{
+  enhanced,
+  breakable,
+  colback=blue!3!white,
+  colframe=blue!75!black,
+  coltitle=white,
+  fonttitle=\bfseries\sffamily\small,
+  title={#2},
+  arc=2.5mm,
+  boxrule=0.9pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  shadow={0.8mm}{-0.8mm}{0mm}{black!15},
+  #1
+}
+
+% Formal Compliance & Theorem Callout Box
+\newtcolorbox{mandatebox}[2][]{
+  enhanced,
+  breakable,
+  colback=amber!3!white,
+  colframe=orange!80!black,
+  coltitle=white,
+  fonttitle=\bfseries\sffamily\small,
+  title={#2},
+  arc=2.5mm,
+  boxrule=0.9pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  #1
+}
 
 \lstset{
   basicstyle=\ttfamily\scriptsize,
@@ -48,7 +111,15 @@
 
 % Citations & Hyperlinks
 \usepackage{cite}
-\usepackage[hidelinks]{hyperref}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!75!black,
+  citecolor=teal!70!black,
+  urlcolor=blue!75!black,
+  pdftitle={C-STGB: Conformal Spatio-Temporal GraphBoost for High-Velocity Financial Forensics and Compliance Automation},
+  pdfauthor={Md. Nazmul and Musrat Jahan Gungun}
+}
 
 % Theorem Environments
 \newtheorem{theorem}{Theorem}[chapter]
@@ -69,6 +140,7 @@
 % -----------------------------------------------------------------------------
 \input{frontmatter/cover_page}
 \pagenumbering{roman}
+\pagestyle{plain}
 \input{frontmatter/certificate}
 \input{frontmatter/declaration}
 \input{frontmatter/dedication}
@@ -95,6 +167,7 @@
 % Main Chapters (Arabic Numerals)
 % -----------------------------------------------------------------------------
 \pagenumbering{arabic}
+\pagestyle{fancy}
 
 \input{chapters/ch1_introduction}
 \input{chapters/ch2_literature_review}
@@ -105,6 +178,11 @@
 \input{chapters/ch7_experiments}
 \input{chapters/ch8_software_engineering}
 \input{chapters/ch9_conclusion}
+
+% -----------------------------------------------------------------------------
+% Appendices (Formal Appendix A - E)
+% -----------------------------------------------------------------------------
+\appendix
 \input{chapters/ch10_appendices}
 
 % -----------------------------------------------------------------------------

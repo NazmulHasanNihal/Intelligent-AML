@@ -1,6 +1,16 @@
 \chapter{Vectorized Streaming Data Pipeline \& Systems Engineering}
 \label{ch:data_pipeline}
 
+\begin{takeawaybox}{Chapter 4: Vectorized Streaming Systems \& Data Engineering}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item \textbf{Embedded Analytical Kernel:} DuckDB embedded relational OLAP engine executes zero-lookahead time-causal ego-graph analytical queries in $0.11\,\text{ms}$.
+  \item \textbf{Zero-Copy Memory Management:} Apache Arrow columnar IPC streaming eliminates serialization overhead between streaming ingestion and PyTorch tensor buffers.
+  \item \textbf{Causal Index Architecture:} Composite $(u, t_{\text{timestamp}})$ and $(v, t_{\text{timestamp}})$ indexing strictly enforces causal non-leakage ($t_e \le t_{\text{eval}}$).
+  \item \textbf{LRU Ego-Graph Caching:} In-memory 2-hop topological cache achieves an 88.4\% hit rate, serving single-entity subgraphs in $0.18\,\text{ms}$.
+\end{itemize}
+\end{takeawaybox}
+
+
 \section{Introduction and High-Velocity Ingestion Challenges}
 Financial transaction networks generate massive streaming volumes, requiring ingestion engines to process hundreds of thousands of events per second while maintaining strict temporal causality, dynamic schema flexibility, and sub-millisecond query latencies. Traditional relational databases (e.g., PostgreSQL) or distributed frameworks (e.g., Apache Spark) introduce severe serialization overheads, disk I/O bottlenecks, and network round-trip latencies that violate payment authorization service-level agreements (SLAs).
 
@@ -9,7 +19,7 @@ To resolve these challenges, C-STGB incorporates a vectorized, zero-copy streami
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig4_1_duckdb_arrow_pipeline.pdf}
-\caption{Vectorized streaming data engineering architecture, illustrating zero-copy Arrow ingestion, DuckDB SQL data contracts, dynamic schema discovery, and in-memory LRU causal subgraph caching.}
+\caption[Vectorized Streaming Data Engineering Architecture]{Vectorized streaming data engineering architecture, illustrating zero-copy Arrow ingestion, DuckDB SQL data contracts, dynamic schema discovery, and in-memory LRU causal subgraph caching.}
 \label{fig:ch4_pipeline_architecture}
 \end{figure}
 
@@ -22,7 +32,7 @@ Every incoming financial transaction payload and reference entity is structured 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig4_2_database_erd.pdf}
-\caption{Relational Database Schema (ERD), time-causal composite indexing architecture, and materialized 12-dimensional canonical invariant view (\texttt{v\_canonical\_invariants\_12d}) mapping relational transaction tables into a directed multigraph.}
+\caption[Relational Database Schema and Causal Index Architecture]{Relational Database Schema (ERD), time-causal composite indexing architecture, and materialized 12-dimensional canonical invariant view (\texttt{v\_canonical\_invariants\_12d}) mapping relational transaction tables into a directed multigraph.}
 \label{fig:ch4_database_erd}
 \end{figure}
 
@@ -62,7 +72,7 @@ Table~\ref{tab:schema_discovery} details the automated dynamic schema discovery 
 
 \begin{table}[htbp]
 \centering
-\caption{Dynamic Heterogeneous Schema Discovery and Canonical Invariant Mapping across 4 Major Financial Rails.}
+\caption[Dynamic Heterogeneous Schema Discovery and Invariant Mapping]{Dynamic Heterogeneous Schema Discovery and Canonical Invariant Mapping across 4 Major Financial Rails.}
 \label{tab:schema_discovery}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccc}

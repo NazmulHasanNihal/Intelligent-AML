@@ -1,6 +1,16 @@
 \chapter{Enterprise Software Engineering \& Production Deployment}
 \label{ch:software}
 
+\begin{takeawaybox}{Chapter 8: Enterprise Architecture \& Production Engineering}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item \textbf{Asynchronous Serving Tier:} FastAPI / Uvicorn asynchronous streaming endpoints supporting ISO 20022 webhooks with sub-millisecond response SLAs.
+  \item \textbf{Cloud-Native Orchestration:} Multi-stage Docker containerization and Kubernetes manifests with Horizontal Pod Autoscaling (HPA) from 4 to 32 worker replicas.
+  \item \textbf{Production Telemetry:} Prometheus metrics tracking P50/P90/P99 latency, conformal triage distributions, edge-pruning ratios, and streaming drift statistics.
+  \item \textbf{Verification Suite:} 158 automated unit, integration, and regression tests achieving 100\% pass verification across 25 dedicated test modules.
+\end{itemize}
+\end{takeawaybox}
+
+
 \section{Introduction and Production System Architecture}
 Deploying deep graph neural networks in enterprise Tier-1 financial institutions requires strict adherence to software engineering standards, high availability, sub-millisecond streaming throughput, comprehensive automated testing, and statutory compliance auditing. 
 
@@ -9,7 +19,7 @@ Figure~\ref{fig:system-architecture} illustrates the enterprise system architect
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/fig_system_architecture.pdf}
-  \caption{System architecture of Intelligent-AML. Payment rails stream through Redpanda/Kafka into the DuckDB + PyArrow engine, which computes the 12-D canonical invariants and serves the LRU ego-graph cache. The C-STGB core scores each entity, class-conditional CRC routes it to Tier~1/2/3, and Tier~1/2 escalations go to the four-agent forensic swarm and the governance and WORM-vault layer.}
+  \caption[System Architecture of Intelligent-AML Production Serving]{System architecture of Intelligent-AML. Payment rails stream through Redpanda/Kafka into the DuckDB + PyArrow engine, which computes the 12-D canonical invariants and serves the LRU ego-graph cache. The C-STGB core scores each entity, class-conditional CRC routes it to Tier~1/2/3, and Tier~1/2 escalations go to the four-agent forensic swarm and the governance and WORM-vault layer.}
   \label{fig:system-architecture}
   \label{fig:ch8_microservice}
 \end{figure}
@@ -23,7 +33,7 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 \begin{table}[htbp]
 \centering
 \small
-\caption{Enterprise RESTful and WebSocket API Endpoint Specifications.}
+\caption[Enterprise RESTful and WebSocket API Endpoint Specifications]{Enterprise RESTful and WebSocket API Endpoint Specifications.}
 \label{tab:fastapi_endpoints}
 \begin{tabularx}{\textwidth}{l p{5.8cm} c X}
 \toprule
@@ -44,7 +54,7 @@ To formalize the real-time interaction across distributed microservice actors, F
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig8_2_uml_sequence_lifeline.pdf}
-\caption{Real-Time Operational UML Sequence Lifeline diagram detailing stage-by-stage execution latency timestamps from inbound payment webhook arrival to conformal triage verdict and Merkle WORM sealing.}
+\caption[Real-Time Operational UML Sequence Lifeline]{Real-Time Operational UML Sequence Lifeline diagram detailing stage-by-stage execution latency timestamps from inbound payment webhook arrival to conformal triage verdict and Merkle WORM sealing.}
 \label{fig:ch8_sequence_lifeline}
 \end{figure}
 
@@ -65,7 +75,7 @@ To rigorously characterize system scaling under enterprise authorization SLAs, T
 \begin{table}[htbp]
 \centering
 \small
-\caption{Algorithmic Complexity, Single-Event Latency, and Memory Footprint per C-STGB Pipeline Stage.}
+\caption[Algorithmic Complexity, Latency, and Memory Footprint]{Algorithmic Complexity, Single-Event Latency, and Memory Footprint per C-STGB Pipeline Stage.}
 \label{tab:module_complexity}
 \begin{tabularx}{\textwidth}{llccX}
 \toprule
@@ -91,6 +101,14 @@ To rigorously characterize system scaling under enterprise authorization SLAs, T
 To guarantee reproducible deployment across on-premise banking mainframes, cloud Kubernetes clusters (AWS EKS, Google Cloud GKE), and local edge environments, the entire platform is packaged via Docker and orchestrated with Kubernetes.
 
 \subsection{Containerization \& Cloud-Native Orchestration Strategy}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig8_1_fastapi_k8s_topology.pdf}
+\caption[Enterprise Cloud-Native Deployment Topology and Kubernetes Orchestration]{Enterprise cloud-native deployment topology of C-STGB: mTLS 1.3 ingress API Gateway, containerized FastAPI scoring workers orchestrated with Kubernetes Horizontal Pod Autoscaling (HPA), zero-copy Apache Arrow shared memory buffers, DuckDB embedded analytics, and WORM-vault tamper-proof Merkle audit ledger.}
+\label{fig:ch8_k8s_topology}
+\end{figure}
+
 The C-STGB serving tier is packaged as an immutable, hardened multi-stage Docker container built upon minimal Debian-slim images with pre-compiled PyTorch C++ extensions and zero-copy Apache Arrow memory bindings.
 
 For high-availability cloud deployment (e.g., AWS EKS, Google Cloud GKE, on-prem OpenShift), the platform is orchestrated via Kubernetes with Horizontal Pod Autoscaling (HPA). The autoscaler dynamically scales worker pods from 4 to 32 replicas based on CPU utilization and queue depth. The complete Dockerfile and Kubernetes deployment manifests are documented in Appendix~\ref{app:operator_manual} (Listing~\ref{app_lst:dockerfile} and Listing~\ref{app_lst:k8s_deployment}).

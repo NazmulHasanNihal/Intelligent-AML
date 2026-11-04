@@ -1,6 +1,17 @@
 \chapter{C-STGB System Architecture \& Mathematical Formulations}
 \label{ch:architecture}
 
+\begin{takeawaybox}{Chapter 3: Architectural Innovations \& Mathematical Formulations}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item \textbf{12-D Canonical Invariants ($\mathbf{z}_{\text{inv}}$):} Formulates physical mass-flow conservation ($\Phi_{\text{flow}}$), marked Hawkes burst rates ($\lambda_u$), pass-through layering ratios, and directed taint exposure.
+  \item \textbf{Tri-Band Temporal Attention Kernel:} Synthesizes multi-scale exponential decay spanning burst ($\tau_1=2.4\text{h}$), operational ($\tau_2=24\text{h}$), and dormancy ($\tau_3=168\text{h}$) regimes with continuous Fourier encodings.
+  \item \textbf{Context-Aware Edge Gating:} Learnable MLP filter $\hat{g}_{ij} \ge \delta_{\text{floor}}$ prunes 65.9\% of spurious merchant camouflage noise prior to message passing.
+  \item \textbf{Typology GraphSMOTE:} Discovers latent topological clusters via GMM and generates synthetic illicit nodes with localized bilinear edge synthesis preserving mass conservation.
+  \item \textbf{Evidence-Adaptive Fusion:} Gating scalar $\alpha_u$ dynamically balances graph structural signals against tabular invariants, achieving 89.60\% F1 on zero-degree cold-start nodes.
+\end{itemize}
+\end{takeawaybox}
+
+
 \section{Architectural Overview and Neuro-Symbolic Philosophy}
 
 \subsection{Reader's Guide: Architectural Roadmap}
@@ -9,7 +20,7 @@ To guide the reader through the mathematical derivations, Table~\ref{tab:ch3_roa
 \begin{table}[htbp]
 \centering
 \small
-\caption{Reader's Architectural Roadmap: Mapping Operational AML Bottlenecks to C-STGB Innovations.}
+\caption[Mapping Operational AML Bottlenecks to C-STGB Innovations]{Reader's Architectural Roadmap: Mapping Operational AML Bottlenecks to C-STGB Innovations.}
 \label{tab:ch3_roadmap}
 \begin{tabularx}{\textwidth}{llcX}
 \toprule
@@ -29,7 +40,7 @@ Black-Box Compliance Deficit & Autonomous Multi-Agent SAR Swarm & Chapter~\ref{c
 \begin{table}[htbp]
 \centering
 \small
-\caption{Summary of Universal Mathematical Notations, Tensor Dimensions, and Operator Types.}
+\caption[Summary of Universal Mathematical Notations and Tensor Shapes]{Summary of Universal Mathematical Notations, Tensor Dimensions, and Operator Types.}
 \label{tab:ch3_notations}
 \begin{tabularx}{\textwidth}{llcX}
 \toprule
@@ -69,7 +80,7 @@ Figure~\ref{fig:ch3_detailed_pipeline} illustrates the six interconnected module
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig3_1_tensor_flow.pdf}
-\caption{End-to-End Architectural Dataflow of C-STGB v2, detailing data ingestion, continuous-time temporal encoding, learnable edge-trust gating, latent manifold oversampling, evidence-adaptive fusion, and conformal risk control.}
+\caption[End-to-End Architectural Dataflow of C-STGB]{End-to-End Architectural Dataflow of C-STGB v2, detailing data ingestion, continuous-time temporal encoding, learnable edge-trust gating, latent manifold oversampling, evidence-adaptive fusion, and conformal risk control.}
 \label{fig:ch3_detailed_pipeline}
 \end{figure}
 
@@ -80,7 +91,7 @@ To enable seamless zero-shot cross-network generalization across heterogeneous f
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_canonical_invariants.pdf}
-\caption{Universal 12-dimensional canonical invariant representation space, projecting heterogeneous transaction ledgers (Bitcoin UTXO, Ethereum EVM, PaySim, SAML-D) into a standardized feature space for zero-shot cross-network transfer.}
+\caption[Universal 12-Dimensional Canonical Invariant Space]{Universal 12-dimensional canonical invariant representation space, projecting heterogeneous transaction ledgers (Bitcoin UTXO, Ethereum EVM, PaySim, SAML-D) into a standardized feature space for zero-shot cross-network transfer.}
 \label{fig:ch3_canonical_invariants}
 \end{figure}
 
@@ -169,7 +180,7 @@ provides a universal, schema-agnostic feature foundation. Table~\ref{tab:12d_inv
 \begin{table}[htbp]
 \centering
 \small
-\caption{Compact Formal Specification of the 12-Dimensional Canonical Invariant Vector $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$.}
+\caption[Formal Specification of the 12-Dimensional Canonical Invariants]{Compact Formal Specification of the 12-Dimensional Canonical Invariant Vector $\mathbf{z}_{\text{inv}}(u, t) \in \mathbb{R}^{12}$.}
 \label{tab:12d_invariants_spec}
 \begin{tabularx}{\textwidth}{clllcX}
 \toprule
@@ -220,7 +231,7 @@ The minimum floor parameter $w_{\min} = 0.05$ ensures that historical topologica
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.92\textwidth]{figures/fig_triband_decay_comparison.pdf}
-\caption{Multi-scale tri-band continuous harmonic temporal attention kernel decay curve contrasting burst, diurnal (24h/48h resonance), and macro dormancy bands against standard monotonic exponential decay.}
+\caption[Tri-Band Continuous Harmonic Temporal Decay Comparison]{Multi-scale tri-band continuous harmonic temporal attention kernel decay curve contrasting burst, diurnal (24h/48h resonance), and macro dormancy bands against standard monotonic exponential decay.}
 \label{fig:triband_decay_comparison}
 \end{figure}
 
@@ -260,7 +271,7 @@ Under extreme class skew ($\pi < 0.05\%$), naïve SMOTE oversampling blurs disti
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig18_graphsmote_synthesis_pipeline.pdf}
-\caption{Three-step Typology-Clustered Latent GraphSMOTE synthesis pipeline: (1) Latent manifold typology clustering; (2) Intra-cluster convex interpolation; and (3) Localized $O(K_{\text{cand}} \cdot d)$ bilinear edge reconstruction preserving mass-balance flow conservation.}
+\caption[Three-Step Typology-Clustered Latent GraphSMOTE Pipeline]{Three-step Typology-Clustered Latent GraphSMOTE synthesis pipeline: (1) Latent manifold typology clustering; (2) Intra-cluster convex interpolation; and (3) Localized $O(K_{\text{cand}} \cdot d)$ bilinear edge reconstruction preserving mass-balance flow conservation.}
 \label{fig:ch3_graphsmote_pipeline}
 \end{figure}
 
@@ -362,7 +373,7 @@ with balancing multipliers $\gamma_1 = 0.50, \gamma_2 = 0.10, \lambda_{\text{ort
 The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:cstgb_training}, and real-time streaming inference is formalized in Algorithm~\ref{alg:cstgb_inference}.
 
 \begin{algorithm}[htbp]
-\caption{C-STGB Unified Multi-Stage Training Pipeline}
+\caption[C-STGB Unified Multi-Stage Training Pipeline]{C-STGB Unified Multi-Stage Training Pipeline}
 \label{alg:cstgb_training}
 \begin{algorithmic}[1]
 \Require Directed graph $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, Entity features $\mathbf{X}$, Target coverage $1-\alpha$, Loss weights $\gamma_1, \gamma_2$.
@@ -410,7 +421,7 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_algorithm1_flowchart.pdf}
-\caption{Dual-lane execution lifecycle of C-STGB: Lane 1 (top) illustrates offline batch model training on historical transactions $\mathcal{D}_{\text{train}} \cup \mathcal{D}_{\text{cal}}$ with latent GraphSMOTE oversampling and conformal calibration; Lane 2 (bottom) formalizes the real-time online streaming fast-path inference pipeline executing under $0.45\,\text{ms}$ SLA with 3-tier selective triage dispatch.}
+\caption[C-STGB Dual-Lane Execution Lifecycle: Training and Inference]{Dual-lane execution lifecycle of C-STGB: Lane 1 (top) illustrates offline batch model training on historical transactions $\mathcal{D}_{\text{train}} \cup \mathcal{D}_{\text{cal}}$ with latent GraphSMOTE oversampling and conformal calibration; Lane 2 (bottom) formalizes the real-time online streaming fast-path inference pipeline executing under $0.45\,\text{ms}$ SLA with 3-tier selective triage dispatch.}
 \label{fig:ch3_algorithm1_flowchart}
 \end{figure}
 
@@ -419,14 +430,14 @@ This chapter delivered the complete mathematical formulation of the C-STGB archi
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_canonical_invariants_empirical.pdf}
-\caption{Empirical separability distributions of the 12 canonical physical and temporal invariants $\mathbf{z}_{\text{inv}}(u, t)$ contrasting confirmed illicit entities ($y=1$, red) versus benign accounts ($y=0$, green) across benchmark datasets. Invariants such as flow regularity $\tilde{\Phi}_{\text{flow}}$, Hawkes burst arrival rate $\lambda_u$, and causal taints ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) provide decisive orthogonal discriminatory power even on isolated, cold-start nodes.}
+\caption[Empirical Separability Distributions of Canonical Invariants]{Empirical separability distributions of the 12 canonical physical and temporal invariants $\mathbf{z}_{\text{inv}}(u, t)$ contrasting confirmed illicit entities ($y=1$, red) versus benign accounts ($y=0$, green) across benchmark datasets. Invariants such as flow regularity $\tilde{\Phi}_{\text{flow}}$, Hawkes burst arrival rate $\lambda_u$, and causal taints ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) provide decisive orthogonal discriminatory power even on isolated, cold-start nodes.}
 \label{fig:ch3_invariant_violins}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig22_triband_spectral_coldstart.pdf}
-\caption{Evidence-adaptive gating dynamics $\alpha_u \in [0, 1]$ and spectral cold-start representation behavior across network density regimes. When entities possess sparse topological neighborhoods ($\deg(u) \le 1$), the learnable gating mechanism suppresses unreliable message aggregation ($\alpha_u \to 0$, empirically $\alpha_u \in [0.08, 0.12]$), transferring inductive reliance to the 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u, t)$ and securing $89.60\%$ F1 on newly created accounts. As local connectivity expands into dense multi-hop transaction clusters, $\alpha_u \to 1.0$, harnessing high-order spatio-temporal graph structures.}
+\caption[Evidence-Adaptive Gating and Spectral Cold-Start Convergence]{Evidence-adaptive gating dynamics $\alpha_u \in [0, 1]$ and spectral cold-start representation behavior across network density regimes. When entities possess sparse topological neighborhoods ($\deg(u) \le 1$), the learnable gating mechanism suppresses unreliable message aggregation ($\alpha_u \to 0$, empirically $\alpha_u \in [0.08, 0.12]$), transferring inductive reliance to the 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u, t)$ and securing $89.60\%$ F1 on newly created accounts. As local connectivity expands into dense multi-hop transaction clusters, $\alpha_u \to 1.0$, harnessing high-order spatio-temporal graph structures.}
 \label{fig:ch3_spectral_coldstart}
 \end{figure}
 

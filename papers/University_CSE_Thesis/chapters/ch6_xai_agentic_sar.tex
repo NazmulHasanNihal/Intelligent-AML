@@ -1,6 +1,16 @@
 \chapter{Explainable AI \& Autonomous Multi-Agent SAR Compliance Swarms}
 \label{ch:xai}
 
+\begin{takeawaybox}{Chapter 6: Explainable AI \& Multi-Agent Forensic Swarms}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item \textbf{Mutual Information Attribution:} GNNExplainer extracts compact, connected subgraphs maximizing mutual information with model risk predictions.
+  \item \textbf{Multi-Agent Swarm:} Coordinates four specialized forensic roles: Invariant Analyst, Typology Profiler, Compliance Officer, and Statutory Auditor.
+  \item \textbf{Deterministic Anti-Hallucination:} AST grammar compiler enforces strict Extended Backus-Naur Form ($\mathcal{G}_{\text{SAR}}$) and Pydantic schemas over LLM outputs with 0.00\% hallucination rate.
+  \item \textbf{Cryptographic Merkle Receipts:} Every SAR filing is anchored to a SHA-256 Merkle root stored in a WORM-compliant audit ledger meeting Federal Reserve SR 11-7 / SR 21-8 standards.
+\end{itemize}
+\end{takeawaybox}
+
+
 \section{The Explainability and Regulatory Auditability Imperative}
 In statutory Anti-Money Laundering (AML) enforcement, raw classification scores are legally insufficient for asset seizure or regulatory filings. Regulatory mandates—including the interagency supervisory guidance on Model Risk Management (Federal Reserve SR 11-7 and SR 21-8), the European Union AI Act (High-Risk AI Systems Requirements), and Financial Crimes Enforcement Network (FinCEN) regulations—mandate that every Suspicious Activity Report (SAR) must contain an auditable, human-interpretable narrative detailing the factual transaction chain, typological indicators, and mathematical rationale.
 
@@ -9,7 +19,7 @@ To bridge machine learning predictions with statutory legal compliance, C-STGB i
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/fig_forensic_swarm.pdf}
-  \caption{Multi-agent forensic reasoning and dual-governance pipeline. The orchestrator hydrates the alert context for the Investigator, Drafter and Auditor agents. The AST compiler accepts a dossier only if every entity is grounded in the evidence subgraph ($V(T)\subseteq V_{\mathrm{sub}}$, Proposition~\ref{prop:anti_hallucination}); rejected drafts return to the Drafter. Verified dossiers pass the maker--checker gate and are sealed in the WORM vault.}
+  \caption[Multi-Agent Forensic Reasoning and Dual-Governance Pipeline]{Multi-agent forensic reasoning and dual-governance pipeline. The orchestrator hydrates the alert context for the Investigator, Drafter and Auditor agents. The AST compiler accepts a dossier only if every entity is grounded in the evidence subgraph ($V(T)\subseteq V_{\mathrm{sub}}$, Proposition~\ref{prop:anti_hallucination}); rejected drafts return to the Drafter. Verified dossiers pass the maker--checker gate and are sealed in the WORM vault.}
   \label{fig:forensic-swarm}
   \label{fig:ch6_swarm_architecture}
 \end{figure}
@@ -89,7 +99,7 @@ To ensure complete scientific reproducibility, the Multi-Agent Forensic Swarm op
 \begin{table}[htbp]
 \centering
 \small
-\caption{Operational Cost, Token Budget, and Latency Comparison: Multi-Agent Swarm vs.\ Manual Compliance Review.}
+\caption[Operational Cost, Token Budget, and Latency: Swarm vs. Manual]{Operational Cost, Token Budget, and Latency Comparison: Multi-Agent Swarm vs.\ Manual Compliance Review.}
 \label{tab:swarm_cost_budget}
 \begin{tabularx}{\textwidth}{lccccX}
 \toprule
@@ -136,14 +146,14 @@ Figure~\ref{fig:ch6_case_study_subgraph} and Figure~\ref{fig:single_alert_timeli
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_15node_forensic_progression.pdf}
-\caption{Worked 3-stage forensic progression of a 15-node smurfing and peeling incident: (a) Raw ingested transaction graph showing 24 transactions contaminated by heavy camouflage chaff; (b) GNNExplainer topological mask pruning 65.9\% of spurious links ($M_e \ge 0.65$), isolating the true criminal fan-out and wash cycle; and (c) Certified FinCEN Form 111 SAR dossier autonomously generated with SHA-256 Merkle root verification under Federal Reserve SR 11-7 and SR 21-8 model risk governance.}
+\caption[Worked 3-Stage Forensic Progression of a 15-Node Incident]{Worked 3-stage forensic progression of a 15-node smurfing and peeling incident: (a) Raw ingested transaction graph showing 24 transactions contaminated by heavy camouflage chaff; (b) GNNExplainer topological mask pruning 65.9\% of spurious links ($M_e \ge 0.65$), isolating the true criminal fan-out and wash cycle; and (c) Certified FinCEN Form 111 SAR dossier autonomously generated with SHA-256 Merkle root verification under Federal Reserve SR 11-7 and SR 21-8 model risk governance.}
 \label{fig:ch6_case_study_subgraph}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_single_alert_timeline.pdf}
-\caption{Chronological forensic timeline of the 15-node incident, tracking timestamped deposits, smurfing dispersal ($\lambda = 74.2$), layering washes, offshore aggregation ($\Phi_{\text{flow}} \approx 0.994$), and Tier 1 Conformal Quarantine alert generation.}
+\caption[Chronological Forensic Timeline of the 15-Node Laundering Case]{Chronological forensic timeline of the 15-node incident, tracking timestamped deposits, smurfing dispersal ($\lambda = 74.2$), layering washes, offshore aggregation ($\Phi_{\text{flow}} \approx 0.994$), and Tier 1 Conformal Quarantine alert generation.}
 \label{fig:single_alert_timeline}
 \end{figure}
 

@@ -4,7 +4,7 @@
 \begin{takeawaybox}{Chapter 9: Synthesis, Limitations \& Enterprise Roadmap}
 \begin{itemize}\setlength{\itemsep}{1pt}
   \item \textbf{Scientific Synthesis:} Establishes C-STGB as the first mathematically guaranteed, real-time, explainable graph learning system for high-velocity financial crime surveillance.
-  \item \textbf{26-Week Deployment Roadmap:} Details a phased production integration for Tier-1 banks (Shadow Ingestion $\rightarrow$ Dual-Run Conformal Pilot $\rightarrow$ Straight-Through Autonomous Surveillance).
+  \item \textbf{Enterprise Deployment Lifecycle:} Details a phased 3-stage production integration for Tier-1 banks (Passive Shadow Ingestion $\rightarrow$ Dual-Run Conformal Pilot $\rightarrow$ Straight-Through Autonomous Surveillance).
   \item \textbf{Threats to Validity:} Methodically documents five structural boundaries: cross-institutional banking gaps, unobserved dark liquidity, cross-chain bridging, cold-start latency, and adversarial adaptation.
   \item \textbf{Open Science:} Fully reproducible codebase with open-source benchmarks, container recipes, and pre-trained model weights.
 \end{itemize}
@@ -38,21 +38,21 @@ The findings of this research have profound implications for global financial in
 \section{Enterprise Deployment Roadmap for Tier-1 Banking}
 To transition C-STGB from research prototype to production core banking infrastructure, financial institutions should follow a phased 3-stage integration blueprint:
 
-\subsection{Phase 1: Passive Shadow Deployment \& Rolling Calibration (Months 1--3)}
+\subsection{Stage I: Passive Shadow Deployment \& Rolling Calibration}
 \begin{itemize}
     \item \textbf{Data Pipeline Integration:} Deploy DuckDB and Apache Arrow ingestion connectors as passive subscribers to Kafka/Pulsar payment streams.
     \item \textbf{Shadow Scoring:} Execute C-STGB in shadow mode alongside existing rule engines, logging non-conformity scores and tracking drift statistics without blocking live traffic.
     \item \textbf{Calibration Stabilization:} Accumulate rolling calibration split $\mathcal{D}_{\text{cal}}$ over a 90-day seasonal horizon, tuning class-conditional quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$ to achieve nominal coverage $1-\alpha = 99.0\%$.
 \end{itemize}
 
-\subsection{Phase 2: Dual-Run Pilot \& Selective Abstention (Months 4--6)}
+\subsection{Stage II: Dual-Run Pilot \& Selective Conformal Abstention}
 \begin{itemize}
     \item \textbf{Tier 2 Queue Routing:} Route Tier-2 boundary alerts ($\Gamma(u) = \{0, 1\} = \bot$) to human compliance investigators alongside automated GNNExplainer topological dossiers.
     \item \textbf{Feedback Loop:} Feed analyst adjudication outcomes back into the hard-negative mining bank ($\mathcal{B}_{\text{hard}}$) to continuously refine decision boundaries.
     \item \textbf{SLA Stress Testing:} Validate P99 latency bounds ($<2.5\,\text{ms}$) under peak transaction loads ($10,000\,\text{Tx/sec}$).
 \end{itemize}
 
-\subsection{Phase 3: Straight-Through Surveillance (Months 7+)}
+\subsection{Stage III: Full-Scale Autonomous Straight-Through Surveillance}
 \begin{itemize}
     \item \textbf{Tier 3 Automated Clearance:} Authorize $>99.38\%$ of transactions for instantaneous Straight-Through Processing (STP) without human intervention.
     \item \textbf{Tier 1 Autonomous Quarantine:} Enforce automated asset holds on high-confidence illicit nodes ($\Gamma(u) = \{1\}$), autonomously generating FinCEN Form 111 XML filings with cryptographic Merkle receipts.
@@ -61,8 +61,9 @@ To transition C-STGB from research prototype to production core banking infrastr
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.86\textwidth]{figures/fig_26week_roadmap_gantt.pdf}
-\caption[26-Week Enterprise Integration Roadmap for Tier-1 Banking]{26-Week Enterprise Integration Roadmap for Tier-1 Banking Core Surveillance across Phase 1 (Shadow), Phase 2 (Pilot), and Phase 3 (STP Production).}
+\includegraphics[width=0.88\textwidth]{figures/fig_enterprise_deployment_lifecycle.pdf}
+\caption[Enterprise Production Deployment Lifecycle for Tier-1 Banking]{Enterprise production deployment lifecycle for Tier-1 banking core surveillance across Stage~I (Passive Shadow Ingestion), Stage~II (Dual-Run Conformal Pilot), and Stage~III (Full-Scale Straight-Through Autonomous Surveillance).}
+\label{fig:ch9_deployment_lifecycle}
 \label{fig:26week_roadmap_gantt}
 \end{figure}
 

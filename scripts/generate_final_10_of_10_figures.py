@@ -47,15 +47,18 @@ plt.rcParams.update({
 })
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+import sys
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 thesis_fig_dir = BASE_DIR / "papers" / "University_CSE_Thesis" / "figures"
 eaai_fig_dir = BASE_DIR / "papers" / "EAAI_Research_Paper" / "figures"
 data_fig_dir = BASE_DIR / "data" / "outputs" / "figures"
 
-TARGET_DIRS = [data_fig_dir, thesis_fig_dir, eaai_fig_dir]
+TARGET_DIRS = [data_fig_dir, thesis_fig_dir, eaai_fig_dir, BASE_DIR / "papers" / "EAAI_Submission" / "figures", BASE_DIR / "reports" / "figures"]
 for d in TARGET_DIRS:
     d.mkdir(parents=True, exist_ok=True)
 
-def save_fig(fig, stems, pad_inches=0.03):
+def save_fig(fig, stems, pad_inches=0.15):
     if isinstance(stems, str):
         stems = [stems]
     for stem in stems:
@@ -236,9 +239,9 @@ ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.088, r"$n_0 = 3,306, \; n_1 = 372$"
         ha="center", va="center", fontsize=5.8, fontweight="bold", color="#0f172a")
 ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.126, "Non-Conformity Scores:",
         ha="center", va="center", fontsize=5.5, color="#713f12")
-ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.156, r"$s_i^{(1)} = 1 - \hat{p}_i$  (Illicit)",
+ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.156, r"$s^{(1)}(i) = 1 - \hat{p}_i$  (Illicit)",
         ha="center", va="center", fontsize=5.6, color="#b91c1c")
-ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.186, r"$s_i^{(0)} = \hat{p}_i$  (Benign)",
+ax.text(cal_x + cal_w / 2, cal_y + cal_h - 0.186, r"$s^{(0)}(i) = \hat{p}_i$  (Benign)",
         ha="center", va="center", fontsize=5.6, color="#15803d")
 ax.text(cal_x + cal_w / 2, cal_y + 0.022, r"Target: $1 - \alpha \geq 99.0\%$",
         ha="center", va="center", fontsize=5.6, fontweight="bold", color="#854d0e")
@@ -333,7 +336,7 @@ for t in tiers:
 # =========================================================================
 # BOTTOM PRODUCTION SLA & GOVERNANCE STRIP (y: 0.008 -> 0.134, height: 0.126)
 # =========================================================================
-bot_y, bot_h = 0.008, 0.126
+bot_y, bot_h = 0.006, 0.138
 ax.add_patch(patches.FancyBboxPatch(
     (0.006, bot_y), 0.988, bot_h,
     boxstyle="round,pad=0.003,rounding_size=0.006",
@@ -378,23 +381,23 @@ cols = [
 
 for col in cols:
     cx, cw = col["x"], col["w"]
-    cy, ch = bot_y + 0.006, bot_h - 0.034
+    cy, ch = bot_y + 0.006, bot_h - 0.030
     ax.add_patch(patches.FancyBboxPatch(
         (cx, cy), cw, ch,
         boxstyle="round,pad=0.002,rounding_size=0.003",
         facecolor="#ffffff", edgecolor="#cbd5e1", linewidth=0.6
     ))
-    ax.text(cx + cw / 2, cy + ch - 0.018, col["title"],
+    ax.text(cx + cw / 2, cy + ch - 0.016, col["title"],
             ha="center", va="center", fontsize=6.2, fontweight="bold", color=col["color"])
     ax.text(cx + cw / 2, cy + ch - 0.040, col["stat"],
             ha="center", va="center", fontsize=6.8, fontweight="bold", color="#0f172a")
-    ax.text(cx + cw / 2, cy + ch - 0.062, col["line1"],
+    ax.text(cx + cw / 2, cy + ch - 0.065, col["line1"],
             ha="center", va="center", fontsize=5.3, color="#475569")
-    ax.text(cx + cw / 2, cy + ch - 0.080, col["line2"],
+    ax.text(cx + cw / 2, cy + ch - 0.086, col["line2"],
             ha="center", va="center", fontsize=5.3, color="#475569")
 
 
-save_fig(fig, ["fig1_operational_architecture_flowchart", "fig6_system_architecture", "pipeline_cstgb", "fig_conformal_triage_flowchart"], pad_inches=0.03)
+save_fig(fig, ["fig1_operational_architecture_flowchart", "fig_conformal_triage_flowchart"], pad_inches=0.15)
 
 print("======================================================================")
 print("2. GENERATING 2-PANEL FACTORIAL ATTRIBUTION GROUPED BAR CHART")
@@ -759,7 +762,7 @@ ax.text(view_box_x + 0.015, b_y + 0.250, "CREATE VIEW v_canonical_invariants_12d
         ha='left', va='center', fontsize=6.2, fontweight='bold', color='#0f172a')
 view_groups = [
     (r"1. Flow Regularity: $\Phi_{\mathrm{flow}} = \ln(1 + \sum A_{\mathrm{out}} / (\sum A_{\mathrm{in}} + \epsilon))$", "#0f766e"),
-    (r"2. Hawkes Arrival Rate: $\lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha \cdot e^{-\beta (t - t_i)}$", "#1e40af"),
+    (r"2. Hawkes Arrival Rate: $\lambda_u(t) = \mu_u + \sum \alpha \cdot e^{-\beta (t - t_i)} \quad (t_i < t)$", "#1e40af"),
     (r"3. Directed Causal Taints: $\mathbf{s}_{\mathrm{fwd}} \in [0, 1]$ (Dispersion), $\mathbf{s}_{\mathrm{bwd}} \in [0, 1]$ (Aggregation)", "#b91c1c"),
     (r"4. Graph Multi-Moments: $[\mu_A, \mathrm{Var}(A), \gamma_A, \kappa_A] \parallel [\text{deg}_{\mathrm{in}}, \text{deg}_{\mathrm{out}}, v_A, \nu_{\mathrm{io}}] \to \mathbf{R}^{12}$", "#6d28d9")
 ]
@@ -805,8 +808,13 @@ for t_head, t_body, x_b, y_b, w_b, h_b, c_bg, c_fg in train_boxes:
         (x_b, y_b), w_b, h_b, boxstyle="round,pad=0.003,rounding_size=0.005",
         facecolor=c_bg, edgecolor=c_fg, linewidth=0.85
     ))
-    ax.text(x_b + w_b/2, y_b + h_b - 0.060, t_head, ha="center", va="top", fontsize=6.8, fontweight="bold", color=c_fg)
-    ax.text(x_b + w_b/2, y_b + 0.060, t_body, ha="center", va="bottom", fontsize=5.8, color="#334155", linespacing=1.25)
+    ax.text(x_b + w_b/2, y_b + h_b - 0.050, t_head, ha="center", va="top", fontsize=6.8, fontweight="bold", color=c_fg)
+    t_lines = t_body.split("\n")
+    if len(t_lines) == 2:
+        ax.text(x_b + w_b/2, y_b + 0.145, t_lines[0], ha="center", va="center", fontsize=5.3, color="#334155")
+        ax.text(x_b + w_b/2, y_b + 0.070, t_lines[1], ha="center", va="center", fontsize=5.3, color="#334155")
+    else:
+        ax.text(x_b + w_b/2, y_b + 0.090, t_body, ha="center", va="center", fontsize=5.3, color="#334155")
 
 for x_arr in [0.193, 0.388, 0.583, 0.778]:
     ax.annotate("", xy=(x_arr + 0.016, 0.700), xytext=(x_arr - 0.002, 0.700),
@@ -829,7 +837,7 @@ ax.text(0.290, 0.389, "LANE 2: ONLINE STREAMING FAST-PATH INFERENCE (<0.45 ms SL
 
 infer_boxes = [
     ("1. Live Ingest & Top-15", "Zero-copy Arrow RecordBatch\n15-hop dynamic ego-graph cache", 0.020, 0.035, 0.225, 0.300, "#f0fdf4", "#15803d"),
-    ("2. Incremental Invariants", r"Flow conservation $\Phi_{\mathrm{flow}}$" + "\nHawkes burst rate $\lambda_u(t)$", 0.265, 0.035, 0.225, 0.300, "#f0fdfa", "#0f766e"),
+    ("2. Incremental Invariants", "Flow conservation $\Phi_{\mathrm{flow}}$" + "\n" + "Hawkes rate $\lambda_u(t)$", 0.265, 0.035, 0.225, 0.300, "#f0fdfa", "#0f766e"),
     ("3. Frozen GNN & Bayes", r"Forward pass on cached weights" + "\nRisk score $\hat{p}_u \in [0, 1]$", 0.510, 0.035, 0.225, 0.300, "#faf5ff", "#6d28d9"),
     ("4. 3-Tier CRC Triage", r"Dual-quantile dispatch $\Gamma(u)$" + "\nT1 Quarantine / T2 Rev / T3 STP", 0.755, 0.035, 0.225, 0.300, "#fef2f2", "#b91c1c")
 ]
@@ -839,8 +847,13 @@ for i_head, i_body, x_b, y_b, w_b, h_b, c_bg, c_fg in infer_boxes:
         (x_b, y_b), w_b, h_b, boxstyle="round,pad=0.003,rounding_size=0.005",
         facecolor=c_bg, edgecolor=c_fg, linewidth=0.85
     ))
-    ax.text(x_b + w_b/2, y_b + h_b - 0.055, i_head, ha="center", va="top", fontsize=6.8, fontweight="bold", color=c_fg)
-    ax.text(x_b + w_b/2, y_b + 0.055, i_body, ha="center", va="bottom", fontsize=5.8, color="#334155", linespacing=1.25)
+    ax.text(x_b + w_b/2, y_b + h_b - 0.045, i_head, ha="center", va="top", fontsize=6.8, fontweight="bold", color=c_fg)
+    lines_body = i_body.split("\n")
+    if len(lines_body) == 2:
+        ax.text(x_b + w_b/2, y_b + 0.125, lines_body[0], ha="center", va="center", fontsize=5.4, color="#334155")
+        ax.text(x_b + w_b/2, y_b + 0.060, lines_body[1], ha="center", va="center", fontsize=5.4, color="#334155")
+    else:
+        ax.text(x_b + w_b/2, y_b + 0.075, i_body, ha="center", va="center", fontsize=5.4, color="#334155")
 
 for x_arr in [0.247, 0.492, 0.737]:
     ax.annotate("", xy=(x_arr + 0.016, 0.185), xytext=(x_arr - 0.002, 0.185),
@@ -1032,70 +1045,11 @@ ax_m.text(0.50, -0.12, r"Invariant: $\Phi_{\mathrm{flow}} \approx 0.994$ (Mass C
 plt.tight_layout()
 save_fig(fig, ["fig_benign_vs_smurfing_topology", "fig_topological_cam_contrast"])
 
+print("========print("======================================================================")
+print("11. CRITICAL DIFFERENCE (CD) & DOMAIN SYNTHESIS CHART (Fig 7.4)")
 print("======================================================================")
-print("11. CRITICAL DIFFERENCE (CD) & DOMAIN LOLLIPOP CHART (Fig 7.3)")
-print("======================================================================")
-fig, (ax_cd, ax_lol) = plt.subplots(1, 2, figsize=(7.16, 2.70))
-
-# Subplot (a): CD Rank Axis
-models_rank = ["C-STGB", "XGBoost", "CatBoost", "TGN", "CARE-GNN", "GCN", "GraphSAGE", "EvolveGCN"]
-mean_ranks =  [1.07,     2.43,      2.79,       4.21,  5.14,       6.71,  6.86,        7.79]
-cd_val = 1.45
-
-ax_cd.plot([1.0, 8.0], [0.5, 0.5], color="#0f172a", lw=1.5)
-for r_val in np.arange(1.0, 9.0, 1.0):
-    ax_cd.plot([r_val, r_val], [0.46, 0.54], color="#0f172a", lw=1.0)
-    ax_cd.text(r_val, 0.40, f"{int(r_val)}", ha="center", va="top", fontsize=6.8, fontweight="bold")
-
-ax_cd.set_xlim([0.5, 8.5])
-ax_cd.set_ylim([0.0, 1.0])
-ax_cd.axis('off')
-ax_cd.set_title("(a) Wilcoxon-Holm Critical Difference (CD=1.45)", fontweight="bold", fontsize=8.8)
-
-# Points and connectors
-y_offs = [0.82, 0.70, 0.60, 0.25, 0.15, 0.82, 0.70, 0.25]
-for i, (m_name, r_val) in enumerate(zip(models_rank, mean_ranks)):
-    clr = "#15803d" if "C-STGB" in m_name else ("#1e40af" if "Boost" in m_name else "#b91c1c")
-    ax_cd.scatter([r_val], [0.5], color=clr, s=35, zorder=5)
-    ax_cd.plot([r_val, r_val], [0.5, y_offs[i]], color=clr, lw=0.9, linestyle=":")
-    ax_cd.text(r_val, y_offs[i] + (0.04 if y_offs[i] > 0.5 else -0.04), f"{m_name}\n({r_val:.2f})",
-               ha="center", va="center", fontsize=5.8, fontweight="bold", color=clr)
-
-# CD Bar at top left
-ax_cd.plot([1.0, 1.0 + cd_val], [0.95, 0.95], color="#b91c1c", lw=2.2)
-ax_cd.plot([1.0, 1.0], [0.92, 0.98], color="#b91c1c", lw=1.5)
-ax_cd.plot([1.0 + cd_val, 1.0 + cd_val], [0.92, 0.98], color="#b91c1c", lw=1.5)
-ax_cd.text(1.0 + cd_val/2, 0.98, "CD = 1.45 (alpha=0.05)", ha="center", va="bottom", fontsize=5.8, fontweight="bold", color="#b91c1c")
-
-# Subplot (b): Domain-Grouped Lollipop Chart
-domains = ["Public Crypto (4)", "Multi-Bank (9)", "Card Stream (1)", "Overall Macro (14)"]
-cstgb_dom = [90.53, 59.34, 56.48, 68.05]
-xgb_dom =   [86.76, 56.32, 48.20, 64.76]
-gnn_dom =   [60.95, 37.80, 38.20, 43.76]
-
-y_dom = np.arange(len(domains))
-ax_lol.hlines(y_dom - 0.15, 0, cstgb_dom, color="#15803d", lw=1.8, label="C-STGB (Proposed)")
-ax_lol.scatter(cstgb_dom, y_dom - 0.15, color="#15803d", s=45, zorder=5)
-
-ax_lol.hlines(y_dom, 0, xgb_dom, color="#1e40af", lw=1.4, linestyle="--", label="Best Tree (XGBoost)")
-ax_lol.scatter(xgb_dom, y_dom, color="#1e40af", s=35, zorder=5)
-
-ax_lol.hlines(y_dom + 0.15, 0, gnn_dom, color="#b91c1c", lw=1.2, linestyle=":", label="Best GNN (TGN/CARE)")
-ax_lol.scatter(gnn_dom, y_dom + 0.15, color="#b91c1c", s=30, zorder=5)
-
-for i in range(len(domains)):
-    ax_lol.annotate(f"{cstgb_dom[i]:.1f}%", (cstgb_dom[i], y_dom[i] - 0.15), xytext=(4, 0), textcoords="offset points",
-                    ha="left", va="center", fontsize=5.8, fontweight="bold", color="#15803d")
-
-ax_lol.set_yticks(y_dom)
-ax_lol.set_yticklabels(domains, fontsize=7.2, fontweight="bold")
-ax_lol.set_xlabel("Minority F1-Score (%)", fontsize=8.5)
-ax_lol.set_xlim([0, 105])
-ax_lol.set_title("(b) Performance by Domain Archetype", fontweight="bold", fontsize=8.8)
-ax_lol.grid(True, axis="x", linestyle=":", alpha=0.5)
-ax_lol.legend(loc="upper left", fontsize=6.2, framealpha=0.92)
-
-plt.tight_layout()
+from scripts.redesign_fig7_4_critical_difference import generate_figure_7_4
+fig = generate_figure_7_4()
 save_fig(fig, ["fig_critical_difference_lollipop", "fig7_3_critical_difference_lollipop"])
 
 print("======================================================================")
@@ -1202,39 +1156,9 @@ plt.tight_layout()
 save_fig(fig, ["fig_zero_shot_transfer_heatmap", "fig_transfer_matrix_heatmap"])
 
 print("======================================================================")
-print("14. COMPLIANCE ALERT-VOLUME FUNNEL CHART (Ch 5)")
-print("======================================================================")
-fig, ax = plt.subplots(figsize=(7.16, 2.50))
-ax.axis("off")
-ax.set_xlim([0, 100])
-ax.set_ylim([0, 100])
-
-# Funnel trapezoids
-# Stage 1: Legacy SQL Rules (>95% FP)
-p1 = patches.Polygon([[10, 92], [90, 92], [75, 64], [25, 64]], facecolor="#fee2e2", edgecolor="#b91c1c", lw=1.2)
-ax.add_patch(p1)
-ax.text(50, 79, "1. Legacy SQL Static Rules & Threshold Triggers", ha="center", va="center", fontsize=7.8, fontweight="bold", color="#b91c1c")
-ax.text(50, 70, "Alert Volume: ~500 to 1,200 alerts / 10k tx  |  False Positive Rate: >95.0%  |  Massive Examiner Fatigue",
-        ha="center", va="center", fontsize=6.4, color="#7f1d1d")
-
-# Stage 2: Marginal Conformal (18.4% Review Queue)
-p2 = patches.Polygon([[25, 62], [75, 62], [63, 34], [37, 34]], facecolor="#fef3c7", edgecolor="#d97706", lw=1.2)
-ax.add_patch(p2)
-ax.text(50, 49, "2. Marginal Conformal Prediction (Class-Agnostic)", ha="center", va="center", fontsize=7.8, fontweight="bold", color="#b45309")
-ax.text(50, 40, "Review Queue: 1,840 alerts / 10k tx (18.4%)  |  Severe Minority Under-Coverage Deficit (-16.6 pp)",
-        ha="center", va="center", fontsize=6.4, color="#78350f")
-
-# Stage 3: C-STGB Class-Conditional CRC (0.50% Review Queue)
-p3 = patches.Polygon([[37, 32], [63, 32], [55, 6], [45, 6]], facecolor="#dcfce7", edgecolor="#15803d", lw=1.4)
-ax.add_patch(p3)
-ax.text(50, 20, "3. C-STGB Class-Conditional CRC", ha="center", va="center", fontsize=8.0, fontweight="bold", color="#15803d")
-ax.text(50, 11, "Ambiguous Queue: Exactly 50 alerts / 10k tx (0.50%) | Workload Cut: -99.50% | True Coverage >= 99.0%",
-        ha="center", va="center", fontsize=6.4, fontweight="bold", color="#14532d")
-
-ax.set_title("Operational Compliance Triage Funnel: Workload Reduction & Finite-Sample Coverage",
-             fontweight="bold", fontsize=9.6, pad=8)
-plt.tight_layout()
-save_fig(fig, ["fig_compliance_alert_funnel", "fig_compliance_funnel"])
+print("14. COMPLIANCE ALERT-VOLUME FUNNEL CHART (Ch 5) (Upgraded)")
+from scripts.upgrade_user_target_figures import upgrade_compliance_alert_funnel
+upgrade_compliance_alert_funnel()
 
 print("======================================================================")
 print("ALL 14 PUBLICATION-GRADE VISUALS GENERATED SUCCESSFULLY!")

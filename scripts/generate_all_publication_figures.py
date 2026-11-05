@@ -68,6 +68,9 @@ C_BENIGN = "#4682B4"     # Steel Blue (Benign)
 C_SYNTH  = "#FF8C00"     # Dark Orange (Synthesized)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+import sys
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 
 thesis_fig_dir = BASE_DIR / "papers" / "University_CSE_Thesis" / "figures"
 eaai_fig_dir = BASE_DIR / "papers" / "EAAI_Research_Paper" / "figures"
@@ -76,6 +79,8 @@ OUT_DIRS = [
     BASE_DIR / "data" / "outputs" / "figures",
     thesis_fig_dir,
     eaai_fig_dir,
+    BASE_DIR / "papers" / "EAAI_Submission" / "figures",
+    BASE_DIR / "reports" / "figures",
 ]
 
 for d in OUT_DIRS:
@@ -86,8 +91,8 @@ def save_all_formats(fig, filename_stem):
     for d in OUT_DIRS:
         pdf_path = d / f"{filename_stem}.pdf"
         png_path = d / f"{filename_stem}.png"
-        fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.06)
-        fig.savefig(png_path, dpi=300, bbox_inches="tight", pad_inches=0.06)
+        fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.15)
+        fig.savefig(png_path, dpi=300, bbox_inches="tight", pad_inches=0.15)
     plt.close(fig)
     print(f"   ✓ Generated: {filename_stem}.pdf & .png")
 
@@ -464,7 +469,7 @@ stages = [
                 'desc': 'Latent interpolation & hard-negative pairs'
             }
         ],
-        'output_tensor': r'$\mathbf{h}_u^{(L)} \in \mathbb{R}^d \text{ (Latent Embedding)}$',
+        'output_tensor': r'$\mathbf{h}^{(L)}(u) \in \mathbb{R}^d \text{ (Latent Embedding)}$',
         'sla_tag': 'Continuous Temporal Dynamics'
     },
     {
@@ -483,16 +488,16 @@ stages = [
             },
             {
                 'head': 'Unified Representation Space',
-                'math': r'$\mathbf{h}_u^* = \alpha_u \mathbf{h}_u + (1 - \alpha_u)[\mathbf{z}_{\mathrm{inv}} \parallel \mathbf{x}_u]$',
+                'math': r'$\mathbf{h}^*(u) = \alpha_u \mathbf{h}_u + (1 - \alpha_u)[\mathbf{z}_{\mathrm{inv}} \parallel \mathbf{x}_u]$',
                 'desc': 'Secures 89.6% F1 on isolated entities'
             },
             {
                 'head': 'Cost-Sensitive Bayes Head',
-                'math': r'$\tau^* = \arg\min_\tau (15 \cdot \mathrm{FN} + 1 \cdot \mathrm{FP})$',
+                'math': r'$\tau^* = 0.18 \; (15 \cdot \mathrm{FN} + 1 \cdot \mathrm{FP})$',
                 'desc': 'Asymmetric loss policy (C_FN / C_FP = 15)'
             }
         ],
-        'output_tensor': r'$\hat{p}_u \in [0, 1], \; \mathbf{h}_u^* \in \mathbb{R}^{d^*}$',
+        'output_tensor': r'$\hat{p}_u \in [0, 1], \; \mathbf{h}^*(u) \in \mathbb{R}^{d^*}$',
         'sla_tag': 'Cold-Start Guarded + Bayes Risk'
     },
     {
@@ -545,10 +550,10 @@ for s in stages:
         boxstyle='round,pad=0.003,rounding_size=0.006',
         facecolor=s['badge_bg'], edgecolor=s['badge_bg'], linewidth=0.5
     ))
-    ax.text(x0 + w0/2, y_bottom + card_h - 0.028, s['id'],
-            ha='center', va='center', fontsize=6.5, fontweight='bold', color='#ffffff')
-    ax.text(x0 + w0/2, y_bottom + card_h - 0.062, s['title'],
-            ha='center', va='center', fontsize=5.8, color=s['badge_fg'], style='italic')
+    ax.text(x0 + w0/2, y_bottom + card_h - 0.022, s['id'],
+            ha='center', va='center', fontsize=5.8, fontweight='bold', color='#ffffff')
+    ax.text(x0 + w0/2, y_bottom + card_h - 0.058, s['title'],
+            ha='center', va='center', fontsize=5.4, color=s['badge_fg'], style='italic')
 
     # 3 Inner Functional Blocks
     block_h = 0.208
@@ -859,21 +864,20 @@ ax.text(w_train + w_val + w_cal / 2, y_pos_discrete + bar_h / 2, "Cal\n$\\hat{q}
 ax.text(w_train + w_val + w_cal + w_test / 2, y_pos_discrete + bar_h / 2, "Test $\\mathcal{D}_{\\text{test}}$: 39–49 (20%)\n(Out-of-Time)", 
         ha="center", va="center", color="white", fontsize=8.0, fontweight="bold")
 
-ax.annotate("$\\mathcal{D}_{\\text{val}}$: 31–34 (10%)\nHyperparams & $\\tau^*$",
+ax.annotate(r"$\mathcal{D}_{\text{val}}$: 31-34 (10%)\nHyperparams & $\tau^*$",
             xy=(w_train + w_val / 2, y_pos_discrete + bar_h),
-            xytext=(w_train + w_val / 2 - 0.06, y_pos_discrete + bar_h + 0.18),
+            xytext=(w_train + w_val / 2 - 0.07, y_pos_discrete + bar_h + 0.12),
             arrowprops=dict(arrowstyle="->", color="#7b1fa2", lw=1.3),
-            ha="center", va="bottom", fontsize=7.2, fontweight="bold", color="#4a148c",
+            ha="center", va="bottom", fontsize=6.6, fontweight="bold", color="#4a148c",
+            linespacing=1.35,
             bbox=dict(boxstyle="round,pad=0.25", facecolor="#f3e5f5", edgecolor="#ce93d8", lw=0.9))
-
-ax.annotate("$\\mathcal{D}_{\\text{cal}}$: 35–38 (10%)\nConformal $\\hat{q}^{(y)}$",
+ax.annotate(r"$\mathcal{D}_{\text{cal}}$: 35-38 (10%)\nConformal $\hat{q}^{(y)}$",
             xy=(w_train + w_val + w_cal / 2, y_pos_discrete + bar_h),
-            xytext=(w_train + w_val + w_cal / 2 + 0.06, y_pos_discrete + bar_h + 0.18),
+            xytext=(w_train + w_val + w_cal / 2 + 0.07, y_pos_discrete + bar_h + 0.27),
             arrowprops=dict(arrowstyle="->", color="#e65100", lw=1.3),
-            ha="center", va="bottom", fontsize=7.2, fontweight="bold", color="#b71c1c",
+            ha="center", va="bottom", fontsize=6.6, fontweight="bold", color="#b71c1c",
+            linespacing=1.35,
             bbox=dict(boxstyle="round,pad=0.25", facecolor="#fff3e0", edgecolor="#ffb74d", lw=0.9))
-
-# Continuous Stream Bar
 rect_ctr = patches.Rectangle((0, y_pos_cont), 0.60, bar_h, facecolor="#0d47a1", edgecolor="black", lw=1.2)
 rect_cvl = patches.Rectangle((0.60, y_pos_cont), 0.10, bar_h, facecolor="#6a1b9a", edgecolor="black", lw=1.2)
 rect_ccl = patches.Rectangle((0.70, y_pos_cont), 0.10, bar_h, facecolor="#ef6c00", edgecolor="black", lw=1.2)
@@ -884,15 +888,13 @@ ax.add_patch(rect_cvl)
 ax.add_patch(rect_ccl)
 ax.add_patch(rect_cte)
 
-ax.text(0.30, y_pos_cont + bar_h / 2, "Train Stream: $t_0 \\to t_{\\text{train}}$ (60% Horizon)", 
-        ha="center", va="center", color="white", fontsize=8.0, fontweight="bold")
-ax.text(0.65, y_pos_cont + bar_h / 2, "Val (10%)\n$t_{\\text{val}}$", 
-        ha="center", va="center", color="white", fontsize=7.5, fontweight="bold")
-ax.text(0.75, y_pos_cont + bar_h / 2, "Cal (10%)\n$t_{\\text{cal}}$", 
-        ha="center", va="center", color="white", fontsize=7.5, fontweight="bold")
-ax.text(0.90, y_pos_cont + bar_h / 2, "Test Stream $t_{\\text{test}}$ (20%)\n(Strict Forward)", 
-        ha="center", va="center", color="white", fontsize=8.0, fontweight="bold")
-
+ax.text(0.30, y_pos_cont + bar_h / 2, r"Train Stream: $t_0 \to t_{\text{train}}$ (60% Horizon)", ha="center", va="center", color="white", fontsize=8.0, fontweight="bold")
+ax.text(0.65, y_pos_cont + bar_h / 2 + 0.048, "Val (10%)", ha="center", va="center", color="white", fontsize=6.6, fontweight="bold")
+ax.text(0.65, y_pos_cont + bar_h / 2 - 0.048, r"$t_{\text{val}}$", ha="center", va="center", color="white", fontsize=6.6, fontweight="bold")
+ax.text(0.75, y_pos_cont + bar_h / 2 + 0.048, "Cal (10%)", ha="center", va="center", color="white", fontsize=6.6, fontweight="bold")
+ax.text(0.75, y_pos_cont + bar_h / 2 - 0.048, r"$t_{\text{cal}}$", ha="center", va="center", color="white", fontsize=6.6, fontweight="bold")
+ax.text(0.90, y_pos_cont + bar_h / 2 + 0.048, "Test (20%)", ha="center", va="center", color="white", fontsize=6.6, fontweight="bold")
+ax.text(0.90, y_pos_cont + bar_h / 2 - 0.048, r"$t_{\text{test}}$ (Strict)", ha="center", va="center", color="white", fontsize=6.2, fontweight="bold")
 ax.text(0.0, y_pos_discrete + bar_h + 0.06, "Discrete UTXO Batches (Elliptic-v1/v2, 49 Timesteps):", fontsize=9.0, fontweight="bold", color="#0d47a1")
 ax.text(0.0, y_pos_cont + bar_h + 0.06, "Continuous Streams (PaySim, SAML-D, IBM-AMLSIM, ETH):", fontsize=9.0, fontweight="bold", color="#1a237e")
 
@@ -1108,44 +1110,16 @@ save_all_formats(fig, "fig_algorithm1_flowchart")
 
 
 # ======================================================================
-# FIGURE 14: Leave-One-Out Impact Bar Chart (Single Column: 3.50" x 2.85")
+# FIGURE 14: Leave-One-Out Component Removal Waterfall & Asymmetry (Publication Grade)
 # ======================================================================
-print("[14/22] Generating Figure 14: Leave-One-Out Impact Horizontal Bar Chart...")
-fig, ax = plt.subplots(figsize=(3.50, 3.10))
-
-components = [
-    "Typology GraphSMOTE",
-    "12-D Canonical Invariants",
-    "Edge-Trust Gating ($\\hat{g}_{ij}$)",
-    "Tri-Band Temporal Decay",
-    "Evidence-Adaptive Fusion ($\\alpha_u$)",
-    "Hawkes Point Process ($\\lambda_u$)"
-]
-
-drops = [9.92, 7.46, 5.62, 5.32, 3.30, 2.30]
-colors = ["#b71c1c", "#c62828", "#e65100", "#1565c0", "#00695c", "#2e7d32"]
-
-y_pos = np.arange(len(components))[::-1]
-
-bars = ax.barh(y_pos, drops, color=colors, edgecolor="black", lw=0.7, alpha=0.92, height=0.62)
-
-ax.set_yticks(y_pos)
-ax.set_yticklabels(components, fontsize=7.8)
-ax.set_xlabel("F1 Degradation (Percentage Points, pp)", fontsize=9.0)
-ax.set_title("Leave-One-Out Component Impact (Table 7.4 Aligned)", fontweight="bold", fontsize=10.0)
-ax.set_xlim([0, 14])
-ax.grid(True, axis="x")
-
-for bar in bars:
-    w = bar.get_width()
-    ax.annotate(f"-{w:.2f} pp",
-                xy=(w, bar.get_y() + bar.get_height()/2),
-                xytext=(4.0, 0),
-                textcoords="offset points",
-                ha='left', va='center', fontsize=7.6, fontweight='bold', color="#b71c1c" if w > 7 else "#212121")
-
-plt.tight_layout()
+print("[14/22] Generating Figure 14: Leave-One-Out Component Removal Waterfall & Asymmetry...")
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import redesign_fig7_9_leave_one_out
+fig = redesign_fig7_9_leave_one_out.build_figure()
 save_all_formats(fig, "fig_leave_one_out_impact")
+plt.close(fig)
 
 
 # ======================================================================
@@ -1321,7 +1295,7 @@ ax_sketch.plot([2.8, 3.4], [1.2, 3.8], color="#dc2626", linestyle="-.", lw=1.5, 
 ax_sketch.text(3.1, 2.5, "Forbidden Cross-Interp.\n(Zero Typology Blur)", ha="center", va="center",
                fontsize=5.6, fontweight="bold", color="#b91c1c", bbox=dict(boxstyle="round,pad=0.15", facecolor="#fee2e2", edgecolor="#dc2626", lw=0.5))
 
-ax_sketch.set_title("Latent Manifold Topology Space", fontsize=8.2, fontweight="bold", pad=4)
+ax_sketch.set_title("Latent Manifold Space", fontsize=8.0, fontweight="bold", pad=2)
 ax_sketch.set_xlabel("Latent Dim 1", fontsize=7.2)
 ax_sketch.set_ylabel("Latent Dim 2", fontsize=7.2)
 ax_sketch.tick_params(labelsize=6.5)
@@ -1341,9 +1315,9 @@ steps_data = [
      "• Generates realistic synthetic minority representations",
      0.00, 0.35, 0.98, 0.30, "#fff7ed", "#c2410c"),
     ("Step 3: Bilinear Edge Gen. & Flow Invariants",
-     "• Localized bilinear link head: $\\hat{\\mathbf{A}}_{\\mathrm{syn}, w} = \\sigma(\\mathbf{h}_{\\mathrm{syn}}^T \\mathbf{W}_{\\mathrm{edge}} \\mathbf{h}_w)$\n"
-     "• Linear transaction amount interp: preserves $\\Phi_{\\mathrm{flow}} \\approx 1.0$\n"
-     "• 100% quarantined to $\\mathcal{D}_{\\mathrm{train}}$: zero lookahead or test leakage",
+     r"• Bilinear link head: $\hat{\mathbf{A}}_{\mathrm{syn}, w} = \sigma(\mathbf{h}_{\mathrm{syn}}^T \mathbf{W}_e \mathbf{h}_w)$" + "\n"
+     r"• Invariant check: preserves $\Phi_{\mathrm{flow}} \approx 1.0$" + "\n"
+     r"• Quarantined strictly to $\mathcal{D}_{\mathrm{train}}$",
      0.00, 0.02, 0.98, 0.30, "#f0fdf4", "#15803d")
 ]
 
@@ -1352,8 +1326,11 @@ for s_title, s_body, sx, sy, sw, sh, s_bg, s_fg in steps_data:
         (sx, sy), sw, sh, boxstyle="round,pad=0.003,rounding_size=0.005",
         facecolor=s_bg, edgecolor=s_fg, linewidth=0.9
     ))
-    ax_steps.text(sx + 0.025, sy + sh - 0.065, s_title, ha="left", va="center", fontsize=7.2, fontweight="bold", color=s_fg)
-    ax_steps.text(sx + 0.025, sy + 0.095, s_body, ha="left", va="center", fontsize=6.2, color="#1e293b", linespacing=1.28)
+    ax_steps.text(sx + 0.025, sy + sh - 0.042, s_title, ha="left", va="center", fontsize=6.8, fontweight="bold", color=s_fg)
+    b_lines = [b.strip() for b in s_body.split("\n") if b.strip()]
+    for b_idx, b_txt in enumerate(b_lines):
+        ax_steps.text(sx + 0.025, sy + sh - 0.098 - (b_idx * 0.065), b_txt,
+                      ha="left", va="center", fontsize=4.9, color="#1e293b")
 
 # Connect 3 steps with downward arrows
 for y_conn in [0.66, 0.33]:
@@ -1361,55 +1338,17 @@ for y_conn in [0.66, 0.33]:
                       arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#64748b", lw=1.2))
 
 fig.suptitle("Three-Step Typology-Clustered Latent GraphSMOTE & Bilinear Edge Synthesis Pipeline",
-             fontsize=9.6, fontweight="bold", color="#0f172a", y=0.96)
+             fontsize=9.6, fontweight="bold", color="#0f172a", y=0.98)
+plt.subplots_adjust(top=0.88, bottom=0.06, left=0.08, right=0.98)
 
 save_all_formats(fig, "fig18_graphsmote_synthesis_pipeline")
 
 
 # ======================================================================
-# FIGURE 19: Class-Conditional CRC vs Marginal Conformal (Double Column: 7.16" x 3.00")
-# ======================================================================
-print("[19/22] Generating Figure 19: Class-Conditional CRC vs Marginal Risk Mechanism...")
-fig, axes = plt.subplots(1, 2, figsize=(7.16, 3.00))
-
-# Left panel: Non-conformity distribution breakdown
-np.random.seed(123)
-s_benign = np.random.beta(2, 8, 2000)      # High confidence benign (low s_i)
-s_illicit = np.random.beta(7, 3, 100)      # High confidence illicit (high s_i for y=0 nonconformity)
-
-axes[0].hist(s_benign, bins=30, alpha=0.6, color=C_BENIGN, label=r"Benign $s_i^{(0)}$ ($99.95\%$)")
-axes[0].hist(s_illicit, bins=30, alpha=0.8, color=C_GCN, label=r"Illicit $s_i^{(1)}$ ($0.05\%$)")
-axes[0].axvline(np.quantile(s_benign, 0.99), color=C_XGB, ls="--", lw=1.8, label=r"Benign Quantile $\hat{q}^{(0)}$")
-axes[0].axvline(np.quantile(s_illicit, 0.99), color=C_CSTGB, ls="-.", lw=1.8, label=r"Illicit Quantile $\hat{q}^{(1)}$")
-axes[0].set_title("(a) Dual Calibrated Quantiles under Imbalance", fontweight="bold", fontsize=10.0)
-axes[0].set_xlabel("Non-Conformity Score $s_i = 1 - \\hat{p}_i(y)$", fontsize=9.5)
-axes[0].set_ylabel("Sample Frequency", fontsize=9.5)
-axes[0].grid(True)
-axes[0].legend(loc="upper right", framealpha=0.94, fontsize=7.5)
-
-# Right panel: Set composition comparison
-triage_cats = ["Marginal\nConformal", "Class-Conditional\nCRC (Proposed)"]
-p_block  = [1.2, 0.55]   # Singletons {1}
-p_clear  = [78.5, 99.40] # Singletons {0}
-p_review = [20.3, 0.05]  # Ambiguous {0, 1}
-
-x_t = np.arange(len(triage_cats))
-w_t = 0.25
-axes[1].bar(x_t - w_t, p_block,  w_t, label="Auto-Block $\{1\}$", color="#c62828", edgecolor="black", lw=0.6)
-axes[1].bar(x_t,       p_clear,  w_t, label="Auto-Clear $\{0\}$", color="#2e7d32", edgecolor="black", lw=0.6)
-axes[1].bar(x_t + w_t, p_review, w_t, label="Human Review $\{0, 1\}$", color="#f57c00", edgecolor="black", lw=0.6)
-
-axes[1].set_ylabel("Transaction Share (%)", fontsize=9.5)
-axes[1].set_title("(b) Triage Operational Volume Comparison", fontweight="bold", fontsize=10.0)
-axes[1].set_xticks(x_t)
-axes[1].set_xticklabels(triage_cats, fontsize=8.2, fontweight="bold")
-axes[1].set_yscale("log")
-axes[1].set_ylim([0.01, 150])
-axes[1].grid(True, axis="y")
-axes[1].legend(loc="upper left", framealpha=0.94, fontsize=7.8)
-
-plt.tight_layout()
-save_all_formats(fig, "fig19_conformal_risk_mechanism")
+# FIGURE 19: Class-Conditional CRC vs Marginal Conformal (Double Column: Spacious 8.2" x 4.0")
+print("[19/22] Generating Figure 19: Class-Conditional CRC vs Marginal Risk Mechanism (Upgraded)...")
+from scripts.upgrade_user_target_figures import upgrade_fig19_conformal_risk_mechanism
+upgrade_fig19_conformal_risk_mechanism()
 
 
 # ======================================================================

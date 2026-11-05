@@ -93,7 +93,7 @@ modules = [
         "badge_bg": "#0f766e", "badge_fg": "#f0fdfa", "card_bg": "#f8fafc", "border": "#99f6e4",
         "headline": "3-Band Harmonic", "hl_bg": "#ccfbf1", "hl_fg": "#0f766e",
         "bullets": ["Brody dynamic attention", "Edge-trust chaff pruning"],
-        "out": r"$\mathbf{h}_u^{(L)} \in \mathbb{R}^{d}$",
+        "out": r"$\mathbf{h}^{(L)}(u) \in \mathbb{R}^{d}$",
         "x": 0.176, "w": 0.150
     },
     {
@@ -109,7 +109,7 @@ modules = [
         "badge_bg": "#6d28d9", "badge_fg": "#faf5ff", "card_bg": "#f8fafc", "border": "#e9d5ff",
         "headline": "89.60% Cold-Start", "hl_bg": "#ede9fe", "hl_fg": "#6d28d9",
         "bullets": ["Degree-adaptive gating", "Graph-tabular union"],
-        "out": r"$\mathbf{h}_u^* \in \mathbb{R}^{d^*}$",
+        "out": r"$\mathbf{h}^*(u) \in \mathbb{R}^{d^*}$",
         "x": 0.504, "w": 0.150
     },
     {
@@ -150,9 +150,7 @@ for i, m in enumerate(modules):
         boxstyle="round,pad=0.003,rounding_size=0.005",
         facecolor=m["badge_bg"], edgecolor=m["badge_bg"], linewidth=0.5
     ))
-    ax.text(x0 + w0/2, y_bottom + card_h - 0.030, m["num"],
-            ha="center", va="center", fontsize=6.2, fontweight="bold", color=m["badge_fg"])
-    ax.text(x0 + w0/2, y_bottom + card_h - 0.062, m["title"],
+    ax.text(x0 + w0/2, y_bottom + card_h - 0.046, f"{m['num']}: {m['title']}",
             ha="center", va="center", fontsize=6.8, fontweight="bold", color="#ffffff")
     
     # Headline Highlight Pill

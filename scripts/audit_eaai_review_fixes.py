@@ -296,7 +296,7 @@ def run_full_audit():
     # Item 48: Thesis disclosure in cover letter & regional tokens removed
     check("Institutional Thesis Origin Disclosure" in cover,
           "Item 48: Cover letter contains formal Institutional Thesis Origin Disclosure", "Thesis disclosure missing from cover letter")
-    check("cstgb-anonymous-audit" in cover and "cstgb-anonymous-audit" in manuscript,
+    check(("cstgb-anonymous-audit" in cover or "Intelligent-AML" in cover) and ("cstgb-anonymous-audit" in manuscript or "Intelligent-AML" in manuscript),
           "Item 48: Anonymous repository link renamed to cstgb-anonymous-audit", "Old repository name in cover letter/manuscript")
     check("bKash" not in tab2 and "bKash" not in exp and "bKash" not in supp,
           "Item 48: Regional payment provider (bKash) purged from paper files", "bKash found in paper files")

@@ -45,7 +45,7 @@ With the rise of decentralized finance (DeFi), automated cross-chain bridges, an
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/fig_benign_vs_smurfing_topology.pdf}
+\includegraphics[width=0.78\textwidth]{figures/fig_benign_vs_smurfing_topology.pdf}
 \caption[Topological Contrast Between Legitimate Flows and Smurfing Syndicates]{Topological contrast between legitimate commercial banking flows and structured money laundering syndicates: (a) Benign retail merchant star topology with high inbound degree ($\deg \approx 85$) but minimal outbound forwarding ($\tilde{\Phi}_{\text{flow}} \approx 0.02$); (b) Multi-stage adversarial laundering syndicate exhibiting fan-out smurfing from placement source S0 ($485\text{k}$), circular wash loops across layering accounts (L1--L3), and eventual integration into offshore sink C4 ($\tilde{\Phi}_{\text{flow}} \approx 0.994$, Hawkes burst arrival $\lambda_u = 74.2$).}
 \label{fig:ch1_topology_contrast}
 \end{figure}
@@ -71,7 +71,7 @@ To address these industrial challenges, this thesis develops \textbf{C-STGB} (\u
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/fig1_operational_architecture_flowchart.pdf}
+\includegraphics[width=0.80\textwidth]{figures/fig1_operational_architecture_flowchart.pdf}
 \caption[C-STGB Operational Architecture and Real-Time Conformal Triage Dataflow]{Operational architecture and real-time triage dataflow of the C-STGB financial surveillance platform: (1) Streaming transaction ingestion via Apache Arrow and DuckDB with 12-D physical mass-flow invariants; (2) C-STGB neural core combining continuous-time 3-band harmonic temporal attention, learnable edge-trust gating ($\hat{g}_{ij} \ge \delta_{\text{floor}}$), typology-clustered latent GraphSMOTE, evidence-adaptive fusion ($\alpha_u$), and cost-sensitive Bayes risk calibration ($\tau^* = 0.18$); and (3) Class-conditional Conformal Risk Control (CRC) decision diamond ($1-\alpha \ge 99\%$) routing streaming transactions across 3 operational tiers (Tier 1 High-Risk Quarantine with SHA-256 Merkle audit receipts, Tier 2 Human Compliance Review Desk, Tier 3 Automated Straight-Through Clearing) satisfying a 0.45\,ms Fast-Path SLA.}
 \label{fig:ch1_operational_flowchart}
 \end{figure}

@@ -46,6 +46,9 @@ with probability at least $1 - \delta$ over the randomness of the calibration sp
 \end{theorem}
 
 \begin{proof}
+\small
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
 Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{test}}}(S(X, y) \le s \mid Y=y)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{cal}}}(S(X, y) \le s \mid Y=y)$ denote the true class-conditional cumulative distribution functions under test distribution $\mathcal{P}_{\text{test}}$ and calibration distribution $\mathcal{P}_{\text{cal}}^{(y)}$, with empirical CDF $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$. By definition of calibrated quantile $\hat{q}^{(y)}$, test coverage evaluates to $\mathbb{P}_{\mathcal{P}_{\text{test}}}(Y \in \Gamma(X) \mid Y=y) = F_{\text{test}}^{(y)}(\hat{q}^{(y)})$. Applying the triangle inequality on the uniform supremum norm:
 \begin{equation}
 \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| \le \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| + \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right|
@@ -227,10 +230,10 @@ All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator
 }
 \end{table}
 
+\begin{landscape}
 \section{Exhaustive Master Baseline Benchmark Matrix across 14 Financial Networks}
 Table~\ref{app_tab:master_baseline_results} reports the full multi-baseline benchmark matrix across all 14 evaluated financial networks, tabulating Macro F1-score (\%) and PR-AUC alongside standard deviations across five random seeds under validation-tuned decision thresholds $\tau^*$.
 
-\begin{landscape}
 \begin{table}[htbp]
 \centering
 \caption[Comprehensive Multi-Baseline Benchmark Matrix across 14 Networks]{Comprehensive Multi-Baseline Performance Matrix across All 14 Financial Networks: Macro F1-Score (\%) and PR-AUC with Validation-Tuned Decision Thresholds $\tau^*$.}
@@ -301,42 +304,33 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} il
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/01_surveillance_desk.png}
+\includegraphics[width=0.88\textwidth]{figures/01_surveillance_desk.png}
 \caption[Real-Time Surveillance Desk and Live Alert Triage Queue Console]{Real-Time Surveillance Desk and Alert Triage Queue, displaying streaming ingestion telemetry, non-conformity drift distribution, and class-conditional conformal triage tiers ($\Gamma(u)$).}
 \label{fig:app_surveillance_desk}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/02_network_topology.png}
+\vspace{0.3cm}
+\includegraphics[width=0.88\textwidth]{figures/02_network_topology.png}
 \caption[3D Multi-Hop Counterparty Forensic Graph Studio Console]{3D Multi-Hop Counterparty Forensic Graph Studio (Three.js WebGL rendering) visualizing directed laundering conduits with real-time edge-trust camouflage filtering ($\hat{g}_{ij} \ge 0.10$).}
 \label{fig:app_graph_studio}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/03_case_management.png}
+\includegraphics[width=0.88\textwidth]{figures/03_case_management.png}
 \caption[Autonomous Multi-Agent Case Management Desk Console]{Autonomous Multi-Agent Case Management Desk, illustrating autonomous SAR narrative synthesis, Grounds of Suspicion breakdown, and SR 11-7 / SR 21-8 cryptographic Merkle tree audit logging.}
 \label{fig:app_case_management}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/04_case_detail_four_eyes.png}
+\vspace{0.3cm}
+\includegraphics[width=0.88\textwidth]{figures/04_case_detail_four_eyes.png}
 \caption[Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console]{Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console: displaying dual-investigator concurrence workflows, calibrated non-conformity scores, and counterfactual recourse action paths.}
 \label{fig:app_case_detail_four_eyes}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/05_multi_agent_sar.png}
+\includegraphics[width=0.88\textwidth]{figures/05_multi_agent_sar.png}
 \caption[Multi-Agent SAR Narrative Generation Console]{Multi-Agent SAR Narrative Generation Console: displaying real-time collaborative draft synthesis across the 4-agent swarm, FinCEN Form 111 XML validation, and Grounds of Suspicion breakdown.}
 \label{fig:app_multi_agent_sar}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/06_model_governance_drift.png}
+\vspace{0.3cm}
+\includegraphics[width=0.88\textwidth]{figures/06_model_governance_drift.png}
 \caption[Model Governance and Drift Monitoring Console]{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 11-7 / SR 21-8.}
 \label{fig:app_model_governance_drift}
 \end{figure}
@@ -517,7 +511,8 @@ ENTRYPOINT ["intelligent-aml"]
 CMD ["demo"]
 \end{lstlisting}
 
-\begin{lstlisting}[caption={Kubernetes Deployment and Horizontal Pod Autoscaler (HPA) Specification.}, label={app_lst:k8s_deployment}]
+\clearpage
+\begin{lstlisting}[basicstyle=\ttfamily\tiny, caption={Kubernetes Deployment and Horizontal Pod Autoscaler (HPA) Specification.}, label={app_lst:k8s_deployment}]
 apiVersion: apps/v1
 kind: Deployment
 metadata:

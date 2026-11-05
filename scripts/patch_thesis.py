@@ -310,3 +310,4 @@ if __name__ == "__main__":
             print(f"Processing {fname}...")
             patch_chapter(fname)
     print("All chapters successfully patched!")
+

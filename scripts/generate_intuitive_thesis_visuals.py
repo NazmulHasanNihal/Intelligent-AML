@@ -53,7 +53,7 @@ def save_fig(fig, stem):
 # 1. FIG: 2D AML Graph Learning Evolution Frontier (Chapter 2)
 # =============================================================================
 def generate_lit_evolution_frontier():
-    fig, ax = plt.subplots(figsize=(7.5, 4.6))
+    fig, ax = plt.subplots(figsize=(7.5, 4.8))
     
     # Background quadrants
     ax.axhspan(0, 50, 0, 50, color='#f8f9fa', alpha=0.8, zorder=0)
@@ -65,22 +65,22 @@ def generate_lit_evolution_frontier():
     ax.axvline(50, color='#cbd5e1', linestyle='--', lw=1.2, zorder=1)
     ax.axhline(50, color='#cbd5e1', linestyle='--', lw=1.2, zorder=1)
     
-    # Quadrant Labels
-    ax.text(25, 6, "Quadrant I: Static & Tabular Baselines\n(No Relational or Temporal Modeling)", 
-            ha='center', va='bottom', fontsize=7.5, color='#64748b', style='italic')
-    ax.text(25, 94, "Quadrant II: Topological Imbalance Specialists\n(Static Relational Oversampling)", 
-            ha='center', va='top', fontsize=7.5, color='#64748b', style='italic')
-    ax.text(75, 6, "Quadrant III: Continuous Temporal GNNs\n(Blind to Imbalance & Camouflage)", 
-            ha='center', va='bottom', fontsize=7.5, color='#64748b', style='italic')
-    ax.text(75, 94, "Quadrant IV: Unified Frontier\n(Continuous-Time + Conformal Safety)", 
-            ha='center', va='top', fontsize=8.0, color='#0369a1', weight='bold')
+    # Unobtrusive Quadrant Header Badges (Placed in clear boundary corners)
+    ax.text(6, 8, "QUADRANT I: Static Tabular Baselines", ha='left', va='bottom', 
+            fontsize=7.0, color='#64748b', weight='bold')
+    ax.text(6, 96, "QUADRANT II: Topological Imbalance Specialists", ha='left', va='top', 
+            fontsize=7.0, color='#64748b', weight='bold')
+    ax.text(52, 8, "QUADRANT III: Continuous Temporal GNNs", ha='left', va='bottom', 
+            fontsize=7.0, color='#64748b', weight='bold')
+    ax.text(52, 96, "QUADRANT IV: Unified Neuro-Symbolic Frontier", ha='left', va='top', 
+            fontsize=7.2, color='#0369a1', weight='bold')
     
-    # Models data: (name, x_temporal, y_robustness, family, color, size, offset)
+    # Models data: (name, x_temporal, y_robustness, color, size, offset)
     models = [
         # Tabular
-        ("XGBoost", 12, 18, "#475569", 100, (-10, -12)),
-        ("LightGBM", 16, 24, "#475569", 100, (10, -5)),
-        ("CatBoost", 20, 20, "#475569", 100, (-10, 8)),
+        ("XGBoost", 12, 16, "#475569", 100, (-12, -12)),
+        ("LightGBM", 16, 26, "#475569", 100, (-15, 8)),
+        ("CatBoost", 22, 18, "#475569", 100, (8, -10)),
         
         # Spatial GNNs
         ("GCN", 15, 38, "#2563eb", 120, (-10, -12)),
@@ -113,11 +113,11 @@ def generate_lit_evolution_frontier():
         
     # C-STGB (Ours) - Grand Star
     ax.scatter(92, 92, s=320, color='#dc2626', marker='*', edgecolors='#fef08a', lw=2.0, zorder=5)
-    ax.annotate("C-STGB (Proposed)\n★ 91.42% F1 | 0.45 ms SLA | CRC Guarantees", 
-                xy=(92, 92), xytext=(-130, -28), textcoords='offset points',
-                bbox=dict(boxstyle="round,pad=0.4", fc="#fee2e2", ec="#dc2626", lw=1.2),
-                fontsize=8.5, weight='bold', color='#991b1b',
-                arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=-0.15", color='#dc2626', lw=1.2))
+    ax.annotate("C-STGB (Proposed)\n★ 91.42% F1 | 0.45 ms SLA", 
+                xy=(92, 92), xytext=(-65, -35), textcoords='offset points',
+                bbox=dict(boxstyle="round,pad=0.35", fc="#fee2e2", ec="#dc2626", lw=1.2),
+                fontsize=8.0, weight='bold', color='#991b1b',
+                arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=-0.12", color='#dc2626', lw=1.2))
 
     # Pareto Frontier Curve
     curve_x = np.linspace(15, 92, 100)
@@ -128,21 +128,23 @@ def generate_lit_evolution_frontier():
 
     ax.set_xlim(5, 98)
     ax.set_ylim(5, 98)
-    ax.set_xlabel(r"Temporal Expressiveness & Velocity Modeling (Static Snapshots $\longrightarrow$ Continuous-Time Harmonic)", fontsize=9.0, weight='semibold')
-    ax.set_ylabel(r"Imbalance, Camouflage & Conformal Safety (None $\longrightarrow$ Finite-Sample Risk Bounds)", fontsize=9.0, weight='semibold')
-    ax.set_title("2D Financial Crime Graph Learning Evolution Frontier: Positioning C-STGB vs. 18 SOTA Baselines", fontsize=10.0, weight='bold', pad=10)
+    ax.set_xlabel(r"Temporal Expressiveness & Velocity Modeling (Static Snapshots $\longrightarrow$ Continuous-Time Harmonic)", fontsize=8.5, weight='semibold')
+    ax.set_ylabel(r"Imbalance, Camouflage & Conformal Safety (None $\longrightarrow$ Finite-Sample Risk Bounds)", fontsize=8.5, weight='semibold')
+    ax.set_title("2D Financial Crime Graph Learning Evolution Frontier: Positioning C-STGB vs. 18 SOTA Baselines", fontsize=9.5, weight='bold', pad=10)
     
-    # Legend
+    # Legend placed cleanly below the plot area - completely eliminates text collisions
     legend_elements = [
-        plt.Line2D([0], [0], marker='o', color='w', label='Tabular Ensembles (XGBoost/LightGBM)', markerfacecolor='#475569', markersize=7),
-        plt.Line2D([0], [0], marker='o', color='w', label='Spatial GNNs (GCN/GAT/GIN)', markerfacecolor='#2563eb', markersize=7),
-        plt.Line2D([0], [0], marker='o', color='w', label='Topological Imbalance GNNs (GraphSMOTE)', markerfacecolor='#d97706', markersize=7),
-        plt.Line2D([0], [0], marker='o', color='w', label='Camouflage Filtering GNNs (CARE/FraudGate)', markerfacecolor='#7c3aed', markersize=7),
-        plt.Line2D([0], [0], marker='o', color='w', label='Dynamic / Continuous GNNs (TGN/TGAT)', markerfacecolor='#059669', markersize=7),
-        plt.Line2D([0], [0], marker='*', color='w', label='C-STGB (Unified Neuro-Symbolic Core)', markerfacecolor='#dc2626', markeredgecolor='#fef08a', markersize=11),
+        plt.Line2D([0], [0], marker='o', color='w', label='Tabular (XGB/LGBM)', markerfacecolor='#475569', markersize=6),
+        plt.Line2D([0], [0], marker='o', color='w', label='Spatial GNNs (GCN/GAT)', markerfacecolor='#2563eb', markersize=6),
+        plt.Line2D([0], [0], marker='o', color='w', label='Imbalance (GraphSMOTE)', markerfacecolor='#d97706', markersize=6),
+        plt.Line2D([0], [0], marker='o', color='w', label='Camouflage (CARE/FraudGate)', markerfacecolor='#7c3aed', markersize=6),
+        plt.Line2D([0], [0], marker='o', color='w', label='Dynamic GNNs (TGN/TGAT)', markerfacecolor='#059669', markersize=6),
+        plt.Line2D([0], [0], marker='*', color='w', label='C-STGB (Proposed)', markerfacecolor='#dc2626', markeredgecolor='#fef08a', markersize=10),
     ]
-    ax.legend(handles=legend_elements, loc='lower right', fontsize=7.0, framealpha=0.95, edgecolor='#cbd5e1')
+    ax.legend(handles=legend_elements, loc='upper center', bbox_to_anchor=(0.5, -0.13), 
+              ncol=3, fontsize=6.8, framealpha=0.95, edgecolor='#cbd5e1')
     
+    fig.subplots_adjust(bottom=0.22, top=0.92, left=0.08, right=0.96)
     save_fig(fig, "fig_lit_evolution_frontier")
 
 # =============================================================================
@@ -190,7 +192,7 @@ def generate_12d_toy_model_schematic():
 
     # Panel C: Directed Causal Taint & PageRank
     ax = axes[1, 0]
-    ax.set_title(r"(c) Directed Causal Taint Exposure ($\pi_u^{\mathrm{fwd}}, \pi_u^{\mathrm{rev}}$)", fontsize=8.5, weight='bold', color='#1e3a8a')
+    ax.set_title(r"(c) Directed Causal Taint Exposure ($\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{bwd}}$)", fontsize=8.5, weight='bold', color='#1e3a8a')
     pos = {'S0': (0.15, 0.50), 'M1': (0.45, 0.75), 'M2': (0.45, 0.25), 'C3': (0.80, 0.50)}
     # Darknet seed
     seed = patches.Circle(pos['S0'], 0.08, fc="#dc2626", ec="#991b1b", lw=1.5)

@@ -263,7 +263,7 @@ inv_groups = [
     ("Group 1: Kirchhoff Flow Balance", r"$\Phi_{\mathrm{flow}} = \sum A_{\mathrm{out}} / (\sum A_{\mathrm{in}} + \epsilon)$", "Mule pass-through ~1.0 balance", "#14532d"),
     ("Group 2: Hawkes Burst Rate", r"$\lambda_u(t) = \mu_0 + \sum \alpha e^{-\beta(t - t_i)}$", "Continuous micro-burst acceleration", "#166534"),
     ("Group 3: Bi-Directional Taint", r"$\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{bwd}} = (1-\alpha)(\mathbf{I}-\alpha\mathbf{P})^{-1}\mathbf{s}_0$", "Causal illicit PageRank proximity", "#15803d"),
-    ("Group 4: 5-Moment Amount Stats", r"$\mu_A, \sigma_A^2, \gamma_A, \kappa_A, \nu_{\mathrm{io}}$ & Temporal Jitter", "Higher-order ego transaction dispersion", "#16a34a"),
+    ("Group 4: 5-Moment Amount Stats", r"$\mu_A, \mathrm{Var}(A), \gamma_A, \kappa_A, \nu_{\mathrm{io}}$ & Temporal Jitter", "Higher-order ego transaction dispersion", "#16a34a"),
 ]
 
 y_grp = 0.615

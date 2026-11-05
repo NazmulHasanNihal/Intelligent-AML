@@ -207,7 +207,7 @@ inv_features = [
     r"Amount Velocity ($v_A$)",
     r"In/Out Velocity Ratio ($\nu_{\text{io}}$)",
     r"Amount Mean ($\mu_A$)",
-    r"Amount Variance ($\sigma_A^2$)",
+    r"Amount Variance ($\mathrm{Var}(A)$)",
     r"Amount Skewness ($\gamma_A$)",
     r"Amount Kurtosis ($\kappa_A$)"
 ]
@@ -419,7 +419,7 @@ inv_labels = [
     r"$v_A$ (Amount Velocity)",
     r"$\nu_{\text{io}}$ (IO Velocity Ratio)",
     r"$\mu_A$ (Amount Mean)",
-    r"$\sigma_A^2$ (Amount Variance)",
+    r"$\mathrm{Var}(A)$ (Amount Variance)",
     r"$\gamma_A$ (Amount Skewness)",
     r"$\kappa_A$ (Amount Kurtosis)"
 ]

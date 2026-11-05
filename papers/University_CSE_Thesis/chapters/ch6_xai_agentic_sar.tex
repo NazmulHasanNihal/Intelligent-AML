@@ -21,7 +21,7 @@ To bridge machine learning predictions with statutory legal compliance, C-STGB i
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figures/fig_forensic_swarm.pdf}
+  \includegraphics[width=0.85\textwidth]{figures/fig_forensic_swarm.pdf}
   \caption[Multi-Agent Forensic Reasoning and Dual-Governance Pipeline]{Multi-agent forensic reasoning and dual-governance pipeline. The orchestrator hydrates the alert context for the Investigator, Drafter and Auditor agents. The AST compiler accepts a dossier only if every entity is grounded in the evidence subgraph ($V(T)\subseteq V_{\mathrm{sub}}$, Proposition~\ref{prop:anti_hallucination}); rejected drafts return to the Drafter. Verified dossiers pass the maker--checker gate and are sealed in the WORM vault.}
   \label{fig:forensic-swarm}
   \label{fig:ch6_swarm_architecture}
@@ -58,7 +58,7 @@ To eliminate Large Language Model (LLM) entity hallucinations (e.g., inventing f
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/fig_ast_grammar_pipeline.pdf}
+\includegraphics[width=0.85\textwidth]{figures/fig_ast_grammar_pipeline.pdf}
 \caption[AST Grammar Compiler and Anti-Hallucination SAR Pipeline]{AST grammar compiler and schema verification pipeline: multi-agent forensic reasoning text is parsed via Extended Backus-Naur Form ($\mathcal{G}_{\text{SAR}}$) recursive descent rules and validated against strict Pydantic schemas, guaranteeing a 0.00\% hallucination rate in compiled FinCEN Form 111 XML filings.}
 \label{fig:ch6_ast_pipeline}
 \end{figure}
@@ -157,14 +157,14 @@ Figure~\ref{fig:ch6_case_study_subgraph} and Figure~\ref{fig:single_alert_timeli
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/fig_15node_forensic_progression.pdf}
+\includegraphics[width=0.86\textwidth]{figures/fig_15node_forensic_progression.pdf}
 \caption[Worked 3-Stage Forensic Progression of a 15-Node Incident]{Worked 3-stage forensic progression of a 15-node smurfing and peeling incident: (a) Raw ingested transaction graph showing 24 transactions contaminated by heavy camouflage chaff; (b) GNNExplainer topological mask pruning 65.9\% of spurious links ($M_e \ge 0.65$), isolating the true criminal fan-out and wash cycle; and (c) Certified FinCEN Form 111 SAR dossier autonomously generated with SHA-256 Merkle root verification under Federal Reserve SR 11-7 and SR 21-8 model risk governance.}
 \label{fig:ch6_case_study_subgraph}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/fig_single_alert_timeline.pdf}
+\includegraphics[width=0.86\textwidth]{figures/fig_single_alert_timeline.pdf}
 \caption[Chronological Forensic Timeline of the 15-Node Laundering Case]{Chronological forensic timeline of the 15-node incident, tracking timestamped deposits, smurfing dispersal ($\lambda = 74.2$), layering washes, offshore aggregation ($\Phi_{\text{flow}} \approx 0.994$), and Tier 1 Conformal Quarantine alert generation.}
 \label{fig:single_alert_timeline}
 \end{figure}

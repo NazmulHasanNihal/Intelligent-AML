@@ -36,6 +36,15 @@
 \captionsetup{font=small,labelfont=bf,skip=8pt}
 \graphicspath{{figures/}{figs/}}
 
+% Tight Float Placement & Page Density Optimization
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.80}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{10pt plus 2pt minus 3pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+
 % Modern Callout Boxes & Visual Styling
 \usepackage{tcolorbox}
 \tcbuselibrary{skins,breakable}
@@ -161,15 +170,24 @@
 \clearpage
 \phantomsection
 \addcontentsline{toc}{chapter}{\contentsname}
+\begingroup
+\singlespacing
 \tableofcontents
+\endgroup
 \clearpage
 \phantomsection
 \addcontentsline{toc}{chapter}{\listfigurename}
+\begingroup
+\singlespacing
 \listoffigures
+\endgroup
 \clearpage
 \phantomsection
 \addcontentsline{toc}{chapter}{\listtablename}
+\begingroup
+\singlespacing
 \listoftables
+\endgroup
 \clearpage
 
 % -----------------------------------------------------------------------------

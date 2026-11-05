@@ -133,7 +133,7 @@ stages = [
             (r"Mass Flow: $\Phi = \ln(1 + A_{\mathrm{out}} / [A_{\mathrm{in}} + \epsilon])$", "#0f172a", True),
             ("Pass-Through Layering Detector", "#334155", False),
             (r"Hawkes: $\lambda_u(t) = \mu_u + \sum \alpha e^{-\beta \Delta t}$", "#0f766e", True),
-            (r"Burst Acceleration ($\mu_A, \sigma_A^2$)", "#334155", False),
+            (r"Burst Acceleration ($\mu_A, \mathrm{Var}(A)$)", "#334155", False),
             ("Directed Causal Taint Tracing", "#0f766e", True),
             (r"Tensor: $\mathbf{z}_{\mathrm{inv}} \in \mathbb{R}^{12}$", "#0f172a", True),
         ]
@@ -719,8 +719,8 @@ ax.plot([t1_x + t1_w, 0.325, 0.325, t2_x], [0.780, 0.780, 0.690, 0.690], color='
 ax.text(0.325, 0.665, "1 : N (Target)", ha='center', va='top', fontsize=5.4, fontweight='bold', color='#0f766e')
 
 # Jurisdiction FK connector
-ax.plot([t3_x, 0.700, 0.700, 0.200, 0.200, 0.200], [0.815, 0.815, 0.900, 0.900, 0.895, 0.895], color='#b91c1c', lw=1.2, linestyle=':')
-ax.text(0.705, 0.825, "1 : N (Jurisdiction FK)", ha='left', va='bottom', fontsize=5.2, fontweight='bold', color='#b91c1c')
+ax.plot([t3_x, 0.695, 0.695, 0.160, 0.160, 0.160], [0.815, 0.815, 0.905, 0.905, 0.895, 0.895], color='#b91c1c', lw=1.2, linestyle=':')
+ax.text(0.440, 0.908, "1 : N (Jurisdiction FK)", ha='center', va='bottom', fontsize=5.2, fontweight='bold', color='#b91c1c')
 
 # BOTTOM PANEL: Causal Indexes & 12-D Materialized View
 b_x, b_y, b_w, b_h = 0.015, 0.015, 0.975, 0.355
@@ -761,7 +761,7 @@ view_groups = [
     (r"1. Flow Regularity: $\Phi_{\mathrm{flow}} = \ln(1 + \sum A_{\mathrm{out}} / (\sum A_{\mathrm{in}} + \epsilon))$", "#0f766e"),
     (r"2. Hawkes Arrival Rate: $\lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha \cdot e^{-\beta (t - t_i)}$", "#1e40af"),
     (r"3. Directed Causal Taints: $\mathbf{s}_{\mathrm{fwd}} \in [0, 1]$ (Dispersion), $\mathbf{s}_{\mathrm{bwd}} \in [0, 1]$ (Aggregation)", "#b91c1c"),
-    (r"4. Graph Multi-Moments: $[\mu_A, \sigma_A^2, \gamma_A, \kappa_A] \parallel [\text{deg}_{\mathrm{in}}, \text{deg}_{\mathrm{out}}, v_A, \nu_{\mathrm{io}}] \to \mathbf{R}^{12}$", "#6d28d9")
+    (r"4. Graph Multi-Moments: $[\mu_A, \mathrm{Var}(A), \gamma_A, \kappa_A] \parallel [\text{deg}_{\mathrm{in}}, \text{deg}_{\mathrm{out}}, v_A, \nu_{\mathrm{io}}] \to \mathbf{R}^{12}$", "#6d28d9")
 ]
 for i, (v_line, v_clr) in enumerate(view_groups):
     y_v = b_y + 0.200 - (i * 0.054)
@@ -1093,7 +1093,7 @@ ax_lol.set_xlabel("Minority F1-Score (%)", fontsize=8.5)
 ax_lol.set_xlim([0, 105])
 ax_lol.set_title("(b) Performance by Domain Archetype", fontweight="bold", fontsize=8.8)
 ax_lol.grid(True, axis="x", linestyle=":", alpha=0.5)
-ax_lol.legend(loc="lower right", fontsize=6.2, framealpha=0.92)
+ax_lol.legend(loc="upper left", fontsize=6.2, framealpha=0.92)
 
 plt.tight_layout()
 save_fig(fig, ["fig_critical_difference_lollipop", "fig7_3_critical_difference_lollipop"])

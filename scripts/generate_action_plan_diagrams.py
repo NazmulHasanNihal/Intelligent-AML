@@ -53,7 +53,7 @@ def save_fig(fig, stem):
 # 1. FIG 4.2: DATABASE ENTITY-RELATIONSHIP DIAGRAM (ERD) (7.16" x 3.60")
 # ==============================================================================
 print("Generating Fig 4.2: Relational Database ERD & Materialized Graph View...")
-fig, ax = plt.subplots(figsize=(7.16, 3.60))
+fig, ax = plt.subplots(figsize=(7.16, 4.20))
 ax.axis('off')
 ax.set_xlim([-0.010, 1.010])
 ax.set_ylim([-0.015, 1.015])
@@ -147,10 +147,10 @@ ax.text(t3_x + t3_w/2, t3_y + t3_h - 0.035, 'TABLE: high_risk_jurisdictions', ha
 
 t3_fields = [
     ("PK", "country_iso", "CHAR(2)", True),
-    ("  ", "country_name", "VARCHAR(64)", False),
-    ("  ", "fatf_status", "VARCHAR(24) [Grey/Black]", False),
-    ("  ", "basel_aml_index", "NUMERIC(4, 2)", False),
-    ("  ", "sanction_authority", "VARCHAR(32) [OFAC/UN]", False),
+    ("  ", "country_name", "VARCHAR(48)", False),
+    ("  ", "fatf_status", "VARCHAR(24)", False),
+    ("  ", "basel_aml_idx", "NUMERIC(4, 2)", False),
+    ("  ", "sanction_auth", "VARCHAR(32)", False),
     ("  ", "effective_date", "DATE", False)
 ]
 for i, (pk, fname, ftype, is_pk) in enumerate(t3_fields):
@@ -173,8 +173,8 @@ ax.plot([t1_x + t1_w, 0.325, 0.325, t2_x], [0.795, 0.795, 0.700, 0.700], color='
 ax.text(0.325, 0.675, "1 : N (Target)", ha='center', va='top', fontsize=5.4, fontweight='bold', color='#0f766e')
 
 # 2. high_risk_jurisdictions (PK: country_iso) -> entities_master (FK: country_iso)
-ax.plot([t3_x, 0.705, 0.705, 0.200, 0.200, 0.200], [0.835, 0.835, 0.900, 0.900, 0.895, 0.895], color='#b91c1c', lw=1.2, linestyle=':')
-ax.text(0.710, 0.845, "1 : N (Jurisdiction FK)", ha='left', va='bottom', fontsize=5.2, fontweight='bold', color='#b91c1c')
+ax.plot([t3_x, 0.695, 0.695, 0.160, 0.160, 0.160], [0.815, 0.815, 0.905, 0.905, 0.895, 0.895], color='#b91c1c', lw=1.2, linestyle=':')
+ax.text(0.440, 0.908, "1 : N (Jurisdiction FK)", ha='center', va='bottom', fontsize=5.2, fontweight='bold', color='#b91c1c')
 
 # BOTTOM PANEL: Composite Time-Causal Indexes & 12-D Invariant Materialization
 b_x, b_y, b_w, b_h = 0.015, 0.020, 0.970, 0.350
@@ -218,7 +218,7 @@ view_groups = [
     (r"1. Flow Regularity: $\Phi_{\mathrm{flow}} = \ln(1 + \sum A_{\mathrm{out}} / (\sum A_{\mathrm{in}} + \epsilon))$", "#0f766e"),
     (r"2. Hawkes Arrival Rate: $\lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha \cdot e^{-\beta (t - t_i)}$", "#1e40af"),
     (r"3. Directed Causal Taints: $\mathbf{s}_{\mathrm{fwd}} \in [0, 1]$ (Dispersion), $\mathbf{s}_{\mathrm{bwd}} \in [0, 1]$ (Aggregation)", "#b91c1c"),
-    (r"4. Graph Multi-Moments: $[\mu_A, \sigma_A^2, \gamma_A, \kappa_A] \parallel [\text{deg}_{\mathrm{in}}, \text{deg}_{\mathrm{out}}, v_A, \nu_{\mathrm{io}}] \to \mathbb{R}^{12}$", "#6d28d9")
+    (r"4. Graph Multi-Moments: $[\mu_A, \mathrm{Var}(A), \gamma_A, \kappa_A] \parallel [\text{deg}_{\mathrm{in}}, \text{deg}_{\mathrm{out}}, v_A, \nu_{\mathrm{io}}] \to \mathbb{R}^{12}$", "#6d28d9")
 ]
 for i, (v_line, v_clr) in enumerate(view_groups):
     y_v = b_y + 0.195 - (i * 0.054)
@@ -271,9 +271,9 @@ cols = [
             ("Harmonic Band 1", r"$\Phi_{\text{burst}}(\Delta t) \in \mathbb{R}^{d/3}$", "#1e40af"),
             ("Harmonic Band 2", r"$\Phi_{\text{diurnal}}(\Delta t) \; (24\text{h})$", "#0f766e"),
             ("Harmonic Band 3", r"$\Phi_{\text{macro}}(\Delta t) \; (90\text{d})$", "#b91c1c"),
-            ("Hawkes State", r"$\lambda_u(t) = \mu_0 + \sum \alpha e^{-\beta \Delta t}$", "#6d28d9")
+            ("Hawkes State", r"$\lambda_u(t) = \mu_0 + \sum_i \alpha e^{-\beta \Delta t}$", "#6d28d9")
         ],
-        "out_tensor": r"$\mathbf{h}_u^{(0)} \in \mathbb{R}^{d_{\text{embed}}}$"
+        "out_tensor": r"$\mathbf{h}_u^{\,(0)} \in \mathbb{R}^{d_{\text{embed}}}$"
     },
     {
         "id": "STEP 2: EDGE GATE",
@@ -301,7 +301,7 @@ cols = [
             ("Neighborhood Agg", r"$\tilde{\mathbf{h}}_u = \sum_{v \in \mathcal{N}_u} \alpha_{vu} \mathbf{m}_{vu}$", "#0f766e"),
             ("Feed-Forward Layer", r"$\mathbf{h}_u^{(l)} = \mathrm{LayerNorm}(\mathbf{h}_u + \mathrm{MLP})$", "#6d28d9")
         ],
-        "out_tensor": r"$\mathbf{h}_u^{(L)} \in \mathbb{R}^d \text{ (Structural)}$"
+        "out_tensor": r"$\mathbf{h}_u^{\,(L)} \in \mathbb{R}^d \text{ (Structural)}$"
     },
     {
         "id": "STEP 4: GRAPH-SMOTE",
@@ -311,7 +311,7 @@ cols = [
         "items": [
             ("Typology Clusters", r"$\mathcal{C}_1, \dots, \mathcal{C}_K \; (\tau_{\mathrm{sim}} \geq 0.75)$", "#0f172a"),
             ("Intra-Cluster Interp", r"$\mathbf{h}_{\mathrm{syn}} = (1-\rho)\mathbf{h}_u + \rho \mathbf{h}_v$", "#6d28d9"),
-            ("Bilinear Link Head", r"$\hat{A}_{\mathrm{syn}, w} = \sigma(\mathbf{h}_{\mathrm{syn}}^\top \mathbf{W}_e \mathbf{h}_w)$", "#6d28d9"),
+            ("Bilinear Link Head", r"$\hat{A}_{\mathrm{syn}, w} = \sigma(\mathbf{h}_{\mathrm{syn}}^T \mathbf{W}_e \mathbf{h}_w)$", "#6d28d9"),
             ("Flow Invariant Check", r"$\Phi_{\mathrm{flow}}(\mathrm{syn}) \approx 1.0 \text{ (Pass-thru)}$", "#15803d"),
             ("Train Isolation", r"100% Quarantined to $\mathcal{D}_{\mathrm{train}}$", "#b91c1c")
         ],
@@ -418,7 +418,7 @@ save_fig(fig, "fig3_1_tensor_flow")
 # 3. FIG 8.2: UNIFIED UML SEQUENCE LIFELINE DIAGRAM (7.16" x 3.60")
 # ==============================================================================
 print("Generating Fig 8.2: Real-Time UML Sequence Lifeline with Latency Timestamps...")
-fig, ax = plt.subplots(figsize=(7.16, 3.60))
+fig, ax = plt.subplots(figsize=(7.16, 4.20))
 ax.axis('off')
 ax.set_xlim([-0.010, 1.010])
 ax.set_ylim([-0.015, 1.015])
@@ -493,10 +493,10 @@ for s_num, f_idx, t_idx, y_m, m_txt, t_stamp, m_clr, is_async in messages:
         ax.annotate("", xy=(x_to, y_m), xytext=(x_from, y_m),
                     arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color=m_clr, lw=1.2, linestyle=ls))
         mid_x = (x_from + x_to) / 2
-        ax.text(mid_x, y_m + 0.016, f"{s_num}. {m_txt}", ha='center', va='bottom',
+        ax.text(mid_x, y_m + 0.014, f"{s_num}. {m_txt}", ha='center', va='bottom',
                 fontsize=5.2, fontweight='bold', color=m_clr)
-        ax.text(mid_x, y_m - 0.014, t_stamp, ha='center', va='top',
-                fontsize=5.0, color='#475569', style='italic')
+        ax.text(mid_x, y_m - 0.016, f"[{t_stamp}]", ha='center', va='top',
+                fontsize=4.9, color='#475569', style='italic')
 
 # Bottom SLA SLA Guarantee Bar
 ax.add_patch(patches.FancyBboxPatch((0.012, 0.012), 0.976, 0.058,

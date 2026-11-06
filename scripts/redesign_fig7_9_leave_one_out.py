@@ -46,24 +46,24 @@ for d in TARGET_DIRS:
 
 
 def build_figure():
-    fig = plt.figure(figsize=(9.6, 4.8), dpi=300)
+    fig = plt.figure(figsize=(9.6, 5.0), dpi=300)
     
     gs = gridspec.GridSpec(
         2, 2,
         height_ratios=[3.6, 1.1],
         width_ratios=[1.15, 1.0],
         left=0.06, right=0.98,
-        top=0.90, bottom=0.06,
+        top=0.84, bottom=0.06,
         wspace=0.22, hspace=0.32
     )
 
     # -------------------------------------------------------------
     # Master Header Banner
     # -------------------------------------------------------------
-    fig.text(0.06, 0.965, "Leave-One-Out Component Removal Waterfall & Asymmetry Analysis",
-             fontsize=10.2, fontweight='bold', color='#0f172a', ha='left')
-    fig.text(0.06, 0.930, "Marginal degradation on Elliptic-v1 benchmark (N=5 Seeds, Table 7.4 Aligned) — Full Model: 91.42 ± 0.65% F1",
-             fontsize=7.6, color='#475569', ha='left')
+    fig.text(0.06, 0.966, "Leave-One-Out Component Removal Waterfall & Asymmetry Analysis",
+             fontsize=10.0, fontweight='bold', color='#0f172a', ha='left')
+    fig.text(0.06, 0.932, "Marginal degradation on Elliptic-v1 benchmark (N=5 Seeds, Table 7.4 Aligned) — Full Model: 91.42 ± 0.65% F1",
+             fontsize=7.4, color='#475569', ha='left')
 
     # Component definitions
     components = [

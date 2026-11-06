@@ -96,57 +96,57 @@ def generate_new_fig3_2():
     ax0.set_title("(a) Incompatible Protocol Topologies\n(Feature Dimensions: $d_1 \\neq d_2 \\neq d_3 \\neq d_4$)",
                   fontsize=8.4, fontweight="bold", color="#0f172a", pad=10)
 
-    # 1. Bitcoin UTXO Hypergraph Box (Top-Left: x 2-48, y 52-96)
-    ax0.add_patch(patches.FancyBboxPatch((2, 52), 46, 44, boxstyle="round,pad=0.5", fc="#fff7ed", ec="#ea580c", lw=1.1))
-    ax0.text(25, 91, "Bitcoin (UTXO Hypergraph)", ha="center", fontsize=6.2, fontweight="bold", color="#9a3412")
+    # 1. Bitcoin UTXO Hypergraph Box (Top-Left: x 2-48, y 48-88)
+    ax0.add_patch(patches.FancyBboxPatch((2, 48), 46, 40, boxstyle="square,pad=0.4", fc="#fff7ed", ec="#ea580c", lw=1.1))
+    ax0.text(25, 84, "Bitcoin (UTXO Hypergraph)", ha="center", fontsize=6.2, fontweight="bold", color="#9a3412")
     # Draw 1-to-3 split
-    ax0.scatter([10], [70], s=120, color="#ea580c", edgecolors="#ffffff", lw=1.0, zorder=3)
-    ax0.text(10, 70, "Tx", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#ffffff", zorder=4)
-    out_ys = [82, 70, 58]
+    ax0.scatter([10], [67], s=120, color="#ea580c", edgecolors="#ffffff", lw=1.0, zorder=3)
+    ax0.text(10, 67, "Tx", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#ffffff", zorder=4)
+    out_ys = [78, 67, 56]
     for oy in out_ys:
-        ax0.annotate("", xy=(36, oy), xytext=(15, 70), arrowprops=dict(arrowstyle="->", color="#c2410c", lw=1.2))
+        ax0.annotate("", xy=(36, oy), xytext=(15, 67), arrowprops=dict(arrowstyle="->", color="#c2410c", lw=1.2))
         ax0.scatter([38], [oy], s=70, color="#fed7aa", edgecolors="#ea580c", lw=0.8, zorder=3)
-    ax0.text(25, 54.5, "1-to-N Unspent Outputs | Mempool", ha="center", fontsize=5.0, color="#7c2d12")
+    ax0.text(25, 50.5, "1-to-N Unspent Outputs | Mempool", ha="center", fontsize=5.0, color="#7c2d12")
 
-    # 2. Ethereum EVM State Machine (Top-Right: x 52-98, y 52-96)
-    ax0.add_patch(patches.FancyBboxPatch((52, 52), 46, 44, boxstyle="round,pad=0.5", fc="#f0f9ff", ec="#0284c7", lw=1.1))
-    ax0.text(75, 91, "Ethereum (EVM Calls)", ha="center", fontsize=6.2, fontweight="bold", color="#0369a1")
+    # 2. Ethereum EVM State Machine (Top-Right: x 52-98, y 48-88)
+    ax0.add_patch(patches.FancyBboxPatch((52, 48), 46, 40, boxstyle="square,pad=0.4", fc="#f0f9ff", ec="#0284c7", lw=1.1))
+    ax0.text(75, 84, "Ethereum (EVM Calls)", ha="center", fontsize=6.2, fontweight="bold", color="#0369a1")
     # Draw account + smart contract loop
-    ax0.scatter([62], [70], s=110, color="#0284c7", edgecolors="#ffffff", lw=1.0, zorder=3)
-    ax0.text(62, 70, "EOA", ha="center", va="center", fontsize=5.0, fontweight="bold", color="#ffffff", zorder=4)
-    ax0.scatter([85], [70], s=110, color="#38bdf8", edgecolors="#0284c7", lw=1.0, zorder=3)
-    ax0.text(85, 70, "ERC", ha="center", va="center", fontsize=5.0, fontweight="bold", color="#0f172a", zorder=4)
+    ax0.scatter([62], [67], s=110, color="#0284c7", edgecolors="#ffffff", lw=1.0, zorder=3)
+    ax0.text(62, 67, "EOA", ha="center", va="center", fontsize=5.0, fontweight="bold", color="#ffffff", zorder=4)
+    ax0.scatter([85], [67], s=110, color="#38bdf8", edgecolors="#0284c7", lw=1.0, zorder=3)
+    ax0.text(85, 67, "ERC", ha="center", va="center", fontsize=5.0, fontweight="bold", color="#0f172a", zorder=4)
     # Loop arrows
-    ax0.annotate("", xy=(80, 74), xytext=(67, 74), arrowprops=dict(arrowstyle="->", color="#0284c7", lw=1.2, connectionstyle="arc3,rad=-0.25"))
-    ax0.annotate("", xy=(67, 66), xytext=(80, 66), arrowprops=dict(arrowstyle="->", color="#0284c7", lw=1.2, connectionstyle="arc3,rad=-0.25"))
-    ax0.text(75, 54.5, "Account States | Internal Gas", ha="center", fontsize=5.0, color="#075985")
+    ax0.annotate("", xy=(80, 71), xytext=(67, 71), arrowprops=dict(arrowstyle="->", color="#0284c7", lw=1.2, connectionstyle="arc3,rad=-0.25"))
+    ax0.annotate("", xy=(67, 63), xytext=(80, 63), arrowprops=dict(arrowstyle="->", color="#0284c7", lw=1.2, connectionstyle="arc3,rad=-0.25"))
+    ax0.text(75, 50.5, "Account States | Internal Gas", ha="center", fontsize=5.0, color="#075985")
 
-    # 3. SWIFT / ISO-20022 Banking (Bottom-Left: x 2-48, y 4-48)
-    ax0.add_patch(patches.FancyBboxPatch((2, 4), 46, 44, boxstyle="round,pad=0.5", fc="#f0fdf4", ec="#059669", lw=1.1))
-    ax0.text(25, 43, "SWIFT / ISO 20022", ha="center", fontsize=6.2, fontweight="bold", color="#065f46")
+    # 3. SWIFT / ISO-20022 Banking (Bottom-Left: x 2-48, y 4-44)
+    ax0.add_patch(patches.FancyBboxPatch((2, 4), 46, 40, boxstyle="square,pad=0.4", fc="#f0fdf4", ec="#059669", lw=1.1))
+    ax0.text(25, 40, "SWIFT / ISO 20022", ha="center", fontsize=6.2, fontweight="bold", color="#065f46")
     # Linear correspondent chain
     c_xs = [10, 25, 40]
     c_lbls = ["Ord", "Cor", "Ben"]
     for cx, clbl in zip(c_xs, c_lbls):
-        ax0.scatter([cx], [24], s=90, color="#059669", edgecolors="#ffffff", lw=1.0, zorder=3)
-        ax0.text(cx, 24, clbl, ha="center", va="center", fontsize=4.8, fontweight="bold", color="#ffffff", zorder=4)
-    ax0.annotate("", xy=(20, 24), xytext=(15, 24), arrowprops=dict(arrowstyle="->", color="#047857", lw=1.2))
-    ax0.annotate("", xy=(35, 24), xytext=(30, 24), arrowprops=dict(arrowstyle="->", color="#047857", lw=1.2))
-    ax0.text(25, 7.5, "MT103 / pacs.008 Wires", ha="center", fontsize=5.0, color="#064e3b")
+        ax0.scatter([cx], [22], s=90, color="#059669", edgecolors="#ffffff", lw=1.0, zorder=3)
+        ax0.text(cx, 22, clbl, ha="center", va="center", fontsize=4.8, fontweight="bold", color="#ffffff", zorder=4)
+    ax0.annotate("", xy=(20, 22), xytext=(15, 22), arrowprops=dict(arrowstyle="->", color="#047857", lw=1.2))
+    ax0.annotate("", xy=(35, 22), xytext=(30, 22), arrowprops=dict(arrowstyle="->", color="#047857", lw=1.2))
+    ax0.text(25, 6.5, "MT103 / pacs.008 Wires", ha="center", fontsize=5.0, color="#064e3b")
 
-    # 4. Mobile Money / Fast P2P (Bottom-Right: x 52-98, y 4-48)
-    ax0.add_patch(patches.FancyBboxPatch((52, 4), 46, 44, boxstyle="round,pad=0.5", fc="#faf5ff", ec="#7c3aed", lw=1.1))
-    ax0.text(75, 43, "Mobile Money (bKash/UPI)", ha="center", fontsize=6.2, fontweight="bold", color="#5b21b6")
+    # 4. Mobile Money / Fast P2P (Bottom-Right: x 52-98, y 4-44)
+    ax0.add_patch(patches.FancyBboxPatch((52, 4), 46, 40, boxstyle="square,pad=0.4", fc="#faf5ff", ec="#7c3aed", lw=1.1))
+    ax0.text(75, 40, "Mobile Money (bKash/UPI)", ha="center", fontsize=6.2, fontweight="bold", color="#5b21b6")
     # Agent star
-    ax0.scatter([75], [24], s=120, color="#7c3aed", edgecolors="#ffffff", lw=1.0, zorder=3)
-    ax0.text(75, 24, "Hub", ha="center", va="center", fontsize=5.0, fontweight="bold", color="#ffffff", zorder=4)
+    ax0.scatter([75], [22], s=120, color="#7c3aed", edgecolors="#ffffff", lw=1.0, zorder=3)
+    ax0.text(75, 22, "Hub", ha="center", va="center", fontsize=5.0, fontweight="bold", color="#ffffff", zorder=4)
     star_angles = [0, np.pi/2, np.pi, 3*np.pi/2]
     for ang in star_angles:
         px = 75 + 14 * np.cos(ang)
-        py = 24 + 11 * np.sin(ang)
+        py = 22 + 11 * np.sin(ang)
         ax0.scatter([px], [py], s=40, color="#c4b5fd", edgecolors="#7c3aed", lw=0.6, zorder=3)
-        ax0.plot([75, px], [24, py], color="#7c3aed", lw=0.9, ls=":")
-    ax0.text(75, 7.5, "High-Velocity Agent Star", ha="center", fontsize=5.0, color="#4c1d95")
+        ax0.plot([75, px], [22, py], color="#7c3aed", lw=0.9, ls=":")
+    ax0.text(75, 6.5, "High-Velocity Agent Star", ha="center", fontsize=5.0, color="#4c1d95")
 
     # =========================================================================
     # PANEL (b): UNIVERSAL 12-D CANONICAL INVARIANT NORMALIZER
@@ -220,14 +220,14 @@ def generate_new_fig3_2():
         [80.60, 75.30, 74.50, 97.91], # Train on Credit/P2P (DGraphFin -> Elliptic: 80.60%, PaySim -> SAML-D: 74.50%)
     ])
 
-    mat_x0, mat_y0 = 24, 44
-    cell_w, cell_h = 17, 10.5
+    mat_x0, mat_y0 = 24, 36
+    cell_w, cell_h = 17, 9.2
 
     # Column Headers (Target Rails) with clean vertical clearance
-    ax2.text(mat_x0 + 2 * cell_w, mat_y0 + 4 * cell_h + 8.0, "Target Ledger (Zero-Shot Deployment)",
+    ax2.text(mat_x0 + 2 * cell_w, mat_y0 + 4 * cell_h + 6.8, "Target Ledger (Zero-Shot Deployment)",
              ha="center", va="center", fontsize=5.8, fontweight="bold", color="#1e40af")
     for j, lbl in enumerate(labels):
-        ax2.text(mat_x0 + j * cell_w + cell_w/2, mat_y0 + 4 * cell_h + 2.5, lbl,
+        ax2.text(mat_x0 + j * cell_w + cell_w/2, mat_y0 + 4 * cell_h + 2.0, lbl,
                  ha="center", va="center", fontsize=5.8, fontweight="bold", color="#334155")
 
     # Row Headers (Source Training Rails)
@@ -252,25 +252,25 @@ def generate_new_fig3_2():
                 tag = "(Zero-Shot)"
             
             ax2.add_patch(patches.Rectangle((cx, cy), cell_w - 1.2, cell_h - 1.2, fc=c_fc, ec="#94a3b8", lw=0.6))
-            ax2.text(cx + cell_w/2 - 0.6, cy + cell_h/2 + 1.2, f"{val:.1f}%",
+            ax2.text(cx + cell_w/2 - 0.6, cy + cell_h/2 + 1.1, f"{val:.1f}%",
                      ha="center", va="center", fontsize=5.8, fontweight="bold", color=c_tc)
-            ax2.text(cx + cell_w/2 - 0.6, cy + cell_h/2 - 2.8, tag,
+            ax2.text(cx + cell_w/2 - 0.6, cy + cell_h/2 - 2.6, tag,
                      ha="center", va="center", fontsize=4.2, color=c_tc)
 
     # Performance Comparison Bar (Table 7.12 Empirical Transfer Synthesis)
-    b_y = 6
-    ax2.add_patch(patches.FancyBboxPatch((4, b_y), 92, 28, boxstyle="round,pad=0.4", fc="#f8fafc", ec="#94a3b8", lw=1.0))
-    ax2.text(50, b_y + 24.0, "Table 7.12 Empirical Zero-Shot Macro Transfer F1:", ha="center", fontsize=6.2, fontweight="bold", color="#0f172a")
+    b_y = 5.0
+    ax2.add_patch(patches.Rectangle((4, b_y), 92, 26, fc="#f8fafc", ec="#94a3b8", lw=0.9))
+    ax2.text(50, b_y + 21.5, "Table 7.12 Empirical Zero-Shot Macro Transfer F1:", ha="center", fontsize=6.0, fontweight="bold", color="#0f172a")
 
     # Bar 1: Vanilla HGT Baseline
-    ax2.add_patch(patches.Rectangle((10, b_y + 12.5), 22, 6.5, fc="#fca5a5", ec="#dc2626", lw=0.8))
-    ax2.text(21, b_y + 15.75, "HGT: 19.51%", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#991b1b")
-    ax2.text(34, b_y + 15.75, "vs XGBoost 54.06% (Schema Drop)", ha="left", va="center", fontsize=4.8, color="#7f1d1d", style="italic")
+    ax2.add_patch(patches.Rectangle((10, b_y + 11.2), 22, 6.2, fc="#fca5a5", ec="#dc2626", lw=0.8))
+    ax2.text(21, b_y + 14.3, "HGT: 19.51%", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#991b1b")
+    ax2.text(34, b_y + 14.3, "vs XGBoost 54.06% (Schema Drop)", ha="left", va="center", fontsize=4.8, color="#7f1d1d", style="italic")
 
     # Bar 2: 12-D Invariants (C-STGB Zero-Shot)
-    ax2.add_patch(patches.Rectangle((10, b_y + 4.0), 54, 6.5, fc="#86efac", ec="#16a34a", lw=0.8))
-    ax2.text(37, b_y + 7.25, "C-STGB Zero-Shot: 69.98% Macro F1", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#14532d")
-    ax2.text(66, b_y + 7.25, "[+50.5 pp over HGT]", ha="left", va="center", fontsize=5.4, fontweight="bold", color="#059669")
+    ax2.add_patch(patches.Rectangle((10, b_y + 3.5), 54, 6.2, fc="#86efac", ec="#16a34a", lw=0.8))
+    ax2.text(37, b_y + 6.6, "C-STGB Zero-Shot: 69.98% Macro F1", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#14532d")
+    ax2.text(66, b_y + 6.6, "[+50.5 pp over HGT]", ha="left", va="center", fontsize=5.4, fontweight="bold", color="#059669")
 
     # Save to all target directories
     save_to_all(fig, "fig_canonical_invariants")

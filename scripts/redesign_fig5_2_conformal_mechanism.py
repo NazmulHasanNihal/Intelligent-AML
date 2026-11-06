@@ -84,39 +84,39 @@ def generate_figure_5_2():
     # Text Badges for Thresholds (carefully non-overlapping)
     # Benign threshold badge
     ax0.text(q0 - 0.02, 3.65, r"$\hat{q}^{(0)} = 0.52$" + "\n(Benign 99% Cov.)",
-             ha="right", va="top", fontsize=7.2, fontweight="bold", color="#0369a1",
-             bbox=dict(boxstyle="round,pad=0.25", fc="#e0f2fe", ec="#0284c7", lw=0.8, alpha=0.95), zorder=5)
+             ha="right", va="top", fontsize=7.2, fontweight="bold", linespacing=1.35, color="#0369a1",
+             bbox=dict(boxstyle="square,pad=0.25", fc="#e0f2fe", ec="#0284c7", lw=0.8, alpha=0.95), zorder=5)
     
     # Illicit threshold badge
     ax0.text(q1 - 0.02, 3.65, r"$\hat{q}^{(1)} = 0.94$" + "\n(Illicit 99% Cov.)",
-             ha="right", va="top", fontsize=7.2, fontweight="bold", color="#b91c1c",
-             bbox=dict(boxstyle="round,pad=0.25", fc="#fee2e2", ec="#dc2626", lw=0.8, alpha=0.95), zorder=5)
+             ha="right", va="top", fontsize=7.2, fontweight="bold", linespacing=1.35, color="#b91c1c",
+             bbox=dict(boxstyle="square,pad=0.25", fc="#fee2e2", ec="#dc2626", lw=0.8, alpha=0.95), zorder=5)
              
     # Marginal threshold callout
-    ax0.text(q_marginal + 0.02, 2.50, r"$\hat{q}_{marg} = 0.53$" + " (Marginal)\nDeficit: Illicit Cov. $\\rightarrow 82.4\%$",
-             ha="left", va="top", fontsize=6.8, color="#5b21b6",
-             bbox=dict(boxstyle="round,pad=0.22", fc="#ede9fe", ec="#7c3aed", lw=0.8, alpha=0.92), zorder=5)
+    ax0.text(q_marginal + 0.02, 2.50, r"$\hat{q}_{marg} = 0.53$" + " (Marginal)\nDeficit: Illicit $\\rightarrow 82.4\%$",
+             ha="left", va="top", fontsize=6.8, linespacing=1.35, color="#5b21b6",
+             bbox=dict(boxstyle="square,pad=0.22", fc="#ede9fe", ec="#7c3aed", lw=0.8, alpha=0.92), zorder=5)
 
     # Finite-Sample Guarantee Callout Badge (Lower Left, completely collision-free)
     ax0.text(0.03, 1.80, "Finite-Sample Validity:\n" + r"$\mathbb{P}(Y \in \Gamma \mid Y=y) \geq 99.0\%$" + "\nGuaranteed for BOTH Classes",
-             ha="left", va="top", fontsize=6.8, fontweight="bold", color="#1e293b",
-             bbox=dict(boxstyle="round,pad=0.3", fc="#ffffff", ec="#94a3b8", lw=0.8, alpha=0.95), zorder=5)
+             ha="left", va="top", fontsize=6.8, fontweight="bold", linespacing=1.48, color="#1e293b",
+             bbox=dict(boxstyle="square,pad=0.3", fc="#ffffff", ec="#94a3b8", lw=0.8, alpha=0.95), zorder=5)
 
-    # Triage Decision Regime Ribbon at bottom
-    ax0.text(0.25, -0.42, "Auto-Clear STP:\n" + r"$\Gamma(u) = \{0\}$", ha="center", va="top",
-             fontsize=7.0, color="#0369a1", fontweight="bold",
-             bbox=dict(boxstyle="round,pad=0.25", fc="#f0f9ff", ec="#0284c7", lw=0.8))
+    # Triage Decision Regime Ribbon at bottom inside plot bounds (staggered to eliminate horizontal overlap)
+    ax0.text(0.24, 0.32, "Auto-Clear STP: " + r"$\Gamma(u) = \{0\}$", ha="center", va="bottom",
+             fontsize=6.8, color="#0369a1", fontweight="bold",
+             bbox=dict(boxstyle="square,pad=0.25", fc="#f0f9ff", ec="#0284c7", lw=0.8), zorder=5)
              
-    ax0.text(0.73, -0.42, "Human Review Queue:\n" + r"$\Gamma(u) = \{0, 1\}$", ha="center", va="top",
-             fontsize=7.0, color="#b45309", fontweight="bold",
-             bbox=dict(boxstyle="round,pad=0.25", fc="#fffbeb", ec="#f59e0b", lw=0.8))
+    ax0.text(0.68, 0.32, "Human Review: " + r"$\Gamma(u) = \{0, 1\}$", ha="center", va="bottom",
+             fontsize=6.6, color="#b45309", fontweight="bold",
+             bbox=dict(boxstyle="square,pad=0.25", fc="#fffbeb", ec="#f59e0b", lw=0.8), zorder=5)
              
-    ax0.text(0.97, -0.42, "Auto-Block:\n" + r"$\Gamma(u) = \{1\}$", ha="center", va="top",
-             fontsize=7.0, color="#991b1b", fontweight="bold",
-             bbox=dict(boxstyle="round,pad=0.25", fc="#fef2f2", ec="#dc2626", lw=0.8))
+    ax0.text(0.97, 0.72, "Auto-Block:\n" + r"$\Gamma(u) = \{1\}$", ha="center", va="bottom",
+             fontsize=6.6, color="#991b1b", fontweight="bold", linespacing=1.35,
+             bbox=dict(boxstyle="square,pad=0.25", fc="#fef2f2", ec="#dc2626", lw=0.8), zorder=5)
 
     ax0.set_xlim(-0.02, 1.02)
-    ax0.set_ylim(-0.75, 4.30)
+    ax0.set_ylim(0.0, 4.30)
     ax0.set_xlabel(r"Class-Conditional Non-Conformity Score $s_i^{(y)} = 1 - \hat{p}_i(y)$", fontsize=8.6, weight="bold", labelpad=6)
     ax0.set_ylabel(r"Probability Density $p(s \mid Y=y)$", fontsize=8.6, weight="bold", labelpad=6)
     ax0.set_title("(a) Dual Calibrated Non-Conformity Quantiles under Imbalance", fontsize=9.2, fontweight="bold", pad=28)
@@ -149,16 +149,16 @@ def generate_figure_5_2():
 
     # Value Labels above bars (Percentage & Count)
     # Clear bars
-    ax1.text(x[0] - w, p_clear[0] * 1.18, "80.40%\n(8,040 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#047857")
-    ax1.text(x[1] - w, p_clear[1] * 1.18, "99.33%\n(9,933 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#047857")
+    ax1.text(x[0] - w, p_clear[0] * 1.18, "80.40%\n(8,040 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", linespacing=1.35, color="#047857")
+    ax1.text(x[1] - w, p_clear[1] * 1.18, "99.33%\n(9,933 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", linespacing=1.35, color="#047857")
     
     # Review bars
-    ax1.text(x[0], p_review[0] * 1.25, "18.40%\n(1,840 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b45309")
-    ax1.text(x[1], p_review[1] * 1.30, "0.49%\n(49 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b45309")
+    ax1.text(x[0], p_review[0] * 1.25, "18.40%\n(1,840 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", linespacing=1.35, color="#b45309")
+    ax1.text(x[1], p_review[1] * 1.30, "0.49%\n(49 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", linespacing=1.35, color="#b45309")
 
     # Block bars
-    ax1.text(x[0] + w, p_block[0] * 1.30, "1.20%\n(120 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
-    ax1.text(x[1] + w, p_block[1] * 1.30, "0.18%\n(18 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
+    ax1.text(x[0] + w, p_block[0] * 1.30, "1.20%\n(120 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", linespacing=1.35, color="#b91c1c")
+    ax1.text(x[1] + w, p_block[1] * 1.30, "0.18%\n(18 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", linespacing=1.35, color="#b91c1c")
 
     # Workload Slashing Callout Arrow (shortened so it never crosses over '0.49% (49 tx)')
     ax1.annotate("", xy=(x[1], 1.25), xytext=(x[0] + 0.08, 12.0),
@@ -166,13 +166,13 @@ def generate_figure_5_2():
     
     # Callout badge centered at x=0.52, y=6.0 (safely above the 1.20% block bar and between bars)
     ax1.text(0.52, 6.0, "-97.3% Review Slashing\n" + r"(1,840 $\rightarrow$ 49 alerts / 10k)" + "\n[-99.51% vs Legacy Rules]",
-             ha="center", va="center", fontsize=7.0, fontweight="bold", color="#991b1b",
-             bbox=dict(boxstyle="round,pad=0.28", fc="#fef2f2", ec="#dc2626", lw=1.0, alpha=0.95), zorder=5)
+             ha="center", va="center", fontsize=7.0, fontweight="bold", linespacing=1.35, color="#991b1b",
+             bbox=dict(boxstyle="square,pad=0.28", fc="#fef2f2", ec="#dc2626", lw=1.0, alpha=0.95), zorder=5)
 
     ax1.set_yscale("log")
     ax1.set_ylim(0.04, 380)
     ax1.set_xticks(x)
-    ax1.set_xticklabels(models, fontsize=8.2, fontweight="bold")
+    ax1.set_xticklabels(models, fontsize=8.0, fontweight="bold", linespacing=1.35)
     ax1.set_ylabel("Transaction Share (%) [Log Scale]", fontsize=8.6, weight="bold", labelpad=6)
     ax1.set_title("(b) Triage Operational Volume Comparison (N = 10,000 Wires)", fontsize=9.2, fontweight="bold", pad=28)
     

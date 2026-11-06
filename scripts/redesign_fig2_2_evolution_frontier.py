@@ -84,7 +84,8 @@ def generate_fig2_2():
         fsize = 8.5 if m == "*" else 7.5
         ax.annotate(label, (x, y + offset_y), fontsize=fsize, fontweight=weight,
                     ha="center", va="bottom", color=col if m == "*" else "#0F172A", zorder=6,
-                    bbox=dict(boxstyle="round,pad=0.18", fc="#ffffff", ec="none", alpha=0.85) if m != "*" else None)
+                    linespacing=1.35,
+                    bbox=dict(boxstyle="square,pad=0.20", fc="#ffffff", ec="#cbd5e1", lw=0.6, alpha=0.90) if m != "*" else None)
 
     # Highlight Pareto Frontier curve
     px = [16, 25, 47, 92]
@@ -92,8 +93,8 @@ def generate_fig2_2():
 
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
-    ax.set_xlabel("Static Snapshots  --->  CONTINUOUS-TIME HARMONIC VELOCITY\n(Tri-Band Decay 2.4h / 24h / 168h & Hawkes Burst Intensity)", fontsize=9.5, fontweight="bold")
-    ax.set_ylabel("Uncalibrated  --->  TOPOLOGICAL DENOISING & CONFORMAL SAFETY\n(Edge-Trust Gating >= 0.10, 12-D Invariant Fusion & Class-Cond. CRC)", fontsize=9.5, fontweight="bold")
+    ax.set_xlabel("Static Snapshots  --->  CONTINUOUS-TIME HARMONIC VELOCITY\n(Tri-Band Decay 2.4h / 24h / 168h & Hawkes Burst Intensity)", fontsize=9.5, fontweight="bold", linespacing=1.35)
+    ax.set_ylabel("Uncalibrated  --->  TOPOLOGICAL DENOISING & CONFORMAL SAFETY\n(Edge-Trust Gating >= 0.10, 12-D Invariant Fusion & Class-Cond. CRC)", fontsize=9.5, fontweight="bold", linespacing=1.35)
     ax.set_title("2D Financial Crime Graph Learning Evolution Frontier (Elliptic-v1 Benchmark F1)", fontsize=11.5, fontweight="bold", pad=12)
     ax.grid(True, linestyle=":", alpha=0.45)
     plt.tight_layout()

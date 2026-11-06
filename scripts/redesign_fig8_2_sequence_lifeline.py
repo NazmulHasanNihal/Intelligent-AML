@@ -53,21 +53,21 @@ def generate_figure_8_2():
 
     # 2. Top Header Banner
     ax.add_patch(patches.Rectangle(
-        (0.005, 0.932), 0.990, 0.062,
+        (0.005, 0.920), 0.990, 0.074,
         facecolor='#0f172a', edgecolor='#0f172a', linewidth=0.5
     ))
-    ax.text(0.018, 0.967, 'Real-Time Operational UML Sequence Lifeline & Microsecond Execution Trace',
-            ha='left', va='center', fontsize=9.0, fontweight='bold', color='#ffffff')
-    ax.text(0.018, 0.945,
+    ax.text(0.018, 0.970, 'Real-Time Operational UML Sequence Lifeline & Microsecond Execution Trace',
+            ha='left', va='center', fontsize=8.6, fontweight='bold', color='#ffffff')
+    ax.text(0.018, 0.936,
             r'Deterministic Pipeline: ISO 20022 Ingress $\rightarrow$ Vectorized Arrow Cache $\rightarrow$ C-STGB Forward Pass $\rightarrow$ Conformal Triage $\rightarrow$ Merkle WORM',
-            ha='left', va='center', fontsize=6.3, color='#94a3b8')
+            ha='left', va='center', fontsize=5.8, color='#94a3b8')
 
     # Top Right SLA Badge
     ax.add_patch(patches.Rectangle(
-        (0.772, 0.938), 0.218, 0.050,
+        (0.772, 0.930), 0.218, 0.054,
         facecolor='#065f46', edgecolor='#10b981', linewidth=0.8
     ))
-    ax.text(0.881, 0.963, 'FAST-PATH: 0.45 ms (SLA < 10.0 ms)',
+    ax.text(0.881, 0.957, 'FAST-PATH: 0.45 ms (SLA < 10.0 ms)',
             ha='center', va='center', fontsize=6.2, fontweight='bold', color='#ecfdf5')
 
     # 3. 6 Lifeline Actors
@@ -110,43 +110,44 @@ def generate_figure_8_2():
         }
     ]
 
-    header_y = 0.852
+    header_y = 0.840
+    header_h = 0.076
     lifeline_bottom_y = 0.035
 
     # 4. UML Grouping Frames
     # Frame 1: Synchronous Fast-Path (<0.45 ms)
     ax.add_patch(patches.Rectangle(
-        (0.010, 0.380), 0.855, 0.455,
+        (0.010, 0.345), 0.855, 0.480,
         facecolor='#f8fafc', edgecolor='#94a3b8', linewidth=0.9, linestyle='-', alpha=0.55
     ))
     ax.add_patch(patches.Rectangle(
-        (0.014, 0.812), 0.285, 0.022,
+        (0.014, 0.803), 0.285, 0.020,
         facecolor='#0284c7', edgecolor='#0284c7', linewidth=0.5
     ))
-    ax.text(0.018, 0.823, 'alt [SYNCHRONOUS IN-FLIGHT FAST-PATH (SLA < 10.0 ms)]',
+    ax.text(0.018, 0.813, 'alt [SYNCHRONOUS IN-FLIGHT FAST-PATH (SLA < 10.0 ms)]',
             ha='left', va='center', fontsize=5.8, fontweight='bold', color='#ffffff')
-    ax.text(0.858, 0.823, 'Total Latency: 0.45 ms (22.2x SLA Safety Margin)',
+    ax.text(0.858, 0.813, 'Total Latency: 0.45 ms (22.2x SLA Safety Margin)',
             ha='right', va='center', fontsize=5.5, fontweight='bold', color='#0369a1')
 
     # Frame 2: Asynchronous Swarm Investigation & WORM
     ax.add_patch(patches.Rectangle(
-        (0.010, 0.038), 0.980, 0.332,
+        (0.010, 0.035), 0.980, 0.295,
         facecolor='#fefce8', edgecolor='#ca8a04', linewidth=0.9, linestyle='--', alpha=0.60
     ))
     ax.add_patch(patches.Rectangle(
-        (0.014, 0.346), 0.380, 0.022,
+        (0.014, 0.305), 0.380, 0.020,
         facecolor='#ca8a04', edgecolor='#ca8a04', linewidth=0.5
     ))
-    ax.text(0.018, 0.357, 'par [ASYNCHRONOUS TIER-1/2 SWARM FORENSICS & MERKLE WORM VAULT]',
+    ax.text(0.018, 0.315, 'par [ASYNCHRONOUS TIER-1/2 SWARM FORENSICS & MERKLE WORM VAULT]',
             ha='left', va='center', fontsize=5.6, fontweight='bold', color='#ffffff')
-    ax.text(0.982, 0.357, 'Triggered on Tier-1 Quarantine (0.18%) & Tier-2 Human Review (0.49%) | Non-blocking Queue',
+    ax.text(0.982, 0.315, 'Triggered on Tier-1 Quarantine (0.18%) & Tier-2 Human Review (0.49%) | Non-blocking Queue',
             ha='right', va='center', fontsize=5.2, fontweight='bold', color='#854d0e')
 
     # Draw Actor Headers and Vertical Lifeline Guides
     for act in actors:
         lx = act["x"]
         w = act["w"]
-        hh = act["hh"]
+        hh = header_h
         
         # Vertical Lifeline
         ax.plot([lx, lx], [lifeline_bottom_y, header_y], color='#94a3b8', linestyle=':', lw=0.9, alpha=0.7)
@@ -161,11 +162,11 @@ def generate_figure_8_2():
             (lx - w/2, header_y + hh - 0.007), w, 0.007,
             facecolor=act["border"], edgecolor=act["border"], linewidth=0.2, zorder=4
         ))
-        ax.text(lx, header_y + hh - 0.024, act["name"],
-                ha='center', va='center', fontsize=6.3, fontweight='bold', color='#0f172a', zorder=5)
-        ax.text(lx, header_y + 0.022, act["sub"],
-                ha='center', va='center', fontsize=5.1, color='#475569', zorder=5)
-        ax.text(lx, header_y + 0.007, f"«{act['tag']}»",
+        ax.text(lx, header_y + 0.054, act["name"],
+                ha='center', va='center', fontsize=6.1, fontweight='bold', color='#0f172a', zorder=5)
+        ax.text(lx, header_y + 0.032, act["sub"],
+                ha='center', va='center', fontsize=5.0, color='#475569', zorder=5)
+        ax.text(lx, header_y + 0.012, f"«{act['tag']}»",
                 ha='center', va='center', fontsize=4.6, fontweight='bold', color=act["fg"], zorder=5)
 
     # 5. UML Activation Bars (Execution Specifications)
@@ -217,56 +218,56 @@ def generate_figure_8_2():
         },
         # 4. Neural Forward Pass
         {
-            "step": "4", "from": 1, "to": 3, "y": 0.585, "is_return": False, "is_async": False,
+            "step": "4", "from": 1, "to": 3, "y": 0.560, "is_return": False, "is_async": False,
             "title": r"C-STGB Forward Pass: $\hat{y}_u = f_\theta(\mathcal{G}_u^{(t)}, \mathbf{z}_{\mathrm{inv}})$", "time": "t = +0.18 ms",
             "detail": "Continuous Fourier Convolution on TensorRT GPU",
             "color": "#c2410c"
         },
         # 5. Return Neural Score
         {
-            "step": "5", "from": 3, "to": 1, "y": 0.520, "is_return": True, "is_async": False,
+            "step": "5", "from": 3, "to": 1, "y": 0.500, "is_return": True, "is_async": False,
             "title": r"Return Posterior Score $\hat{p}_u \in [0, 1]$ & Invariant Embedding", "time": "t = +0.28 ms",
             "detail": r"TorchScript JIT Inference Latency ($\Delta t = 0.10\,\text{ms}$)",
             "color": "#c2410c"
         },
         # 6. Conformal Calibration Check
         {
-            "step": "6", "from": 1, "to": 4, "y": 0.465, "is_return": False, "is_async": False,
+            "step": "6", "from": 1, "to": 4, "y": 0.445, "is_return": False, "is_async": False,
             "title": r"Class-Conditional Conformal Calibration Check: $S_i \leq \hat{q}^{(y)}$", "time": "t = +0.30 ms",
             "detail": "Distribution-Free Dual-Quantile Evaluation (CRC Guarantee)",
             "color": "#6d28d9"
         },
         # 7. Return Triage Verdict
         {
-            "step": "7", "from": 4, "to": 1, "y": 0.415, "is_return": True, "is_async": False,
+            "step": "7", "from": 4, "to": 1, "y": 0.395, "is_return": True, "is_async": False,
             "title": r"Return Triage Verdict: Tier-3 STP (99.33%) / Tier-2 Escalate (0.49%) / Tier-1 Quarantine (0.18%)", "time": "t = +0.32 ms",
             "detail": r"Scalar In-Memory Table Lookup ($\Delta t = 0.02\,\text{ms}$)",
             "color": "#6d28d9"
         },
         # 8. Synchronous SLA Clearance Response
         {
-            "step": "8", "from": 1, "to": 0, "y": 0.365, "is_return": True, "is_async": False,
+            "step": "8", "from": 1, "to": 0, "y": 0.355, "is_return": True, "is_async": False,
             "title": "HTTP 200 OK: {status: 'CLEARED_STP', latency: 0.45 ms}", "time": "t = +0.45 ms",
             "detail": "Straight-Through Clearance Returned to CBS (22.2x SLA Headroom)",
             "color": "#059669"
         },
         # 9. Asynchronous Swarm Dispatch
         {
-            "step": "9", "from": 1, "to": 5, "y": 0.275, "is_return": False, "is_async": True,
+            "step": "9", "from": 1, "to": 5, "y": 0.245, "is_return": False, "is_async": True,
             "title": "«async» Kafka Non-Blocking Queue: Dispatch Flagged Alert to 4-Agent Forensic Swarm", "time": "t = +1.10 ms",
             "detail": "Autonomous Lead Coordinator -> Topology Specialist -> Legal Drafter -> Rule Verifier",
             "color": "#b45309"
         },
         # 10. Autonomous Forensic Synthesis & Merkle WORM
         {
-            "step": "10", "from": 5, "to": 5, "y": 0.175, "is_return": False, "is_async": True,
+            "step": "10", "from": 5, "to": 5, "y": 0.160, "is_return": False, "is_async": True,
             "title": "Multi-Agent SAR Compilation: Context-Free AST Grammar Verification & FinCEN XML Dossier", "time": "t = +24.8 s",
             "detail": "Anchor Cryptographic SHA-256 Merkle Root to WORM Vault (FRE 902(11) Certified)",
             "color": "#15803d"
         },
         # 11. Final Merkle Audit Trail Receipt
         {
-            "step": "11", "from": 5, "to": 1, "y": 0.085, "is_return": True, "is_async": True,
+            "step": "11", "from": 5, "to": 1, "y": 0.075, "is_return": True, "is_async": True,
             "title": "Return SAR Audit Receipt: {receipt_hash: 9f86d081...00a08, worm_vault_status: 'COMMITTED'}", "time": "t = +25.1 s",
             "detail": "Immutable Supervisory Audit Ledger Entry Archived to Tamper-Proof Storage",
             "color": "#15803d"

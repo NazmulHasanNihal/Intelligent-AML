@@ -1115,7 +1115,7 @@ save_fig(fig, "fig_hyperparam_sensitivity_4panel")
 print("======================================================================")
 print("13. GENERATING ZERO-SHOT CROSS-DOMAIN TRANSFER HEATMAP (Ch 7)")
 print("======================================================================")
-fig, ax = plt.subplots(figsize=(7.16, 2.50))
+fig, ax = plt.subplots(figsize=(7.30, 2.70))
 
 pairs = [
     "Elliptic-v1 -> Elliptic-v2",
@@ -1143,7 +1143,7 @@ ax.bar(x_p + 1.5*w_p, target_f1, width=w_p, color="#94a3b8", edgecolor="black", 
 ax.set_ylabel("Minority F1 (%)", fontsize=8.5)
 ax.set_title("Frozen-Weight Zero-Shot Transfer Matrix across 8 Cross-Domain Source-Target Pairs", fontweight="bold", fontsize=9.2)
 ax.set_xticks(x_p)
-ax.set_xticklabels(pairs, rotation=22, ha="right", fontsize=6.6, fontweight="bold")
+ax.set_xticklabels(pairs, rotation=35, ha="right", fontsize=6.8, fontweight="bold")
 ax.set_ylim([0, 108])
 ax.grid(True, axis="y", linestyle=":", alpha=0.5)
 ax.legend(loc="upper left", ncol=4, fontsize=6.8, framealpha=0.92)

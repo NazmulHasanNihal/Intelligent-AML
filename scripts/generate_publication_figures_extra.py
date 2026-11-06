@@ -14,6 +14,9 @@ Generates missing figures for Thesis and Research Paper (Part B & Visual Fixes):
 
 import sys
 from pathlib import Path
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -77,32 +80,34 @@ datasets = [
 ]
 illicit_pct = [2.23, 0.85, 0.09, 1.82, 0.05, 0.13, 0.13, 0.23, 0.23, 0.75, 0.75, 1.50, 1.30, 0.17]
 
-fig, ax = plt.subplots(figsize=(7.16, 3.10))
+fig, ax = plt.subplots(figsize=(8.8, 3.40))
 x = np.arange(len(datasets))
 colors = ["#1565c0" if i < 4 else "#2e7d32" if i < 13 else "#c62828" for i in range(len(datasets))]
 
-bars = ax.bar(x, illicit_pct, color=colors, edgecolor="black", lw=0.6, alpha=0.90, width=0.65)
+bars = ax.bar(x, illicit_pct, color=colors, edgecolor="black", lw=0.6, alpha=0.90, width=0.62)
 ax.set_yscale("log")
 ax.set_xticks(x)
-ax.set_xticklabels(datasets, rotation=42, ha="right", fontsize=7.2)
-ax.set_ylabel(r"Illicit Ratio $\pi$ (%) [$\log_{10}$]", fontsize=8.8)
-ax.set_ylim([0.02, 12.0])
+ax.set_xticklabels(datasets, rotation=42, ha="right", fontsize=7.2, fontweight="bold")
+ax.set_ylabel(r"Illicit Ratio $\pi$ (%) [$\log_{10}$]", fontsize=9.0, fontweight="bold")
+ax.set_ylim([0.02, 16.0])
 ax.grid(True, axis="y", linestyle=":", alpha=0.6)
 
-for bar in bars:
+for i, bar in enumerate(bars):
     h = bar.get_height()
+    # Stagger vertical offset for adjacent bars with identical heights to prevent collisions
+    y_offset = 11 if (i in [6, 8, 10, 12]) else 2
     ax.annotate(f"{h:.2f}%", (bar.get_x() + bar.get_width() / 2, h),
-                xytext=(0, 2), textcoords="offset points", ha="center", va="bottom",
-                fontsize=6.5, fontweight="bold")
+                xytext=(0, y_offset), textcoords="offset points", ha="center", va="bottom",
+                fontsize=6.6, fontweight="bold", color=colors[i])
 
 legend_elements = [
     mlines.Line2D([], [], color='#1565c0', marker='s', ls='', label='Group A (Crypto)'),
     mlines.Line2D([], [], color='#2e7d32', marker='s', ls='', label='Group B (Banking/FinTech)'),
     mlines.Line2D([], [], color='#c62828', marker='s', ls='', label='Group C (Cards)'),
 ]
-ax.legend(handles=legend_elements, loc="upper right", framealpha=0.95, fontsize=7.0, ncol=3)
-ax.set_title("Extreme Class Imbalance (Illicit Ratio $\\pi$) across 14 Financial Transaction Networks",
-             fontweight="bold", fontsize=9.8, pad=8)
+ax.legend(handles=legend_elements, loc="upper right", framealpha=0.95, fontsize=7.4, ncol=3)
+ax.set_title(r"Extreme Class Imbalance (Illicit Ratio $\pi$) across 14 Financial Transaction Networks",
+             fontweight="bold", fontsize=10.0, pad=9)
 plt.tight_layout()
 save_all(fig, "fig_class_imbalance_log")
 
@@ -114,26 +119,26 @@ print("[2/8] Generating Tri-Band Decay Comparison...")
 fig, ax = plt.subplots(figsize=(7.16, 2.70))
 dt = np.linspace(0.01, 72.0, 500) # hours
 
-# Standard single exponential decay: exp(-lambda * dt)
-decay_std_fast = np.exp(-0.25 * dt)
-decay_std_slow = np.exp(-0.03 * dt)
+# Standard single exponential decay: exp(-lambda * dt) matching Section 3.3.2
+decay_std_fast = np.exp(-0.80 * dt)
+decay_std_slow = np.exp(-0.01 * dt)
 
 # C-STGB Tri-band attention weight:
-# Band 1 (Burst): seconds to minutes, Band 2 (Diurnal): 24h harmonic, Band 3 (Macro): 30-90d
-w_burst = np.exp(-1.5 * dt)
-w_diurnal = np.exp(-0.04 * dt) * (0.6 + 0.4 * np.cos(2 * np.pi * dt / 24.0))
+# Band 1 (Burst): lambda_1 = 0.80, Band 2 (Diurnal): lambda_2 = 0.05, Band 3 (Macro): lambda_3 = 0.01
+w_burst = np.exp(-0.80 * dt)
+w_diurnal = np.exp(-0.05 * dt) * (0.6 + 0.4 * np.cos(2 * np.pi * dt / 24.0))
 w_macro = np.exp(-0.01 * dt)
 w_triband = 0.45 * w_burst + 0.35 * w_diurnal + 0.20 * w_macro
 w_triband = np.clip(w_triband, 0.0, 1.0)
 
-ax.plot(dt, decay_std_fast, label="Standard Exponential Decay (Fast: $\\lambda=0.25$)", color="#9e9e9e", lw=1.6, ls="--")
-ax.plot(dt, decay_std_slow, label="Standard Exponential Decay (Slow: $\\lambda=0.03$)", color="#616161", lw=1.6, ls=":")
-ax.plot(dt, w_triband, label="C-STGB Tri-Band Harmonic Attention $w(\Delta t)$ (Ours)", color="#006400", lw=2.4)
+ax.plot(dt, decay_std_fast, label=r"Monolithic Fast Decay ($\lambda_1 = 0.80$)", color="#9e9e9e", lw=1.6, ls="--")
+ax.plot(dt, decay_std_slow, label=r"Monolithic Slow Decay ($\lambda_3 = 0.01$)", color="#616161", lw=1.6, ls=":")
+ax.plot(dt, w_triband, label=r"C-STGB Tri-Band Harmonic Attention $w(\Delta t)$ (Ours)", color="#006400", lw=2.4)
 
 ax.axvline(24.0, color="#1565c0", linestyle="-.", alpha=0.6, lw=1.0)
 ax.text(24.3, 0.68, "24h Diurnal Resonance", fontsize=7.5, color="#1565c0", fontweight="bold")
 ax.axvline(48.0, color="#1565c0", linestyle="-.", alpha=0.6, lw=1.0)
-ax.text(48.3, 0.55, "48h Harmonic", fontsize=7.5, color="#1565c0", fontweight="bold")
+ax.text(48.3, 0.35, "48h Harmonic Resonance", fontsize=7.5, color="#1565c0", fontweight="bold")
 
 ax.set_xlabel(r"Elapsed Inter-Event Time $\Delta t$ (Hours)", fontsize=9.2)
 ax.set_ylabel(r"Attention Temporal Weight $w(\Delta t)$", fontsize=9.2)
@@ -418,20 +423,20 @@ save_all(fig, "fig_conformal_coverage_reliability")
 
 
 # =====================================================================
-# 10. Stepwise Cumulative Ablation Waterfall Chart (7.16" x 3.00")
+# 10. Stepwise Cumulative Ablation Waterfall Chart
 # =====================================================================
 print("[10/12] Generating Stepwise Cumulative Ablation Waterfall Chart...")
-fig, ax = plt.subplots(figsize=(7.16, 3.00))
+fig, ax = plt.subplots(figsize=(8.4, 3.60))
 
 steps = [
-    "Base GCN\n(τ=0.50)",
-    "+ 12-D\nInvariants",
-    "+ Hawkes\nTemporal",
-    "+ Edge-Trust\nGating",
-    "+ Typology\nGraphSMOTE",
-    "+ Adaptive\nFusion",
-    "+ Bayes\nRisk Head",
-    "Full C-STGB\n(Final)"
+    "Base GCN (τ=0.50)",
+    "+ 12-D Invariants",
+    "+ Hawkes Temporal",
+    "+ Edge-Trust Gating",
+    "+ Typology GraphSMOTE",
+    "+ Adaptive Fusion",
+    "+ Bayes Risk Head",
+    "Full C-STGB (Final)"
 ]
 
 # Baseline start, incremental deltas, final total exactly matching Table 7.4
@@ -455,29 +460,39 @@ heights.append(current)
 colors_wf = ["#64748b", "#1e40af", "#0f766e", "#0284c7", "#ea580c", "#6d28d9", "#15803d", "#b91c1c"]
 
 x_pos = np.arange(len(steps))
-bars = ax.bar(x_pos, heights, bottom=bottoms, color=colors_wf, edgecolor="black", lw=0.6, width=0.58)
+bars = ax.bar(x_pos, heights, bottom=bottoms, color=colors_wf, edgecolor="black", lw=0.6, width=0.56)
 
 # Connect tops of deltas with dotted guide lines
 for i in range(len(deltas) - 1):
     y_top = bottoms[i+1] + heights[i+1]
-    ax.plot([x_pos[i+1] - 0.29, x_pos[i+2] + 0.29], [y_top, y_top], color="#94a3b8", linestyle=":", lw=0.9)
+    ax.plot([x_pos[i+1] - 0.28, x_pos[i+2] + 0.28], [y_top, y_top], color="#94a3b8", linestyle=":", lw=0.9)
 
 # Value annotations
 for i, (b, h) in enumerate(zip(bottoms, heights)):
     if i == 0:
-        ax.text(x_pos[i], h + 1.2, f"{h:.2f}%", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#1e293b")
+        ax.text(x_pos[i], h + 1.5, f"{h:.2f}%", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#1e293b")
     elif i == len(steps) - 1:
-        ax.text(x_pos[i], h + 1.2, f"{h:.2f}%\n(+65.02 pp)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
+        ax.text(x_pos[i], h + 1.5, f"{h:.2f}%\n(+65.02 pp)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
     else:
-        ax.text(x_pos[i], b + h + 1.2, f"+{h:.2f}\n({b+h:.1f}%)", ha="center", va="bottom", fontsize=6.2, fontweight="bold", color=colors_wf[i])
+        ax.text(x_pos[i], b + h + 1.5, f"+{h:.2f}\n({b+h:.1f}%)", ha="center", va="bottom", fontsize=6.4, fontweight="bold", color=colors_wf[i])
 
+steps = [
+    "Base GCN (τ=0.50)",
+    "+ 12-D Invariants",
+    "+ Hawkes Temporal",
+    "+ Edge Gate (g>=0.10)",
+    "+ GraphSMOTE",
+    "+ Adaptive Fusion",
+    "+ Bayes Risk Head",
+    "Full C-STGB"
+]
 ax.set_xticks(x_pos)
-ax.set_xticklabels(steps, fontsize=7.6)
-ax.set_ylabel("Elliptic-v1 F1 Score (%)", fontsize=9.0)
-ax.set_ylim([0, 108])
+ax.set_xticklabels(steps, fontsize=7.2, rotation=35, ha="right", fontweight="bold")
+ax.set_ylabel("Elliptic-v1 F1 Score (%)", fontsize=9.2, fontweight="bold")
+ax.set_ylim([0, 115])
 ax.grid(True, axis="y", linestyle=":", alpha=0.5)
 ax.set_title("Stepwise Cumulative Architectural Ablation Progression on Elliptic-v1",
-             fontweight="bold", fontsize=9.8, pad=8)
+             fontweight="bold", fontsize=10.0, pad=9)
 
 plt.tight_layout()
 save_all(fig, "fig_ablation_waterfall")

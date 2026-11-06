@@ -46,25 +46,25 @@ for d in TARGET_DIRS:
 
 
 def build_figure():
-    fig = plt.figure(figsize=(9.8, 4.4), dpi=300)
+    fig = plt.figure(figsize=(9.8, 4.6), dpi=300)
     
     gs = gridspec.GridSpec(
         1, 2,
         width_ratios=[1.25, 1.0],
         left=0.06, right=0.98,
-        top=0.88, bottom=0.12,
+        top=0.84, bottom=0.12,
         wspace=0.25
     )
 
     # -------------------------------------------------------------
     # Master Header Banner
     # -------------------------------------------------------------
-    fig.text(0.06, 0.965, "Streaming Latency Breakdown & Production SLA Safety Margins",
-             fontsize=10.2, fontweight='bold', color='#0f172a', ha='left')
-    fig.text(0.06, 0.925, "Stage-by-stage empirical latency (P50, P90, P99) across Fast-Path and Forensics pipelines (AMD EPYC 7763 + NVIDIA A100)",
-             fontsize=7.6, color='#475569', ha='left')
-    fig.text(0.98, 0.940, "Peak Throughput: 31,200 tx/s | Fast-Path P99: 0.82 ms",
-             fontsize=7.6, fontweight='bold', color='#1e3a8a', ha='right',
+    fig.text(0.06, 0.966, "Streaming Latency Breakdown & Production SLA Safety Margins",
+             fontsize=10.0, fontweight='bold', color='#0f172a', ha='left')
+    fig.text(0.06, 0.932, "Stage-by-stage empirical latency (P50, P90, P99) across Fast-Path and Forensics pipelines (AMD EPYC 7763 + NVIDIA A100)",
+             fontsize=7.4, color='#475569', ha='left')
+    fig.text(0.98, 0.942, "Peak Throughput: 31,200 tx/s | Fast-Path P99: 0.82 ms",
+             fontsize=7.4, fontweight='bold', color='#1e3a8a', ha='right',
              bbox=dict(boxstyle='square,pad=0.25', facecolor='#eff6ff', edgecolor='#93c5fd', lw=0.8))
 
     # -------------------------------------------------------------

@@ -52,21 +52,21 @@ def generate_figure_8_3():
 
     # 2. Master Header Banner
     ax.add_patch(patches.Rectangle(
-        (0.005, 0.932), 0.990, 0.062,
+        (0.005, 0.922), 0.990, 0.072,
         facecolor='#0f172a', edgecolor='#0f172a', linewidth=0.5
     ))
-    ax.text(0.018, 0.967, 'Enterprise Cloud-Native Kubernetes Deployment Topology & Elastic Autoscaling',
-            ha='left', va='center', fontsize=9.0, fontweight='bold', color='#ffffff')
-    ax.text(0.018, 0.945,
+    ax.text(0.018, 0.968, 'Enterprise Cloud-Native Kubernetes Deployment Topology & Elastic Autoscaling',
+            ha='left', va='center', fontsize=8.8, fontweight='bold', color='#ffffff')
+    ax.text(0.018, 0.938,
             r'End-to-End Orchestration: Ingress mTLS 1.3 $\rightarrow$ HPA Elastic Scaling (4 $\rightleftharpoons$ 32 Pods) $\rightarrow$ TorchScript & Arrow IPC $\rightarrow$ Prometheus & WORM Vault',
-            ha='left', va='center', fontsize=6.2, color='#94a3b8')
+            ha='left', va='center', fontsize=6.0, color='#94a3b8')
 
     # Top Right SLA Pill
     ax.add_patch(patches.Rectangle(
-        (0.755, 0.938), 0.235, 0.050,
+        (0.755, 0.932), 0.235, 0.052,
         facecolor='#0284c7', edgecolor='#38bdf8', linewidth=0.8
     ))
-    ax.text(0.872, 0.963, 'HPA ELASTIC: 4 - 32 PODS (31.2k tx/s)',
+    ax.text(0.872, 0.958, 'HPA ELASTIC: 4 - 32 PODS (31.2k tx/s)',
             ha='center', va='center', fontsize=6.0, fontweight='bold', color='#ffffff')
 
     # =========================================================================
@@ -249,13 +249,13 @@ def generate_figure_8_3():
         (pod_x + 0.006, pod_y + 0.405), pod_w - 0.012, 0.125,
         facecolor='#f8fafc', edgecolor='#cbd5e1', linewidth=0.7
     ))
-    ax.text(pod_x + 0.012, pod_y + 0.510, '2. Apache Arrow Zero-Copy IPC Memory', ha='left', va='center',
+    ax.text(pod_x + 0.012, pod_y + 0.516, '2. Apache Arrow IPC Shared Memory', ha='left', va='center',
             fontsize=5.5, fontweight='bold', color='#0f766e')
-    ax.text(pod_x + 0.012, pod_y + 0.485, r'Vectorized batch memory buffer: $\mathcal{O}(|\mathcal{E}_{\text{batch}}|)$', ha='left', va='center',
+    ax.text(pod_x + 0.012, pod_y + 0.482, r'Vectorized batch buffer: $\mathcal{O}(|\mathcal{E}|)$', ha='left', va='center',
             fontsize=5.0, color='#475569')
-    ax.text(pod_x + 0.012, pod_y + 0.460, r'Direct PyTorch Tensor Zero-Copy View ($0.11\,\text{ms}$)', ha='left', va='center',
+    ax.text(pod_x + 0.012, pod_y + 0.456, r'Direct PyTorch Tensor View ($0.11\,\text{ms}$)', ha='left', va='center',
             fontsize=5.1, fontweight='bold', color='#0f766e')
-    ax.text(pod_x + 0.012, pod_y + 0.435, r'Kirchhoff flow & 12-D topological invariants $\mathbf{z}_{\mathrm{inv}}$', ha='left', va='center',
+    ax.text(pod_x + 0.012, pod_y + 0.430, r'Kirchhoff flow & 12-D invariants $\mathbf{z}_{\mathrm{inv}}$', ha='left', va='center',
             fontsize=4.8, color='#64748b')
 
     # Component 3: TorchScript Neural Scoring Engine
@@ -448,7 +448,7 @@ def generate_figure_8_3():
     # Worker Pod -> Swarm Pod (Async Event Queue)
     ax.annotate("", xy=(sw_x, 0.450), xytext=(pod_x + pod_w, 0.450),
                 arrowprops=dict(arrowstyle="->,head_width=0.22,head_length=0.32", color='#ca8a04', lw=1.4, linestyle='--'))
-    ax.text((pod_x + pod_w + sw_x)/2, 0.460, '«async»', ha='center', va='bottom', fontsize=4.8, fontweight='bold', color='#b45309')
+    ax.text((pod_x + pod_w + sw_x)/2, 0.454, '«async»', ha='center', va='bottom', fontsize=4.8, fontweight='bold', color='#b45309')
 
     # Cluster -> Telemetry
     ax.annotate("", xy=(z3_x, 0.690), xytext=(z2_x + z2_w, 0.690),

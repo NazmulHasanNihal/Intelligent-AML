@@ -92,14 +92,14 @@ def generate_figure_3_3():
     ax_a.add_patch(arrow_in)
 
     # Central Mule Account Card (centered inside the conduit)
-    mule_box = FancyBboxPatch((0.31, 0.39), 0.38, 0.28, boxstyle="round,pad=0.025",
+    mule_box = FancyBboxPatch((0.30, 0.38), 0.40, 0.30, boxstyle="square,pad=0.02",
                               fc="#fee2e2", ec="#dc2626", lw=1.6, zorder=3)
     ax_a.add_patch(mule_box)
-    ax_a.text(0.50, 0.59, "Layering Mule Account M1", ha='center', va='center',
+    ax_a.text(0.50, 0.60, "Layering Mule Account M1", ha='center', va='center',
               fontsize=8.0, weight='bold', color='#991b1b', zorder=5)
-    ax_a.text(0.50, 0.49, r"$\Phi_{\mathrm{flow}} = \frac{\$99,850}{\$100,000 + \epsilon} = 0.9985 \approx 1.0$", 
+    ax_a.text(0.50, 0.50, r"$\Phi_{\mathrm{flow}} = \frac{\$99,850}{\$100,000 + \epsilon} = 0.9985 \approx 1.0$", 
               ha='center', va='center', fontsize=7.2, weight='bold', color='#b91c1c', zorder=5)
-    ax_a.text(0.50, 0.43, r"Retention: $\Delta = \$150$ (0.15% fee cut)", ha='center', va='center',
+    ax_a.text(0.50, 0.41, r"Retention: $\Delta = \$150$ (0.15% fee cut)", ha='center', va='center',
               fontsize=6.8, color='#7f1d1d', zorder=5)
 
     # Outflow Arrow & Text (Completely separated vertically, zero collision)
@@ -218,43 +218,43 @@ def generate_figure_3_3():
     ax_c.text(0.70, 0.37, r"$p_{23}=0.85$", fontsize=7.0, weight='bold', color='#c2410c', zorder=4)
 
     # S0 Box
-    b_s0 = FancyBboxPatch((0.06, 0.41), 0.18, 0.28, boxstyle="round,pad=0.02",
+    b_s0 = FancyBboxPatch((0.05, 0.38), 0.19, 0.32, boxstyle="square,pad=0.02",
                           fc="#fee2e2", ec="#dc2626", lw=1.6, zorder=3)
     ax_c.add_patch(b_s0)
-    ax_c.text(0.15, 0.61, "Illicit Seed S0", ha='center', va='center',
+    ax_c.text(0.145, 0.62, "Illicit Seed S0", ha='center', va='center',
               fontsize=7.6, weight='bold', color='#991b1b', zorder=5)
-    ax_c.text(0.15, 0.53, "Darknet Faucet", ha='center', va='center',
+    ax_c.text(0.145, 0.53, "Darknet Faucet", ha='center', va='center',
               fontsize=6.8, color='#b91c1c', zorder=5)
-    ax_c.text(0.15, 0.45, r"$\mathbf{s}_{\mathrm{fwd}} = 1.00$", ha='center', va='center',
+    ax_c.text(0.145, 0.43, r"$\mathbf{s}_{\mathrm{fwd}} = 1.00$", ha='center', va='center',
               fontsize=7.2, weight='bold', color='#7f1d1d', zorder=5)
 
     # M1 Box
-    b_m1 = FancyBboxPatch((0.39, 0.66), 0.22, 0.23, boxstyle="round,pad=0.02",
+    b_m1 = FancyBboxPatch((0.39, 0.65), 0.22, 0.24, boxstyle="square,pad=0.02",
                           fc="#ffedd5", ec="#ea580c", lw=1.5, zorder=3)
     ax_c.add_patch(b_m1)
     ax_c.text(0.50, 0.81, "Layering Mule M1", ha='center', va='center',
               fontsize=7.5, weight='bold', color='#9a3412', zorder=5)
-    ax_c.text(0.50, 0.72, r"$\mathbf{s}_{\mathrm{fwd}} = 84\%$", ha='center', va='center',
+    ax_c.text(0.50, 0.71, r"$\mathbf{s}_{\mathrm{fwd}} = 0.84$", ha='center', va='center',
               fontsize=7.2, weight='bold', color='#c2410c', zorder=5)
 
     # M2 Box
-    b_m2 = FancyBboxPatch((0.39, 0.21), 0.22, 0.23, boxstyle="round,pad=0.02",
+    b_m2 = FancyBboxPatch((0.39, 0.20), 0.22, 0.24, boxstyle="square,pad=0.02",
                           fc="#ffedd5", ec="#ea580c", lw=1.5, zorder=3)
     ax_c.add_patch(b_m2)
     ax_c.text(0.50, 0.36, "Layering Mule M2", ha='center', va='center',
               fontsize=7.5, weight='bold', color='#9a3412', zorder=5)
-    ax_c.text(0.50, 0.27, r"$\mathbf{s}_{\mathrm{fwd}} = 79\%$", ha='center', va='center',
+    ax_c.text(0.50, 0.26, r"$\mathbf{s}_{\mathrm{fwd}} = 0.79$", ha='center', va='center',
               fontsize=7.2, weight='bold', color='#c2410c', zorder=5)
 
     # C3 Box
-    b_c3 = FancyBboxPatch((0.76, 0.41), 0.18, 0.28, boxstyle="round,pad=0.02",
+    b_c3 = FancyBboxPatch((0.76, 0.38), 0.19, 0.32, boxstyle="square,pad=0.02",
                           fc="#fef9c3", ec="#ca8a04", lw=1.5, zorder=3)
     ax_c.add_patch(b_c3)
-    ax_c.text(0.85, 0.61, "Exit Sink C3", ha='center', va='center',
+    ax_c.text(0.855, 0.62, "Exit Sink C3", ha='center', va='center',
               fontsize=7.6, weight='bold', color='#854d0e', zorder=5)
-    ax_c.text(0.85, 0.53, "Off-Ramp ATM", ha='center', va='center',
+    ax_c.text(0.855, 0.53, "Off-Ramp ATM", ha='center', va='center',
               fontsize=6.8, color='#a16207', zorder=5)
-    ax_c.text(0.85, 0.45, r"$\mathbf{s}_{\mathrm{bwd}} = 0.95$", ha='center', va='center',
+    ax_c.text(0.855, 0.43, r"$\mathbf{s}_{\mathrm{bwd}} = 0.95$", ha='center', va='center',
               fontsize=7.2, weight='bold', color='#713f12', zorder=5)
 
     # Bottom caption strip inside card
@@ -294,17 +294,17 @@ def generate_figure_3_3():
 
     # Annotations at depth 5 cleanly placed without touching legend
     ax_d.annotate(r"$\mathcal{E}(\mathbf{H}^{(5)}) = 0.77$" + "\n(Camouflage Resilient)",
-                  xy=(5.0, 0.77), xytext=(3.5, 0.56),
+                  xy=(5.0, 0.77), xytext=(3.1, 0.46),
                   arrowprops=dict(arrowstyle="->", color="#1d4ed8", lw=1.3),
-                  fontsize=7.0, weight='bold', color="#1d4ed8",
-                  bbox=dict(boxstyle="round,pad=0.2", fc="#eff6ff", ec="#93c5fd", lw=0.8),
+                  fontsize=6.8, weight='bold', color="#1d4ed8",
+                  bbox=dict(boxstyle="square,pad=0.2", fc="#eff6ff", ec="#93c5fd", lw=0.8),
                   zorder=5)
 
     ax_d.annotate(r"$\mathcal{E}(\mathbf{H}^{(5)}) \to 0.01$" + "\n(Centroid Collapse)",
-                  xy=(5.0, 0.01), xytext=(3.4, 0.16),
+                  xy=(5.0, 0.01), xytext=(3.1, 0.12),
                   arrowprops=dict(arrowstyle="->", color="#b91c1c", lw=1.3),
-                  fontsize=7.0, weight='bold', color="#b91c1c",
-                  bbox=dict(boxstyle="round,pad=0.2", fc="#fef2f2", ec="#fca5a5", lw=0.8),
+                  fontsize=6.8, weight='bold', color="#b91c1c",
+                  bbox=dict(boxstyle="square,pad=0.2", fc="#fef2f2", ec="#fca5a5", lw=0.8),
                   zorder=5)
 
     ax_d.set_xlabel("Message Passing Depth (Layers $l$)", fontsize=8.2, weight='bold', color='#0f172a')
@@ -313,7 +313,7 @@ def generate_figure_3_3():
     ax_d.set_xticks(layers)
     ax_d.set_xlim(0.8, 5.4)
     ax_d.set_ylim(-0.05, 1.15)
-    ax_d.legend(fontsize=6.8, loc='upper right', framealpha=0.95, edgecolor='#cbd5e1')
+    ax_d.legend(fontsize=6.6, loc='upper right', framealpha=0.95, edgecolor='#cbd5e1', labelspacing=0.6, borderpad=0.5)
     ax_d.grid(True, linestyle=':', alpha=0.5, color='#94a3b8')
 
     # Layout adjustments

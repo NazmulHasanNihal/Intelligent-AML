@@ -42,14 +42,14 @@ TARGET_DIRS = [
 ]
 
 def generate_fig1_1():
-    fig, (ax_b, ax_m) = plt.subplots(1, 2, figsize=(7.2, 3.2), dpi=300)
+    fig, (ax_b, ax_m) = plt.subplots(1, 2, figsize=(8.2, 3.4), dpi=300, gridspec_kw={'wspace': 0.22})
     ax_b.axis('off')
     ax_m.axis('off')
 
     # Left Panel: Benign Retail Merchant Star Graph
     ax_b.set_xlim([-1.42, 1.35])
     ax_b.set_ylim([-1.35, 1.25])
-    ax_b.set_title("(a) Benign Commercial Merchant Hub (Star Topology)", fontweight="bold", fontsize=8.6, pad=8)
+    ax_b.set_title("(a) Benign Commercial Hub (Star Topology)", fontweight="bold", fontsize=8.8, pad=8)
 
     # Central merchant node
     circle_m = patches.Circle((0, 0), 0.22, facecolor="#1e40af", edgecolor="#0f172a", lw=1.2, zorder=5)

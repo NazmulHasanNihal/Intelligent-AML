@@ -265,22 +265,26 @@ def generate_figure_4_1():
 
     # Horizontal Bar Comparison
     bars = [
-        ("PostgreSQL + IPC Copy", 14.2, "#ef4444", "14.2 ms (Legacy Disk/IPC)"),
-        ("DuckDB Cold Miss Scan", 2.1, "#f59e0b", "2.1 ms (OLAP B-Tree)"),
-        ("C-STGB LRU Hit (Fast-Path)", 0.45, "#10b981", "0.45 ms (Sub-ms SLA)")
+        ("PostgreSQL + IPC Copy", 14.2, "#ef4444", "14.2 ms (Disk)"),
+        ("DuckDB Cold Miss Scan", 2.1, "#f59e0b", "2.1 ms (OLAP)"),
+        ("C-STGB LRU Hit (Fast-Path)", 0.45, "#10b981", "0.45 ms (SLA)")
     ]
     for idx, (label, val, bar_color, val_str) in enumerate(bars):
         y_bar = 0.295 - idx * 0.095
-        ax.text(0.025, y_bar + 0.040, label, fontsize=6.4, weight='bold', color='#334155', zorder=3)
+        ax.text(0.025, y_bar + 0.038, label, fontsize=6.2, weight='bold', color='#334155', zorder=3)
         # Background track
-        ax.add_patch(FancyBboxPatch((0.025, y_bar), 0.282, 0.028, boxstyle="round,pad=0.002",
+        ax.add_patch(FancyBboxPatch((0.025, y_bar), 0.270, 0.026, boxstyle="round,pad=0.002",
                                    fc="#f1f5f9", ec="#e2e8f0", lw=0.6, zorder=3))
         # Active bar scaled relative to 15.0 ms
-        w_bar = min(0.282, (val / 15.0) * 0.282)
-        ax.add_patch(FancyBboxPatch((0.025, y_bar), w_bar, 0.028, boxstyle="round,pad=0.002",
+        w_bar = min(0.270, (val / 15.0) * 0.270)
+        ax.add_patch(FancyBboxPatch((0.025, y_bar), w_bar, 0.026, boxstyle="round,pad=0.002",
                                    fc=bar_color, ec=bar_color, lw=0.8, zorder=4))
-        ax.text(0.025 + w_bar + 0.006, y_bar + 0.014, val_str,
-                fontsize=5.8, weight='bold', color=bar_color, va='center', zorder=5)
+        if val > 10.0:
+            ax.text(0.025 + w_bar - 0.006, y_bar + 0.013, val_str,
+                    fontsize=5.6, weight='bold', color="#ffffff", ha='right', va='center', zorder=5)
+        else:
+            ax.text(0.025 + w_bar + 0.006, y_bar + 0.013, val_str,
+                    fontsize=5.6, weight='bold', color=bar_color, ha='left', va='center', zorder=5)
 
     ax.text(0.166, 0.048, "Speedup: 31.5x vs Legacy PostgreSQL | Meets <10ms Banking SLA",
             ha='center', va='center', fontsize=5.8, weight='bold', color='#047857', zorder=3)

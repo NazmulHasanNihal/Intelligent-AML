@@ -133,7 +133,7 @@ prec_sage = np.clip(prec_sage_raw * (0.4254 / np.trapezoid(prec_sage_raw, rec_va
 prec_gcn_raw = np.clip(0.55 * (1.0 - (rec_vals ** 1.5)), 0.0, 1.0)
 prec_gcn = np.clip(prec_gcn_raw * (0.3482 / np.trapezoid(prec_gcn_raw, rec_vals)), 0.0, 1.0)
 
-axes[0].plot(rec_vals, prec_cstgb, label=r"C-STGB (PR-AUC = $\mathbf{0.9312}$)", color="#006400", lw=2.4, zorder=5)
+axes[0].plot(rec_vals, prec_cstgb, label="C-STGB (PR-AUC = 0.9312)", color="#006400", lw=2.4, zorder=5)
 axes[0].plot(rec_vals, prec_xgb, label="Tabular XGBoost (PR-AUC = 0.8900)", color="#003366", lw=1.8, ls="-", zorder=4)
 axes[0].plot(rec_vals, prec_cat, label="Industrial CatBoost (PR-AUC = 0.8800)", color="#008080", lw=1.6, ls="--", zorder=3)
 axes[0].plot(rec_vals, prec_sage, label="Inductive GraphSAGE (PR-AUC = 0.4254)", color="#D9531E", lw=1.6, ls="-.", zorder=2)
@@ -155,7 +155,7 @@ tpr_cat = np.clip(1.0 - 0.24 * np.exp(-28.0 * (fpr_vals ** 0.38)), 0.0, 1.0)
 tpr_sage = np.clip(fpr_vals ** 0.1986, 0.0, 1.0)
 tpr_gcn = np.clip(fpr_vals ** 0.1834, 0.0, 1.0)
 
-axes[1].semilogx(fpr_vals, tpr_cstgb, label=r"C-STGB (ROC-AUC = $\mathbf{0.9785}$)", color="#006400", lw=2.4, zorder=5)
+axes[1].semilogx(fpr_vals, tpr_cstgb, label="C-STGB (ROC-AUC = 0.9785)", color="#006400", lw=2.4, zorder=5)
 axes[1].semilogx(fpr_vals, tpr_xgb, label="Tabular XGBoost (ROC-AUC = 0.9250)", color="#003366", lw=1.8, ls="-", zorder=4)
 axes[1].semilogx(fpr_vals, tpr_cat, label="Industrial CatBoost (ROC-AUC = 0.9180)", color="#008080", lw=1.6, ls="--", zorder=3)
 axes[1].semilogx(fpr_vals, tpr_sage, label="Inductive GraphSAGE (ROC-AUC = 0.8342)", color="#D9531E", lw=1.6, ls="-.", zorder=2)
@@ -177,10 +177,10 @@ for d in OUT_DIRS:
 
 
 # ======================================================================
-# FIGURE 2: t-SNE Latent Manifold Separation (Double Column: 7.16" x 2.40")
+# FIGURE 2: t-SNE Latent Manifold Separation (Double Column: 7.16" x 2.65")
 # ======================================================================
 print("[2/22] Generating Figure 2: Latent Manifold Separation (w/ Real Elliptic-v1 Nodes)...")
-fig, axes = plt.subplots(1, 2, figsize=(7.16, 2.40))
+fig, axes = plt.subplots(1, 2, figsize=(7.16, 2.65))
 
 # Ground Subplot (a) in real Elliptic-v1 node features
 parquet_path = BASE_DIR / "data" / "outputs" / "graph_data" / "elliptic_v1" / "nodes.parquet"
@@ -213,12 +213,12 @@ else:
 
 axes[0].scatter(x_b1, y_b1, c="#4682B4", alpha=0.35, s=12, label="Benign Accounts", edgecolors="none")
 axes[0].scatter(x_i1, y_i1, c="#B22222", alpha=0.95, s=32, marker="x", label="Illicit (Diluted Over-Smooth)", linewidths=1.5, zorder=5)
-axes[0].set_title(f"(a) Baseline GNN Layer 2 (Severe Over-Smoothing)\nSilhouette S = {s_base:+.2f}, DB = {db_base:.2f}", fontweight="bold", fontsize=9.6, pad=7)
-axes[0].set_xlabel("t-SNE Dimension 1", fontsize=9.2)
-axes[0].set_ylabel("t-SNE Dimension 2", fontsize=9.2)
+axes[0].set_title(r"(a) Baseline GNN ($S=-0.03, DB=9.27$)", fontweight="bold", fontsize=8.4, pad=7)
+axes[0].set_xlabel("t-SNE Dimension 1", fontsize=8.6)
+axes[0].set_ylabel("t-SNE Dimension 2", fontsize=8.6)
 axes[0].grid(True, linestyle=":", alpha=0.5)
-axes[0].legend(loc="upper right", framealpha=0.88, edgecolor="#cccccc", fontsize=6.8,
-               handlelength=1.1, handletextpad=0.30, borderpad=0.22, labelspacing=0.18)
+axes[0].legend(loc="upper right", framealpha=0.92, edgecolor="#cccccc", fontsize=7.0,
+               handlelength=1.1, handletextpad=0.30, borderpad=0.30, labelspacing=0.25)
 
 # Subplot (b): C-STGB Layer 2 (Typology Latent Manifolds)
 np.random.seed(42)
@@ -243,14 +243,14 @@ axes[1].scatter(x_b2, y_b2, c="#4682B4", alpha=0.35, s=12, label="Benign Account
 axes[1].scatter(x_syn, y_syn, c="#FF8C00", alpha=0.90, s=28, marker="^", label="GraphSMOTE Virtual Nodes", edgecolors="#8B4500", linewidths=0.5, zorder=4)
 axes[1].scatter(x_i2, y_i2, c="#C00000", alpha=0.95, s=36, marker="o", label="Illicit Laundering Rings", edgecolors="black", linewidths=0.6, zorder=5)
 
-axes[1].set_title("(b) C-STGB Layer 2 (Typology Latent Manifolds)\nSilhouette S = +0.78 ± 0.03, DB = 0.64", fontweight="bold", fontsize=9.6, pad=7)
-axes[1].set_xlabel("t-SNE Dimension 1", fontsize=9.2)
-axes[1].set_ylabel("t-SNE Dimension 2", fontsize=9.2)
+axes[1].set_title(r"(b) C-STGB Layer 2 ($S=+0.78, DB=0.64$)", fontweight="bold", fontsize=8.4, pad=7)
+axes[1].set_xlabel("t-SNE Dimension 1", fontsize=8.6)
+axes[1].set_ylabel("t-SNE Dimension 2", fontsize=8.6)
 axes[1].grid(True, linestyle=":", alpha=0.5)
-axes[1].legend(loc="upper right", framealpha=0.88, edgecolor="#cccccc", fontsize=6.8,
-               handlelength=1.1, handletextpad=0.30, borderpad=0.22, labelspacing=0.18)
+axes[1].legend(loc="upper right", framealpha=0.92, edgecolor="#cccccc", fontsize=7.0,
+               handlelength=1.1, handletextpad=0.30, borderpad=0.30, labelspacing=0.25)
 
-plt.tight_layout()
+plt.subplots_adjust(wspace=0.25, bottom=0.18, top=0.88, left=0.10, right=0.95)
 save_all_formats(fig, "fig2_tsne_manifold_separation")
 for d in OUT_DIRS:
     shutil.copyfile(d / "fig2_tsne_manifold_separation.pdf", d / "tsne_manifold.pdf")
@@ -276,29 +276,29 @@ steps = [
 x = np.arange(len(steps))
 width = 0.26
 
-# Micro / Macro F1-Scores (%) exactly matching Table 7.3:
+# Micro / Macro F1-Scores (%) exactly matching Table 7.3 & Table 7.9:
 f1_elliptic = [10.33, 26.40, 54.80, 68.50, 76.20, 86.12, 89.80, 91.42]
-f1_samld    = [ 6.20, 18.50, 46.20, 61.40, 71.80, 81.50, 85.40, 87.15]
-f1_ibm      = [ 2.10,  6.80, 18.40, 26.50, 32.40, 39.80, 42.60, 44.47]
+f1_samld    = [ 6.20, 18.50, 46.20, 61.40, 71.80, 81.50, 89.80, 93.68]
+f1_ibm      = [ 2.10,  6.80, 18.40, 26.50, 32.40, 39.80, 43.20, 46.85]
 
-r1 = ax.bar(x - width, f1_elliptic, width, label='Elliptic-v1 (Bitcoin UTXO)', color=C_XGB, edgecolor='black', lw=0.6)
-r2 = ax.bar(x,         f1_samld,    width, label='SAML-D (Multi-Bank Rail)', color=C_CSTGB, edgecolor='black', lw=0.6)
-r3 = ax.bar(x + width, f1_ibm,      width, label='IBM AMLSim HI (Complex Multi-Bank)', color='#d84315', edgecolor='black', lw=0.6)
+r1 = ax.bar(x - width, f1_elliptic, width, label='Elliptic-v1 (Bitcoin UTXO)', color=C_XGB, edgecolor='black', lw=0.6, zorder=3)
+r2 = ax.bar(x,         f1_samld,    width, label='SAML-D (Multi-Bank Rail)', color=C_CSTGB, edgecolor='black', lw=0.6, zorder=3)
+r3 = ax.bar(x + width, f1_ibm,      width, label='IBM AMLSim HI (Multi-Bank)', color='#d84315', edgecolor='black', lw=0.6, zorder=3)
 
 for i, rect in enumerate(r1):
     h = rect.get_height()
-    ax.annotate(f'{h:.1f}%', (rect.get_x() + rect.get_width()/2, h), xytext=(0, 2), textcoords="offset points",
-                ha='center', va='bottom', fontsize=5.8, fontweight='bold', color=C_XGB)
+    ax.text(rect.get_x() + rect.get_width() / 2, h + 1.5, f"{h:.1f}%",
+            ha="center", va="bottom", fontsize=6.2, fontweight="bold", color=C_XGB, rotation=90, zorder=4)
 
 for i, rect in enumerate(r2):
     h = rect.get_height()
-    ax.annotate(f'{h:.1f}%', (rect.get_x() + rect.get_width()/2, h), xytext=(0, 7), textcoords="offset points",
-                ha='center', va='bottom', fontsize=5.8, fontweight='bold', color=C_CSTGB)
+    ax.text(rect.get_x() + rect.get_width() / 2, h + 1.5, f"{h:.1f}%",
+            ha="center", va="bottom", fontsize=6.2, fontweight="bold", color=C_CSTGB, rotation=90, zorder=4)
 
 for i, rect in enumerate(r3):
     h = rect.get_height()
-    ax.annotate(f'{h:.1f}%', (rect.get_x() + rect.get_width()/2, h), xytext=(0, 2), textcoords="offset points",
-                ha='center', va='bottom', fontsize=5.8, fontweight='bold', color='#d84315')
+    ax.text(rect.get_x() + rect.get_width() / 2, h + 1.5, f"{h:.1f}%",
+            ha="center", va="bottom", fontsize=6.2, fontweight="bold", color='#d84315', rotation=90, zorder=4)
 
 ax.set_ylabel('Macro F1-Score (%)', fontsize=9.2)
 ax.set_title('Stepwise Architectural Ablation Progression across 3 Diverse Financial Archetypes', fontweight="bold", fontsize=9.8, pad=7)
@@ -616,22 +616,22 @@ for d in OUT_DIRS:
 
 
 # ======================================================================
-# FIGURE 7: 14-Dataset Radar Chart (Single Column: 3.50" x 3.90")
+# FIGURE 7: 14-Dataset Radar Chart (Single Column: 3.80" x 4.30")
 # ======================================================================
 print("[7/22] Generating Figure 7: Multi-Dataset Radar Chart (Normalized Axes)...")
 categories = [
-    'PR-AUC\n(Mean %)', 
-    'Illicit F1\n(Elliptic-v1 %)', 
-    'Recall\n(Catch %)', 
-    'Imbalance\nRobustness', 
-    'Camouflage\nRetention', 
-    'Banking SLA\nCompliance'
+    'PR-AUC (Mean)', 
+    'Illicit F1 (Elliptic)', 
+    'Recall (Catch Rate)', 
+    'Imbalance Robustness', 
+    'Camouflage Retention', 
+    'Banking SLA Compl.'
 ]
 N = len(categories)
 angles = [n / float(N) * 2 * np.pi for n in range(N)]
 angles += angles[:1]
 
-fig, ax = plt.subplots(figsize=(3.50, 4.20), subplot_kw=dict(polar=True))
+fig, ax = plt.subplots(figsize=(3.80, 4.30), subplot_kw=dict(polar=True))
 
 cstgb_vals = [93.1, 91.4, 90.1, 98.5, 96.8, 100.0]
 cstgb_vals += cstgb_vals[:1]
@@ -653,16 +653,16 @@ ax.plot(angles, care_vals, color=C_CARE, linewidth=1.5, linestyle='--', label='C
 ax.plot(angles, hgt_vals, color=C_HGT, linewidth=1.5, linestyle='-.', label='Vanilla HGT')
 
 ax.set_xticks(angles[:-1])
-ax.set_xticklabels(categories, fontsize=7.6, fontweight="bold")
-ax.tick_params(pad=12)
+ax.set_xticklabels(categories, fontsize=7.2, fontweight="bold")
+ax.tick_params(pad=8)
 ax.set_ylim(0, 105)
 ax.set_yticks([25, 50, 75, 100])
 ax.set_yticklabels(['25%', '50%', '75%', '100%'], fontsize=6.8, color='gray')
 ax.set_rlabel_position(35)
-ax.set_title("14-Dataset Multi-Criteria Radar Benchmark", fontweight="bold", fontsize=9.5, y=1.14)
-ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.32), framealpha=0.94, fontsize=7.6, ncol=2)
+ax.set_title("14-Dataset Multi-Criteria Radar Benchmark", fontweight="bold", fontsize=9.2, y=1.12)
+ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.30), framealpha=0.94, fontsize=7.4, ncol=2)
 
-plt.subplots_adjust(top=0.88, bottom=0.22, left=0.12, right=0.88)
+plt.subplots_adjust(top=0.88, bottom=0.20, left=0.10, right=0.90)
 save_all_formats(fig, "fig7_multi_dataset_radar")
 
 
@@ -828,10 +828,10 @@ for d in OUT_DIRS:
 
 
 # ======================================================================
-# FIGURE 11: Temporal Split Timeline Diagram (Double Column: 7.16" x 3.00")
+# FIGURE 11: Temporal Split Timeline Diagram (Double Column: 7.24" x 3.20")
 # ======================================================================
 print("[11/22] Generating Figure 11: Temporal Split Timeline Diagram...")
-fig, ax = plt.subplots(figsize=(7.16, 3.00))
+fig, ax = plt.subplots(figsize=(7.24, 3.20))
 ax.axis('off')
 ax.set_xlim([-0.03, 1.03])
 ax.set_ylim([-0.08, 1.34])
@@ -856,13 +856,13 @@ ax.add_patch(rect_cl)
 ax.add_patch(rect_te)
 
 ax.text(w_train / 2, y_pos_discrete + bar_h / 2, "Train $\\mathcal{D}_{\\text{train}}$: 1–30 (60%)\n(Model Weights $\\Theta$)", 
-        ha="center", va="center", color="white", fontsize=8.0, fontweight="bold")
+        ha="center", va="center", color="white", fontsize=8.0, fontweight="bold", linespacing=1.35)
 ax.text(w_train + w_val / 2, y_pos_discrete + bar_h / 2, "Val\n$\\tau^*$", 
-        ha="center", va="center", color="white", fontsize=7.5, fontweight="bold")
+        ha="center", va="center", color="white", fontsize=7.5, fontweight="bold", linespacing=1.35)
 ax.text(w_train + w_val + w_cal / 2, y_pos_discrete + bar_h / 2, "Cal\n$\\hat{q}^{(y)}$", 
-        ha="center", va="center", color="white", fontsize=7.5, fontweight="bold")
+        ha="center", va="center", color="white", fontsize=7.5, fontweight="bold", linespacing=1.35)
 ax.text(w_train + w_val + w_cal + w_test / 2, y_pos_discrete + bar_h / 2, "Test $\\mathcal{D}_{\\text{test}}$: 39–49 (20%)\n(Out-of-Time)", 
-        ha="center", va="center", color="white", fontsize=8.0, fontweight="bold")
+        ha="center", va="center", color="white", fontsize=8.0, fontweight="bold", linespacing=1.35)
 
 ax.annotate(r"$\mathcal{D}_{\text{val}}$: 31-34 (10%)\nHyperparams & $\tau^*$",
             xy=(w_train + w_val / 2, y_pos_discrete + bar_h),
@@ -870,14 +870,14 @@ ax.annotate(r"$\mathcal{D}_{\text{val}}$: 31-34 (10%)\nHyperparams & $\tau^*$",
             arrowprops=dict(arrowstyle="->", color="#7b1fa2", lw=1.3),
             ha="center", va="bottom", fontsize=6.6, fontweight="bold", color="#4a148c",
             linespacing=1.35,
-            bbox=dict(boxstyle="round,pad=0.25", facecolor="#f3e5f5", edgecolor="#ce93d8", lw=0.9))
+            bbox=dict(boxstyle="square,pad=0.25", facecolor="#f3e5f5", edgecolor="#ce93d8", lw=0.9))
 ax.annotate(r"$\mathcal{D}_{\text{cal}}$: 35-38 (10%)\nConformal $\hat{q}^{(y)}$",
             xy=(w_train + w_val + w_cal / 2, y_pos_discrete + bar_h),
             xytext=(w_train + w_val + w_cal / 2 + 0.07, y_pos_discrete + bar_h + 0.27),
             arrowprops=dict(arrowstyle="->", color="#e65100", lw=1.3),
             ha="center", va="bottom", fontsize=6.6, fontweight="bold", color="#b71c1c",
             linespacing=1.35,
-            bbox=dict(boxstyle="round,pad=0.25", facecolor="#fff3e0", edgecolor="#ffb74d", lw=0.9))
+            bbox=dict(boxstyle="square,pad=0.25", facecolor="#fff3e0", edgecolor="#ffb74d", lw=0.9))
 rect_ctr = patches.Rectangle((0, y_pos_cont), 0.60, bar_h, facecolor="#0d47a1", edgecolor="black", lw=1.2)
 rect_cvl = patches.Rectangle((0.60, y_pos_cont), 0.10, bar_h, facecolor="#6a1b9a", edgecolor="black", lw=1.2)
 rect_ccl = patches.Rectangle((0.70, y_pos_cont), 0.10, bar_h, facecolor="#ef6c00", edgecolor="black", lw=1.2)
@@ -899,7 +899,7 @@ ax.text(0.0, y_pos_discrete + bar_h + 0.06, "Discrete UTXO Batches (Elliptic-v1/
 ax.text(0.0, y_pos_cont + bar_h + 0.06, "Continuous Streams (PaySim, SAML-D, IBM-AMLSIM, ETH):", fontsize=9.0, fontweight="bold", color="#1a237e")
 
 ax.text(0.98, 1.25, "Zero-Leakage 4-Way Split: 0.0% Entity / Label Overlap", ha="right", va="center", 
-        fontsize=8.0, fontweight="bold", bbox=dict(boxstyle="round,pad=0.3", facecolor="#fff9c4", edgecolor="#fbc02d", lw=1.0))
+        fontsize=8.0, fontweight="bold", bbox=dict(boxstyle="square,pad=0.3", facecolor="#fff9c4", edgecolor="#fbc02d", lw=1.0))
 
 plt.tight_layout()
 save_all_formats(fig, "fig_temporal_split")
@@ -1000,106 +1000,100 @@ print("[12/22] Figure 12: Generated via render_publication_diagrams.py")
 
 
 # ======================================================================
-# FIGURE 13: Two-Lane Architecture: Training vs. Real-Time Inference (7.16" x 2.85")
+# FIGURE 13: Two-Lane Architecture: Training vs. Real-Time Inference (7.40" x 3.45")
 # ======================================================================
 print("[13/22] Generating Figure 13: Two-Lane Pipeline Flowchart (Training vs. Inference)...")
-fig, ax = plt.subplots(figsize=(7.16, 2.85))
+fig, ax = plt.subplots(figsize=(7.40, 3.45))
 ax.axis('off')
 ax.set_xlim([-0.010, 1.010])
 ax.set_ylim([-0.015, 1.015])
 
 # Top Master Banner
-ax.add_patch(patches.FancyBboxPatch(
-    (0.010, 0.910), 0.980, 0.080,
-    boxstyle="round,pad=0.003,rounding_size=0.006",
+ax.add_patch(patches.Rectangle(
+    (0.010, 0.915), 0.980, 0.075,
     facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
 ))
-ax.text(0.50, 0.950, "C-STGB Two-Lane Execution Lifecycle: Offline Training vs. Online Real-Time Inference",
+ax.text(0.50, 0.952, "C-STGB Two-Lane Execution Lifecycle: Offline Training vs. Online Real-Time Inference",
         ha="center", va="center", fontsize=8.6, fontweight="bold", color="#ffffff")
 
 # Top Lane: Offline Training Split (D_train & D_cal)
-lane1_card = patches.FancyBboxPatch(
-    (0.010, 0.505), 0.980, 0.385,
-    boxstyle="round,pad=0.004,rounding_size=0.006",
+lane1_card = patches.Rectangle(
+    (0.010, 0.505), 0.980, 0.390,
     facecolor="#f8fafc", edgecolor="#93c5fd", linewidth=1.0
 )
 ax.add_patch(lane1_card)
 
-# Lane 1 Title Pill
-ax.add_patch(patches.FancyBboxPatch(
-    (0.015, 0.835), 0.320, 0.048,
-    boxstyle="round,pad=0.002,rounding_size=0.004",
+# Lane 1 Title Bar
+ax.add_patch(patches.Rectangle(
+    (0.015, 0.840), 0.420, 0.046,
     facecolor="#1e40af", edgecolor="#1e40af", linewidth=0.3
 ))
-ax.text(0.175, 0.859, r"LANE 1: OFFLINE BATCH TRAINING ($\mathcal{D}_{\mathrm{train}} \cup \mathcal{D}_{\mathrm{cal}}$)",
-        ha="center", va="center", fontsize=6.2, fontweight="bold", color="#ffffff")
+ax.text(0.225, 0.863, r"LANE 1: OFFLINE BATCH TRAINING ($\mathcal{D}_{\mathrm{train}} \cup \mathcal{D}_{\mathrm{cal}}$)",
+        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#ffffff")
 
 train_boxes = [
-    ("1. Batch Ingest & Invariants", "Historical transaction log\nKirchhoff flow & Hawkes rates", 0.020, 0.520, 0.225, 0.290, "#eff6ff", "#1e40af"),
-    ("2. Latent GraphSMOTE", "Typology clustering & interp.\nLocalized bilinear edge synthesis", 0.265, 0.520, 0.225, 0.290, "#fff7ed", "#c2410c"),
-    ("3. Joint GNN-Tree Training", "Harmonic attention & edge gate\nAsymmetric Bayes risk loss", 0.510, 0.520, 0.225, 0.290, "#faf5ff", "#6d28d9"),
-    ("4. Conformal Calibration", "Non-conformity quantiles on $\\mathcal{D}_{\\mathrm{cal}}$\n$\\hat{q}^{(0)}, \\hat{q}^{(1)} \\to 1-\\alpha \\geq 99\%$", 0.755, 0.520, 0.225, 0.290, "#f0fdf4", "#15803d")
+    ("1. Batch Ingest & Invariants", "• Historical transaction log\n• Kirchhoff flow & Hawkes rates", 0.020, 0.525, 0.225, 0.295, "#eff6ff", "#1e40af"),
+    ("2. Latent GraphSMOTE", "• Typology clustering & interp.\n• Localized bilinear edge synthesis", 0.265, 0.525, 0.225, 0.295, "#fff7ed", "#c2410c"),
+    ("3. Joint GNN-Tree Training", "• Harmonic attention & edge gate\n• Asymmetric Bayes risk loss", 0.510, 0.525, 0.225, 0.295, "#faf5ff", "#6d28d9"),
+    ("4. Conformal Calibration", "• Non-conformity on $\\mathcal{D}_{\\mathrm{cal}}$\n• $\\hat{q}^{(0)}, \\hat{q}^{(1)} \\to 1-\\alpha \\geq 99\%$", 0.755, 0.525, 0.225, 0.295, "#f0fdf4", "#15803d")
 ]
 
 for t_head, t_body, x_b, y_b, w_b, h_b, c_bg, c_fg in train_boxes:
-    ax.add_patch(patches.FancyBboxPatch(
-        (x_b, y_b), w_b, h_b, boxstyle="round,pad=0.003,rounding_size=0.005",
+    ax.add_patch(patches.Rectangle(
+        (x_b, y_b), w_b, h_b,
         facecolor=c_bg, edgecolor=c_fg, linewidth=0.85
     ))
-    ax.text(x_b + w_b/2, y_b + h_b - 0.055, t_head, ha="center", va="top", fontsize=6.8, fontweight="bold", color=c_fg)
-    ax.text(x_b + w_b/2, y_b + 0.055, t_body, ha="center", va="bottom", fontsize=5.8, color="#334155", linespacing=1.25)
+    ax.text(x_b + w_b/2, y_b + h_b - 0.038, t_head, ha="center", va="top", fontsize=6.6, fontweight="bold", color=c_fg)
+    ax.text(x_b + w_b/2, y_b + h_b - 0.105, t_body, ha="center", va="top", fontsize=5.4, color="#334155", linespacing=1.35)
 
 # Connect Train Boxes with arrows
 for x_arr in [0.247, 0.492, 0.737]:
-    ax.annotate("", xy=(x_arr + 0.016, 0.665), xytext=(x_arr - 0.002, 0.665),
+    ax.annotate("", xy=(x_arr + 0.016, 0.672), xytext=(x_arr - 0.002, 0.672),
                 arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#64748b", lw=1.2))
 
 # Center Vertical Bridge: Model Artifacts Exported to Serving
-ax.add_patch(patches.FancyBboxPatch(
-    (0.280, 0.435), 0.440, 0.052,
-    boxstyle="round,pad=0.002,rounding_size=0.004",
+ax.add_patch(patches.Rectangle(
+    (0.240, 0.435), 0.520, 0.050,
     facecolor="#0f172a", edgecolor="#0f172a", linewidth=0.5
 ))
-ax.text(0.50, 0.461, r"Frozen Weights $\Theta^*$, Bayes Cut $\tau^*$, Quantiles $\hat{q} \longrightarrow$ Production Serving",
-        ha="center", va="center", fontsize=6.2, fontweight="bold", color="#ffffff")
+ax.text(0.50, 0.460, r"Frozen Weights $\Theta^*$, Bayes Cut $\tau^*$, Quantiles $\hat{q} \longrightarrow$ Production Serving",
+        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#ffffff")
 
 # Downward Bridge Arrows
-ax.annotate("", xy=(0.380, 0.415), xytext=(0.380, 0.518),
+ax.annotate("", xy=(0.350, 0.415), xytext=(0.350, 0.522),
             arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#1e40af", lw=1.3, linestyle=":"))
-ax.annotate("", xy=(0.620, 0.415), xytext=(0.620, 0.518),
+ax.annotate("", xy=(0.650, 0.415), xytext=(0.650, 0.522),
             arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#15803d", lw=1.3, linestyle=":"))
 
 # Bottom Lane: Online Streaming Fast-Path Inference (<0.45 ms SLA)
-lane2_card = patches.FancyBboxPatch(
+lane2_card = patches.Rectangle(
     (0.010, 0.015), 0.980, 0.400,
-    boxstyle="round,pad=0.004,rounding_size=0.006",
     facecolor="#f8fafc", edgecolor="#86efac", linewidth=1.0
 )
 ax.add_patch(lane2_card)
 
-# Lane 2 Title Pill
-ax.add_patch(patches.FancyBboxPatch(
-    (0.015, 0.355), 0.580, 0.048,
-    boxstyle="round,pad=0.002,rounding_size=0.004",
+# Lane 2 Title Bar (Sufficient width to prevent any clipping)
+ax.add_patch(patches.Rectangle(
+    (0.015, 0.355), 0.700, 0.046,
     facecolor="#15803d", edgecolor="#15803d", linewidth=0.3
 ))
-ax.text(0.305, 0.379, "LANE 2: ONLINE STREAMING FAST-PATH INFERENCE (<0.45 ms SLA)",
-        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#ffffff")
+ax.text(0.365, 0.378, "LANE 2: ONLINE STREAMING FAST-PATH INFERENCE (<0.45 ms SLA)",
+        ha="center", va="center", fontsize=5.5, fontweight="bold", color="#ffffff")
 
 infer_boxes = [
-    ("1. Live Ingest & Top-15", "Zero-copy Arrow RecordBatch\n15-hop dynamic ego-graph cache", 0.020, 0.035, 0.225, 0.300, "#f0fdf4", "#15803d"),
-    ("2. Incremental Invariants", "Flow conservation $\\Phi_{\\mathrm{flow}}$\nHawkes burst rate $\\lambda_u(t)$", 0.265, 0.035, 0.225, 0.300, "#f0fdfa", "#0f766e"),
-    ("3. Frozen GNN & Bayes", "Forward pass on cached weights\nRisk score $\\hat{p}_u \\in [0, 1]$", 0.510, 0.035, 0.225, 0.300, "#faf5ff", "#6d28d9"),
-    ("4. 3-Tier CRC Triage", "Dual-quantile dispatch $\\Gamma(u)$\nT1 Quarantine / T2 Rev / T3 STP", 0.755, 0.035, 0.225, 0.300, "#fef2f2", "#b91c1c")
+    ("1. Live Ingest & Top-15", "• Zero-copy Arrow RecordBatch\n• 15-hop dynamic ego-graph cache", 0.020, 0.035, 0.225, 0.300, "#f0fdf4", "#15803d"),
+    ("2. Incremental Invariants", "• Flow conservation $\\Phi_{\\mathrm{flow}}$\n• Hawkes burst rate $\\lambda_u(t)$", 0.265, 0.035, 0.225, 0.300, "#f0fdfa", "#0f766e"),
+    ("3. Frozen GNN & Bayes", "• Forward pass on cached weights\n• Risk score $\\hat{p}_u \\in [0, 1]$", 0.510, 0.035, 0.225, 0.300, "#faf5ff", "#6d28d9"),
+    ("4. 3-Tier CRC Triage", "• Dual-quantile dispatch $\\Gamma(u)$\n• T1 Block / T2 Review / T3 STP", 0.755, 0.035, 0.225, 0.300, "#fef2f2", "#b91c1c")
 ]
 
 for i_head, i_body, x_b, y_b, w_b, h_b, c_bg, c_fg in infer_boxes:
-    ax.add_patch(patches.FancyBboxPatch(
-        (x_b, y_b), w_b, h_b, boxstyle="round,pad=0.003,rounding_size=0.005",
+    ax.add_patch(patches.Rectangle(
+        (x_b, y_b), w_b, h_b,
         facecolor=c_bg, edgecolor=c_fg, linewidth=0.85
     ))
-    ax.text(x_b + w_b/2, y_b + h_b - 0.055, i_head, ha="center", va="top", fontsize=6.8, fontweight="bold", color=c_fg)
-    ax.text(x_b + w_b/2, y_b + 0.055, i_body, ha="center", va="bottom", fontsize=5.8, color="#334155", linespacing=1.25)
+    ax.text(x_b + w_b/2, y_b + h_b - 0.038, i_head, ha="center", va="top", fontsize=6.6, fontweight="bold", color=c_fg)
+    ax.text(x_b + w_b/2, y_b + h_b - 0.105, i_body, ha="center", va="top", fontsize=5.4, color="#334155", linespacing=1.35)
 
 for x_arr in [0.247, 0.492, 0.737]:
     ax.annotate("", xy=(x_arr + 0.016, 0.185), xytext=(x_arr - 0.002, 0.185),
@@ -1131,10 +1125,10 @@ print("[15/22] Figure 15: Generated via render_publication_diagrams.py")
 
 # ======================================================================
 # ======================================================================
-# FIGURE 16: Small-Multiples PR Curves across ALL 14 Benchmarks (Double Column: 7.16" x 5.80")
+# FIGURE 16: Small-Multiples PR Curves across ALL 14 Benchmarks (Double Column: 7.40" x 6.20")
 # ======================================================================
 print("[16/22] Generating Figure 16: Small-Multiples PR Curves across ALL 14 Datasets...")
-fig, axes = plt.subplots(4, 4, figsize=(7.16, 5.80), sharex=True, sharey=True)
+fig, axes = plt.subplots(4, 4, figsize=(7.40, 6.20), sharex=True, sharey=True)
 axes_flat = axes.flatten()
 
 dataset_names = [
@@ -1170,28 +1164,48 @@ for i, (dname, prauc_cstgb, prauc_xgb, prauc_cat, prauc_gcn) in enumerate(datase
     ax.plot(r_vals, p_cat, color="#f57c00", lw=1.1, ls=":", label="Industrial CatBoost" if i==0 else "")
     ax.plot(r_vals, p_gcn, color=C_GCN, lw=1.1, ls="-.", label="Homogeneous GCN" if i==0 else "")
     
-    title_color = "#003366" if "Macro" in dname else "#212121"
-    ax.set_title(f"{dname}\nPR-AUC = {prauc_cstgb:.3f}", fontsize=7.2, fontweight="bold", color=title_color)
+    title_color = "#003366" if "Macro" in dname else "#1e293b"
+    ax.set_title(f"{dname} ({prauc_cstgb:.3f})", fontsize=6.8, fontweight="bold", color=title_color, pad=3)
     ax.set_xlim([0, 1.02])
     ax.set_ylim([0, 1.05])
-    ax.grid(True)
-    ax.tick_params(labelsize=6.8)
+    ax.grid(True, linestyle=":", alpha=0.5)
+    ax.tick_params(labelsize=6.4)
 
-# Turn off only the 16th empty panel (index 15)
-axes_flat[15].axis('off')
+# 16th panel (index 15) is the dedicated Summary & Legend Box
+ax_legend = axes_flat[15]
+ax_legend.axis('off')
+ax_legend.set_xlim([0, 1])
+ax_legend.set_ylim([0, 1])
 
-for r in range(4):
-    axes[r, 0].set_ylabel("Precision", fontsize=8.5)
-for c in range(4):
-    axes[3, c].set_xlabel("Recall", fontsize=8.5)
-axes[2, 2].set_xlabel("Recall", fontsize=8.5)
-axes[2, 3].set_xlabel("Recall", fontsize=8.5)
+# Clean academic border for the legend box
+ax_legend.add_patch(patches.Rectangle(
+    (0.04, 0.04), 0.92, 0.92,
+    facecolor="#f8fafc", edgecolor="#94a3b8", linewidth=0.9
+))
+ax_legend.text(0.50, 0.86, "Benchmark Legend", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#0f172a")
 
 handles, labels = axes_flat[0].get_legend_handles_labels()
-fig.legend(handles, labels, loc='lower center', bbox_to_anchor=(0.5, -0.012), ncol=4, fontsize=8.8, framealpha=0.94)
+for h_idx, (h_line, h_lbl) in enumerate(zip(handles, labels)):
+    y_pos = 0.70 - (h_idx * 0.14)
+    c = h_line.get_color()
+    ls = h_line.get_linestyle()
+    lw = h_line.get_linewidth()
+    ax_legend.plot([0.10, 0.28], [y_pos, y_pos], color=c, linestyle=ls, lw=lw + 0.3)
+    ax_legend.text(0.32, y_pos, h_lbl, ha="left", va="center", fontsize=6.0,
+                   fontweight="bold" if "C-STGB" in h_lbl else "normal", color="#0f172a")
 
-plt.suptitle("Comprehensive Small-Multiples Precision-Recall Curves across ALL 14 Empirical Datasets", fontsize=10.5, fontweight="bold", y=0.99)
-plt.tight_layout(rect=[0, 0.025, 1, 0.975])
+ax_legend.text(0.50, 0.14, "Top AUC across 14 sets\nMacro PR-AUC: 0.697",
+               ha="center", va="center", fontsize=5.6, color="#047857", fontweight="bold")
+
+for r in range(4):
+    axes[r, 0].set_ylabel("Precision", fontsize=7.8)
+for c in range(4):
+    if c != 3:
+        axes[3, c].set_xlabel("Recall", fontsize=7.8)
+axes[2, 3].set_xlabel("Recall", fontsize=7.8)
+
+plt.suptitle("Comprehensive Small-Multiples Precision-Recall Curves across ALL 14 Empirical Datasets", fontsize=10.0, fontweight="bold", y=0.99)
+plt.subplots_adjust(left=0.06, right=0.98, top=0.94, bottom=0.06, wspace=0.18, hspace=0.35)
 save_all_formats(fig, "fig_all_datasets_pr_curves")
 
 
@@ -1236,12 +1250,12 @@ save_all_formats(fig, "fig_edge_gate_distribution")
 
 
 # ======================================================================
-# FIGURE 18: Typology GraphSMOTE & Bilinear Synthesis Pipeline (Double Column: 7.16" x 3.10")
+# FIGURE 18: Typology GraphSMOTE & Bilinear Synthesis Pipeline (Double Column: 7.40" x 3.55")
 # ======================================================================
 print("[18/22] Generating Figure 18: Typology GraphSMOTE & Bilinear Synthesis Pipeline...")
-fig = plt.figure(figsize=(7.16, 3.30))
+fig = plt.figure(figsize=(7.40, 3.55))
 # Create grid with left panel for latent sketch, right panel for 3 steps
-gs = fig.add_gridspec(1, 2, width_ratios=[0.38, 0.62], wspace=0.18, left=0.06, right=0.98, top=0.86, bottom=0.08)
+gs = fig.add_gridspec(1, 2, width_ratios=[0.38, 0.62], wspace=0.18, left=0.06, right=0.98, top=0.88, bottom=0.06)
 
 ax_sketch = fig.add_subplot(gs[0])
 ax_steps = fig.add_subplot(gs[1])
@@ -1293,14 +1307,15 @@ ax_sketch.add_patch(c2_circle)
 # Cross-cluster forbidden line
 ax_sketch.plot([2.8, 3.4], [1.2, 3.8], color="#dc2626", linestyle="-.", lw=1.5, alpha=0.85)
 ax_sketch.text(3.1, 2.5, "Forbidden Cross-Interp.\n(Zero Typology Blur)", ha="center", va="center",
-               fontsize=5.6, fontweight="bold", color="#b91c1c", bbox=dict(boxstyle="round,pad=0.15", facecolor="#fee2e2", edgecolor="#dc2626", lw=0.5))
+               fontsize=5.2, fontweight="bold", linespacing=1.35, color="#b91c1c",
+               bbox=dict(boxstyle="square,pad=0.25", facecolor="#fee2e2", edgecolor="#dc2626", lw=0.6))
 
-ax_sketch.set_title("Latent Manifold Space", fontsize=8.0, fontweight="bold", pad=2)
-ax_sketch.set_xlabel("Latent Dim 1", fontsize=7.2)
-ax_sketch.set_ylabel("Latent Dim 2", fontsize=7.2)
-ax_sketch.tick_params(labelsize=6.5)
+ax_sketch.set_title("Latent Manifold Space", fontsize=8.2, fontweight="bold", pad=4)
+ax_sketch.set_xlabel("Latent Dim 1", fontsize=7.6)
+ax_sketch.set_ylabel("Latent Dim 2", fontsize=7.6)
+ax_sketch.tick_params(labelsize=6.8)
 ax_sketch.grid(True, linestyle=":", alpha=0.5)
-ax_sketch.legend(loc="upper left", fontsize=5.8, framealpha=0.90, handletextpad=0.2, borderpad=0.2)
+ax_sketch.legend(loc="upper left", fontsize=6.2, framealpha=0.92, handletextpad=0.25, borderpad=0.25)
 
 # Right Panel: Exactly 3 Steps matching the caption
 steps_data = [
@@ -1308,38 +1323,37 @@ steps_data = [
      "• Minority illicit nodes clustered into $\\mathcal{C}_1, \\dots, \\mathcal{C}_K$\n"
      "• Cosine similarity threshold $\\tau_{\\mathrm{sim}} \\geq 0.75$\n"
      "• Preserves distinct criminal topological signatures",
-     0.00, 0.68, 0.98, 0.30, "#eff6ff", "#1e40af"),
+     0.00, 0.69, 0.98, 0.29, "#eff6ff", "#1e40af"),
     ("Step 2: Intra-Cluster Latent Interpolation",
      "• Sample seed pair $u, v \\in \\mathcal{C}_k$ within same cluster\n"
      "• Convex combination: $\\mathbf{h}_{\\mathrm{syn}} = (1-\\rho)\\mathbf{h}_u + \\rho\\mathbf{h}_v$\n"
      "• Generates realistic synthetic minority representations",
-     0.00, 0.35, 0.98, 0.30, "#fff7ed", "#c2410c"),
+     0.00, 0.36, 0.98, 0.29, "#fff7ed", "#c2410c"),
     ("Step 3: Bilinear Edge Gen. & Flow Invariants",
      r"• Bilinear link head: $\hat{\mathbf{A}}_{\mathrm{syn}, w} = \sigma(\mathbf{h}_{\mathrm{syn}}^T \mathbf{W}_e \mathbf{h}_w)$" + "\n"
      r"• Invariant check: preserves $\Phi_{\mathrm{flow}} \approx 1.0$" + "\n"
      r"• Quarantined strictly to $\mathcal{D}_{\mathrm{train}}$",
-     0.00, 0.02, 0.98, 0.30, "#f0fdf4", "#15803d")
+     0.00, 0.03, 0.98, 0.29, "#f0fdf4", "#15803d")
 ]
 
 for s_title, s_body, sx, sy, sw, sh, s_bg, s_fg in steps_data:
-    ax_steps.add_patch(patches.FancyBboxPatch(
-        (sx, sy), sw, sh, boxstyle="round,pad=0.003,rounding_size=0.005",
+    ax_steps.add_patch(patches.Rectangle(
+        (sx, sy), sw, sh,
         facecolor=s_bg, edgecolor=s_fg, linewidth=0.9
     ))
-    ax_steps.text(sx + 0.025, sy + sh - 0.042, s_title, ha="left", va="center", fontsize=6.8, fontweight="bold", color=s_fg)
+    ax_steps.text(sx + 0.025, sy + sh - 0.040, s_title, ha="left", va="center", fontsize=6.8, fontweight="bold", color=s_fg)
     b_lines = [b.strip() for b in s_body.split("\n") if b.strip()]
     for b_idx, b_txt in enumerate(b_lines):
-        ax_steps.text(sx + 0.025, sy + sh - 0.098 - (b_idx * 0.065), b_txt,
-                      ha="left", va="center", fontsize=4.9, color="#1e293b")
+        ax_steps.text(sx + 0.025, sy + sh - 0.095 - (b_idx * 0.068), b_txt,
+                      ha="left", va="center", fontsize=5.2, color="#1e293b")
 
 # Connect 3 steps with downward arrows
-for y_conn in [0.66, 0.33]:
-    ax_steps.annotate("", xy=(0.49, y_conn), xytext=(0.49, y_conn + 0.03),
+for y_conn in [0.665, 0.335]:
+    ax_steps.annotate("", xy=(0.49, y_conn - 0.015), xytext=(0.49, y_conn + 0.015),
                       arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.25", color="#64748b", lw=1.2))
 
 fig.suptitle("Three-Step Typology-Clustered Latent GraphSMOTE & Bilinear Edge Synthesis Pipeline",
              fontsize=9.6, fontweight="bold", color="#0f172a", y=0.98)
-plt.subplots_adjust(top=0.88, bottom=0.06, left=0.08, right=0.98)
 
 save_all_formats(fig, "fig18_graphsmote_synthesis_pipeline")
 
@@ -1458,10 +1472,10 @@ save_all_formats(fig, "fig20_multi_agent_forensic_swarm")
 
 
 # ======================================================================
-# FIGURE 21: Camouflage Topology Pruning Case Study (Double Column: 7.16" x 3.20")
+# FIGURE 21: Camouflage Topology Pruning Case Study (Double Column: 7.16" x 3.40")
 # ======================================================================
 print("[21/22] Generating Figure 21: Camouflage Topology Denoising Case Study...")
-fig, axes = plt.subplots(1, 2, figsize=(7.16, 3.20))
+fig, axes = plt.subplots(1, 2, figsize=(7.16, 3.40))
 
 for ax in axes:
     ax.axis('off')
@@ -1490,8 +1504,8 @@ axes[0].scatter(x_ch, y_ch, color="#90a4ae", s=35, edgecolors="black", lw=0.5, z
 axes[0].scatter(x_ring, y_ring, color="#d32f2f", s=75, edgecolors="black", lw=0.8, zorder=4, label="Laundering Wash Cycle ($C_4$)")
 axes[0].scatter([0], [0], color="#0d47a1", s=95, edgecolors="black", lw=1.0, zorder=5, label="Target Suspect Mule")
 
-axes[0].set_title("(a) Raw Camouflaged Topology\n(50+ Spurious Merchant Hub Links)", fontweight="bold", fontsize=9.5)
-axes[0].legend(loc="lower center", bbox_to_anchor=(0.5, -0.15), framealpha=0.94, fontsize=7.2, ncol=1)
+axes[0].set_title(r"(a) Raw Camouflaged Topology (50+ Spurious Links)", fontweight="bold", fontsize=8.6, pad=7)
+axes[0].legend(loc="lower center", bbox_to_anchor=(0.5, -0.16), framealpha=0.94, fontsize=7.0, ncol=1)
 
 # Right: Pruned by C-STGB Edge Gate (g_ij >= 0.10)
 for i in range(4):
@@ -1501,21 +1515,21 @@ axes[1].plot([0, x_ch[2]], [0, y_ch[2]], color="#b0bec5", lw=0.8, ls=":", alpha=
 axes[1].plot([0, x_ch[14]], [0, y_ch[14]], color="#b0bec5", lw=0.8, ls=":", alpha=0.5, zorder=1)
 axes[1].scatter([x_ch[2], x_ch[14]], [y_ch[2], y_ch[14]], color="#cfd8dc", s=25, alpha=0.6, zorder=3)
 
-axes[1].scatter(x_ring, y_ring, color="#006400", s=85, edgecolors="black", lw=0.8, zorder=4, label="Filtered Laundering Ring ($g_{ij} \\geq 0.92$)")
+axes[1].scatter(x_ring, y_ring, color="#006400", s=85, edgecolors="black", lw=0.8, zorder=4, label=r"Filtered Laundering Ring ($\hat{g}_{ij} \geq 0.92$)")
 axes[1].scatter([0], [0], color="#0d47a1", s=95, edgecolors="black", lw=1.0, zorder=5, label="Target Suspect Mule")
 
-axes[1].set_title("(b) C-STGB Edge-Gated Subgraph\n(65.9% Camouflage Noise Pruned, $g_{ij} < 0.10$)", fontweight="bold", fontsize=9.5)
-axes[1].legend(loc="lower center", bbox_to_anchor=(0.5, -0.15), framealpha=0.94, fontsize=7.2, ncol=1)
+axes[1].set_title(r"(b) C-STGB Denoised Subgraph (65.9% Pruned, $\hat{g}_{ij} < 0.10$)", fontweight="bold", fontsize=8.6, pad=7)
+axes[1].legend(loc="lower center", bbox_to_anchor=(0.5, -0.16), framealpha=0.94, fontsize=7.0, ncol=1)
 
-plt.tight_layout()
+plt.tight_layout(rect=[0, 0.08, 1, 0.98])
 save_all_formats(fig, "fig21_adversarial_camouflage_topology")
 
 
 # ======================================================================
-# NEW FIGURE 22: Tri-Band Frequency Disentanglement & Cold-Start Gating (Double Column: 7.16" x 2.30")
+# NEW FIGURE 22: Tri-Band Frequency Disentanglement & Cold-Start Gating (Double Column: 7.16" x 2.65")
 # ======================================================================
 print("[22/22] Generating Figure 22: Tri-Band Frequency Disentanglement & Cold-Start Fusion...")
-fig, axes = plt.subplots(1, 2, figsize=(7.16, 2.30))
+fig, axes = plt.subplots(1, 2, figsize=(7.16, 2.65))
 
 # Left: Frequency domain response
 freq = np.logspace(-3, 2, 300)
@@ -1527,15 +1541,15 @@ axes[0].semilogx(freq, resp_burst, label="Burst", color=C_GCN, lw=2.0, zorder=4)
 axes[0].semilogx(freq, resp_diurnal, label="Diurnal", color=C_XGB, lw=1.8, ls="--", zorder=3)
 axes[0].semilogx(freq, resp_seas, label="Seasonal", color="#f57c00", lw=1.8, ls=":", zorder=2)
 
-axes[0].set_title("(a) Orthogonal Tri-Band Spectral Decomposition", fontweight="bold", fontsize=9.6, pad=6)
-axes[0].set_xlabel("Harmonic Frequency $f$ (Cycles/Hour)", fontsize=9.0)
-axes[0].set_ylabel("Filter Magnitude $|H(f)|$", fontsize=9.0)
+axes[0].set_title("(a) Orthogonal Tri-Band Spectral Decomposition", fontweight="bold", fontsize=9.2, pad=6)
+axes[0].set_xlabel("Harmonic Frequency $f$ (Cycles/Hour)", fontsize=8.8)
+axes[0].set_ylabel("Filter Magnitude $|H(f)|$", fontsize=8.8)
 axes[0].set_xlim([1e-3, 1e2])
 axes[0].set_ylim([0, 1.05])
 axes[0].grid(True, linestyle=":", alpha=0.5)
-axes[0].tick_params(labelsize=8.2)
-axes[0].legend(loc="center right", bbox_to_anchor=(0.98, 0.40), framealpha=0.92, edgecolor="#cccccc", fontsize=5.8,
-               handlelength=0.7, handletextpad=0.18, borderpad=0.12, labelspacing=0.10)
+axes[0].tick_params(labelsize=8.0)
+axes[0].legend(loc="upper right", framealpha=0.92, edgecolor="#cccccc", fontsize=7.2,
+               handlelength=1.1, handletextpad=0.25, borderpad=0.30, labelspacing=0.25)
 
 # Right: Cold-start Evidence Gating with Split Dual y-Axes (twinx)
 node_degrees = np.arange(0, 25)
@@ -1550,27 +1564,27 @@ line1 = ax_left.plot(node_degrees, f1_cstgb_fused, label=r"C-STGB Fused ($\alpha
 line2 = ax_left.plot(node_degrees, f1_pure_gnn, label="Pure GNN (No Invariants)", color=C_GCN, lw=1.5, marker="s", markersize=3.0, ls="--", zorder=3)
 line3 = ax_right.plot(node_degrees, alpha_gate, label=r"Fusion Weight $\alpha_u$", color="#7b1fa2", lw=1.5, ls="-.", zorder=4)
 
-ax_left.annotate("Cold-Start Mule Boost\n(+71.20 pp F1 at deg=0)",
-                xy=(0, 89.6), xytext=(2.5, 46.0),
+ax_left.annotate("Cold-Start Mule Boost (+71.20 pp F1)",
+                xy=(0, 89.6), xytext=(2.8, 52.0),
                 arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.26", color=C_CSTGB, lw=1.2),
                 fontsize=6.4, fontweight="bold", color=C_CSTGB,
-                bbox=dict(boxstyle="round,pad=0.18", facecolor="#e8f5e9", edgecolor="#a5d6a7", lw=0.75))
+                bbox=dict(boxstyle="square,pad=0.25", facecolor="#e8f5e9", edgecolor="#a5d6a7", lw=0.75))
 
-ax_left.set_title("(b) Evidence-Adaptive Cold-Start Resolution", fontweight="bold", fontsize=9.6, pad=6)
-ax_left.set_xlabel(r"Node Transaction Degree $\deg(u)$", fontsize=9.0)
-ax_left.set_ylabel("Minority F1-Score (%)", fontsize=9.0, color="#0f172a")
-ax_right.set_ylabel(r"Evidence Fusion Weight $\alpha_u$", fontsize=9.0, color="#7b1fa2")
+ax_left.set_title("(b) Evidence-Adaptive Cold-Start Resolution", fontweight="bold", fontsize=9.2, pad=6)
+ax_left.set_xlabel(r"Node Transaction Degree $\deg(u)$", fontsize=8.8)
+ax_left.set_ylabel("Minority F1-Score (%)", fontsize=8.8, color="#0f172a")
+ax_right.set_ylabel(r"Evidence Fusion Weight $\alpha_u$", fontsize=8.8, color="#7b1fa2")
 ax_left.set_xlim([0, 24])
 ax_left.set_ylim([0, 105])
 ax_right.set_ylim([0.0, 1.05])
 ax_left.grid(True, linestyle=":", alpha=0.5)
-ax_left.tick_params(labelsize=8.2)
-ax_right.tick_params(labelsize=8.2, colors="#7b1fa2")
+ax_left.tick_params(labelsize=8.0)
+ax_right.tick_params(labelsize=8.0, colors="#7b1fa2")
 
 lines_all = line1 + line2 + line3
 labels_all = [l.get_label() for l in lines_all]
-ax_left.legend(lines_all, labels_all, loc="lower right", framealpha=0.92, edgecolor="#cccccc", fontsize=5.8,
-               handlelength=1.0, handletextpad=0.20, borderpad=0.15, labelspacing=0.12)
+ax_left.legend(lines_all, labels_all, loc="lower right", framealpha=0.92, edgecolor="#cccccc", fontsize=6.2,
+               handlelength=1.1, handletextpad=0.25, borderpad=0.30, labelspacing=0.20)
 
 plt.tight_layout()
 save_all_formats(fig, "fig22_triband_spectral_coldstart")

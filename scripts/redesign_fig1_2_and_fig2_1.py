@@ -77,38 +77,35 @@ def generate_intuitive_fig1_2():
     ax.set_ylim(0.0, 1.0)
 
     # -------------------------------------------------------------------------
-    # Master Header Banner (y: 0.925 -> 0.990)
+    # Master Header Banner (y: 0.918 -> 0.992) - Sharp Engineering Container
     # -------------------------------------------------------------------------
-    ax.add_patch(patches.FancyBboxPatch(
-        (0.015, 0.925), 0.970, 0.065,
-        boxstyle="round,pad=0.005,rounding_size=0.012",
+    ax.add_patch(patches.Rectangle(
+        (0.010, 0.918), 0.980, 0.074,
         facecolor="#0f172a", edgecolor="#1e293b", lw=1.2
     ))
-    ax.text(0.50, 0.963, "C-STGB: Real-Time Financial Surveillance Architecture & Conformal Triage Platform",
-            ha="center", va="center", fontsize=9.2, fontweight="bold", color="#ffffff")
-    ax.text(0.50, 0.940, "End-to-End Pipeline: Multi-Rail Ingestion -> 12-D Invariants -> Spatio-Temporal GNN -> 3-Tier Conformal Triage",
-            ha="center", va="center", fontsize=7.2, color="#94a3b8", style="italic")
+    ax.text(0.50, 0.964, "C-STGB: Real-Time Financial Surveillance Architecture & Conformal Triage Platform",
+            ha="center", va="center", fontsize=8.8, fontweight="bold", color="#ffffff")
+    ax.text(0.50, 0.936, "End-to-End Pipeline: Multi-Rail Ingestion -> 12-D Invariants -> Spatio-Temporal GNN -> 3-Tier Conformal Triage",
+            ha="center", va="center", fontsize=6.8, color="#94a3b8")
 
     # -------------------------------------------------------------------------
-    # STAGE 1: Multi-Rail Streaming Ingestion (x: 0.015 -> 0.170, y: 0.21 -> 0.905)
+    # STAGE 1: Multi-Rail Streaming Ingestion (x: 0.010 -> 0.170, y: 0.205 -> 0.905)
     # -------------------------------------------------------------------------
-    s1_w = 0.155
-    s1_x = 0.015
-    ax.add_patch(patches.FancyBboxPatch(
-        (s1_x, 0.21), s1_w, 0.695,
-        boxstyle="round,pad=0.006,rounding_size=0.012",
+    s1_w = 0.160
+    s1_x = 0.010
+    ax.add_patch(patches.Rectangle(
+        (s1_x, 0.205), s1_w, 0.700,
         facecolor="#f8fafc", edgecolor="#2563eb", lw=1.4
     ))
     
     # Stage 1 Header Badge
-    ax.add_patch(patches.FancyBboxPatch(
-        (s1_x + 0.008, 0.845), s1_w - 0.016, 0.045,
-        boxstyle="round,pad=0.004,rounding_size=0.008",
+    ax.add_patch(patches.Rectangle(
+        (s1_x + 0.006, 0.852), s1_w - 0.012, 0.045,
         facecolor="#2563eb", edgecolor="#1d4ed8"
     ))
-    ax.text(s1_x + s1_w/2, 0.867, "1. Streaming Ingest", ha="center", va="center", fontsize=7.6, fontweight="bold", color="#ffffff")
+    ax.text(s1_x + s1_w/2, 0.874, "1. Streaming Ingest", ha="center", va="center", fontsize=7.6, fontweight="bold", color="#ffffff")
 
-    # Payment Rail Badges (Vertical Stack)
+    # Payment Rail Blocks (Vertical Stack)
     rails = [
         ("SWIFT MT103 / ISO-20022", "Cross-Border Wires", "#1e40af", "#eff6ff"),
         ("Domestic RTGS / ACH", "Instant Net Settlement", "#0369a1", "#f0f9ff"),
@@ -116,59 +113,54 @@ def generate_intuitive_fig1_2():
         ("Crypto UTXO & EVM", "Bitcoin & Ethereum", "#6d28d9", "#faf5ff"),
     ]
     for idx, (title, sub, col_fg, col_bg) in enumerate(rails):
-        y_r = 0.695 - idx * 0.108
-        ax.add_patch(patches.FancyBboxPatch(
-            (s1_x + 0.008, y_r), s1_w - 0.016, 0.090,
-            boxstyle="round,pad=0.003,rounding_size=0.006",
+        y_r = 0.705 - idx * 0.110
+        ax.add_patch(patches.Rectangle(
+            (s1_x + 0.006, y_r), s1_w - 0.012, 0.092,
             facecolor=col_bg, edgecolor=col_fg, lw=0.9
         ))
-        ax.text(s1_x + s1_w/2, y_r + 0.057, title, ha="center", va="center", fontsize=5.6, fontweight="bold", color=col_fg)
+        ax.text(s1_x + s1_w/2, y_r + 0.058, title, ha="center", va="center", fontsize=5.8, fontweight="bold", color=col_fg)
         ax.text(s1_x + s1_w/2, y_r + 0.026, sub, ha="center", va="center", fontsize=5.1, color="#475569")
 
     # Ingestion Buffer Footnote
-    ax.add_patch(patches.FancyBboxPatch(
-        (s1_x + 0.008, 0.225), s1_w - 0.016, 0.058,
-        boxstyle="round,pad=0.003,rounding_size=0.006",
+    ax.add_patch(patches.Rectangle(
+        (s1_x + 0.006, 0.218), s1_w - 0.012, 0.060,
         facecolor="#f1f5f9", edgecolor="#94a3b8", lw=0.8
     ))
-    ax.text(s1_x + s1_w/2, 0.260, "DuckDB + Arrow IPC", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#1e293b")
-    ax.text(s1_x + s1_w/2, 0.238, "0.11 ms Zero-Copy Ingest", ha="center", va="center", fontsize=5.2, color="#059669", fontweight="bold")
+    ax.text(s1_x + s1_w/2, 0.254, "DuckDB + Arrow IPC", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#1e293b")
+    ax.text(s1_x + s1_w/2, 0.232, "0.11 ms Zero-Copy Ingest", ha="center", va="center", fontsize=5.2, color="#059669", fontweight="bold")
 
     # Arrow Stage 1 -> Stage 2 (Across dedicated gap x: 0.170 -> 0.198)
     ax.annotate("", xy=(0.196, 0.55), xytext=(0.172, 0.55),
                 arrowprops=dict(arrowstyle="->", lw=1.8, color="#2563eb"))
 
     # -------------------------------------------------------------------------
-    # STAGE 2: 12-D Physical Invariant Engine (x: 0.200 -> 0.380, y: 0.21 -> 0.905)
+    # STAGE 2: 12-D Physical Invariant Engine (x: 0.198 -> 0.380, y: 0.205 -> 0.905)
     # -------------------------------------------------------------------------
-    s2_x = 0.200
-    s2_w = 0.180
-    ax.add_patch(patches.FancyBboxPatch(
-        (s2_x, 0.21), s2_w, 0.695,
-        boxstyle="round,pad=0.006,rounding_size=0.012",
+    s2_x = 0.198
+    s2_w = 0.182
+    ax.add_patch(patches.Rectangle(
+        (s2_x, 0.205), s2_w, 0.700,
         facecolor="#f8fafc", edgecolor="#0d9488", lw=1.4
     ))
     
     # Stage 2 Header Badge
-    ax.add_patch(patches.FancyBboxPatch(
-        (s2_x + 0.008, 0.845), s2_w - 0.016, 0.045,
-        boxstyle="round,pad=0.004,rounding_size=0.008",
+    ax.add_patch(patches.Rectangle(
+        (s2_x + 0.006, 0.852), s2_w - 0.012, 0.045,
         facecolor="#0d9488", edgecolor="#0f766e"
     ))
-    ax.text(s2_x + s2_w/2, 0.867, "2. 12-D Invariants", ha="center", va="center", fontsize=7.6, fontweight="bold", color="#ffffff")
+    ax.text(s2_x + s2_w/2, 0.874, "2. 12-D Invariants", ha="center", va="center", fontsize=7.6, fontweight="bold", color="#ffffff")
 
-    # Invariant Card 1: Hydrodynamic Mass-Flow Pipe
-    ax.add_patch(patches.FancyBboxPatch(
-        (s2_x + 0.008, 0.575), s2_w - 0.016, 0.250,
-        boxstyle="round,pad=0.004,rounding_size=0.008",
+    # Invariant Block 1: Hydrodynamic Mass-Flow Pipe
+    ax.add_patch(patches.Rectangle(
+        (s2_x + 0.006, 0.575), s2_w - 0.012, 0.255,
         facecolor="#f0fdfa", edgecolor="#14b8a6", lw=1.0
     ))
-    ax.text(s2_x + s2_w/2, 0.795, "Hydrodynamic Mass Flow", ha="center", va="center", fontsize=6.6, fontweight="bold", color="#0f766e")
+    ax.text(s2_x + s2_w/2, 0.798, "Hydrodynamic Mass Flow", ha="center", va="center", fontsize=6.6, fontweight="bold", color="#0f766e")
     
-    # Mini pipe diagram inside Card 1
-    pipe_x = s2_x + 0.018
-    pipe_w = s2_w - 0.036
-    ax.add_patch(patches.FancyBboxPatch((pipe_x, 0.695), pipe_w, 0.075, boxstyle="round,pad=0.002", fc="#ccfbf1", ec="#0d9488", lw=0.9))
+    # Mini pipe diagram inside Block 1
+    pipe_x = s2_x + 0.016
+    pipe_w = s2_w - 0.032
+    ax.add_patch(patches.Rectangle((pipe_x, 0.695), pipe_w, 0.075, fc="#ccfbf1", ec="#0d9488", lw=0.9))
     ax.add_patch(patches.Circle((s2_x + s2_w/2, 0.732), 0.026, fc="#fecaca", ec="#dc2626", lw=1.0))
     ax.text(s2_x + s2_w/2, 0.732, "Mule", ha="center", va="center", fontsize=5.5, fontweight="bold", color="#991b1b")
     ax.text(pipe_x + 0.012, 0.732, "In", ha="left", va="center", fontsize=5.2, fontweight="bold", color="#0d9488")
@@ -177,70 +169,64 @@ def generate_intuitive_fig1_2():
     ax.text(s2_x + s2_w/2, 0.648, r"Flow Balance: $\Phi_{\mathrm{flow}} \approx 1.0$", ha="center", va="center", fontsize=5.4, fontweight="bold", color="#0f766e")
     ax.text(s2_x + s2_w/2, 0.612, "(Zero Retention Conduit)", ha="center", va="center", fontsize=5.0, color="#475569")
 
-    # Invariant Card 2: Hawkes Temporal Burst Intensity
-    ax.add_patch(patches.FancyBboxPatch(
-        (s2_x + 0.008, 0.315), s2_w - 0.016, 0.240,
-        boxstyle="round,pad=0.004,rounding_size=0.008",
+    # Invariant Block 2: Hawkes Temporal Burst Intensity
+    ax.add_patch(patches.Rectangle(
+        (s2_x + 0.006, 0.310), s2_w - 0.012, 0.245,
         facecolor="#fff7ed", edgecolor="#f97316", lw=1.0
     ))
     ax.text(s2_x + s2_w/2, 0.525, "Hawkes Point Process", ha="center", va="center", fontsize=6.6, fontweight="bold", color="#c2410c")
     
     # Mini spike curve
-    t_mini = np.linspace(s2_x + 0.022, s2_x + s2_w - 0.022, 50)
+    t_mini = np.linspace(s2_x + 0.020, s2_x + s2_w - 0.020, 50)
     center_t = s2_x + s2_w/2 - 0.015
     y_spike = 0.440 + 0.045 * np.exp(-120 * (t_mini - center_t)**2)
     ax.plot(t_mini, y_spike, color="#ea580c", lw=1.5)
     
-    ax.text(s2_x + s2_w/2, 0.410, r"Bursts: $\lambda_u(t) > 12.0$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#9a3412")
-    ax.text(s2_x + s2_w/2, 0.375, "Smurfing Acceleration", ha="center", va="center", fontsize=5.2, color="#7c2d12")
-    ax.text(s2_x + s2_w/2, 0.335, r"Causal Taint: $\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{bwd}}$", ha="center", va="center", fontsize=5.4, fontweight="bold", color="#431407")
+    ax.text(s2_x + s2_w/2, 0.408, r"Bursts: $\lambda_u(t) > 12.0$", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#9a3412")
+    ax.text(s2_x + s2_w/2, 0.372, "Smurfing Acceleration", ha="center", va="center", fontsize=5.2, color="#7c2d12")
+    ax.text(s2_x + s2_w/2, 0.332, r"Causal Taint: $\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{bwd}}$", ha="center", va="center", fontsize=5.4, fontweight="bold", color="#431407")
 
     # Output Vector Label at bottom
-    ax.add_patch(patches.FancyBboxPatch(
-        (s2_x + 0.008, 0.225), s2_w - 0.016, 0.058,
-        boxstyle="round,pad=0.003,rounding_size=0.006",
+    ax.add_patch(patches.Rectangle(
+        (s2_x + 0.006, 0.218), s2_w - 0.012, 0.060,
         facecolor="#ecfdf5", edgecolor="#10b981", lw=0.8
     ))
-    ax.text(s2_x + s2_w/2, 0.254, r"Invariant: $\mathbf{z}_{\mathrm{inv}} \in \mathbb{R}^{12}$", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#065f46")
+    ax.text(s2_x + s2_w/2, 0.250, r"Invariant: $\mathbf{z}_{\mathrm{inv}} \in \mathbb{R}^{12}$", ha="center", va="center", fontsize=6.0, fontweight="bold", color="#065f46")
 
     # Arrow Stage 2 -> Stage 3 (Across dedicated gap x: 0.380 -> 0.408)
     ax.annotate("", xy=(0.406, 0.55), xytext=(0.382, 0.55),
                 arrowprops=dict(arrowstyle="->", lw=1.8, color="#0d9488"))
 
     # -------------------------------------------------------------------------
-    # STAGE 3: Continuous Spatio-Temporal GNN Core (x: 0.408 -> 0.615, y: 0.21 -> 0.905)
+    # STAGE 3: Continuous Spatio-Temporal GNN Core (x: 0.408 -> 0.615, y: 0.205 -> 0.905)
     # -------------------------------------------------------------------------
-    s3_x = 0.410
+    s3_x = 0.408
     s3_w = 0.205
-    ax.add_patch(patches.FancyBboxPatch(
-        (s3_x, 0.21), s3_w, 0.695,
-        boxstyle="round,pad=0.006,rounding_size=0.012",
+    ax.add_patch(patches.Rectangle(
+        (s3_x, 0.205), s3_w, 0.700,
         facecolor="#f8fafc", edgecolor="#4f46e5", lw=1.4
     ))
 
     # Stage 3 Header Badge
-    ax.add_patch(patches.FancyBboxPatch(
-        (s3_x + 0.008, 0.845), s3_w - 0.016, 0.045,
-        boxstyle="round,pad=0.004,rounding_size=0.008",
+    ax.add_patch(patches.Rectangle(
+        (s3_x + 0.006, 0.852), s3_w - 0.012, 0.045,
         facecolor="#4f46e5", edgecolor="#4338ca"
     ))
-    ax.text(s3_x + s3_w/2, 0.867, "3. Spatio-Temporal GNN", ha="center", va="center", fontsize=7.6, fontweight="bold", color="#ffffff")
+    ax.text(s3_x + s3_w/2, 0.874, "3. Spatio-Temporal GNN", ha="center", va="center", fontsize=7.6, fontweight="bold", color="#ffffff")
 
     # GNN Module 1: Tri-Band Harmonic Attention
-    ax.add_patch(patches.FancyBboxPatch(
-        (s3_x + 0.008, 0.665), s3_w - 0.016, 0.160,
-        boxstyle="round,pad=0.004,rounding_size=0.007",
+    ax.add_patch(patches.Rectangle(
+        (s3_x + 0.006, 0.665), s3_w - 0.012, 0.165,
         facecolor="#eef2ff", edgecolor="#6366f1", lw=0.9
     ))
-    ax.text(s3_x + s3_w/2, 0.795, "Tri-Band Harmonic Attention", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#3730a3")
-    ax.text(s3_x + s3_w/2, 0.760, r"$\tau_1=2.4\,\mathrm{h}$ (Burst)  |  $\tau_2=24\,\mathrm{h}$ (Diurnal)", ha="center", va="center", fontsize=5.2, color="#4338ca")
+    ax.text(s3_x + s3_w/2, 0.798, "Tri-Band Harmonic Attention", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#3730a3")
+    ax.text(s3_x + s3_w/2, 0.762, r"$\tau_1=2.4\,\mathrm{h}$ (Burst)  |  $\tau_2=24\,\mathrm{h}$ (Diurnal)", ha="center", va="center", fontsize=5.2, color="#4338ca")
     ax.text(s3_x + s3_w/2, 0.730, r"$\tau_3=168\,\mathrm{h}$ (90-Day Dormant Hibernation)", ha="center", va="center", fontsize=5.2, color="#4338ca")
     ax.text(s3_x + s3_w/2, 0.690, "Resolves Long-Dwell Blindness", ha="center", va="center", fontsize=5.3, fontweight="bold", color="#1e1b4b")
 
     # GNN Module 2: Edge-Trust Camouflage Pruner
-    ax.add_patch(patches.FancyBboxPatch(
-        (s3_x + 0.008, 0.465), s3_w - 0.016, 0.180,
-        boxstyle="round,pad=0.004,rounding_size=0.007",
+    ax.add_patch(patches.Rectangle(
+        (s3_x + 0.006, 0.465), s3_w - 0.012, 0.180,
         facecolor="#faf5ff", edgecolor="#a855f7", lw=0.9
     ))
     ax.text(s3_x + s3_w/2, 0.615, "Learnable Edge-Trust Gating", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#6b21a8")
@@ -249,9 +235,8 @@ def generate_intuitive_fig1_2():
     ax.text(s3_x + s3_w/2, 0.495, "Dirichlet Energy Preserved (>0.75)", ha="center", va="center", fontsize=5.2, color="#475569")
 
     # GNN Module 3: Evidence Fusion & Cost-Sensitive Head
-    ax.add_patch(patches.FancyBboxPatch(
-        (s3_x + 0.008, 0.225), s3_w - 0.016, 0.220,
-        boxstyle="round,pad=0.004,rounding_size=0.007",
+    ax.add_patch(patches.Rectangle(
+        (s3_x + 0.006, 0.218), s3_w - 0.012, 0.228,
         facecolor="#fef2f2", edgecolor="#ef4444", lw=0.9
     ))
     ax.text(s3_x + s3_w/2, 0.415, "Adaptive Evidence Fusion", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#991b1b")
@@ -275,53 +260,50 @@ def generate_intuitive_fig1_2():
     ax.text(0.700, 0.515, r"$1-\alpha \geq 99\%$", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#b45309", zorder=5)
 
     # -------------------------------------------------------------------------
-    # STAGE 5: Three-Tier Operational Dispatch (x: 0.785 -> 0.985, y: 0.21 -> 0.905)
+    # STAGE 5: Three-Tier Operational Dispatch (x: 0.785 -> 0.985, y: 0.205 -> 0.905)
     # -------------------------------------------------------------------------
     s5_x = 0.785
-    s5_w = 0.200
+    s5_w = 0.205
     
-    # Tier 1 (Quarantine) - Top Red (y: 0.690 -> 0.890)
-    t1_box = patches.FancyBboxPatch(
-        (s5_x, 0.690), s5_w, 0.200,
-        boxstyle="round,pad=0.005,rounding_size=0.010",
+    # Tier 1 (Quarantine) - Top Red (y: 0.690 -> 0.895)
+    t1_box = patches.Rectangle(
+        (s5_x, 0.690), s5_w, 0.205,
         fc='#fee2e2', ec='#dc2626', lw=1.5
     )
     ax.add_patch(t1_box)
-    ax.text(s5_x + s5_w/2, 0.855, "Tier 1: Quarantine Hold", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#991b1b")
-    ax.text(s5_x + s5_w/2, 0.810, r"Decisive Illicit: $\Gamma(u) = \{1\}$", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#b91c1c")
-    ax.text(s5_x + s5_w/2, 0.765, "Volume: 18 / 10k tx (0.18%)", ha="center", va="center", fontsize=5.8, color="#7f1d1d")
+    ax.text(s5_x + s5_w/2, 0.858, "Tier 1: Quarantine Hold", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#991b1b")
+    ax.text(s5_x + s5_w/2, 0.812, r"Decisive Illicit: $\Gamma(u) = \{1\}$", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#b91c1c")
+    ax.text(s5_x + s5_w/2, 0.768, "Volume: 18 / 10k tx (0.18%)", ha="center", va="center", fontsize=5.8, color="#7f1d1d")
     ax.text(s5_x + s5_w/2, 0.725, "Auto Wire Freeze & FinCEN SAR", ha="center", va="center", fontsize=5.5, fontweight="bold", color="#991b1b")
     
     # Connection arrow from diamond to Tier 1
     ax.annotate("", xy=(s5_x, 0.790), xytext=(0.745, 0.635),
                 arrowprops=dict(arrowstyle="->", lw=1.6, color="#dc2626", connectionstyle="arc3,rad=-0.10"))
 
-    # Tier 2 (Review) - Mid Amber (y: 0.450 -> 0.650)
-    t2_box = patches.FancyBboxPatch(
-        (s5_x, 0.450), s5_w, 0.200,
-        boxstyle="round,pad=0.005,rounding_size=0.010",
+    # Tier 2 (Review) - Mid Amber (y: 0.450 -> 0.655)
+    t2_box = patches.Rectangle(
+        (s5_x, 0.450), s5_w, 0.205,
         fc='#fef9c3', ec='#ca8a04', lw=1.5
     )
     ax.add_patch(t2_box)
-    ax.text(s5_x + s5_w/2, 0.615, "Tier 2: Compliance Desk", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#854d0e")
-    ax.text(s5_x + s5_w/2, 0.570, r"Abstention Set: $\Gamma(u) = \{0, 1\}$", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#a16207")
-    ax.text(s5_x + s5_w/2, 0.525, "Volume: 49 / 10k tx (0.49%)", ha="center", va="center", fontsize=5.8, color="#78350f")
+    ax.text(s5_x + s5_w/2, 0.618, "Tier 2: Compliance Desk", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#854d0e")
+    ax.text(s5_x + s5_w/2, 0.572, r"Abstention Set: $\Gamma(u) = \{0, 1\}$", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#a16207")
+    ax.text(s5_x + s5_w/2, 0.528, "Volume: 49 / 10k tx (0.49%)", ha="center", va="center", fontsize=5.8, color="#78350f")
     ax.text(s5_x + s5_w/2, 0.485, "-99.51% Human Review Queue Cut", ha="center", va="center", fontsize=5.5, fontweight="bold", color="#854d0e")
     
     # Connection arrow from diamond to Tier 2
     ax.annotate("", xy=(s5_x, 0.550), xytext=(0.755, 0.550),
                 arrowprops=dict(arrowstyle="->", lw=1.6, color="#ca8a04"))
 
-    # Tier 3 (Clear) - Bottom Green (y: 0.210 -> 0.410)
-    t3_box = patches.FancyBboxPatch(
-        (s5_x, 0.210), s5_w, 0.200,
-        boxstyle="round,pad=0.005,rounding_size=0.010",
+    # Tier 3 (Clear) - Bottom Green (y: 0.205 -> 0.415)
+    t3_box = patches.Rectangle(
+        (s5_x, 0.205), s5_w, 0.210,
         fc='#dcfce7', ec='#16a34a', lw=1.5
     )
     ax.add_patch(t3_box)
-    ax.text(s5_x + s5_w/2, 0.375, "Tier 3: Straight-Through (STP)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#166534")
-    ax.text(s5_x + s5_w/2, 0.330, r"Decisive Benign: $\Gamma(u) = \{0\}$", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#15803d")
-    ax.text(s5_x + s5_w/2, 0.285, "Volume: 9,933 / 10k tx (99.33%)", ha="center", va="center", fontsize=5.8, color="#14532d")
+    ax.text(s5_x + s5_w/2, 0.378, "Tier 3: Straight-Through (STP)", ha="center", va="center", fontsize=7.2, fontweight="bold", color="#166534")
+    ax.text(s5_x + s5_w/2, 0.332, r"Decisive Benign: $\Gamma(u) = \{0\}$", ha="center", va="center", fontsize=6.4, fontweight="bold", color="#15803d")
+    ax.text(s5_x + s5_w/2, 0.288, "Volume: 9,933 / 10k tx (99.33%)", ha="center", va="center", fontsize=5.8, color="#14532d")
     ax.text(s5_x + s5_w/2, 0.245, "0.45 ms Real-Time Clear (<10ms SLA)", ha="center", va="center", fontsize=5.4, fontweight="bold", color="#166534")
     
     # Connection arrow from diamond to Tier 3
@@ -329,7 +311,7 @@ def generate_intuitive_fig1_2():
                 arrowprops=dict(arrowstyle="->", lw=1.6, color="#16a34a", connectionstyle="arc3,rad=0.10"))
 
     # -------------------------------------------------------------------------
-    # BOTTOM: Executive Assurance & Statutory Governance Strip (y: 0.025 -> 0.170)
+    # BOTTOM: Executive Assurance & Statutory Governance Strip (y: 0.020 -> 0.170)
     # -------------------------------------------------------------------------
     kpis = [
         ("Real-Time Latency SLA", "0.45 ms Fast-Path", "P99 0.82 ms | 31,200 tx/s throughput\nStrict compliance with <10 ms banking SLA", "#1e40af", "#eff6ff"),
@@ -339,22 +321,21 @@ def generate_intuitive_fig1_2():
     ]
 
     for idx, (kpi_title, kpi_val, kpi_sub, col_fg, col_bg) in enumerate(kpis):
-        x_k = 0.015 + idx * 0.245
-        w_k = 0.235
-        ax.add_patch(patches.FancyBboxPatch(
-            (x_k, 0.025), w_k, 0.155,
-            boxstyle="round,pad=0.004,rounding_size=0.008",
+        x_k = 0.010 + idx * 0.247
+        w_k = 0.239
+        ax.add_patch(patches.Rectangle(
+            (x_k, 0.020), w_k, 0.160,
             facecolor=col_bg, edgecolor=col_fg, lw=1.1
         ))
-        ax.text(x_k + w_k/2, 0.148, kpi_title, ha="center", va="center", fontsize=6.2, fontweight="bold", color="#475569")
-        ax.text(x_k + w_k/2, 0.116, kpi_val, ha="center", va="center", fontsize=8.0, fontweight="bold", color=col_fg)
+        ax.text(x_k + w_k/2, 0.150, kpi_title, ha="center", va="center", fontsize=6.2, fontweight="bold", color="#475569")
+        ax.text(x_k + w_k/2, 0.118, kpi_val, ha="center", va="center", fontsize=8.0, fontweight="bold", color=col_fg)
         ax.text(x_k + w_k/2, 0.065, kpi_sub, ha="center", va="center", fontsize=5.0, color="#334155", linespacing=1.25)
 
-    save_to_all(fig, "fig1_operational_architecture_flowchart")
-    # Also save as alternative stem
+    # Save alternative stem first
     for d in TARGET_DIRS:
         fig.savefig(d / "fig_conformal_triage_flowchart.pdf", bbox_inches="tight", pad_inches=0.15)
         fig.savefig(d / "fig_conformal_triage_flowchart.png", dpi=300, bbox_inches="tight", pad_inches=0.15)
+    save_to_all(fig, "fig1_operational_architecture_flowchart")
 
 
 # =============================================================================

@@ -41,8 +41,8 @@ for d in TARGET_DIRS:
     d.mkdir(parents=True, exist_ok=True)
 
 def generate_figure_6_3():
-    # Canvas sized 10.0 x 3.8 to maintain perfect aspect ratio (~2.63:1) for Page 73
-    fig, axes = plt.subplots(1, 3, figsize=(10.0, 3.8))
+    # Canvas sized 10.2 x 4.2 to maintain spacious aspect ratio with zero collisions
+    fig, axes = plt.subplots(1, 3, figsize=(10.2, 4.2))
     
     for ax in axes:
         ax.set_xlim(0.0, 1.0)
@@ -130,9 +130,9 @@ def generate_figure_6_3():
         ax0.text(x, y, name, ha="center", va="center", fontsize=6.4, color=c_txt, weight="bold", zorder=5)
 
     # Bottom summary card
-    ax0.text(0.50, 0.07, "15 Entities | 24 Ingested Transactions\nHeavy Camouflage Noise Injection",
+    ax0.text(0.50, 0.055, "15 Entities | 24 Ingested Transactions\nHeavy Camouflage Noise Injection",
              ha="center", va="center", fontsize=6.8, color="#475569", weight="bold",
-             bbox=dict(boxstyle="round,pad=0.2", fc="#ffffff", ec="#e2e8f0", lw=0.6), zorder=6)
+             bbox=dict(boxstyle="square,pad=0.25", fc="#ffffff", ec="#cbd5e1", lw=0.8), zorder=6)
 
     # =========================================================================
     # PANEL (b): GNNExplainer Causal Attribution Mask (Pruning Chaff)
@@ -169,9 +169,9 @@ def generate_figure_6_3():
              bbox=dict(boxstyle="round,pad=0.2", fc="#fee2e2", ec="#dc2626", lw=0.8), zorder=7)
 
     # Bottom summary card
-    ax1.text(0.50, 0.07, "65.9% Spurious Links Pruned\nIsolates True Smurfing & Peeling Ring",
+    ax1.text(0.50, 0.055, "65.9% Spurious Links Pruned\nIsolates True Smurfing & Peeling Ring",
              ha="center", va="center", fontsize=6.8, color="#991b1b", weight="bold",
-             bbox=dict(boxstyle="round,pad=0.2", fc="#ffffff", ec="#fecaca", lw=0.6), zorder=6)
+             bbox=dict(boxstyle="square,pad=0.25", fc="#ffffff", ec="#fca5a5", lw=0.8), zorder=6)
 
     # =========================================================================
     # PANEL (c): Certified FinCEN Form 111 SAR Dossier
@@ -192,7 +192,7 @@ def generate_figure_6_3():
         ("Triage Set", "Tier 1: Quarantine Hold", "#b91c1c"),
         ("Typology", "Smurfing & Peeling Chain", "#c2410c"),
         ("Flow Retention", "Pass-Through (0.994)", "#0f766e"),
-        ("Cryptographic Seal", "SHA-256 9f86d0... (WORM)", "#15803d"),
+        ("Cryptographic Seal", "SHA-256 580945... (WORM)", "#15803d"),
         ("Governance", "Fed SR 11-7 & BSA Aligned", "#4338ca")
     ]
 
@@ -204,12 +204,12 @@ def generate_figure_6_3():
         # Field Value on Right
         ax2.text(0.94, y_pos, val, ha="right", va="center",
                  fontsize=6.8, weight="bold", color=c_val, zorder=3)
-        y_pos -= 0.102
+        y_pos -= 0.092
 
     # Bottom summary card
-    ax2.text(0.50, 0.07, "Autonomous Multi-Agent Generation\n100% AST Grammar Validated (0.00% Hallucination)",
+    ax2.text(0.50, 0.055, "Autonomous Multi-Agent Generation\n100% AST Grammar Validated (0.00% Hallucination)",
              ha="center", va="center", fontsize=6.8, color="#166534", weight="bold",
-             bbox=dict(boxstyle="round,pad=0.2", fc="#ffffff", ec="#bbf7d0", lw=0.6), zorder=6)
+             bbox=dict(boxstyle="square,pad=0.25", fc="#ffffff", ec="#86efac", lw=0.8), zorder=6)
 
     # Layout adjustment
     fig.subplots_adjust(left=0.02, right=0.98, top=0.96, bottom=0.04, wspace=0.12)

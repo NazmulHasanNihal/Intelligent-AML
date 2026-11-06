@@ -49,21 +49,21 @@ def generate_figure_9_1():
 
     # 2. Master Header Banner
     ax.add_patch(patches.Rectangle(
-        (0.005, 0.925), 0.990, 0.068,
+        (0.005, 0.920), 0.990, 0.074,
         facecolor='#0f172a', edgecolor='#0f172a', linewidth=0.5
     ))
-    ax.text(0.018, 0.966, 'Phased Enterprise Production Deployment Lifecycle & Verification Gates',
-            ha='left', va='center', fontsize=9.0, fontweight='bold', color='#ffffff')
-    ax.text(0.018, 0.941,
+    ax.text(0.018, 0.968, 'Phased Enterprise Production Deployment Lifecycle & Verification Gates',
+            ha='left', va='center', fontsize=8.8, fontweight='bold', color='#ffffff')
+    ax.text(0.018, 0.938,
             r'Tier-1 Core Banking Adoption Framework: Passive Shadow Ingestion $\rightarrow$ Dual-Run Conformal Pilot $\rightarrow$ Straight-Through Autonomous Surveillance',
-            ha='left', va='center', fontsize=6.2, color='#94a3b8')
+            ha='left', va='center', fontsize=6.0, color='#94a3b8')
 
     # Top Right Status Pill
     ax.add_patch(patches.Rectangle(
-        (0.748, 0.932), 0.240, 0.054,
+        (0.748, 0.930), 0.240, 0.054,
         facecolor='#065f46', edgecolor='#10b981', linewidth=0.8
     ))
-    ax.text(0.868, 0.959, 'OPERATIONAL MATURITY: STAGE I -> II -> III',
+    ax.text(0.868, 0.957, 'OPERATIONAL MATURITY: STAGE I -> II -> III',
             ha='center', va='center', fontsize=5.8, fontweight='bold', color='#ffffff')
 
     # =========================================================================

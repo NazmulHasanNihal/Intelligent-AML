@@ -77,12 +77,12 @@ def generate_figure_5_5():
     ax.text(23.0, 52.0, "2. Marginal Conformal", ha="center", va="center", fontsize=8.0, weight="bold", color="#92400e", zorder=3)
     ax.text(23.0, 44.0, "Review Queue: 1,840\n(18.40% Volume)", ha="center", va="center", fontsize=7.2, weight="bold", color="#b45309", zorder=3)
 
-    # Tier 3 Trapezoid: Class-Conditional CRC (Narrow bottom)
-    t3_poly = patches.Polygon([[17.0, 35.0], [29.0, 35.0], [26.0, 13.0], [20.0, 13.0]],
+    # Tier 3 Trapezoid: Class-Conditional CRC (Widened bottom so text fits cleanly)
+    t3_poly = patches.Polygon([[15.0, 35.0], [31.0, 35.0], [29.0, 13.0], [17.0, 13.0]],
                               closed=True, facecolor="#dcfce7", edgecolor="#16a34a", lw=1.8, zorder=2)
     ax.add_patch(t3_poly)
     ax.text(23.0, 26.5, "3. C-STGB CRC", ha="center", va="center", fontsize=7.6, weight="bold", color="#166534", zorder=3)
-    ax.text(23.0, 19.5, "Queue: 49\n(0.49%)", ha="center", va="center", fontsize=7.2, weight="bold", color="#15803d", zorder=3)
+    ax.text(23.0, 19.5, "Queue: 49 alerts\n(0.49% Volume)", ha="center", va="center", fontsize=7.0, weight="bold", color="#15803d", zorder=3)
 
     # Funnel Flow Indicator on Far Left
     ax.annotate("", xy=(3.0, 15.0), xytext=(3.0, 85.0),

@@ -55,11 +55,21 @@ def generate_fig7_7():
     b2 = ax.bar(x,     samld,    w, label="SAML-D (15-Bank Rail)", color="#15803D", edgecolor="black", linewidth=0.8, zorder=3)
     b3 = ax.bar(x + w, amlsim,   w, label="IBM AMLSim HI (Multi-Bank)", color="#EA580C", edgecolor="black", linewidth=0.8, zorder=3)
 
-    for bars, col in [(b1, "#1E3A8A"), (b2, "#15803D"), (b3, "#EA580C")]:
-        for bar in bars:
-            h = bar.get_height()
-            ax.text(bar.get_x() + bar.get_width() / 2, h + 1.8, f"{h:.1f}%",
-                    ha="center", va="bottom", fontsize=7.5, fontweight="bold", color=col, rotation=35, zorder=4)
+    # Label each bar with staggered heights to eliminate any text overlap
+    for bar in b1:
+        h = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, h + 1.5, f"{h:.1f}%",
+                ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#1E3A8A", rotation=90, zorder=4)
+
+    for bar in b2:
+        h = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, h + 1.5, f"{h:.1f}%",
+                ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#15803D", rotation=90, zorder=4)
+
+    for bar in b3:
+        h = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, h + 1.5, f"{h:.1f}%",
+                ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#EA580C", rotation=90, zorder=4)
 
     ax.set_ylim(0, 115)
     ax.set_ylabel("Macro F1-Score (%)", fontsize=10.0, fontweight="bold")
@@ -72,10 +82,15 @@ def generate_fig7_7():
 
     for d in TARGET_DIRS:
         d.mkdir(parents=True, exist_ok=True)
-        for ext in [".pdf", ".png"]:
-            out_file = d / f"fig3_ablation_component_study{ext}"
-            plt.savefig(out_file, bbox_inches="tight", pad_inches=0.15)
-            print(f"Saved: {out_file}")
+        for stem in ["fig3_ablation_component_study", "fig7_7_ablation_progression"]:
+            for ext in [".pdf", ".png"]:
+                out_file = d / f"{stem}{ext}"
+                plt.savefig(out_file, bbox_inches="tight", pad_inches=0.15)
+                print(f"Saved: {out_file}")
+
+    artifact_out = Path("C:/Users/SAAD/.gemini/antigravity/brain/26c4505d-0616-4920-a3c3-01117c9a7ce5/fig7_7_redesigned_final.png")
+    plt.savefig(artifact_out, bbox_inches="tight", pad_inches=0.15, dpi=300)
+    print(f"Saved artifact: {artifact_out}")
 
     plt.close()
 

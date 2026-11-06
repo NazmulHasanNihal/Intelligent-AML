@@ -520,8 +520,8 @@ def generate_upgraded_fig2_1():
         plt.Line2D([0], [0], marker='o', color='w', label='Laundering Syndicate (S0, M1-M2, L3, C4)', markerfacecolor='#dc2626', markeredgecolor='#fde047', markersize=8),
         plt.Line2D([0], [0], marker='o', color='w', label='Benign Retail Customers', markerfacecolor='#94a3b8', markersize=5),
         plt.Line2D([0], [0], color='#dc2626', lw=2.0, label='Illicit Flow Conduit'),
-        plt.Line2D([0], [0], color='#f87171', lw=1.2, linestyle='--', label='Adversarial Camouflage Chaff (Spurious)'),
-        plt.Line2D([0], [0], color='#059669', lw=2.0, label='C-STGB Denoised Wash Cycle (g_ij >= 0.92)'),
+        plt.Line2D([0], [0], color='#f87171', lw=1.2, linestyle='--', label=r'Adversarial Camouflage Chaff ($\hat{g}_{ij} < 0.10$)'),
+        plt.Line2D([0], [0], color='#059669', lw=2.0, label=r'C-STGB Denoised Wash Cycle ($\hat{g}_{ij} \geq 0.92$)'),
     ]
     fig.legend(handles=legend_elements, loc='lower center', bbox_to_anchor=(0.5, 0.015),
                ncol=3, fontsize=6.6, framealpha=0.96, edgecolor='#cbd5e1')

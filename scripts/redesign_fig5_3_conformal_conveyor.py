@@ -61,24 +61,24 @@ def generate_figure_5_3():
             ha='center', va='center', fontsize=7.8, style='italic', color='#475569')
 
     # =========================================================================
-    # STAGE 1: STREAMING INGESTION FUNNEL (x: 2.5 to 19.0)
+    # STAGE 1: STREAMING INGESTION FUNNEL (x: 1.5 to 21.0)
     # =========================================================================
-    funnel_pts = [[2.5, 87.0], [19.0, 68.0], [19.0, 32.0], [2.5, 13.0]]
+    funnel_pts = [[1.5, 89.0], [21.0, 69.0], [21.0, 31.0], [1.5, 11.0]]
     funnel = patches.Polygon(funnel_pts, closed=True, facecolor='#f8fafc', edgecolor='#64748b', lw=1.6, zorder=2)
     ax.add_patch(funnel)
 
-    # Ingestion badges and details
-    ax.text(10.0, 72.0, "STAGE 1", ha='center', va='center', fontsize=7.0, weight='bold', color='#64748b',
+    # Ingestion badges and details (comfortable margin clearance)
+    ax.text(11.0, 72.0, "STAGE 1", ha='center', va='center', fontsize=7.0, weight='bold', color='#64748b',
             bbox=dict(boxstyle="round,pad=0.2", fc="#ffffff", ec="#cbd5e1", lw=0.8), zorder=3)
-    ax.text(10.0, 63.0, "100% Streaming\nTransactions", ha='center', va='center', fontsize=8.2, weight='bold', color='#0f172a', zorder=3)
-    ax.text(10.0, 52.0, "N = 10,000 Wires\nMT103 / UTXO Ingress", ha='center', va='center', fontsize=7.2, color='#334155', zorder=3)
-    ax.text(10.0, 41.0, "12-D Canonical\nPhysical Invariants", ha='center', va='center', fontsize=7.0, style='italic', color='#64748b', zorder=3)
-    ax.text(10.0, 27.0, "Zero-Copy Arrow ABI\nEmbedded DuckDB", ha='center', va='center', fontsize=6.8, weight='bold', color='#0284c7', zorder=3)
+    ax.text(11.0, 63.0, "100% Streaming\nTransactions", ha='center', va='center', fontsize=8.2, weight='bold', color='#0f172a', zorder=3)
+    ax.text(11.0, 52.0, "N = 10,000 Wires\nMT103 / UTXO Ingress", ha='center', va='center', fontsize=7.2, color='#334155', zorder=3)
+    ax.text(11.0, 41.0, "12-D Canonical\nPhysical Invariants", ha='center', va='center', fontsize=7.0, style='italic', color='#64748b', zorder=3)
+    ax.text(11.0, 26.0, "Zero-Copy Arrow ABI\nEmbedded DuckDB", ha='center', va='center', fontsize=6.5, weight='bold', color='#0284c7', zorder=3)
 
     # Arrow from Stage 1 to Stage 2
-    ax.annotate("", xy=(23.5, 50.0), xytext=(19.0, 50.0),
+    ax.annotate("", xy=(23.5, 50.0), xytext=(21.0, 50.0),
                 arrowprops=dict(arrowstyle="->", lw=2.0, color="#2563eb", shrinkA=0, shrinkB=0), zorder=4)
-    ax.text(21.25, 46.5, r"Raw $\mathbf{x}_u$", ha='center', va='top', fontsize=6.6, weight='bold', color='#1d4ed8', zorder=5)
+    ax.text(22.25, 46.5, r"Raw $\mathbf{x}_u$", ha='center', va='top', fontsize=6.6, weight='bold', color='#1d4ed8', zorder=5)
 
     # =========================================================================
     # STAGE 2: C-STGB NEURAL RISK CORE (x: 23.5 to 43.5, y: 32.0 to 68.0)

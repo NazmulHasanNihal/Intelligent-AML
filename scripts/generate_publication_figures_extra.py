@@ -295,7 +295,7 @@ inv_labels = [
     r"$v_A$ (Amount Velocity)",
     r"$\nu_{\text{io}}$ (IO Velocity Ratio)",
     r"$\mu_A$ (Amount Mean)",
-    r"$\mathrm{Var}(A)$ (Amount Variance)",
+    r"$\sigma_A^2$ (Amount Variance)",
     r"$\gamma_A$ (Amount Skewness)",
     r"$\kappa_A$ (Amount Kurtosis)"
 ]

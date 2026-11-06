@@ -211,13 +211,13 @@ def generate_new_fig3_2():
     ax2.set_title("(c) Zero-Shot Cross-Ledger Transfer Matrix\n(Frozen C-STGB Backbone $\\eta=0$, Zero Fine-Tuning)",
                   fontsize=8.4, fontweight="bold", color="#0f172a", pad=10)
 
-    # 4x4 Transfer Heatmap Matrix
-    labels = ["BTC", "ETH", "Fiat", "P2P"]
+    # 4x4 Transfer Heatmap Matrix synced with Table 7.12
+    labels = ["BTC", "ETH", "Fiat", "Credit"]
     matrix = np.array([
-        [91.4, 83.6, 82.9, 84.1], # Train on BTC
-        [82.8, 90.8, 81.5, 83.2], # Train on ETH
-        [83.5, 82.1, 92.1, 87.5], # Train on Fiat
-        [81.9, 81.2, 88.2, 88.9], # Train on P2P/Synth
+        [91.42, 82.40, 76.80, 79.20], # Train on BTC (Elliptic-v1)
+        [78.50, 97.40, 72.10, 85.10], # Train on ETH (XBlock-ETH -> DGraphFin: 85.10%)
+        [71.40, 68.20, 93.68, 39.40], # Train on Fiat (SAML-D -> AMLSim: 39.40%)
+        [80.60, 75.30, 74.50, 97.91], # Train on Credit/P2P (DGraphFin -> Elliptic: 80.60%, PaySim -> SAML-D: 74.50%)
     ])
 
     mat_x0, mat_y0 = 24, 44
@@ -245,10 +245,10 @@ def generate_new_fig3_2():
             if i == j: # Native Trained (Diagonal)
                 c_fc = "#1e40af"
                 c_tc = "#ffffff"
-                tag = "(Train)"
+                tag = "(Tuned)"
             else: # Zero-Shot Transfer
-                c_fc = "#dcfce7" if val >= 85.0 else "#eff6ff"
-                c_tc = "#166534" if val >= 85.0 else "#1e40af"
+                c_fc = "#dcfce7" if val >= 75.0 else ("#fef9c3" if val >= 50.0 else "#fee2e2")
+                c_tc = "#166534" if val >= 75.0 else ("#854d0e" if val >= 50.0 else "#991b1b")
                 tag = "(Zero-Shot)"
             
             ax2.add_patch(patches.Rectangle((cx, cy), cell_w - 1.2, cell_h - 1.2, fc=c_fc, ec="#94a3b8", lw=0.6))
@@ -257,20 +257,20 @@ def generate_new_fig3_2():
             ax2.text(cx + cell_w/2 - 0.6, cy + cell_h/2 - 2.8, tag,
                      ha="center", va="center", fontsize=4.2, color=c_tc)
 
-    # Performance Comparison Bar (Raw vs 12-D Canonical Invariants)
+    # Performance Comparison Bar (Table 7.12 Empirical Transfer Synthesis)
     b_y = 6
     ax2.add_patch(patches.FancyBboxPatch((4, b_y), 92, 28, boxstyle="round,pad=0.4", fc="#f8fafc", ec="#94a3b8", lw=1.0))
-    ax2.text(50, b_y + 24.0, "Cross-Ledger Zero-Shot Generalization Lift:", ha="center", fontsize=6.2, fontweight="bold", color="#0f172a")
+    ax2.text(50, b_y + 24.0, "Table 7.12 Empirical Zero-Shot Macro Transfer F1:", ha="center", fontsize=6.2, fontweight="bold", color="#0f172a")
 
-    # Bar 1: Raw Incompatible Features
-    ax2.add_patch(patches.Rectangle((10, b_y + 12.5), 36, 6.5, fc="#fca5a5", ec="#dc2626", lw=0.8))
-    ax2.text(28, b_y + 15.75, "Raw Features: 55.4% F1", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#991b1b")
-    ax2.text(50, b_y + 15.75, "(Schema Mismatch Failure)", ha="left", va="center", fontsize=4.8, color="#7f1d1d", style="italic")
+    # Bar 1: Vanilla HGT Baseline
+    ax2.add_patch(patches.Rectangle((10, b_y + 12.5), 22, 6.5, fc="#fca5a5", ec="#dc2626", lw=0.8))
+    ax2.text(21, b_y + 15.75, "HGT: 19.51%", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#991b1b")
+    ax2.text(34, b_y + 15.75, "vs XGBoost 54.06% (Schema Drop)", ha="left", va="center", fontsize=4.8, color="#7f1d1d", style="italic")
 
-    # Bar 2: 12-D Invariants (Proposed)
-    ax2.add_patch(patches.Rectangle((10, b_y + 4.0), 58, 6.5, fc="#86efac", ec="#16a34a", lw=0.8))
-    ax2.text(39, b_y + 7.25, "12-D Invariants: 83.60% - 88.20% F1", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#14532d")
-    ax2.text(71, b_y + 7.25, "[+28.2 pp Lift]", ha="left", va="center", fontsize=5.4, fontweight="bold", color="#059669")
+    # Bar 2: 12-D Invariants (C-STGB Zero-Shot)
+    ax2.add_patch(patches.Rectangle((10, b_y + 4.0), 54, 6.5, fc="#86efac", ec="#16a34a", lw=0.8))
+    ax2.text(37, b_y + 7.25, "C-STGB Zero-Shot: 69.98% Macro F1", ha="center", va="center", fontsize=5.2, fontweight="bold", color="#14532d")
+    ax2.text(66, b_y + 7.25, "[+50.5 pp over HGT]", ha="left", va="center", fontsize=5.4, fontweight="bold", color="#059669")
 
     # Save to all target directories
     save_to_all(fig, "fig_canonical_invariants")

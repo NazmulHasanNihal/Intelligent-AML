@@ -332,7 +332,7 @@ def generate_figure_4_1():
             fontsize=7.8, weight='bold', color='#0f172a', zorder=3)
 
     # Inset Cartesian axis for real Cache Scaling Curve!
-    ax_inset = fig.add_axes([0.722, 0.108, 0.250, 0.235])
+    ax_inset = fig.add_axes([0.722, 0.125, 0.250, 0.218])
     ax_inset.set_facecolor('#fafbfc')
 
     capacity_k = np.array([10, 25, 50, 75, 100])
@@ -352,8 +352,8 @@ def generate_figure_4_1():
     ax_inset.set_yticklabels(['50%', '70%', '88%', '100%'], fontsize=5.8)
     ax_inset.grid(True, linestyle=':', alpha=0.5, color='#cbd5e1')
 
-    ax.text(0.832, 0.048, "Footprint: ~250 MB RAM for 50k nodes | 88.4% Fast-Path Hits",
-            ha='center', va='center', fontsize=5.8, weight='bold', color='#047857', zorder=3)
+    ax.text(0.832, 0.035, "Footprint: ~250 MB RAM for 50k nodes | 88.4% Fast-Path Hits",
+            ha='center', va='center', fontsize=5.6, weight='bold', color='#047857', zorder=3)
 
     return fig
 

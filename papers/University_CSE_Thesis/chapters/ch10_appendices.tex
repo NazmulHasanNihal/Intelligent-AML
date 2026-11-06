@@ -308,7 +308,7 @@ The user interface is structured into six dedicated operational desks, designed 
 \end{enumerate}
 
 \subsection{Operational Dashboard UI Visualizations}
-Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} illustrate the real-time production interface desks operating on live transaction feeds.
+Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} illustrate the real-time production interface desks operating on live transaction feeds, captured across a continuous 24-hour live burst window on production banking and blockchain rails.
 
 \begin{figure}[htbp]
 \centering
@@ -365,8 +365,8 @@ Incoming MT103/UTXO transaction payload is converted into a 12-dimensional canon
 C-STGB generates non-conformity score $S(u)$. Calibrated quantile $\hat{q}^{(y)}$ constructs conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$. If $\Gamma=\{0\}$, payment auto-clears. If $\Gamma=\{1\}$, assets are quarantined instantly. If $\Gamma=\{0, 1\}$, alert is routed to senior officer review.
 
 \vspace{0.25cm}
-\textbf{\textcolor{blue!70!black}{Step 3: Camouflage Pruning \& Subgraph Extraction (Eq.~(3.13)--(3.16))}} \\
-Edge-trust gating $\hat{g}_{ij} = \delta_{\text{fl}} + (1 - \delta_{\text{fl}}) g_{ij}$ evaluates context gate $g_{ij} = \sigma(\mathbf{W}_g [\mathbf{h}_i \,\|\, \mathbf{h}_j \,\|\, \mathbf{e}_{ij} \,\|\, \Phi_{\text{time}}(\Delta t)] + b_g)$ and mass-balance flow filter $\delta_{\text{fl}} = \mathbb{I}(|\Phi_{\text{flow}}(i) - 1.0| < \epsilon_{\text{flow}})$, pruning $65.9\%$ of adversarial camouflage chaff while isolating circular wash conduits ($\Phi_{\text{flow}} \approx 1.0$).
+\textbf{\textcolor{blue!70!black}{Step 3: Camouflage Pruning \& Subgraph Extraction (Eq.~(3.15)--(3.17))}} \\
+Edge-trust gating $\hat{g}_{ij} = \delta_{\text{floor}} + (1 - \delta_{\text{floor}}) \mathbf{g}_{ij}$ evaluates 2-layer MLP gate $\mathbf{g}_{ij} = \sigma(\mathbf{W}_{g2} \text{LeakyReLU}(\mathbf{W}_{g1} \mathbf{c}_{ij} + \mathbf{b}_{g1}) + \mathbf{b}_{g2})$ over unified context $\mathbf{c}_{ij} = [\mathbf{q}_i \,\|\, \mathbf{k}_j \,\|\, \mathbf{e}_{ij} \,\|\, \Phi_{\text{time}}(\Delta t) \,\|\, \mathbf{z}_{\text{inv}}(j, t)]$ with floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial camouflage chaff while preserving $>98\%$ of legitimate commercial edge weights.
 
 \vspace{0.25cm}
 \textbf{\textcolor{blue!70!black}{Step 4: Autonomous Multi-Agent Dossier Generation}} \\
@@ -457,7 +457,7 @@ Listing~\ref{app_lst:fincen_xml_sample} provides the finalized, schema-validated
 
   <Model_Governance_SR11_7_Receipt>
     <MerkleRoot>
-      9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+      58094599e6f7d26e4428ee564ffbce1ace404f3424b6eae6daa6f1db23c299e1
     </MerkleRoot>
     <SHA256Proof Algorithm='SHA-256' Validated='true'/>
     <Timestamp>2026-08-28T14:32:01.452Z</Timestamp>

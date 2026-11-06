@@ -160,9 +160,9 @@ def generate_figure_5_2():
     ax1.text(x[0] + w, p_block[0] * 1.30, "1.20%\n(120 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
     ax1.text(x[1] + w, p_block[1] * 1.30, "0.18%\n(18 tx)", ha="center", va="bottom", fontsize=6.8, fontweight="bold", color="#b91c1c")
 
-    # Workload Slashing Callout Arrow
-    ax1.annotate("", xy=(x[1], 0.70), xytext=(x[0] + 0.05, 14.0),
-                 arrowprops=dict(arrowstyle="->", color="#dc2626", lw=1.8, connectionstyle="arc3,rad=-0.18"))
+    # Workload Slashing Callout Arrow (shortened so it never crosses over '0.49% (49 tx)')
+    ax1.annotate("", xy=(x[1], 1.25), xytext=(x[0] + 0.08, 12.0),
+                 arrowprops=dict(arrowstyle="->", color="#dc2626", lw=1.6, connectionstyle="arc3,rad=-0.16"))
     
     # Callout badge centered at x=0.52, y=6.0 (safely above the 1.20% block bar and between bars)
     ax1.text(0.52, 6.0, "-97.3% Review Slashing\n" + r"(1,840 $\rightarrow$ 49 alerts / 10k)" + "\n[-99.51% vs Legacy Rules]",
@@ -184,11 +184,12 @@ def generate_figure_5_2():
     
     # Save to all target directories
     for d in TARGET_DIRS:
-        pdf_path = d / "fig19_conformal_risk_mechanism.pdf"
-        png_path = d / "fig19_conformal_risk_mechanism.png"
-        fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.15)
-        fig.savefig(png_path, dpi=300, bbox_inches="tight", pad_inches=0.15)
-        print(f" [OK] Saved: {pdf_path}")
+        for stem in ["fig19_conformal_risk_mechanism", "fig_conformal_mechanism_proof"]:
+            pdf_path = d / f"{stem}.pdf"
+            png_path = d / f"{stem}.png"
+            fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.15)
+            fig.savefig(png_path, dpi=300, bbox_inches="tight", pad_inches=0.15)
+            print(f" [OK] Saved: {pdf_path}")
         
     # Also save to artifact directory
     artifact_png = Path("C:/Users/SAAD/.gemini/antigravity/brain/26c4505d-0616-4920-a3c3-01117c9a7ce5/fig5_2_redesigned_final.png")

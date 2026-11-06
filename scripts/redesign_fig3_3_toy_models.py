@@ -180,7 +180,7 @@ def generate_figure_3_3():
     # =========================================================================
     ax_c = axes[1, 0]
     ax_c.set_facecolor('#ffffff')
-    ax_c.set_title(r"(c) Directed Causal Taint Exposure ($\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{rev}}$)", 
+    ax_c.set_title(r"(c) Directed Causal Taint Exposure ($\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{bwd}}$)", 
                    fontsize=9.2, weight='bold', color='#0f172a', pad=10)
     
     card_c = FancyBboxPatch((0.015, 0.02), 0.97, 0.96, boxstyle="round,pad=0.02",
@@ -225,7 +225,7 @@ def generate_figure_3_3():
               fontsize=7.6, weight='bold', color='#991b1b', zorder=5)
     ax_c.text(0.15, 0.53, "Darknet Faucet", ha='center', va='center',
               fontsize=6.8, color='#b91c1c', zorder=5)
-    ax_c.text(0.15, 0.45, r"$\pi^{\mathrm{fwd}} = 1.00$", ha='center', va='center',
+    ax_c.text(0.15, 0.45, r"$\mathbf{s}_{\mathrm{fwd}} = 1.00$", ha='center', va='center',
               fontsize=7.2, weight='bold', color='#7f1d1d', zorder=5)
 
     # M1 Box
@@ -254,7 +254,7 @@ def generate_figure_3_3():
               fontsize=7.6, weight='bold', color='#854d0e', zorder=5)
     ax_c.text(0.85, 0.53, "Off-Ramp ATM", ha='center', va='center',
               fontsize=6.8, color='#a16207', zorder=5)
-    ax_c.text(0.85, 0.45, r"$\pi^{\mathrm{rev}} = 0.95$", ha='center', va='center',
+    ax_c.text(0.85, 0.45, r"$\mathbf{s}_{\mathrm{bwd}} = 0.95$", ha='center', va='center',
               fontsize=7.2, weight='bold', color='#713f12', zorder=5)
 
     # Bottom caption strip inside card

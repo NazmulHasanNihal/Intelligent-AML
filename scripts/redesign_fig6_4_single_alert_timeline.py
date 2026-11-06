@@ -185,9 +185,9 @@ def generate_figure_6_4():
         if i > 0:
             prev_x = stages[i-1]["x"]
             mid_x = (prev_x + cx) / 2.0
-            # Small pill on the timeline axis
-            ax.text(mid_x, y_axis, s["dt"], ha="center", va="center", fontsize=5.8, weight="bold", color="#475569",
-                    bbox=dict(boxstyle="round,pad=0.15", fc="#ffffff", ec="#94a3b8", lw=0.6), zorder=6)
+            # Solid white pill on the timeline axis to cleanly occlude line
+            ax.text(mid_x, y_axis, s["dt"], ha="center", va="center", fontsize=6.0, weight="bold", color="#1e293b",
+                    bbox=dict(boxstyle="round,pad=0.25", fc="#ffffff", ec="#64748b", lw=0.8, alpha=1.0), zorder=10)
 
     # =========================================================================
     # BOTTOM EXECUTIVE SUMMARY RIBBON (y: 2.5 to 8.5)

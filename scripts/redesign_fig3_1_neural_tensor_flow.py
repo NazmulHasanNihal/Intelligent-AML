@@ -127,7 +127,7 @@ def generate_new_fig3_1():
     # Mini Visual: 3 Harmonic Waveform Tracks
     w_box_y = m1_y + 0.175
     ax.add_patch(patches.Rectangle((m1_x + 0.012, w_box_y), m1_w - 0.024, 0.130, fc="#f0f9ff", ec="#bae6fd", lw=0.8))
-    ax.text(m1_x + 0.020, w_box_y + 0.115, "Tri-Band Harmonic Position Pos(t):", fontsize=5.8, fontweight="bold", color="#0369a1")
+    ax.text(m1_x + 0.020, w_box_y + 0.115, "Tri-Band Harmonic Positional Encoding:", fontsize=5.8, fontweight="bold", color="#0369a1")
     
     t_pts = np.linspace(0, 1, 100)
     x_wave = m1_x + 0.025 + t_pts * (m1_w - 0.050)
@@ -401,15 +401,15 @@ def generate_new_fig3_1():
     ax.text(m5_x + m5_w/2, m5_y + m5_h - 0.022, "Module 5: Cost-Sensitive Bayes Head",
             ha="center", va="center", fontsize=6.8, fontweight="bold", color="#ffffff")
 
-    # Mini Visual: 15:1 Asymmetric Cost & Optimal Threshold Shift
+    # Mini Visual: Asymmetric Focal Tversky Loss & Optimal Shift
     c_curve_y = m5_y + 0.170
     ax.add_patch(patches.Rectangle((m5_x + 0.012, c_curve_y), m5_w - 0.024, 0.170, fc="#fef2f2", ec="#fecaca", lw=0.8))
-    ax.text(m5_x + 0.020, c_curve_y + 0.150, "Bayesian Cost-Sensitive Risk Optimization:", fontsize=5.8, fontweight="bold", color="#991b1b")
+    ax.text(m5_x + 0.020, c_curve_y + 0.150, "Asymmetric Focal Tversky Loss (Eq. 3.28):", fontsize=5.8, fontweight="bold", color="#991b1b")
 
-    # Asymmetric loss formula
-    ax.text(m5_x + m5_w/2, c_curve_y + 0.125, r"$\mathcal{L}_{\mathrm{asym}} = 15 \cdot \mathbb{I}(y=1)\log \hat{p} + 1 \cdot \mathbb{I}(y=0)\log(1-\hat{p})$",
-            ha="center", va="center", fontsize=5.2, fontweight="bold", color="#b91c1c")
-    ax.text(m5_x + m5_w/2, c_curve_y + 0.102, r"15:1 Asymmetry: \$150k FinCEN Penalty vs \$10k Review Cost",
+    # Asymmetric Focal Tversky loss formula
+    ax.text(m5_x + m5_w/2, c_curve_y + 0.125, r"$\mathcal{L}_{\mathrm{task}} = 1 - \frac{\sum p_i y_i + \epsilon}{\sum p_i y_i + 0.85 \sum(1-p_i)y_i + 0.15 \sum p_i(1-y_i) + \epsilon}$",
+            ha="center", va="center", fontsize=5.0, fontweight="bold", color="#b91c1c")
+    ax.text(m5_x + m5_w/2, c_curve_y + 0.102, r"5.67x FN Gradient Magnification ($\beta_{\mathrm{FN}}=0.85$ vs $\beta_{\mathrm{FP}}=0.15$)",
             ha="center", va="center", fontsize=5.0, color="#7f1d1d")
 
     # Threshold shift curve

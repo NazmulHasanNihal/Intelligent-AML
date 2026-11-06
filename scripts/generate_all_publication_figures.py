@@ -1079,12 +1079,12 @@ ax.add_patch(lane2_card)
 
 # Lane 2 Title Pill
 ax.add_patch(patches.FancyBboxPatch(
-    (0.015, 0.355), 0.340, 0.048,
+    (0.015, 0.355), 0.580, 0.048,
     boxstyle="round,pad=0.002,rounding_size=0.004",
     facecolor="#15803d", edgecolor="#15803d", linewidth=0.3
 ))
-ax.text(0.185, 0.379, "LANE 2: ONLINE STREAMING FAST-PATH INFERENCE (<0.45 ms SLA)",
-        ha="center", va="center", fontsize=6.1, fontweight="bold", color="#ffffff")
+ax.text(0.305, 0.379, "LANE 2: ONLINE STREAMING FAST-PATH INFERENCE (<0.45 ms SLA)",
+        ha="center", va="center", fontsize=5.8, fontweight="bold", color="#ffffff")
 
 infer_boxes = [
     ("1. Live Ingest & Top-15", "Zero-copy Arrow RecordBatch\n15-hop dynamic ego-graph cache", 0.020, 0.035, 0.225, 0.300, "#f0fdf4", "#15803d"),
@@ -1540,8 +1540,8 @@ axes[0].legend(loc="center right", bbox_to_anchor=(0.98, 0.40), framealpha=0.92,
 # Right: Cold-start Evidence Gating with Split Dual y-Axes (twinx)
 node_degrees = np.arange(0, 25)
 alpha_gate = 1.0 / (1.0 + np.exp(-0.45 * (node_degrees - 3.5)))
-f1_pure_gnn = np.where(node_degrees == 0, 12.4, 25.0 + 65.0 * (1.0 - np.exp(-0.3 * node_degrees)))
-f1_cstgb_fused = np.where(node_degrees == 0, 84.6, 85.0 + 7.5 * (1.0 - np.exp(-0.4 * node_degrees)))
+f1_pure_gnn = np.where(node_degrees == 0, 18.4, 25.0 + 65.0 * (1.0 - np.exp(-0.3 * node_degrees)))
+f1_cstgb_fused = np.where(node_degrees == 0, 89.6, 85.0 + 7.5 * (1.0 - np.exp(-0.4 * node_degrees)))
 
 ax_left = axes[1]
 ax_right = ax_left.twinx()
@@ -1550,8 +1550,8 @@ line1 = ax_left.plot(node_degrees, f1_cstgb_fused, label=r"C-STGB Fused ($\alpha
 line2 = ax_left.plot(node_degrees, f1_pure_gnn, label="Pure GNN (No Invariants)", color=C_GCN, lw=1.5, marker="s", markersize=3.0, ls="--", zorder=3)
 line3 = ax_right.plot(node_degrees, alpha_gate, label=r"Fusion Weight $\alpha_u$", color="#7b1fa2", lw=1.5, ls="-.", zorder=4)
 
-ax_left.annotate("Cold-Start Mule Boost\n(+72.2 pp F1 at deg=0)",
-                xy=(0, 84.6), xytext=(2.5, 46.0),
+ax_left.annotate("Cold-Start Mule Boost\n(+71.20 pp F1 at deg=0)",
+                xy=(0, 89.6), xytext=(2.5, 46.0),
                 arrowprops=dict(arrowstyle="->,head_width=0.18,head_length=0.26", color=C_CSTGB, lw=1.2),
                 fontsize=6.4, fontweight="bold", color=C_CSTGB,
                 bbox=dict(boxstyle="round,pad=0.18", facecolor="#e8f5e9", edgecolor="#a5d6a7", lw=0.75))

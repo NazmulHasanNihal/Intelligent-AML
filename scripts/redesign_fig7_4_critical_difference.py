@@ -67,11 +67,11 @@ def generate_figure_7_4():
     ax_cd.text(1.0 + cd_val / 2.0, caliper_y + 0.06, r"$\mathrm{CD} = 1.45$ ($\alpha = 0.05$ Holm)",
                ha="center", va="bottom", fontsize=6.2, weight="bold", color="#991b1b")
 
-    # Shaded Significance Separation Band between C-STGB and GNNs
-    rect_sep = patches.Rectangle((1.07 + cd_val, 0.40), 4.21 - (1.07 + cd_val), 0.20,
-                                 facecolor="#fee2e2", edgecolor="#fca5a5", linestyle=":", lw=0.8, alpha=0.5, zorder=1)
+    # Shaded Significance Separation Band between C-STGB and GNNs (positioned cleanly above axis)
+    rect_sep = patches.Rectangle((1.07 + cd_val, 0.60), 4.21 - (1.07 + cd_val), 0.22,
+                                 facecolor="#fee2e2", edgecolor="#fca5a5", linestyle=":", lw=0.8, alpha=0.6, zorder=1)
     ax_cd.add_patch(rect_sep)
-    ax_cd.text((1.07 + cd_val + 4.21) / 2.0, 0.50, "Statistically Significant Lead\nOver All Deep GNNs (p < 0.001)",
+    ax_cd.text((1.07 + cd_val + 4.21) / 2.0, 0.71, "Statistically Significant Lead\nOver Deep GNNs (p < 0.001)",
                ha="center", va="center", fontsize=5.0, weight="bold", color="#991b1b", style="italic", zorder=2)
 
     # Main Horizontal Rank Axis (y = 0.50)

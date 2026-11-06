@@ -85,11 +85,10 @@ def generate_figure_4_2():
             fontsize=7.2, weight='bold', color='#ffffff', zorder=4)
 
     t1_fields = [
-        ("PK", "country_iso", "CHAR(2)", True),
-        ("  ", "country_name", "VARCHAR(48)", False),
-        ("  ", "fatf_status", "VARCHAR(24)", False),
-        ("  ", "basel_aml_idx", "NUMERIC(4, 2)", False),
-        ("  ", "sanction_auth", "VARCHAR(32)", False),
+        ("PK", "country_iso", "VARCHAR(3)", True),
+        ("  ", "fatf_status", "VARCHAR(16)", False),
+        ("  ", "basel_aml_index", "DOUBLE PRECISION", False),
+        ("  ", "sanction_regime", "VARCHAR(64)", False),
         ("  ", "effective_date", "DATE", False)
     ]
     for i, (pk, fname, ftype, is_pk) in enumerate(t1_fields):
@@ -125,13 +124,13 @@ def generate_figure_4_2():
             fontsize=7.4, weight='bold', color='#ffffff', zorder=4)
 
     t2_fields = [
-        ("PK", "entity_id", "BIGINT / UUID", True, False),
+        ("PK", "entity_id", "VARCHAR(64)", True, False),
         ("  ", "entity_type", "VARCHAR(32)", False, False),
-        ("  ", "kyc_risk_tier", "SMALLINT (1-5)", False, False),
-        ("FK", "country_iso", "CHAR(2) -> Jurisdictions", False, True),
-        ("  ", "created_timestamp", "TIMESTAMP WITH TZ", False, False),
-        ("  ", "is_pep_flag", "BOOLEAN DEFAULT FALSE", False, False),
-        ("  ", "initial_balance", "NUMERIC(18, 4)", False, False)
+        ("FK", "country_iso", "VARCHAR(3) -> Jurisdictions", False, True),
+        ("  ", "kyc_risk_tier", "INTEGER (1-5)", False, False),
+        ("  ", "is_pep", "BOOLEAN DEFAULT FALSE", False, False),
+        ("  ", "is_sanctioned", "BOOLEAN DEFAULT FALSE", False, False),
+        ("  ", "registration_timestamp", "TIMESTAMP NOT NULL", False, False)
     ]
     for i, (pk, fname, ftype, is_pk, is_fk) in enumerate(t2_fields):
         y_row = t2_y + t2_h - 0.098 - (i * 0.048)
@@ -171,14 +170,14 @@ def generate_figure_4_2():
             fontsize=7.4, weight='bold', color='#ffffff', zorder=4)
 
     t3_fields = [
-        ("PK", "transaction_id", "BIGINT / UUID", True, False),
-        ("FK", "source_entity_id", "BIGINT -> entities", False, True),
-        ("FK", "target_entity_id", "BIGINT -> entities", False, True),
-        ("  ", "amount_usd", "NUMERIC(18, 4)", False, False),
-        ("  ", "timestamp_utc", "TIMESTAMP WITH TZ", False, False),
-        ("  ", "payment_rail", "VARCHAR(16) [SWIFT/bKash]", False, False),
-        ("  ", "channel_code", "VARCHAR(16) [ATM/API/WIRE]", False, False),
-        ("  ", "conformal_label", "SMALLINT [0=Benign, 1=Illicit]", False, False)
+        ("PK", "transaction_id", "VARCHAR(64)", True, False),
+        ("FK", "source_entity_id", "VARCHAR(64) -> entities", False, True),
+        ("FK", "target_entity_id", "VARCHAR(64) -> entities", False, True),
+        ("  ", "timestamp_epoch", "DOUBLE PRECISION NOT NULL", False, False),
+        ("  ", "amount_usd", "DOUBLE PRECISION NOT NULL", False, False),
+        ("  ", "channel_type", "VARCHAR(16) [SWIFT/bKash]", False, False),
+        ("  ", "currency_code", "VARCHAR(8) [USD/EUR/BTC]", False, False),
+        ("  ", "is_sar_alert", "BOOLEAN DEFAULT FALSE", False, False)
     ]
     for i, (pk, fname, ftype, is_pk, is_fk) in enumerate(t3_fields):
         y_row = t3_y + t3_h - 0.096 - (i * 0.046)

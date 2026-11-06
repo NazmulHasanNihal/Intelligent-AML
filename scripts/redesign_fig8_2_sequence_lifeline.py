@@ -1,7 +1,6 @@
 """
 scripts/redesign_fig8_2_sequence_lifeline.py
-Dedicated publication-grade redesign for Figure 8.2:
-Real-Time Operational UML Sequence Lifeline & Microsecond Execution Trace.
+Dedicated publication-grade redesign for Real-Time Operational UML Sequence Lifeline & Microsecond Execution Trace.
 
 Conforms to standard UML 2.5 sequence specifications:
 - 6 Lifeline Actors with distinct enterprise roles and color signatures
@@ -58,7 +57,7 @@ def generate_figure_8_2():
         boxstyle='round,pad=0.003,rounding_size=0.005',
         facecolor='#0f172a', edgecolor='#0f172a', linewidth=0.5
     ))
-    ax.text(0.018, 0.966, 'Figure 8.2: Real-Time Operational UML Sequence Lifeline & Microsecond Execution Trace',
+    ax.text(0.018, 0.966, 'Real-Time Operational UML Sequence Lifeline & Microsecond Execution Trace',
             ha='left', va='center', fontsize=8.6, fontweight='bold', color='#ffffff')
     ax.text(0.018, 0.941,
             r'Deterministic Microservice Pipeline: ISO 20022 Ingress $\rightarrow$ Vectorized LRU Cache $\rightarrow$ C-STGB Forward Pass $\rightarrow$ Conformal Triage $\rightarrow$ Merkle WORM',
@@ -395,7 +394,7 @@ if __name__ == "__main__":
     for d in TARGET_DIRS:
         d.mkdir(parents=True, exist_ok=True)
 
-    print("Generating Redesigned Figure 8.2: Real-Time Operational UML Sequence Lifeline...")
+    print("Generating Redesigned Real-Time Operational UML Sequence Lifeline...")
     fig = generate_figure_8_2()
     
     stem = "fig8_2_uml_sequence_lifeline"

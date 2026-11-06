@@ -1,7 +1,6 @@
 """
 scripts/redesign_fig8_3_cloud_native_k8s.py
-Dedicated publication-grade redesign replacing Figure 8.3:
-Enterprise Cloud-Native Kubernetes Deployment Topology & Elastic Autoscaling (HPA).
+Dedicated publication-grade redesign replacing Enterprise Cloud-Native Kubernetes Deployment Topology & Elastic Autoscaling (HPA).
 
 Transforms the old repetitive 4-card diagram into a true Kubernetes deployment architecture:
 - Zone 1: Banking Ingress & Edge Security Gateway (mTLS 1.3, Envoy/Nginx, RBAC)
@@ -58,7 +57,7 @@ def generate_figure_8_3():
         boxstyle='round,pad=0.003,rounding_size=0.005',
         facecolor='#0f172a', edgecolor='#0f172a', linewidth=0.5
     ))
-    ax.text(0.018, 0.965, 'Figure 8.3: Enterprise Cloud-Native Kubernetes Deployment Topology & Elastic Autoscaling',
+    ax.text(0.018, 0.965, 'Enterprise Cloud-Native Kubernetes Deployment Topology & Elastic Autoscaling',
             ha='left', va='center', fontsize=8.6, fontweight='bold', color='#ffffff')
     ax.text(0.018, 0.940,
             r'End-to-End Orchestration: Ingress mTLS 1.3 $\rightarrow$ Dynamic HPA Elastic Scaling (4 $\rightleftharpoons$ 32 Pods) $\rightarrow$ TorchScript & Arrow IPC $\rightarrow$ Prometheus & WORM Vault',
@@ -560,7 +559,7 @@ if __name__ == "__main__":
     for d in TARGET_DIRS:
         d.mkdir(parents=True, exist_ok=True)
 
-    print("Generating Brand New Figure 8.3: Enterprise Cloud-Native Kubernetes Deployment Topology...")
+    print("Generating Brand New Enterprise Cloud-Native Kubernetes Deployment Topology...")
     fig = generate_figure_8_3()
     
     # Save as both fig8_1_fastapi_k8s_topology (for existing LaTeX link) and fig8_3_cloud_native_k8s

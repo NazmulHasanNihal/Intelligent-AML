@@ -1,7 +1,6 @@
 """
 scripts/redesign_fig7_15_streaming_latency.py
-Publication-grade redesign of Figure 7.15:
-Stage-by-Stage Fast-Path Streaming Latency Breakdown and Production SLA Headroom.
+Publication-grade redesign of Stage-by-Stage Fast-Path Streaming Latency Breakdown and Production SLA Headroom.
 Generates fig_streaming_latency_waterfall.pdf and .png across all 5 figure target directories.
 Zero text-over-text collisions; zero border clipping; 127 total pages strictly preserved.
 """
@@ -66,7 +65,7 @@ def build_figure():
     # -------------------------------------------------------------
     # Master Header Banner (Figure Title & Rigor Guarantee)
     # -------------------------------------------------------------
-    fig.text(0.038, 0.950, "Figure 7.15: Streaming Latency Breakdown & Production SLA Headroom",
+    fig.text(0.038, 0.950, "Streaming Latency Breakdown & Production SLA Headroom",
              fontsize=9.8, fontweight='bold', color='#0f172a', ha='left')
     fig.text(0.038, 0.885, "Stage-by-stage empirical latency (P50, P90, P99) across Fast-Path and Forensics pipelines (AMD EPYC 7763 + NVIDIA A100)",
              fontsize=7.2, color='#475569', ha='left')
@@ -230,7 +229,7 @@ def build_figure():
 
 
 def main():
-    print("Generating Redesigned Figure 7.15: Streaming Latency Breakdown...")
+    print("Generating Redesigned Streaming Latency Breakdown...")
     fig = build_figure()
     
     for target_dir in TARGET_DIRS:

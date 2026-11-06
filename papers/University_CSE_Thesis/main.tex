@@ -215,7 +215,16 @@
 % -----------------------------------------------------------------------------
 % References
 % -----------------------------------------------------------------------------
+\begingroup
+\small
+\let\oldbibliography\thebibliography
+\renewcommand{\thebibliography}[1]{%
+  \oldbibliography{#1}%
+  \setlength{\itemsep}{1.5pt}%
+  \setlength{\parskip}{0pt}%
+}
 \bibliographystyle{IEEEtran}
 \bibliography{references}
+\endgroup
 
 \end{document}

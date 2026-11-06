@@ -1,7 +1,6 @@
 """
 scripts/redesign_fig6_3_forensic_progression.py
-Publication-grade redesign of Figure 6.3:
-Worked 3-Stage Forensic Progression of a 15-Node Incident.
+Publication-grade redesign of Worked 3-Stage Forensic Progression of a 15-Node Incident.
 Generates fig_15node_forensic_progression.pdf and .png.
 """
 
@@ -193,7 +192,7 @@ def generate_figure_6_3():
         ("Triage Set", "Tier 1: Quarantine Hold", "#b91c1c"),
         ("Typology", "Smurfing & Peeling Chain", "#c2410c"),
         ("Flow Retention", "Pass-Through (0.994)", "#0f766e"),
-        ("Cryptographic Seal", "SHA-256 e3b0c4... (WORM)", "#15803d"),
+        ("Cryptographic Seal", "SHA-256 9f86d0... (WORM)", "#15803d"),
         ("Governance", "Fed SR 11-7 & BSA Aligned", "#4338ca")
     ]
 

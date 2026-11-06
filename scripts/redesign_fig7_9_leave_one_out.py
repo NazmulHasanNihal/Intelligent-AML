@@ -1,7 +1,6 @@
 """
 scripts/redesign_fig7_9_leave_one_out.py
-Publication-grade redesign of Figure 7.9:
-Leave-One-Out Component Removal Ablation Waterfall and Precision-Recall Asymmetry.
+Publication-grade redesign of Leave-One-Out Component Removal Ablation Waterfall and Precision-Recall Asymmetry.
 Generates fig_leave_one_out_impact.pdf and .png across all 5 figure target directories.
 Zero text-over-text collisions; zero border clipping; 127 total pages strictly preserved.
 """
@@ -66,7 +65,7 @@ def build_figure():
     # -------------------------------------------------------------
     # Master Header Banner (Figure Title & Rigor Guarantee)
     # -------------------------------------------------------------
-    fig.text(0.045, 0.970, "Figure 7.9: Leave-One-Out Component Removal Waterfall & Asymmetry",
+    fig.text(0.045, 0.970, "Leave-One-Out Component Removal Waterfall & Asymmetry",
              fontsize=10.2, fontweight='bold', color='#0f172a', ha='left')
     fig.text(0.045, 0.938, "Marginal degradation on Elliptic-v1 benchmark (N=5 Seeds, Table 7.4 Aligned)",
              fontsize=7.5, color='#475569', ha='left')
@@ -320,7 +319,7 @@ def build_figure():
 
 
 def main():
-    print("Generating Redesigned Figure 7.9: Leave-One-Out Component Removal...")
+    print("Generating Redesigned Leave-One-Out Component Removal...")
     fig = build_figure()
     
     for target_dir in TARGET_DIRS:

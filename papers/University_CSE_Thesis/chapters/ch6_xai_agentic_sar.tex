@@ -84,8 +84,8 @@ CausalChain        ::= "<Hop" " Seq='" Integer "'>" SourceNode "-->" TargetNode
                        Amount Timestamp EdgeTrust "</Hop>"
 FlowConservation   ::= "<FlowConservation" " Inflow='" Real "' Outflow='" Real 
                        "' Ratio='" Real "/>"
-AuditTrailer       ::= "<Fed_SR26_2_Receipt>" MerkleRoot SHA256Proof Timestamp 
-                       "</Fed_SR26_2_Receipt>"
+AuditTrailer       ::= "<Fed_SR11_7_Receipt>" MerkleRoot SHA256Proof Timestamp 
+                       "</Fed_SR11_7_Receipt>"
 EntityID           ::= [a-zA-Z0-9_]{1,64}
 \end{lstlisting}
 

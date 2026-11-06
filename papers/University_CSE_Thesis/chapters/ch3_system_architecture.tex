@@ -171,7 +171,7 @@ A critical methodological requirement in production deployment is preventing lab
     \item \textbf{Zero-Shot Cold-Start Fallback:} In cold-start institutions or newly launched crypto-ledgers where zero historical seeds exist ($\mathbf{s}_{\text{seed}} \equiv \mathbf{0}$), both taint vectors collapse to uninformative zeros. Under this condition, C-STGB's Evidence-Adaptive Fusion Gate ($\alpha_u$, Section~\ref{sec:ch3_mod4}) shifts feature importance dynamically to the 10 physical flow and temporal invariants ($\tilde{\Phi}_{\text{flow}}, \Psi_{\text{asym}}, \lambda_u, \mu_A, \sigma_{\Delta t}, \dots$), which operate completely unsupervised without requiring any seed annotations.
 \end{enumerate}
 
-\subsubsection{Group 5: 5-Moment Causal Ego-Statistics ($\mu_A, \sigma_A^2, \gamma_A, \kappa_A, \nu_{\text{io}}, \sigma_{\Delta t}$)}
+\subsubsection{Group 5: 7-Moment Causal Ego-Statistics ($\mu_A, \sigma_A^2, \gamma_A, \kappa_A, \nu_{\text{io}}, \sigma_{\Delta t}, v_A$)}
 We capture the distribution of historical transaction amounts and inter-arrival intervals via causal statistical moments:
 \begin{itemize}
     \item Mean transaction amount ($\mu_A$)
@@ -180,6 +180,7 @@ We capture the distribution of historical transaction amounts and inter-arrival 
     \item Kurtosis of transaction amounts ($\kappa_A$)
     \item Inflow-to-outflow velocity ratio ($\nu_{\text{io}} = \sum A_{\text{in}} / \sum A_{\text{out}}$)
     \item Inter-arrival temporal standard deviation ($\sigma_{\Delta t}$)
+    \item Transmission capital velocity ($v_A = \text{mean}(A_e / \Delta t_e)$)
 \end{itemize}
 
 The concatenated 12-dimensional invariant representation:

@@ -175,7 +175,7 @@ A fundamental operational challenge in anti-money laundering is that individual 
 To enable cross-institution surveillance without violating privacy regulations (GDPR, GLBA, BSA), emerging paradigms explore Federated Graph Neural Networks (FedGNN) and Split Learning. In Split-GNN architectures, client institutions maintain private feature embeddings and local message passing, transmitting only obfuscated boundary activations to a centralized server. Coupling Split-GNNs with C-STGB's universal 12-D canonical invariants ($\mathbf{z}_{\text{inv}}$) provides a standardized, zero-leakage feature interface across institutional boundaries.
 
 \section{Comparative Literature Matrix}
-Table~\ref{tab:lit_matrix} presents an exhaustive 25-paper comparative taxonomy across key methodological dimensions, highlighting the critical architectural voids resolved by C-STGB.
+Table~\ref{tab:lit_matrix} presents an exhaustive 18-model comparative taxonomy across key methodological dimensions, highlighting the critical architectural voids resolved by C-STGB.
 
 \begin{figure}[htbp]
 \centering
@@ -191,7 +191,7 @@ This chapter established the theoretical foundation and literature taxonomy acro
 \begin{table}[htbp]
 \centering
 \small
-\caption[Comprehensive 25-Paper Financial Forensics and Graph ML Taxonomy]{Comprehensive 25-Paper Comparative Taxonomy in Financial Forensics and Graph Machine Learning, Grouped by Methodological Families.}
+\caption[Comprehensive 18-Model Financial Forensics and Graph ML Taxonomy]{Comprehensive 18-Model Comparative Taxonomy in Financial Forensics and Graph Machine Learning, Grouped by Methodological Families.}
 \label{tab:lit_matrix}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{llcccccc}
@@ -214,7 +214,7 @@ This chapter established the theoretical foundation and literature taxonomy acro
 & EvolveGCN~\cite{pareja2020evolvegcn} & Discrete Snapshots & \ding{55} & \ding{55} & Recurrent Memory & \ding{55} & \ding{55} \\
 & TGN~\cite{rossi2020temporal} & Continuous Memory & Uniform Sampling & \ding{55} & Zero-Memory Init & \ding{55} & \ding{55} \\
 & TGAT~\cite{xu2020inductive} & Harmonic Positional & Self-Attention & \ding{55} & Temporal Encoding & \ding{55} & Attention Saliency \\
-& ChronoWave-GNN & Wavelet Continuous & Frequency Bandpass & \ding{55} & Wavelet Fallback & \ding{55} & Wavelet Energy \\
+& ChronoWave-GNN~\cite{lin2026chronowave} & Wavelet Continuous & Frequency Bandpass & \ding{55} & Wavelet Fallback & \ding{55} & Wavelet Energy \\
 \midrule
 \multirow{4}{*}{\textbf{(iv) Camouflage GNNs}} 
 & CARE-GNN~\cite{dou2020enhancing} & Multi-Relational & RL Neighbor Selector & \ding{55} & \ding{55} & \ding{55} & Relation Saliency \\

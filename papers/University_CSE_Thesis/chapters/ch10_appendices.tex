@@ -216,7 +216,7 @@ All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator
 \textbf{Model} & \textbf{Hyperparameter} & \textbf{Search Space Range} & \textbf{Optimal Setting (Elliptic-v1)} \\
 \midrule
 \multirow{4}{*}{\textbf{C-STGB (Ours)}} & Learning Rate ($\eta$) & $[10^{-4}, 10^{-2}]$ & $1.2 \times 10^{-3}$ \\
-& Edge Trust Threshold ($\tau_{\text{gate}}$) & $[0.05, 0.30]$ & $0.10$ \\
+& Edge Trust Floor ($\delta_{\text{floor}}$) & $[0.05, 0.30]$ & $0.10$ \\
 & Latent Typology Clusters ($K$) & $\{2, 4, 8, 12\}$ & $4$ \\
 & Conformal Significance ($\alpha$) & $[0.005, 0.05]$ & $0.010$ \\
 & Hawkes Base Rate ($\mu_0$) & $[0.1, 5.0]$ & $1.20$ \\
@@ -295,7 +295,7 @@ The user interface is structured into six dedicated operational desks, designed 
         \item \textit{Tier 3 ($\Gamma=\{0\}$):} Confirmed licit activity ($>99.4\%$ volume) cleared straight-through without manual review.
     \end{itemize}
     Includes a drag-and-drop batch CSV ingestion gateway supporting Elliptic Bitcoin UTXO, SAML-D inter-bank clearing, and corporate ACH payroll schemas.
-    \item \textbf{3D Multi-Hop Counterparty Forensic Graph Studio:} Renders court-admissible directed causal subgraphs. Incorporates learnable edge-trust gating ($g_{ij} \ge \tau_{\text{gate}}$) to filter up to $65.9\%$ of adversarial camouflage chaff while isolating 3-hop and 4-hop wash trading rings and smurfing dispersal trees.
+    \item \textbf{3D Multi-Hop Counterparty Forensic Graph Studio:} Renders court-admissible directed causal subgraphs. Incorporates learnable edge-trust gating ($g_{ij} \ge \delta_{\text{floor}}$) to filter up to $65.9\%$ of adversarial camouflage chaff while isolating 3-hop and 4-hop wash trading rings and smurfing dispersal trees.
     \item \textbf{Multi-Agent SAR \& Notice Workbench:} Orchestrates a 4-agent autonomous swarm (Lead Forensic Coordinator, Subgraph Topology Specialist, Legal SAR Drafter, and Compliance Rule Verifier) to synthesize multi-jurisdictional filings within 28 seconds:
     \begin{itemize}
         \item \textit{FinCEN Form 111 XML} (United States 31 CFR \S\ 1010.311).
@@ -455,13 +455,13 @@ Listing~\ref{app_lst:fincen_xml_sample} provides the finalized, schema-validated
     </CausalChain>
   </TopologicalEvidence>
 
-  <Model_Governance_SR26_2_Receipt>
+  <Model_Governance_SR11_7_Receipt>
     <MerkleRoot>
-      e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
     </MerkleRoot>
     <SHA256Proof Algorithm='SHA-256' Validated='true'/>
     <Timestamp>2026-08-28T14:32:01.452Z</Timestamp>
-  </Model_Governance_SR26_2_Receipt>
+  </Model_Governance_SR11_7_Receipt>
 </SAR_Form111>
 \end{lstlisting}
 

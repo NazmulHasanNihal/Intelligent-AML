@@ -1,7 +1,6 @@
 """
 scripts/redesign_fig9_1_enterprise_lifecycle.py
-Dedicated publication-grade redesign replacing Figure 9.1:
-Phased Enterprise Production Deployment Lifecycle & Operational Verification Gates.
+Dedicated publication-grade redesign replacing Phased Enterprise Production Deployment Lifecycle & Operational Verification Gates.
 
 Replaces the legacy 26-week Gantt chart with an authentic 3-stage progressive enterprise adoption framework:
 - Stage I: Passive Shadow Deployment & Rolling Calibration (Zero Live Overhead, 90d Horizon, DKW Conformal Tuning)
@@ -56,7 +55,7 @@ def generate_figure_9_1():
         boxstyle='round,pad=0.003,rounding_size=0.005',
         facecolor='#0f172a', edgecolor='#0f172a', linewidth=0.5
     ))
-    ax.text(0.018, 0.965, 'Figure 9.1: Phased Enterprise Production Deployment Lifecycle & Verification Gates',
+    ax.text(0.018, 0.965, 'Phased Enterprise Production Deployment Lifecycle & Verification Gates',
             ha='left', va='center', fontsize=8.6, fontweight='bold', color='#ffffff')
     ax.text(0.018, 0.939,
             r'Tier-1 Core Banking Adoption Framework: Passive Shadow Ingestion $\rightarrow$ Dual-Run Conformal Pilot $\rightarrow$ Straight-Through Autonomous Surveillance',
@@ -260,7 +259,7 @@ if __name__ == "__main__":
     for d in TARGET_DIRS:
         d.mkdir(parents=True, exist_ok=True)
 
-    print("Generating Brand New Figure 9.1: Phased Enterprise Production Deployment Lifecycle...")
+    print("Generating Brand New Phased Enterprise Production Deployment Lifecycle...")
     fig = generate_figure_9_1()
     
     # Save as both fig_26week_roadmap_gantt (for backwards asset compatibility) and fig_enterprise_deployment_lifecycle

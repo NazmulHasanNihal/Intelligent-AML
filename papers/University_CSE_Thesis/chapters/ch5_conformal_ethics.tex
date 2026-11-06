@@ -148,6 +148,14 @@ This confirms that the long-term empirical error rate converges asymptotically t
 \label{fig:ch5_conformal_conveyor}
 \end{figure}
 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.90\textwidth]{figures/fig_5_6_aci_drift_convergence.pdf}
+\caption[Empirical Illicit Coverage under Non-Stationary Concept Drift]{Empirical illicit coverage across a 12-week non-stationary banking stream experiencing an adversarial concept drift shock at Week 5. While static conformal calibration degrades below $90\%$, C-STGB's Adaptive Conformal Inference (ACI) rapidly restores nominal $1-\alpha = 99.0\%$ coverage within the non-asymptotic DKW bound (Theorems 5.2 and 5.3).}
+\label{fig:aci_drift}
+\end{figure}
+
 \section{The 3-Tier Selective Abstention Triage Architecture}
 The conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$ produces four possible set outcomes, which are mapped to three deterministic operational compliance tiers:
 
@@ -220,6 +228,14 @@ Let $A \in \{0, 1\}$ denote a protected binary attribute. We evaluate two statut
     \end{equation}
 \end{enumerate}
 Under C-STGB's class-conditional calibration, empirical demographic parity disparity satisfies $\Delta_{\text{DP}} \le 0.012$, and equalized odds disparity satisfies $\Delta_{\text{EO}} \le 0.008$ across all 14 benchmarks, confirming compliance with federal Fair Lending and Equal Credit Opportunity Act (ECOA) mandates.
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/fig_5_7_fairness_audit.pdf}
+\caption[Algorithmic Fairness and Non-Discrimination Audit]{Algorithmic fairness and non-discrimination audit across protected demographic and commercial segments, verifying that C-STGB maintains Demographic Parity ($\Delta_{\text{DP}} \le 0.012$) and Equalized Odds ($\Delta_{\text{EO}} \le 0.008$) well below the statutory $\epsilon_{\text{fair}} = 0.050$ threshold.}
+\label{fig:fairness_audit}
+\end{figure}
 
 \section{Chapter Summary}
 This chapter established the theoretical foundations of Class-Conditional Conformal Risk Control, derived finite-sample coverage proofs under non-stationary temporal drift, formulated the 3-tier selective abstention triage mechanism, and verified demographic non-discrimination. The next chapter presents the explainable AI multi-agent forensic swarm.

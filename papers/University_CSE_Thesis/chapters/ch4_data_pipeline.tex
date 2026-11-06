@@ -53,6 +53,14 @@ To achieve sub-millisecond execution over tables containing tens of millions of 
 \end{itemize}
 These composite indexes reduce the 2-hop causal ego-graph extraction time to under $0.18\text{ ms}$, operating directly within memory. The complete executable SQL DDL contracts and parameterized analytical queries are documented in Appendix~\ref{app:schemas} (Listing~\ref{app_lst:duckdb_schema} and Listing~\ref{app_lst:duckdb_ego_query}).
 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_4_3_causal_slicing.pdf}
+\caption[Time-Causal 2-Hop Ego-Graph Extraction Window]{Time-causal 2-hop ego-graph extraction window enforced by DuckDB composite B-tree indexes (\texttt{idx\_source\_time}, \texttt{idx\_target\_time}), restricting neighborhood aggregation strictly to historical events ($t_e \le t_{\text{eval}}$) with $0.18\text{ ms}$ query latency and zero lookahead bias.}
+\label{fig:causal_slicing}
+\end{figure}
+
 \section{Zero-Copy Apache Arrow Columnar Memory Management}
 To bridge analytical SQL querying with PyTorch tensor representations without data copying, C-STGB utilizes the Apache Arrow C Data Interface. 
 

@@ -393,6 +393,15 @@ where:
 \end{enumerate}
 with balancing multipliers $\gamma_1 = 0.50, \gamma_2 = 0.10, \lambda_{\text{ortho}} = 0.05$.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/fig_3_10_gradient_dynamics.pdf}
+\caption[Gradient Magnitude Dynamics of Cost-Sensitive Focal Tversky Loss]{Gradient magnitude dynamics of the Cost-Sensitive Asymmetric Focal Tversky Loss (Eq.~3.29), illustrating the $5.67\times$ false-negative gradient amplification ($\beta_{\text{FN}}=0.85$ vs.\ $\beta_{\text{FP}}=0.15$) that prevents minority recall collapse under $\pi < 0.05\%$ skew.}
+\label{fig:gradient_dynamics}
+\end{figure}
+
+
+
 \section{Unified Algorithmic Procedures}
 The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:cstgb_training}, and real-time streaming inference is formalized in Algorithm~\ref{alg:cstgb_inference}.
 

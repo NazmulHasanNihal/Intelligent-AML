@@ -84,6 +84,14 @@ To address these industrial challenges, this thesis develops \textbf{C-STGB} (\u
     \item \textbf{Black-Box Uncertainty \& Queue Saturation:} Conventional point predictions provide no formal confidence bounds. Standard marginal conformal prediction inflates ambiguous prediction sets under extreme skew, flooding compliance queues with up to 18\% of total transaction volume.
 \end{enumerate}
 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_1_3_failure_modes.pdf}
+\caption[Five Canonical Failure Modes of Conventional AML Architectures]{Five canonical failure modes of conventional AML surveillance: (a) 90-day exponential memory decay vanishing; (b) feature over-smoothing and Dirichlet energy collapse $\mathcal{E}(\mathbf{H}) \to 0$ in high-degree merchant hubs; (c) false-negative recall collapse under extreme class skew ($\pi < 0.05\%$) with na\"ive $\tau = 0.50$; (d) $k$-hop neighborhood VRAM explosion exceeding hardware limits ($>80\,\text{GB}$); (e) marginal conformal triage queue flooding exceeding human review capacity.}
+\label{fig:ch1_failure_modes}
+\end{figure}
+
 \section{Formal Problem Formulation}
 \label{sec:problem_formulation}
 

@@ -141,6 +141,14 @@ c_u^{(t+1)} = \text{HASH}\left( c_u^{(t)}, \{\{ c_v^{(t)} : v \in \mathcal{N}(u)
 \end{equation}
 Morris et al.~\cite{morris2019weisfeiler} and Xu et al.~\cite{xu2019powerful} proved that standard spatial GNNs with mean or max aggregators fail to distinguish non-isomorphic graphs that 1-WL can separate (e.g., distinguishing a 6-cycle from two disjoint 3-cycles). In financial crime surveillance, this limitation manifests when circular layering rings exhibit identical degree statistics to benign bipartite transaction clusters. C-STGB overcomes this 1-WL bottleneck by incorporating continuous edge timestamps ($\Delta t$), continuous transaction amounts, and 12-dimensional canonical topological invariants ($\mathbf{z}_{\text{inv}}$), rendering the input multiset strictly injective.
 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_2_3_1wl_failure_vs_invariants.pdf}
+\caption[1-WL Graph Isomorphism Bottleneck vs. 12-D Invariant Disambiguation]{Representational capacity contrast: (Left) Standard spatial GNNs bounded by the 1-WL graph isomorphism test assign identical degree multisets $\{\{2, 2\}\}$ to circular laundering wash cycles and disjoint bipartite clusters; (Right) C-STGB incorporates 12-dimensional canonical invariants ($\tilde{\Phi}_{\text{flow}}$, $s_{\text{fwd}} \cdot s_{\text{bwd}}$, $\sigma_{\Delta t}$, $v_A$) to establish an injective representation space that separates isomorphic financial crime typologies.}
+\label{fig:ch2_1wl_disambiguation}
+\end{figure}
+
 \section{Spectral Graph Theory \& Feature Over-Smoothing Dynamics}
 A catastrophic failure mode of deep GNNs is \textit{feature over-smoothing}, where repeated neighborhood averaging causes node embeddings across different classes to converge toward a uniform representation:
 \begin{equation}

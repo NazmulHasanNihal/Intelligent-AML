@@ -145,18 +145,18 @@ def make_fig_2_3():
 
     # Draw two disjoint 3-cycles
     pts_t1 = [(3.0, 3.1), (3.6, 3.1), (3.3, 3.6)]
-    pts_t2 = [(3.0, 1.3), (3.6, 1.3), (3.3, 1.8)]
+    pts_t2 = [(3.0, 1.2), (3.6, 1.2), (3.3, 1.7)]
     for tri in [pts_t1, pts_t2]:
         for i in range(3):
             ax1.plot([tri[i][0], tri[(i+1)%3][0]], [tri[i][1], tri[(i+1)%3][1]], color="#64748B", lw=2, zorder=2)
         for p in tri:
             ax1.scatter(p[0], p[1], s=140, color="#2563EB", edgecolor="black", zorder=3)
-    ax1.text(3.3, 0.7, "Disjoint 3-Cycles\nDegree Multiset: {{2,2}}", fontsize=7.2, fontweight="bold", ha="center", va="center")
+    ax1.text(3.3, 2.45, "Disjoint 3-Cycles\nDegree Multiset: {{2,2}}", fontsize=7.2, fontweight="bold", ha="center", va="center")
 
-    fail_badge = patches.FancyBboxPatch((0.2, 0.15), 3.6, 0.45, boxstyle="round,pad=0.04", fc="#B91C1C", ec="none")
+    fail_badge = patches.Rectangle((0.15, 0.12), 3.7, 0.55, fc="#B91C1C", ec="#991B1B", lw=0.8)
     ax1.add_patch(fail_badge)
-    ax1.text(2.0, 0.38, "1-WL COLOR REFINEMENT FAILS: c(u) = c(v)\nCannot distinguish circular wash cycle from benign bipartite transfers!",
-             color="white", fontsize=7.0, fontweight="bold", ha="center", va="center")
+    ax1.text(2.0, 0.395, "1-WL COLOR REFINEMENT FAILS: c(u) = c(v)\nCannot distinguish circular wash cycle from benign bipartite transfers!",
+             color="white", fontsize=6.8, fontweight="bold", ha="center", va="center")
 
     # Right: C-STGB Disambiguation via 12-D Invariants
     ax2.set_xlim(-0.2, 4.2)
@@ -182,10 +182,10 @@ def make_fig_2_3():
         ax2.text(0.35, y + 0.25, title, fontsize=7.5, fontweight="bold", color=col)
         ax2.text(0.35, y - 0.05, desc, fontsize=6.8, color="#1E293B")
 
-    succ_badge = patches.FancyBboxPatch((0.2, 0.15), 3.6, 0.45, boxstyle="round,pad=0.04", fc="#15803D", ec="none")
+    succ_badge = patches.Rectangle((0.15, 0.12), 3.7, 0.55, fc="#15803D", ec="#166534", lw=0.8)
     ax2.add_patch(succ_badge)
-    ax2.text(2.0, 0.38, "THEORETICALLY SEPARABLE: Injective Multiset Mapping\n12-D invariants strictly separate topologically isomorphic crime patterns!",
-             color="white", fontsize=7.0, fontweight="bold", ha="center", va="center")
+    ax2.text(2.0, 0.395, "THEORETICALLY SEPARABLE: Injective Multiset Mapping\n12-D invariants strictly separate topologically isomorphic crime patterns!",
+             color="white", fontsize=6.8, fontweight="bold", ha="center", va="center")
 
     plt.tight_layout()
     save_fig(fig, "fig_2_3_1wl_failure_vs_invariants")

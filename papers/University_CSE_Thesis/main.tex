@@ -22,28 +22,39 @@
 \usepackage{amsmath,amssymb,amsfonts,bm,mathtools}
 \usepackage{algorithm,algpseudocode}
 \usepackage{amsthm}
+\usepackage{placeins}
 
 \providecommand{\REQUIRE}{\Require}
 \providecommand{\ENSURE}{\Ensure}
 
+% Robust Non-Breaking Commands and Global Hyphenation Rules
+\newcommand{\cstgb}{\mbox{C-STGB}}
+\hyphenation{XGBoost GraphSMOTE GNNExplainer ChronoWave-GNN GraphBoost LightGBM CatBoost}
+
+% Algorithm Hanging Indent Support
+\makeatletter
+\newcommand{\StateHang}{\State\hangindent=1.5em\hangafter=1}
+\makeatother
+
 % Tables & Figures
 \usepackage{graphicx}
-\usepackage{booktabs,tabularx,multirow}
+\usepackage{booktabs,tabularx,multirow,longtable}
 \usepackage{rotating}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{listings}
+\usepackage{upquote}
 \usepackage{caption}
-\captionsetup{font=small,labelfont=bf,skip=8pt}
+\captionsetup{font=small,labelfont=bf,skip=8pt,singlelinecheck=false,justification=justified}
 \graphicspath{{figures/}{figs/}}
 
-% Tight Float Placement & Page Density Optimization
+% Float Placement & Page Density Optimization
 \renewcommand{\topfraction}{0.92}
 \renewcommand{\bottomfraction}{0.85}
 \renewcommand{\textfraction}{0.08}
 \renewcommand{\floatpagefraction}{0.80}
-\setlength{\floatsep}{8pt plus 2pt minus 2pt}
-\setlength{\textfloatsep}{10pt plus 2pt minus 3pt}
-\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{14pt plus 4pt minus 2pt}
+\setlength{\textfloatsep}{16pt plus 4pt minus 3pt}
+\setlength{\intextsep}{14pt plus 4pt minus 2pt}
 
 % Modern Callout Boxes & Visual Styling
 \usepackage{tcolorbox}
@@ -52,6 +63,10 @@
 % Table of Contents & Section Numbering Depth
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{3}
+\makeatletter
+\renewcommand{\@pnumwidth}{2.8em}
+\renewcommand{\@tocrmarg}{4.0em}
+\makeatother
 
 % Professional Running Headers & Footers
 \usepackage{fancyhdr}
@@ -108,11 +123,12 @@
 }
 
 \lstset{
-  basicstyle=\ttfamily\scriptsize,
+  basicstyle=\ttfamily\footnotesize,
+  columns=fixed,
+  keepspaces=true,
+  upquote=true,
   breaklines=true,
   breakatwhitespace=true,
-  columns=flexible,
-  keepspaces=true,
   frame=single,
   backgroundcolor=\color{black!3},
   keywordstyle=\bfseries\color{blue!70!black},
@@ -131,25 +147,44 @@
 \usepackage{hyperref}
 \hypersetup{
   breaklinks=true,
-  colorlinks=true,
-  linkcolor=blue!75!black,
-  citecolor=teal!70!black,
-  urlcolor=blue!75!black,
+  hidelinks,
   pdftitle={C-STGB: Conformal Spatio-Temporal GraphBoost for High-Velocity Financial Forensics and Compliance Automation},
   pdfauthor={Md. Nazmul and Musrat Jahan Gungun}
 }
 
-% Theorem Environments
+% Formal Theorem Environments (amsthm Styled)
+\theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{definition}{Definition}[chapter]
 \newtheorem{proposition}{Proposition}[chapter]
 \newtheorem{lemma}{Lemma}[chapter]
 
-% Chapter Header Formatting
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[chapter]
+
+% Chapter and Section Header Formatting (Forbid Hyphenation & Enforce Raggedright)
 \usepackage{titlesec}
 \titleformat{\chapter}[display]
- {\normalfont\bfseries\Large}{\chaptertitlename\ \thechapter}{14pt}{\LARGE}
+  {\normalfont\bfseries\Large\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}
+  {\chaptertitlename\ \thechapter}{14pt}{\LARGE\raggedright}
 \titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}
+  {\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{14pt plus 4pt minus 2pt}{6pt plus 2pt minus 2pt}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}
+  {\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{12pt plus 3pt minus 2pt}{4pt plus 2pt minus 2pt}
+
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}
+  {\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0pt}{10pt plus 2pt minus 2pt}{3pt plus 1pt minus 1pt}
 
 \begin{document}
 
@@ -215,6 +250,9 @@
 % -----------------------------------------------------------------------------
 % References
 % -----------------------------------------------------------------------------
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
 \begingroup
 \small
 \let\oldbibliography\thebibliography

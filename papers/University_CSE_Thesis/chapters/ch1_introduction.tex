@@ -66,15 +66,7 @@ GNNs capture topological connectivity and structural neighborhood contexts. Howe
 \section{The Five Foundational Failure Modes of Standard GNNs}
 \label{sec:failure_modes}
 
-% High-level architectural overview cross-referenced to detailed formulation in Chapter 3
-To address these industrial challenges, this thesis develops \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost), an applied intelligent decision-support system operating across high-throughput financial transaction streams under strict regulatory governance mandates (Figure~\ref{fig:ch1_operational_flowchart}).
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.80\textwidth]{figures/fig1_operational_architecture_flowchart.pdf}
-\caption[C-STGB Operational Architecture and Real-Time Conformal Triage Dataflow]{Operational architecture and real-time triage dataflow of the C-STGB financial surveillance platform: (1) Streaming transaction ingestion via Apache Arrow and DuckDB with 12-D physical mass-flow invariants; (2) C-STGB neural core combining continuous-time 3-band harmonic temporal attention, learnable edge-trust gating ($\hat{g}_{ij} \ge \delta_{\text{floor}}$), typology-clustered latent GraphSMOTE, evidence-adaptive fusion ($\alpha_u$), and cost-sensitive Bayes risk calibration ($\tau^* = 0.18$); and (3) Class-conditional Conformal Risk Control (CRC) decision diamond ($1-\alpha \ge 99\%$) routing streaming transactions across 3 operational tiers (Tier 1 High-Risk Quarantine with SHA-256 Merkle audit receipts, Tier 2 Human Compliance Review Desk, Tier 3 Automated Straight-Through Clearing) satisfying a 0.45\,ms Fast-Path SLA.}
-\label{fig:ch1_operational_flowchart}
-\end{figure}
+Real-world deployment of Graph Neural Networks in financial transaction streams exposes five structural failure modes that defeat conventional surveillance architectures:
 
 \begin{enumerate}
     \item \textbf{Long-Dwell Hibernation Evasion (30--90+ Days):} Sophisticated laundering rings deliberately introduce 30- to 90-day dormant delays between layering hops to avoid triggering velocity alarms. Conventional exponential temporal decay kernels ($\exp(-\lambda \Delta t)$) vanish toward zero, rendering continuous-time dynamic GNNs completely blind to dormant fund transfers.
@@ -83,7 +75,6 @@ To address these industrial challenges, this thesis develops \textbf{C-STGB} (\u
     \item \textbf{The $k$-Hop Latency \& Memory Explosion:} High-density payment hubs with degrees exceeding 10,000 trigger combinatorial graph expansion, exhausting GPU VRAM and exceeding the 35\,ms real-time webhook Service Level Agreement (SLA) required for payment authorizations.
     \item \textbf{Black-Box Uncertainty \& Queue Saturation:} Conventional point predictions provide no formal confidence bounds. Standard marginal conformal prediction inflates ambiguous prediction sets under extreme skew, flooding compliance queues with up to 18\% of total transaction volume.
 \end{enumerate}
-
 
 \begin{figure}[htbp]
 \centering
@@ -114,7 +105,17 @@ The surveillance system is tasked with solving two interconnected optimization a
 \end{enumerate}
 
 \section{Summary of Scientific Contributions}
-In this dissertation, we introduce \textbf{C-STGB} (Conformal Spatio-Temporal GraphBoost), an enterprise-grade neuro-symbolic framework resolving all five foundational failure modes. The primary scientific and engineering contributions of our research are:
+\label{sec:contributions}
+To overcome these five foundational failure modes and operational bottlenecks, this thesis introduces \textbf{C-STGB} (\textbf{C}onformal \textbf{S}patio-\textbf{T}emporal \textbf{G}raph\textbf{B}oost), an end-to-end applied intelligent decision-support system operating across high-throughput financial transaction streams under strict regulatory governance mandates (Figure~\ref{fig:ch1_operational_flowchart}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/fig1_operational_architecture_flowchart.pdf}
+\caption[C-STGB Operational Architecture and Real-Time Conformal Triage Dataflow]{Operational architecture and real-time triage dataflow of the C-STGB financial surveillance platform: (1) Streaming transaction ingestion via Apache Arrow and DuckDB with 12-D physical mass-flow invariants; (2) C-STGB neural core combining continuous-time 3-band harmonic temporal attention, learnable edge-trust gating ($\hat{g}_{ij} \ge \delta_{\text{floor}}$), typology-clustered latent GraphSMOTE, evidence-adaptive fusion ($\alpha_u$), and cost-sensitive Bayes risk calibration ($\tau^* = 0.18$); and (3) Class-conditional Conformal Risk Control (CRC) decision diamond ($1-\alpha \ge 99\%$) routing streaming transactions across 3 operational tiers (Tier 1 High-Risk Quarantine with SHA-256 Merkle audit receipts, Tier 2 Human Compliance Review Desk, Tier 3 Automated Straight-Through Clearing) satisfying a 0.45\,ms Fast-Path SLA.}
+\label{fig:ch1_operational_flowchart}
+\end{figure}
+
+The primary scientific and engineering contributions of our research are:
 
 \begin{enumerate}
     \item \textbf{Multi-Scale Continuous-Time Harmonic Attention:} We formulate a continuous harmonic temporal encoding combined with localized self-exciting Hawkes point process arrival rates, simultaneously capturing sub-second smurfing bursts and 90-day dormant hibernation chains.
@@ -131,7 +132,7 @@ In this dissertation, we introduce \textbf{C-STGB} (Conformal Spatio-Temporal Gr
 \subsection{How to Read This Thesis}
 To facilitate engagement for examiners across machine learning, computational mathematics, and enterprise software engineering disciplines, this dissertation is structured into four thematic tracks:
 \begin{itemize}
-    \item \textbf{Regulatory Imperative \& Literature Foundations (Chapters~\ref{ch:introduction}--\ref{ch:literature}):} Establishes the multi-trillion-dollar economic impact of money laundering, statutory supervisory mandates (FATF, 6AMLD, SR 11-7, BFIU), and an exhaustive 25-paper comparative taxonomy.
+    \item \textbf{Regulatory Imperative \& Literature Foundations (Chapters~\ref{ch:introduction}--\ref{ch:literature}):} Establishes the multi-trillion-dollar economic impact of money laundering, statutory supervisory mandates (FATF, 6AMLD, SR 11-7, BFIU), and an exhaustive 18-model comparative taxonomy.
     \item \textbf{Mathematical Foundations \& Theoretical Proofs (Chapters~\ref{ch:architecture}, \ref{ch:conformal}, \ref{ch:xai}):} Formulates the 6-module C-STGB architecture, proving mass-flow invariance (Lemma~\ref{lem:flow_conservation}), DKW non-asymptotic total-variation drift coverage bounds (Theorem~\ref{thm:conformal_tv_bound}), and deterministic multi-agent anti-hallucination guarantees (Proposition~\ref{prop:anti_hallucination}).
     \item \textbf{High-Throughput Vectorized Systems Engineering (Chapters~\ref{ch:data_pipeline}, \ref{ch:software}):} Details the DuckDB embedded analytical contracts, Apache Arrow zero-copy memory pipelines, LRU subgraph caches, and Kubernetes microservice topology achieving 0.45\,ms Fast-Path SLAs.
     \item \textbf{Empirical Campaigns \& Industrial Deployment (Chapters~\ref{ch:experiments}, \ref{ch:conclusion}):} Delivers the 14-dataset comparative benchmark ($9.53\text{M}$ entities, $9.53\text{M}$ transactions), ablation waterfalls, adversarial stress-testing, threats to validity, and a phased enterprise production deployment roadmap.
@@ -139,7 +140,7 @@ To facilitate engagement for examiners across machine learning, computational ma
 
 The remainder of this dissertation is organized into eight core technical chapters followed by extended mathematical derivations and ETL schema appendices:
 \begin{itemize}
-    \item \textbf{Chapter~\ref{ch:literature}} presents an exhaustive literature review, theoretical taxonomies, and a 25-paper comparative analysis.
+    \item \textbf{Chapter~\ref{ch:literature}} presents an exhaustive literature review, theoretical taxonomies, and an 18-model comparative analysis.
     \item \textbf{Chapter~\ref{ch:architecture}} details the step-by-step tensor formulations, harmonic embeddings, and mathematical proofs of the C-STGB architecture.
     \item \textbf{Chapter~\ref{ch:data_pipeline}} outlines the vectorized streaming data engineering pipeline, DuckDB SQL data contracts, and in-memory LRU caching.
     \item \textbf{Chapter~\ref{ch:conformal}} develops the mathematical foundations of Class-Conditional Conformal Risk Control, DKW bounds under temporal drift, and ethical non-discrimination audits.

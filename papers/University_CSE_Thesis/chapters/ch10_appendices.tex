@@ -4,17 +4,26 @@
 
 To facilitate cross-disciplinary clarity across academic examiners, quantitative researchers, and banking compliance officers, Table~\ref{app_tab:glossary} defines foundational terms across financial crime surveillance, graph machine learning, and conformal risk theory.
 
-\begin{table}[htbp]
-\centering
-\small
+{\small
+\begin{longtable}{>{\RaggedRight\bfseries}p{4.0cm} >{\RaggedRight}p{9.5cm}}
 \caption[Cross-Disciplinary Financial Crime and Graph ML Glossary]{Comprehensive Cross-Disciplinary Glossary of Financial Crime, Graph ML, and Conformal Risk Terminology.}
-\label{app_tab:glossary}
-\begin{tabularx}{\textwidth}{>{\RaggedRight\bfseries}p{4.2cm} >{\RaggedRight}X}
+\label{app_tab:glossary} \\
 \toprule
 \textbf{Terminology} & \textbf{Formal Operational Definition in Financial Surveillance} \\
 \midrule
+\endfirsthead
+\multicolumn{2}{c}%
+{{\bfseries Table \thetable\ continued from previous page}} \\
+\toprule
+\textbf{Terminology} & \textbf{Formal Operational Definition in Financial Surveillance} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\bottomrule
+\endlastfoot
 \textbf{Smurfing / Structuring} & The illegal practice of breaking a large illicit transaction into multiple micro-transfers below statutory reporting thresholds (e.g., $\$9,900$ to evade the $\$10,000$ CTR limit). \\
-\textbf{Peeling Chain} & A sequence of rapid crypto or fiat transfers where a source address sends funds through intermediary nodes, "peeling" off a small amount at each hop while forwarding the remainder. \\
+\textbf{Peeling Chain} & A sequence of rapid crypto or fiat transfers where a source address sends funds through intermediary nodes, ``peeling'' off a small amount at each hop while forwarding the remainder. \\
 \textbf{Mule Account} & An account utilized as a pass-through conduit to receive and immediately disburse illicit funds, obscuring the beneficial ownership trail ($\Phi_{\text{flow}} \approx 1.0$). \\
 \textbf{Camouflage Chaff} & The strategic injection of benign, high-degree merchant or utility payments to induce graph over-smoothing and disguise illicit relationships. \\
 \textbf{Hawkes Intensity} & A continuous-time self-exciting point process $\lambda(t)$ modeling transactional arrival rates where past events momentarily elevate future arrival probabilities. \\
@@ -28,9 +37,8 @@ To facilitate cross-disciplinary clarity across academic examiners, quantitative
 \textbf{FinCEN Form 111} & The statutory Suspicious Activity Report (SAR) XML specification mandated by the United States Treasury for documenting suspicious financial transactions. \\
 \textbf{AST Grammar Compiler} & A deterministic parser enforcing Extended Backus-Naur Form ($\mathcal{G}_{\text{SAR}}$) syntactic and semantic validity over LLM narrative outputs. \\
 \textbf{Merkle Audit Tree} & A cryptographic hash tree anchoring forensic dossiers into an immutable, tamper-evident audit ledger compliant with Federal Reserve SR 11-7. \\
-\bottomrule
-\end{tabularx}
-\end{table}
+\end{longtable}
+}
 
 \chapter{Extended Mathematical Proofs \& Derivations}
 \label{app:proofs}
@@ -40,15 +48,15 @@ To facilitate cross-disciplinary clarity across academic examiners, quantitative
 \begin{theorem}[Non-Asymptotic Coverage under Temporal Class-Conditional TV Drift]
 Let $\mathcal{P}_{\text{cal}}^{(y)}$ and $\mathcal{P}_{\text{test}}^{(y)}$ be the class-conditional probability measures defined on $\mathcal{X} \times \{y\}$ such that their class-conditional Total Variation distance satisfies $d_{\mathrm{TV}}(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) = \frac{1}{2} \int |\, d\mathcal{P}_{\text{test}}^{(y)} - d\mathcal{P}_{\text{cal}}^{(y)} \,| \le \epsilon_{\text{drift}}$. Then for any non-conformity score function $S: \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$ with continuous non-atomic marginal CDF $F(s)$, the class-conditional conformal prediction set $\Gamma(X) = \{y \mid S(X, y) \le \hat{q}^{(y)}\}$ calibrated at level $\alpha \in (0, 1)$ on $n(y)$ exchangeable samples from $\mathcal{P}_{\text{cal}}^{(y)}$ satisfies:
 \begin{equation}
-\left| \mathbb{P}_{\mathcal{P}_{\text{test}}}\left( Y \in \Gamma(X) \mid Y=y \right) - (1 - \alpha) \right| \le d_{\mathrm{TV}}\left(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}\right) + \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} + \frac{1}{n(y)}
+\begin{aligned}
+\big| \mathbb{P}_{\mathcal{P}_{\text{test}}}\left( Y \in \Gamma(X) \mid Y=y \right) & - (1 - \alpha) \big| \\
+& \le d_{\mathrm{TV}}\left(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}\right) + \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} + \frac{1}{n(y)}
+\end{aligned}
 \end{equation}
 with probability at least $1 - \delta$ over the randomness of the calibration split $\mathcal{D}_{\text{cal}}^{(y)}$.
 \end{theorem}
 
 \begin{proof}
-\small
-\setlength{\abovedisplayskip}{3pt}
-\setlength{\belowdisplayskip}{3pt}
 Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{test}}}(S(X, y) \le s \mid Y=y)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{cal}}}(S(X, y) \le s \mid Y=y)$ denote the true class-conditional cumulative distribution functions under test distribution $\mathcal{P}_{\text{test}}$ and calibration distribution $\mathcal{P}_{\text{cal}}^{(y)}$, with empirical CDF $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$. By definition of calibrated quantile $\hat{q}^{(y)}$, test coverage evaluates to $\mathbb{P}_{\mathcal{P}_{\text{test}}}(Y \in \Gamma(X) \mid Y=y) = F_{\text{test}}^{(y)}(\hat{q}^{(y)})$. Applying the triangle inequality on the uniform supremum norm:
 \begin{equation}
 \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| \le \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| + \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right|
@@ -118,8 +126,8 @@ CREATE TABLE streaming_transactions (
     ingest_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_source_time ON streaming_transactions (source_entity_id, timestamp_epoch);
-CREATE INDEX idx_target_time ON streaming_transactions (target_entity_id, timestamp_epoch);
+CREATE INDEX idx_source_time ON streaming_transactions (source_entity_id, timestamp_epoch DESC);
+CREATE INDEX idx_target_time ON streaming_transactions (target_entity_id, timestamp_epoch DESC);
 
 CREATE TABLE entities_master (
     entity_id VARCHAR(64) PRIMARY KEY,
@@ -187,7 +195,7 @@ Open Code Repository & Verified & Persistent repository: \url{https://anonymous.
 Pretrained Model Checkpoints & Verified & Checkpoints for all 14 networks deposited in repository \texttt{/models} \\
 Hardware Specification & Disclosed & Dual AMD EPYC 7763, 512 GB RAM, 4x NVIDIA A100 (80 GB) in Table~\ref{tab:compute_budget} \\
 Software Stack Versions & Disclosed & Python 3.10+, PyTorch 2.4, PyG 2.5, DuckDB 1.0, Apache Arrow 16.0 \\
-Locked Random Seeds & Disclosed & Five locked seeds: $\{42, 1337, 2024, 777, 999\}$ for all runs \\
+Locked Random Seeds & Disclosed & Five locked seeds: $\{42, 101, 2024, 7, 999\}$ for all runs \\
 Data Chronological Splits & Disclosed & Zero-leakage chronological 60/10/10/20\% protocol in Section~\ref{sec:ch7_splits} \\
 Hyperparameter Grid & Disclosed & Complete search spaces and optimal configurations in Table~\ref{app_tab:hyperparam_grid} \\
 Automated Test Suites & Disclosed & 158 automated unit, integration, and regression tests passing with exit code 0 \\
@@ -196,8 +204,8 @@ Automated Test Suites & Disclosed & 158 automated unit, integration, and regress
 }
 \end{table}
 
-\section{Detailed Hyperparameter Sweeps across 13 Baselines}
-All baseline models and C-STGB were tuned using Tree-structured Parzen Estimator (TPE) over 50 Bayesian optimization trials on the validation split $\mathcal{D}_{\text{val}}$.
+\section{Detailed Hyperparameter Sweeps and Optimization Protocol}
+All 13 baseline models and C-STGB were tuned using Tree-structured Parzen Estimator (TPE) over 50 Bayesian optimization trials on the validation split $\mathcal{D}_{\text{val}}$. Table~\ref{app_tab:hyperparam_grid} summarizes the search spaces and optimal configurations for C-STGB alongside representative exemplars across tabular, temporal, and heterogeneous baseline families.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_hyperparam_sensitivity_4panel.pdf}
@@ -365,7 +373,7 @@ Incoming MT103/UTXO transaction payload is converted into a 12-dimensional canon
 C-STGB generates non-conformity score $S(u)$. Calibrated quantile $\hat{q}^{(y)}$ constructs conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$. If $\Gamma=\{0\}$, payment auto-clears. If $\Gamma=\{1\}$, assets are quarantined instantly. If $\Gamma=\{0, 1\}$, alert is routed to senior officer review.
 
 \vspace{0.25cm}
-\textbf{\textcolor{blue!70!black}{Step 3: Camouflage Pruning \& Subgraph Extraction (Eq.~(3.15)--(3.17))}} \\
+\textbf{\textcolor{blue!70!black}{Step 3: Camouflage Pruning \& Subgraph Extraction}} \\
 Edge-trust gating $\hat{g}_{ij} = \delta_{\text{floor}} + (1 - \delta_{\text{floor}}) \mathbf{g}_{ij}$ evaluates 2-layer MLP gate $\mathbf{g}_{ij} = \sigma(\mathbf{W}_{g2} \text{LeakyReLU}(\mathbf{W}_{g1} \mathbf{c}_{ij} + \mathbf{b}_{g1}) + \mathbf{b}_{g2})$ over unified context $\mathbf{c}_{ij} = [\mathbf{q}_i \,\|\, \mathbf{k}_j \,\|\, \mathbf{e}_{ij} \,\|\, \Phi_{\text{time}}(\Delta t) \,\|\, \mathbf{z}_{\text{inv}}(j, t)]$ with floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial camouflage chaff while preserving $>98\%$ of legitimate commercial edge weights.
 
 \vspace{0.25cm}
@@ -377,7 +385,7 @@ Autonomous 4-agent swarm (Lead Forensic Coordinator, Subgraph Topology Specialis
 The complete inference state, model weights hash, and decision tree are hashed into an immutable SHA-256 Merkle tree leaf $h_{\text{leaf}}$, committed to an append-only WORM ledger for central bank regulatory examination.\par
 \end{minipage}%
 }
-\caption[End-to-End Enterprise Operator Investigation Lifecycle]{End-to-end operator investigation lifecycle enforced by the Intelligent-AML platform matching Eq.~(3.13)--(3.16).}
+\caption[End-to-End Enterprise Operator Investigation Lifecycle]{End-to-end operator investigation lifecycle enforced by the Intelligent-AML platform matching the edge-trust gating formulation.}
 \label{app_fig:workflow_lifecycle}
 \end{figure}
 
@@ -475,7 +483,7 @@ async def score_transaction(
     tx: TransactionPayload,
     engine: CSTGBEngine = Depends(get_inference_engine)
 ) -> TriageResponse:
-    \"\"\"Scores incoming transaction and constructs conformal prediction set.\"\"\"
+    """Scores incoming transaction and constructs conformal prediction set."""
     start_time = time.perf_counter()
     
     # 1. Update in-memory DuckDB graph and fetch ego-subgraph
@@ -524,7 +532,7 @@ CMD ["demo"]
 \end{lstlisting}
 
 \clearpage
-\begin{lstlisting}[basicstyle=\ttfamily\tiny, caption={Kubernetes Deployment and Horizontal Pod Autoscaler (HPA) Specification.}, label={app_lst:k8s_deployment}]
+\begin{lstlisting}[caption={Kubernetes Deployment and Horizontal Pod Autoscaler (HPA) Specification.}, label={app_lst:k8s_deployment}]
 apiVersion: apps/v1
 kind: Deployment
 metadata:

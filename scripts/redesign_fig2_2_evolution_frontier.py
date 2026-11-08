@@ -64,37 +64,38 @@ def generate_fig2_2():
         (21, 12, "GIN\n(22.32% F1)", "#2563EB", "o"),
         (39, 34, "HGT\n(48.20% F1)", "#2563EB", "o"),
         # Quadrant II: Topological Imbalance & Camouflage Specialists
-        (27, 68, "GraphSMOTE\n(74.20% F1)", "#D97706", "o"),
-        (36, 64, "CARE-GNN\n(64.50% F1)", "#7C3AED", "o"),
-        (44, 76, "H2-IDE\n(84.10% F1)", "#7C3AED", "o"),
-        (47, 83, "CamFD\n(85.30% F1)", "#7C3AED", "o"),
+        (26, 68, "GraphSMOTE\n(74.20% F1)", "#D97706", "o", (0, 2.2)),
+        (35, 60, "CARE-GNN\n(64.50% F1)", "#7C3AED", "o", (0, 2.2)),
+        (43, 74, "H2-IDE\n(84.10% F1)", "#7C3AED", "o", (0, 2.2)),
+        (51, 83, "CamFD\n(85.30% F1)", "#7C3AED", "o", (0, 2.2)),
         # Quadrant III: Continuous-Time Dynamic GNNs
-        (62, 32, "EvolveGCN\n(51.04% F1)", "#059669", "o"),
-        (73, 41, "TGAT\n(66.20% F1)", "#059669", "o"),
-        (80, 46, "TGN\n(68.40% F1)", "#059669", "o"),
+        (62, 32, "EvolveGCN\n(51.04% F1)", "#059669", "o", (0, 2.2)),
+        (73, 41, "TGAT\n(66.20% F1)", "#059669", "o", (0, 2.2)),
+        (80, 46, "TGN\n(68.40% F1)", "#059669", "o", (0, 2.2)),
         # Quadrant IV: Unified Neuro-Symbolic & Statistical Safety Frontier
-        (92, 91, "C-STGB (Ours)\n(91.42% F1 | 0.9312 PR-AUC)", "#DC2626", "*"),
+        (92, 91, "C-STGB (Ours)\n(91.42% F1 | 0.9312 PR-AUC)", "#DC2626", "*", (0, -6.5)),
     ]
 
-    for x, y, label, col, m in models:
+    for model in models:
+        x, y, label, col, m = model[0], model[1], model[2], model[3], model[4]
+        offset_x, offset_y = model[5] if len(model) > 5 else (0, 2.2)
         size = 280 if m == "*" else 105
         ax.scatter(x, y, c=col, s=size, marker=m, edgecolors="black", linewidths=1.2, zorder=5)
-        offset_y = -6.5 if m == "*" else 2.2
         weight = "bold" if m == "*" else "semibold"
         fsize = 8.5 if m == "*" else 7.5
-        ax.annotate(label, (x, y + offset_y), fontsize=fsize, fontweight=weight,
+        ax.annotate(label, (x + offset_x, y + offset_y), fontsize=fsize, fontweight=weight,
                     ha="center", va="bottom", color=col if m == "*" else "#0F172A", zorder=6,
                     linespacing=1.35,
                     bbox=dict(boxstyle="square,pad=0.20", fc="#ffffff", ec="#cbd5e1", lw=0.6, alpha=0.90) if m != "*" else None)
 
     # Highlight Pareto Frontier curve
-    px = [16, 25, 47, 92]
+    px = [16, 25, 50, 92]
     py = [42, 38, 83, 91]
 
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
-    ax.set_xlabel("Static Snapshots  --->  CONTINUOUS-TIME HARMONIC VELOCITY\n(Tri-Band Decay 2.4h / 24h / 168h & Hawkes Burst Intensity)", fontsize=9.5, fontweight="bold", linespacing=1.35)
-    ax.set_ylabel("Uncalibrated  --->  TOPOLOGICAL DENOISING & CONFORMAL SAFETY\n(Edge-Trust Gating >= 0.10, 12-D Invariant Fusion & Class-Cond. CRC)", fontsize=9.5, fontweight="bold", linespacing=1.35)
+    ax.set_xlabel(r"Static Snapshots  $\longrightarrow$  CONTINUOUS-TIME HARMONIC VELOCITY" "\n" r"(Tri-Band Decay 2.4h / 24h / 168h & Hawkes Burst Intensity)", fontsize=9.5, fontweight="bold", linespacing=1.35)
+    ax.set_ylabel(r"Uncalibrated  $\longrightarrow$  TOPOLOGICAL DENOISING & CONFORMAL SAFETY" "\n" r"(Edge-Trust Gating $\geq 0.10$, 12-D Invariant Fusion & Class-Cond. CRC)", fontsize=9.5, fontweight="bold", linespacing=1.35)
     ax.set_title("2D Financial Crime Graph Learning Evolution Frontier (Elliptic-v1 Benchmark F1)", fontsize=11.5, fontweight="bold", pad=12)
     ax.grid(True, linestyle=":", alpha=0.45)
     plt.tight_layout()

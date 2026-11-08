@@ -4,7 +4,7 @@
 \begin{takeawaybox}{Chapter 3: Architectural Innovations \& Mathematical Formulations}
 \begin{itemize}\setlength{\itemsep}{1pt}
   \item \textbf{12-D Canonical Invariants ($\mathbf{z}_{\text{inv}}$):} Formulates physical mass-flow conservation ($\Phi_{\text{flow}}$), marked Hawkes burst rates ($\lambda_u$), pass-through layering ratios, and directed taint exposure.
-  \item \textbf{Tri-Band Temporal Attention Kernel:} Synthesizes multi-scale exponential decay spanning burst ($\tau_1=2.4\text{h}$), operational ($\tau_2=24\text{h}$), and dormancy ($\tau_3=168\text{h}$) regimes with continuous Fourier encodings.
+  \item \textbf{Tri-Band Temporal Attention Kernel:} Synthesizes multi-scale exponential decay spanning burst ($\lambda_1=0.80\,\text{h}^{-1}$, $\tau_1=2.4\,\text{h}$), operational diurnal ($\lambda_2=0.05\,\text{h}^{-1}$, $\tau_2=24\,\text{h}$), and seasonal dormancy ($\lambda_3=0.01\,\text{h}^{-1}$, $\tau_3=168\,\text{h}$) regimes with continuous Fourier encodings.
   \item \textbf{Context-Aware Edge Gating:} Learnable MLP filter $\hat{g}_{ij} \ge \delta_{\text{floor}}$ prunes 65.9\% of spurious merchant camouflage noise prior to message passing.
   \item \textbf{Typology GraphSMOTE:} Discovers latent topological clusters via GMM and generates synthetic illicit nodes with localized bilinear edge synthesis preserving mass conservation.
   \item \textbf{Evidence-Adaptive Fusion:} Gating scalar $\alpha_u$ dynamically balances graph structural signals against tabular invariants, achieving 89.60\% F1 on zero-degree cold-start nodes.
@@ -13,6 +13,7 @@
 
 
 \section{Architectural Overview and Neuro-Symbolic Philosophy}
+The core architectural thesis of \textbf{C-STGB} is that robust, enterprise-grade Anti-Money Laundering (AML) surveillance requires a unified neuro-symbolic design: deep relational message passing to learn emergent structural patterns, fused dynamically with domain-specific spatio-temporal invariants and statistically calibrated risk bounds.
 
 \subsection{Reader's Guide: Architectural Roadmap}
 To guide the reader through the mathematical derivations, Table~\ref{tab:ch3_roadmap} maps each core research challenge to its corresponding C-STGB module and mathematical theorem. Furthermore, Table~\ref{tab:ch3_notations} establishes the universal mathematical notations and tensor dimensions employed throughout this dissertation.
@@ -69,7 +70,7 @@ $\alpha$ & Nominal significance error budget & Scalar $\in (0, 1)$ & User-specif
 \end{tabular}%
 }
 \end{table}
-The core architectural thesis of \textbf{C-STGB} is that robust, enterprise-grade Anti-Money Laundering (AML) surveillance requires a unified neuro-symbolic design: deep relational message passing to learn emergent structural patterns, fused dynamically with domain-specific spatio-temporal invariants and statistically calibrated risk bounds.
+\FloatBarrier
 
 Figure~\ref{fig:ch3_detailed_pipeline} illustrates the six interconnected modules of the C-STGB end-to-end architecture:
 \begin{enumerate}
@@ -84,7 +85,7 @@ Figure~\ref{fig:ch3_detailed_pipeline} illustrates the six interconnected module
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig3_1_tensor_flow.pdf}
-\caption[End-to-End Architectural Dataflow of C-STGB]{End-to-End Architectural Dataflow of C-STGB v2, detailing data ingestion, continuous-time temporal encoding, learnable edge-trust gating, latent manifold oversampling, evidence-adaptive fusion, and conformal risk control.}
+\caption[End-to-End Architectural Dataflow of C-STGB]{End-to-End Architectural Dataflow of C-STGB, detailing data ingestion, continuous-time temporal encoding, learnable edge-trust gating, latent manifold oversampling, evidence-adaptive fusion, and conformal risk control.}
 \label{fig:ch3_detailed_pipeline}
 \end{figure}
 
@@ -137,7 +138,7 @@ To separate fan-in smurfing aggregation trees from fan-out peeling disbursement 
 \Psi_{\text{asym}}(u, t) = \frac{\deg_{\text{in}}(u, t) - \deg_{\text{out}}(u, t)}{\deg_{\text{in}}(u, t) + \deg_{\text{out}}(u, t) + \epsilon}
 \end{equation}
 
-\subsubsection{Group 3: Continuous Point-Process Hawkes Arrival Intensity ($\lambda_u(t) \in \mathbb{R}^+$)}
+\subsubsection{Group 3: Continuous Point-Process Hawkes Arrival Intensity \mbox{($\lambda_u(t) \in \mathbb{R}^+$)}}
 Transaction arrivals exhibit localized burstiness and clustering. We model the self-exciting conditional arrival intensity $\lambda_u(t)$ via a continuous univariate Hawkes point process~\cite{hawkes1971spectra}:
 \begin{equation}
 \lambda_u(t) = \mu_u + \sum_{t_i < t, \, t_i \in \mathcal{T}_u} \alpha_H \exp\left( -\beta_H (t - t_i) \right)
@@ -163,7 +164,9 @@ To trace proximity to known illicit seed entities without introducing future inf
 \begin{equation}
 \mathbf{s}_{\text{bwd}}^{(k+1)} = (1 - \alpha_{\text{PPR}}) \mathbf{s}_{\text{seed}} + \alpha_{\text{PPR}} \mathbf{\tilde{A}}_{\text{causal}} \mathbf{D}_{\text{in}}^{-1} \mathbf{s}_{\text{bwd}}^{(k)}
 \end{equation}
-where $\alpha_{\text{PPR}} = 0.85$, and $\mathbf{\tilde{A}}_{\text{causal}}$ is strictly restricted to edges occurring prior to time $t$ ($t_e < t$). \paragraph{Zero-Leakage Streaming Inference Protocol for Taint Invariants:}
+where $\alpha_{\text{PPR}} = 0.85$, and $\mathbf{\tilde{A}}_{\text{causal}}$ is strictly restricted to edges occurring prior to time $t$ ($t_e < t$).
+
+\paragraph{Zero-Leakage Streaming Inference Protocol for Taint Invariants:}
 A critical methodological requirement in production deployment is preventing label contamination during inference when future ground-truth labels are unavailable. C-STGB enforces a strict chronological protocol:
 \begin{enumerate}
     \item \textbf{Historical Seed Conditioning ($t_e < t$):} Taint propagation initializes exclusively from entities confirmed illicit \textit{prior} to current time $t$ via historical regulatory filings or confirmed alert investigations ($\mathbf{s}_{\text{seed}}(u) = 1.0$).
@@ -185,7 +188,10 @@ We capture the distribution of historical transaction amounts and inter-arrival 
 
 The concatenated 12-dimensional invariant representation:
 \begin{equation}
-\mathbf{z}_{\text{inv}}(u, t) = \left[ \tilde{\Phi}_{\text{flow}}, \Psi_{\text{asym}}, \lambda_u(t), \mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}, \mu_A, \sigma_A^2, \gamma_A, \kappa_A, v_A, \nu_{\text{io}}, \sigma_{\Delta t} \right]^T \in \mathbb{R}^{12}
+\begin{aligned}
+\mathbf{z}_{\text{inv}}(u, t) = \big[ & \tilde{\Phi}_{\text{flow}}, \Psi_{\text{asym}}, \lambda_u(t), \mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}, \mu_A, \\
+& \sigma_A^2, \gamma_A, \kappa_A, \nu_{\text{io}}, \sigma_{\Delta t}, v_A \big]^T \in \mathbb{R}^{12}
+\end{aligned}
 \end{equation}
 provides a universal, schema-agnostic feature foundation. Table~\ref{tab:12d_invariants_spec} formalizes the complete structural, dimensional, and operational taxonomy of all 12 canonical invariants.
 
@@ -232,13 +238,16 @@ where $k \in \{0, 1, \dots, \frac{d_t}{2} - 1\}$. This continuous formulation en
 \subsection{Tri-Band Continuous Decay Attention Kernel}
 We synthesize three orthogonal temporal velocity regimes through a tri-band decay function:
 \begin{equation}
-w(\Delta t) = \sum_{b \in \mathcal{B}} \pi_{\text{mix},b} \left[ w_{\min} + (1 - w_{\min}) \exp(-\lambda_b \Delta t) \right] \times \left(1 + \tanh(\gamma_b \lambda_u(t))\right)
+\begin{aligned}
+w(\Delta t) = \sum_{b \in \mathcal{B}} \pi_{\text{mix},b} & \left[ w_{\min} + (1 - w_{\min}) \exp(-\lambda_b \Delta t) \right] \\
+& \times \left(1 + \tanh(\gamma_b \lambda_u(t))\right)
+\end{aligned}
 \end{equation}
 where $\mathcal{B} = \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ represents the three operational velocity regimes:
 \begin{enumerate}
-    \item \textbf{Burst Regime ($\lambda_{\text{burst}} = 0.80\,\text{h}^{-1}$):} Captures high-frequency microsecond to hourly smurfing velocity spikes.
-    \item \textbf{Diurnal Regime ($\lambda_{\text{diurnal}} = 0.05\,\text{h}^{-1}$):} Captures 24-hour cyclic commercial velocity oscillations.
-    \item \textbf{Seasonal Regime ($\lambda_{\text{seasonal}} = 0.01\,\text{h}^{-1}$):} Captures 30- to 90-day dormant holding and hibernation strategies.
+    \item \textbf{Burst Regime ($\lambda_{\text{burst}} = 0.80\,\text{h}^{-1}$, nominal horizon $\tau_1 = 2.4\,\text{h}$):} Captures high-frequency microsecond to hourly smurfing velocity spikes.
+    \item \textbf{Diurnal Regime ($\lambda_{\text{diurnal}} = 0.05\,\text{h}^{-1}$, nominal cycle $\tau_2 = 24\,\text{h}$):} Captures 24-hour cyclic commercial velocity oscillations.
+    \item \textbf{Seasonal Regime ($\lambda_{\text{seasonal}} = 0.01\,\text{h}^{-1}$, nominal horizon $\tau_3 = 168\,\text{h}$):} Captures 30- to 90-day dormant holding and hibernation strategies.
 \end{enumerate}
 The minimum floor parameter $w_{\min} = 0.05$ ensures that historical topological connectivity is never completely erased, preventing the vanishing gradient problem on long-dormant edges.
 
@@ -375,11 +384,11 @@ where:
 
     \paragraph{Gradient Dynamics Analysis:}
     Differentiating $\mathcal{L}_{\text{task}}$ with respect to predicted logit $z_i$ ($p_i = \sigma(z_i)$) for an illicit entity ($y_i = 1$) yields:
-    \begin{equation}
-    \begin{split}
-    \frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i} = & -\beta_{\text{FN}} \frac{\sum_j p_j y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon}{\left[ \sum_j p_j y_j + \beta_{\text{FN}} \sum_j (1 - p_j) y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon \right]^2} \\
-    & \quad \times p_i (1 - p_i)
-    \end{split}
+    \begin{equation}\small
+    \begin{aligned}
+    \frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i} = -\beta_{\text{FN}} & \frac{\sum_j p_j y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon}{\big[ \sum_j p_j y_j + \beta_{\text{FN}} \sum_j (1 - p_j) y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon \big]^2} \\
+    & \times p_i (1 - p_i)
+    \end{aligned}
     \end{equation}
     Because $\beta_{\text{FN}} = 0.85 \gg \beta_{\text{FP}} = 0.15$, the gradient magnitude for false negatives ($y_i=1, p_i \to 0$) is magnified by a factor of $\frac{\beta_{\text{FN}}}{\beta_{\text{FP}}} = 5.67\times$ relative to false positives, driving rapid parameter updates that aggressively pull minority illicit embeddings away from benign clusters.
     \item $\mathcal{L}_{\text{recon}}$ is the topological edge reconstruction loss:

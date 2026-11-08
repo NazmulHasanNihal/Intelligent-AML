@@ -5,14 +5,14 @@
 \begin{itemize}\setlength{\itemsep}{1pt}
   \item \textbf{Scientific Synthesis:} Establishes C-STGB as the first mathematically guaranteed, real-time, explainable graph learning system for high-velocity financial crime surveillance.
   \item \textbf{Enterprise Deployment Lifecycle:} Details a phased 3-stage production integration for Tier-1 banks (Passive Shadow Ingestion $\rightarrow$ Dual-Run Conformal Pilot $\rightarrow$ Straight-Through Autonomous Surveillance).
-  \item \textbf{Threats to Validity:} Methodically documents five structural boundaries: cross-institutional banking gaps, unobserved dark liquidity, cross-chain bridging, cold-start latency, and adversarial adaptation.
+  \item \textbf{Threats to Validity:} Methodically documents four structural boundaries: cross-institutional banking gaps, cold-start virgin accounts, cross-chain DEX bridging, and non-stationary concept drift.
   \item \textbf{Open Science:} Fully reproducible codebase with open-source benchmarks, container recipes, and pre-trained model weights.
 \end{itemize}
 \end{takeawaybox}
 
 
 \section{Synthesis of Scientific Contributions}
-This dissertation introduced \textbf{C-STGB} (\underline{C}onformal \underline{S}patio-\underline{T}emporal \underline{G}raph\underline{B}oost), an end-to-end neuro-symbolic framework designed to overcome the five foundational failure modes of graph representation learning in high-velocity Anti-Money Laundering (AML) surveillance.
+This dissertation introduced \textbf{C-STGB} (\textbf{C}onformal \textbf{S}patio-\textbf{T}emporal \textbf{G}raph\textbf{B}oost), an end-to-end neuro-symbolic framework designed to overcome the five foundational failure modes of graph representation learning in high-velocity Anti-Money Laundering (AML) surveillance.
 
 By systematically integrating continuous harmonic temporal encodings, self-exciting Hawkes point processes, learnable context-aware edge-trust gating, typology-aware latent GraphSMOTE, evidence-adaptive graph-tabular fusion, and Class-Conditional Conformal Risk Control (CRC), this research bridges the critical gap between academic geometric deep learning and production enterprise compliance operations.
 
@@ -54,7 +54,7 @@ To transition C-STGB from research prototype to production core banking infrastr
 
 \subsection{Stage III: Full-Scale Autonomous Straight-Through Surveillance}
 \begin{itemize}
-    \item \textbf{Tier 3 Automated Clearance:} Authorize $>99.38\%$ of transactions for instantaneous Straight-Through Processing (STP) without human intervention.
+    \item \textbf{Tier 3 Automated Clearance:} Authorize $99.33\%$ of transactions (9,933 per 10,000) for instantaneous Straight-Through Processing (STP) without human intervention.
     \item \textbf{Tier 1 Autonomous Quarantine:} Enforce automated asset holds on high-confidence illicit nodes ($\Gamma(u) = \{1\}$), autonomously generating FinCEN Form 111 XML filings with cryptographic Merkle receipts.
     \item \textbf{Continuous Auditability:} Provide internal audit committees and regulatory examiners with append-only cryptographic verification logs satisfying interagency model risk management guidance (SR 11-7 / SR 21-8).
 \end{itemize}
@@ -64,7 +64,6 @@ To transition C-STGB from research prototype to production core banking infrastr
 \includegraphics[width=0.88\textwidth]{figures/fig_enterprise_deployment_lifecycle.pdf}
 \caption[Enterprise Production Deployment Lifecycle for Tier-1 Banking]{Enterprise production deployment lifecycle for Tier-1 banking core surveillance across Stage~I (Passive Shadow Ingestion), Stage~II (Dual-Run Conformal Pilot), and Stage~III (Full-Scale Straight-Through Autonomous Surveillance).}
 \label{fig:ch9_deployment_lifecycle}
-\label{fig:26week_roadmap_gantt}
 \end{figure}
 
 \begin{figure}[htbp]

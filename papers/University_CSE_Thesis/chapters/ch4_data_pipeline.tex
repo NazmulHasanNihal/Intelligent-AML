@@ -29,13 +29,6 @@ C-STGB deploys DuckDB as an in-process, columnar analytical execution engine. By
 \subsection{Relational Entity-Relationship Model \& Causal Index Architecture}
 Every incoming financial transaction payload and reference entity is structured into an optimized, normalized relational schema that directly maps into our directed multigraph representation space. Figure~\ref{fig:ch4_database_erd} illustrates the Crow's Foot Entity-Relationship Diagram (ERD), composite time-causal indexing structures, and the materialized 12-dimensional canonical invariant view (\texttt{v\_canonical\_invariants\_12d}).
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/fig4_2_database_erd.pdf}
-\caption[Relational Database Schema and Causal Index Architecture]{Relational Database Schema (ERD), time-causal composite indexing architecture, and materialized 12-dimensional canonical invariant view (\path|v_canonical_invariants_12d|) mapping relational transaction tables into a directed multigraph.}
-\label{fig:ch4_database_erd}
-\end{figure}
-
 The database schema connects three primary relational tables:
 \begin{enumerate}
     \item \textbf{\texttt{entities\_master} (Primary Key: \texttt{entity\_id}):} Stores core entity demographics, account risk profiles (KYC tiers 1--5), politically exposed person (PEP) status, and ISO 3166-1 alpha-2 jurisdiction references.
@@ -43,13 +36,20 @@ The database schema connects three primary relational tables:
     \item \textbf{\texttt{high\_risk\_jurisdictions} (Primary Key: \texttt{country\_iso}):} Holds Financial Action Task Force (FATF) black-list and grey-list classifications and Basel AML Index risk metrics.
 \end{enumerate}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_2_database_erd.pdf}
+\caption[Relational Database Schema and Causal Index Architecture]{Relational Database Schema (ERD), time-causal composite indexing architecture, and materialized 12-dimensional canonical invariant view (\texttt{v\_canonical\_invariants\_12d}) mapping relational transaction tables into a directed multigraph.}
+\label{fig:ch4_database_erd}
+\end{figure}
+
 \subsection{Causal Ego-Graph Analytical Query Execution \& Zero-Lookahead Invariant}
 To prevent temporal data leakage, transaction neighborhoods must be strictly time-bounded: an ego-graph $\mathcal{N}_k(u, t)$ evaluated at continuous time $t$ can only incorporate edges $e \in \mathcal{E}$ satisfying $t_e \le t$. 
 
 To achieve sub-millisecond execution over tables containing tens of millions of records, C-STGB establishes composite B-tree indexes:
 \begin{itemize}
-    \item \texttt{idx\_source\_time} on column pair \path|streaming_transactions(source_entity_id, timestamp_epoch DESC)|
-    \item \texttt{idx\_target\_time} on column pair \path|streaming_transactions(target_entity_id, timestamp_epoch DESC)|
+    \item \texttt{idx\_source\_time} on column pair \texttt{streaming\_transactions(source\_entity\_id, timestamp\_epoch DESC)}
+    \item \texttt{idx\_target\_time} on column pair \texttt{streaming\_transactions(target\_entity\_id, timestamp\_epoch DESC)}
 \end{itemize}
 These composite indexes reduce the 2-hop causal ego-graph extraction time to under $0.18\text{ ms}$, operating directly within memory. The complete executable SQL DDL contracts and parameterized analytical queries are documented in Appendix~\ref{app:schemas} (Listing~\ref{app_lst:duckdb_schema} and Listing~\ref{app_lst:duckdb_ego_query}).
 

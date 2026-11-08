@@ -3,7 +3,7 @@
 
 \begin{takeawaybox}{Chapter 2: Theoretical Foundations \& Literature Taxonomy}
 \begin{itemize}\setlength{\itemsep}{1pt}
-  \item \textbf{Methodological Taxonomy:} Synthesizes 25 foundational publications across tabular gradient boosters, spatial GNNs, continuous dynamic GNNs, and adversarial camouflage filters.
+  \item \textbf{Methodological Taxonomy:} Synthesizes an 18-model comparative taxonomy across tabular gradient boosters, spatial GNNs, continuous dynamic GNNs, and adversarial camouflage filters.
   \item \textbf{Theoretical Expressiveness Bounds:} Analyzes Weisfeiler-Lehman (1-WL) graph expressiveness, Dirichlet energy over-smoothing under commercial merchant hubs, and marked Hawkes self-exciting point processes.
   \item \textbf{Distribution-Free Uncertainty:} Formalizes split conformal prediction and class-conditional non-conformity quantiles under non-stationary distribution drift.
   \item \textbf{Architectural Voids Resolved:} Identifies why no single existing framework simultaneously resolves multi-scale temporal decay, topological camouflage, extreme class imbalance, and strict regulatory auditability.
@@ -15,7 +15,7 @@
 The automation of Anti-Money Laundering (AML) surveillance has evolved through three distinct algorithmic epochs: (1) deterministic rule-based expert systems (1970s--2000s), (2) tabular machine learning and gradient boosted decision trees (2010s), and (3) geometric deep learning and graph neural networks (2019--present). This chapter systematically reviews the theoretical foundations, architectural mechanisms, and operational limitations of these paradigms, positioning C-STGB within the state-of-the-art literature.
 
 \section{Taxonomy of Graph Neural Networks in Financial Forensics}
-To systematically analyze the existing literature, we categorize graph neural architectures in financial transaction surveillance along four foundational axes: (1) spatial neighborhood aggregation, (2) dynamic and continuous-time temporal encoding, (3) heterogeneous multi-relation message passing, and (4) topological imbalance and camouflage mitigation. Table~\ref{tab:lit_matrix} synthesizes these dimensions across 25 benchmark publications.
+To systematically analyze the existing literature, we categorize graph neural architectures in financial transaction surveillance along four foundational axes: (1) spatial neighborhood aggregation, (2) dynamic and continuous-time temporal encoding, (3) heterogeneous multi-relation message passing, and (4) topological imbalance and camouflage mitigation. Table~\ref{tab:lit_matrix} synthesizes these dimensions across an 18-model comparative taxonomy.
 
 \subsection{Foundational Spatial Graph Neural Networks}
 Spatial Graph Neural Networks operate on static graph snapshots $\mathcal{G} = (\mathcal{V}, \mathcal{E}, \mathbf{X})$ by recursively aggregating feature vectors across local node neighborhoods.
@@ -105,7 +105,7 @@ However, standard GraphSMOTE exhibits three major pathologies in financial crime
 \label{fig:ch2_camouflage_topology}
 \end{figure}
 
-Laundering syndicates actively obfuscate transaction patterns by interweaving illicit transfers with high-degree merchant accounts and utility hubs. To counter this, specialized GNNs have introduced camouflage-filtering mechanisms. CARE-GNN~\cite{dou2020enhancing} utilizes reinforcement learning to select informative neighbors across multi-relational graphs. FraudGate~\cite{liu2021overcoming} deploys multi-view gating to suppress feature noise. More recently, domain-specific architectures such as H$^2$IDE~\cite{dou2020enhancing}, CamFD, and Group-Aware GNN have explored heterophily-aware aggregation and homophily-preserving clustering. 
+Laundering syndicates actively obfuscate transaction patterns by interweaving illicit transfers with high-degree merchant accounts and utility hubs. To counter this, specialized GNNs have introduced camouflage-filtering mechanisms. CARE-GNN~\cite{dou2020enhancing} utilizes reinforcement learning to select informative neighbors across multi-relational graphs. Continual and multi-view gating architectures such as Liu et al.~\cite{liu2021overcoming} deploy gating mechanisms to suppress feature noise and prevent representation degradation. More recently, domain-specific architectures such as H$^2$IDE, CamFD, and Group-Aware GNN have explored heterophily-aware aggregation and homophily-preserving clustering. 
 
 While open-source weights and reproduction harnesses for proprietary architectures (H$^2$IDE, CamFD, Group-Aware GNN) are not publicly released for full multi-dataset replication, Section~\ref{sec:ch7_sota_comparison} directly contrasts C-STGB against their published Elliptic-v1 benchmarks (where CamFD reported 85.30\% F1 and H$^2$IDE reported 84.10\% F1, both significantly trailing C-STGB's 91.42\% F1).
 Launderers actively deploy counter-surveillance tactics, such as routing micro-transfers through high-degree merchant, utility, or payroll accounts to camouflage their structural presence.
@@ -226,7 +226,7 @@ This chapter established the theoretical foundation and literature taxonomy acro
 \midrule
 \multirow{4}{*}{\textbf{(iv) Camouflage GNNs}} 
 & CARE-GNN~\cite{dou2020enhancing} & Multi-Relational & RL Neighbor Selector & \ding{55} & \ding{55} & \ding{55} & Relation Saliency \\
-& FraudGate~\cite{liu2021overcoming} & Multi-View Graph & Gated Edge Filtering & \ding{55} & \ding{55} & \ding{55} & Gate Weights \\
+& Liu et al.~\cite{liu2021overcoming} & Multi-View Graph & Gated Edge Filtering & \ding{55} & \ding{55} & \ding{55} & Gate Weights \\
 & Johannessen \& Jullum~\cite{johannessen2023predicting} & Heterogeneous Snapshot & Edge-Type Attention & Cost-Sensitive Loss & \ding{55} & \ding{55} & \ding{55} \\
 & CamFD / H$^2$IDE & Heterophilic Metric & Camouflage Pruning & Class Weighting & \ding{55} & \ding{55} & Subgraph Salience \\
 \midrule
@@ -235,12 +235,12 @@ This chapter established the theoretical foundation and literature taxonomy acro
 & Split Conformal CRC~\cite{angelopoulos2021gentle} & Point Estimator & \ding{55} & Marginal Quantile & \ding{55} & Marginal ($1-\alpha$) & Conformal Sets \\
 & GNNExplainer~\cite{ying2019gnnexplainer} & Post-Hoc Mask & \ding{55} & \ding{55} & \ding{55} & \ding{55} & Topological Mask \\
 \midrule
-\textbf{(vi) Proposed Framework} & \textbf{C-STGB (Ours)} & \textbf{Tri-Band + Hawkes} & \textbf{Context-Aware Gate ($\hat{g}_{ij}$)} & \textbf{Typology GraphSMOTE} & \textbf{Evidence Gate ($\alpha_u$)} & \textbf{Class-Cond. CRC + DKW} & \textbf{AST-Enforced Swarm} \\
+\rowcolor{blue!6}\textbf{(vi) Proposed Framework} & \textbf{C-STGB (Ours)} & \textbf{Tri-Band + Hawkes} & \textbf{Context-Aware Gate ($\hat{g}_{ij}$)} & \textbf{Typology GraphSMOTE} & \textbf{Evidence Gate ($\alpha_u$)} & \textbf{Class-Cond. CRC + DKW} & \textbf{AST-Enforced Swarm} \\
 \bottomrule
 \end{tabular}%
 }
-\vspace{0.2cm}
-\footnotesize{\textbf{Legend:} \checkmark = Fully supported with formal guarantees; \ding{55} = Unsupported; $\sim$ = Partially supported without distribution-free risk guarantees.}
+\par\vspace{6pt}
+\footnotesize\raggedright\textbf{Note:} \ding{55} denotes lack of capability; substantive domain capabilities and architectural mechanisms are explicitly characterized per model row.
 \end{table}
 \end{landscape}
 

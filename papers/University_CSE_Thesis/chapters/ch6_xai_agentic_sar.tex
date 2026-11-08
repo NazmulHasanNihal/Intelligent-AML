@@ -22,7 +22,7 @@ To bridge machine learning predictions with statutory legal compliance, C-STGB i
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.85\textwidth]{figures/fig_forensic_swarm.pdf}
-  \caption[Multi-Agent Forensic Reasoning and Dual-Governance Pipeline]{Multi-agent forensic reasoning and dual-governance pipeline. The orchestrator hydrates the alert context for the Investigator, Drafter and Auditor agents. The AST compiler accepts a dossier only if every entity is grounded in the evidence subgraph ($V(T)\subseteq V_{\mathrm{sub}}$, Proposition~\ref{prop:anti_hallucination}); rejected drafts return to the Drafter. Verified dossiers pass the maker--checker gate and are sealed in the WORM vault.}
+  \caption[Four-Lane Multi-Agent Forensic Investigation Swimlane]{Four-lane multi-agent forensic investigation and dual-governance swimlane workflow. Alert progression traverses four sequential lanes: Lane~1 Ingestion \& Coordination (Coordinator Agent), Lane~2 Topological Reasoning (Specialist Agent), Lane~3 Narrative Synthesis (Drafter Agent), and Lane~4 Deterministic Governance (Verifier Agent), integrating grammar validation, schema checking, 4-eyes compliance approval, and immutable SHA-256 Merkle sealing.}
   \label{fig:forensic-swarm}
   \label{fig:ch6_swarm_architecture}
 \end{figure}

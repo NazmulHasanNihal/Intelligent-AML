@@ -54,7 +54,7 @@ def generate_fig1_1():
     # Central merchant node
     circle_m = patches.Circle((0, 0), 0.22, facecolor="#1e40af", edgecolor="#0f172a", lw=1.2, zorder=5)
     ax_b.add_patch(circle_m)
-    ax_b.text(0, 0, "Retail Hub\n(deg=85)", ha="center", va="center", fontsize=6.8, fontweight="bold", color="#ffffff", zorder=6)
+    ax_b.text(0, 0, "Retail Hub\n(deg=85)", ha="center", va="center", fontsize=4, fontweight="bold", color="#ffffff", zorder=6)
 
     # Surrounding customer nodes
     n_cust = 12
@@ -77,21 +77,21 @@ def generate_fig1_1():
 
     # Placement Source S0
     ax_m.add_patch(patches.Circle((0.08, 0.5), 0.08, facecolor="#b91c1c", edgecolor="black", lw=1.0, zorder=5))
-    ax_m.text(0.08, 0.5, "Source S0\n$485k", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#ffffff", zorder=6)
+    ax_m.text(0.08, 0.5, "Source S0\n$485k", ha="center", va="center", fontsize=4, fontweight="bold", color="#ffffff", zorder=6)
 
     # Mules M1, M2, M3
     mule_y = [0.85, 0.5, 0.15]
     for i, my in enumerate(mule_y):
         ax_m.add_patch(patches.Circle((0.36, my), 0.065, facecolor="#fee2e2", edgecolor="#b91c1c", lw=0.9, zorder=5))
-        ax_m.text(0.36, my, f"Mule {i+1}", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#b91c1c", zorder=6)
+        ax_m.text(0.36, my, f"Mule {i+1}", ha="center", va="center", fontsize=4, fontweight="bold", color="#b91c1c", zorder=6)
         ax_m.annotate("", xy=(0.30, my), xytext=(0.16, 0.5),
                       arrowprops=dict(arrowstyle="->,head_width=0.14,head_length=0.20", color="#b91c1c", lw=1.1))
 
     # Layering Wash Cycle L1 -> L2 -> L3 -> L1
     ax_m.add_patch(patches.Circle((0.68, 0.72), 0.06, facecolor="#ffedd5", edgecolor="#ea580c", lw=0.9, zorder=5))
-    ax_m.text(0.68, 0.72, "L1", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#ea580c", zorder=6)
+    ax_m.text(0.68, 0.72, "L1", ha="center", va="center", fontsize=4, fontweight="bold", color="#ea580c", zorder=6)
     ax_m.add_patch(patches.Circle((0.68, 0.28), 0.06, facecolor="#ffedd5", edgecolor="#ea580c", lw=0.9, zorder=5))
-    ax_m.text(0.68, 0.28, "L2", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#ea580c", zorder=6)
+    ax_m.text(0.68, 0.28, "L2", ha="center", va="center", fontsize=4, fontweight="bold", color="#ea580c", zorder=6)
 
     # Mule to Layering arrows
     ax_m.annotate("", xy=(0.62, 0.72), xytext=(0.425, 0.85),
@@ -104,11 +104,11 @@ def generate_fig1_1():
                   arrowprops=dict(arrowstyle="->,head_width=0.12", color="#ea580c", lw=1.2, connectionstyle="arc3,rad=-0.35"))
     ax_m.annotate("", xy=(0.68, 0.66), xytext=(0.68, 0.34),
                   arrowprops=dict(arrowstyle="->,head_width=0.12", color="#ea580c", lw=1.2, connectionstyle="arc3,rad=-0.35"))
-    ax_m.text(0.68, 0.50, "Wash Loop\nCycle", ha="center", va="center", fontsize=5.4, fontweight="bold", color="#ea580c")
+    ax_m.text(0.68, 0.50, "Wash Loop\nCycle", ha="center", va="center", fontsize=4, fontweight="bold", color="#ea580c")
 
     # Integration Sink C4
     ax_m.add_patch(patches.Circle((0.95, 0.5), 0.08, facecolor="#7c3aed", edgecolor="black", lw=1.0, zorder=5))
-    ax_m.text(0.95, 0.5, "Sink C4\n(Offshore)", ha="center", va="center", fontsize=5.8, fontweight="bold", color="#ffffff", zorder=6)
+    ax_m.text(0.95, 0.5, "Sink C4\n(Offshore)", ha="center", va="center", fontsize=4, fontweight="bold", color="#ffffff", zorder=6)
 
     ax_m.annotate("", xy=(0.87, 0.5), xytext=(0.74, 0.72),
                   arrowprops=dict(arrowstyle="->", color="#7c3aed", lw=1.2))

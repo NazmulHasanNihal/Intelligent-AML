@@ -1,111 +1,119 @@
 """
-Figure 6.4: Chronological Forensic Timeline of the 15-Node Laundering Case
-Standalone publication script for C-STGB monograph.
+Figure 6.4: Chronological Forensic Timeline of Laundering Incident
+Bangladeshi Banking & Mobile Financial Services (MFS) Case Study:
+Motijheel Dhaka Influx -> bKash/Nagad Smurfing -> Khatunganj Chattogram Wash -> Offshore Sink -> BFIU SAR
+Zero raw math clutter; strictly uses Bangladesh Standard Time (BST, UTC+6) and realistic transaction data.
 """
 import sys
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.patches import FancyBboxPatch, Rectangle
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import setup_plt, save_figure
+from common import (
+    setup_plt, save_figure,
+    COLOR_INGEST, COLOR_INGEST_BG,
+    COLOR_GNN, COLOR_GNN_BG,
+    COLOR_SAFE, COLOR_SAFE_BG,
+    COLOR_RISK, COLOR_RISK_BG,
+    COLOR_REVIEW, COLOR_REVIEW_BG,
+    COLOR_DARK, COLOR_MUTED, COLOR_BORDER
+)
 
 def generate():
-    # Canvas sized 10.2 x 3.8 to maintain perfect aspect ratio (~2.68:1) for Page 73
-    fig, ax = plt.subplots(figsize=(10.2, 3.8))
+    setup_plt(font_size=8.5, title_size=10.0, label_size=8.5)
+    # Generous widescreen canvas for spacious timeline
+    fig, ax = plt.subplots(figsize=(12.8, 5.6), dpi=300)
     ax.axis("off")
     ax.set_xlim(0.0, 100.0)
     ax.set_ylim(0.0, 100.0)
 
     # Master background
-    bg = patches.Rectangle((0, 0), 100, 100, facecolor="#ffffff", edgecolor="none", zorder=0)
-    ax.add_patch(bg)
+    ax.add_patch(patches.Rectangle((0, 0), 100, 100, facecolor="#ffffff", edgecolor="none"))
 
-    # =========================================================================
-    # MASTER HEADER
-    # =========================================================================
-    ax.text(50.0, 96.0, "Chronological Forensic Event Timeline: 15-Node Smurfing Incident",
-            ha="center", va="center", fontsize=10.0, weight="bold", color="#0f172a")
-    ax.text(50.0, 91.5, r"Real-Time Detection Lifecycle: Influx $\rightarrow$ Smurfing $\rightarrow$ Wash $\rightarrow$ Offshore Sink $\rightarrow$ Tier 1 Quarantine SAR",
-            ha="center", va="center", fontsize=7.6, style="italic", color="#475569")
+    # Master Header Banner
+    ax.add_patch(patches.Rectangle(
+        (1.5, 92.5), 97.0, 6.5,
+        facecolor=COLOR_DARK, edgecolor="none"
+    ))
+    ax.text(50.0, 96.5, "CHRONOLOGICAL FORENSIC INVESTIGATION TIMELINE (BANGLADESH BANKING CASE)",
+            ha="center", va="center", fontsize=9.8, fontweight="bold", color="#ffffff")
+    ax.text(50.0, 94.0, "Detection Lifecycle: Motijheel Wire -> bKash/Nagad MFS Structuring -> Chattogram Wash -> Offshore Sink -> BFIU SAR",
+            ha="center", va="center", fontsize=7.2, color="#94a3b8")
 
-    # =========================================================================
-    # CENTRAL TIMELINE AXIS & INTERVAL CHEVRONS (y = 52.0)
-    # =========================================================================
+    # Central Timeline Axis (y = 51.0)
     y_axis = 51.0
-    ax.annotate("", xy=(97.5, y_axis), xytext=(2.5, y_axis),
-                arrowprops=dict(arrowstyle="->", lw=2.4, color="#334155", shrinkA=0, shrinkB=0), zorder=2)
-    ax.text(98.5, y_axis, "UTC", ha="left", va="center", fontsize=6.8, weight="bold", color="#334155")
+    ax.annotate("", xy=(97.0, y_axis), xytext=(3.0, y_axis),
+                arrowprops=dict(arrowstyle="->", lw=2.4, color=COLOR_DARK, shrinkA=0, shrinkB=0))
+    ax.text(97.5, y_axis, "BST (UTC+6)", ha="left", va="center", fontsize=7.2, fontweight="bold", color=COLOR_DARK)
 
-    # Five Stages Data: (center_x, time_utc, stage_title, details_lines, color, delta_t)
+    # Five Stages Data: Pure practical banking without math formulas
     stages = [
         {
-            "x": 10.5,
-            "time": "14:15:02 UTC",
-            "title": "Stage 1: Primary Influx",
-            "entity": "Source S0 (ACC_9941)",
-            "metric": r"Wire Influx: $\$485{,}000$",
+            "x": 11.5,
+            "time": "10:15:00 BST",
+            "title": "Stage 1: Primary Wire",
+            "entity": "Motijheel Corporate Acc",
+            "metric": "Wire Influx: BDT 5,000,000",
             "sub": "Dormant account reactivation",
-            "fc": "#eff6ff",
-            "ec": "#2563eb",
-            "tc": "#1e40af",
-            "dt": "T = 0.0m"
+            "fc": COLOR_INGEST_BG,
+            "ec": COLOR_INGEST,
+            "tc": COLOR_INGEST,
+            "dt": "T = 0 min"
         },
         {
-            "x": 30.0,
-            "time": "14:19:12 UTC",
-            "title": "Stage 2: Smurfing Dispersal",
-            "entity": r"Mules $M_1 \rightarrow M_4$ ($4 \times \$9.8\text{k}$)",
-            "metric": r"Burst Rate: $\lambda_u(t) = 74.2$",
-            "sub": "Sub-threshold structuring (<$10k)",
-            "fc": "#fff7ed",
-            "ec": "#ea580c",
-            "tc": "#9a3412",
+            "x": 30.5,
+            "time": "10:19:10 BST",
+            "title": "Stage 2: MFS Smurfing",
+            "entity": "bKash & Nagad Wallets",
+            "metric": "Structured: BDT 99,000 / tx",
+            "sub": "Evades BDT 100,000 CTR limit",
+            "fc": COLOR_REVIEW_BG,
+            "ec": COLOR_REVIEW,
+            "tc": COLOR_REVIEW,
             "dt": "+4m 10s"
         },
         {
-            "x": 50.0,
-            "time": "14:23:01 UTC",
-            "title": "Stage 3: Layering Wash",
-            "entity": r"Conduits $L_1 \rightarrow L_2$ (Wash Ring)",
-            "metric": r"Pruned Chaff: $M_e \geq 0.65$",
-            "sub": r"Rapid hop dwell ($\Delta t < 3.8\text{m}$)",
-            "fc": "#faf5ff",
-            "ec": "#9333ea",
-            "tc": "#6b21a8",
-            "dt": "+3m 49s"
+            "x": 49.5,
+            "time": "10:23:00 BST",
+            "title": "Stage 3: Trade Wash",
+            "entity": "Khatunganj Commodity Hub",
+            "metric": "14 Benign Chaff Links Filtered",
+            "sub": "Rapid wash dwell (<3.8 min)",
+            "fc": "#FAF5FF",
+            "ec": COLOR_GNN,
+            "tc": COLOR_GNN,
+            "dt": "+3m 50s"
         },
         {
-            "x": 70.0,
-            "time": "14:27:45 UTC",
-            "title": "Stage 4: Offshore Sink",
-            "entity": "Offshore Account Sink (C4)",
-            "metric": r"Mass Flow: $\Phi_{\text{flow}} = 0.994$",
-            "sub": r"Reconsolidated: $\$482{,}300$",
-            "fc": "#fef2f2",
-            "ec": "#dc2626",
-            "tc": "#991b1b",
-            "dt": "+4m 44s"
+            "x": 68.5,
+            "time": "10:27:45 BST",
+            "title": "Stage 4: Offshore Remittance",
+            "entity": "Singapore / UAE Shell Co",
+            "metric": "Consolidated: BDT 4,950,000",
+            "sub": "99.0% flow retention through chain",
+            "fc": COLOR_RISK_BG,
+            "ec": COLOR_RISK,
+            "tc": COLOR_RISK,
+            "dt": "+4m 45s"
         },
         {
-            "x": 89.5,
-            "time": "14:28:12 UTC",
-            "title": "Stage 5: Conformal Triage",
-            "entity": r"Verdict: $\mathbf{\Gamma(u) = \{1\}}$ (Quarantine)",
-            "metric": "Action: Wire Freeze (<0.45 ms)",
+            "x": 87.5,
+            "time": "10:28:12 BST",
+            "title": "Stage 5: Automated SAR",
+            "entity": "BFIU Regulatory Filing Desk",
+            "metric": "Real-Time Freeze (<0.45 ms)",
             "sub": "SHA-256 Merkle WORM Sealed",
-            "fc": "#f0fdf4",
-            "ec": "#16a34a",
-            "tc": "#166534",
-            "dt": "+27s"
+            "fc": COLOR_SAFE_BG,
+            "ec": COLOR_SAFE,
+            "tc": COLOR_SAFE,
+            "dt": "+27 sec"
         }
     ]
 
-    # Draw Stage Cards alternating cleanly with elegant pin connectors
-    # Stage 1, 3, 5: Placed ABOVE timeline (y: 57.0 to 86.0)
-    # Stage 2, 4: Placed BELOW timeline (y: 16.0 to 45.0)
+    card_w = 17.5
+    card_h = 30.0
 
     for i, s in enumerate(stages):
         cx = s["x"]
@@ -115,63 +123,74 @@ def generate():
         pin = patches.Circle((cx, y_axis), 1.6, facecolor=s["ec"], edgecolor="#ffffff", lw=1.2, zorder=5)
         ax.add_patch(pin)
 
-        # Timestamp Badge right beside the pin
-        if is_above:
-            ax.text(cx, y_axis - 3.2, s["time"], ha="center", va="top",
-                    fontsize=6.8, weight="bold", color="#1e293b",
-                    bbox=dict(boxstyle="round,pad=0.18", fc="#f8fafc", ec="#cbd5e1", lw=0.6), zorder=6)
-            # Connector vertical line up to card
-            ax.plot([cx, cx], [y_axis + 1.6, 58.0], color=s["ec"], lw=1.6, zorder=3)
+        # Interval duration badge between pins
+        if i > 0:
+            prev_cx = stages[i-1]["x"]
+            mid_x = (prev_cx + cx) / 2
+            ax.text(mid_x, y_axis, s["dt"], ha="center", va="center",
+                    fontsize=6.5, fontweight="bold", color=COLOR_DARK,
+                    bbox=dict(boxstyle="square,pad=0.25", fc="#ffffff", ec=COLOR_BORDER, lw=0.8), zorder=6)
 
-            # Card Above
-            card = patches.FancyBboxPatch((cx - 8.8, 58.0), 17.6, 27.5, boxstyle="round,pad=0.6",
-                                          facecolor=s["fc"], edgecolor=s["ec"], lw=1.4, zorder=3)
+        if is_above:
+            # Timestamp Badge below pin
+            ax.text(cx, y_axis - 3.8, s["time"], ha="center", va="top",
+                    fontsize=7.0, fontweight="bold", color=COLOR_DARK,
+                    bbox=dict(boxstyle="square,pad=0.25", fc="#f8fafc", ec=COLOR_BORDER, lw=0.8), zorder=6)
+            # Connector vertical line up to card
+            ax.plot([cx, cx], [y_axis + 1.6, 57.0], color=s["ec"], lw=1.6, zorder=3)
+
+            # Card Above (y: 57.0 to 87.0)
+            card = patches.Rectangle((cx - card_w/2, 57.0), card_w, card_h,
+                                     facecolor=s["fc"], edgecolor=s["ec"], lw=1.4, zorder=3)
             ax.add_patch(card)
+
+            # Header inside Card
+            ax.add_patch(patches.Rectangle((cx - card_w/2, 57.0 + card_h - 6.5), card_w, 6.5,
+                                           facecolor=s["ec"], edgecolor="none", zorder=4))
+            ax.text(cx, 57.0 + card_h - 3.2, s["title"], ha="center", va="center",
+                    fontsize=7.2, fontweight="bold", color="#ffffff", zorder=5)
 
             # Content inside Card Above
-            ax.text(cx, 82.5, s["title"], ha="center", va="center", fontsize=7.2, weight="bold", color=s["tc"], zorder=4)
-            ax.text(cx, 76.0, s["entity"], ha="center", va="center", fontsize=6.4, weight="bold", color="#0f172a", zorder=4)
-            ax.text(cx, 69.5, s["metric"], ha="center", va="center", fontsize=6.6, weight="bold", color=s["tc"], zorder=4)
-            ax.text(cx, 63.0, s["sub"], ha="center", va="center", fontsize=6.0, color="#475569", style="italic", zorder=4)
+            ax.text(cx, 75.5, s["entity"], ha="center", va="center", fontsize=6.8, fontweight="bold", color=COLOR_DARK, zorder=4)
+            ax.text(cx, 68.5, s["metric"], ha="center", va="center", fontsize=6.6, fontweight="bold", color=s["tc"], zorder=4)
+            ax.text(cx, 62.0, s["sub"], ha="center", va="center", fontsize=6.2, color=COLOR_MUTED, zorder=4)
 
         else:
-            ax.text(cx, y_axis + 3.2, s["time"], ha="center", va="bottom",
-                    fontsize=6.8, weight="bold", color="#1e293b",
-                    bbox=dict(boxstyle="round,pad=0.18", fc="#f8fafc", ec="#cbd5e1", lw=0.6), zorder=6)
+            # Timestamp Badge above pin
+            ax.text(cx, y_axis + 3.8, s["time"], ha="center", va="bottom",
+                    fontsize=7.0, fontweight="bold", color=COLOR_DARK,
+                    bbox=dict(boxstyle="square,pad=0.25", fc="#f8fafc", ec=COLOR_BORDER, lw=0.8), zorder=6)
             # Connector vertical line down to card
-            ax.plot([cx, cx], [y_axis - 1.6, 44.0], color=s["ec"], lw=1.6, zorder=3)
+            ax.plot([cx, cx], [y_axis - 1.6, 45.0], color=s["ec"], lw=1.6, zorder=3)
 
-            # Card Below
-            card = patches.FancyBboxPatch((cx - 8.8, 16.5), 17.6, 27.5, boxstyle="round,pad=0.6",
-                                          facecolor=s["fc"], edgecolor=s["ec"], lw=1.4, zorder=3)
+            # Card Below (y: 15.0 to 45.0)
+            card = patches.Rectangle((cx - card_w/2, 15.0), card_w, card_h,
+                                     facecolor=s["fc"], edgecolor=s["ec"], lw=1.4, zorder=3)
             ax.add_patch(card)
 
+            # Header inside Card Below
+            ax.add_patch(patches.Rectangle((cx - card_w/2, 15.0 + card_h - 6.5), card_w, 6.5,
+                                           facecolor=s["ec"], edgecolor="none", zorder=4))
+            ax.text(cx, 15.0 + card_h - 3.2, s["title"], ha="center", va="center",
+                    fontsize=7.2, fontweight="bold", color="#ffffff", zorder=5)
+
             # Content inside Card Below
-            ax.text(cx, 41.0, s["title"], ha="center", va="center", fontsize=7.2, weight="bold", color=s["tc"], zorder=4)
-            ax.text(cx, 34.5, s["entity"], ha="center", va="center", fontsize=6.4, weight="bold", color="#0f172a", zorder=4)
-            ax.text(cx, 28.0, s["metric"], ha="center", va="center", fontsize=6.6, weight="bold", color=s["tc"], zorder=4)
-            ax.text(cx, 21.5, s["sub"], ha="center", va="center", fontsize=6.0, color="#475569", style="italic", zorder=4)
+            ax.text(cx, 33.5, s["entity"], ha="center", va="center", fontsize=6.8, fontweight="bold", color=COLOR_DARK, zorder=4)
+            ax.text(cx, 26.5, s["metric"], ha="center", va="center", fontsize=6.6, fontweight="bold", color=s["tc"], zorder=4)
+            ax.text(cx, 20.0, s["sub"], ha="center", va="center", fontsize=6.2, color=COLOR_MUTED, zorder=4)
 
-        # Elapsed Interval Indicator between milestones
-        if i > 0:
-            prev_x = stages[i-1]["x"]
-            mid_x = (prev_x + cx) / 2.0
-            # Solid white pill on the timeline axis to cleanly occlude line
-            ax.text(mid_x, y_axis, s["dt"], ha="center", va="center", fontsize=6.0, weight="bold", color="#1e293b",
-                    bbox=dict(boxstyle="round,pad=0.25", fc="#ffffff", ec="#64748b", lw=0.8, alpha=1.0), zorder=10)
+    # Bottom Takeaway Callout Banner
+    ax.add_patch(patches.Rectangle(
+        (1.5, 3.0), 97.0, 8.5,
+        facecolor="#f8fafc", edgecolor=COLOR_BORDER, lw=1.0
+    ))
+    ax.text(50.0, 8.2, "CRITICAL DETECTION WINDOW: Total Influx-to-Quarantine Elapsed Dwell = 13 Minutes 12 Seconds",
+            ha="center", va="center", fontsize=7.6, fontweight="bold", color=COLOR_DARK)
+    ax.text(50.0, 5.2, "C-STGB unmasks sub-threshold bKash/Nagad smurfing and freezes funds before offshore clearing settlement completes.",
+            ha="center", va="center", fontsize=6.8, color=COLOR_MUTED)
 
-    # =========================================================================
-    # BOTTOM EXECUTIVE SUMMARY RIBBON (y: 2.5 to 8.5)
-    # =========================================================================
-    summary_card = patches.FancyBboxPatch((2.5, 2.5), 95.0, 6.5, boxstyle="round,pad=0.4",
-                                          facecolor="#f8fafc", edgecolor="#94a3b8", lw=1.0, zorder=2)
-    ax.add_patch(summary_card)
-
-    ax.text(50.0, 5.75, r"Total Incident Velocity: 13.1 Minutes from Influx to Autonomous Tier 1 Quarantine | Latency: < 0.45 ms STP Clearance | Fed SR 11-7 / SR 21-8 Aligned",
-            ha="center", va="center", fontsize=7.0, weight="bold", color="#1e293b", zorder=3)
-
-    # Save to all target directories
-    save_figure(fig, "fig_single_alert_timeline", pad_inches=0.15)
+    save_figure(fig, "fig_single_alert_timeline", pad_inches=0.12)
+    save_figure(fig, "fig21_single_alert_timeline", pad_inches=0.12)
     plt.close(fig)
 
 if __name__ == "__main__":

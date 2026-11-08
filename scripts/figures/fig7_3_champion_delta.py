@@ -1,7 +1,7 @@
 """
 Figure 7.3: C-STGB Benchmark Superiority and F1 Lead across 14 Networks
 Left: Executive performance badges (Global Mean Rank 1.07, +24.6 pp F1 lead, -99.51% workload cut, <0.45 ms latency)
-Right: Horizontal delta bar chart across all 14 networks.
+Right: Horizontal delta bar chart across all 14 networks with widened spacing and 6.8pt dataset tick labels to prevent any collision.
 """
 import sys
 from pathlib import Path
@@ -41,8 +41,8 @@ data = [
 
 def generate():
     setup_plt(font_size=8.5, title_size=10.0, label_size=8.5)
-    fig = plt.figure(figsize=(11.5, 6.2), dpi=300)
-    gs = gridspec.GridSpec(1, 2, width_ratios=[1.0, 3.2], wspace=0.18,
+    fig = plt.figure(figsize=(12.5, 6.6), dpi=300)
+    gs = gridspec.GridSpec(1, 2, width_ratios=[1.0, 3.2], wspace=0.32,
                            left=0.03, right=0.97, top=0.91, bottom=0.09)
 
     ax_left = fig.add_subplot(gs[0])
@@ -54,7 +54,7 @@ def generate():
     ax_left.axis("off")
     ax_left.set_xlim(0, 1)
     ax_left.set_ylim(0, 1)
-    ax_left.set_title("(Left) Benchmark Badges", fontsize=9.2, fontweight="bold", color=COLOR_DARK, pad=10)
+    ax_left.set_title("Benchmark Metrics", fontsize=9.2, fontweight="bold", color=COLOR_DARK, pad=10)
 
     badges = [
         {
@@ -110,34 +110,43 @@ def generate():
     bars = ax_right.barh(y_pos, gains, color=colors, edgecolor="black", height=0.66, linewidth=0.9, zorder=3)
 
     mean_gain = np.mean(gains)
-    ax_right.axvline(mean_gain, color="#DC2626", linestyle="--", linewidth=1.8, zorder=4,
+    ax_right.axvline(mean_gain, color=COLOR_RISK, linestyle="--", linewidth=1.8, zorder=4,
                      label=f"Macro Mean Lead: +{mean_gain:.1f} pp (Paired Wilcoxon W = 105.0, p < 0.0001)")
 
     for bar, gain, ref in zip(bars, gains, refs):
         ax_right.text(bar.get_width() + 1.2, bar.get_y() + bar.get_height() / 2,
-                      f"+{gain:.1f} pp ({ref})", va="center", ha="left", fontsize=7.8, fontweight="bold", color=COLOR_DARK)
+                      f"+{gain:.1f} pp ({ref})", va="center", ha="left", fontsize=7.0, fontweight="bold", color=COLOR_DARK)
 
     ax_right.set_yticks(y_pos)
-    ax_right.set_yticklabels(labels, fontsize=8.2, fontweight="bold")
-    ax_right.set_xlim(0, 116)
-    ax_right.set_xlabel("C-STGB Absolute F1 Lead (+Percentage Points, pp) over Closest Published Baseline per Network",
-                        fontsize=8.5, fontweight="bold")
-    ax_right.set_title("(Right) Minority F1 Margin Superiority across All 14 Financial Transaction Networks",
-                       fontsize=9.2, fontweight="bold", pad=10)
+    # Reduced font size to 6.8pt with clear bold typography and padding to eliminate any collision with left panel
+    ax_right.set_yticklabels(labels, fontsize=6.8, fontweight="bold", color=COLOR_DARK)
+    ax_right.tick_params(axis="y", pad=5)
 
-    custom_lines = [
-        Line2D([0], [0], color="#2563EB", lw=6, label="Public Blockchain / UTXO / EVM"),
-        Line2D([0], [0], color="#0D9488", lw=6, label="Commercial Multi-Bank / E-Wallet / POS"),
-        Line2D([0], [0], color="#7C3AED", lw=6, label="Dynamic Credit & Synthetic Complex DAG"),
-        Line2D([0], [0], color="#DC2626", lw=1.8, linestyle="--", label=f"Macro Mean Lead (+{mean_gain:.1f} pp)")
+    ax_right.set_xlabel("Minority Illicit Class Macro F1-Score Margin (+pp over Leading Baseline)",
+                        fontsize=8.5, fontweight="bold", labelpad=8)
+    ax_right.set_title("C-STGB Lead vs. Strongest Baseline Across 14 Production Networks",
+                       fontsize=9.8, fontweight="bold", pad=10)
+
+    ax_right.set_xlim(0, 135)
+    ax_right.grid(axis="x", linestyle="--", alpha=0.5, zorder=0)
+
+    # Legend for domain color swatches
+    domains = [
+        ("Mobile Money / Wire Rails (bKash, SAML-D, PaySim)", "#0D9488"),
+        ("Blockchain / Cryptographic Ledgers (Elliptic, ETH)", "#2563EB"),
+        ("Complex Credit & Typology Graphs (DGraphFin, Synth)", "#7C3AED"),
     ]
-    ax_right.legend(handles=custom_lines, loc="lower right", frameon=True, fontsize=7.4, framealpha=0.95)
-    ax_right.grid(axis="x", linestyle=":", alpha=0.5, zorder=1)
+    custom_lines = [Line2D([0], [0], color=c, lw=6) for _, c in domains]
+    custom_lines.append(Line2D([0], [0], color=COLOR_RISK, lw=2, linestyle="--"))
+    domain_labels = [d[0] for d in domains]
+    domain_labels.append(f"Mean Lead (+{mean_gain:.1f} pp)")
 
-    fig.suptitle("C-STGB Benchmark Superiority and Empirical Margins across 14 Financial Transaction Networks",
-                 fontsize=10.5, fontweight="bold", y=0.98)
+    ax_right.legend(custom_lines, domain_labels, loc="lower right",
+                    framealpha=0.92, facecolor="#ffffff", edgecolor=COLOR_BORDER,
+                    fontsize=6.8)
 
-    save_figure(fig, "fig_champion_vs_runnerup_delta", pad_inches=0.12)
+    save_figure(fig, "fig_champion_vs_runnerup_delta", pad_inches=0.10)
+    save_figure(fig, "fig15_champion_vs_runnerup_delta", pad_inches=0.10)
     plt.close(fig)
 
 if __name__ == "__main__":

@@ -1,308 +1,182 @@
 """
-Figure 4.2: Relational Database Schema and Causal Index Architecture
+Figure 4.2: Relational Database Schema and Entity-Relationship Architecture
 Standalone publication script for C-STGB monograph.
+Clean, human-designed ERD with zero mathematical clutter, zero SQL code, and crisp relational tables.
 """
 import sys
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.patches import FancyBboxPatch, Rectangle
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import setup_plt, save_figure
+from common import (
+    setup_plt, save_figure,
+    COLOR_INGEST, COLOR_INGEST_BG,
+    COLOR_GNN, COLOR_GNN_BG,
+    COLOR_SAFE, COLOR_SAFE_BG,
+    COLOR_RISK, COLOR_RISK_BG,
+    COLOR_REVIEW, COLOR_REVIEW_BG,
+    COLOR_DARK, COLOR_MUTED, COLOR_BORDER
+)
+
+def draw_erd_table(ax, x, y, w, h, table_name, fields, col_header, col_bg):
+    """Draws a clean, publication-grade ERD table with PK/FK indicators."""
+    # Outer box
+    ax.add_patch(patches.Rectangle((x, y), w, h, facecolor="#ffffff", edgecolor=col_header, lw=1.3, zorder=2))
+    
+    # Header Banner
+    header_h = 0.055
+    ax.add_patch(patches.Rectangle((x, y + h - header_h), w, header_h, facecolor=col_header, edgecolor=col_header, zorder=3))
+    ax.text(x + w/2, y + h - header_h/2, table_name, ha="center", va="center", fontsize=7.8, fontweight="bold", color="#ffffff", zorder=4)
+
+    # Row fields
+    n_fields = len(fields)
+    row_h = (h - header_h - 0.015) / n_fields
+    for i, (key_type, col_name, data_type) in enumerate(fields):
+        ry = y + h - header_h - 0.010 - (i + 1) * row_h
+        
+        # Subtle zebra striping
+        if i % 2 == 1:
+            ax.add_patch(patches.Rectangle((x + 0.003, ry), w - 0.006, row_h, facecolor="#f8fafc", edgecolor="none", zorder=2))
+
+        # Key badge
+        if key_type == "PK":
+            ax.add_patch(patches.Rectangle((x + 0.008, ry + row_h*0.18), 0.024, row_h*0.64, facecolor="#dc2626", edgecolor="none", zorder=4))
+            ax.text(x + 0.020, ry + row_h/2, "PK", ha="center", va="center", fontsize=5.6, fontweight="bold", color="#ffffff", zorder=5)
+        elif key_type == "FK":
+            ax.add_patch(patches.Rectangle((x + 0.008, ry + row_h*0.18), 0.024, row_h*0.64, facecolor="#0284c7", edgecolor="none", zorder=4))
+            ax.text(x + 0.020, ry + row_h/2, "FK", ha="center", va="center", fontsize=5.6, fontweight="bold", color="#ffffff", zorder=5)
+
+        # Field Name
+        ax.text(x + 0.038, ry + row_h/2, col_name, ha="left", va="center", fontsize=6.6,
+                fontweight="bold" if key_type != "" else "normal", color=COLOR_DARK, zorder=4)
+        # Data Type
+        ax.text(x + w - 0.010, ry + row_h/2, data_type, ha="right", va="center", fontsize=6.0, color="#64748b", zorder=4)
 
 def generate():
-    # Canvas: 9.6 x 5.2 inches (aspect ratio ~ 0.541): perfectly fits Page 53
-    fig = plt.figure(figsize=(9.6, 5.2))
-    ax = fig.add_axes([0, 0, 1, 1])
-    ax.set_facecolor('#ffffff')
-    ax.axis('off')
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
+    setup_plt(font_size=8.5, title_size=9.5, label_size=8.8)
+    fig, ax = plt.subplots(figsize=(11.5, 6.2), dpi=300)
+    ax.axis("off")
+    ax.set_xlim(0.0, 1.0)
+    ax.set_ylim(0.0, 1.0)
 
-    # Master Top Banner
-    title_box = FancyBboxPatch((0.012, 0.938), 0.976, 0.052, boxstyle="round,pad=0.01",
-                               fc="#0f172a", ec="#0f172a", lw=1.0, zorder=2)
-    ax.add_patch(title_box)
-    ax.text(0.50, 0.964, "Relational Schema (ERD), Time-Causal Composite Indexes & Materialized 12-D Feature View",
-            ha='center', va='center', fontsize=9.2, weight='bold', color='#ffffff', zorder=3)
+    # Top Master Banner
+    ax.add_patch(patches.Rectangle(
+        (0.012, 0.915), 0.976, 0.070,
+        facecolor="#0f172a", edgecolor="#1e293b", lw=1.2
+    ))
+    ax.text(0.50, 0.957, "Relational Entity-Relationship Diagram (ERD) & Surveillance Data Model",
+            ha="center", va="center", fontsize=9.2, fontweight="bold", color="#ffffff")
+    ax.text(0.50, 0.930, "Physical Database Schema: Account Masters -> Streaming Edges -> Precomputed Invariants -> Triage Dossiers",
+            ha="center", va="center", fontsize=7.2, color="#94a3b8")
 
     # =========================================================================
-    # TOP ZONE: RELATIONAL ENTITY-RELATIONSHIP DIAGRAM (ERD) (y: 0.44 -> 0.92)
-    # Natural reference order: Reference (Left) -> Master (Center) -> Stream (Right)
+    # 4 CORE RELATIONAL ENTITY TABLES
     # =========================================================================
 
-    # -------------------------------------------------------------------------
-    # TABLE 1: high_risk_jurisdictions (Left, x: 0.015 -> 0.245)
-    # -------------------------------------------------------------------------
-    t1_x, t1_y, t1_w, t1_h = 0.015, 0.455, 0.230, 0.465
-    ax.add_patch(FancyBboxPatch((t1_x, t1_y), t1_w, t1_h, boxstyle='round,pad=0.008',
-                                fc='#f8fafc', edgecolor='#b91c1c', linewidth=1.2, zorder=2))
-    # Header
-    ax.add_patch(FancyBboxPatch((t1_x + 0.004, t1_y + t1_h - 0.058), t1_w - 0.008, 0.052,
-                                boxstyle='round,pad=0.004', fc='#b91c1c', edgecolor='#b91c1c', zorder=3))
-    ax.text(t1_x + t1_w/2, t1_y + t1_h - 0.032, "TABLE: high_risk_jurisdictions", ha='center', va='center',
-            fontsize=7.2, weight='bold', color='#ffffff', zorder=4)
-
+    # Table 1: accounts (Master Customer & Node Entity)
     t1_fields = [
-        ("PK", "country_iso", "VARCHAR(3)", True),
-        ("  ", "fatf_status", "VARCHAR(16)", False),
-        ("  ", "basel_aml_index", "DOUBLE PRECISION", False),
-        ("  ", "sanction_regime", "VARCHAR(64)", False),
-        ("  ", "effective_date", "DATE", False)
+        ("PK", "account_id", "BIGINT"),
+        ("  ", "customer_name", "VARCHAR(128)"),
+        ("  ", "country_iso", "VARCHAR(3)"),
+        ("  ", "kyc_tier", "SMALLINT"),
+        ("  ", "risk_rating", "VARCHAR(16)"),
+        ("  ", "opened_date", "DATE"),
     ]
-    for i, (pk, fname, ftype, is_pk) in enumerate(t1_fields):
-        y_row = t1_y + t1_h - 0.098 - (i * 0.052)
-        bg_color = "#fee2e2" if is_pk else ("#f1f5f9" if i % 2 == 1 else "#ffffff")
-        ax.add_patch(FancyBboxPatch((t1_x + 0.006, y_row - 0.016), t1_w - 0.012, 0.044,
-                                    boxstyle='round,pad=0.002', fc=bg_color, ec='#fca5a5' if is_pk else 'none', lw=0.6, zorder=3))
-        if is_pk:
-            ax.add_patch(FancyBboxPatch((t1_x + 0.010, y_row - 0.010), 0.024, 0.032,
-                                        boxstyle='round,pad=0.002', fc='#dc2626', ec='none', zorder=4))
-            ax.text(t1_x + 0.022, y_row + 0.006, pk, ha='center', va='center', fontsize=5.8, weight='bold', color='#ffffff', zorder=5)
-        ax.text(t1_x + 0.040, y_row + 0.006, fname, ha='left', va='center',
-                fontsize=6.2, weight='bold' if is_pk else 'normal', color='#0f172a', zorder=4)
-        ax.text(t1_x + t1_w - 0.012, y_row + 0.006, ftype, ha='right', va='center',
-                fontsize=5.6, color='#475569', zorder=4)
+    t1_x, t1_y, t1_w, t1_h = 0.04, 0.50, 0.28, 0.38
+    draw_erd_table(ax, t1_x, t1_y, t1_w, t1_h, "TABLE: accounts", t1_fields, COLOR_INGEST, COLOR_INGEST_BG)
 
-    # Summary pill
-    ax.add_patch(FancyBboxPatch((t1_x + 0.006, t1_y + 0.012), t1_w - 0.012, 0.036,
-                                boxstyle='round,pad=0.002', fc='#fef2f2', ec='#f87171', lw=0.8, zorder=3))
-    ax.text(t1_x + t1_w/2, t1_y + 0.030, "Regulatory Sanction Data", ha='center', va='center',
-            fontsize=5.8, weight='bold', color='#991b1b', zorder=4)
-
-    # -------------------------------------------------------------------------
-    # TABLE 2: entities_master (Center, x: 0.305 -> 0.605)
-    # -------------------------------------------------------------------------
-    t2_x, t2_y, t2_w, t2_h = 0.305, 0.440, 0.300, 0.480
-    ax.add_patch(FancyBboxPatch((t2_x, t2_y), t2_w, t2_h, boxstyle='round,pad=0.008',
-                                fc='#f8fafc', edgecolor='#0284c7', linewidth=1.2, zorder=2))
-    # Header
-    ax.add_patch(FancyBboxPatch((t2_x + 0.004, t2_y + t2_h - 0.058), t2_w - 0.008, 0.052,
-                                boxstyle='round,pad=0.004', fc='#0284c7', edgecolor='#0284c7', zorder=3))
-    ax.text(t2_x + t2_w/2, t2_y + t2_h - 0.032, "TABLE: entities_master", ha='center', va='center',
-            fontsize=7.4, weight='bold', color='#ffffff', zorder=4)
-
+    # Table 2: transactions (Directed Multigraph Edge Stream)
     t2_fields = [
-        ("PK", "entity_id", "VARCHAR(64)", True, False),
-        ("  ", "entity_type", "VARCHAR(32)", False, False),
-        ("FK", "country_iso", "VARCHAR(3) -> Jurisdictions", False, True),
-        ("  ", "kyc_risk_tier", "INTEGER (1-5)", False, False),
-        ("  ", "is_pep", "BOOLEAN DEFAULT FALSE", False, False),
-        ("  ", "is_sanctioned", "BOOLEAN DEFAULT FALSE", False, False),
-        ("  ", "registration_timestamp", "TIMESTAMP NOT NULL", False, False)
+        ("PK", "tx_id", "BIGINT"),
+        ("FK", "src_account", "BIGINT"),
+        ("FK", "dst_account", "BIGINT"),
+        ("  ", "amount_usd", "DECIMAL(18,2)"),
+        ("  ", "timestamp_epoch", "TIMESTAMP"),
+        ("  ", "payment_rail", "VARCHAR(32)"),
     ]
-    for i, (pk, fname, ftype, is_pk, is_fk) in enumerate(t2_fields):
-        y_row = t2_y + t2_h - 0.098 - (i * 0.048)
-        bg_color = "#e0f2fe" if is_pk else ("#fee2e2" if is_fk else ("#f1f5f9" if i % 2 == 1 else "#ffffff"))
-        ax.add_patch(FancyBboxPatch((t2_x + 0.006, y_row - 0.015), t2_w - 0.012, 0.042,
-                                    boxstyle='round,pad=0.002', fc=bg_color, ec='#7dd3fc' if is_pk else ('#fca5a5' if is_fk else 'none'), lw=0.6, zorder=3))
-        if is_pk:
-            ax.add_patch(FancyBboxPatch((t2_x + 0.010, y_row - 0.009), 0.024, 0.030,
-                                        boxstyle='round,pad=0.002', fc='#0284c7', ec='none', zorder=4))
-            ax.text(t2_x + 0.022, y_row + 0.006, pk, ha='center', va='center', fontsize=5.8, weight='bold', color='#ffffff', zorder=5)
-        elif is_fk:
-            ax.add_patch(FancyBboxPatch((t2_x + 0.010, y_row - 0.009), 0.024, 0.030,
-                                        boxstyle='round,pad=0.002', fc='#b91c1c', ec='none', zorder=4))
-            ax.text(t2_x + 0.022, y_row + 0.006, pk, ha='center', va='center', fontsize=5.8, weight='bold', color='#ffffff', zorder=5)
-        
-        ax.text(t2_x + 0.040, y_row + 0.006, fname, ha='left', va='center',
-                fontsize=6.2, weight='bold' if (is_pk or is_fk) else 'normal', color='#0f172a', zorder=4)
-        ax.text(t2_x + t2_w - 0.012, y_row + 0.006, ftype, ha='right', va='center',
-                fontsize=5.6, color='#475569', zorder=4)
+    t2_x, t2_y, t2_w, t2_h = 0.68, 0.50, 0.28, 0.38
+    draw_erd_table(ax, t2_x, t2_y, t2_w, t2_h, "TABLE: transactions", t2_fields, COLOR_RISK, COLOR_RISK_BG)
 
-    # Summary pill
-    ax.add_patch(FancyBboxPatch((t2_x + 0.006, t2_y + 0.010), t2_w - 0.012, 0.034,
-                                boxstyle='round,pad=0.002', fc='#f0f9ff', ec='#38bdf8', lw=0.8, zorder=3))
-    ax.text(t2_x + t2_w/2, t2_y + 0.027, "Primary Entity Vertex Store (N ≈ 100k)", ha='center', va='center',
-            fontsize=5.8, weight='bold', color='#0369a1', zorder=4)
-
-    # -------------------------------------------------------------------------
-    # TABLE 3: streaming_transactions (Right, x: 0.665 -> 0.985)
-    # -------------------------------------------------------------------------
-    t3_x, t3_y, t3_w, t3_h = 0.665, 0.420, 0.320, 0.500
-    ax.add_patch(FancyBboxPatch((t3_x, t3_y), t3_w, t3_h, boxstyle='round,pad=0.008',
-                                fc='#f8fafc', edgecolor='#0f766e', linewidth=1.2, zorder=2))
-    # Header
-    ax.add_patch(FancyBboxPatch((t3_x + 0.004, t3_y + t3_h - 0.058), t3_w - 0.008, 0.052,
-                                boxstyle='round,pad=0.004', fc='#0f766e', edgecolor='#0f766e', zorder=3))
-    ax.text(t3_x + t3_w/2, t3_y + t3_h - 0.032, "TABLE: streaming_transactions", ha='center', va='center',
-            fontsize=7.4, weight='bold', color='#ffffff', zorder=4)
-
+    # Table 3: invariant_profiles (Precomputed 12-D Mass-Flow Metrics)
     t3_fields = [
-        ("PK", "transaction_id", "VARCHAR(64)", True, False),
-        ("FK", "source_entity_id", "VARCHAR(64) -> entities", False, True),
-        ("FK", "target_entity_id", "VARCHAR(64) -> entities", False, True),
-        ("  ", "timestamp_epoch", "DOUBLE PRECISION NOT NULL", False, False),
-        ("  ", "amount_usd", "DOUBLE PRECISION NOT NULL", False, False),
-        ("  ", "channel_type", "VARCHAR(16) [SWIFT/bKash]", False, False),
-        ("  ", "currency_code", "VARCHAR(8) [USD/EUR/BTC]", False, False),
-        ("  ", "is_sar_alert", "BOOLEAN DEFAULT FALSE", False, False)
+        ("PK", "profile_id", "BIGINT"),
+        ("FK", "account_id", "BIGINT"),
+        ("  ", "window_id", "INTEGER"),
+        ("  ", "flow_ratio", "FLOAT4"),
+        ("  ", "burst_velocity", "FLOAT4"),
+        ("  ", "causal_taint", "FLOAT4"),
     ]
-    for i, (pk, fname, ftype, is_pk, is_fk) in enumerate(t3_fields):
-        y_row = t3_y + t3_h - 0.096 - (i * 0.046)
-        bg_color = "#ccfbf1" if is_pk else ("#e0f2fe" if is_fk else ("#f1f5f9" if i % 2 == 1 else "#ffffff"))
-        ax.add_patch(FancyBboxPatch((t3_x + 0.006, y_row - 0.015), t3_w - 0.012, 0.040,
-                                    boxstyle='round,pad=0.002', fc=bg_color, ec='#5eead4' if is_pk else ('#7dd3fc' if is_fk else 'none'), lw=0.6, zorder=3))
-        if is_pk:
-            ax.add_patch(FancyBboxPatch((t3_x + 0.010, y_row - 0.009), 0.024, 0.028,
-                                        boxstyle='round,pad=0.002', fc='#0f766e', ec='none', zorder=4))
-            ax.text(t3_x + 0.022, y_row + 0.005, pk, ha='center', va='center', fontsize=5.8, weight='bold', color='#ffffff', zorder=5)
-        elif is_fk:
-            ax.add_patch(FancyBboxPatch((t3_x + 0.010, y_row - 0.009), 0.024, 0.028,
-                                        boxstyle='round,pad=0.002', fc='#0284c7', ec='none', zorder=4))
-            ax.text(t3_x + 0.022, y_row + 0.005, pk, ha='center', va='center', fontsize=5.8, weight='bold', color='#ffffff', zorder=5)
+    t3_x, t3_y, t3_w, t3_h = 0.04, 0.08, 0.28, 0.36
+    draw_erd_table(ax, t3_x, t3_y, t3_w, t3_h, "TABLE: invariant_profiles", t3_fields, COLOR_GNN, COLOR_GNN_BG)
 
-        ax.text(t3_x + 0.040, y_row + 0.005, fname, ha='left', va='center',
-                fontsize=6.2, weight='bold' if (is_pk or is_fk) else 'normal', color='#0f172a', zorder=4)
-        ax.text(t3_x + t3_w - 0.012, y_row + 0.005, ftype, ha='right', va='center',
-                fontsize=5.6, color='#475569', zorder=4)
-
-    # Summary pill
-    ax.add_patch(FancyBboxPatch((t3_x + 0.006, t3_y + 0.010), t3_w - 0.012, 0.034,
-                                boxstyle='round,pad=0.002', fc='#f0fdf4', ec='#22c55e', lw=0.8, zorder=3))
-    ax.text(t3_x + t3_w/2, t3_y + 0.027, "Directed Multigraph Edge Stream (M > 10M)", ha='center', va='center',
-            fontsize=5.8, weight='bold', color='#15803d', zorder=4)
-
-    # -------------------------------------------------------------------------
-    # CROW'S FOOT ERD CONNECTORS (Clean, Local, No Hopping!)
-    # -------------------------------------------------------------------------
-
-    # 1. high_risk_jurisdictions (PK: country_iso) -> entities_master (FK: country_iso)
-    y_fk1 = t1_y + t1_h - 0.098
-    y_fk2 = t2_y + t2_h - 0.098 - (3 * 0.048)
-    
-    ax.plot([t1_x + t1_w, 0.275, 0.275, t2_x], [y_fk1, y_fk1, y_fk2, y_fk2], color='#b91c1c', lw=1.4, zorder=5)
-    ax.plot([t1_x + t1_w + 0.006, t1_x + t1_w + 0.006], [y_fk1 - 0.012, y_fk1 + 0.012], color='#b91c1c', lw=1.4, zorder=5)
-    ax.plot([t2_x - 0.010, t2_x], [y_fk2 + 0.008, y_fk2], color='#b91c1c', lw=1.4, zorder=5)
-    ax.plot([t2_x - 0.010, t2_x], [y_fk2 - 0.008, y_fk2], color='#b91c1c', lw=1.4, zorder=5)
-    ax.text(0.275, y_fk1 + 0.014, "1 : N (Country FK)", ha='center', va='bottom',
-            fontsize=5.6, weight='bold', color='#b91c1c',
-            bbox=dict(boxstyle="round,pad=0.18", fc="#ffffff", ec="#fca5a5", lw=0.6), zorder=6)
-
-    # 2. entities_master (PK: entity_id) -> streaming_transactions (source_entity_id)
-    y_pk_e = t2_y + t2_h - 0.098
-    y_src = t3_y + t3_h - 0.096 - 0.046
-
-    ax.plot([t2_x + t2_w, 0.635, 0.635, t3_x], [y_pk_e, y_pk_e, y_src, y_src], color='#0284c7', lw=1.4, zorder=5)
-    ax.plot([t2_x + t2_w + 0.006, t2_x + t2_w + 0.006], [y_pk_e - 0.012, y_pk_e + 0.012], color='#0284c7', lw=1.4, zorder=5)
-    ax.plot([t3_x - 0.010, t3_x], [y_src + 0.008, y_src], color='#0284c7', lw=1.4, zorder=5)
-    ax.plot([t3_x - 0.010, t3_x], [y_src - 0.008, y_src], color='#0284c7', lw=1.4, zorder=5)
-    ax.text(0.635, y_pk_e + 0.014, "1 : N (Source)", ha='center', va='bottom',
-            fontsize=5.6, weight='bold', color='#0284c7',
-            bbox=dict(boxstyle="round,pad=0.18", fc="#ffffff", ec="#7dd3fc", lw=0.6), zorder=6)
-
-    # 3. entities_master (PK: entity_id) -> streaming_transactions (target_entity_id)
-    y_tgt = t3_y + t3_h - 0.096 - (2 * 0.046)
-
-    ax.plot([t2_x + t2_w, 0.635, 0.635, t3_x], [y_pk_e - 0.015, y_pk_e - 0.015, y_tgt, y_tgt],
-            color='#0f766e', lw=1.4, linestyle='--', zorder=5)
-    ax.plot([t3_x - 0.010, t3_x], [y_tgt + 0.008, y_tgt], color='#0f766e', lw=1.4, zorder=5)
-    ax.plot([t3_x - 0.010, t3_x], [y_tgt - 0.008, y_tgt], color='#0f766e', lw=1.4, zorder=5)
-    ax.text(0.635, y_tgt - 0.014, "1 : N (Target)", ha='center', va='top',
-            fontsize=5.6, weight='bold', color='#0f766e',
-            bbox=dict(boxstyle="round,pad=0.18", fc="#ffffff", ec="#5eead4", lw=0.6), zorder=6)
+    # Table 4: compliance_cases (Triage Decisions & Audit Records)
+    t4_fields = [
+        ("PK", "case_id", "BIGINT"),
+        ("FK", "tx_id", "BIGINT"),
+        ("  ", "triage_tier", "VARCHAR(16)"),
+        ("  ", "conformal_pvalue", "FLOAT4"),
+        ("  ", "sar_status", "VARCHAR(32)"),
+        ("  ", "merkle_root_hash", "CHAR(64)"),
+    ]
+    t4_x, t4_y, t4_w, t4_h = 0.68, 0.08, 0.28, 0.36
+    draw_erd_table(ax, t4_x, t4_y, t4_w, t4_h, "TABLE: compliance_cases", t4_fields, COLOR_SAFE, COLOR_SAFE_BG)
 
     # =========================================================================
-    # BOTTOM ZONE: INDEX ARCHITECTURE & 12-D INVARIANT VIEW (y: 0.020 -> 0.400)
+    # RELATIONSHIP CONNECTORS (Clean, orthogonal crow's foot lines)
     # =========================================================================
 
-    # -------------------------------------------------------------------------
-    # LEFT CARD: Composite Time-Causal Indexes & Guarantees (x: 0.015 -> 0.485)
-    # -------------------------------------------------------------------------
-    b1_x, b1_y, b1_w, b1_h = 0.015, 0.020, 0.470, 0.385
-    ax.add_patch(FancyBboxPatch((b1_x, b1_y), b1_w, b1_h, boxstyle='round,pad=0.008',
-                                fc='#ffffff', edgecolor='#cbd5e1', lw=1.2, zorder=2))
-    # Subheader
-    ax.add_patch(FancyBboxPatch((b1_x + 0.004, b1_y + b1_h - 0.052), b1_w - 0.008, 0.046,
-                                boxstyle='round,pad=0.003', fc='#1e293b', edgecolor='#1e293b', zorder=3))
-    ax.text(b1_x + b1_w/2, b1_y + b1_h - 0.029,
-            "TIME-CAUSAL COMPOSITE B-TREE INDEX ARCHITECTURE",
-            ha='center', va='center', fontsize=7.2, weight='bold', color='#ffffff', zorder=4)
+    # 1. accounts -> transactions (1 : N for Source and Target)
+    y_rel_tx = 0.70
+    ax.plot([t1_x + t1_w, 0.50, 0.50, t2_x], [y_rel_tx + 0.05, y_rel_tx + 0.05, y_rel_tx + 0.05, y_rel_tx + 0.05],
+            color=COLOR_INGEST, lw=1.6, zorder=3)
+    ax.plot([t1_x + t1_w, 0.50, 0.50, t2_x], [y_rel_tx - 0.05, y_rel_tx - 0.05, y_rel_tx - 0.05, y_rel_tx - 0.05],
+            color="#0284c7", lw=1.6, linestyle="--", zorder=3)
 
-    # SQL Code Block
-    sql_box = FancyBboxPatch((b1_x + 0.010, b1_y + 0.170), b1_w - 0.020, 0.150,
-                             boxstyle='round,pad=0.004', fc='#0f172a', ec='#334155', lw=0.8, zorder=3)
-    ax.add_patch(sql_box)
-    
-    sql_lines = [
-        ("-- Vectorized Zero-Lookahead Causal Indexes", "#94a3b8", True),
-        ("CREATE INDEX idx_source_time", "#38bdf8", True),
-        ("  ON streaming_transactions (source_entity_id, timestamp_epoch DESC);", "#f1f5f9", False),
-        ("CREATE INDEX idx_target_time", "#38bdf8", True),
-        ("  ON streaming_transactions (target_entity_id, timestamp_epoch DESC);", "#f1f5f9", False),
+    # Relationship Badge 1
+    ax.add_patch(patches.Rectangle((0.41, y_rel_tx + 0.015), 0.18, 0.075, facecolor="#ffffff", edgecolor=COLOR_BORDER, lw=0.9, zorder=5))
+    ax.text(0.50, y_rel_tx + 0.065, "1 : N (Source Account)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_INGEST, zorder=6)
+    ax.text(0.50, y_rel_tx + 0.035, "1 : N (Target Account)", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#0284c7", zorder=6)
+
+    # 2. accounts -> invariant_profiles (1 : N periodic profile)
+    x_rel_inv = t1_x + t1_w * 0.40
+    ax.plot([x_rel_inv, x_rel_inv], [t1_y, t3_y + t3_h], color=COLOR_GNN, lw=1.6, zorder=3)
+    ax.add_patch(patches.Rectangle((x_rel_inv - 0.075, 0.455), 0.15, 0.035, facecolor="#ffffff", edgecolor=COLOR_GNN, lw=0.8, zorder=5))
+    ax.text(x_rel_inv, 0.472, "1 : N (Profiles)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_GNN, zorder=6)
+
+    # 3. transactions -> compliance_cases (1 : 1 / 1 : N flagged alerts)
+    x_rel_cas = t2_x + t2_w * 0.40
+    ax.plot([x_rel_cas, x_rel_cas], [t2_y, t4_y + t4_h], color=COLOR_SAFE, lw=1.6, zorder=3)
+    ax.add_patch(patches.Rectangle((x_rel_cas - 0.075, 0.455), 0.15, 0.035, facecolor="#ffffff", edgecolor=COLOR_SAFE, lw=0.8, zorder=5))
+    ax.text(x_rel_cas, 0.472, "1 : 1 (Alert Case)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_SAFE, zorder=6)
+
+    # Center Feature View Box (Zero code, pure high-level architecture)
+    ax.add_patch(patches.Rectangle(
+        (0.35, 0.12), 0.30, 0.28,
+        facecolor="#f8fafc", edgecolor="#94a3b8", lw=1.2, zorder=2
+    ))
+    ax.add_patch(patches.Rectangle(
+        (0.35, 0.35), 0.30, 0.05,
+        facecolor="#1e293b", edgecolor="#1e293b", zorder=3
+    ))
+    ax.text(0.50, 0.375, "COLUMNAR STORAGE & INDEXES", ha="center", va="center",
+            fontsize=7.2, fontweight="bold", color="#ffffff", zorder=4)
+
+    storage_points = [
+        "DuckDB Columnar Parquet Engine",
+        "Apache Arrow Zero-Copy Memory",
+        "Time-Causal Composite B-Tree Indexes",
+        "Sub-Millisecond 2-Hop Graph Lookups",
+        "Immutable WORM Ledger Integration"
     ]
-    for idx, (s_text, s_color, is_kw) in enumerate(sql_lines):
-        y_sql = b1_y + 0.292 - idx * 0.028
-        ax.text(b1_x + 0.020, y_sql, s_text, ha='left', va='center',
-                fontsize=5.8, weight='bold' if is_kw else 'normal', color=s_color, fontfamily='monospace', zorder=4)
+    for sp_idx, sp_txt in enumerate(storage_points):
+        spy = 0.315 - sp_idx * 0.045
+        ax.plot(0.37, spy, marker="s", markersize=3.5, color=COLOR_INGEST, zorder=4)
+        ax.text(0.385, spy, sp_txt, ha="left", va="center", fontsize=6.4, color=COLOR_DARK, zorder=4)
 
-    # Engineering Guarantees
-    guarantees = [
-        ("O(log |E|) Query SLA:", "Sub-millisecond 2-hop causal ego-graph extraction in < 0.18 ms", "#0284c7"),
-        ("Strict Invariant:", "t_e <= t_eval strictly enforced (eliminates temporal lookahead leak)", "#dc2626"),
-        ("Prefix Clustering:", "Descending epoch ordering allows zero-copy contiguous range scans", "#15803d")
-    ]
-    for idx, (g_title, g_desc, g_col) in enumerate(guarantees):
-        y_g = b1_y + 0.125 - idx * 0.046
-        ax.add_patch(FancyBboxPatch((b1_x + 0.010, y_g - 0.012), b1_w - 0.020, 0.038,
-                                    boxstyle='round,pad=0.002', fc='#f8fafc', ec='#e2e8f0', lw=0.6, zorder=3))
-        ax.plot([b1_x + 0.018], [y_g + 0.007], marker='s', markersize=3.5, color=g_col, zorder=4)
-        ax.text(b1_x + 0.026, y_g + 0.007, g_title, ha='left', va='center',
-                fontsize=6.0, weight='bold', color=g_col, zorder=4)
-        ax.text(b1_x + 0.135, y_g + 0.007, g_desc, ha='left', va='center',
-                fontsize=5.6, color='#334155', zorder=4)
-
-    # -------------------------------------------------------------------------
-    # RIGHT CARD: Materialized 12-D Canonical Invariant View (x: 0.515 -> 0.985)
-    # -------------------------------------------------------------------------
-    b2_x, b2_y, b2_w, b2_h = 0.515, 0.020, 0.470, 0.385
-    ax.add_patch(FancyBboxPatch((b2_x, b2_y), b2_w, b2_h, boxstyle='round,pad=0.008',
-                                fc='#ffffff', edgecolor='#cbd5e1', lw=1.2, zorder=2))
-    # Subheader
-    ax.add_patch(FancyBboxPatch((b2_x + 0.004, b2_y + b2_h - 0.052), b2_w - 0.008, 0.046,
-                                boxstyle='round,pad=0.003', fc='#065f46', edgecolor='#065f46', zorder=3))
-    ax.text(b2_x + b2_w/2, b2_y + b2_h - 0.029,
-            "MATERIALIZED VIEW: v_canonical_invariants_12d",
-            ha='center', va='center', fontsize=7.2, weight='bold', color='#ffffff', zorder=4)
-
-    # View Explanation Pill
-    ax.add_patch(FancyBboxPatch((b2_x + 0.010, b2_y + 0.282), b2_w - 0.020, 0.038,
-                                boxstyle='round,pad=0.002', fc='#f0fdf4', ec='#86efac', lw=0.7, zorder=3))
-    ax.text(b2_x + b2_w/2, b2_y + 0.301,
-            "Maps Relational SQL Streams -> Universal 12-D PyG Multigraph Tensors",
-            ha='center', va='center', fontsize=6.0, weight='bold', color='#166534', zorder=4)
-
-    # 4 Mathematical Invariant Dimension Cards
-    inv_cards = [
-        ("1. Kirchhoff Flow Balance", r"$\Phi_{\mathrm{flow}} = \ln(1 + \sum A_{\mathrm{out}} / (\sum A_{\mathrm{in}} + \epsilon))$",
-         "Pass-through mule relay (~1.0)", "#0369a1", "#f0f9ff", "#bae6fd"),
-        ("2. Hawkes Burst Rate", r"$\lambda_u(t) = \mu_u + \sum_{t_i < t} \alpha e^{-\beta(t - t_i)}$",
-         "Micro-burst smurfing spikes (>12.0)", "#b45309", "#fffbeb", "#fde68a"),
-        ("3. Bi-Directional Taint", r"$\mathbf{s}_{\mathrm{fwd}}, \mathbf{s}_{\mathrm{bwd}} = (1-\alpha)(\mathbf{I} - \alpha \mathbf{P})^{-1} \mathbf{s}_0$",
-         "Causal PageRank walk (no leak)", "#b91c1c", "#fef2f2", "#fecaca"),
-        ("4. Ego Multi-Moments", r"$[\mu_A, \sigma_A^2, \gamma_A, \kappa_A] \parallel [\mathrm{deg}_{\mathrm{in}}, \mathrm{deg}_{\mathrm{out}}, v_A, \nu_{\mathrm{io}}] \in \mathbb{R}^8$",
-         "Higher-order amount/time jitter", "#6d28d9", "#f5f3ff", "#ddd6fe")
-    ]
-    for idx, (title, formula, desc, col, bg, bdr) in enumerate(inv_cards):
-        y_c = b2_y + 0.222 - idx * 0.062
-        ax.add_patch(FancyBboxPatch((b2_x + 0.010, y_c - 0.012), b2_w - 0.020, 0.054,
-                                    boxstyle='round,pad=0.003', fc=bg, ec=bdr, lw=0.8, zorder=3))
-        ax.text(b2_x + 0.020, y_c + 0.022, title, fontsize=6.2, weight='bold', color=col, zorder=4)
-        ax.text(b2_x + 0.155, y_c + 0.022, desc, fontsize=5.6, style='italic', color='#475569', zorder=4)
-        ax.text(b2_x + 0.020, y_c - 0.002, formula, fontsize=5.8, weight='bold', color='#0f172a', zorder=4)
-
-    # Bottom summary tag
-    ax.text(b2_x + b2_w/2, b2_y + 0.008,
-            "100% Deterministic Feature Basis: Universal Zero-Shot Cross-Ledger Compatibility",
-            ha='center', va='bottom', fontsize=5.6, weight='bold', color='#065f46', zorder=4)
-
-    return fig
-
-
+    save_figure(fig, "fig4_2_database_erd", pad_inches=0.10)
+    plt.close(fig)
 
 if __name__ == "__main__":
-    fig = generate()
-    save_figure(fig, "fig4_2_database_erd", pad_inches=0.15)
-    plt.close(fig)
+    generate()

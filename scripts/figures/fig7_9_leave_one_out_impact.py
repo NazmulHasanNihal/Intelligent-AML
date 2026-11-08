@@ -1,6 +1,6 @@
 """
-Figure 7.9: Leave-One-Out Component Ablation Impact Waterfall
-Standalone publication script for C-STGB monograph.
+Figure 7.9: Leave-One-Out Component Removal Waterfall & Asymmetry Analysis
+Redesigned with expanded xlim, widened canvas, and an enlarged, highly legible component impact table.
 """
 import sys
 from pathlib import Path
@@ -13,24 +13,25 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import setup_plt, save_figure
 
 def generate():
-    fig = plt.figure(figsize=(9.6, 5.0), dpi=300)
+    setup_plt(font_size=8.5, title_size=10.0, label_size=8.5)
+    fig = plt.figure(figsize=(10.8, 6.4), dpi=300)
     
     gs = gridspec.GridSpec(
         2, 2,
-        height_ratios=[3.6, 1.1],
+        height_ratios=[2.8, 1.8],
         width_ratios=[1.15, 1.0],
         left=0.06, right=0.98,
-        top=0.84, bottom=0.06,
-        wspace=0.22, hspace=0.32
+        top=0.88, bottom=0.06,
+        wspace=0.22, hspace=0.38
     )
 
     # -------------------------------------------------------------
     # Master Header Banner
     # -------------------------------------------------------------
-    fig.text(0.06, 0.966, "Leave-One-Out Component Removal Waterfall & Asymmetry Analysis",
-             fontsize=10.0, fontweight='bold', color='#0f172a', ha='left')
+    fig.text(0.06, 0.965, "Leave-One-Out Component Removal Waterfall & Asymmetry Analysis",
+             fontsize=10.2, fontweight='bold', color='#0f172a', ha='left')
     fig.text(0.06, 0.932, "Marginal degradation on Elliptic-v1 benchmark (N=5 Seeds, Table 7.4 Aligned) — Full Model: 91.42 ± 0.65% F1",
-             fontsize=7.4, color='#475569', ha='left')
+             fontsize=7.6, color='#475569', ha='left')
 
     # Component definitions
     components = [
@@ -65,7 +66,7 @@ def generate():
     # =============================================================
     ax_a = fig.add_subplot(gs[0, 0])
     ax_a.set_title(r"(a) Marginal Macro F1 Degradation ($\Delta\mathrm{F1}$ in percentage points)",
-                   fontsize=8.6, fontweight='bold', color='#0f172a', pad=8)
+                   fontsize=8.8, fontweight='bold', color='#0f172a', pad=8)
     
     bars_a = ax_a.barh(
         y_pos, drops_f1, xerr=stds_f1, height=0.55,
@@ -77,19 +78,20 @@ def generate():
     ax_a.set_yticks(y_pos)
     ax_a.set_yticklabels(components, fontsize=7.6, fontweight='bold', color='#1e293b')
     ax_a.set_xlabel("F1 Degradation (−pp relative to 91.42%)", fontsize=8.0, fontweight='bold', color='#1e293b')
-    ax_a.set_xlim([0, 13.5])
+    # Expanded xlim to 16.0 so the 9.92 pp label fits cleanly with plenty of margin
+    ax_a.set_xlim([0, 16.0])
     ax_a.grid(True, axis='x', linestyle='--', alpha=0.5, color='#cbd5e1', zorder=1)
     
     for y, d, s, ret in zip(y_pos, drops_f1, stds_f1, retained_f1):
         ax_a.text(d + s + 0.35, y, f"−{d:.2f} pp  ({ret:.2f}% F1)",
-                  ha='left', va='center', fontsize=7.2, fontweight='bold', color='#0f172a', zorder=4)
+                  ha='left', va='center', fontsize=6.8, fontweight='bold', color='#0f172a', zorder=4)
 
     # =============================================================
     # PANEL (B): PRECISION VS RECALL ASYMMETRY
     # =============================================================
     ax_b = fig.add_subplot(gs[0, 1])
     ax_b.set_title(r"(b) Decoupled Sensitivity: Precision Drop vs Recall Crash",
-                   fontsize=8.6, fontweight='bold', color='#0f172a', pad=8)
+                   fontsize=8.8, fontweight='bold', color='#0f172a', pad=8)
     
     bar_h = 0.30
     bars_p = ax_b.barh(y_pos + bar_h/2, drops_prec, height=bar_h, color='#0284c7', edgecolor='#0369a1',
@@ -100,7 +102,7 @@ def generate():
     ax_b.set_yticks(y_pos)
     ax_b.set_yticklabels(["" for _ in y_pos])  # Shared with left
     ax_b.set_xlabel("Metric Degradation (−pp)", fontsize=8.0, fontweight='bold', color='#1e293b')
-    ax_b.set_xlim([0, 17.5])
+    ax_b.set_xlim([0, 18.5])
     ax_b.grid(True, axis='x', linestyle='--', alpha=0.5, color='#cbd5e1', zorder=1)
     ax_b.legend(loc='lower right', fontsize=7.2, framealpha=0.95, facecolor='#ffffff', edgecolor='#cbd5e1')
     
@@ -111,12 +113,14 @@ def generate():
               ha='left', va='center', fontsize=6.8, fontweight='bold', color='#0369a1')
 
     # =============================================================
-    # BOTTOM PANEL (C): FORMAL MECHANISM DECOUPLING TABLE (NO CARDS!)
+    # BOTTOM PANEL (C): ENLARGED, HIGHLY READABLE MECHANISM TABLE
     # =============================================================
     ax_tbl = fig.add_subplot(gs[1, :])
     ax_tbl.axis('off')
+    ax_tbl.set_xlim(0, 1.0)
+    ax_tbl.set_ylim(0, 1.0)
 
-    col_widths = [0.22, 0.16, 0.38, 0.24]
+    col_widths = [0.24, 0.16, 0.38, 0.22]
     cols = ["Architectural Component", "Marginal Impact", "Theoretical & Operational Failure Mode", "Statutory Risk"]
     
     table_data = [
@@ -127,35 +131,39 @@ def generate():
     ]
 
     # Draw structured table grid
-    y_top = 0.98
-    row_h = 0.22
+    y_top = 0.96
+    hdr_h = 0.18
+    row_h = 0.195
     
     # Table Header
-    ax_tbl.add_patch(patches.Rectangle((0, y_top - 0.22), 1.0, 0.22, facecolor='#1e293b', edgecolor='#0f172a', lw=0.8))
+    ax_tbl.add_patch(patches.Rectangle((0, y_top - hdr_h), 1.0, hdr_h, facecolor='#1e293b', edgecolor='#0f172a', lw=0.9))
     x_curr = 0.0
     for w, c in zip(col_widths, cols):
-        ax_tbl.text(x_curr + 0.01, y_top - 0.11, c, ha='left', va='center', fontsize=7.0, fontweight='bold', color='#ffffff')
+        ax_tbl.text(x_curr + 0.012, y_top - hdr_h/2, c, ha='left', va='center', fontsize=7.6, fontweight='bold', color='#ffffff')
         x_curr += w
 
     # Table Rows
-    y_row = y_top - 0.22
     for r_idx, row in enumerate(table_data):
-        bg = "#f8fafc" if r_idx % 2 == 0 else "#ffffff"
-        ax_tbl.add_patch(patches.Rectangle((0, y_row - row_h), 1.0, row_h, facecolor=bg, edgecolor='#e2e8f0', lw=0.6))
-        x_curr = 0.0
-        for w, val in zip(col_widths, row):
-            fontweight = 'bold' if w in [col_widths[0], col_widths[1]] else 'normal'
-            color = '#0f172a' if w != col_widths[3] else '#b91c1c'
-            ax_tbl.text(x_curr + 0.01, y_row - row_h/2, val, ha='left', va='center', fontsize=6.2,
-                        fontweight=fontweight, color=color)
-            x_curr += w
-        y_row -= row_h
+        y_r = y_top - hdr_h - (r_idx + 1) * row_h
+        bg_col = "#ffffff" if (r_idx % 2 == 0) else "#f8fafc"
+        ax_tbl.add_patch(patches.Rectangle((0, y_r), 1.0, row_h, facecolor=bg_col, edgecolor='#cbd5e1', lw=0.6))
+        
+        x_c = 0.0
+        # Col 0: Component Name
+        ax_tbl.text(x_c + 0.012, y_r + row_h/2, row[0], ha='left', va='center', fontsize=7.4, fontweight='bold', color='#0f172a')
+        x_c += col_widths[0]
+        # Col 1: Marginal Impact
+        ax_tbl.text(x_c + 0.012, y_r + row_h/2, row[1], ha='left', va='center', fontsize=7.2, fontweight='bold', color='#b91c1c')
+        x_c += col_widths[1]
+        # Col 2: Theoretical Failure Mode
+        ax_tbl.text(x_c + 0.012, y_r + row_h/2, row[2], ha='left', va='center', fontsize=7.0, color='#334155')
+        x_c += col_widths[2]
+        # Col 3: Statutory Risk
+        ax_tbl.text(x_c + 0.012, y_r + row_h/2, row[3], ha='left', va='center', fontsize=7.0, fontweight='bold', color='#d97706')
 
-    return fig
-
-
+    save_figure(fig, "fig_leave_one_out_impact", pad_inches=0.10)
+    save_figure(fig, "fig17_leave_one_out_impact", pad_inches=0.10)
+    plt.close(fig)
 
 if __name__ == "__main__":
-    fig = generate()
-    save_figure(fig, "fig_leave_one_out_impact", pad_inches=0.10)
-    plt.close(fig)
+    generate()

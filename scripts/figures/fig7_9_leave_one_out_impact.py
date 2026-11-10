@@ -108,9 +108,9 @@ def generate():
     
     # Text callouts for key extremes
     ax_b.text(drops_rec[0] + 0.4, y_pos[0] - bar_h/2, "−14.5 pp (Recall Crash)",
-              ha='left', va='center', fontsize=6.8, fontweight='bold', color='#be123c')
+              ha='left', va='center', fontsize=6, fontweight='bold', color='#be123c')
     ax_b.text(drops_prec[2] + 0.4, y_pos[2] + bar_h/2, "−9.6 pp (Precision Drop)",
-              ha='left', va='center', fontsize=6.8, fontweight='bold', color='#0369a1')
+              ha='left', va='center', fontsize=6, fontweight='bold', color='#0369a1')
 
     # =============================================================
     # BOTTOM PANEL (C): ENLARGED, HIGHLY READABLE MECHANISM TABLE

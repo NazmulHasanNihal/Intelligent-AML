@@ -62,15 +62,14 @@ export const BenchmarkGovernanceHub = () => {
   const fetchLiveDrift = async () => {
     try {
       setLoadingDrift(true);
-      let res;
+      let res = null;
       try {
-        res = await fetch('/api/v1/models/drift-status');
+        const apiUrl = import.meta.env.VITE_API_URL || '';
+        res = await fetch(`${apiUrl}/api/v1/models/drift-status`);
       } catch (e) {
-        if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-          res = await fetch('http://localhost:8000/api/v1/models/drift-status').catch(() => null);
-        }
+        res = null;
       }
-      if (res && res.ok) {
+      if (res && res.ok && res.headers.get('content-type')?.includes('application/json')) {
         const data = await res.json();
         setDriftReport(data);
       } else {

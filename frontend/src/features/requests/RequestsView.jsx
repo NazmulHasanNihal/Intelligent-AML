@@ -54,7 +54,8 @@ export const RequestsView = () => {
   const handleRunOcrAudit = async (rfiId) => {
     setOcrLoadingId(rfiId);
     try {
-      const res = await fetch('/api/v1/rfi/ingest-document', {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${apiUrl}/api/v1/rfi/ingest-document`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -63,7 +64,7 @@ export const RequestsView = () => {
           document_type: 'BANGLADESH_BANK_EXP_FORM'
         })
       });
-      if (res.ok) {
+      if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
         const data = await res.json();
         setOcrData(prev => ({ ...prev, [rfiId]: data }));
         addToast('OCR Extraction Complete', 'Extracted LC-2026-CTG-88912 & ASYCUDA price deviation', 'critical');

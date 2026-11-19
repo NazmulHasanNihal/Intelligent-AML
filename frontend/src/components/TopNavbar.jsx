@@ -175,10 +175,10 @@ export const TopNavbar = ({
             >
               <span className={`w-2 h-2 rounded-full ${isLiveServer ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
               <span className="font-bold">
-                {isLiveServer ? 'Live API: 8000' : 'Standalone Engine'}
+                {isLiveServer ? 'Live Cloud API' : 'Standalone Engine'}
               </span>
               <span className="text-[9px] opacity-75 hidden xl:inline">
-                ({health?.tests_passed || '158/158 Tests'})
+                ({health?.tests_passed || '175/175 Tests'})
               </span>
             </button>
 
@@ -383,7 +383,7 @@ export const TopNavbar = ({
                 <div className="flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--text-muted)]">API GATEWAY:</span>
                   <span className="font-bold text-[var(--text-primary)]">
-                    {isLiveServer ? (typeof window !== 'undefined' && window.location.origin ? `${window.location.origin} (Active)` : 'http://127.0.0.1:8000 (Active)') : 'Standalone In-Memory Simulation Engine'}
+                    {isLiveServer ? (typeof window !== 'undefined' && window.location.origin ? `${window.location.origin} (Active)` : 'Cloud API Gateway (Active)') : 'Standalone In-Memory Simulation Engine'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-mono">

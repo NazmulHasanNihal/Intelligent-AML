@@ -195,7 +195,8 @@ In accordance with ${currentJurisdiction.citation}, this suspicious activity rep
   const handleSignWithHSM = async () => {
     setSigningLoading(true);
     try {
-      const res = await fetch('/api/v1/sar/sign', {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${apiUrl}/api/v1/sar/sign`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -205,7 +206,7 @@ In accordance with ${currentJurisdiction.citation}, this suspicious activity rep
           approver: currentBanker?.name || 'Authorized Officer'
         })
       });
-      if (res.ok) {
+      if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
         const data = await res.json();
         setHsmReceipt(data);
         logAuditAction(

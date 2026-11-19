@@ -61,15 +61,14 @@ export const MultiAgentSARWorkbench = ({ activeCase, onOpenNoticeModal, onOpenAc
     try {
       setDownloadingPdf(true);
       const caseId = activeCase?.id || 'SAR-2026-BD-8842';
-      let res;
+      let res = null;
       try {
-        res = await fetch(`/api/v1/sar/${caseId}/pdf`);
+        const apiUrl = import.meta.env.VITE_API_URL || '';
+        res = await fetch(`${apiUrl}/api/v1/sar/${caseId}/pdf`);
       } catch (e) {
-        if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-          res = await fetch(`http://localhost:8000/api/v1/sar/${caseId}/pdf`).catch(() => null);
-        }
+        res = null;
       }
-      if (res && res.ok) {
+      if (res && res.ok && res.headers.get('content-type')?.includes('application/pdf')) {
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');

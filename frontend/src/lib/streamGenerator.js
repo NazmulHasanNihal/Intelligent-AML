@@ -159,12 +159,24 @@ class TransactionStreamService {
       this.ws = null;
     }
 
+    // When deployed standalone (e.g. Vercel, Netlify) without a dedicated backend WS proxy,
+    // rely on high-fidelity client-side simulation engine unless VITE_WS_URL is provided.
+    const wsUrlFromEnv = import.meta.env.VITE_WS_URL;
+    const isCloudStandalone = !wsUrlFromEnv && typeof window !== 'undefined' && 
+      window.location.hostname !== 'localhost' && 
+      window.location.hostname !== '127.0.0.1';
+    
+    if (isCloudStandalone) {
+      this.isWsConnected = false;
+      return;
+    }
+
     try {
       const isHttps = window.location.protocol === 'https:';
       const wsProtocol = isHttps ? 'wss:' : 'ws:';
       const host = window.location.host;
-      // Connect to Vite proxy or backend directly
-      const wsUrl = `${wsProtocol}//${host}/ws/stream`;
+      // Connect to custom WS URL, Vite proxy, or backend directly
+      const wsUrl = wsUrlFromEnv || `${wsProtocol}//${host}/ws/stream`;
 
       this.ws = new WebSocket(wsUrl);
 
@@ -589,9 +601,10 @@ class TransactionStreamService {
 
     // Attempt backend scenario generation first
     try {
-      fetch(`/api/v1/stream/scenario/${scenarioId}`, { method: 'POST' })
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      fetch(`${apiUrl}/api/v1/stream/scenario/${scenarioId}`, { method: 'POST' })
         .then(res => {
-          if (res.ok) return res.json();
+          if (res.ok && res.headers.get('content-type')?.includes('application/json')) return res.json();
           return null;
         })
         .then(data => {

@@ -51,7 +51,8 @@ export const SanctionsScreeningModal = () => {
     setLoading(true);
     const start = performance.now();
     try {
-      const res = await fetch('/api/v1/screening/query', {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${apiUrl}/api/v1/screening/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -60,7 +61,7 @@ export const SanctionsScreeningModal = () => {
           watchlists: selectedWatchlists
         })
       });
-      if (res.ok) {
+      if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
         const data = await res.json();
         setResults(data);
       } else {

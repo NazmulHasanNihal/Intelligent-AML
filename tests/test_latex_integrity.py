@@ -5,7 +5,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 def test_ieee_research_paper_integrity():
-    project_dir = BASE_DIR / "papers" / "ESWA_Research_Paper"
+    project_dir = BASE_DIR / "papers" / "EAAI_Research_Paper"
+    if not project_dir.exists():
+        project_dir = BASE_DIR / "papers" / "ESWA_Research_Paper"
     if not project_dir.exists():
         project_dir = BASE_DIR / "papers" / "IEEE_Research_Paper"
     if not project_dir.exists():

@@ -6,7 +6,7 @@
   \item \textbf{Asynchronous Serving Tier:} FastAPI / Uvicorn asynchronous streaming endpoints supporting ISO 20022 webhooks with sub-millisecond response SLAs.
   \item \textbf{Cloud-Native Orchestration:} Multi-stage Docker containerization and Kubernetes manifests with Horizontal Pod Autoscaling (HPA) from 4 to 32 worker replicas.
   \item \textbf{Production Telemetry:} Prometheus metrics tracking P50/P90/P99 latency, conformal triage distributions, edge-pruning ratios, and streaming drift statistics.
-  \item \textbf{Verification Suite:} 158 automated unit, integration, and regression tests achieving 100\% pass verification across 25 dedicated test modules.
+  \item \textbf{Verification Suite:} 175 automated unit, integration, and regression tests achieving 100\% pass verification across 30 dedicated test modules.
 \end{itemize}
 \end{takeawaybox}
 
@@ -72,7 +72,7 @@ The sequence diagram documents the following deterministic execution stages:
 The complete asynchronous FastAPI endpoint implementation is documented in Appendix~\ref{app:operator_manual} (Listing~\ref{app_lst:fastapi_code}).
 
 \section{Per-Module Computational Complexity, Latency, and Memory Footprint}
-To rigorously characterize system scaling under enterprise authorization SLAs, Table~\ref{tab:module_complexity} profiles the algorithmic time complexity, single-event latency, and GPU memory footprint across each discrete module of C-STGB.
+To rigorously characterize system scaling under enterprise authorization SLAs, Table~\ref{tab:module_complexity} profiles the algorithmic time complexity, single-event latency, and memory footprint across each discrete module of C-STGB. Single-event Fast-Path production inference ($0.45\,\text{ms}$ P50 / $0.82\,\text{ms}$ P99) is fully CPU-native, executing on commodity enterprise x86-64 or ARM64 server CPUs without requiring dedicated GPU accelerators. Offline training across all 14 networks and high-throughput enterprise burst clusters ($>31,200\,\text{tx/s}$) support optional GPU acceleration (\texttt{nvidia.com/gpu: "1"}).
 
 \begin{table}[htbp]
 \centering
@@ -115,7 +115,7 @@ To guarantee reproducible deployment across on-premise banking mainframes, cloud
 
 The C-STGB serving tier is packaged as an immutable, hardened multi-stage Docker container built upon minimal Debian-slim images with pre-compiled PyTorch C++ extensions and zero-copy Apache Arrow memory bindings.
 
-For high-availability cloud deployment (e.g., AWS EKS, Google Cloud GKE, on-prem OpenShift), the platform is orchestrated via Kubernetes with Horizontal Pod Autoscaling (HPA). The autoscaler dynamically scales worker pods from 4 to 32 replicas based on CPU utilization and queue depth. The complete Dockerfile and Kubernetes deployment manifests are documented in Appendix~\ref{app:operator_manual} (Listing~\ref{app_lst:dockerfile} and Listing~\ref{app_lst:k8s_deployment}).
+For high-availability cloud deployment (e.g., AWS EKS, Google Cloud GKE, on-prem OpenShift), the platform is orchestrated via Kubernetes with Horizontal Pod Autoscaling (HPA). The autoscaler dynamically scales worker pods from 4 to 32 replicas based on CPU utilization and queue depth. While high-concurrency burst clusters support optional GPU acceleration (\texttt{nvidia.com/gpu: "1"} as specified in Listing~\ref{app_lst:k8s_deployment}), standard production pods run with complete CPU isolation. The complete Dockerfile and Kubernetes deployment manifests are documented in Appendix~\ref{app:operator_manual} (Listing~\ref{app_lst:dockerfile} and Listing~\ref{app_lst:k8s_deployment}).
 
 \subsection{Prometheus Metrics \& Real-Time Telemetry}
 The microservice exposes Prometheus \texttt{/metrics} telemetry for real-time operations:
@@ -127,8 +127,8 @@ The microservice exposes Prometheus \texttt{/metrics} telemetry for real-time op
     \item \texttt{cstgb\_streaming\_drift\_pvalue}: Gauge recording two-sample Kolmogorov-Smirnov statistics on streaming non-conformity scores.
 \end{itemize}
 
-\subsection{Automated Test Verification Suite (158 Tests)}
-The repository incorporates 158 automated unit, integration, and regression tests across 25 dedicated test modules, achieving \textbf{100\% pass verification} across:
+\subsection{Automated Test Verification Suite (175 Tests across 30 Modules)}
+The repository incorporates 175 automated unit, integration, and regression tests across 30 dedicated test modules, achieving \textbf{100\% pass verification} across:
 \begin{itemize}
     \item Continuous Tri-Band harmonic attention \& Hawkes point process intensity calculations.
     \item Latent GraphSMOTE minority oversampling and bilinear link prediction heads.
@@ -148,4 +148,4 @@ The software platform enforces enterprise-grade security controls:
 \end{enumerate}
 
 \section{Chapter Summary}
-This chapter detailed the enterprise software engineering architecture of Intelligent-AML, presenting asynchronous FastAPI endpoints, zero-copy Arrow memory management, containerization specifications, the 158-test verification suite, and security governance protocols. The next chapter synthesizes research conclusions, limitations, and future research directions.
+This chapter detailed the enterprise software engineering architecture of Intelligent-AML, presenting asynchronous FastAPI endpoints, zero-copy Arrow memory management, containerization specifications, the 175-test (30-module) verification suite, and security governance protocols. The next chapter synthesizes research conclusions, limitations, and future research directions.

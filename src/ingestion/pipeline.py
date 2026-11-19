@@ -142,6 +142,15 @@ class _LazyDuckDB:
     def cursor(self, *a, **k):
         return self._ensure().cursor(*a, **k)
 
+    def sql(self, *a, **k):
+        return self._ensure().sql(*a, **k)
+
+    def unregister(self, *a, **k):
+        return self._ensure().unregister(*a, **k)
+
+    def __getattr__(self, name):
+        return getattr(self._ensure(), name)
+
 
 con = _LazyDuckDB()
 
@@ -1714,7 +1723,7 @@ def load_full_dataset(dataset_name):
         patterns.append(str(stream_dir / "*.parquet"))
     if not patterns:
         return None
-    return con.execute(f"SELECT * FROM read_parquet({patterns}, union_by_name=true)").pl()
+    return con.sql(f"SELECT * FROM read_parquet({patterns}, union_by_name=true)").pl()
 
 
 def watch_folder_and_ingest(dataset_name, folder, max_polls=3, poll_interval_s=5):

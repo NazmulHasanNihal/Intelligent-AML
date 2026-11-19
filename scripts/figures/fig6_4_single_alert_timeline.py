@@ -68,7 +68,7 @@ def generate():
             "title": "Stage 2: MFS Smurfing",
             "entity": "bKash & Nagad Wallets",
             "metric": "Structured: BDT 99,000 / tx",
-            "sub": "Evades BDT 100,000 CTR limit",
+            "sub": "Evades BDT 100k MFS/Agent Structuring Limit",
             "fc": COLOR_REVIEW_BG,
             "ec": COLOR_REVIEW,
             "tc": COLOR_REVIEW,

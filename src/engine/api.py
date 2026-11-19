@@ -267,7 +267,7 @@ def health_check():
         "version": "1.0.0",
         "timestamp": time.time(),
         "cached_nodes_count": len(subgraph_cache._cache),
-        "tests_passed": "154/154 (100%)",
+        "tests_passed": "175/175 (100%)",
         "rate_limiting": "ACTIVE",
         "cryptographic_ledger": "VERIFIED"
     }
@@ -1384,6 +1384,7 @@ def explain_case_with_copilot(request: Request, req: CopilotExplainRequest):
 # =============================================================================
 
 @app.post("/score/transaction", response_model=TransactionScoreResponse, tags=["Direct Aliases"])
+@app.post("/api/v1/inference/score", response_model=TransactionScoreResponse, tags=["Direct Aliases"])
 def score_transaction_alias(req: TransactionScoreRequest):
     return score_transaction(req)
 

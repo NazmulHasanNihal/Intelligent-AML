@@ -20,7 +20,7 @@ def generate():
     fig, ax = plt.subplots(figsize=(9.2, 3.8), dpi=300)
 
     steps = [
-        r"Base GCN ($\tau=0.50$)",
+        r"Base GCN (Bayes $\tau^*$)",
         r"+ 12-D Invariants",
         r"+ Hawkes Temporal",
         r"+ Edge Gate ($\hat{g}_{ij} \geq 0.10$)",

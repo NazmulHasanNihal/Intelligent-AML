@@ -432,7 +432,7 @@ Table~\ref{tab:adversarial_benchmarks} reports the relative F1-score retention u
 
 \begin{table}[htbp]
 \centering
-\caption[Adversarial Topological Robustness under Camouflage Attacks]{Adversarial Topological Robustness and Relative F1-Score Retention under Camouflage Attacks on Elliptic-v1.}
+\caption[Adversarial Topological Robustness under Camouflage Attacks]{Adversarial Topological Robustness and Relative F1-Score Retention under Camouflage Attacks on Elliptic-v1.\footnote{In Table~\ref{tab:adversarial_benchmarks}, Standard GCN and spatial baselines are evaluated under their standard default decision cutoff ($\tau = 0.50$), yielding $18.73\%$ clean baseline F1 on Elliptic-v1. When decision thresholds are individually tuned via Bayesian optimization on validation splits ($\tau^* = 0.28$), GCN achieves $43.55\%$ as reported in Table~\ref{tab:sota_reported_comparison} and Table~\ref{app_tab:master_baseline_results}.}}
 \label{tab:adversarial_benchmarks}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccc}

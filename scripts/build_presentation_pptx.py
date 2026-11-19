@@ -1034,7 +1034,7 @@ def create_presentation():
         ("Temperature Scaling", "99.89%", "92.80%", "-6.20 pp", "0.31%"),
         ("Isotonic Regression", "99.85%", "94.50%", "-4.50 pp", "0.38%"),
         ("Marginal Conformal", "99.91%", "82.40%", "-16.60 pp", "18.40%"),
-        ("C-STGB Class-Cond. CRC", "99.32%", "99.12%", "+0.12 pp", "0.50%")
+        ("C-STGB Class-Cond. CRC", "99.33%", "99.12%", "+0.12 pp", "0.49%")
     ]
     for ri, r in enumerate(cal_data):
         is_cstgb = (ri == 4)
@@ -1294,7 +1294,7 @@ def create_presentation():
     p.space_after = Pt(2)
     concls = [
         "• Solved 5 GNN Failure Modes: Breaks 1-WL isomorphism, eliminates camouflage over-smoothing, and recovers minority recall.",
-        "• Rigorous Coverage Guarantees: 99.12% empirical illicit recall with 99.32% automated straight-through processing.",
+        "• Rigorous Coverage Guarantees: 99.12% empirical illicit recall with 99.33% automated straight-through processing.",
         "• Open-Source & Reproducible: Complete 134-page monograph, 56 standalone Python figure scripts, and production FastAPI backend."
     ]
     for c in concls:
@@ -1334,7 +1334,7 @@ def create_presentation():
         p.font.color.rgb = SLATE_MUTED
 
     add_examiner_strip(s20, [
-        "Monograph Artifact Verification: 134 pages, 56 reproducible Python figures (100% test pass), 14 evaluated datasets, 0 broken references, compiled with Tectonic.",
+        "Monograph Artifact Verification: 134 pages, 56 reproducible Python figures (175 tests / 100% test pass across 30 modules), 14 evaluated datasets, 0 broken references, compiled with Tectonic.",
         "Committee Q&A: The candidates invite questions and critical discussion from the examination board."
     ])
     set_speaker_notes(s20, "Close by summarizing how C-STGB bridges geometric deep learning, conformal statistics, and agentic law to secure the future of digital banking, then invite questions from the examination board.")

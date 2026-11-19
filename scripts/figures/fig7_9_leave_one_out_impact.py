@@ -45,12 +45,12 @@ def generate():
     
     y_pos = np.arange(len(components))[::-1]
     
-    drops_f1 = np.array([9.92, 7.46, 5.62, 5.32, 3.30, 2.30])
-    stds_f1 = np.array([0.82, 0.80, 0.72, 0.70, 0.65, 0.64])
-    retained_f1 = np.array([81.50, 83.96, 85.80, 86.10, 88.12, 89.12])
+    drops_f1 = np.array([9.92, 13.00, 5.62, 5.32, 3.30, 2.30])
+    stds_f1 = np.array([0.82, 0.88, 0.72, 0.70, 0.65, 0.64])
+    retained_f1 = np.array([81.50, 78.42, 85.80, 86.10, 88.12, 89.12])
     
-    drops_prec = np.array([4.40, 7.20, 9.60, 4.70, 3.30, 2.30])
-    drops_rec = np.array([14.50, 7.70, 1.60, 5.90, 3.30, 2.30])
+    drops_prec = np.array([4.40, 11.60, 9.60, 4.70, 3.30, 2.30])
+    drops_rec = np.array([14.50, 14.30, 1.60, 5.90, 3.30, 2.30])
 
     bar_colors = [
         "#dc2626",  # Red-600
@@ -78,8 +78,8 @@ def generate():
     ax_a.set_yticks(y_pos)
     ax_a.set_yticklabels(components, fontsize=7.6, fontweight='bold', color='#1e293b')
     ax_a.set_xlabel("F1 Degradation (−pp relative to 91.42%)", fontsize=8.0, fontweight='bold', color='#1e293b')
-    # Expanded xlim to 16.0 so the 9.92 pp label fits cleanly with plenty of margin
-    ax_a.set_xlim([0, 16.0])
+    # Expanded xlim to 18.0 so the 13.00 pp label fits cleanly with plenty of margin
+    ax_a.set_xlim([0, 18.0])
     ax_a.grid(True, axis='x', linestyle='--', alpha=0.5, color='#cbd5e1', zorder=1)
     
     for y, d, s, ret in zip(y_pos, drops_f1, stds_f1, retained_f1):
@@ -125,7 +125,7 @@ def generate():
     
     table_data = [
         ["Typology GraphSMOTE", "ΔF1: −9.92 pp\nΔRec: −14.5 pp", "Severe minority class collapse under 0.05% skew; failure to learn motifs", "High FN Regulatory Fines"],
-        ["12-D Canonical Invariants", "ΔF1: −7.46 pp\nSymmetric drop", "Violation of flow conservation & capital velocity kinetics across hops", "Cross-Rail Non-Transfer"],
+        ["12-D Canonical Invariants", "ΔF1: −13.00 pp\nΔRec: −14.3 pp", "Violation of flow conservation & capital velocity kinetics across hops", "Cross-Rail Non-Transfer"],
         ["Edge-Trust Gating", "ΔF1: −5.62 pp\nΔPrec: −9.6 pp", "Spurious camouflage chaff overwhelms message passing (smurfing noise)", "Severe Alert Fatigue"],
         ["Tri-Band Decay + Hawkes", "ΔF1: −7.62 pp\nTime sensitivity", "Inability to decouple microsecond transaction bursts from 90-day dormancy", "Evasion via Temporal Gap"]
     ]

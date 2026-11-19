@@ -128,6 +128,10 @@ class LaTeXProjectValidator:
             for lbl in found_labels:
                 labels.add(lbl.strip())
 
+            found_lst_labels = re.findall(r"(?:\[|\s|,)label=\{([^}]+)\}", clean_content)
+            for lbl in found_lst_labels:
+                labels.add(lbl.strip())
+
             found_refs = re.findall(r"\\(?:ref|eqref)\{([^}]+)\}", clean_content)
             for r in found_refs:
                 refs.append((r.strip(), tex_file))

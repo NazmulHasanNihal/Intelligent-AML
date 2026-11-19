@@ -191,14 +191,14 @@ In compliance with international open-science reproducibility standards, Table~\
 \toprule
 \textbf{Checklist Item} & \textbf{Status} & \textbf{Repository Location / Verification Reference} \\
 \midrule
-Open Code Repository & Verified & Persistent repository: \url{https://anonymous.4open.science/r/Intelligent-AML} \\
+Open Code Repository & Verified & Persistent repository: \url{https://github.com/NazmulHasanNihal/Intelligent-AML} \\
 Pretrained Model Checkpoints & Verified & Checkpoints for all 14 networks deposited in repository \texttt{/models} \\
 Hardware Specification & Disclosed & Dual AMD EPYC 7763, 512 GB RAM, 4x NVIDIA A100 (80 GB) in Table~\ref{tab:compute_budget} \\
 Software Stack Versions & Disclosed & Python 3.10+, PyTorch 2.4, PyG 2.5, DuckDB 1.0, Apache Arrow 16.0 \\
 Locked Random Seeds & Disclosed & Five locked seeds: $\{42, 101, 2024, 7, 999\}$ for all runs \\
 Data Chronological Splits & Disclosed & Zero-leakage chronological 60/10/10/20\% protocol in Section~\ref{sec:ch7_splits} \\
 Hyperparameter Grid & Disclosed & Complete search spaces and optimal configurations in Table~\ref{app_tab:hyperparam_grid} \\
-Automated Test Suites & Disclosed & 158 automated unit, integration, and regression tests passing with exit code 0 \\
+Automated Test Suites & Disclosed & 175 automated unit, integration, and regression tests across 30 modules passing with exit code 0 \\
 \bottomrule
 \end{tabular}%
 }
@@ -289,10 +289,10 @@ Table~\ref{app_tab:master_baseline_results} reports the full multi-baseline benc
 \section{System Overview \& Software Stack}
 To bridge the gap between theoretical machine learning formulations and Tier-1 banking operations, \textbf{Intelligent-AML (C-STGB)} is realized as an enterprise-grade financial surveillance platform. The front-end is engineered using React 18, Vite, and hardware-accelerated WebGL (Three.js and 3D Force-Directed Graph engines) paired with Apache ECharts telemetry canvases. The back-end comprises an asynchronous FastAPI microservice layer communicating with DuckDB zero-copy Apache Arrow tables and PyTorch Geometric tensor workers.
 
-The platform provides dual-mode operational resilience: (i) an asynchronous production streaming mode connected to live banking webhooks, and (ii) a standalone in-memory simulation engine verified across 158 automated unit, integration, and regression test suites.
+The platform provides dual-mode operational resilience: (i) an asynchronous production streaming mode connected to live banking webhooks, and (ii) a standalone in-memory simulation engine verified across 175 automated unit, integration, and regression test suites across 30 modules.
 
 \section{Specialized Operational Consoles}
-The user interface is structured into six dedicated operational desks, designed around role-based access control (Level-1 Compliance Analyst, Level-2 Senior Investigator, Chief Compliance Officer, and Model Risk Officer):
+The user interface is structured into dedicated operational desks and governance consoles, designed around role-based access control (Level-1 Compliance Analyst, Level-2 Senior Investigator, Chief Compliance Officer, and Model Risk Officer):
 
 \begin{enumerate}
     \item \textbf{Unified Command Center:} Serves as the executive surveillance cockpit. Displays live transaction throughput, sub-millisecond fast-path latency breakdown ($0.11\,\text{ms}$ invariant extraction, $0.18\,\text{ms}$ DuckDB LRU cache lookup, $0.12\,\text{ms}$ neural fusion, and $0.04\,\text{ms}$ conformal calibration), a real-time 3D ego-graph canvas, and an interactive transaction scoring sandbox.
@@ -313,6 +313,8 @@ The user interface is structured into six dedicated operational desks, designed 
     \end{itemize}
     \item \textbf{Algorithmic Recourse \& Customer Remediation Sandbox:} Solves counterfactual feature perturbations to determine the minimal, cost-optimal modifications required for falsely flagged customers to achieve legitimate clearance, guaranteeing statutory compliance with CFPB and FCRA fair lending mandates.
     \item \textbf{Model Governance \& Benchmark Hub (SR 11-7 / SR 21-8):} Hosts immutable SHA-256 Merkle audit receipts, monitors streaming non-conformity Kolmogorov-Smirnov drift statistics, and displays comprehensive comparative benchmarks across all 14 financial networks.
+    \item \textbf{Tamper-Evident Cryptographic WORM Audit Vault:} Provides an immutable Merkle tree ledger and verification console for digital evidence records conforming to Federal Rules of Evidence FRE 902(11) and SEC Rule 17a-4.
+    \item \textbf{Operator Explainability \& Plain-English Glossary Portals:} Features a plain-English translation interface and an interactive Jargon Buster dictionary to demystify spat-io-temporal graph neural signals for front-line compliance analysts and non-technical examiners.
 \end{enumerate}
 
 \subsection{Operational Dashboard UI Visualizations}
@@ -332,7 +334,7 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} il
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.88\textwidth]{figures/03_case_management.png}
-\caption[Autonomous Multi-Agent Case Management Desk Console]{Autonomous Multi-Agent Case Management Desk, illustrating autonomous SAR narrative synthesis, Grounds of Suspicion breakdown, and SR 11-7 / SR 21-8 cryptographic Merkle tree audit logging.}
+\caption[Case Management \& Regulatory SLA Docket Console]{Case Management \& Regulatory SLA Docket: tracking prioritized forensic review queues, regulatory filing SLA deadlines, case assignment dockets, and supervisory triage workflows.}
 \label{fig:app_case_management}
 \vspace{0.3cm}
 \includegraphics[width=0.88\textwidth]{figures/04_case_detail_four_eyes.png}
@@ -349,6 +351,27 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} il
 \includegraphics[width=0.88\textwidth]{figures/06_model_governance_drift.png}
 \caption[Model Governance and Drift Monitoring Console]{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 11-7 / SR 21-8.}
 \label{fig:app_model_governance_drift}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/07_audit_vault.png}
+\caption[Tamper-Evident Cryptographic WORM Audit Vault Console]{Tamper-Evident Cryptographic WORM Audit Vault: immutable SHA-256 Merkle tree audit receipt ledger, satisfying Federal Rules of Evidence FRE 902(11) self-authenticating digital records and SEC Rule 17a-4 regulatory compliance.}
+\label{fig:app_audit_vault}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/08_plain_english_guide.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/09_jargon_buster_dictionary.png}
+\end{minipage}
+\caption[Operator Explainability and Accessibility Portals]{Operator Explainability and Accessibility Portals: (Left) Plain-English Operational Guide translating topological GNN risk signals into actionable compliance narratives; (Right) Jargon Buster Dictionary providing standardized definitions for statutory AML and graph neural network terminology.}
+\label{fig:app_explainability_portals}
 \end{figure}
 
 \section{End-to-End Forensic Investigation Lifecycle}

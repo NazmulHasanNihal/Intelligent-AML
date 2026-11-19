@@ -1,5 +1,6 @@
 # 🏛️ Intelligent-AML: Enterprise Financial Intelligence & Anti-Money Laundering Platform
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-intelligent--aml.vercel.app-000000.svg?logo=vercel&logoColor=white&style=for-the-badge)](https://intelligent-aml.vercel.app/)
 [![Python 3.11 | 3.12](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg?logo=fastapi&logoColor=white)](src/engine/api.py)
 [![React 18](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite-61DAFB.svg?logo=react&logoColor=black)](frontend/)
@@ -10,6 +11,9 @@
 [![Showcase: 9 Screens](https://img.shields.io/badge/UI_Showcase-9_Live_Screens-success.svg)](#4-interactive-visual-platform-showcase--screen-by-screen-walkthrough)
 [![Online Demo Guide](https://img.shields.io/badge/Online_Demo-Free_%26_Live-brightgreen.svg?logo=vercel&logoColor=white)](docs/ONLINE_DEMO_GUIDE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+> 🚀 **Live Interactive Web Platform:** **[https://intelligent-aml.vercel.app/](https://intelligent-aml.vercel.app/)**
+> Explore the live deployed web application with real-time streaming, interactive 2D/3D cash flow network forensics, autonomous multi-agent SAR drafting, and regulatory compliance dockets.
 
 An institutional-grade, real-time banking surveillance, financial network forensics, and regulatory compliance platform. Engineered with **C-STGB (Conformal Spatio-Temporal GraphBoost)** to eliminate false alarms, auto-clear honest payments in sub-millisecond timeframes, freeze high-risk financial crime instantly, and empower human compliance officers with interactive graph intelligence and an autonomous team of multi-agent AI forensic investigators.
 
@@ -449,9 +453,12 @@ To guarantee forensic accuracy and eliminate artificial intelligence hallucinati
 
 ## 🚀 Quickstart & Deployment Guide
 
-### 🌐 Free Online Lite Demo (Instant Live Web Showcase)
+### 🌐 Live Production Demo & Instant Cloud Deployment
 
-You can launch and showcase the complete web version online on **free cloud infrastructure** in under 60 seconds with **zero cost**:
+> 🚀 **Direct Web Access:** **[https://intelligent-aml.vercel.app/](https://intelligent-aml.vercel.app/)**
+> The platform runs live on Vercel's global edge network with zero setup required. Explore simulated real-time streaming, interactive 2D/3D cash flow graphs, two-officer maker-checker workflows, and autonomous SAR generation.
+
+You can also deploy your own instance to free cloud infrastructure in under 60 seconds with **zero cost**:
 
 | Platform | Deployment Type | One-Click Launch | Setup Guide |
 | :--- | :--- | :---: | :--- |

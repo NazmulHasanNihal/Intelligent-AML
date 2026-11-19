@@ -38,9 +38,9 @@ const getLayoutConfig = (mode) => {
     return {
       name: 'breadthfirst',
       directed: true,
-      roots: ['BD22-EBLB-4829-1092-8823', 'MFS-BKASH-0171-8840'],
-      padding: 24,
-      spacingFactor: 1.1,
+      roots: ['MFS-BKASH-0171-8840', 'BD22-EBLB-4829-1092-8823'],
+      padding: 36,
+      spacingFactor: 1.65,
       animate: false
     };
   }
@@ -52,27 +52,29 @@ const getLayoutConfig = (mode) => {
         return 4 - tier; // Tier 1 center (3), Tier 2 middle (2), Tier 3 outer (1)
       },
       levelWidth: () => 1,
-      padding: 24,
+      padding: 36,
+      spacingFactor: 1.45,
       animate: false
     };
   }
   if (mode === 'circle') {
     return {
       name: 'circle',
-      padding: 24,
+      padding: 36,
+      spacingFactor: 1.3,
       animate: false
     };
   }
   return {
     name: 'cose',
     animate: false,
-    nodeRepulsion: 20000,
-    idealEdgeLength: 140,
-    nodeOverlap: 35,
-    componentSpacing: 100,
+    nodeRepulsion: 38000,
+    idealEdgeLength: 165,
+    nodeOverlap: 45,
+    componentSpacing: 120,
     edgeElasticity: 100,
     nestingFactor: 1.2,
-    gravity: 0.22,
+    gravity: 0.2,
     numIter: 1000,
     nodeDimensionsIncludeLabels: true
   };
@@ -128,53 +130,53 @@ export const Cytoscape2DGraph = ({
   // Initial Seeded Ego-Network with Authentic Bangladeshi & Cross-Border Entities
   const allElements = [
     // Core Seed Nodes (Hop 1)
-    { data: { id: 'BD22-EBLB-4829-1092-8823', label: 'Meghna Industrial & Agro (Hub)', tier: 'Tier 1 Hold', tierCode: 1, role: 'Trade Originator & Smurfing Hub', amount: 48500, riskScore: 0.984, hop: 1, timeStep: 0 } },
-    { data: { id: 'BD04-BRAC-1109-8421-4402', label: 'Tanvir Ahmed Rahman (Conduit)', tier: 'Tier 1 Hold', tierCode: 1, role: 'Hundi & MFS Aggregator', amount: 38400, riskScore: 0.972, hop: 1, timeStep: 1 } },
-    { data: { id: 'AE-EBIL-4412-8819-3301', label: 'Gulf Star Commodities (Dubai)', tier: 'Tier 1 Hold', tierCode: 1, role: 'JAFZA Free Zone Offshore Entity', amount: 47600, riskScore: 0.965, hop: 1, timeStep: 3 } },
-    { data: { id: 'MFS-BKASH-0171-8840', label: 'Mohammad Rafiqul Islam (MFS)', tier: 'Tier 2 Review', tierCode: 2, role: 'MFS Agent Account', amount: 4800, riskScore: 0.642, hop: 1, timeStep: 1 } },
-    { data: { id: 'BD04-BRAC-0192-8821-4401', label: 'Beximco Pharmaceuticals Ltd', tier: 'Tier 3 Clear', tierCode: 3, role: 'Prime Pharma Exporter', amount: 14250, riskScore: 0.012, hop: 1, timeStep: 0 } },
-    { data: { id: 'BD12-HSBC-2201-9940', label: 'Grameenphone Corporate Treasury', tier: 'Tier 3 Clear', tierCode: 3, role: 'Telecom Settlement Gateway', amount: 14250, riskScore: 0.005, hop: 1, timeStep: 0 } },
-    { data: { id: 'BD18-CIBL-3312-8804', label: 'Square Fashion & Apparels Ltd', tier: 'Tier 2 Review', tierCode: 2, role: 'RMG Commercial Exporter', amount: 6200, riskScore: 0.580, hop: 1, timeStep: 0 } },
-    { data: { id: 'DE-DB-9901-7721-5540', label: 'EuroTextile Importers (Hamburg)', tier: 'Tier 3 Clear', tierCode: 3, role: 'Verified German Importer', amount: 6200, riskScore: 0.082, hop: 1, timeStep: 0 } },
+    { data: { id: 'BD22-EBLB-4829-1092-8823', label: 'Meghna Industrial', tier: 'Tier 1 Hold', tierCode: 1, role: 'Trade Originator & Smurfing Hub', amount: 48500, riskScore: 0.984, hop: 1, timeStep: 0 } },
+    { data: { id: 'BD04-BRAC-1109-8421-4402', label: 'Tanvir Rahman', tier: 'Tier 1 Hold', tierCode: 1, role: 'Hundi & MFS Aggregator', amount: 38400, riskScore: 0.972, hop: 1, timeStep: 1 } },
+    { data: { id: 'AE-EBIL-4412-8819-3301', label: 'Gulf Star Dubai', tier: 'Tier 1 Hold', tierCode: 1, role: 'JAFZA Free Zone Offshore Entity', amount: 47600, riskScore: 0.965, hop: 1, timeStep: 3 } },
+    { data: { id: 'MFS-BKASH-0171-8840', label: 'Rafiqul MFS', tier: 'Tier 2 Review', tierCode: 2, role: 'MFS Agent Account', amount: 4800, riskScore: 0.642, hop: 1, timeStep: 1 } },
+    { data: { id: 'BD04-BRAC-0192-8821-4401', label: 'Beximco Pharma', tier: 'Tier 3 Clear', tierCode: 3, role: 'Prime Pharma Exporter', amount: 14250, riskScore: 0.012, hop: 1, timeStep: 0 } },
+    { data: { id: 'BD12-HSBC-2201-9940', label: 'Grameenphone', tier: 'Tier 3 Clear', tierCode: 3, role: 'Telecom Settlement Gateway', amount: 14250, riskScore: 0.005, hop: 1, timeStep: 0 } },
+    { data: { id: 'BD18-CIBL-3312-8804', label: 'Square Fashion', tier: 'Tier 2 Review', tierCode: 2, role: 'RMG Commercial Exporter', amount: 6200, riskScore: 0.580, hop: 1, timeStep: 0 } },
+    { data: { id: 'DE-DB-9901-7721-5540', label: 'EuroTextile Hamburg', tier: 'Tier 3 Clear', tierCode: 3, role: 'Verified German Importer', amount: 6200, riskScore: 0.082, hop: 1, timeStep: 0 } },
 
     // Peripheral Retail POS Camouflage Chaff Nodes (Hop 2)
-    { data: { id: 'BD-POS-SHWAPNO-01', label: 'Shwapno Supermarket POS', tier: 'Tier 3 Clear', tierCode: 3, role: 'Retail Merchant', amount: 12.0, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
-    { data: { id: 'BD-BILL-GP-02', label: 'Grameenphone Corporate Bill', tier: 'Tier 3 Clear', tierCode: 3, role: 'Telecom Utility', amount: 4.8, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
-    { data: { id: 'BD-POS-DARAZ-03', label: 'Daraz Online Shopping POS', tier: 'Tier 3 Clear', tierCode: 3, role: 'E-commerce POS', amount: 18.3, riskScore: 0.02, isCamouflageNode: true, hop: 2, timeStep: 0 } },
-    { data: { id: 'BD-POS-PATHAO-04', label: 'Pathao Courier Logistics', tier: 'Tier 3 Clear', tierCode: 3, role: 'Urban Courier Logistics', amount: 2.8, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'BD-POS-SHWAPNO-01', label: 'Shwapno POS', tier: 'Tier 3 Clear', tierCode: 3, role: 'Retail Merchant', amount: 12.0, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'BD-BILL-GP-02', label: 'GP Utility', tier: 'Tier 3 Clear', tierCode: 3, role: 'Telecom Utility', amount: 4.8, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'BD-POS-DARAZ-03', label: 'Daraz POS', tier: 'Tier 3 Clear', tierCode: 3, role: 'E-commerce POS', amount: 18.3, riskScore: 0.02, isCamouflageNode: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'BD-POS-PATHAO-04', label: 'Pathao Courier', tier: 'Tier 3 Clear', tierCode: 3, role: 'Urban Courier Logistics', amount: 2.8, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
 
     // 2-Hop and 3-Hop Extended Corridor Nodes
-    { data: { id: 'SG-DBS-8819-3301', label: 'Pacific Commodities (Singapore)', tier: 'Tier 2 Review', tierCode: 2, role: 'Singapore Broker', amount: 4800, riskScore: 0.610, hop: 2, timeStep: 2 } },
-    { data: { id: 'GB-BARC-1109-8421-4402', label: 'Anglo-Bengal Freight (London)', tier: 'Tier 1 Hold', tierCode: 1, role: 'UK Clearing Hub', amount: 47600, riskScore: 0.940, hop: 3, timeStep: 3 } },
-    { data: { id: 'CH-UBS-4491-0021-9912', label: 'Helvetia Trade Nominee (Geneva)', tier: 'Tier 2 Review', tierCode: 2, role: 'Offshore Escrow', amount: 24000, riskScore: 0.540, hop: 3, timeStep: 4 } },
+    { data: { id: 'SG-DBS-8819-3301', label: 'Pacific Singapore', tier: 'Tier 2 Review', tierCode: 2, role: 'Singapore Broker', amount: 4800, riskScore: 0.610, hop: 2, timeStep: 2 } },
+    { data: { id: 'GB-BARC-1109-8421-4402', label: 'Anglo-Bengal Freight', tier: 'Tier 1 Hold', tierCode: 1, role: 'UK Clearing Hub', amount: 47600, riskScore: 0.940, hop: 3, timeStep: 3 } },
+    { data: { id: 'CH-UBS-4491-0021-9912', label: 'Helvetia Trade', tier: 'Tier 2 Review', tierCode: 2, role: 'Offshore Escrow', amount: 24000, riskScore: 0.540, hop: 3, timeStep: 4 } },
 
     // Flow Edges with Temporal Sequence Tagging
     // Step 1: Smurfing Inflow ($4,800 bKash to Mule)
-    { data: { id: 'e6', source: 'MFS-BKASH-0171-8840', target: 'BD04-BRAC-1109-8421-4402', label: '$4,800 (bKash MFS)', amount: 4800, rail: 'bKash MFS', timeStep: 1, hop: 1 } },
+    { data: { id: 'e6', source: 'MFS-BKASH-0171-8840', target: 'BD04-BRAC-1109-8421-4402', label: '$4.8K • bKash', amount: 4800, rail: 'bKash MFS', timeStep: 1, hop: 1 } },
 
     // Step 2: Layering Interbank ($47,600 RTGS from Meghna to Tanvir)
-    { data: { id: 'e3', source: 'BD22-EBLB-4829-1092-8823', target: 'BD04-BRAC-1109-8421-4402', label: '$47,600 (RTGS)', amount: 47600, rail: 'RTGS (BD Bank)', isLoop: true, timeStep: 2, hop: 1 } },
+    { data: { id: 'e3', source: 'BD22-EBLB-4829-1092-8823', target: 'BD04-BRAC-1109-8421-4402', label: '$47.6K • RTGS', amount: 47600, rail: 'RTGS (BD Bank)', isLoop: true, timeStep: 2, hop: 1 } },
 
     // Step 3: Integration Outflow ($47,600 SWIFT to Dubai Free Zone)
-    { data: { id: 'e4', source: 'BD04-BRAC-1109-8421-4402', target: 'AE-EBIL-4412-8819-3301', label: '$47,600 (SWIFT Wire)', amount: 47600, rail: 'SWIFT MT103', isLoop: true, timeStep: 3, hop: 1 } },
-    { data: { id: 'e10', source: 'AE-EBIL-4412-8819-3301', target: 'GB-BARC-1109-8421-4402', label: '$47,600 (CHAPS)', amount: 47600, rail: 'CHAPS', timeStep: 3, hop: 3 } },
+    { data: { id: 'e4', source: 'BD04-BRAC-1109-8421-4402', target: 'AE-EBIL-4412-8819-3301', label: '$47.6K • SWIFT', amount: 47600, rail: 'SWIFT MT103', isLoop: true, timeStep: 3, hop: 1 } },
+    { data: { id: 'e10', source: 'AE-EBIL-4412-8819-3301', target: 'GB-BARC-1109-8421-4402', label: '$47.6K • CHAPS', amount: 47600, rail: 'CHAPS', timeStep: 3, hop: 3 } },
 
     // Step 4: Cycle-3 Wash Return (SWIFT MT700 LC Wash Return to Meghna)
-    { data: { id: 'e5', source: 'AE-EBIL-4412-8819-3301', target: 'BD22-EBLB-4829-1092-8823', label: '$47,600 (Cycle-3 Return)', amount: 47600, rail: 'SWIFT MT700 (LC)', isLoop: true, timeStep: 4, hop: 1 } },
-    { data: { id: 'e1', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9,450 (SWIFT LC)', amount: 9450, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
-    { data: { id: 'e2', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9,600 (SWIFT LC)', amount: 9600, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
-    { data: { id: 'e11', source: 'MFS-BKASH-0171-8840', target: 'SG-DBS-8819-3301', label: '$4,800', amount: 4800, rail: 'SWIFT', timeStep: 2, hop: 2 } },
-    { data: { id: 'e12', source: 'GB-BARC-1109-8421-4402', target: 'CH-UBS-4491-0021-9912', label: '$24,000', amount: 24000, rail: 'SEPA', timeStep: 4, hop: 3 } },
+    { data: { id: 'e5', source: 'AE-EBIL-4412-8819-3301', target: 'BD22-EBLB-4829-1092-8823', label: '$47.6K • Loop Return', amount: 47600, rail: 'SWIFT MT700 (LC)', isLoop: true, timeStep: 4, hop: 1 } },
+    { data: { id: 'e1', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9.45K • LC 1', amount: 9450, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
+    { data: { id: 'e2', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9.60K • LC 2', amount: 9600, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
+    { data: { id: 'e11', source: 'MFS-BKASH-0171-8840', target: 'SG-DBS-8819-3301', label: '$4.8K • Wire', amount: 4800, rail: 'SWIFT', timeStep: 2, hop: 2 } },
+    { data: { id: 'e12', source: 'GB-BARC-1109-8421-4402', target: 'CH-UBS-4491-0021-9912', label: '$24.0K • SEPA', amount: 24000, rail: 'SEPA', timeStep: 4, hop: 3 } },
 
     // Legitimate Background Interbank Corridors
-    { data: { id: 'e7', source: 'BD18-CIBL-3312-8804', target: 'DE-DB-9901-7721-5540', label: '$6,200 (Export Wire)', amount: 6200, rail: 'RTGS (BD Bank)', timeStep: 0, hop: 1 } },
-    { data: { id: 'e8', source: 'BD04-BRAC-0192-8821-4401', target: 'BD12-HSBC-2201-9940', label: '$14,250 (Interbank)', amount: 14250, rail: 'SWIFT MT103', timeStep: 0, hop: 1 } },
+    { data: { id: 'e7', source: 'BD18-CIBL-3312-8804', target: 'DE-DB-9901-7721-5540', label: '$6.2K • Export', amount: 6200, rail: 'RTGS (BD Bank)', timeStep: 0, hop: 1 } },
+    { data: { id: 'e8', source: 'BD04-BRAC-0192-8821-4401', target: 'BD12-HSBC-2201-9940', label: '$14.3K • Wire', amount: 14250, rail: 'SWIFT MT103', timeStep: 0, hop: 1 } },
 
     // Injected Camouflage Chaff Edges (Low-value retail noise to dilute GNN attention)
-    { data: { id: 'e_chaff1', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-SHWAPNO-01', label: '$12.00', amount: 12.0, rail: 'POS Retail', isCamouflage: true, hop: 2, timeStep: 0 } },
-    { data: { id: 'e_chaff2', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-BILL-GP-02', label: '$4.80', amount: 4.8, rail: 'bKash MFS', isCamouflage: true, hop: 2, timeStep: 0 } },
-    { data: { id: 'e_chaff3', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-DARAZ-03', label: '$18.30', amount: 18.3, rail: 'Visa Net BD', isCamouflage: true, hop: 2, timeStep: 0 } },
-    { data: { id: 'e_chaff4', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-PATHAO-04', label: '$2.80', amount: 2.8, rail: 'Nagad MFS', isCamouflage: true, hop: 2, timeStep: 0 } }
+    { data: { id: 'e_chaff1', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-SHWAPNO-01', label: '$12', amount: 12.0, rail: 'POS', isCamouflage: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'e_chaff2', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-BILL-GP-02', label: '$4.8', amount: 4.8, rail: 'Utility', isCamouflage: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'e_chaff3', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-DARAZ-03', label: '$18', amount: 18.3, rail: 'Ecom', isCamouflage: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'e_chaff4', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-PATHAO-04', label: '$2.8', amount: 2.8, rail: 'Courier', isCamouflage: true, hop: 2, timeStep: 0 } }
   ];
 
   // Filter elements by egoHopDistance and maxVisibleNodes
@@ -304,61 +306,76 @@ export const Cytoscape2DGraph = ({
           selector: 'node',
           style: {
             'label': 'data(label)',
-            'font-size': '8.5px',
-            'font-family': 'Inter, sans-serif',
-            'font-weight': 600,
-            'color': '#334155',
+            'font-size': '9.5px',
+            'font-family': 'Inter, system-ui, sans-serif',
+            'font-weight': 700,
+            'color': '#0F172A',
             'text-valign': 'bottom',
             'text-margin-y': 6,
             'text-wrap': 'wrap',
-            'text-max-width': '95px',
+            'text-max-width': '100px',
+            'text-background-opacity': 0.95,
+            'text-background-color': '#FFFFFF',
+            'text-background-padding': '3px 6px',
+            'text-background-shape': 'roundrectangle',
+            'text-border-width': 1,
+            'text-border-color': '#CBD5E1',
             'background-color': '#FFFFFF',
-            'border-width': 2,
-            'border-color': '#E2E8F0',
-            'width': 30,
-            'height': 30,
+            'border-width': 2.5,
+            'border-color': '#CBD5E1',
+            'width': 36,
+            'height': 36,
             'min-zoomed-font-size': 7,
             'transition-property': 'background-color, border-color, width, height, opacity',
-            'transition-duration': '0.25s'
+            'transition-duration': '0.2s'
           }
         },
         {
           selector: 'node[tierCode = 1]',
           style: {
             'background-color': '#FEF2F2',
-            'border-color': '#EF4444',
-            'color': '#B91C1C',
-            'width': 34,
-            'height': 34
+            'border-color': '#DC2626',
+            'border-width': 3.5,
+            'color': '#991B1B',
+            'text-border-color': '#FECACA',
+            'width': 44,
+            'height': 44
           }
         },
         {
           selector: 'node[tierCode = 2]',
           style: {
             'background-color': '#FFFBEB',
-            'border-color': '#F59E0B',
-            'color': '#B45309',
-            'width': 30,
-            'height': 30
+            'border-color': '#D97706',
+            'border-width': 2.5,
+            'color': '#92400E',
+            'text-border-color': '#FDE68A',
+            'width': 38,
+            'height': 38
           }
         },
         {
           selector: 'node[tierCode = 3]',
           style: {
             'background-color': '#F0FDF4',
-            'border-color': '#22C55E',
-            'color': '#15803D'
+            'border-color': '#16A34A',
+            'border-width': 2,
+            'color': '#166534',
+            'text-border-color': '#BBF7D0',
+            'width': 34,
+            'height': 34
           }
         },
         {
           selector: 'node[?isCamouflageNode]',
           style: {
             'background-color': '#F8FAFC',
-            'border-color': '#CBD5E1',
+            'border-color': '#94A3B8',
+            'border-width': 1.5,
             'color': '#64748B',
-            'width': 22,
-            'height': 22,
-            'font-size': '7.5px'
+            'width': 24,
+            'height': 24,
+            'font-size': '8px'
           }
         },
         {
@@ -376,10 +393,10 @@ export const Cytoscape2DGraph = ({
         {
           selector: '.active-temporal-node',
           style: {
-            'border-width': 3.5,
-            'border-color': '#EF4444',
-            'underlay-color': '#EF4444',
-            'underlay-padding': 6,
+            'border-width': 4,
+            'border-color': '#DC2626',
+            'underlay-color': '#DC2626',
+            'underlay-padding': 7,
             'underlay-opacity': 0.35
           }
         },
@@ -398,39 +415,41 @@ export const Cytoscape2DGraph = ({
         {
           selector: 'edge',
           style: {
-            'width': 1.8,
-            'line-color': '#CBD5E1',
-            'target-arrow-color': '#94A3B8',
+            'width': 2,
+            'line-color': '#94A3B8',
+            'target-arrow-color': '#64748B',
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
-            'arrow-scale': 0.85,
+            'control-point-step-size': 45,
+            'arrow-scale': 0.95,
             'label': 'data(label)',
-            'font-size': '8px',
+            'font-size': '9px',
             'font-family': 'JetBrains Mono, monospace',
-            'font-weight': 600,
+            'font-weight': 700,
             'text-background-opacity': 0.95,
             'text-background-color': '#FFFFFF',
-            'text-background-padding': '3px',
+            'text-background-padding': '3px 5px',
             'text-background-shape': 'roundrectangle',
             'text-border-width': 1,
-            'text-border-color': '#E2E8F0',
-            'text-border-opacity': 0.8,
+            'text-border-color': '#CBD5E1',
+            'text-border-opacity': 0.9,
             'edge-text-rotation': 'autorotate',
             'min-zoomed-font-size': 7,
-            'color': '#475569',
+            'color': '#334155',
             'transition-property': 'line-color, opacity, width, line-style',
-            'transition-duration': '0.25s'
+            'transition-duration': '0.2s'
           }
         },
         {
           selector: 'edge[?isLoop]',
           style: {
-            'line-color': '#EF4444',
-            'target-arrow-color': '#EF4444',
-            'width': 2.8,
-            'font-weight': 700,
-            'color': '#B91C1C',
-            'text-border-color': '#FECACA'
+            'line-color': '#DC2626',
+            'target-arrow-color': '#DC2626',
+            'width': 3.2,
+            'font-weight': 800,
+            'color': '#991B1B',
+            'text-background-color': '#FEF2F2',
+            'text-border-color': '#FCA5A5'
           }
         },
         {
@@ -544,7 +563,7 @@ export const Cytoscape2DGraph = ({
 
     cyRef.current = cy;
     setTimeout(() => {
-      if (cyRef.current) cyRef.current.fit(undefined, 25);
+      if (cyRef.current) cyRef.current.fit(undefined, 40);
     }, 150);
 
     return () => {
@@ -568,7 +587,7 @@ export const Cytoscape2DGraph = ({
     try {
       cy.layout(config).run();
       setTimeout(() => {
-        if (cyRef.current) cyRef.current.fit(undefined, 25);
+        if (cyRef.current) cyRef.current.fit(undefined, 40);
       }, 420);
     } catch (e) {
       console.warn('Cytoscape layout update error:', e);
@@ -1091,93 +1110,49 @@ export const Cytoscape2DGraph = ({
           className="absolute inset-0 pointer-events-none z-10 w-full h-full"
         />
 
-        {/* Live Transaction HUD Card */}
+        {/* Sleek Floating Flow Telemetry Pill */}
         {currentStepMeta && (
-          <div className="absolute top-3 left-3 max-w-sm sm:max-w-md w-full z-20 pointer-events-auto transition-all duration-300">
+          <div className="absolute top-3 left-3 z-20 pointer-events-auto">
             {timelineStep === 0 ? (
-              <div className="p-3 rounded-lg bg-surface/90 backdrop-blur-md border border-border shadow-sm flex items-center justify-between gap-3 text-xs font-mono">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cleared animate-pulse" />
-                  <div>
-                    <span className="text-text font-semibold block">Baseline Topology (08:00 UTC)</span>
-                    <span className="text-[10px] text-text-muted">Interbank settlement corridors quiescent</span>
-                  </div>
+              <div className="px-3 py-1.5 rounded-full bg-surface/90 backdrop-blur-md border border-border shadow-xs flex items-center gap-3 text-xs font-mono">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-cleared animate-pulse" />
+                  <span className="text-text font-medium text-[11px]">Baseline Corridors (08:00 UTC)</span>
                 </div>
                 <button
                   onClick={() => { timelineStepRef.current = 1; setTimelineStep(1); setIsPlaying(true); }}
-                  className="px-2.5 py-1 rounded bg-accent text-white text-[11px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
+                  className="px-2.5 py-0.5 rounded-full bg-accent text-white text-[10px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
                 >
-                  <Play className="w-3 h-3" />
+                  <Play className="w-2.5 h-2.5" />
                   <span>Start Flow</span>
                 </button>
               </div>
             ) : (
-              <div className="p-3.5 rounded-lg bg-surface/95 backdrop-blur-md border border-border shadow-lg space-y-2.5 text-xs font-mono">
-                {/* Header: Phase badge & timestamp */}
-                <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="w-2.5 h-2.5 rounded-full animate-ping"
-                      style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }}
-                    />
-                    <span className="font-bold text-text uppercase tracking-wider text-[11px]">
-                      {currentStepMeta.title}
-                    </span>
-                  </div>
-                  <Badge variant="accent" size="sm" className="font-mono">
-                    {currentStepMeta.label}
+              <div className="px-3 py-1.5 rounded-lg bg-surface/90 backdrop-blur-md border border-border shadow-sm flex items-center gap-2.5 text-xs font-mono">
+                <span
+                  className="w-2 h-2 rounded-full animate-ping shrink-0"
+                  style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }}
+                />
+                <div className="flex items-center gap-2 text-[11px] flex-wrap sm:flex-nowrap">
+                  <span className="font-bold text-text uppercase tracking-wider text-[10.5px]">
+                    {currentStepMeta.title.replace('Phase ', 'P')}
+                  </span>
+                  <span className="text-text-muted">•</span>
+                  <span className="text-text font-medium">
+                    {currentStepMeta.activeTx?.sourceName.split(' ')[0]} ➔ {currentStepMeta.activeTx?.targetName.split(' ')[0]}
+                  </span>
+                  <span className="text-text-muted">•</span>
+                  <span className="font-bold text-critical">
+                    {currentStepMeta.activeTx?.amount}
+                  </span>
+                  <Badge variant="neutral" size="sm" className="font-mono text-[9px] py-0 px-1.5">
+                    {currentStepMeta.activeTx?.rail}
                   </Badge>
+                  <span className="text-text-muted hidden md:inline">•</span>
+                  <span className="font-semibold text-critical text-[10px] hidden md:inline">
+                    {currentStepMeta.activeTx?.typology}
+                  </span>
                 </div>
-
-                {/* Active Transfer Pair */}
-                {currentStepMeta.activeTx && (
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between text-[11px] gap-2">
-                      <div className="min-w-0">
-                        <span className="text-text-muted block text-[10px]">ORIGINATOR (SENDER)</span>
-                        <span className="font-semibold text-text truncate block">{currentStepMeta.activeTx.sourceName}</span>
-                      </div>
-                      <ArrowRight className="w-4 h-4 text-accent shrink-0 animate-pulse" />
-                      <div className="min-w-0 text-right">
-                        <span className="text-text-muted block text-[10px]">BENEFICIARY (RECEIVER)</span>
-                        <span className="font-semibold text-text truncate block">{currentStepMeta.activeTx.targetName}</span>
-                      </div>
-                    </div>
-
-                    {/* Amount & Rail */}
-                    <div className="p-2 rounded bg-bg border border-border flex items-center justify-between">
-                      <div>
-                        <span className="text-[10px] text-text-muted block">TRANSACTION VOLUME</span>
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="text-sm font-bold text-text">{currentStepMeta.activeTx.amount}</span>
-                          <span className="text-[10px] text-text-muted font-normal">({currentStepMeta.activeTx.amountBdt})</span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-[10px] text-text-muted block">PAYMENT RAIL</span>
-                        <Badge variant="neutral" size="sm" className="font-bold">
-                          {currentStepMeta.activeTx.rail}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    {/* Metrics Row: Hawkes Intensity & Typology */}
-                    <div className="grid grid-cols-2 gap-2 text-[10px]">
-                      <div className="p-1.5 rounded bg-bg/50 border border-border/50">
-                        <span className="text-text-muted block">TYPOLOGY</span>
-                        <span className="font-semibold text-critical truncate block">
-                          {currentStepMeta.activeTx.typology}
-                        </span>
-                      </div>
-                      <div className="p-1.5 rounded bg-bg/50 border border-border/50">
-                        <span className="text-text-muted block">VELOCITY RATE</span>
-                        <span className="font-semibold text-text truncate block">
-                          {currentStepMeta.activeTx.hawkes}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             )}
           </div>
@@ -1185,10 +1160,10 @@ export const Cytoscape2DGraph = ({
 
         {/* Closed Laundering Loop Detected Banner on Step 4 */}
         {timelineStep === 4 && (
-          <div className="absolute bottom-4 right-4 z-20 pointer-events-none animate-in fade-in slide-in-from-bottom duration-300">
-            <div className="px-3.5 py-2 rounded-lg bg-critical/15 backdrop-blur-md border border-critical text-critical text-xs font-mono font-bold flex items-center gap-2 shadow-lg">
-              <span className="w-2.5 h-2.5 rounded-full bg-critical animate-ping" />
-              <span>🚨 3-Hop Wash Loop Closed • 100% Flow Conservation Ring</span>
+          <div className="absolute bottom-3 right-3 z-20 pointer-events-none animate-in fade-in slide-in-from-bottom duration-300">
+            <div className="px-3 py-1.5 rounded-lg bg-critical/15 backdrop-blur-md border border-critical text-critical text-xs font-mono font-bold flex items-center gap-2 shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-critical animate-ping" />
+              <span>3-Hop Wash Loop Closed • 100% Flow Conservation Ring</span>
             </div>
           </div>
         )}
@@ -1327,45 +1302,45 @@ export const Cytoscape2DGraph = ({
       </div>
 
       {/* Floating Canvas Action Bar (Zoom, Fit, Export) */}
-      <div className="absolute top-16 right-3 flex items-center gap-1.5 bg-surface border border-border shadow-md rounded p-1 z-20">
-        <Button variant="ghost" size="icon" onClick={handleZoomIn} title="Zoom In">
-          <ZoomIn className="w-4 h-4 text-text-2" />
+      <div className={`absolute ${showTopControls ? 'top-16' : 'top-3'} right-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md border border-border shadow-xs rounded p-1 z-20`}>
+        <Button variant="ghost" size="icon" onClick={handleZoomIn} title="Zoom In" className="h-7 w-7">
+          <ZoomIn className="w-3.5 h-3.5 text-text-2" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={handleZoomOut} title="Zoom Out">
-          <ZoomOut className="w-4 h-4 text-text-2" />
+        <Button variant="ghost" size="icon" onClick={handleZoomOut} title="Zoom Out" className="h-7 w-7">
+          <ZoomOut className="w-3.5 h-3.5 text-text-2" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={handleFit} title="Fit to View">
-          <Maximize2 className="w-4 h-4 text-text-2" />
+        <Button variant="ghost" size="icon" onClick={handleFit} title="Fit to View" className="h-7 w-7">
+          <Maximize2 className="w-3.5 h-3.5 text-text-2" />
         </Button>
-        <div className="w-px h-4 bg-border mx-0.5" />
+        <div className="w-px h-3.5 bg-border mx-0.5" />
         <Button
           variant={trackCamera ? "secondary" : "ghost"}
           size="icon"
           onClick={() => setTrackCamera(!trackCamera)}
           title={trackCamera ? "Auto-Track Camera Active" : "Enable Auto-Track Camera"}
+          className="h-7 w-7"
         >
-          <Crosshair className={`w-4 h-4 ${trackCamera ? 'text-accent' : 'text-text-2'}`} />
+          <Crosshair className={`w-3.5 h-3.5 ${trackCamera ? 'text-accent' : 'text-text-2'}`} />
         </Button>
-        <div className="w-px h-4 bg-border mx-0.5" />
-        <Button variant="ghost" size="icon" onClick={handleExportPNG} title="Export PNG">
-          <Download className="w-4 h-4 text-text-2" />
+        <div className="w-px h-3.5 bg-border mx-0.5" />
+        <Button variant="ghost" size="icon" onClick={handleExportPNG} title="Export PNG" className="h-7 w-7">
+          <Download className="w-3.5 h-3.5 text-text-2" />
         </Button>
       </div>
 
-      {/* Floating Minimal Legend */}
-      <div className="absolute bottom-20 left-3 bg-surface/95 backdrop-blur-xs border border-border shadow-sm rounded p-2 z-20 text-[10px] space-y-1 font-mono">
-        <span className="font-semibold text-text text-[9px] uppercase tracking-wider block">Topology Tiers</span>
-        <div className="flex items-center gap-2 text-text-2">
+      {/* Floating Minimal Legend (Compact Bottom Pill) */}
+      <div className="absolute bottom-3 left-3 bg-surface/90 backdrop-blur-md border border-border shadow-xs rounded px-2.5 py-1 z-20 text-[10px] flex items-center gap-2.5 font-mono">
+        <div className="flex items-center gap-1.5 text-text-2">
           <span className="w-2 h-2 rounded-full bg-critical border border-critical inline-block" />
-          <span>Tier 1 Hold (&gt;85% Risk)</span>
+          <span>Tier 1 Hold</span>
         </div>
-        <div className="flex items-center gap-2 text-text-2">
+        <div className="flex items-center gap-1.5 text-text-2">
           <span className="w-2 h-2 rounded-full bg-review border border-review inline-block" />
-          <span>Tier 2 Review Queue</span>
+          <span>Tier 2 Review</span>
         </div>
-        <div className="flex items-center gap-2 text-text-2">
+        <div className="flex items-center gap-1.5 text-text-2">
           <span className="w-2 h-2 rounded-full bg-cleared border border-cleared inline-block" />
-          <span>Tier 3 Straight-Through</span>
+          <span>Tier 3 Clear</span>
         </div>
       </div>
     </div>

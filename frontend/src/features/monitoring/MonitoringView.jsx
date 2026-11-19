@@ -460,7 +460,7 @@ export const MonitoringView = () => {
                         </td>
                       </tr>
                     );
-                  })}
+                  }))}
                 </tbody>
               </table>
             </div>

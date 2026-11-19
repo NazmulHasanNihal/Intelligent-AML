@@ -155,18 +155,18 @@ export const OverviewView = () => {
   return (
     <div className="space-y-4 select-none">
       {/* Real-Time Pipeline Telemetry & Consumer Lag Indicator Banner */}
-      <div className="p-3 rounded-lg bg-surfaceRaised border border-border flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+      <div className="p-2.5 px-3 rounded-lg bg-surfaceRaised border border-border flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-cleared animate-ping" />
             <span className="font-semibold text-text">Kafka Streaming Gateway:</span>
           </div>
           <div className="flex items-center gap-2 text-text-2">
-            <span>Lag: <strong className="text-cleared font-bold">{consumerLagMsgs} msgs</strong> behind head</span>
+            <span>Lag: <strong className="text-cleared font-bold">{consumerLagMsgs} msgs</strong></span>
             <span>•</span>
             <span>Latency: <strong className="text-text font-bold">0.12 ms</strong></span>
             <span>•</span>
-            <span className="hidden sm:inline">Watermark: <strong className="text-text">Partition 0/Offset 148,312</strong></span>
+            <span className="hidden sm:inline">Head Synchronized</span>
           </div>
         </div>
 
@@ -188,11 +188,11 @@ export const OverviewView = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Card className="flex flex-col justify-between">
           <div>
-            <span className="text-xs text-text-muted font-medium block">24h Volume (Honest Payments)</span>
+            <span className="text-xs text-text-muted font-medium block">24h Honest Volume</span>
             <div className="text-xl sm:text-2xl font-bold text-text mt-1 tabular-nums font-mono">
               {telemetry.totalProcessed24h.toLocaleString()}
             </div>
-            <span className="text-[10px] text-text-muted block mt-0.5">Cleared in &lt;1ms without human delays</span>
+            <span className="text-[10px] text-text-muted block mt-0.5">Sub-millisecond auto-clearance</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-cleared font-mono mt-3">
             <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
@@ -206,7 +206,7 @@ export const OverviewView = () => {
             <div className="text-xl sm:text-2xl font-bold text-critical mt-1 tabular-nums font-mono">
               {telemetry.tier1Quarantined.toLocaleString()}
             </div>
-            <span className="text-[10px] text-text-muted block mt-0.5">High danger / Sanctioned crime match</span>
+            <span className="text-[10px] text-text-muted block mt-0.5">FATF & sanctioned crime alerts</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-2 font-mono mt-3">
             <span className="w-1.5 h-1.5 rounded-full bg-critical" />
@@ -216,11 +216,11 @@ export const OverviewView = () => {
 
         <Card className="flex flex-col justify-between">
           <div>
-            <span className="text-xs text-text-muted font-medium block">Tier 2 Needs Human Check</span>
+            <span className="text-xs text-text-muted font-medium block">Tier 2 Officer Review</span>
             <div className="text-xl sm:text-2xl font-bold text-review mt-1 tabular-nums font-mono">
               {telemetry.tier2ReviewQueue.toLocaleString()}
             </div>
-            <span className="text-[10px] text-text-muted block mt-0.5">Unusual pattern sent to human officer</span>
+            <span className="text-[10px] text-text-muted block mt-0.5">Anomalous pattern queue</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-2 font-mono mt-3">
             <span className="w-1.5 h-1.5 rounded-full bg-review" />
@@ -230,11 +230,11 @@ export const OverviewView = () => {
 
         <Card className="flex flex-col justify-between">
           <div>
-            <span className="text-xs text-text-muted font-medium block">Locked Dirty Money</span>
+            <span className="text-xs text-text-muted font-medium block">Contained Illicit Capital</span>
             <div className="text-xl sm:text-2xl font-bold text-critical mt-1 tabular-nums font-mono">
               $1,482,900
             </div>
-            <span className="text-[10px] text-text-muted block mt-0.5">৳177,948,000 BDT locked in escrow</span>
+            <span className="text-[10px] text-text-muted block mt-0.5">৳177.9M BDT held in escrow</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-cleared font-mono mt-3">
             <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-cleared" />
@@ -367,7 +367,7 @@ export const OverviewView = () => {
               </Badge>
             </div>
             <p className="text-xs text-text-muted mt-0.5">
-              Real-time banking settlement across SWIFT MT103/700, Bangladesh Bank RTGS, BEFTN ACH, bKash & Nagad MFS, NBR e-Challan, and NPSB cards.
+              Live interbank settlements across SWIFT, RTGS, BEFTN, MFS, and Cards.
             </p>
           </div>
 
@@ -572,7 +572,7 @@ export const OverviewView = () => {
                       </td>
                     </tr>
                   );
-                })}
+                }))}
             </tbody>
           </table>
         </div>

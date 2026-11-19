@@ -173,7 +173,7 @@ export const NetworkView = () => {
         conformalSet: 'Γ = {0}',
         badgeVariant: 'cleared',
         statusText: 'Statutory Hold Released',
-        explanation: 'Normal commercial billing dwell (>24h) and micro-ticket size eliminate structuring and smurfing invariants.'
+        explanation: 'Commercial dwell (>24h) and micro-ticket size clear structuring invariants.'
       };
     } else if (simulatedDwellHours >= 6 || simulatedAmount <= 10000) {
       return {
@@ -181,7 +181,7 @@ export const NetworkView = () => {
         conformalSet: 'Γ = {0, 1}',
         badgeVariant: 'review',
         statusText: 'Enhanced Due Diligence (EDD) Required',
-        explanation: 'Dwell time mitigates automated hold, but cross-border offshore destination requires officer check.'
+        explanation: 'Extended dwell mitigates instant hold; offshore destination warrants officer review.'
       };
     } else {
       return {
@@ -189,7 +189,7 @@ export const NetworkView = () => {
         conformalSet: 'Γ = {1}',
         badgeVariant: 'critical',
         statusText: 'Administrative Hold Enforced',
-        explanation: 'Rapid pass-through (<120s) and near-CTR allocation trigger Section 25 of MLPA 2012 / FinCEN invariants.'
+        explanation: 'Rapid pass-through (<120s) and near-CTR ticket trigger statutory freeze.'
       };
     }
   }, [simulatedDwellHours, simulatedAmount]);
@@ -258,7 +258,7 @@ export const NetworkView = () => {
               </span>
             </div>
             <p className="text-[11px] text-text-muted">
-              Causal flow preservation (Placement ➔ Layering ➔ Integration), noise pruning, and counterfactual recourse.
+              Interactive graph forensics: Placement ➔ Layering ➔ Integration trace with noise pruning.
             </p>
           </div>
         </div>
@@ -503,10 +503,10 @@ export const NetworkView = () => {
                 onNodeSelect={(node) => setSelectedGraphNode(node)}
                 showTopControls={false}
                 externalCamouflageDelta={camouflageDelta}
-                className="relative w-full h-[430px] sm:h-[450px] lg:h-[470px] bg-surface rounded-lg border border-border overflow-hidden flex flex-col justify-between select-none shadow-xs"
+                className="relative w-full h-[460px] sm:h-[490px] lg:h-[510px] bg-surface rounded-lg border border-border overflow-hidden flex flex-col justify-between select-none shadow-xs"
               />
             ) : (
-              <div className="w-full h-[430px] sm:h-[450px] lg:h-[470px] rounded-lg border border-border overflow-hidden relative bg-surface">
+              <div className="w-full h-[460px] sm:h-[490px] lg:h-[510px] rounded-lg border border-border overflow-hidden relative bg-surface">
                 <Suspense fallback={
                   <div className="w-full h-full flex flex-col items-center justify-center text-xs font-mono text-text-muted gap-2">
                     <span className="w-3 h-3 rounded-full bg-accent animate-ping" />

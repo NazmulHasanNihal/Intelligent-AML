@@ -17,18 +17,21 @@ import {
   Printer,
   FileCheck,
   RefreshCw,
-  Eye
+  Eye,
+  Bot
 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { useAuth } from '../../context/AuthContext';
 import { Card, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { MultiAgentSARWorkbench } from '../../consoles/MultiAgentSARWorkbench';
 
 export const FilingsView = () => {
   const { cases, selectedCaseId, fourEyesSignOffCase, addToast, logAuditAction } = useAppStore();
   const { currentBanker } = useAuth();
 
+  const [filingsSubTab, setFilingsSubTab] = useState('docket'); // 'docket' | 'workbench'
   const [selectedCaseIdState, setSelectedCaseIdState] = useState(selectedCaseId || cases[0]?.id);
   const [selectedJurisdiction, setSelectedJurisdiction] = useState('BFIU_STR');
   const [copied, setCopied] = useState(false);
@@ -370,7 +373,39 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
         </div>
       </div>
 
-      {/* Audit Diff Engine Banner (FRE 902(11) Evidentiary Chain of Custody) */}
+      {/* Sub-Tab Switcher: Regulatory Filing Docket vs Autonomous Multi-Agent Swarm Desk */}
+      <div className="flex items-center gap-1 border-b border-border text-xs font-mono">
+        <button
+          onClick={() => setFilingsSubTab('docket')}
+          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
+            filingsSubTab === 'docket'
+              ? 'border-accent text-accent'
+              : 'border-transparent text-text-muted hover:text-text'
+          }`}
+        >
+          <FileText className="w-3.5 h-3.5" />
+          <span>Statutory SAR Docket & HSM Sign-off</span>
+        </button>
+
+        <button
+          onClick={() => setFilingsSubTab('workbench')}
+          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
+            filingsSubTab === 'workbench'
+              ? 'border-accent text-accent'
+              : 'border-transparent text-text-muted hover:text-text'
+          }`}
+        >
+          <Sparkles className="w-3.5 h-3.5 text-accent" />
+          <span>Autonomous Multi-Agent SAR Swarm Desk</span>
+          <Badge variant="accent" size="sm">4 Agents</Badge>
+        </button>
+      </div>
+
+      {filingsSubTab === 'workbench' ? (
+        <MultiAgentSARWorkbench activeCase={activeCase} />
+      ) : (
+        <>
+          {/* Audit Diff Engine Banner (FRE 902(11) Evidentiary Chain of Custody) */}
       <div className="p-3 rounded-lg bg-surfaceRaised border border-border flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         <div className="flex items-center gap-2.5">
           <GitCommit className="w-4 h-4 text-accent shrink-0" />
@@ -625,6 +660,8 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
           </Card>
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 };

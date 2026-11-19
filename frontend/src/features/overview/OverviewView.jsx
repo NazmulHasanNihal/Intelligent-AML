@@ -22,6 +22,7 @@ import {
   Radio
 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
+import { useTheme } from '../../context/ThemeContext';
 import { Card, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -39,6 +40,7 @@ export const OverviewView = () => {
     setRoleModalOpen,
     consumerLagMsgs
   } = useAppStore();
+  const { theme } = useTheme();
 
   const [railFilter, setRailFilter] = useState('ALL');
   const [tierFilter, setTierFilter] = useState('ALL');
@@ -48,76 +50,107 @@ export const OverviewView = () => {
     .filter(a => a.tierCode === 1 || a.tierCode === 2)
     .slice(0, 5);
 
+  const filteredLiveTxs = useMemo(() => {
+    return liveTransactions.filter((tx) => {
+      if (railFilter !== 'ALL') {
+        if (railFilter === 'MFS' && !tx.rail?.includes('bKash') && !tx.rail?.includes('Nagad')) return false;
+        if (railFilter === 'CHAPS' && !tx.rail?.includes('CHAPS') && !tx.rail?.includes('SEPA')) return false;
+        if (railFilter !== 'MFS' && railFilter !== 'CHAPS' && !tx.rail?.includes(railFilter)) return false;
+      }
+      if (tierFilter !== 'ALL') {
+        if (String(tx.tierCode) !== tierFilter) return false;
+      }
+      if (txSearch) {
+        const q = txSearch.toLowerCase();
+        const match = (tx.sourceEntity || '').toLowerCase().includes(q) ||
+                      (tx.targetEntity || '').toLowerCase().includes(q) ||
+                      (tx.remittanceInfo || '').toLowerCase().includes(q) ||
+                      (tx.swiftReference || '').toLowerCase().includes(q) ||
+                      (tx.rail || '').toLowerCase().includes(q) ||
+                      (tx.id || '').toLowerCase().includes(q);
+        if (!match) return false;
+      }
+      return true;
+    });
+  }, [liveTransactions, railFilter, tierFilter, txSearch]);
+
   // ECharts Theme: Neutral grid, muted axes, throughput line + small alert bars beneath
-  const chartOption = useMemo(() => ({
-    animation: false,
-    backgroundColor: 'transparent',
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'cross' }
-    },
-    grid: [
-      { left: '7%', right: '4%', top: '12%', height: '50%' },
-      { left: '7%', right: '4%', top: '72%', height: '20%' }
-    ],
-    xAxis: [
-      {
-        type: 'category',
-        data: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00', 'Now'],
-        gridIndex: 0,
-        axisLine: { lineStyle: { color: 'rgba(128, 128, 128, 0.2)' } },
-        axisLabel: { color: '#717A8C', fontSize: 10, fontFamily: 'monospace' }
+  const chartOption = useMemo(() => {
+    const isDark = theme === 'dark' || (typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark');
+    const labelColor = isDark ? '#94A3B8' : '#64748B';
+    const gridLineColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
+    const axisLineColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)';
+
+    return {
+      animation: false,
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'cross' }
       },
-      {
-        type: 'category',
-        data: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00', 'Now'],
-        gridIndex: 1,
-        axisLine: { lineStyle: { color: 'rgba(128, 128, 128, 0.2)' } },
-        axisLabel: { show: false }
-      }
-    ],
-    yAxis: [
-      {
-        type: 'value',
-        name: 'Throughput (tx/s)',
-        gridIndex: 0,
-        splitLine: { lineStyle: { color: 'rgba(128, 128, 128, 0.12)' } },
-        axisLabel: { color: '#717A8C', fontSize: 10, fontFamily: 'monospace' },
-        nameTextStyle: { color: '#717A8C', fontSize: 10, padding: [0, 0, 4, 0] }
-      },
-      {
-        type: 'value',
-        name: 'Flagged Alerts',
-        nameLocation: 'end',
-        gridIndex: 1,
-        splitLine: { show: false },
-        axisLabel: { color: '#717A8C', fontSize: 9, fontFamily: 'monospace' },
-        nameTextStyle: { color: '#717A8C', fontSize: 9, padding: [0, 0, 2, 28] }
-      }
-    ],
-    series: [
-      {
-        name: 'Throughput (tx/s)',
-        type: 'line',
-        smooth: true,
-        showSymbol: false,
-        xAxisIndex: 0,
-        yAxisIndex: 0,
-        data: [410, 395, 480, 520, 640, 580, 510, 490, 500],
-        itemStyle: { color: '#4C8DF6' },
-        lineStyle: { width: 2 }
-      },
-      {
-        name: 'Flagged Alerts',
-        type: 'bar',
-        xAxisIndex: 1,
-        yAxisIndex: 1,
-        data: [4, 2, 7, 12, 18, 14, 9, 6, 8],
-        itemStyle: { color: '#F2555A', borderRadius: [2, 2, 0, 0] },
-        barWidth: '35%'
-      }
-    ]
-  }), []);
+      grid: [
+        { left: '7%', right: '4%', top: '12%', height: '50%' },
+        { left: '7%', right: '4%', top: '72%', height: '20%' }
+      ],
+      xAxis: [
+        {
+          type: 'category',
+          data: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00', 'Now'],
+          gridIndex: 0,
+          axisLine: { lineStyle: { color: axisLineColor } },
+          axisLabel: { color: labelColor, fontSize: 10, fontFamily: 'monospace' }
+        },
+        {
+          type: 'category',
+          data: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00', 'Now'],
+          gridIndex: 1,
+          axisLine: { lineStyle: { color: axisLineColor } },
+          axisLabel: { show: false }
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          name: 'Throughput (tx/s)',
+          gridIndex: 0,
+          splitLine: { lineStyle: { color: gridLineColor } },
+          axisLabel: { color: labelColor, fontSize: 10, fontFamily: 'monospace' },
+          nameTextStyle: { color: labelColor, fontSize: 10, padding: [0, 0, 4, 0] }
+        },
+        {
+          type: 'value',
+          name: 'Flagged Alerts',
+          nameLocation: 'end',
+          gridIndex: 1,
+          splitLine: { show: false },
+          axisLabel: { color: labelColor, fontSize: 9, fontFamily: 'monospace' },
+          nameTextStyle: { color: labelColor, fontSize: 9, padding: [0, 0, 2, 28] }
+        }
+      ],
+      series: [
+        {
+          name: 'Throughput (tx/s)',
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          xAxisIndex: 0,
+          yAxisIndex: 0,
+          data: [410, 395, 480, 520, 640, 580, 510, 490, 500],
+          itemStyle: { color: '#3B82F6' },
+          lineStyle: { width: 2 }
+        },
+        {
+          name: 'Flagged Alerts',
+          type: 'bar',
+          xAxisIndex: 1,
+          yAxisIndex: 1,
+          data: [4, 2, 7, 12, 18, 14, 9, 6, 8],
+          itemStyle: { color: '#EF4444', borderRadius: [2, 2, 0, 0] },
+          barWidth: '35%'
+        }
+      ]
+    };
+  }, [theme]);
 
   return (
     <div className="space-y-4 select-none">
@@ -201,7 +234,7 @@ export const OverviewView = () => {
             <div className="text-xl sm:text-2xl font-bold text-critical mt-1 tabular-nums font-mono">
               $1,482,900
             </div>
-            <span className="text-[11px] font-mono text-text-muted">৳177,948,000 BDT locked in escrow</span>
+            <span className="text-[10px] text-text-muted block mt-0.5">৳177,948,000 BDT locked in escrow</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-cleared font-mono mt-3">
             <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-cleared" />
@@ -420,29 +453,21 @@ export const OverviewView = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-borderSubtle font-mono text-[11px]">
-              {liveTransactions
-                .filter((tx) => {
-                  if (railFilter !== 'ALL') {
-                    if (railFilter === 'MFS' && !tx.rail?.includes('bKash') && !tx.rail?.includes('Nagad')) return false;
-                    if (railFilter === 'CHAPS' && !tx.rail?.includes('CHAPS') && !tx.rail?.includes('SEPA')) return false;
-                    if (railFilter !== 'MFS' && railFilter !== 'CHAPS' && !tx.rail?.includes(railFilter)) return false;
-                  }
-                  if (tierFilter !== 'ALL') {
-                    if (String(tx.tierCode) !== tierFilter) return false;
-                  }
-                  if (txSearch) {
-                    const q = txSearch.toLowerCase();
-                    const match = (tx.sourceEntity || '').toLowerCase().includes(q) ||
-                                  (tx.targetEntity || '').toLowerCase().includes(q) ||
-                                  (tx.remittanceInfo || '').toLowerCase().includes(q) ||
-                                  (tx.swiftReference || '').toLowerCase().includes(q) ||
-                                  (tx.rail || '').toLowerCase().includes(q) ||
-                                  (tx.id || '').toLowerCase().includes(q);
-                    if (!match) return false;
-                  }
-                  return true;
-                })
-                .map((tx, idx) => {
+              {filteredLiveTxs.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-12 text-center text-xs text-text-muted">
+                    <p className="font-semibold text-text">No transactions match current filters</p>
+                    <p className="text-[11px] mt-1 text-text-muted">Try selecting "All Rails", "All Tiers", or clearing the search query.</p>
+                    <button
+                      onClick={() => { setRailFilter('ALL'); setTierFilter('ALL'); setTxSearch(''); }}
+                      className="mt-3 px-3 py-1 rounded bg-surface hover:bg-surfaceHover border border-border text-xs text-accent cursor-pointer transition-colors"
+                    >
+                      Reset Filters
+                    </button>
+                  </td>
+                </tr>
+              ) : (
+                filteredLiveTxs.map((tx, idx) => {
                   const railColor =
                     tx.rail?.includes('LC') ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' :
                     tx.rail?.includes('MT103') || tx.rail?.includes('COV') ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { 
   Cpu, 
@@ -9,80 +9,94 @@ import {
   CheckCircle2, 
   Zap, 
   Clock,
-  Layers
+  Layers,
+  Sparkles,
+  BarChart3
 } from 'lucide-react';
 import { Card, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { useTheme } from '../../context/ThemeContext';
+import { BenchmarkGovernanceHub } from '../../consoles/BenchmarkGovernanceHub';
 
 export const ModelsView = () => {
+  const { theme } = useTheme();
+  const [activeTab, setActiveTab] = useState('health'); // 'health' | 'benchmark'
+
   // ACI Distribution Drift Tracker EChart
-  const aciDriftOption = useMemo(() => ({
-    animation: false,
-    backgroundColor: 'transparent',
-    tooltip: { trigger: 'axis' },
-    legend: {
-      data: ['Statistical Drift Index', 'Calibrated Risk Tolerance (1%)', 'Target Error Tolerance (1%)'],
-      bottom: 0,
-      textStyle: { color: '#667085', fontSize: 11 }
-    },
-    grid: { left: '7%', right: '11%', top: '12%', bottom: '15%' },
-    xAxis: {
-      type: 'category',
-      data: ['t=0', 't=10k', 't=20k', 't=30k', 't=40k (Peak)', 't=50k', 't=60k', 't=70k', 't=80k', 't=90k', 't=100k'],
-      axisLabel: { color: '#667085', fontSize: 10, fontFamily: 'monospace' },
-      axisLine: { lineStyle: { color: '#E4E7EC' } }
-    },
-    yAxis: [
-      {
-        type: 'value',
-        name: 'Drift Index',
-        min: 0,
-        max: 0.25,
-        splitLine: { lineStyle: { color: '#F2F4F7' } },
-        axisLabel: { color: '#667085', fontSize: 10, fontFamily: 'monospace' },
-        nameTextStyle: { color: '#667085', fontSize: 10 }
+  const aciDriftOption = useMemo(() => {
+    const isDark = theme === 'dark' || (typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark');
+    const labelColor = isDark ? '#94A3B8' : '#64748B';
+    const gridLineColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
+    const axisLineColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)';
+
+    return {
+      animation: false,
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis' },
+      legend: {
+        data: ['Statistical Drift Index', 'Calibrated Risk Tolerance (1%)', 'Target Error Tolerance (1%)'],
+        bottom: 0,
+        textStyle: { color: labelColor, fontSize: 11 }
       },
-      {
-        type: 'value',
-        name: 'Risk Tolerance',
-        min: 0.005,
-        max: 0.020,
-        splitLine: { show: false },
-        axisLabel: { 
-          color: '#667085', 
-          fontSize: 10, 
-          fontFamily: 'monospace',
-          formatter: (v) => v.toFixed(3)
+      grid: { left: '7%', right: '11%', top: '12%', bottom: '15%' },
+      xAxis: {
+        type: 'category',
+        data: ['t=0', 't=10k', 't=20k', 't=30k', 't=40k (Peak)', 't=50k', 't=60k', 't=70k', 't=80k', 't=90k', 't=100k'],
+        axisLabel: { color: labelColor, fontSize: 10, fontFamily: 'monospace' },
+        axisLine: { lineStyle: { color: axisLineColor } }
+      },
+      yAxis: [
+        {
+          type: 'value',
+          name: 'Drift Index',
+          min: 0,
+          max: 0.25,
+          splitLine: { lineStyle: { color: gridLineColor } },
+          axisLabel: { color: labelColor, fontSize: 10, fontFamily: 'monospace' },
+          nameTextStyle: { color: labelColor, fontSize: 10 }
         },
-        nameTextStyle: { color: '#667085', fontSize: 10, padding: [0, 0, 0, 15] }
-      }
-    ],
-    series: [
-      {
-        name: 'Statistical Drift Index',
-        type: 'line',
-        data: [0.012, 0.018, 0.142, 0.082, 0.168, 0.074, 0.041, 0.185, 0.062, 0.038, 0.024],
-        itemStyle: { color: '#E8A23B' },
-        lineStyle: { width: 2 }
-      },
-      {
-        name: 'Calibrated Risk Tolerance (1%)',
-        type: 'line',
-        yAxisIndex: 1,
-        data: [0.010, 0.0102, 0.0078, 0.0089, 0.0072, 0.0094, 0.0098, 0.0069, 0.0092, 0.0099, 0.010],
-        itemStyle: { color: '#2563EB' },
-        lineStyle: { width: 2 }
-      },
-      {
-        name: 'Target Error Tolerance (1%)',
-        type: 'line',
-        yAxisIndex: 1,
-        data: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
-        lineStyle: { type: 'dashed', color: '#98A2B3', width: 1 }
-      }
-    ]
-  }), []);
+        {
+          type: 'value',
+          name: 'Risk Tolerance',
+          min: 0.005,
+          max: 0.020,
+          splitLine: { show: false },
+          axisLabel: { 
+            color: labelColor, 
+            fontSize: 10, 
+            fontFamily: 'monospace',
+            formatter: (v) => v.toFixed(3)
+          },
+          nameTextStyle: { color: labelColor, fontSize: 10, padding: [0, 0, 0, 15] }
+        }
+      ],
+      series: [
+        {
+          name: 'Statistical Drift Index',
+          type: 'line',
+          data: [0.012, 0.018, 0.142, 0.082, 0.168, 0.074, 0.041, 0.185, 0.062, 0.038, 0.024],
+          itemStyle: { color: '#E8A23B' },
+          lineStyle: { width: 2 }
+        },
+        {
+          name: 'Calibrated Risk Tolerance (1%)',
+          type: 'line',
+          yAxisIndex: 1,
+          data: [0.010, 0.0102, 0.0078, 0.0089, 0.0072, 0.0094, 0.0098, 0.0069, 0.0092, 0.0099, 0.010],
+          itemStyle: { color: '#2563EB' },
+          lineStyle: { width: 2 }
+        },
+        {
+          name: 'Target Error Tolerance (1%)',
+          type: 'line',
+          yAxisIndex: 1,
+          data: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+          lineStyle: { type: 'dashed', color: '#98A2B3', width: 1 }
+        }
+      ]
+    };
+  }, [theme]);
 
   const handleDownloadModelCard = () => {
     const card = {
@@ -137,42 +151,74 @@ export const ModelsView = () => {
         </Button>
       </div>
 
-      {/* Production Engine & Clearing Rails Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Active Production Engine */}
-        <Card className="space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-borderSubtle">
-            <div className="flex items-center gap-2">
-              <Badge variant="cleared" size="sm">ACTIVE PRODUCTION ENGINE</Badge>
-              <span className="font-mono text-xs text-text-muted">v2.4.0-PROD</span>
-            </div>
-            <span className="font-mono text-xs text-cleared font-semibold">100% Real-Time Flow</span>
-          </div>
+      {/* Sub-Tab Bar: Health vs 14-Dataset Benchmark Governance */}
+      <div className="flex items-center gap-1 border-b border-border text-xs font-mono">
+        <button
+          onClick={() => setActiveTab('health')}
+          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
+            activeTab === 'health'
+              ? 'border-accent text-accent'
+              : 'border-transparent text-text-muted hover:text-text'
+          }`}
+        >
+          <Cpu className="w-3.5 h-3.5" />
+          <span>Production Engine & Rail Health</span>
+        </button>
 
-          <div>
-            <h3 className="text-sm font-semibold text-text">Spatio-Temporal Graph Surveillance Engine</h3>
-            <p className="text-xs text-text-muted mt-0.5">Deep interbank graph convolutions with real-time transactional gating</p>
-          </div>
+        <button
+          onClick={() => setActiveTab('benchmark')}
+          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
+            activeTab === 'benchmark'
+              ? 'border-accent text-accent'
+              : 'border-transparent text-text-muted hover:text-text'
+          }`}
+        >
+          <Scale className="w-3.5 h-3.5" />
+          <span>14-Dataset Benchmark Matrix & Drift Governance</span>
+          <Badge variant="accent" size="sm">Thesis Scorecard</Badge>
+        </button>
+      </div>
 
-          <div className="grid grid-cols-2 gap-2 p-2.5 rounded bg-bg border border-borderSubtle font-mono text-xs">
-            <div>
-              <span className="text-[10px] text-text-muted uppercase block">F1 Precision Score</span>
-              <span className="font-bold text-accent text-sm">94.2%</span>
-            </div>
-            <div>
-              <span className="text-[10px] text-text-muted uppercase block">PR-AUC Accuracy</span>
-              <span className="font-bold text-accent text-sm">0.982</span>
-            </div>
-            <div>
-              <span className="text-[10px] text-text-muted uppercase block">Triage Decision Speed</span>
-              <span className="font-bold text-cleared text-sm">&lt; 0.45 ms</span>
-            </div>
-            <div>
-              <span className="text-[10px] text-text-muted uppercase block">Safety Guarantee</span>
-              <span className="font-bold text-cleared text-sm">&ge; 99.0% Coverage</span>
-            </div>
-          </div>
-        </Card>
+      {activeTab === 'benchmark' ? (
+        <BenchmarkGovernanceHub />
+      ) : (
+        <>
+          {/* Production Engine & Clearing Rails Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Active Production Engine */}
+            <Card className="space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-borderSubtle">
+                <div className="flex items-center gap-2">
+                  <Badge variant="cleared" size="sm">ACTIVE PRODUCTION ENGINE</Badge>
+                  <span className="font-mono text-xs text-text-muted">v2.4.0-PROD</span>
+                </div>
+                <span className="font-mono text-xs text-cleared font-semibold">100% Real-Time Flow</span>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold text-text">Spatio-Temporal Graph Surveillance Engine</h3>
+                <p className="text-xs text-text-muted mt-0.5">Deep interbank graph convolutions with real-time transactional gating</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 p-2.5 rounded bg-bg border border-borderSubtle font-mono text-xs">
+                <div>
+                  <span className="text-[10px] text-text-muted uppercase block">Elliptic-v1 F1 Score</span>
+                  <span className="font-bold text-accent text-sm">91.42%</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-text-muted uppercase block">Macro Mean F1 (14 Sets)</span>
+                  <span className="font-bold text-accent text-sm">68.05%</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-text-muted uppercase block">Fast-Path Latency</span>
+                  <span className="font-bold text-cleared text-sm">&lt; 0.45 ms</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-text-muted uppercase block">Safety Guarantee</span>
+                  <span className="font-bold text-cleared text-sm">&ge; 99.0% Coverage</span>
+                </div>
+              </div>
+            </Card>
 
         {/* Operational Rail Connectors */}
         <Card className="space-y-3">
@@ -271,6 +317,8 @@ export const ModelsView = () => {
           </p>
         </Card>
       </div>
+      </>
+      )}
     </div>
   );
 };

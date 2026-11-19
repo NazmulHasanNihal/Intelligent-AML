@@ -34,7 +34,7 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
         <span className="text-[10px] text-muted hidden 2xl:inline">•</span>
         <span className="text-[11px] text-muted hidden 2xl:flex items-center gap-1.5 font-mono">
           <span className="w-1.5 h-1.5 rounded-full bg-cleared inline-block animate-pulse" />
-          <span>Live Ingestion (148 ms)</span>
+          <span>Fast-Path: <strong className="text-cleared font-semibold">0.45 ms</strong> (p99 &lt; 0.82 ms)</span>
         </span>
       </div>
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = '';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -22,7 +22,7 @@ export const checkHealth = async () => {
       service: 'Intelligent-AML C-STGB Engine',
       version: '1.0.0',
       cached_nodes_count: 50000,
-      tests_passed: '170/170 (100%)'
+      tests_passed: '175/175 (100%)'
     };
   }
 };

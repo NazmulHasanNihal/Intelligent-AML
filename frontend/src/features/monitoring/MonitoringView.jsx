@@ -323,7 +323,21 @@ export const MonitoringView = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-borderSubtle font-mono text-[11px]">
-                  {filteredLiveTxs.map((tx, idx) => {
+                  {filteredLiveTxs.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="py-12 text-center text-xs text-text-muted">
+                        <p className="font-semibold text-text">No transactions match your search</p>
+                        <p className="text-[11px] mt-1 text-text-muted">Try clearing the search query to view incoming live stream transactions.</p>
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="mt-3 px-3 py-1 rounded bg-surface hover:bg-surfaceHover border border-border text-xs text-accent cursor-pointer transition-colors"
+                        >
+                          Clear Search
+                        </button>
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredLiveTxs.map((tx, idx) => {
                     const isAlreadyBlocked = blockedTransactions.some(b => b.txId === tx.id && b.status === 'BLOCKED');
                     const isHighRisk = tx.tierCode === 1 || tx.riskScore > 0.85;
 

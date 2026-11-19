@@ -138,7 +138,12 @@ export const DemoBanner = () => {
         >
           <span className="text-accent font-semibold">{latestTx.id}</span>
           <span className="text-text truncate max-w-[140px]">{latestTx.sourceEntity}</span>
-          <span className="text-text-muted font-bold">${Number(latestTx.amount).toLocaleString()}</span>
+          <span className="text-text-muted font-bold">
+            {latestTx.currency === 'BDT' ? `৳${Number(latestTx.amount).toLocaleString()}` :
+             latestTx.currency === 'EUR' ? `€${Number(latestTx.amount).toLocaleString()}` :
+             latestTx.currency === 'GBP' ? `£${Number(latestTx.amount).toLocaleString()}` :
+             `$${Number(latestTx.amount).toLocaleString()}`}
+          </span>
           <Badge 
             variant={latestTx.tierCode === 1 ? 'critical' : latestTx.tierCode === 2 ? 'review' : 'cleared'} 
             size="sm"

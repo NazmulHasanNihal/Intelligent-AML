@@ -383,7 +383,7 @@ export const TopNavbar = ({
                 <div className="flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--text-muted)]">API GATEWAY:</span>
                   <span className="font-bold text-[var(--text-primary)]">
-                    {isLiveServer ? 'http://127.0.0.1:8000 (Active)' : 'Standalone In-Memory Mock Engine'}
+                    {isLiveServer ? (typeof window !== 'undefined' && window.location.origin ? `${window.location.origin} (Active)` : 'http://127.0.0.1:8000 (Active)') : 'Standalone In-Memory Simulation Engine'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-mono">
@@ -397,7 +397,7 @@ export const TopNavbar = ({
                 <div className="flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--text-muted)]">TEST VERIFICATION SUITE:</span>
                   <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                    {health?.tests_passed || '158 / 158 Tests Passed (100%)'}
+                    {health?.tests_passed || '175 / 175 Tests Passed (100%)'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-mono">

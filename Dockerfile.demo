@@ -1,0 +1,49 @@
+# =============================================================================
+# Multi-stage Container for Intelligent-AML Free Online Demo (FastAPI + React)
+# Suitable for: Hugging Face Spaces (Port 7860), Render, Railway, Koyeb
+# =============================================================================
+
+# Stage 1: Build production React 18 + Vite frontend
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app/frontend
+
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm install
+
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Hardened Python runtime serving both API and Frontend
+FROM python:3.11-slim
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=7860 \
+    CORS_ALLOW_ALL=true
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt pyproject.toml ./
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install -r requirements.txt && \
+    pip install -e .
+
+COPY src/ ./src/
+COPY configs/ ./configs/
+COPY scripts/ ./scripts/
+COPY README.md LICENSE ./
+
+# Mount pre-built React frontend into FastAPI static serving directory
+COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+
+EXPOSE 7860
+
+# Runs unified FastAPI engine serving both React UI at / and REST API at /api/v1/
+CMD ["sh", "-c", "python -m uvicorn src.engine.api:app --host 0.0.0.0 --port ${PORT:-7860}"]

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: intelligent-aml-demo
+    runtime: docker
+    dockerfilePath: ./Dockerfile.demo
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: CORS_ALLOW_ALL
+        value: "true"

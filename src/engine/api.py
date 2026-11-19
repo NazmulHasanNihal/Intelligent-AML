@@ -15,6 +15,7 @@ import asyncio
 from dotenv import load_dotenv
 
 load_dotenv()
+from pathlib import Path
 from typing import Dict, List, Optional, Any
 from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect, Request, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -89,8 +90,25 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Enable Cross-Origin Resource Sharing (CORS) with origin restriction
 CORS_ORIGINS_ENV = os.getenv("CORS_ORIGINS", "")
+CORS_ALLOW_ALL = os.getenv("CORS_ALLOW_ALL", "true").lower() in ("true", "1", "yes")
+
 if CORS_ORIGINS_ENV:
     ALLOWED_ORIGINS = [o.strip() for o in CORS_ORIGINS_ENV.split(",") if o.strip()]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=ALLOWED_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+elif CORS_ALLOW_ALL:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origin_regex=r"https?://.*",
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 else:
     ALLOWED_ORIGINS = [
         "http://localhost:5173",
@@ -100,14 +118,13 @@ else:
         "http://localhost:8000",
         "http://127.0.0.1:8000"
     ]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=ALLOWED_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # Global Telemetry Counters for Observability & Prometheus
 import threading as _threading
@@ -226,6 +243,10 @@ class CounterfactualSolveResponse(BaseModel):
     actionable_remediation_steps: List[str]
 
 
+# Path to built React frontend assets for unified web demo serving
+FRONTEND_DIST = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
+
+
 # =============================================================================
 # API Endpoints
 # =============================================================================
@@ -234,7 +255,10 @@ class CounterfactualSolveResponse(BaseModel):
 def root_index():
     """
     Intelligent-AML C-STGB Engine Root Service Index.
+    Serves the React Web Platform if built, or returns API service telemetry.
     """
+    if FRONTEND_DIST.exists() and (FRONTEND_DIST / "index.html").exists():
+        return FileResponse(FRONTEND_DIST / "index.html")
     return {
         "service": "🏛️ Intelligent-AML C-STGB Production Platform",
         "description": "Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering (IEEE TIFS)",
@@ -1555,3 +1579,22 @@ def execute_graph_query(req: GraphQueryRequest):
 def get_fast_path_telemetry():
     """Returns high-throughput Fast-Path early-exit triage statistics."""
     return fast_path_gate.get_telemetry()
+
+
+# =============================================================================
+# Production Web Platform Serving (Frontend Static Assets & SPA Catch-All)
+# =============================================================================
+from fastapi.staticfiles import StaticFiles
+
+if FRONTEND_DIST.exists() and (FRONTEND_DIST / "index.html").exists():
+    if (FRONTEND_DIST / "assets").exists():
+        app.mount("/assets", StaticFiles(directory=str(FRONTEND_DIST / "assets")), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_spa_frontend(full_path: str):
+        if full_path.startswith(("api/", "health", "ready", "metrics", "docs", "redoc", "openapi.json", "ws")):
+            raise HTTPException(status_code=404, detail="Not Found")
+        target_file = FRONTEND_DIST / full_path
+        if full_path and target_file.is_file():
+            return FileResponse(target_file)
+        return FileResponse(FRONTEND_DIST / "index.html")

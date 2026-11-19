@@ -8,6 +8,7 @@
 [![Research Under Review](https://img.shields.io/badge/Elsevier-EAAI%20Under%20Review-blue.svg)](papers/EAAI_Research_Paper/)
 [![Hardware: CPU-Native](https://img.shields.io/badge/Hardware-Commodity_CPU_Native-blue.svg)](#-empirical-performance--latency-benchmarks)
 [![Showcase: 9 Screens](https://img.shields.io/badge/UI_Showcase-9_Live_Screens-success.svg)](#4-interactive-visual-platform-showcase--screen-by-screen-walkthrough)
+[![Online Demo Guide](https://img.shields.io/badge/Online_Demo-Free_%26_Live-brightgreen.svg?logo=vercel&logoColor=white)](docs/ONLINE_DEMO_GUIDE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 An institutional-grade, real-time banking surveillance, financial network forensics, and regulatory compliance platform. Engineered with **C-STGB (Conformal Spatio-Temporal GraphBoost)** to eliminate false alarms, auto-clear honest payments in sub-millisecond timeframes, freeze high-risk financial crime instantly, and empower human compliance officers with interactive graph intelligence and an autonomous team of multi-agent AI forensic investigators.
@@ -447,6 +448,22 @@ To guarantee forensic accuracy and eliminate artificial intelligence hallucinati
 ---
 
 ## 🚀 Quickstart & Deployment Guide
+
+### 🌐 Free Online Lite Demo (Instant Live Web Showcase)
+
+You can launch and showcase the complete web version online on **free cloud infrastructure** in under 60 seconds with **zero cost**:
+
+| Platform | Deployment Type | One-Click Launch | Setup Guide |
+| :--- | :--- | :---: | :--- |
+| **Vercel** | Free Frontend Edge CDN | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNazmulHasanNihal%2FIntelligent-AML) | [Vercel Setup Guide](docs/ONLINE_DEMO_GUIDE.md#option-1-vercel-recommended--60-second-setup) |
+| **Netlify** | Free Global CDN | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/NazmulHasanNihal/Intelligent-AML) | [Netlify Setup Guide](docs/ONLINE_DEMO_GUIDE.md#option-2-netlify-1-click-free-hosting) |
+| **GitHub Pages** | Free Automated Hosting | Push to `main` → Auto Deployed via GitHub Actions | [GitHub Pages Guide](docs/ONLINE_DEMO_GUIDE.md#option-3-github-pages-100-free-forever-via-github-actions) |
+| **Hugging Face** | Free Fullstack (16GB RAM) | Multi-Stage Docker on Port 7860 | [Hugging Face Guide](docs/ONLINE_DEMO_GUIDE.md#option-4-hugging-face-spaces-free-fullstack-docker--16-gb-ram) |
+| **Render** | Free Web Service | Blueprint Deploy via `render.yaml` | [Render Guide](docs/ONLINE_DEMO_GUIDE.md#option-5-rendercom-free-web-service) |
+
+*(See the complete [Online Lite Demo Guide](docs/ONLINE_DEMO_GUIDE.md) for step-by-step instructions and interactive demonstration walkthroughs.)*
+
+---
 
 ### 1. System Requirements
 * **Compute:** Standard x86-64 / ARM64 CPU (Zero GPU required for sub-millisecond production inference)

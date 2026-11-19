@@ -19,16 +19,17 @@ The web platform is engineered with **Dual-Mode Operational Resilience**:
 
 Vercel provides free, high-speed global CDN hosting with zero server maintenance.
 
-### Steps:
+### 1-Click Instant Deploy:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNazmulHasanNihal%2FIntelligent-AML&root-directory=frontend)
+
+### Manual Steps:
 1. Go to [https://vercel.com/new](https://vercel.com/new) and log in with your GitHub account.
 2. Select your `Intelligent-AML` repository.
-3. Configure project settings:
-   - **Framework Preset:** `Vite`
-   - **Root Directory:** `./`
-   - **Build Command:** `cd frontend && npm install && npm run build` (configured automatically via root `vercel.json`)
-   - **Output Directory:** `frontend/dist`
+3. In Project Settings:
+   - If Root Directory is set to `frontend`: Framework Preset is `Vite` (automatic).
+   - If Root Directory is root `./`: The pre-configured root [`vercel.json`](../vercel.json) handles building `frontend` automatically.
 4. Click **Deploy**.
-5. Within 60 seconds, you receive a public HTTPS URL: `https://intelligent-aml-<username>.vercel.app`.
+5. Within 45-60 seconds, your site is live at `https://intelligent-aml-<username>.vercel.app`.
 
 *(The repository includes [`vercel.json`](../vercel.json) and [`frontend/vercel.json`](../frontend/vercel.json) ensuring all SPA subroutes like `/monitoring`, `/cases`, and `/network` load seamlessly without 404 errors.)*
 

@@ -455,7 +455,7 @@ You can launch and showcase the complete web version online on **free cloud infr
 
 | Platform | Deployment Type | One-Click Launch | Setup Guide |
 | :--- | :--- | :---: | :--- |
-| **Vercel** | Free Frontend Edge CDN | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNazmulHasanNihal%2FIntelligent-AML) | [Vercel Setup Guide](docs/ONLINE_DEMO_GUIDE.md#option-1-vercel-recommended--60-second-setup) |
+| **Vercel** | Free Frontend Edge CDN | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNazmulHasanNihal%2FIntelligent-AML&root-directory=frontend) | [Vercel Setup Guide](docs/ONLINE_DEMO_GUIDE.md#option-1-vercel-recommended--60-second-setup) |
 | **Netlify** | Free Global CDN | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/NazmulHasanNihal/Intelligent-AML) | [Netlify Setup Guide](docs/ONLINE_DEMO_GUIDE.md#option-2-netlify-1-click-free-hosting) |
 | **GitHub Pages** | Free Automated Hosting | Push to `main` → Auto Deployed via GitHub Actions | [GitHub Pages Guide](docs/ONLINE_DEMO_GUIDE.md#option-3-github-pages-100-free-forever-via-github-actions) |
 | **Hugging Face** | Free Fullstack (16GB RAM) | Multi-Stage Docker on Port 7860 | [Hugging Face Guide](docs/ONLINE_DEMO_GUIDE.md#option-4-hugging-face-spaces-free-fullstack-docker--16-gb-ram) |

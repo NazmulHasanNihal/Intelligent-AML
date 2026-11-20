@@ -3,11 +3,11 @@
 
 \begin{takeawaybox}{Chapter 7: Master Benchmark Campaigns \& Empirical Verification}
 \begin{itemize}\setlength{\itemsep}{1pt}
-  \item \textbf{Master Benchmark Suite:} 14 financial transaction networks, 9,534,980 entities, 9,528,355 transactions, and 13 published baselines across public crypto and commercial banking rails.
+  \item \textbf{Master Benchmark Suite:} 14 financial transaction networks, 9,534,980 entities, 9,528,355 transactions, contrasting 10 full-corpus baselines and 3 Elliptic-v1 literature architectures across public crypto and commercial banking rails.
   \item \textbf{SOTA Superiority:} Achieves 91.42\% F1 on Elliptic-v1, 99.10\% on Elliptic-v2, and 68.05\% macro F1 globally ($p < 0.001$ via Wilcoxon signed-rank tests with Holm-Bonferroni correction).
-  \item \textbf{Factorial Ablations:} Stepwise progression and leave-one-out ablations isolate the precise marginal gain of each module, with GraphSMOTE and Edge-Gating contributing $+32.1\%$ and $+18.4\%$ F1.
+  \item \textbf{Factorial Ablations:} Stepwise progression and leave-one-out ablations isolate the precise marginal gain of each module, with GraphSMOTE and Edge-Gating contributing $+9.92\text{ pp}$ and $+7.70\text{ pp}$ stepwise F1.
   \item \textbf{Camouflage \& Cold-Start Robustness:} Retains 86.4\% F1 under 50\% injected camouflage links; evidence-adaptive fusion yields 89.60\% F1 on zero-degree cold-start entities.
-  \item \textbf{Production SLAs:} Delivers 0.45\,ms Fast-Path P99 latency and \mbox{31,250 tx/sec} throughput, meeting Tier-1 core-banking clearance requirements.
+  \item \textbf{Production SLAs:} Delivers 0.45\,ms Fast-Path P50 (0.82\,ms P99) latency and \mbox{31,250 tx/sec} throughput, meeting Tier-1 core-banking clearance requirements.
 \end{itemize}
 \end{takeawaybox}
 
@@ -103,7 +103,7 @@ System RAM & DDR4-3200 ECC Registered & 512 GB & In-memory Apache Arrow table bu
 GPU Accelerators & NVIDIA A100-SXM4 (80 GB HBM2e) & 4 GPUs & Distributed temporal GNN message-passing \\
 Local Scratch Storage & NVMe PCIe 4.0 Enterprise SSD (7,000 MB/s) & 7.68 TB & High-velocity streaming transaction storage \\
 \midrule
-Total Experimental Runs & 13 Baselines $\times$ 14 Networks $\times$ 5 Seeds & 910 Runs & Full evaluation matrix + ablations \\
+Total Experimental Runs & 11 Full-Corpus Models $\times$ 14 Networks $\times$ 5 Seeds & 910 Runs & 770 primary + 140 ablation/SOTA runs \\
 Total GPU Wall-Clock Time & NVIDIA A100 GPU Hours & 342.5 Hours & Equivalent to 14.27 continuous GPU days \\
 Total Energy Consumption & Measured PDU Consumption & 108.4 kWh & Cluster average including idle cool-down \\
 Carbon Footprint Offset & Regional Grid Factor (0.398 kg CO$_2$/kWh) & 43.1 kg CO$_2$ & Mitigated via certified green hosting credits \\
@@ -137,7 +137,7 @@ Table~\ref{tab:master_baseline_summary} summarizes the overall performance metri
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_champion_vs_runnerup_delta.pdf}
-\caption[C-STGB Benchmark Superiority and F1 Lead across 14 Networks]{C-STGB benchmark superiority across 14 financial transaction networks: (Left) Executive performance badges confirming Global Mean Rank 1.07, +24.6\,pp F1 lead over closest baseline GNN, -99.51\% workload cut, and 0.45\,ms Fast-Path latency; (Right) Horizontal delta bar chart illustrating decisive F1 gains over the closest published baseline per network ($p < 0.001$).}
+\caption[C-STGB Benchmark Superiority and F1 Lead across 14 Networks]{C-STGB benchmark superiority across 14 financial transaction networks: (Left) Executive performance badges confirming Global Mean Rank 1.21, +24.66\,pp F1 lead over closest continuous-time GNN (TGN), -99.43\% cross-benchmark workload cut (-99.51\% live stream), and 0.45\,ms Fast-Path latency; (Right) Horizontal delta bar chart illustrating decisive F1 gains over the closest published baseline per network ($p < 0.001$).}
 \label{fig:ch7_champion_delta}
 \end{figure}
 
@@ -220,7 +220,7 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.21$ & $8.40$ & $29.5\
 \midrule
 \multicolumn{4}{l}{\textbf{Commercial Banking Rails \& Simulators (Multi-Bank Visibility Gap)}} \\
 \texttt{saml\_d} (15-Bank Synthetic Mesh) & $59.40\,/\,0.6300$ & $89.20\,/\,0.8950$ & $\mathbf{93.68\,/\,0.9574}$ \\
-\texttt{paysim1} (Mobile E-Wallet 1-Hop) & $3.50\,/\,0.0180$ & $18.90\,/\,0.1254$ & $\mathbf{16.66\,/\,0.1350}$ \\
+\texttt{paysim1} (Mobile E-Wallet 1-Hop) & $2.50\,/\,0.0220$ & $18.90\,/\,0.1254$ & $\mathbf{16.66\,/\,0.1350}$ \\
 \texttt{paysim\_extended} (Mobile Multi-Hop) & $73.10\,/\,0.7600$ & $99.72\,/\,0.9996$ & $\mathbf{99.80\,/\,0.9993}$ \\
 \texttt{ibm\_amlsim\_hi\_small} (High Imbalance) & $28.40\,/\,0.3200$ & $32.40\,/\,0.3100$ & $\mathbf{39.70\,/\,0.4000}$ \\
 \texttt{ibm\_amlsim\_hi\_med} (Medium Multi-Bank) & $35.20\,/\,0.3900$ & $39.50\,/\,0.4200$ & $\mathbf{46.85\,/\,0.5100}$ \\
@@ -230,7 +230,7 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.21$ & $8.40$ & $29.5\
 \texttt{dgraphfin} (Fintech Lending DAG) & $3.20\,/\,0.0250$ & $96.07\,/\,0.9900$ & $\mathbf{97.91\,/\,0.9979}$ \\
 \texttt{cc\_transactions} (Card Fraud) & $38.20\,/\,0.4200$ & $48.20\,/\,0.4900$ & $\mathbf{56.48\,/\,0.6476}$ \\
 \midrule
-\textbf{Macro-Average} & $43.76\,/\,0.5800$ & $64.76\,/\,0.6500$ & $\mathbf{68.05\,/\,0.6974}$ \\
+\textbf{Macro-Average} & $43.39\,/\,0.4605$ & $64.76\,/\,0.6500$ & $\mathbf{68.05\,/\,0.6974}$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -239,7 +239,7 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.21$ & $8.40$ & $29.5\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_critical_difference_lollipop.pdf}
-\caption[Statistical Significance and Archetype Performance Synthesis]{Statistical significance and archetype-level performance synthesis across all 14 benchmark networks: (a) Wilcoxon-Holm Critical Difference (CD) rank diagram at significance level $\alpha=0.05$ ($\text{CD}=1.45$), confirming C-STGB (mean rank 1.07) significantly outperforms all deep GNN baselines; (b) Domain-grouped performance comparison across Public Crypto Ledgers (90.53\% F1), Commercial Multi-Bank Rails (59.34\% F1), Bipartite Card Streams (56.48\% F1), and Overall Benchmark Macro Mean (68.05\% F1 vs. 64.76\% XGBoost and 43.76\% TGN).}
+\caption[Statistical Significance and Archetype Performance Synthesis]{Statistical significance and archetype-level performance synthesis across all 14 benchmark networks: (a) Wilcoxon-Holm Critical Difference (CD) rank diagram at significance level $\alpha=0.05$ ($\text{CD}=1.45$), confirming C-STGB (mean rank 1.21) significantly outperforms all deep GNN baselines; (b) Domain-grouped performance comparison across Public Crypto Ledgers (90.53\% F1), Commercial Multi-Bank Rails (59.34\% F1), Bipartite Card Streams (56.48\% F1), and Overall Benchmark Macro Mean (68.05\% F1 vs. 64.76\% XGBoost and 43.39\% TGN).}
 \label{fig:ch7_critical_difference}
 \end{figure}
 
@@ -381,7 +381,7 @@ To evaluate the individual explanatory power of each dimension within the univer
 \end{tabular}%
 }
 \par\vspace{6pt}
-\footnotesize\raggedright\textbf{Note:} Sorted descending by mean Macro F1 degradation across public crypto (Elliptic-v1), inter-bank wire meshes (IBM-AMLSim HI), and 15-bank rails (SAML-D). Corresponding PR-AUC drops are detailed in Appendix Table~\ref{app_tab:master_baseline_results}.
+\footnotesize\raggedright\textbf{Note:} Sorted descending by mean Macro F1 degradation across public crypto (Elliptic-v1), inter-bank wire meshes (IBM-AMLSim HI), and 15-bank rails (SAML-D).
 \end{table}
 
 
@@ -402,7 +402,7 @@ Table~\ref{tab:ch7_conformal} evaluates the operational efficiency of the 3-Tier
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
-\textbf{Dataset Identifier} & \textbf{Illicit Coverage $\mathbb{P}(1 \in \Gamma \mid Y=1)$} & \textbf{Benign Coverage $\mathbb{P}(0 \in \Gamma \mid Y=0)$} & \textbf{Tier 1 (Quarantine)} & \textbf{Tier 2 (Manual Review)} & \textbf{Tier 3 (Auto-Clear)} & \textbf{Review Workload Reduction} \\
+\textbf{Dataset Identifier} & \textbf{Illicit Cov.} & \textbf{Benign Cov.} & \textbf{Tier 1 (Quar.)} & \textbf{Tier 2 (Rev.)} & \textbf{Tier 3 (STP)} & \textbf{Workload Cut} \\
 \midrule
 \texttt{elliptic\_v1} & $99.15 \pm 0.20\%$ & $99.08 \pm 0.15\%$ & $2.15\%$ & $0.48\%$ & $97.37\%$ & \textbf{99.52\%} \\
 \texttt{elliptic\_v2} & $99.08 \pm 0.22\%$ & $99.05 \pm 0.18\%$ & $0.82\%$ & $0.52\%$ & $98.66\%$ & \textbf{99.48\%} \\
@@ -432,7 +432,7 @@ Table~\ref{tab:adversarial_benchmarks} reports the relative F1-score retention u
 
 \begin{table}[htbp]
 \centering
-\caption[Adversarial Topological Robustness under Camouflage Attacks]{Adversarial Topological Robustness and Relative F1-Score Retention under Camouflage Attacks on Elliptic-v1.\footnote{In Table~\ref{tab:adversarial_benchmarks}, Standard GCN and spatial baselines are evaluated under their standard default decision cutoff ($\tau = 0.50$), yielding $18.73\%$ clean baseline F1 on Elliptic-v1. When decision thresholds are individually tuned via Bayesian optimization on validation splits ($\tau^* = 0.28$), GCN achieves $43.55\%$ as reported in Table~\ref{tab:sota_reported_comparison} and Table~\ref{app_tab:master_baseline_results}.}}
+\caption[Adversarial Topological Robustness under Camouflage Attacks]{Adversarial Topological Robustness and Relative F1-Score Retention under Camouflage Attacks on Elliptic-v1.\footnotemark}
 \label{tab:adversarial_benchmarks}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccc}
@@ -450,6 +450,7 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 \end{tabular}%
 }
 \end{table}
+\footnotetext{In Table~\ref{tab:adversarial_benchmarks}, Standard GCN and spatial baselines are evaluated under their standard default decision cutoff ($\tau = 0.50$), yielding $18.73\%$ clean baseline F1 on Elliptic-v1. When decision thresholds are individually tuned via Bayesian optimization on validation splits ($\tau^* = 0.28$), GCN achieves $43.55\%$ as reported in Table~\ref{tab:sota_reported_comparison} and Table~\ref{app_tab:master_baseline_results}.}
 
 \begin{figure}[htbp]
 \centering
@@ -556,5 +557,5 @@ Table~\ref{tab:hardware_latencies} reports exact wall-clock training and inferen
 
 \FloatBarrier
 \section{Chapter Summary}
-This chapter delivered the comprehensive experimental campaign validating C-STGB across all 14 financial benchmarks ($9,534,980$ entities, $9,528,355$ transactions). The empirical results confirmed top performance across all datasets ($68.05\%$ Macro F1), verified $>99.4\%$ compliance workload reduction, proved $92.1\%$ adversarial F1 retention under attacks, demonstrated strong zero-shot cross-domain generalization ($69.98\%$ F1), and certified sub-millisecond streaming latency ($0.45\text{ ms}$ Fast-Path, $2.10\text{ ms}$ P99). The next chapter details the production software engineering architecture.
+This chapter delivered the comprehensive experimental campaign validating C-STGB across all 14 financial benchmarks ($9,534,980$ entities, $9,528,355$ transactions). The empirical results confirmed top performance across all datasets ($68.05\%$ Macro F1), verified $>99.4\%$ compliance workload reduction, proved $94.9\%$ mean adversarial F1 retention ($92.1\%$ under worst-case white-box PGD), demonstrated strong zero-shot cross-domain generalization ($69.98\%$ F1), and certified sub-millisecond streaming latency ($0.45\text{ ms}$ Fast-Path P50 / $0.82\text{ ms}$ P99, and $2.10\text{ ms}$ Full Streaming P50 / $3.67\text{ ms}$ P99). The next chapter details the production software engineering architecture.
 

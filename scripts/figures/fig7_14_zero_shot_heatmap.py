@@ -14,7 +14,7 @@ def generate():
     setup_plt(font_size=8.5, title_size=9.5, label_size=8.5)
     print("13. GENERATING ZERO-SHOT CROSS-DOMAIN TRANSFER HEATMAP (Ch 7)")
     print("======================================================================")
-    fig, ax = plt.subplots(figsize=(7.30, 2.70))
+    fig, ax = plt.subplots(figsize=(8.20, 3.40))
     
     pairs = [
         "Elliptic-v1 -> Elliptic-v2",
@@ -39,13 +39,13 @@ def generate():
     ax.bar(x_p + 0.5*w_p, cstgb_zs, width=w_p, color="#15803d", edgecolor="black", lw=0.6, label="C-STGB Zero-Shot (eta=0)")
     ax.bar(x_p + 1.5*w_p, target_f1, width=w_p, color="#94a3b8", edgecolor="black", lw=0.5, label="Target-Tuned Upper Bound")
     
-    ax.set_ylabel("Minority F1 (%)", fontsize=8.5)
-    ax.set_title("Frozen-Weight Zero-Shot Transfer Matrix across 8 Cross-Domain Source-Target Pairs", fontweight="bold", fontsize=9.2)
+    ax.set_ylabel("Minority F1 (%)", fontsize=8.5, fontweight="bold")
+    ax.set_title("Frozen-Weight Zero-Shot Transfer Matrix across 8 Cross-Domain Source-Target Pairs", fontweight="bold", fontsize=9.2, pad=25)
     ax.set_xticks(x_p)
-    ax.set_xticklabels(pairs, rotation=35, ha="right", fontsize=6.8, fontweight="bold")
-    ax.set_ylim([0, 108])
+    ax.set_xticklabels(pairs, rotation=30, ha="right", fontsize=7.0, fontweight="bold")
+    ax.set_ylim([0, 115])
     ax.grid(True, axis="y", linestyle=":", alpha=0.5)
-    ax.legend(loc="upper left", ncol=4, fontsize=6.8, framealpha=0.92)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=4, fontsize=6.8, framealpha=0.95, edgecolor="#cbd5e1")
     
     for i in range(len(pairs)):
         ax.annotate(f"{cstgb_zs[i]:.1f}%", (x_p[i] + 0.5*w_p, cstgb_zs[i]), xytext=(0, 2), textcoords="offset points",

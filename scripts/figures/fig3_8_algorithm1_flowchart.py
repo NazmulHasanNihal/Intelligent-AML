@@ -69,7 +69,7 @@ def generate():
             ha="center", va="center", fontsize=6.4, fontweight="bold", color="#ffffff")
 
     infer_boxes = [
-        ("1. Live Ingest & Top-15", "Zero-Copy Arrow RecordBatch\nDynamic 15-Hop Cache", 0.020, 0.035, 0.225, 0.300, "#f0fdf4", "#15803d"),
+        ("1. Live Ingest & Top-15", "Zero-Copy Arrow RecordBatch\n2-Hop Top-15 Cache", 0.020, 0.035, 0.225, 0.300, "#f0fdf4", "#15803d"),
         ("2. Incremental Invariants", "Flow Conservation & Velocity\nHawkes Burst Arrival Spike", 0.265, 0.035, 0.225, 0.300, "#f0fdfa", "#0f766e"),
         ("3. Frozen GNN & Bayes", "Forward Pass on Cached Weights\nCalibrated Bayes Risk Score", 0.510, 0.035, 0.225, 0.300, "#faf5ff", "#6d28d9"),
         ("4. 3-Tier CRC Triage", "Class-Conditional CRC Gate\nT1 Quarantine / T2 Rev / T3 STP", 0.755, 0.035, 0.225, 0.300, "#fef2f2", "#b91c1c")

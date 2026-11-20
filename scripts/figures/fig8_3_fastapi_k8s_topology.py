@@ -93,7 +93,7 @@ def generate():
 
         # Modules inside Pod
         pod_mods = [
-            ("TorchScript Inference Core", "C++ LibTorch GNN on GPU (<0.28 ms)", COLOR_GNN_BG, COLOR_GNN),
+            ("TorchScript Inference Core", "CPU-Native LibTorch GNN (Optional GPU Burst)", COLOR_GNN_BG, COLOR_GNN),
             ("In-Memory Graph Buffer", "DuckDB Zero-Copy 2-Hop (<0.12 ms)", COLOR_INGEST_BG, COLOR_INGEST),
             ("Conformal CRC Arbiter", "Guaranteed >= 99% Coverage Triage", COLOR_SAFE_BG, COLOR_SAFE)
         ]
@@ -123,9 +123,9 @@ def generate():
             "tech": "DuckDB & Apache Arrow Engine",
             "fc": COLOR_INGEST_BG, "ec": COLOR_INGEST,
             "items": [
-                ("Zero-Copy Memory", "Columnar Arrow format shared directly with GPU."),
+                ("Zero-Copy Memory", "Columnar Arrow format shared directly with CPU/GPU."),
                 ("2-Hop Subgraph", "Sub-0.12 ms localized ego-network retrieval."),
-                ("Ring Buffer", "Sliding 90-day active transaction window.")
+                ("50k Node LRU Cache", "250 MB RAM for 50k nodes | 88.4% Hit Rate.")
             ]
         },
         {

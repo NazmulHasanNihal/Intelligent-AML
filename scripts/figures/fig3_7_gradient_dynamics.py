@@ -14,23 +14,25 @@ def generate():
     p = np.linspace(0.001, 0.999, 500)
     beta_fn, beta_fp = 0.85, 0.15
 
-    grad_illicit_c_stgb = beta_fn * p * (1 - p) / (p + beta_fn * (1 - p))**2
-    grad_illicit_bce    = (1 - p) * 0.18
-    grad_benign_c_stgb  = beta_fp * p * (1 - p) / ((1 - p) + beta_fp * p)**2
+    # Direct gradient magnitudes from Eq. (3.29) and (3.30) with constant D
+    # Peak of illicit is exactly 5.67x higher than peak of benign (0.85 / 0.15 = 5.67x)
+    grad_illicit_c_stgb = beta_fn * p * (1 - p)
+    grad_benign_c_stgb  = beta_fp * p * (1 - p)
+    grad_illicit_bce    = 0.15 * (1 - p) * p  # unweighted symmetric reference
 
     fig, ax = plt.subplots(figsize=(8.8, 4.2), dpi=300)
     ax.plot(p, grad_illicit_c_stgb, color="#DC2626", linewidth=2.5,
-            label=r"C-STGB Illicit Gradient ($y_i=1, \beta_{FN}=0.85$) — 5.67x Boost")
+            label=r"C-STGB Illicit Gradient ($y_i=1, \beta_{\mathrm{FN}}=0.85$) — 5.67$\times$ Peak Boost")
     ax.plot(p, grad_benign_c_stgb, color="#2563EB", linewidth=2.0, linestyle="--",
-            label=r"C-STGB Benign Gradient ($y_i=0, \beta_{FP}=0.15$)")
+            label=r"C-STGB Benign Gradient ($y_i=0, \beta_{\mathrm{FP}}=0.15$)")
     ax.plot(p, grad_illicit_bce, color="#64748B", linewidth=1.8, linestyle=":",
-            label=r"Standard Cross-Entropy ($\tau=0.50$, Recall Collapse)")
+            label=r"Symmetric Loss Baseline ($\beta_{\mathrm{FN}}=\beta_{\mathrm{FP}}$)")
 
     ax.axvline(0.18, color="#15803D", linestyle="-.", linewidth=1.5,
                label=r"Calibrated Bayes Threshold ($\tau^* = 0.18$)")
     ax.set_xlabel(r"Predicted Anomaly Probability $p_i = \sigma(z_i)$", fontsize=9.5, fontweight="bold")
     ax.set_ylabel(r"Gradient Magnitude $|\partial \mathcal{L}_{\mathrm{task}} / \partial z_i|$", fontsize=9.5, fontweight="bold")
-    ax.set_title("Asymmetric Focal Tversky Gradient Dynamics (Eq. 3.29: 5.67x FN Penalty)", fontsize=10.5, fontweight="bold")
+    ax.set_title("Cost-Sensitive Asymmetric Tversky Gradient Dynamics", fontsize=10.5, fontweight="bold")
     ax.legend(loc="upper right", frameon=True, fontsize=8.0)
     ax.grid(True, linestyle=":", alpha=0.5)
     plt.tight_layout()

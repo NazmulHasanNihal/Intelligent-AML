@@ -238,11 +238,14 @@ where $k \in \{0, 1, \dots, \frac{d_t}{2} - 1\}$. This continuous formulation en
 \subsection{Tri-Band Continuous Decay Attention Kernel}
 We synthesize three orthogonal temporal velocity regimes through a tri-band harmonic decay function:
 \begin{equation}
-w(\Delta t) = \Bigg(
+\label{eq:triband_decay}
+\begin{split}
+w(\Delta t) = {}& \Bigg(
   \pi_{\text{burst}}\,k_{\text{burst}}(\Delta t)
-  + \pi_{\text{diurnal}}\,k_{\text{diurnal}}(\Delta t)\,\frac{1 + \cos\!\left(\frac{2\pi \Delta t}{24}\right)}{2}
-  + \pi_{\text{seasonal}}\,k_{\text{seasonal}}(\Delta t)
+  + \pi_{\text{diurnal}}\,k_{\text{diurnal}}(\Delta t)\,\frac{1 + \cos\!\left(\frac{2\pi \Delta t}{24}\right)}{2} \\
+  & \quad + \pi_{\text{seasonal}}\,k_{\text{seasonal}}(\Delta t)
 \Bigg)\Big(1 + \tanh\big(\gamma_H \lambda_u(t)\big)\Big)
+\end{split}
 \end{equation}
 where $k_b(\Delta t) = w_{\min} + (1 - w_{\min})\exp(-\lambda_b \Delta t)$ for $b \in \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ with mixing weights satisfying $\sum_b \pi_b = 1$, representing the three operational velocity regimes:
 \begin{enumerate}
@@ -386,12 +389,11 @@ where:
 
     \paragraph{Gradient Dynamics Analysis:}
     Differentiating $\mathcal{L}_{\text{task}}$ with respect to predicted logit $z_i$ ($p_i = \sigma(z_i)$) via the quotient rule yields exact derivatives for illicit ($y_i = 1$) and benign ($y_i = 0$) entities:
-    \begin{equation}\small
-    \left.\frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i}\right|_{y_i = 1} = -\frac{\beta_{\text{FN}}\left(\sum_j y_j + \epsilon\right) + \beta_{\text{FP}}\sum_j p_j(1 - y_j)}{\left[\sum_j p_j y_j + \beta_{\text{FN}}\sum_j (1 - p_j)y_j + \beta_{\text{FP}}\sum_j p_j(1 - y_j) + \epsilon\right]^2} \cdot p_i(1 - p_i)
-    \end{equation}
-    \begin{equation}\small
-    \left.\frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i}\right|_{y_i = 0} = +\frac{\beta_{\text{FP}}\left(\sum_j p_j y_j + \epsilon\right)}{\left[\sum_j p_j y_j + \beta_{\text{FN}}\sum_j (1 - p_j)y_j + \beta_{\text{FP}}\sum_j p_j(1 - y_j) + \epsilon\right]^2} \cdot p_i(1 - p_i)
-    \end{equation}
+    \begin{align}
+    \left.\frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i}\right|_{y_i = 1} &= -\frac{\beta_{\text{FN}}\left(\sum_j y_j + \epsilon\right) + \beta_{\text{FP}}\sum_j p_j(1 - y_j)}{D^2} \cdot p_i(1 - p_i) \label{eq:grad_illicit} \\
+    \left.\frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i}\right|_{y_i = 0} &= +\frac{\beta_{\text{FP}}\left(\sum_j p_j y_j + \epsilon\right)}{D^2} \cdot p_i(1 - p_i) \label{eq:grad_benign}
+    \end{align}
+    where $D = \sum_j p_j y_j + \beta_{\text{FN}}\sum_j (1 - p_j)y_j + \beta_{\text{FP}}\sum_j p_j(1 - y_j) + \epsilon$.
     Because $\beta_{\text{FN}} = 0.85 \gg \beta_{\text{FP}} = 0.15$, the gradient magnitude for false negatives ($y_i=1, p_i \to 0$) is magnified by a factor of $\frac{\beta_{\text{FN}}}{\beta_{\text{FP}}} = 5.67\times$ relative to false positives, driving rapid parameter updates that aggressively pull minority illicit embeddings away from benign clusters. We explicitly distinguish this $5.67\times$ gradient penalty ratio in the objective function from the separate $15{:}1$ Bayes operational cost ratio ($C_{\text{FN}} / C_{\text{FP}}$) used downstream to optimize the calibrated decision threshold $\tau^*$ (Figure~\ref{fig:ch7_ablation_waterfall} and Appendix~\ref{app:hyperparams}).
     \item $\mathcal{L}_{\text{recon}}$ is the topological edge reconstruction loss:
     \begin{equation}

@@ -24,15 +24,14 @@ def generate():
     # Models: (Name, Year/Era-Index, F1-Score %, Category, (offset_x, offset_y), ha, va)
     models = [
         {"name": "GCN", "year": 1.0, "f1": 43.55, "cat": "Static GNN", "col": COLOR_MUTED, "ox": -10, "oy": 10, "ha": "right"},
-        {"name": "GraphSAGE", "year": 1.3, "f1": 48.20, "cat": "Static GNN", "col": COLOR_MUTED, "ox": 10, "oy": 8, "ha": "left"},
-        {"name": "GAT", "year": 2.0, "f1": 52.40, "cat": "Static GNN", "col": COLOR_MUTED, "ox": -10, "oy": 10, "ha": "right"},
-        {"name": "EvolveGCN", "year": 3.4, "f1": 51.04, "cat": "Temporal GNN", "col": COLOR_INGEST, "ox": 10, "oy": -14, "ha": "left"},
-        {"name": "CARE-GNN", "year": 3.7, "f1": 64.50, "cat": "Camouflage GNN", "col": COLOR_REVIEW, "ox": -12, "oy": 10, "ha": "right"},
-        {"name": "TGAT", "year": 4.0, "f1": 67.20, "cat": "Temporal GNN", "col": COLOR_INGEST, "ox": -12, "oy": -14, "ha": "right"},
-        {"name": "TGN", "year": 4.3, "f1": 68.40, "cat": "Temporal GNN", "col": COLOR_INGEST, "ox": 12, "oy": 10, "ha": "left"},
-        {"name": "GraphSMOTE", "year": 5.0, "f1": 78.40, "cat": "Imbalance GNN", "col": "#7c3aed", "ox": -12, "oy": 10, "ha": "right"},
-        {"name": "H2-IDE", "year": 6.0, "f1": 74.00, "cat": "Camouflage GNN", "col": COLOR_REVIEW, "ox": 12, "oy": -14, "ha": "left"},
-        {"name": "CamFD", "year": 6.4, "f1": 83.00, "cat": "Camouflage GNN", "col": COLOR_REVIEW, "ox": -12, "oy": 12, "ha": "right"},
+        {"name": "GAT", "year": 1.4, "f1": 31.35, "cat": "Static GNN", "col": COLOR_MUTED, "ox": 10, "oy": -12, "ha": "left"},
+        {"name": "GraphSAGE", "year": 1.8, "f1": 49.07, "cat": "Static GNN", "col": COLOR_MUTED, "ox": -10, "oy": 10, "ha": "right"},
+        {"name": "EvolveGCN", "year": 3.2, "f1": 51.04, "cat": "Temporal GNN", "col": COLOR_INGEST, "ox": 10, "oy": -14, "ha": "left"},
+        {"name": "Skip-GCN", "year": 3.5, "f1": 62.40, "cat": "Static GNN", "col": COLOR_MUTED, "ox": -10, "oy": 10, "ha": "right"},
+        {"name": "CARE-GNN", "year": 3.8, "f1": 64.50, "cat": "Camouflage GNN", "col": COLOR_REVIEW, "ox": 10, "oy": 10, "ha": "left"},
+        {"name": "TGN", "year": 4.3, "f1": 68.40, "cat": "Temporal GNN", "col": COLOR_INGEST, "ox": -10, "oy": 10, "ha": "right"},
+        {"name": "GraphSMOTE", "year": 5.0, "f1": 72.10, "cat": "Imbalance GNN", "col": "#7c3aed", "ox": 10, "oy": -12, "ha": "left"},
+        {"name": "ChronoWave-GNN", "year": 6.2, "f1": 84.20, "cat": "Temporal GNN", "col": COLOR_INGEST, "ox": -12, "oy": 10, "ha": "right"},
         {"name": "XGBoost", "year": 2.6, "f1": 88.35, "cat": "Industrial Tabular", "col": COLOR_DARK, "ox": -12, "oy": 10, "ha": "right"},
         {"name": "C-STGB (Proposed)", "year": 8.0, "f1": 91.42, "cat": "Proposed Framework", "col": COLOR_SAFE, "ox": -14, "oy": 12, "ha": "right"},
     ]
@@ -42,9 +41,9 @@ def generate():
     ax.text(0.45, 90.0, "Industrial Baseline: XGBoost (88.35% F1)", fontsize=7.4, fontweight="bold", color="#475569",
             bbox=dict(boxstyle="square,pad=0.2", fc="#ffffff", ec="#cbd5e1", lw=0.6, alpha=0.9))
 
-    # SOTA Frontier Curve (Pareto frontier connecting GCN -> TGN -> GraphSMOTE -> CamFD -> C-STGB)
-    frontier_x = [1.0, 2.0, 4.3, 5.0, 6.4, 8.0]
-    frontier_y = [43.55, 52.40, 68.40, 78.40, 83.00, 91.42]
+    # SOTA Frontier Curve (Pareto frontier connecting GCN -> Skip-GCN -> TGN -> GraphSMOTE -> ChronoWave -> C-STGB)
+    frontier_x = [1.0, 3.5, 4.3, 5.0, 6.2, 8.0]
+    frontier_y = [43.55, 62.40, 68.40, 72.10, 84.20, 91.42]
     ax.plot(frontier_x, frontier_y, color=COLOR_SAFE, linestyle="-", lw=2.4, alpha=0.85, zorder=3)
     ax.text(4.4, 73.0, "Empirical SOTA Progression Curve", fontsize=7.2, fontweight="bold", color=COLOR_SAFE, rotation=22,
             bbox=dict(boxstyle="square,pad=0.2", fc="#f0fdf4", ec=COLOR_SAFE, lw=0.6, alpha=0.9))

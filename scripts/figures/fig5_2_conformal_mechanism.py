@@ -23,73 +23,67 @@ def generate():
     ax0.set_facecolor("#fafbfc")
     ax0.grid(True, linestyle="--", linewidth=0.5, color="#cbd5e1", alpha=0.7, zorder=0)
     
-    # Smooth analytical non-conformity densities
-    s_grid = np.linspace(0.001, 0.999, 500)
+    # Smooth analytical densities over predicted risk p_hat in [0, 1]
+    p_grid = np.linspace(0.001, 0.999, 500)
     
-    # Benign distribution: Beta(2.2, 8.5) -> peak ~0.15
-    dens_benign = beta_dist.pdf(s_grid, 2.2, 8.5)
-    # Illicit distribution: Beta(6.5, 2.5) -> peak ~0.75
-    dens_illicit = beta_dist.pdf(s_grid, 6.5, 2.5)
+    # Benign distribution: Beta(1.5, 12.0) -> peak near ~0.04, 99th percentile at 0.52
+    dens_benign = beta_dist.pdf(p_grid, 1.5, 12.0)
+    # Illicit distribution: Beta(7.0, 2.2) -> peak near ~0.85, 1st percentile at 0.06 (non-conformity q1 = 0.94)
+    dens_illicit = beta_dist.pdf(p_grid, 7.0, 2.2)
     
-    # Cutoff quantiles at 1 - alpha = 0.99 (99% coverage)
-    q0 = beta_dist.ppf(0.99, 2.2, 8.5)   # 0.518 -> 0.52
-    q1 = beta_dist.ppf(0.99, 6.5, 2.5)   # 0.942 -> 0.94
-    q_marginal = 0.53                    # Dominated by 99.95% benign majority
+    # Exact dual calibrated thresholds
+    tau_low = 0.06   # 1 - q^(1) = 1 - 0.94
+    tau_high = 0.52  # q^(0) = 0.52
+    tau_marginal = 0.53
     
     # Plot Benign Density Curve & Shading
-    ax0.plot(s_grid, dens_benign, color="#0284c7", lw=2.2, label=r"Benign Density: $p(s \mid Y=0)$ [99.95%]", zorder=3)
-    ax0.fill_between(s_grid, 0, dens_benign, where=(s_grid <= q0), color="#38bdf8", alpha=0.35, zorder=2)
-    ax0.fill_between(s_grid, 0, dens_benign, where=(s_grid > q0), color="#94a3b8", alpha=0.25, hatch="//", zorder=2)
+    ax0.plot(p_grid, dens_benign, color="#0284c7", lw=2.2, label=r"Benign Density: $p(\hat{p} \mid Y=0)$ [99.95%]", zorder=3)
+    ax0.fill_between(p_grid, 0, dens_benign, where=(p_grid <= tau_high), color="#38bdf8", alpha=0.35, zorder=2)
+    ax0.fill_between(p_grid, 0, dens_benign, where=(p_grid > tau_high), color="#94a3b8", alpha=0.25, hatch="//", zorder=2)
     
     # Plot Illicit Density Curve & Shading
-    ax0.plot(s_grid, dens_illicit, color="#dc2626", lw=2.2, label=r"Illicit Density: $p(s \mid Y=1)$ [0.05%]", zorder=3)
-    ax0.fill_between(s_grid, 0, dens_illicit, where=(s_grid <= q1), color="#f87171", alpha=0.35, zorder=2)
-    ax0.fill_between(s_grid, 0, dens_illicit, where=(s_grid > q1), color="#94a3b8", alpha=0.25, hatch="//", zorder=2)
+    ax0.plot(p_grid, dens_illicit, color="#dc2626", lw=2.2, label=r"Illicit Density: $p(\hat{p} \mid Y=1)$ [0.05%]", zorder=3)
+    ax0.fill_between(p_grid, 0, dens_illicit, where=(p_grid >= tau_low), color="#f87171", alpha=0.35, zorder=2)
+    ax0.fill_between(p_grid, 0, dens_illicit, where=(p_grid < tau_low), color="#94a3b8", alpha=0.25, hatch="//", zorder=2)
     
     # Vertical Threshold Lines
-    ax0.axvline(q0, color="#0369a1", ls="--", lw=1.8, zorder=4)
-    ax0.axvline(q1, color="#b91c1c", ls="-.", lw=1.8, zorder=4)
-    ax0.axvline(q_marginal, color="#7c3aed", ls=":", lw=1.5, zorder=4)
+    ax0.axvline(tau_low, color="#b91c1c", ls="-.", lw=1.8, zorder=4)
+    ax0.axvline(tau_high, color="#0369a1", ls="--", lw=1.8, zorder=4)
     
     # Text Badges for Thresholds (carefully non-overlapping)
-    # Benign threshold badge
-    ax0.text(q0 - 0.02, 3.65, r"$\hat{q}^{(0)} = 0.52$" + "\n(Benign 99% Cov.)",
-             ha="right", va="top", fontsize=7.2, fontweight="bold", linespacing=1.35, color="#0369a1",
-             bbox=dict(boxstyle="square,pad=0.25", fc="#e0f2fe", ec="#0284c7", lw=0.8, alpha=0.95), zorder=5)
-    
-    # Illicit threshold badge
-    ax0.text(q1 - 0.02, 3.65, r"$\hat{q}^{(1)} = 0.94$" + "\n(Illicit 99% Cov.)",
-             ha="right", va="top", fontsize=7.2, fontweight="bold", linespacing=1.35, color="#b91c1c",
+    # Low threshold badge (1 - q^(1))
+    ax0.text(tau_low + 0.02, 3.65, r"$\tau_{\mathrm{low}} = 1 - \hat{q}^{(1)} = 0.06$" + "\n(Illicit 99% Cov. Gate)",
+             ha="left", va="top", fontsize=7.0, fontweight="bold", linespacing=1.35, color="#b91c1c",
              bbox=dict(boxstyle="square,pad=0.25", fc="#fee2e2", ec="#dc2626", lw=0.8, alpha=0.95), zorder=5)
-             
-    # Marginal threshold callout
-    ax0.text(q_marginal + 0.02, 2.50, r"$\hat{q}_{marg} = 0.53$" + " (Marginal)\nDeficit: Illicit $\\rightarrow 82.4\%$",
-             ha="left", va="top", fontsize=6.8, linespacing=1.35, color="#5b21b6",
-             bbox=dict(boxstyle="square,pad=0.22", fc="#ede9fe", ec="#7c3aed", lw=0.8, alpha=0.92), zorder=5)
+    
+    # High threshold badge (q^(0))
+    ax0.text(tau_high + 0.02, 3.65, r"$\tau_{\mathrm{high}} = \hat{q}^{(0)} = 0.52$" + "\n(Benign 99% Cov. Gate)",
+             ha="left", va="top", fontsize=7.0, fontweight="bold", linespacing=1.35, color="#0369a1",
+             bbox=dict(boxstyle="square,pad=0.25", fc="#e0f2fe", ec="#0284c7", lw=0.8, alpha=0.95), zorder=5)
 
-    # Finite-Sample Guarantee Callout Badge (Lower Left, completely collision-free)
-    ax0.text(0.03, 1.80, "Finite-Sample Validity:\n" + r"$\mathbb{P}(Y \in \Gamma \mid Y=y) \geq 99.0\%$" + "\nGuaranteed for BOTH Classes",
-             ha="left", va="top", fontsize=6.8, fontweight="bold", linespacing=1.48, color="#1e293b",
+    # Finite-Sample Guarantee Callout Badge
+    ax0.text(0.04, 1.95, "Finite-Sample Validity:\n" + r"$\mathbb{P}(Y \in \Gamma \mid Y=y) \geq 99.0\%$" + "\nGuaranteed for BOTH Classes",
+             ha="left", va="top", fontsize=6.8, fontweight="bold", linespacing=1.45, color="#1e293b",
              bbox=dict(boxstyle="square,pad=0.3", fc="#ffffff", ec="#94a3b8", lw=0.8, alpha=0.95), zorder=5)
 
-    # Triage Decision Regime Ribbon at bottom inside plot bounds (staggered to eliminate horizontal overlap)
-    ax0.text(0.24, 0.32, "Auto-Clear STP: " + r"$\Gamma(u) = \{0\}$", ha="center", va="bottom",
-             fontsize=6.8, color="#0369a1", fontweight="bold",
-             bbox=dict(boxstyle="square,pad=0.25", fc="#f0f9ff", ec="#0284c7", lw=0.8), zorder=5)
+    # Triage Decision Regime Ribbon at bottom inside plot bounds
+    ax0.text(0.03, 0.40, "Tier 3: STP\n" + r"$\Gamma(u) = \{0\}$", ha="center", va="bottom",
+             fontsize=6.4, color="#0369a1", fontweight="bold", linespacing=1.25,
+             bbox=dict(boxstyle="square,pad=0.22", fc="#f0f9ff", ec="#0284c7", lw=0.8), zorder=5)
              
-    ax0.text(0.68, 0.32, "Human Review: " + r"$\Gamma(u) = \{0, 1\}$", ha="center", va="bottom",
-             fontsize=6.6, color="#b45309", fontweight="bold",
+    ax0.text(0.29, 0.40, "Tier 2: Human Review\n" + r"$\Gamma(u) = \{0, 1\}$", ha="center", va="bottom",
+             fontsize=6.6, color="#b45309", fontweight="bold", linespacing=1.25,
              bbox=dict(boxstyle="square,pad=0.25", fc="#fffbeb", ec="#f59e0b", lw=0.8), zorder=5)
              
-    ax0.text(0.97, 0.72, "Auto-Block:\n" + r"$\Gamma(u) = \{1\}$", ha="center", va="bottom",
-             fontsize=6.6, color="#991b1b", fontweight="bold", linespacing=1.35,
+    ax0.text(0.76, 0.40, "Tier 1: Quarantine\n" + r"$\Gamma(u) = \{1\}$", ha="center", va="bottom",
+             fontsize=6.6, color="#991b1b", fontweight="bold", linespacing=1.25,
              bbox=dict(boxstyle="square,pad=0.25", fc="#fef2f2", ec="#dc2626", lw=0.8), zorder=5)
 
     ax0.set_xlim(-0.02, 1.02)
     ax0.set_ylim(0.0, 4.30)
-    ax0.set_xlabel(r"Class-Conditional Non-Conformity Score $s_i^{(y)} = 1 - \hat{p}_i(y)$", fontsize=8.6, weight="bold", labelpad=6)
-    ax0.set_ylabel(r"Probability Density $p(s \mid Y=y)$", fontsize=8.6, weight="bold", labelpad=6)
-    ax0.set_title("(a) Dual Calibrated Non-Conformity Quantiles under Imbalance", fontsize=9.2, fontweight="bold", pad=28)
+    ax0.set_xlabel(r"Predicted Illicit Risk Score $\hat{p}_u \in [0, 1]$", fontsize=8.6, weight="bold", labelpad=6)
+    ax0.set_ylabel(r"Class-Conditional Density $p(\hat{p} \mid Y=y)$", fontsize=8.6, weight="bold", labelpad=6)
+    ax0.set_title(r"(a) Dual Calibrated Risk Thresholds ($\tau_{\mathrm{low}}=0.06$, $\tau_{\mathrm{high}}=0.52$)", fontsize=9.2, fontweight="bold", pad=28)
     
     # Legend for Panel (a) positioned above the plot to eliminate all internal collisions
     ax0.legend(loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=2, framealpha=0.95, fontsize=7.2, edgecolor="#cbd5e1")

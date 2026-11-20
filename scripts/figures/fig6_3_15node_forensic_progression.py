@@ -49,11 +49,11 @@ def generate():
     # Everyday legitimate commercial accounts (Camouflage Chaff)
     chaff = {
         "Retail Store":  (0.24, 0.88),
-        "Supermarket":   (0.24, 0.12),
+        "Supermarket":   (0.24, 0.16),
         "Online Shop":   (0.51, 0.88),
-        "Utility Co":    (0.51, 0.12),
+        "Utility Co":    (0.51, 0.16),
         "Payroll Svcs":  (0.76, 0.88),
-        "Wholesale":     (0.76, 0.12),
+        "Wholesale":     (0.76, 0.16),
         "Merchant POS":  (0.88, 0.82),
     }
 
@@ -107,7 +107,8 @@ def generate():
     # Draw Chaff Nodes
     for name, (x, y) in chaff.items():
         ax0.scatter(x, y, s=55, color="#f1f5f9", edgecolor="#94a3b8", lw=0.9, zorder=4)
-        ax0.text(x, y - 0.040, name, ha="center", va="center", fontsize=5.0, color="#64748b", fontweight="bold")
+        lbl_y = y + 0.038 if y < 0.25 else y - 0.040
+        ax0.text(x, lbl_y, name, ha="center", va="center", fontsize=5.0, color="#64748b", fontweight="bold")
 
     # Draw Core Nodes
     for name, (x, y) in nodes.items():
@@ -196,7 +197,7 @@ def generate():
         ("Capital Dwell",     "Rapid Wash (<4.2 min)",  COLOR_GNN),
         ("Fund Retention",    "99.4% Flow Preserved",   COLOR_SAFE),
         ("Audit Seal",        "SHA-256 Merkle WORM",    COLOR_DARK),
-        ("Compliance Rule",   "BFIU Cir. 26 / FATF R.16", COLOR_INGEST),
+        ("Compliance Rule",   "FinCEN 111 / FATF R.16", COLOR_INGEST),
     ]
 
     y_start = 0.82

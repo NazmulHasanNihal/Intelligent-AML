@@ -59,10 +59,10 @@ def generate():
         {"name": "CatBoost",      "rank": 3.07, "tier": "top2", "color": "#1d4ed8",    "marker": "s", "sz": 45},
         {"name": "TGN",           "rank": 5.14, "tier": "bot1", "color": COLOR_REVIEW, "marker": "D", "sz": 45},
         {"name": "CARE-GNN",      "rank": 6.36, "tier": "top2", "color": "#ea580c",    "marker": "D", "sz": 45},
-        {"name": "GraphSAGE",     "rank": 7.11, "tier": "bot2", "color": "#991b1b",    "marker": "^", "sz": 45},
+        {"name": "GraphSAGE",     "rank": 7.11, "tier": "bot1", "color": "#991b1b",    "marker": "^", "sz": 45},
         {"name": "HGT",           "rank": 7.57, "tier": "top1", "color": "#7c3aed",    "marker": "D", "sz": 45},
-        {"name": "GCN",           "rank": 7.96, "tier": "bot1", "color": COLOR_RISK,   "marker": "^", "sz": 45},
-        {"name": "EvolveGCN",     "rank": 8.21, "tier": "bot2", "color": "#7f1d1d",    "marker": "v", "sz": 45},
+        {"name": "GCN",           "rank": 7.96, "tier": "bot2", "color": COLOR_RISK,   "marker": "^", "sz": 45},
+        {"name": "EvolveGCN",     "rank": 8.21, "tier": "top2", "color": "#7f1d1d",    "marker": "v", "sz": 45},
     ]
 
     # Non-significant clique horizontal bars above axis
@@ -107,7 +107,7 @@ def generate():
 
     cstgb_vals = [90.53, 59.34, 56.48, 68.05]
     xgb_vals   = [86.76, 56.32, 48.20, 64.76]
-    gnn_vals   = [60.95, 37.80, 38.20, 43.76]
+    gnn_vals   = [60.95, 37.80, 38.20, 43.39]
 
     y_indices = np.arange(len(domains))
     bar_h = 0.22

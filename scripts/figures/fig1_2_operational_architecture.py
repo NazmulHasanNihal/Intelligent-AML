@@ -371,9 +371,9 @@ def generate():
     # Col 1: Fast-Path Latency Budget
     ax.add_patch(patches.Rectangle((2.2, 3.2), card_w, 13.8, facecolor="#ffffff", edgecolor=COLOR_INGEST, lw=0.9, zorder=3))
     ax.text(2.2 + card_w/2, 14.8, "FAST-PATH LATENCY BUDGET", ha="center", va="center", fontsize=6.8, fontweight="bold", color=COLOR_INGEST, zorder=4)
-    ax.text(3.4, 12.2, "> Total Pipeline Latency: 0.45 ms", fontsize=5.8, fontweight="bold", color=COLOR_DARK, zorder=4)
-    ax.text(3.4, 9.7, "> Ingestion: 0.11 ms | Invariants: 0.08 ms", fontsize=5.4, color="#475569", zorder=4)
-    ax.text(3.4, 7.2, "> GNN: 0.16 ms | CRC Triage: 0.04 ms", fontsize=5.4, color="#475569", zorder=4)
+    ax.text(3.4, 12.2, "> Total Pipeline Latency: 0.45 ms (P50) / 0.82 ms (P99)", fontsize=5.8, fontweight="bold", color=COLOR_DARK, zorder=4)
+    ax.text(3.4, 9.7, "> Ingestion: 0.11 ms | LRU Cache: 0.18 ms", fontsize=5.4, color="#475569", zorder=4)
+    ax.text(3.4, 7.2, "> GNN Core: 0.12 ms | CRC Triage: 0.04 ms = 0.45 ms", fontsize=5.4, color="#475569", zorder=4)
     ax.text(3.4, 4.8, "> 22.2x Faster than 10.0 ms Enterprise Banking SLA", fontsize=5.2, fontstyle="italic", color=COLOR_INGEST, zorder=4)
 
     # Col 2: Conformal Coverage Guarantee
@@ -390,7 +390,7 @@ def generate():
     ax.text(68.0, 12.2, "> Straight-Through Flow: 99.33% (9,933 / 10k wires)", fontsize=5.8, fontweight="bold", color=COLOR_DARK, zorder=4)
     ax.text(68.0, 9.7, "> Human Review Queue: 0.49% (49 / 10k wires)", fontsize=5.4, color="#475569", zorder=4)
     ax.text(68.0, 7.2, "> Automated Quarantine: 0.18% (18 / 10k wires)", fontsize=5.4, color="#475569", zorder=4)
-    ax.text(68.0, 4.8, "> 91.8% Manual Compliance Backlog Reduction", fontsize=5.2, fontstyle="italic", color=COLOR_REVIEW, zorder=4)
+    ax.text(68.0, 4.8, "> 99.51% Manual Compliance Backlog Reduction", fontsize=5.2, fontstyle="italic", color=COLOR_REVIEW, zorder=4)
 
     save_figure(fig, "fig1_operational_architecture_flowchart", pad_inches=0.08)
     save_figure(fig, "fig1_2_operational_architecture", pad_inches=0.08)

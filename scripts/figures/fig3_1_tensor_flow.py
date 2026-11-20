@@ -228,7 +228,7 @@ def generate():
         border_color=COLOR_INGEST,
         fill_color=COLOR_INGEST_BG,
         header_color=COLOR_INGEST,
-        sla_badge="Lat: <0.05 ms | O(1) Cache"
+        sla_badge="Lat: 0.11 ms | LRU: 0.18 ms"
     )
 
     # Connector from Cylinder down to Invariant Engine
@@ -267,7 +267,7 @@ def generate():
         border_color=COLOR_GNN,
         fill_color=COLOR_GNN_BG,
         header_color=COLOR_GNN,
-        sla_badge=r"Lat: <0.08 ms | $\mathcal{O}(|E|)$ Scalable"
+        sla_badge=r"Lat: 0.03 ms | $\mathcal{O}(K \cdot d_t)$"
     )
 
     # Module 2 (Bottom): Context-Aware Adaptive Edge-Trust Filter
@@ -287,7 +287,7 @@ def generate():
         border_color=COLOR_GNN,
         fill_color=COLOR_GNN_BG,
         header_color=COLOR_GNN,
-        sla_badge="Lat: <0.06 ms | 65.9% Pruned"
+        sla_badge="Lat: 0.02 ms | 65.9% Pruned"
     )
 
     # Internal Vertical Arrow: Module 1 -> Module 2
@@ -346,7 +346,7 @@ def generate():
         border_color="#a21caf",
         fill_color="#fdf4ff",
         header_color="#a21caf",
-        sla_badge="Lat: <0.04 ms | Zero Cold-Start"
+        sla_badge="Lat: 0.02 ms | Zero Cold-Start"
     )
 
     # Internal Vertical Connector: Module 3 balanced manifold informs Module 4
@@ -386,7 +386,7 @@ def generate():
         border_color=COLOR_REVIEW,
         fill_color=COLOR_REVIEW_BG,
         header_color=COLOR_REVIEW,
-        sla_badge="Lat: <0.04 ms | ECE < 0.015"
+        sla_badge="Lat: 0.05 ms | Cost-Sensitive"
     )
 
     # Connector from Module 5 down to Conformal CRC Diamond
@@ -494,7 +494,7 @@ def generate():
             "x": 1.8, "w": 30.5,
             "title": "HIGH-VELOCITY SYSTEM SLA BENCHMARKS",
             "lines": [
-                "• DuckDB 2-Hop Aggregation: <0.05 ms | Forward Latency: 0.45 ms",
+                "• DuckDB 2-Hop LRU: 0.18 ms | Fast-Path Total: 0.45 ms",
                 "• Ingestion Throughput: 31,250 tx/s | Zero-Copy Apache Arrow"
             ],
             "border": COLOR_INGEST, "bg": COLOR_INGEST_BG

@@ -142,7 +142,7 @@ Morris et al.~\cite{morris2019weisfeiler} and Xu et al.~\cite{xu2019powerful} pr
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_2_3_1wl_failure_vs_invariants.pdf}
-\caption[1-WL Graph Isomorphism Bottleneck vs. 12-D Invariant Disambiguation]{Representational capacity contrast: (Left) Standard spatial GNNs bounded by the 1-WL graph isomorphism test assign identical degree multisets $\{\{2, 2\}\}$ to circular laundering wash cycles and disjoint bipartite clusters; (Right) C-STGB incorporates 12-dimensional canonical invariants ($\tilde{\Phi}_{\text{flow}}$, $s_{\text{fwd}} \cdot s_{\text{bwd}}$, $\sigma_{\Delta t}$, $v_A$) to establish an injective representation space that separates isomorphic financial crime typologies.}
+\caption[1-WL Graph Isomorphism Bottleneck vs. 12-D Invariant Disambiguation]{Representational capacity contrast: (Left) Standard spatial GNNs bounded by the 1-WL graph isomorphism test assign identical in-degree multisets ($\deg_{\text{in}} = 4$, $\{\{1, 1, 1, 1\}\}$) to a legitimate retail store (Account~A) and a structured smurfing mule (Account~B), generating identical node embeddings $\mathbf{h}_A = \mathbf{h}_B$; (Right) C-STGB canonical invariants ($\tilde{\Phi}_{\text{flow}}$, $\mu_A$, $\sigma_A^2$, $\sigma_{\Delta t}$) establish an injective representation space that completely separates absorptive commercial merchants ($\Phi_{\text{flow}} \approx 0.05$) from high-velocity pass-through structuring conduits ($\Phi_{\text{flow}} \approx 0.994$).}
 \label{fig:ch2_1wl_disambiguation}
 \end{figure}
 
@@ -185,7 +185,7 @@ Table~\ref{tab:lit_matrix} presents an exhaustive 18-model comparative taxonomy 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_lit_evolution_frontier.pdf}
-\caption[2D Financial Crime Graph Learning Evolution Frontier]{2D financial crime graph learning evolution frontier positioning C-STGB against 18 SOTA baselines across Temporal Expressiveness (x-axis) and Imbalance, Camouflage \& Conformal Safety (y-axis). C-STGB uniquely defines the upper-right Pareto frontier.}
+\caption[Chronological SOTA Progression Frontier on Elliptic-v1]{Chronological SOTA progression frontier on the Elliptic-v1 benchmark across paradigm eras (x-axis) vs.\ minority illicit F1-score (y-axis). C-STGB (91.42\% F1) establishes the new empirical frontier, decisively outperforming published spatial, temporal, and imbalanced graph learning architectures as well as strong tabular gradient boosted trees (XGBoost 88.35\% F1).}
 \label{fig:ch2_lit_evolution}
 \end{figure}
 

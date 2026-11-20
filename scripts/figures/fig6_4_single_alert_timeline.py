@@ -37,7 +37,7 @@ def generate():
         (1.5, 92.5), 97.0, 6.5,
         facecolor=COLOR_DARK, edgecolor="none"
     ))
-    ax.text(50.0, 96.5, "CHRONOLOGICAL FORENSIC INVESTIGATION TIMELINE (BANGLADESH BANKING CASE)",
+    ax.text(50.0, 96.5, "COMPANION LOCALIZED BANGLADESH MFS/BFIU CASE TIMELINE (BDT 5M, 13m 12s)",
             ha="center", va="center", fontsize=9.8, fontweight="bold", color="#ffffff")
     ax.text(50.0, 94.0, "Detection Lifecycle: Motijheel Wire -> bKash/Nagad MFS Structuring -> Chattogram Wash -> Offshore Sink -> BFIU SAR",
             ha="center", va="center", fontsize=7.2, color="#94a3b8")

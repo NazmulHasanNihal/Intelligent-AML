@@ -32,7 +32,7 @@ data = [
     ("DataGenerator",    99.93 - 81.50, "vs. TGN", "#7C3AED", "Complex Typology Cycles"),
     ("MtGox-Leaked",     74.20 - 55.80, "vs. TGN", "#2563EB", "CEX Orderbook Transfers"),
     ("CC-Transactions",  56.48 - 38.20, "vs. TGN", "#0D9488", "Point-of-Sale Card Streams"),
-    ("PaySim1",          16.66 - 3.50,  "vs. GCN", "#0D9488", "Mobile E-Wallet Log"),
+    ("PaySim1",          16.66 - 2.50,  "vs. TGN", "#0D9488", "Mobile E-Wallet Log"),
     ("IBM-AMLSim-HI-Med",46.85 - 35.20, "vs. TGN", "#0D9488", "Multi-Tier Wire Clearing"),
     ("IBM-AMLSim-HI-Sml",39.70 - 28.40, "vs. TGN", "#0D9488", "Multi-Tier Wire Clearing"),
     ("IBM-AMLSim-LI-Med",23.74 - 19.20, "vs. TGN", "#0D9488", "Multi-Tier Wire Clearing"),
@@ -65,8 +65,8 @@ def generate():
         },
         {
             "header": "MACRO F1 MARGIN",
-            "val": "+24.6 pp",
-            "sub": "Decisive lead over closest\npublished baseline GNN",
+            "val": "+24.66 pp",
+            "sub": "Decisive lead over closest\npublished baseline GNN (TGN)",
             "border": COLOR_GNN, "bg": COLOR_GNN_BG
         },
         {
@@ -111,7 +111,7 @@ def generate():
 
     mean_gain = np.mean(gains)
     ax_right.axvline(mean_gain, color=COLOR_RISK, linestyle="--", linewidth=1.8, zorder=4,
-                     label=f"Macro Mean Lead: +{mean_gain:.1f} pp (Paired Wilcoxon W = 105.0, p < 0.0001)")
+                     label=f"Macro Mean Lead: +{mean_gain:.2f} pp (Paired Wilcoxon W = 105.0, p < 0.0001)")
 
     for bar, gain, ref in zip(bars, gains, refs):
         ax_right.text(bar.get_width() + 1.2, bar.get_y() + bar.get_height() / 2,
@@ -124,7 +124,7 @@ def generate():
 
     ax_right.set_xlabel("Minority Illicit Class Macro F1-Score Margin (+pp over Leading Baseline)",
                         fontsize=8.5, fontweight="bold", labelpad=8)
-    ax_right.set_title("C-STGB Lead vs. Strongest Baseline Across 14 Production Networks",
+    ax_right.set_title("C-STGB Lead vs. Strongest Continuous-Time GNN (TGN)",
                        fontsize=9.8, fontweight="bold", pad=10)
 
     ax_right.set_xlim(0, 135)

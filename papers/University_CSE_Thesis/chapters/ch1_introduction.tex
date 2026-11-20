@@ -6,7 +6,7 @@
   \item \textbf{The Global Challenge:} Transnational financial crime launders \$800B--\$2T annually (2\%--5\% of global GDP), while legacy static rule engines trigger crippling $>98\%$ false positive rates.
   \item \textbf{Theoretical Failure Modes:} Identifies the five structural failure modes of standard GNNs: long-dwell hibernation evasion, adversarial camouflage, extreme class imbalance ($<0.05\%$), topological cold-start blindness, and uncalibrated black-box alert flooding.
   \item \textbf{Proposed Solution (C-STGB):} Introduces Conformal Spatio-Temporal GraphBoost, uniting continuous harmonic temporal attention, context-aware edge-trust gating, latent GraphSMOTE, canonical physical mass-flow invariants, and distribution-free conformal risk control.
-  \item \textbf{Empirical Milestones:} 91.42\% F1 on Elliptic-v1, 99.10\% on Elliptic-v2, 0.45\,ms Fast-Path P99 latency, and a 99.51\% reduction in human analyst compliance queues.
+  \item \textbf{Empirical Milestones:} 91.42\% F1 on Elliptic-v1, 99.10\% on Elliptic-v2, 0.45\,ms Fast-Path P50 (0.82\,ms P99) latency, and a 99.51\% reduction in human analyst compliance queues.
 \end{itemize}
 \end{takeawaybox}
 
@@ -46,7 +46,7 @@ With the rise of decentralized finance (DeFi), automated cross-chain bridges, an
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.78\textwidth]{figures/fig_benign_vs_smurfing_topology.pdf}
-\caption[Topological Contrast Between Legitimate Flows and Smurfing Syndicates]{Topological contrast between legitimate commercial banking flows and structured money laundering syndicates: (a) Benign retail merchant star topology with high inbound degree ($\deg \approx 85$) but minimal outbound forwarding ($\tilde{\Phi}_{\text{flow}} \approx 0.02$); (b) Multi-stage adversarial laundering syndicate exhibiting fan-out smurfing from placement source S0 ($485\text{k}$), circular wash loops across layering accounts (L1--L3), and eventual integration into offshore sink C4 ($\tilde{\Phi}_{\text{flow}} \approx 0.994$, Hawkes burst arrival $\lambda_u = 74.2$).}
+\caption[Topological Contrast Between Legitimate Flows and Smurfing Syndicates]{Topological contrast between legitimate commercial banking flows and structured money laundering syndicates: (a) Benign retail merchant star topology with high inbound degree ($\deg \approx 85$) but minimal outbound forwarding ($\tilde{\Phi}_{\text{flow}} \approx 0.02$); (b) Illicit Source -> Mule 1--4 -> Exfil Account: multi-stage adversarial laundering syndicate exhibiting fan-out smurfing from placement source to intermediate mules and eventual consolidation into an exfiltration account ($\tilde{\Phi}_{\text{flow}} \approx 0.994$, structured amounts near statutory reporting thresholds).}
 \label{fig:ch1_topology_contrast}
 \end{figure}
 
@@ -123,7 +123,7 @@ The primary scientific and engineering contributions of our research are:
     \item \textbf{Typology-Clustered Latent GraphSMOTE:} We design a topology-aware manifold oversampling algorithm that clusters minority laundering nodes into latent typologies ($C_1, \dots, C_K$) and synthesizes realistic minority nodes via localized bilinear edge reconstruction while strictly preserving mass-balance flow conservation ($\Phi_{\text{flow}} \approx 1.0$).
     \item \textbf{Evidence-Adaptive Graph-Tabular Fusion:} We formulate a learnable gating parameter $\alpha_u \in [0, 1]$ that dynamically balances tabular domain invariants against structural GNN embeddings, resolving the zero-degree cold-start entity problem and boosting isolated account F1-score to $89.60\%$ F1 ($+71.20\text{ pp}$ over standalone GNN's $18.40\%$ F1).
     \item \textbf{Class-Conditional Conformal Risk Control (CRC):} We establish a 3-tier selective abstention triage architecture that delivers finite-sample statistical coverage ($\ge 99.0\%$) for both benign and illicit classes under non-stationary temporal drift, validated via Dvoretzky-Kiefer-Wolfowitz (DKW) bounds.
-    \item \textbf{Massive 14-Dataset Cross-Domain Benchmark:} We execute the largest comparative AML benchmark to date across 14 datasets ($9,534,980$ entities, $9,528,355$ transactions) over 5 independent seeds, achieving a macro-average F1-score of $68.05\%$ ($0.6974$ PR-AUC), outperforming prior state-of-the-art GNN baselines by $+12.27\text{ pp}$ to $+54.16\text{ pp}$.
+    \item \textbf{Massive 14-Dataset Cross-Domain Benchmark:} We execute the largest comparative AML benchmark to date across 14 datasets ($9,534,980$ entities, $9,528,355$ transactions) over 5 independent seeds, achieving a macro-average F1-score of $68.05\%$ ($0.6974$ PR-AUC), outperforming prior state-of-the-art GNN baselines by $+24.66\text{ pp}$ (vs.\ TGN) to $+49.11\text{ pp}$ (vs.\ EvolveGCN).
     \item \textbf{Multi-Agent Forensic Swarm with Cryptographic Auditability:} We implement an autonomous multi-agent swarm that drafts regulatory FinCEN Form 111 XML narratives with zero entity hallucinations, verified via deterministic AST grammar validators and Merkle tree SHA-256 cryptographic audit receipts aligned with interagency model risk management guidance (Federal Reserve SR 11-7 and SR 21-8).
 \end{enumerate}
 

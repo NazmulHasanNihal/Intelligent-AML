@@ -64,7 +64,7 @@ def generate():
             "cx": 13.5,
             "title": "Evidence Artifact 1",
             "type": "Wire Transfer Payload",
-            "entity": "Motijheel Corporate Acc",
+            "entity": "ACC_9941 ($485k Wire)",
             "hash": "SHA-256: e9011e...583f",
             "fc": COLOR_INGEST_BG, "ec": COLOR_INGEST
         },

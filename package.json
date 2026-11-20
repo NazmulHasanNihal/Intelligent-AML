@@ -1,0 +1,15 @@
+{
+  "name": "intelligent-aml",
+  "version": "3.0.0",
+  "private": true,
+  "bin": {
+    "vite": "./frontend/bin/vite-compat.cjs"
+  },
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "vite": "node frontend/bin/vite-compat.cjs",
+    "vite:build": "node frontend/bin/vite-compat.cjs",
+    "dev": "cd frontend && npm run dev",
+    "start": "cd frontend && npm run start"
+  }
+}

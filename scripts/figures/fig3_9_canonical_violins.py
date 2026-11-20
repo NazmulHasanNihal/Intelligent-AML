@@ -17,18 +17,18 @@ def generate():
     axes_flat = axes.flatten()
 
     inv_labels = [
-        r"$\Phi_{\mathrm{flow}}$ (Flow Regularity)",
-        r"$\lambda_u$ (Hawkes Arrival Rate)",
-        r"$s_{\mathrm{fwd}}$ (Forward Taint)",
-        r"$s_{\mathrm{bwd}}$ (Backward Taint)",
-        r"$\zeta_{\mathrm{cyc}}$ (Cycle Frequency)",
-        r"$\sigma_{\Delta t}$ (Arrival Dispersion)",
-        r"$v_A$ (Amount Velocity)",
-        r"$\nu_{\mathrm{io}}$ (IO Velocity Ratio)",
-        r"$\mu_A$ (Amount Mean)",
+        r"$\tilde{\Phi}_{\mathrm{flow}}$ (Flow Conservation)",
+        r"$\Psi_{\mathrm{asym}}$ (Degree Asymmetry)",
+        r"$\lambda_u$ (Hawkes Arrival Intensity)",
+        r"$s_{\mathrm{fwd}}$ (Forward Causal Taint)",
+        r"$s_{\mathrm{bwd}}$ (Backward Causal Taint)",
+        r"$\mu_A$ (Mean Amount Scale)",
         r"$\sigma_A^2$ (Amount Variance)",
         r"$\gamma_A$ (Amount Skewness)",
-        r"$\kappa_A$ (Amount Kurtosis)"
+        r"$\kappa_A$ (Amount Kurtosis)",
+        r"$\nu_{\mathrm{io}}$ (Net Flow Velocity)",
+        r"$\sigma_{\Delta t}$ (Timing Dispersion)",
+        r"$v_A$ (Transmission Velocity)"
     ]
 
     np.random.seed(42)

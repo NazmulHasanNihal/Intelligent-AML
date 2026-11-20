@@ -72,62 +72,61 @@ def generate():
             ha="center", va="center", fontsize=7.2, color="#94a3b8")
 
     # =========================================================================
-    # 4 CORE RELATIONAL ENTITY TABLES
+    # 4 CORE RELATIONAL ENTITY TABLES (1:1 with Listing C.1 DDL Contracts)
     # =========================================================================
 
-    # Table 1: accounts (Master Customer & Node Entity)
+    # Table 1: entities_master (Master Customer & Node Entity)
     t1_fields = [
-        ("PK", "account_id", "BIGINT"),
-        ("  ", "customer_name", "VARCHAR(128)"),
-        ("  ", "country_iso", "VARCHAR(3)"),
-        ("  ", "kyc_tier", "SMALLINT"),
-        ("  ", "risk_rating", "VARCHAR(16)"),
-        ("  ", "opened_date", "DATE"),
+        ("PK", "entity_id", "VARCHAR(64)"),
+        ("  ", "entity_name", "VARCHAR(128)"),
+        ("FK", "country_iso", "VARCHAR(3)"),
+        ("  ", "kyc_risk_tier", "INTEGER"),
+        ("  ", "account_created_epoch", "BIGINT"),
+        ("  ", "baseline_volume_usd", "DECIMAL(18,2)"),
     ]
     t1_x, t1_y, t1_w, t1_h = 0.04, 0.50, 0.28, 0.38
-    draw_erd_table(ax, t1_x, t1_y, t1_w, t1_h, "TABLE: accounts", t1_fields, COLOR_INGEST, COLOR_INGEST_BG)
+    draw_erd_table(ax, t1_x, t1_y, t1_w, t1_h, "TABLE: entities_master", t1_fields, COLOR_INGEST, COLOR_INGEST_BG)
 
-    # Table 2: transactions (Directed Multigraph Edge Stream)
+    # Table 2: streaming_transactions (Directed Multigraph Edge Stream)
     t2_fields = [
-        ("PK", "tx_id", "BIGINT"),
-        ("FK", "src_account", "BIGINT"),
-        ("FK", "dst_account", "BIGINT"),
+        ("PK", "transaction_id", "VARCHAR(64)"),
+        ("FK", "source_entity_id", "VARCHAR(64)"),
+        ("FK", "target_entity_id", "VARCHAR(64)"),
         ("  ", "amount_usd", "DECIMAL(18,2)"),
-        ("  ", "timestamp_epoch", "TIMESTAMP"),
+        ("  ", "timestamp_epoch", "BIGINT"),
         ("  ", "payment_rail", "VARCHAR(32)"),
     ]
     t2_x, t2_y, t2_w, t2_h = 0.68, 0.50, 0.28, 0.38
-    draw_erd_table(ax, t2_x, t2_y, t2_w, t2_h, "TABLE: transactions", t2_fields, COLOR_RISK, COLOR_RISK_BG)
+    draw_erd_table(ax, t2_x, t2_y, t2_w, t2_h, "TABLE: streaming_transactions", t2_fields, COLOR_RISK, COLOR_RISK_BG)
 
-    # Table 3: invariant_profiles (Precomputed 12-D Mass-Flow Metrics)
+    # Table 3: high_risk_jurisdictions (FATF Regulatory & Sanctions Registry)
     t3_fields = [
-        ("PK", "profile_id", "BIGINT"),
-        ("FK", "account_id", "BIGINT"),
-        ("  ", "window_id", "INTEGER"),
-        ("  ", "flow_ratio", "FLOAT4"),
-        ("  ", "burst_velocity", "FLOAT4"),
-        ("  ", "causal_taint", "FLOAT4"),
+        ("PK", "country_iso", "VARCHAR(3)"),
+        ("  ", "fatf_status", "VARCHAR(32)"),
+        ("  ", "corruption_index", "FLOAT"),
+        ("  ", "sanctions_flag", "BOOLEAN"),
     ]
-    t3_x, t3_y, t3_w, t3_h = 0.04, 0.08, 0.28, 0.36
-    draw_erd_table(ax, t3_x, t3_y, t3_w, t3_h, "TABLE: invariant_profiles", t3_fields, COLOR_GNN, COLOR_GNN_BG)
+    t3_x, t3_y, t3_w, t3_h = 0.04, 0.10, 0.28, 0.32
+    draw_erd_table(ax, t3_x, t3_y, t3_w, t3_h, "TABLE: high_risk_jurisdictions", t3_fields, COLOR_REVIEW, COLOR_REVIEW_BG)
 
-    # Table 4: compliance_cases (Triage Decisions & Audit Records)
+    # Table 4: v_canonical_invariants_12d (Analytical View over Causal Ego-Graphs)
     t4_fields = [
-        ("PK", "case_id", "BIGINT"),
-        ("FK", "tx_id", "BIGINT"),
-        ("  ", "triage_tier", "VARCHAR(16)"),
-        ("  ", "conformal_pvalue", "FLOAT4"),
-        ("  ", "sar_status", "VARCHAR(32)"),
-        ("  ", "merkle_root_hash", "CHAR(64)"),
+        ("FK", "entity_id", "VARCHAR(64)"),
+        ("  ", "eval_timestamp", "BIGINT"),
+        ("  ", "phi_flow, psi_asym", "FLOAT (12-D)"),
+        ("  ", "lambda_hawkes, s_fwd", "FLOAT (12-D)"),
+        ("  ", "s_bwd, mu_a, sigma_a", "FLOAT (12-D)"),
+        ("  ", "skew_a, kurt_a, nu_io", "FLOAT (12-D)"),
+        ("  ", "sigma_dt, capital_v", "FLOAT (12-D)"),
     ]
     t4_x, t4_y, t4_w, t4_h = 0.68, 0.08, 0.28, 0.36
-    draw_erd_table(ax, t4_x, t4_y, t4_w, t4_h, "TABLE: compliance_cases", t4_fields, COLOR_SAFE, COLOR_SAFE_BG)
+    draw_erd_table(ax, t4_x, t4_y, t4_w, t4_h, "VIEW: v_canonical_invariants_12d", t4_fields, COLOR_GNN, COLOR_GNN_BG)
 
     # =========================================================================
     # RELATIONSHIP CONNECTORS (Clean, orthogonal crow's foot lines)
     # =========================================================================
 
-    # 1. accounts -> transactions (1 : N for Source and Target)
+    # 1. entities_master -> streaming_transactions (1 : N for Source and Target)
     y_rel_tx = 0.70
     ax.plot([t1_x + t1_w, 0.50, 0.50, t2_x], [y_rel_tx + 0.05, y_rel_tx + 0.05, y_rel_tx + 0.05, y_rel_tx + 0.05],
             color=COLOR_INGEST, lw=1.6, zorder=3)
@@ -136,20 +135,20 @@ def generate():
 
     # Relationship Badge 1
     ax.add_patch(patches.Rectangle((0.41, y_rel_tx + 0.015), 0.18, 0.075, facecolor="#ffffff", edgecolor=COLOR_BORDER, lw=0.9, zorder=5))
-    ax.text(0.50, y_rel_tx + 0.065, "1 : N (Source Account)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_INGEST, zorder=6)
-    ax.text(0.50, y_rel_tx + 0.035, "1 : N (Target Account)", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#0284c7", zorder=6)
+    ax.text(0.50, y_rel_tx + 0.065, "1 : N (Source Entity)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_INGEST, zorder=6)
+    ax.text(0.50, y_rel_tx + 0.035, "1 : N (Target Entity)", ha="center", va="center", fontsize=6.2, fontweight="bold", color="#0284c7", zorder=6)
 
-    # 2. accounts -> invariant_profiles (1 : N periodic profile)
-    x_rel_inv = t1_x + t1_w * 0.40
-    ax.plot([x_rel_inv, x_rel_inv], [t1_y, t3_y + t3_h], color=COLOR_GNN, lw=1.6, zorder=3)
+    # 2. high_risk_jurisdictions -> entities_master (1 : N country lookup)
+    x_rel_jur = t1_x + t1_w * 0.40
+    ax.plot([x_rel_jur, x_rel_jur], [t3_y + t3_h, t1_y], color=COLOR_REVIEW, lw=1.6, zorder=3)
+    ax.add_patch(patches.Rectangle((x_rel_jur - 0.075, 0.445), 0.15, 0.035, facecolor="#ffffff", edgecolor=COLOR_REVIEW, lw=0.8, zorder=5))
+    ax.text(x_rel_jur, 0.462, "1 : N (Jurisdiction)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_REVIEW, zorder=6)
+
+    # 3. entities_master -> v_canonical_invariants_12d (1 : 1 materialized feature vector)
+    x_rel_inv = t2_x + t2_w * 0.40
+    ax.plot([x_rel_inv, x_rel_inv], [t2_y, t4_y + t4_h], color=COLOR_GNN, lw=1.6, zorder=3)
     ax.add_patch(patches.Rectangle((x_rel_inv - 0.075, 0.455), 0.15, 0.035, facecolor="#ffffff", edgecolor=COLOR_GNN, lw=0.8, zorder=5))
-    ax.text(x_rel_inv, 0.472, "1 : N (Profiles)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_GNN, zorder=6)
-
-    # 3. transactions -> compliance_cases (1 : 1 / 1 : N flagged alerts)
-    x_rel_cas = t2_x + t2_w * 0.40
-    ax.plot([x_rel_cas, x_rel_cas], [t2_y, t4_y + t4_h], color=COLOR_SAFE, lw=1.6, zorder=3)
-    ax.add_patch(patches.Rectangle((x_rel_cas - 0.075, 0.455), 0.15, 0.035, facecolor="#ffffff", edgecolor=COLOR_SAFE, lw=0.8, zorder=5))
-    ax.text(x_rel_cas, 0.472, "1 : 1 (Alert Case)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_SAFE, zorder=6)
+    ax.text(x_rel_inv, 0.472, "1 : 1 (12-D Invariants)", ha="center", va="center", fontsize=6.2, fontweight="bold", color=COLOR_GNN, zorder=6)
 
     # Center Feature View Box (Zero code, pure high-level architecture)
     ax.add_patch(patches.Rectangle(

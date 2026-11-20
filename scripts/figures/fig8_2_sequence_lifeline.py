@@ -100,12 +100,12 @@ def generate():
 
     # Sync Messages (Numbered 1 to 6)
     sync_msgs = [
-        {"y": 74.0, "x1": 9.0, "x2": 25.5, "txt": "1. POST /v1/transactions (ISO 20022)", "col": COLOR_DARK},
+        {"y": 74.0, "x1": 9.0, "x2": 25.5, "txt": "1. POST /api/v1/inference/score (ISO 20022)", "col": COLOR_DARK},
         {"y": 67.0, "x1": 25.5, "x2": 42.0, "txt": "2. Query 2-Hop Historical Subgraph", "col": COLOR_INGEST},
         {"y": 60.0, "x1": 42.0, "x2": 58.5, "txt": "3. Zero-Copy Arrow Tensor Stream (<0.12 ms)", "col": COLOR_GNN},
         {"y": 53.0, "x1": 58.5, "x2": 75.0, "txt": "4. Forward Pass & Edge-Trust Gating (<0.28 ms)", "col": "#ea580c"},
-        {"y": 46.0, "x1": 75.0, "x2": 25.5, "txt": "5. CRC Prediction Set: {0} Safe vs {1} Quarantined", "col": "#7c3aed"},
-        {"y": 40.0, "x1": 25.5, "x2": 9.0, "txt": "6. Return Decision (HTTP 200 STP Clear / Quarantine)", "col": COLOR_SAFE},
+        {"y": 46.0, "x1": 75.0, "x2": 25.5, "txt": "5. CRC Prediction Set: {0} Safe, {0,1} Review, {1} Quarantined", "col": "#7c3aed"},
+        {"y": 40.0, "x1": 25.5, "x2": 9.0, "txt": "6. Return Decision (HTTP 200 STP Clear / Review / Quarantine)", "col": COLOR_SAFE},
     ]
 
     for m in sync_msgs:

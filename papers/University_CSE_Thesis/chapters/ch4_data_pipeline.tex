@@ -48,8 +48,10 @@ To prevent temporal data leakage, transaction neighborhoods must be strictly tim
 
 To achieve sub-millisecond execution over tables containing tens of millions of records, C-STGB establishes composite B-tree indexes:
 \begin{itemize}
-    \item \texttt{idx\_source\_time} on column pair \texttt{streaming\_transactions(source\_entity\_id, timestamp\_epoch DESC)}
-    \item \texttt{idx\_target\_time} on column pair \texttt{streaming\_transactions(target\_entity\_id, timestamp\_epoch DESC)}
+    \item \texttt{idx\_source\_time} on table \texttt{streaming\_transactions}\\
+          with column pair \texttt{(source\_entity\_id, timestamp\_epoch DESC)}
+    \item \texttt{idx\_target\_time} on table \texttt{streaming\_transactions}\\
+          with column pair \texttt{(target\_entity\_id, timestamp\_epoch DESC)}
 \end{itemize}
 These composite indexes reduce the 2-hop causal ego-graph extraction time to under $0.18\text{ ms}$, operating directly within memory. The complete executable SQL DDL contracts and parameterized analytical queries are documented in Appendix~\ref{app:schemas} (Listing~\ref{app_lst:duckdb_schema} and Listing~\ref{app_lst:duckdb_ego_query}).
 

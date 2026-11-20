@@ -66,7 +66,7 @@ def generate():
     ax.add_patch(kafka_box)
     ax.text(0.117, 0.504, "Streaming Ingest Buffer", ha='center', va='center',
             fontsize=6.6, weight='bold', color="#0f172a", zorder=4)
-    ax.text(0.117, 0.478, "Kafka / Redpanda: 31,200 msg/s", ha='center', va='center',
+    ax.text(0.117, 0.478, "Kafka / Redpanda: 31,250 tx/s", ha='center', va='center',
             fontsize=5.8, color="#64748b", zorder=4)
 
     # Arrow from Stage 1 to Stage 2
@@ -93,7 +93,7 @@ def generate():
     ax.add_patch(fast_box)
     ax.text(0.385, 0.805, "FAST-PATH: In-Memory LRU Cache", ha='center', va='center',
             fontsize=7.2, weight='bold', color='#047857', zorder=4)
-    ax.text(0.385, 0.765, "88.4% Hit Rate | 100k Ego-Graphs", ha='center', va='center',
+    ax.text(0.385, 0.765, "88.4% Hit Rate | 50k nodes", ha='center', va='center',
             fontsize=6.4, color='#065f46', zorder=4)
     ax.text(0.385, 0.725, "Sub-Millisecond Hit SLA: 0.45 ms", ha='center', va='center',
             fontsize=6.8, weight='bold', color='#059669', zorder=4)

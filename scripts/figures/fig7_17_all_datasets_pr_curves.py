@@ -55,8 +55,8 @@ def generate():
 
         title_color = COLOR_SAFE if "Macro" in dname else COLOR_DARK
         ax.set_title(f"{dname} ({prauc_cstgb:.3f})", fontsize=7.4, fontweight="bold", color=title_color, pad=4)
-        ax.set_xlim([0, 1.02])
-        ax.set_ylim([0, 1.05])
+        ax.set_xlim([-0.02, 1.02])
+        ax.set_ylim([-0.02, 1.06])
         ax.grid(True, linestyle=":", alpha=0.5)
         ax.tick_params(labelsize=7.0)
 

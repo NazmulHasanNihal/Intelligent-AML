@@ -65,36 +65,36 @@ def generate():
             "id": "CAT 1", "title": "Flow Conservation",
             "cx": 0.145, "col": COLOR_INGEST, "bg": COLOR_INGEST_BG,
             "metrics": [
-                ("Flow Symmetry Ratio", "Inflow vs Outflow balance;\ndetects zero-retention conduits"),
-                ("Capital Transmission Velocity", "Duration money is held;\nflags pass-through mules"),
-                ("Conduit Retention Ratio", "Fraction retained as fee;\ncharacterizes layering accounts")
+                (r"Flow Conservation ($\tilde{\Phi}_{\mathrm{flow}}$)", "Inflow vs outflow balance;\ndetects zero-retention conduits"),
+                (r"Net Flow Velocity ($\nu_{\mathrm{io}}$)", "Inflow-to-outflow log delta;\nflags accumulator vs. sink nodes"),
+                (r"Transmission Velocity ($v_A$)", "Transfer rate over duration;\nflags high-velocity pass-throughs")
             ]
         },
         {
             "id": "CAT 2", "title": "Temporal Dynamics",
             "cx": 0.380, "col": COLOR_REVIEW, "bg": COLOR_REVIEW_BG,
             "metrics": [
-                ("Hawkes Burst Acceleration", "Rapid-fire transaction bursts;\ndetects coordinated smurfing"),
-                ("Inter-Arrival Variance", "Automated script timing;\nseparates bots from humans"),
-                ("Dormancy Wakeup Index", "Hibernating sleeper accounts\nsuddenly activated for laundering")
+                (r"Hawkes Arrival Intensity ($\lambda_u$)", "Rapid-fire microsecond bursts;\ndetects coordinated smurfing"),
+                (r"Timing Dispersion ($\sigma_{\Delta t}$)", "Automated script timing jitter;\nseparates bots from human retail"),
+                ("Burst Velocity Gradient", "Short-interval intensity derivative;\nflags flash structuring spikes")
             ]
         },
         {
             "id": "CAT 3", "title": "Graph Topology",
             "cx": 0.620, "col": COLOR_GNN, "bg": COLOR_GNN_BG,
             "metrics": [
-                ("Bi-Directional Causal Taint", "Forward dispersal & backward\ntrace to illicit seed nodes"),
-                ("Circular Wash-Cycle Ratio", "Direct & indirect closed loops\nused for fund obfuscation"),
-                ("Ego-Neighborhood Fan-Out", "Branching factor & degree\nsymmetry across entities")
+                (r"Degree Asymmetry ($\Psi_{\mathrm{asym}}$)", "Structuring fan-in vs. fan-out;\nisolates dispersal trees"),
+                (r"Forward Causal Taint ($\mathbf{s}_{\mathrm{fwd}}$)", "Downstream proximity to known\nillicit seed entities via PPR"),
+                (r"Backward Causal Taint ($\mathbf{s}_{\mathrm{bwd}}$)", "Upstream source origin and\ntaint provenance tracking via PPR")
             ]
         },
         {
-            "id": "CAT 4", "title": "Amount & Scale",
+            "id": "CAT 4", "title": "Amount & Scale Moments",
             "cx": 0.855, "col": COLOR_RISK, "bg": COLOR_RISK_BG,
             "metrics": [
-                ("CTR Threshold Proximity", "Transactions clustered just\nbelow statutory filing limits"),
-                ("Benford First-Digit Deviation", "Anomalous digit frequencies;\nflags synthetic fabrication"),
-                ("Amount Variance & Entropy", "Uniform amounts vs natural\nlog-normal financial flows")
+                (r"Mean Amount Scale ($\mu_A$)", "Baseline transfer volume;\nanchors normal entity size"),
+                (r"Amount Variance ($\sigma_A^2$)", "Structured amount homogeneity;\nflags fixed-value smurfing"),
+                (r"Amount Skew & Kurtosis ($\gamma_A, \kappa_A$)", "Heavy-tailed moment metrics;\ndetects asymmetric outlier spikes")
             ]
         }
     ]

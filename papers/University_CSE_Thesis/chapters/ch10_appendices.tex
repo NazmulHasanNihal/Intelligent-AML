@@ -155,41 +155,64 @@ CREATE TABLE high_risk_jurisdictions (
 Listing~\ref{app_lst:duckdb_ego_query} specifies the vectorized analytical SQL kernel executing within the embedded DuckDB columnar engine. The query dynamically evaluates the target transaction context $(u_{\text{eval}}, t_{\text{eval}})$ using zero-copy Apache Arrow memory buffers. It extracts the 2-hop causal ego-graph over a 90-day historical window with sub-millisecond execution latency.
 
 \begin{lstlisting}[language=SQL, caption={Vectorized Causal Ego-Graph Extraction Query.}, label={app_lst:duckdb_ego_query}]
-WITH RECURSIVE causal_ego AS (
-    -- Anchor: 1-hop inbound and outbound transactions within lookback window
-    SELECT 
-        tx_id, src_id, dst_id, amount_usd, timestamp_epoch,
-        ( ? - timestamp_epoch ) AS delta_seconds,
+WITH hop1_edges AS (
+    SELECT
+        t.transaction_id,
+        t.source_entity_id,
+        t.target_entity_id,
+        t.amount_usd,
+        t.timestamp_epoch,
         1 AS hop_depth
-    FROM transactions
-    WHERE (src_id = ? OR dst_id = ?)
-      AND timestamp_epoch <= ?
-      AND timestamp_epoch >= ( ? - 7776000 ) -- 90-day lookback horizon
+    FROM streaming_transactions t
+    WHERE (t.source_entity_id = $target_entity OR t.target_entity_id = $target_entity)
+      AND t.timestamp_epoch <= $t_eval
+      AND t.timestamp_epoch >= ($t_eval - 7776000) -- 90-Day Seasonal Horizon
+    ORDER BY t.timestamp_epoch DESC
+    LIMIT 15 -- Top-K degree cap (K = 15)
+),
+hop1_nodes AS (
+    SELECT DISTINCT source_entity_id AS entity_id FROM hop1_edges
+    UNION
+    SELECT DISTINCT target_entity_id AS entity_id FROM hop1_edges
+),
+hop2_edges AS (
+    SELECT
+        t.transaction_id,
+        t.source_entity_id,
+        t.target_entity_id,
+        t.amount_usd,
+        t.timestamp_epoch,
+        2 AS hop_depth
+    FROM streaming_transactions t
+    INNER JOIN hop1_nodes n
+        ON (t.source_entity_id = n.entity_id OR t.target_entity_id = n.entity_id)
+    WHERE t.timestamp_epoch <= $t_eval
+      AND t.timestamp_epoch >= ($t_eval - 7776000)
+      AND t.transaction_id NOT IN (SELECT transaction_id FROM hop1_edges)
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY n.entity_id ORDER BY t.timestamp_epoch DESC
+    ) <= 15
+),
+causal_ego AS (
+    SELECT * FROM hop1_edges
     UNION ALL
-    -- Recursive Step: 2-hop causal expansion strictly forward/backward in time
-    SELECT 
-        t.tx_id, t.src_id, t.dst_id, t.amount_usd, t.timestamp_epoch,
-        ( ? - t.timestamp_epoch ) AS delta_seconds,
-        e.hop_depth + 1 AS hop_depth
-    FROM transactions t
-    INNER JOIN causal_ego e ON (
-        (t.src_id = e.dst_id AND t.timestamp_epoch >= e.timestamp_epoch) OR
-        (t.dst_id = e.src_id AND t.timestamp_epoch <= e.timestamp_epoch)
-    )
-    WHERE e.hop_depth < 2
-      AND t.timestamp_epoch <= ?
-      AND t.timestamp_epoch >= ( ? - 7776000 )
+    SELECT * FROM hop2_edges
 )
-SELECT DISTINCT 
-    ce.tx_id, ce.src_id, ce.dst_id, ce.amount_usd, ce.delta_seconds, ce.hop_depth,
+SELECT
+    ce.transaction_id,
+    ce.source_entity_id,
+    ce.target_entity_id,
+    ce.amount_usd,
+    ($t_eval - ce.timestamp_epoch) AS delta_seconds,
+    ce.hop_depth,
     e_src.kyc_risk_tier AS src_risk,
     e_dst.kyc_risk_tier AS dst_risk,
     j_dst.fatf_status AS dst_jurisdiction_status
 FROM causal_ego ce
-JOIN entities_master e_src ON ce.src_id = e_src.entity_id
-JOIN entities_master e_dst ON ce.dst_id = e_dst.entity_id
+JOIN entities_master e_src ON ce.source_entity_id = e_src.entity_id
+JOIN entities_master e_dst ON ce.target_entity_id = e_dst.entity_id
 LEFT JOIN high_risk_jurisdictions j_dst ON e_dst.country_iso = j_dst.country_iso
-ORDER BY ce.delta_seconds ASC
+ORDER BY ce.hop_depth ASC, ce.timestamp_epoch DESC
 LIMIT 50;
 \end{lstlisting}
 
@@ -336,7 +359,7 @@ The user interface is structured into dedicated operational desks and governance
 \end{enumerate}
 
 \subsection{Operational Dashboard UI Visualizations}
-Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_model_governance_drift} illustrate the real-time production interface desks operating on live transaction feeds, captured across a continuous 24-hour live burst window on production banking and blockchain rails.
+Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_explainability_portals} (Figures~E.1--E.8) illustrate the real-time production interface desks operating on live transaction feeds, captured across a continuous 24-hour live burst window on production banking and blockchain rails. Figures~E.1--E.8 display a live 24-hour banking/MFS simulation burst with a 98.6\% Straight-Through Processing (STP) rate.
 
 \begin{figure}[htbp]
 \centering
@@ -441,32 +464,61 @@ This section compiles the production implementation artifacts, validation schema
 Listing~\ref{app_lst:pydantic_schema} details the runtime schema validator enforcing deterministic anti-hallucination guarantees (Proposition~6.1).
 
 \begin{lstlisting}[language=Python, caption={Pydantic Runtime Strict Validation Schema ($\mathcal{S}_{\text{AML}}$).}, label={app_lst:pydantic_schema}]
+from datetime import datetime
+from typing import List, Literal, Set, Tuple
+from pydantic import BaseModel, Field, field_validator
+
+
 class CausalHopSchema(BaseModel):
     hop_seq: int = Field(..., ge=1, le=10)
-    source_entity_id: str = Field(..., min_length=1)
-    target_entity_id: str = Field(..., min_length=1)
+    source_entity_id: str = Field(..., min_length=1, max_length=64)
+    target_entity_id: str = Field(..., min_length=1, max_length=64)
     amount_usd: float = Field(..., gt=0.0)
-    timestamp_iso: str
+    timestamp_iso: datetime
     edge_trust_gate: float = Field(..., ge=0.0, le=1.0)
+
 
 class SARDocumentSchema(BaseModel):
     case_id: str = Field(..., pattern=r"^SAR-[0-9]{4}-[A-Z0-9]{8}$")
     filing_timestamp: datetime
     conformal_tier: Literal["Tier_1_Quarantine", "Tier_2_Abstention"]
     predicted_risk_score: float = Field(..., ge=0.0, le=1.0)
-    primary_typology: Literal["Smurfing", "CircularWash", "RapidLayering", 
-                              "DormantPassThrough", "HubCamouflage"]
+    primary_typology: Literal[
+        "Smurfing", "CircularWash", "RapidLayering",
+        "DormantPassThrough", "HubCamouflage",
+    ]
     flow_conservation_ratio: float = Field(..., ge=0.0)
     causal_trajectory: List[CausalHopSchema] = Field(..., min_length=1)
-    merkle_root_hash: str = Field(..., min_length=64, max_length=64)
+    merkle_root_hash: str = Field(..., pattern=r"^[a-f0-9]{64}$")
 
     @field_validator("causal_trajectory")
     @classmethod
-    def verify_topological_chain_integrity(cls, v: List[CausalHopSchema]) -> List[CausalHopSchema]:
-        for i in range(len(v) - 1):
-            assert v[i].target_entity_id == v[i+1].source_entity_id, \
-                "Disconnected non-causal topological chain detected."
-        return v
+    def verify_topological_chain_integrity(
+        cls, hops: List[CausalHopSchema]
+    ) -> List[CausalHopSchema]:
+        for i in range(len(hops) - 1):
+            if hops[i].target_entity_id != hops[i + 1].source_entity_id:
+                raise ValueError(
+                    f"Disconnected causal chain at hop {i + 1}: "
+                    f"{hops[i].target_entity_id} != {hops[i + 1].source_entity_id}"
+                )
+        return hops
+
+    def verify_subgraph_grounding(
+        self,
+        observed_nodes: Set[str],
+        observed_edges: Set[Tuple[str, str]],
+    ) -> None:
+        """Enforces Proposition 6.1: V(T) subset V_sub and E(T) subset E_sub."""
+        for hop in self.causal_trajectory:
+            if hop.source_entity_id not in observed_nodes:
+                raise ValueError(f"Hallucinated source node: {hop.source_entity_id}")
+            if hop.target_entity_id not in observed_nodes:
+                raise ValueError(f"Hallucinated target node: {hop.target_entity_id}")
+            if (hop.source_entity_id, hop.target_entity_id) not in observed_edges:
+                raise ValueError(
+                    f"Hallucinated edge: ({hop.source_entity_id}, {hop.target_entity_id})"
+                )
 \end{lstlisting}
 
 \clearpage
@@ -488,7 +540,7 @@ Listing~\ref{app_lst:fincen_xml_sample} provides the finalized, schema-validated
     <EntityID>ACC_9941</EntityID>
     <RiskScore Saliency='0.9841'>0.9620</RiskScore>
     <ConformalTier>Tier_1_Quarantine</ConformalTier>
-    <PrimaryTypology>Smurfing_FanOut_Wash</PrimaryTypology>
+    <PrimaryTypology>Smurfing</PrimaryTypology>
     <FlowConservation Ratio='0.9942'>BALANCED_PASSTHROUGH</FlowConservation>
   </SubjectEntity>
 
@@ -497,11 +549,11 @@ Listing~\ref{app_lst:fincen_xml_sample} provides the finalized, schema-validated
   <TopologicalEvidence SubgraphNodes='15' SubgraphEdges='18'>
     <CausalChain Hops='3' ExemplarPathAmount='29350.00'>
       <Hop Seq='1' Src='ACC_9941' Dst='ACC_MULE_02'
-           Amount='9850.00' Timestamp='14:19:12Z' EdgeTrust='0.94'/>
+           Amount='9850.00' Timestamp='2026-08-28T14:19:12Z' EdgeTrust='0.94'/>
       <Hop Seq='2' Src='ACC_MULE_02' Dst='ACC_MULE_08'
-           Amount='9800.00' Timestamp='14:23:01Z' EdgeTrust='0.91'/>
+           Amount='9800.00' Timestamp='2026-08-28T14:23:01Z' EdgeTrust='0.91'/>
       <Hop Seq='3' Src='ACC_MULE_08' Dst='ACC_OFFSHORE_08'
-           Amount='9700.00' Timestamp='14:27:45Z' EdgeTrust='0.96'/>
+           Amount='9700.00' Timestamp='2026-08-28T14:27:45Z' EdgeTrust='0.96'/>
     </CausalChain>
   </TopologicalEvidence>
 
@@ -567,22 +619,23 @@ WORKDIR /build
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential curl git libgomp1 \
     && rm -rf /var/lib/apt/lists/*
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.txt pyproject.toml ./
-RUN pip install --user --no-warn-script-location -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+COPY src/ ./src/
+RUN pip install --no-deps .
 
 # Stage 2: Hardened Non-Root Distroless-Style Runtime
 FROM python:3.11-slim AS runner
-ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PATH="/home/amlapp/.local/bin:${PATH}"
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PATH="/opt/venv/bin:$PATH"
 RUN groupadd -g 10001 amlgroup && \
     useradd -u 10001 -g amlgroup -s /bin/bash -m amlapp && \
     apt-get update && apt-get install -y --no-install-recommends libgomp1 curl && \
     rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY --from=builder --chown=amlapp:amlgroup /root/.local /home/amlapp/.local
-COPY --chown=amlapp:amlgroup src/ ./src/
+COPY --from=builder --chown=amlapp:amlgroup /opt/venv /opt/venv
 COPY --chown=amlapp:amlgroup configs/ ./configs/
-COPY --chown=amlapp:amlgroup pyproject.toml ./
-RUN pip install --no-deps -e .
 USER 10001:10001
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
@@ -620,6 +673,9 @@ spec:
           readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
+        volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
         resources:
           limits:
             cpu: "8"
@@ -648,6 +704,9 @@ spec:
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 10
+      volumes:
+      - name: tmp-volume
+        emptyDir: {}
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler

@@ -2,6 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "npm --prefix frontend install",
-  "buildCommand": "node frontend/bin/vite-compat.cjs build",
-  "outputDirectory": "frontend/.next"
+  "buildCommand": "node frontend/bin/vite-compat.cjs build"
 }

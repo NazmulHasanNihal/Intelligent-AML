@@ -17,7 +17,7 @@ console.log(' Arguments received:', process.argv.slice(2).join(' ') || '(none)')
 console.log('===============================================================');
 
 const rootDir = process.cwd();
-const isFrontendDir = fs.existsSync(path.join(rootDir, 'next.config.ts'));
+const isFrontendDir = fs.existsSync(path.join(rootDir, 'src', 'app'));
 const frontendDir = isFrontendDir ? rootDir : path.join(rootDir, 'frontend');
 
 console.log(`[Vercel Bridge] Target frontend directory: ${frontendDir}`);
@@ -52,6 +52,13 @@ try {
   const distDir = path.join(rootDir, 'dist');
   const frontendDistDir = path.join(frontendDir, 'dist');
   
+  // Mirror .next to root ./.next for root-level Next.js detection
+  if (rootDir !== frontendDir && fs.existsSync(nextDir)) {
+    const rootNextDir = path.join(rootDir, '.next');
+    fs.cpSync(nextDir, rootNextDir, { recursive: true });
+    console.log('[Vercel Bridge] Mirrored .next to root ./.next');
+  }
+
   [distDir, frontendDistDir].forEach(d => {
     if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
   });

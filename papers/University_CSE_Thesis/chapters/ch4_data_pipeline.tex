@@ -31,7 +31,7 @@ Every incoming financial transaction payload and reference entity is structured 
 
 The database schema connects three primary relational tables:
 \begin{enumerate}
-    \item \textbf{\texttt{entities\_master} (Primary Key: \texttt{entity\_id}):} Stores core entity demographics, account risk profiles (KYC tiers 1--5), politically exposed person (PEP) status, and ISO 3166-1 alpha-2 jurisdiction references.
+    \item \textbf{\texttt{entities\_master} (Primary Key: \texttt{entity\_id}):} Stores core entity demographics, account risk profiles (KYC tiers 1--5), politically exposed person (PEP) status, and ISO 3166-1 alpha-3 jurisdiction references.
     \item \textbf{\texttt{streaming\_transactions} (Primary Key: \texttt{transaction\_id}):} Captures high-frequency payment movements with foreign keys \texttt{source\_entity\_id} and \texttt{target\_entity\_id} referencing \texttt{entities\_master} (1-to-many cardinality). Each record maintains microsecond UTC timestamps, USD-normalized amounts, and payment rail identifiers.
     \item \textbf{\texttt{high\_risk\_jurisdictions} (Primary Key: \texttt{country\_iso}):} Holds Financial Action Task Force (FATF) black-list and grey-list classifications and Basel AML Index risk metrics.
 \end{enumerate}

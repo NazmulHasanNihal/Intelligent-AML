@@ -91,7 +91,7 @@ export default function ModelGovernancePage() {
   };
 
   return (
-    <div className="p-6 max-w-[1700px] mx-auto space-y-6">
+    <div className="p-4 sm:p-5 lg:p-6 max-w-[1700px] mx-auto space-y-4 sm:space-y-5">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -138,18 +138,18 @@ export default function ModelGovernancePage() {
           </div>
         </div>
 
-        {/* Dual Axis Recharts */}
-        <div className="h-[280px] w-full pt-2">
+        {/* Dual Axis Recharts with Generous Margins to Prevent Tick Clipping */}
+        <div className="h-[280px] w-full pt-2 min-w-0">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={driftData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <LineChart data={driftData} margin={{ top: 16, right: 56, left: 16, bottom: 16 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
               <XAxis dataKey="date" stroke="#64748B" fontSize={11} fontFamily="monospace" />
-              <YAxis yAxisId="left" stroke="#38BDF8" fontSize={11} fontFamily="monospace" domain={[0, 0.08]} />
-              <YAxis yAxisId="right" orientation="right" stroke="#34D399" fontSize={11} fontFamily="monospace" domain={[0.97, 1.0]} />
+              <YAxis yAxisId="left" stroke="#38BDF8" fontSize={11} fontFamily="monospace" domain={[0, 0.08]} width={48} />
+              <YAxis yAxisId="right" orientation="right" stroke="#34D399" fontSize={11} fontFamily="monospace" domain={[0.97, 1.0]} width={52} />
               <Tooltip
                 contentStyle={{ backgroundColor: '#0B0F17', borderColor: '#334155', borderRadius: '8px', fontSize: '11px', fontFamily: 'monospace' }}
               />
-              <ReferenceLine yAxisId="left" y={0.05} stroke="#F43F5E" strokeDasharray="4 4" label={{ value: 'KS Drift Threshold (0.050)', fill: '#F43F5E', fontSize: 10 }} />
+              <ReferenceLine yAxisId="left" y={0.05} stroke="#F43F5E" strokeDasharray="4 4" label={{ value: 'KS Drift (0.050)', fill: '#F43F5E', fontSize: 10 }} />
               <Line yAxisId="left" type="monotone" dataKey="ksDistance" stroke="#38BDF8" strokeWidth={2} dot={{ r: 3 }} name="KS Distance" />
               <Line yAxisId="right" type="monotone" dataKey="coverageRate" stroke="#34D399" strokeWidth={2} dot={{ r: 3 }} name="Coverage Rate" />
             </LineChart>

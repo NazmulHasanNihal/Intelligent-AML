@@ -26,7 +26,7 @@ Vercel provides free, high-speed global CDN hosting with zero server maintenance
 1. Go to [https://vercel.com/new](https://vercel.com/new) and log in with your GitHub account.
 2. Select your `Intelligent-AML` repository.
 3. In Project Settings:
-   - If Root Directory is set to `frontend`: Framework Preset is `Vite` (automatic).
+   - If Root Directory is set to `frontend`: Framework Preset is `Next.js` (automatic).
    - If Root Directory is root `./`: The pre-configured root [`vercel.json`](../vercel.json) handles building `frontend` automatically.
 4. Click **Deploy**.
 5. Within 45-60 seconds, your site is live at `https://intelligent-aml-<username>.vercel.app`.

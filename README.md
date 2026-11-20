@@ -72,20 +72,20 @@ Between **$800 Billion and $2 Trillion** in illicit capital traverses the global
 
 | Model Architecture | Model Category | PR-AUC (Macro) | Minority F1-Score | Inference Latency | Statistical Significance (p-value) |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **C-STGB (Proposed)** | **Conformal Spatio-Temporal GraphBoost** | **0.6974** | **68.05%** | **0.45 ms (Fast-Path) / 2.10 ms (Full)** | — *(Reference Anchor, Mean Rank 1.07)* |
-| **XGBoost** | Tabular Gradient Boost | 0.6500 | 64.76% | 0.32 ms | p = 0.0421 *(Mean Rank 2.4)* |
-| **CatBoost** | Industrial Gradient Boost | 0.6400 | 64.25% | 0.48 ms | p = 0.0384 *(Mean Rank 2.9)* |
-| **TGN** | Continuous Temporal GNN | 0.5800 | 43.76% | 4.85 ms | **p < 0.001 (†)** *(Mean Rank 5.1)* |
-| **CARE-GNN** | Anomaly-Resistant GNN | 0.5400 | 39.68% | 5.10 ms | **p < 0.001 (†)** *(Mean Rank 6.2)* |
-| **Vanilla HGT** | Temporal Heterogeneous GNN | 0.4200 | 30.25% | 6.20 ms | **p < 0.001 (†)** *(Mean Rank 6.8)* |
-| **GraphSAGE** | Inductive Neighborhood GNN | 0.2170 | 24.31% | 2.10 ms | **p < 0.001 (†)** *(Mean Rank 9.2)* |
-| **Standard GCN** | Spectral Graph Convolution | 0.2143 | 23.78% | 1.80 ms | **p < 0.001 (†)** *(Mean Rank 9.6)* |
-| **EvolveGCN** | Dynamic Recurrent GNN | 0.1480 | 18.94% | 8.40 ms | **p < 0.001 (†)** *(Mean Rank 8.9)* |
+| **C-STGB (Proposed)** | **Conformal Spatio-Temporal GraphBoost** | **0.6974** | **68.05%** | **0.45 ms (Fast-Path) / 2.10 ms (Full)** | — *(Reference Anchor, Mean Rank 1.21)* |
+| **XGBoost** | Tabular Gradient Boost | 0.6500 | 64.76% | 0.32 ms | p = 1.58e-03 *(Mean Rank 2.14)* |
+| **CatBoost** | Industrial Gradient Boost | 0.6400 | 64.25% | 0.48 ms | p = 3.05e-04 *(Mean Rank 3.07)* |
+| **TGN** | Continuous Temporal GNN | 0.4605 | 43.39% | 4.85 ms | **p = 6.10e-05 (†)** *(Mean Rank 5.14)* |
+| **CARE-GNN** | Anomaly-Resistant GNN | 0.4309 | 40.53% | 5.10 ms | **p = 6.10e-05 (†)** *(Mean Rank 6.36)* |
+| **Vanilla HGT** | Temporal Heterogeneous GNN | 0.3376 | 31.10% | 6.20 ms | **p = 6.10e-05 (†)** *(Mean Rank 7.57)* |
+| **GraphSAGE** | Inductive Neighborhood GNN | 0.2170 | 24.31% | 2.10 ms | **p = 6.10e-05 (†)** *(Mean Rank 7.11)* |
+| **Standard GCN** | Spectral Graph Convolution | 0.2143 | 23.78% | 1.80 ms | **p = 6.10e-05 (†)** *(Mean Rank 7.96)* |
+| **EvolveGCN** | Dynamic Recurrent GNN | 0.1480 | 18.94% | 8.40 ms | **p = 6.10e-05 (†)** *(Mean Rank 8.21)* |
 
 *(† indicates statistically significant corpus-wide improvement over deep GNNs at W = 105.0, p_adj < 0.001 under two-sided Wilcoxon signed-rank test across all 14 benchmark networks.)*
 
 > [!TIP]
-> **Commodity Hardware & Zero-GPU Footprint:** The 0.45 ms Fast-Path streaming engine (0.12 ms GNN core) and universal 12-D invariant kernels execute on standard **commodity x86-64 / ARM64 enterprise CPU infrastructure** without requiring dedicated GPU acceleration, enabling drop-in integration with on-premise core banking systems (Finacle, Temenos T24, FIS). Offline model training and high-throughput burst clusters (>31,200 tx/s) support optional GPU acceleration.
+> **Commodity Hardware & Zero-GPU Footprint:** The 0.45 ms Fast-Path streaming engine (0.12 ms GNN core) and universal 12-D invariant kernels execute on standard **commodity x86-64 / ARM64 enterprise CPU infrastructure** without requiring dedicated GPU acceleration, enabling drop-in integration with on-premise core banking systems (Finacle, Temenos T24, FIS). Offline model training and high-throughput burst clusters (>31,250 tx/s) support optional GPU acceleration.
 
 ---
 

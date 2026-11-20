@@ -181,9 +181,9 @@ We capture the distribution of historical transaction amounts and inter-arrival 
     \item Variance of transaction amounts ($\sigma_A^2$)
     \item Skewness of transaction amounts ($\gamma_A$)
     \item Kurtosis of transaction amounts ($\kappa_A$)
-    \item Inflow-to-outflow velocity ratio ($\nu_{\text{io}} = \sum A_{\text{in}} / \sum A_{\text{out}}$)
-    \item Inter-arrival temporal standard deviation ($\sigma_{\Delta t}$)
-    \item Transmission capital velocity ($v_A = \text{mean}(A_e / \Delta t_e)$)
+    \item Inflow-to-outflow velocity ratio ($\nu_{\text{io}} = \ln(1 + \sum A_{\text{in}}) - \ln(1 + \sum A_{\text{out}})$)
+    \item Inter-arrival temporal standard deviation ($\sigma_{\Delta t} = \sqrt{\mathrm{Var}(\{t_k - t_{k-1}\})}$)
+    \item Transmission capital velocity ($v_A = \sum_{e \in \mathcal{E}_u} \text{Amount}(e) / (t_{\max} - t_{\min} + \epsilon)$)
 \end{itemize}
 
 The concatenated 12-dimensional invariant representation:
@@ -215,7 +215,7 @@ provides a universal, schema-agnostic feature foundation. Table~\ref{tab:12d_inv
 8 & $\gamma_A$ & $\frac{1}{|\mathcal{E}_u|}\sum_{e} ((\text{Amount}(e) - \mu_A)/\sigma_A)^3$ & Asymmetric high-value outlier spikes & 1 & $\mathbb{R}$ \\
 9 & $\kappa_A$ & $\frac{1}{|\mathcal{E}_u|}\sum_{e} ((\text{Amount}(e) - \mu_A)/\sigma_A)^4$ & Heavy-tailed structuring distributions & 1 & $\mathbb{R}^+$ \\
 10 & $\nu_{\text{io}}$ & $\ln(1 + \sum A_{\text{in}}) - \ln(1 + \sum A_{\text{out}})$ & Inflow-to-outflow velocity imbalance & 1 & $\mathbb{R}$ \\
-11 & $\sigma_{\Delta t}$ & $\sqrt{\text{Var}(\{t_k - t_{k-1}\})}$ & Scripted automated bots vs.\ retail jitter & 1 & $\mathbb{R}^+$ \\
+11 & $\sigma_{\Delta t}$ & $\sqrt{\mathrm{Var}(\{t_k - t_{k-1}\})}$ & Scripted automated bots vs.\ retail jitter & 1 & $\mathbb{R}^+$ \\
 12 & $v_A$ & $\sum_{e \in \mathcal{E}_u} \text{Amount}(e) / (t_{\max} - t_{\min} + \epsilon)$ & Rapid capital transmission speed & 1 & $\mathbb{R}^+$ \\
 \bottomrule
 \end{tabular}%
@@ -236,14 +236,15 @@ For continuous elapsed time difference $\Delta t = t - t_e$, we project $\Delta 
 where $k \in \{0, 1, \dots, \frac{d_t}{2} - 1\}$. This continuous formulation ensures translation invariance and infinite temporal resolution without discrete snapshot boundaries.
 
 \subsection{Tri-Band Continuous Decay Attention Kernel}
-We synthesize three orthogonal temporal velocity regimes through a tri-band decay function:
+We synthesize three orthogonal temporal velocity regimes through a tri-band harmonic decay function:
 \begin{equation}
-\begin{aligned}
-w(\Delta t) = \sum_{b \in \mathcal{B}} \pi_{\text{mix},b} & \left[ w_{\min} + (1 - w_{\min}) \exp(-\lambda_b \Delta t) \right] \\
-& \times \left(1 + \tanh(\gamma_b \lambda_u(t))\right)
-\end{aligned}
+w(\Delta t) = \Bigg(
+  \pi_{\text{burst}}\,k_{\text{burst}}(\Delta t)
+  + \pi_{\text{diurnal}}\,k_{\text{diurnal}}(\Delta t)\,\frac{1 + \cos\!\left(\frac{2\pi \Delta t}{24}\right)}{2}
+  + \pi_{\text{seasonal}}\,k_{\text{seasonal}}(\Delta t)
+\Bigg)\Big(1 + \tanh\big(\gamma_H \lambda_u(t)\big)\Big)
 \end{equation}
-where $\mathcal{B} = \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ represents the three operational velocity regimes:
+where $k_b(\Delta t) = w_{\min} + (1 - w_{\min})\exp(-\lambda_b \Delta t)$ for $b \in \{\text{burst}, \text{diurnal}, \text{seasonal}\}$ with mixing weights satisfying $\sum_b \pi_b = 1$, representing the three operational velocity regimes:
 \begin{enumerate}
     \item \textbf{Burst Regime ($\lambda_{\text{burst}} = 0.80\,\text{h}^{-1}$, nominal horizon $\tau_1 = 2.4\,\text{h}$):} Captures high-frequency microsecond to hourly smurfing velocity spikes.
     \item \textbf{Diurnal Regime ($\lambda_{\text{diurnal}} = 0.05\,\text{h}^{-1}$, nominal cycle $\tau_2 = 24\,\text{h}$):} Captures 24-hour cyclic commercial velocity oscillations.
@@ -359,8 +360,9 @@ We compute an evidence-adaptive gating scalar $\alpha_u \in [0, 1]$:
 \end{equation}
 The unified anomaly representation $\mathbf{h}_u^*$ dynamically fuses graph embeddings with tabular invariants:
 \begin{equation}
-\mathbf{h}_u^* = \alpha_u \mathbf{h}_u^{(L)} + (1 - \alpha_u) \left[ \mathbf{z}_{\text{inv}}(u, t) \,\|\, \mathbf{x}_u \right]
+\mathbf{h}_u^* = \alpha_u \mathbf{h}_u^{(L)} + (1 - \alpha_u) \mathbf{W}_{\text{proj}}\left[ \mathbf{z}_{\text{inv}}(u, t) \,\|\, \mathbf{x}_u \right]
 \end{equation}
+where $\mathbf{W}_{\text{proj}} \in \mathbb{R}^{d \times (12 + d_v)}$ is a learnable projection matrix projecting concatenated tabular invariants and raw node features into the $d$-dimensional embedding space.
 When graph evidence is sparse ($\deg(u) \to 0$), $\alpha_u \to 0$, causing C-STGB to gracefully fall back on robust domain invariants, boosting zero-degree account F1-score to $89.60\%$ F1 ($+71.20\text{ pp}$ over standalone GNN's $18.40\%$ F1).
 
 \section{Module 5: Cost-Sensitive Risk Optimization Head}\label{sec:ch3_mod5}
@@ -376,21 +378,21 @@ The total network loss is formulated as a multi-task objective:
 \end{equation}
 where:
 \begin{enumerate}
-    \item $\mathcal{L}_{\text{task}}$ is the Cost-Sensitive Asymmetric Focal Tversky Loss:
+    \item $\mathcal{L}_{\text{task}}$ is the Cost-Sensitive Asymmetric Tversky Loss (setting focal power $\gamma_f = 1$):
     \begin{equation}
     \mathcal{L}_{\text{task}} = 1 - \frac{\sum_i p_i y_i + \epsilon}{\sum_i p_i y_i + \beta_{\text{FN}} \sum_i (1 - p_i) y_i + \beta_{\text{FP}} \sum_i p_i (1 - y_i) + \epsilon}
     \end{equation}
     with $\beta_{\text{FN}} = 0.85, \beta_{\text{FP}} = 0.15$ enforcing heavy penalties on false negative laundering misses.
 
     \paragraph{Gradient Dynamics Analysis:}
-    Differentiating $\mathcal{L}_{\text{task}}$ with respect to predicted logit $z_i$ ($p_i = \sigma(z_i)$) for an illicit entity ($y_i = 1$) yields:
+    Differentiating $\mathcal{L}_{\text{task}}$ with respect to predicted logit $z_i$ ($p_i = \sigma(z_i)$) via the quotient rule yields exact derivatives for illicit ($y_i = 1$) and benign ($y_i = 0$) entities:
     \begin{equation}\small
-    \begin{aligned}
-    \frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i} = -\beta_{\text{FN}} & \frac{\sum_j p_j y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon}{\big[ \sum_j p_j y_j + \beta_{\text{FN}} \sum_j (1 - p_j) y_j + \beta_{\text{FP}} \sum_j p_j (1 - y_j) + \epsilon \big]^2} \\
-    & \times p_i (1 - p_i)
-    \end{aligned}
+    \left.\frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i}\right|_{y_i = 1} = -\frac{\beta_{\text{FN}}\left(\sum_j y_j + \epsilon\right) + \beta_{\text{FP}}\sum_j p_j(1 - y_j)}{\left[\sum_j p_j y_j + \beta_{\text{FN}}\sum_j (1 - p_j)y_j + \beta_{\text{FP}}\sum_j p_j(1 - y_j) + \epsilon\right]^2} \cdot p_i(1 - p_i)
     \end{equation}
-    Because $\beta_{\text{FN}} = 0.85 \gg \beta_{\text{FP}} = 0.15$, the gradient magnitude for false negatives ($y_i=1, p_i \to 0$) is magnified by a factor of $\frac{\beta_{\text{FN}}}{\beta_{\text{FP}}} = 5.67\times$ relative to false positives, driving rapid parameter updates that aggressively pull minority illicit embeddings away from benign clusters.
+    \begin{equation}\small
+    \left.\frac{\partial \mathcal{L}_{\text{task}}}{\partial z_i}\right|_{y_i = 0} = +\frac{\beta_{\text{FP}}\left(\sum_j p_j y_j + \epsilon\right)}{\left[\sum_j p_j y_j + \beta_{\text{FN}}\sum_j (1 - p_j)y_j + \beta_{\text{FP}}\sum_j p_j(1 - y_j) + \epsilon\right]^2} \cdot p_i(1 - p_i)
+    \end{equation}
+    Because $\beta_{\text{FN}} = 0.85 \gg \beta_{\text{FP}} = 0.15$, the gradient magnitude for false negatives ($y_i=1, p_i \to 0$) is magnified by a factor of $\frac{\beta_{\text{FN}}}{\beta_{\text{FP}}} = 5.67\times$ relative to false positives, driving rapid parameter updates that aggressively pull minority illicit embeddings away from benign clusters. We explicitly distinguish this $5.67\times$ gradient penalty ratio in the objective function from the separate $15{:}1$ Bayes operational cost ratio ($C_{\text{FN}} / C_{\text{FP}}$) used downstream to optimize the calibrated decision threshold $\tau^*$ (Figure~\ref{fig:ch7_ablation_waterfall} and Appendix~\ref{app:hyperparams}).
     \item $\mathcal{L}_{\text{recon}}$ is the topological edge reconstruction loss:
     \begin{equation}
     \mathcal{L}_{\text{recon}} = -\frac{1}{|\mathcal{E}_{\text{train}}|} \sum_{(u, v) \in \mathcal{E}_{\text{train}}} \log \hat{A}_{uv} - \frac{1}{|\mathcal{E}_{\text{neg}}|} \sum_{(u, w) \in \mathcal{E}_{\text{neg}}} \log (1 - \hat{A}_{uw})
@@ -420,10 +422,11 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 \begin{algorithmic}[1]
 \Require Directed graph $\mathcal{G}=(\mathcal{V}, \mathcal{E})$, Entity features $\mathbf{X}$, Target coverage $1-\alpha$, Loss weights $\gamma_1, \gamma_2$.
 \Ensure Trained model parameters $\Theta$, Calibrated threshold $\tau^*$, Conformal quantiles $\hat{q}^{(0)}, \hat{q}^{(1)}$.
+\State Execute warm-up forward pass with initial encoder $\Theta_0$ to generate representations $\mathbf{h}_u^{(0)}$.
 \State Compute 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u)$ for all $u \in \mathcal{V}_{\text{train}}$.
-\State Cluster minority nodes into latent typologies $C_1, \dots, C_K$ via \eqref{eq:typology_clustering}.
+\State Cluster minority nodes in latent representation space into typologies $C_1, \dots, C_K$ via \eqref{eq:typology_clustering}.
 \State Synthesize minority representations $\mathbf{h}_{\text{syn}}$ and bilinear edges $\mathbf{\hat{A}}_{\text{syn}}$ via \eqref{eq:graphsmote_interp}--\eqref{eq:bilinear_link}.
-\State Mine hard-negative commercial hubs into batch bank $\mathcal{B}_{\text{hard}}$.
+\State Mine hard-negative commercial hubs with legitimate velocity into bank $\mathcal{B}_{\text{hard}} = \{v \in \mathcal{V}_{\text{benign}} : \deg(v) > \theta_{\text{hub}}, \lambda_v > \theta_{\text{burst}}\}$.
 \For{epoch $= 1$ to $N_{\text{epochs}}$}
     \State Compute harmonic temporal embeddings $\Phi_{\text{time}}(\Delta t_{ij})$ and tri-band weights $w_{ij}(t)$.
     \State Evaluate context-aware edge trust gates $\mathbf{g}_{ij}$ and filter camouflage links.
@@ -452,10 +455,10 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 \State Construct class-conditional conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$.
 \If{$\Gamma(u) == \{1\}$}
     \State \textbf{Route to Tier 1:} Automated Quarantined Asset Hold \& SAR Draft.
-\ElsIf{$\Gamma(u) == \{0, 1\}$}
-    \State \textbf{Route to Tier 2:} Selective Abstention $\bot \to$ Compliance Officer Review Queue.
-\Else
+\ElsIf{$\Gamma(u) == \{0\}$}
     \State \textbf{Route to Tier 3:} Straight-Through Clear.
+\Else \Comment{Fail-Safe Fallback: $\Gamma(u) \in \{\{0, 1\}, \emptyset\}$}
+    \State \textbf{Route to Tier 2:} Selective Abstention $\bot \to$ Compliance Officer Review Queue.
 \EndIf
 \end{algorithmic}
 \end{algorithm}

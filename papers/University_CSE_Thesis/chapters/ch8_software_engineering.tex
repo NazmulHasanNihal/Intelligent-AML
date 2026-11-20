@@ -72,7 +72,7 @@ The sequence diagram documents the following deterministic execution stages:
 The complete asynchronous FastAPI endpoint implementation is documented in Appendix~\ref{app:operator_manual} (Listing~\ref{app_lst:fastapi_code}).
 
 \section{Per-Module Computational Complexity, Latency, and Memory Footprint}
-To rigorously characterize system scaling under enterprise authorization SLAs, Table~\ref{tab:module_complexity} profiles the algorithmic time complexity, single-event latency, and memory footprint across each discrete module of C-STGB. Single-event Fast-Path production inference ($0.45\,\text{ms}$ P50 / $0.82\,\text{ms}$ P99) is fully CPU-native, executing on commodity enterprise x86-64 or ARM64 server CPUs without requiring dedicated GPU accelerators. Offline training across all 14 networks and high-throughput enterprise burst clusters ($>31,200\,\text{tx/s}$) support optional GPU acceleration (\texttt{nvidia.com/gpu: "1"}).
+To rigorously characterize system scaling under enterprise authorization SLAs, Table~\ref{tab:module_complexity} profiles the algorithmic time complexity, single-event latency, and memory footprint across each discrete module of C-STGB. Single-event Fast-Path production inference ($0.45\,\text{ms}$ P50 / $0.82\,\text{ms}$ P99) is fully CPU-native, executing on commodity enterprise x86-64 or ARM64 server CPUs without requiring dedicated GPU accelerators. Offline training across all 14 networks and high-throughput enterprise burst clusters ($>31,250\,\text{tx/s}$) support optional GPU acceleration.
 
 \begin{table}[htbp]
 \centering
@@ -85,7 +85,7 @@ To rigorously characterize system scaling under enterprise authorization SLAs, T
 \textbf{Pipeline Stage / Component} & \textbf{Algorithmic Complexity} & \textbf{P50 Latency} & \textbf{P99 Latency} & \textbf{Hardware \& Memory Resource Footprint} \\
 \midrule
 1. Ingestion \& Schema Normalization & $\mathcal{O}(|\mathcal{E}_{\text{batch}}|)$ & $0.11\,\text{ms}$ & $0.22\,\text{ms}$ & Zero-copy Apache Arrow table buffer in RAM \\
-2. DuckDB LRU Ego-Graph Fetch & $\mathcal{O}(K \log |\mathcal{V}|)$ & $0.18\,\text{ms}$ & $0.35\,\text{ms}$ & DuckDB memory mapped index ($250\,\text{MB}$ cache) \\
+2. DuckDB LRU Ego-Graph Fetch & $\mathcal{O}(K \log |\mathcal{V}|)$ & $0.18\,\text{ms}$ & $0.35\,\text{ms}$ & DuckDB memory mapped index ($250\,\text{MB}$ cache, 50,000 entities) \\
 3. Continuous Tri-Band Temporal Encoding & $\mathcal{O}(K \cdot d_t)$ & $0.05\,\text{ms}$ & $0.09\,\text{ms}$ & Vectorized PyTorch tensor kernel ($1.2\,\text{MB}$) \\
 4. Context-Aware Edge Trust Gating & $\mathcal{O}(K \cdot d)$ & $0.04\,\text{ms}$ & $0.07\,\text{ms}$ & MLP linear layer ($64 \times 32$ weights on GPU) \\
 5. Spatio-Temporal GNN Attention & $\mathcal{O}(K \cdot d^2)$ & $0.12\,\text{ms}$ & $0.21\,\text{ms}$ & PyG SparseTensor message passing ($12.5\,\text{MB}$) \\

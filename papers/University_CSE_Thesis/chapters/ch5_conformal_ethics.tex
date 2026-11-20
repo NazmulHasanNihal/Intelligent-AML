@@ -126,7 +126,7 @@ With $k_1 = 370$ out of 372, the quantile resides at the 3rd extreme order stati
 \begin{theorem}[ACI Long-Term Average Coverage Guarantee]
 Let $\{\text{err}_t\}_{t=1}^T$ be the binary coverage loss sequence under the ACI update rule $\alpha_{t+1} = \alpha_t + \gamma (\alpha - \text{err}_t)$ with step-size $\gamma > 0$. For any arbitrary, non-stationary data distribution and any bounded horizon $T$:
 \begin{equation}
-\left| \frac{1}{T} \sum_{t=1}^T \text{err}_t - \alpha \right| \le \frac{|\alpha_1 - \alpha_{T+1}|}{\gamma T} \le \frac{1}{\gamma T}
+\left| \frac{1}{T} \sum_{t=1}^T \text{err}_t - \alpha \right| \le \frac{|\alpha_1 - \alpha_{T+1}|}{\gamma T} \le \frac{1 + \gamma}{\gamma T}
 \end{equation}
 \end{theorem}
 \begin{proof}
@@ -138,9 +138,9 @@ Rearranging terms and dividing by $\gamma T$:
 \begin{equation}
 \frac{1}{T} \sum_{t=1}^T \text{err}_t - \alpha = \frac{\alpha_1 - \alpha_{T+1}}{\gamma T}
 \end{equation}
-Since $\alpha_t \in [0, 1]$ for all $t$, the numerator is bounded by $|\alpha_1 - \alpha_{T+1}| \le 1$. Taking the absolute value yields the exact bound:
+Following Gibbs \& Cand\`es~\cite{gibbs2021adaptive} (Lemma 4.1), the unconstrained ACI step can take values outside $[0, 1]$, but is strictly bounded within $[-\gamma, 1 + \gamma]$ when initialized at $\alpha_1 \in [0, 1]$. Therefore, $|\alpha_1 - \alpha_{T+1}| \le 1 + \gamma$. Taking the absolute value yields the finite-sample bound:
 \begin{equation}
-\left| \frac{1}{T} \sum_{t=1}^T \text{err}_t - \alpha \right| \le \frac{1}{\gamma T} \xrightarrow[T \to \infty]{} 0
+\left| \frac{1}{T} \sum_{t=1}^T \text{err}_t - \alpha \right| \le \frac{1 + \gamma}{\gamma T} \xrightarrow[T \to \infty]{} 0
 \end{equation}
 This confirms that the long-term empirical error rate converges asymptotically to the exact nominal risk budget $\alpha$ even under adversarial non-stationary drift.
 \end{proof}
@@ -161,7 +161,7 @@ This confirms that the long-term empirical error rate converges asymptotically t
 \end{figure}
 
 \section{The 3-Tier Selective Abstention Triage Architecture}
-The conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$ produces four possible set outcomes, which are mapped to three deterministic operational compliance tiers:
+The conformal prediction set $\Gamma(u) \subseteq \{0, 1\}$ produces four possible set outcomes, which are mapped to three deterministic operational compliance tiers. Formally, while standard two-class conformal sets yield singletons ($\{0\}$, $\{1\}$), ambiguous sets ($\{0, 1\}$), or empty sets ($\emptyset$), C-STGB implements a fail-safe conservative mapping: any empty prediction set $\Gamma(u) = \emptyset$ (indicating that the entity conforms to neither benign nor known illicit baselines under severe distributional anomaly) is strictly routed to Tier 2 Human Review alongside $\Gamma(u) = \{0, 1\}$, eliminating any possibility of silent fail-open escapes. Note that the volume distributions cited below ($0.18\%$ Tier 1, $0.49\%$ Tier 2, and $99.33\%$ Tier 3) reflect a representative Tier-1 commercial banking transaction stream exemplar with extreme base-rate skew ($\pi \approx 0.18\%$), whereas the cross-benchmark macro-averages across all 14 empirical datasets are reported in Table~\ref{tab:ch7_conformal} ($0.69\%$ Tier 1, $0.57\%$ Tier 2, $98.73\%$ Tier 3, yielding an average $99.43\%$ workload reduction).
 
 \begin{enumerate}
     \item \textbf{Tier 1: High-Confidence Escalation ($\Gamma(u) = \{1\}$)}
@@ -202,13 +202,13 @@ To empirically demonstrate why standard marginal conformal prediction fails unde
 \toprule
 \textbf{Calibration / Conformal Method} & \textbf{Overall Cov.} & \textbf{Benign Cov.} & \textbf{Illicit Cov.} & \textbf{Coverage Deficit} & \textbf{Mean $|\Gamma|$} & \textbf{Empty (\%)} \\
 \midrule
-Uncalibrated Cutoff ($\tau=0.50$) & $91.42\%$ & $99.85\%$ & $90.10\%$ & $-8.90\,\text{pp}$ & $1.000$ & $0.00\%$ \\
-Temperature Scaling~\cite{guo2017calibration} & $94.20\%$ & $99.70\%$ & $92.80\%$ & $-6.20\,\text{pp}$ & $1.000$ & $0.00\%$ \\
-Isotonic Regression~\cite{zadrozny2002transforming} & $96.10\%$ & $99.65\%$ & $94.50\%$ & $-4.50\,\text{pp}$ & $1.000$ & $0.00\%$ \\
-Marginal Conformal~\cite{vovk2005algorithmic} & $99.05\%$ & $99.98\%$ & $82.40\%$ & $-16.60\,\text{pp}$ & $1.001$ & $0.00\%$ \\
+Uncalibrated Cutoff ($\tau=0.50$) & $99.63\%$ & $99.85\%$ & $90.10\%$ & $-8.90\,\text{pp}$ & $1.000$ & $0.00\%$ \\
+Temperature Scaling~\cite{guo2017calibration} & $99.55\%$ & $99.70\%$ & $92.80\%$ & $-6.20\,\text{pp}$ & $1.000$ & $0.00\%$ \\
+Isotonic Regression~\cite{zadrozny2002transforming} & $99.54\%$ & $99.65\%$ & $94.50\%$ & $-4.50\,\text{pp}$ & $1.000$ & $0.00\%$ \\
+Marginal Conformal~\cite{vovk2005algorithmic} & $99.59\%$ & $99.98\%$ & $82.40\%$ & $-16.60\,\text{pp}$ & $1.184$ & $0.00\%$ \\
 \midrule
 \textbf{Class-Conditional CRC (Ours)} & $\mathbf{99.05\%}$ & $\mathbf{99.05\%}$ & $\mathbf{99.12\%}$ & $\mathbf{+0.12\,\text{pp}}$ & $\mathbf{1.005}$ & $\mathbf{0.00\%}$ \\
-\textbf{Streaming Adaptive ACI (Ours)} & $\mathbf{99.04\%}$ & $\mathbf{99.06\%}$ & $\mathbf{99.08\%}$ & $\mathbf{+0.08\,\text{pp}}$ & $\mathbf{1.006}$ & $\mathbf{0.00\%}$ \\
+\textbf{Streaming Adaptive ACI (Ours)} & $\mathbf{99.06\%}$ & $\mathbf{99.06\%}$ & $\mathbf{99.08\%}$ & $\mathbf{+0.08\,\text{pp}}$ & $\mathbf{1.006}$ & $\mathbf{0.00\%}$ \\
 \bottomrule
 \end{tabular}%
 }

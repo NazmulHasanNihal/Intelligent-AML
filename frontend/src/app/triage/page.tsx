@@ -19,14 +19,17 @@ import {
   ArrowUpDown,
   MailQuestion,
   CheckSquare,
-  Square
+  Square,
+  Sliders,
+  ShieldX,
+  UserCheck
 } from 'lucide-react';
-import { useBankingStore } from '@/lib/store';
+import { useAppStore } from '@/lib/store';
 import { SEEDED_ALERTS } from '@/lib/seedData';
 import { PiiText } from '@/components/ui/PiiText';
 
 export default function AlertTriagePage() {
-  const { density, setDensity, setFourEyesModalOpen } = useBankingStore();
+  const { densityMode, setDensityMode, setFourEyesModalOpen, addToast } = useAppStore();
   const [selectedTier, setSelectedTier] = useState<'ALL' | 1 | 2 | 3>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string>>(new Set());
@@ -45,15 +48,15 @@ export default function AlertTriagePage() {
     });
   }, [selectedTier, searchQuery]);
 
-  // Virtualization setup
+  // Virtualization setup connected directly to densityMode
   const parentRef = useRef<HTMLDivElement>(null);
-  const rowHeight = density === 'compact' ? 36 : 48;
+  const rowHeight = densityMode === 'compact' ? 38 : 52;
 
   const rowVirtualizer = useVirtualizer({
     count: filteredAlerts.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => rowHeight,
-    overscan: 10,
+    overscan: 12,
   });
 
   const toggleSelectAll = () => {
@@ -77,71 +80,63 @@ export default function AlertTriagePage() {
   const totalSelectedExposure = selectedAlerts.reduce((sum, a) => sum + a.amount, 0);
 
   return (
-    <div className="p-6 max-w-[1700px] mx-auto space-y-5">
+    <div className="p-4 sm:p-5 lg:p-6 max-w-[1700px] mx-auto space-y-4 sm:space-y-5">
       {/* Header and Controls */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
             <ShieldAlert className="w-5 h-5 text-rose-500" />
-            Alert Triage Queue — Conformal Risk Gating (CRC α=0.01)
+            Alert Triage Queue — Conformal Risk Gating (CRC &alpha;=0.01)
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Institutional high-throughput alert management with class-conditional finite sample coverage guarantees (≥ 99.0%).
+            Institutional high-throughput alert management with class-conditional finite sample coverage guarantees (&ge; 99.0%).
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Density Toggle */}
-          <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155]">
+          {/* Density Mode Sync */}
+          <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
             <button
-              onClick={() => setDensity('compact')}
-              className={`px-2.5 py-1 rounded text-xs font-medium transition-all ${
-                density === 'compact'
+              onClick={() => setDensityMode('compact')}
+              className={`px-2.5 py-1 rounded transition-all cursor-pointer ${
+                densityMode === 'compact'
                   ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Compact (32px)
+              Compact (25+ rows)
             </button>
             <button
-              onClick={() => setDensity('comfortable')}
-              className={`px-2.5 py-1 rounded text-xs font-medium transition-all ${
-                density === 'comfortable'
+              onClick={() => setDensityMode('comfortable')}
+              className={`px-2.5 py-1 rounded transition-all cursor-pointer ${
+                densityMode === 'comfortable'
                   ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Comfortable (44px)
+              Comfortable
             </button>
           </div>
-
-          {/* Export CSV Button */}
-          <button
-            onClick={() => alert('Exporting signed regulatory CSV...')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F172A] hover:bg-[#1E293B] border border-[#334155] text-xs font-medium text-slate-200 transition-colors"
-          >
-            <Download className="w-3.5 h-3.5 text-slate-400" />
-            <span>Export CSV</span>
-          </button>
         </div>
       </div>
 
-      {/* Tabs and Search Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-[#1E293B]">
+      {/* Tabs and Search Controls */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-1 border-b border-[#1E293B]">
+        {/* Tier Filter Tabs */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSelectedTier('ALL')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               selectedTier === 'ALL'
                 ? 'bg-[#1E293B] text-slate-100 border border-[#334155]'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-[#0F172A]'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             All Alerts ({SEEDED_ALERTS.length})
           </button>
           <button
             onClick={() => setSelectedTier(1)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               selectedTier === 1
                 ? 'bg-rose-950/60 text-rose-300 border border-rose-800/60'
                 : 'text-rose-400/80 hover:bg-rose-950/20'
@@ -152,7 +147,7 @@ export default function AlertTriagePage() {
           </button>
           <button
             onClick={() => setSelectedTier(2)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               selectedTier === 2
                 ? 'bg-amber-950/60 text-amber-300 border border-amber-800/60'
                 : 'text-amber-400/80 hover:bg-amber-950/20'
@@ -163,7 +158,7 @@ export default function AlertTriagePage() {
           </button>
           <button
             onClick={() => setSelectedTier(3)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               selectedTier === 3
                 ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60'
                 : 'text-emerald-400/80 hover:bg-emerald-950/20'
@@ -187,172 +182,184 @@ export default function AlertTriagePage() {
         </div>
       </div>
 
-      {/* TanStack Virtualized High-Density Table */}
+      {/* TanStack Virtualized High-Density Table with Overflow Guard */}
       <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
-        {/* Table Header */}
-        <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-semibold text-slate-400 uppercase tracking-wider items-center select-none">
-          <div className="col-span-1 flex items-center gap-2">
-            <button onClick={toggleSelectAll} className="text-slate-400 hover:text-slate-200">
-              {selectedRowIds.size === filteredAlerts.length && filteredAlerts.length > 0 ? (
-                <CheckSquare className="w-4 h-4 text-emerald-400" />
-              ) : (
-                <Square className="w-4 h-4" />
-              )}
-            </button>
-            <span>Alert ID</span>
-          </div>
-          <div className="col-span-3">Entity & Masked Account</div>
-          <div className="col-span-2 text-right">Amount (USD / BDT)</div>
-          <div className="col-span-1">Rail</div>
-          <div className="col-span-1 text-center">CRC Tier</div>
-          <div className="col-span-1 text-center">Conformal Set</div>
-          <div className="col-span-1 text-center">Risk Score</div>
-          <div className="col-span-1 text-center">SLA</div>
-          <div className="col-span-1 text-right">Actions</div>
-        </div>
+        <div className="overflow-x-auto">
+          <div className="min-w-[960px]">
+            {/* Table Header */}
+            <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-semibold text-slate-400 uppercase tracking-wider items-center select-none">
+              <div className="col-span-1 flex items-center gap-2">
+                <button onClick={toggleSelectAll} className="text-slate-400 hover:text-slate-200 cursor-pointer">
+                  {selectedRowIds.size === filteredAlerts.length && filteredAlerts.length > 0 ? (
+                    <CheckSquare className="w-4 h-4 text-emerald-400" />
+                  ) : (
+                    <Square className="w-4 h-4" />
+                  )}
+                </button>
+                <span>Alert ID</span>
+              </div>
+              <div className="col-span-3">Entity & Masked Account</div>
+              <div className="col-span-2 text-right">Amount (USD / BDT)</div>
+              <div className="col-span-1">Rail</div>
+              <div className="col-span-1 text-center">CRC Tier</div>
+              <div className="col-span-1 text-center">Conformal Set</div>
+              <div className="col-span-1 text-center">Risk Score</div>
+              <div className="col-span-1 text-center">SLA</div>
+              <div className="col-span-1 text-right">Actions</div>
+            </div>
 
-        {/* Virtualized Body */}
-        <div
-          ref={parentRef}
-          className="overflow-y-auto max-h-[620px] divide-y divide-[#1E293B]/60"
-        >
-          <div
-            style={{
-              height: `${rowVirtualizer.getTotalSize()}px`,
-              width: '100%',
-              position: 'relative',
-            }}
-          >
-            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-              const alert = filteredAlerts[virtualRow.index];
-              if (!alert) return null;
-              const isSelected = selectedRowIds.has(alert.id);
+            {/* Virtualized Body */}
+            <div
+              ref={parentRef}
+              className="overflow-y-auto max-h-[620px] divide-y divide-[#1E293B]/60"
+            >
+              <div
+                style={{
+                  height: `${rowVirtualizer.getTotalSize()}px`,
+                  width: '100%',
+                  position: 'relative',
+                }}
+              >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                  const alert = filteredAlerts[virtualRow.index];
+                  if (!alert) return null;
+                  const isSelected = selectedRowIds.has(alert.id);
 
-              return (
-                <div
-                  key={alert.id}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: `${virtualRow.size}px`,
-                    transform: `translateY(${virtualRow.start}px)`,
-                  }}
-                  className={`grid grid-cols-12 gap-2 px-4 items-center text-xs transition-colors ${
-                    isSelected ? 'bg-emerald-950/20' : 'hover:bg-[#1E293B]/40'
-                  }`}
-                >
-                  {/* Select + Alert ID */}
-                  <div className="col-span-1 flex items-center gap-2">
-                    <button
-                      onClick={() => toggleSelectRow(alert.id)}
-                      className="text-slate-400 hover:text-slate-200"
-                    >
-                      {isSelected ? (
-                        <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
-                      ) : (
-                        <Square className="w-3.5 h-3.5" />
-                      )}
-                    </button>
-                    <span className="font-mono font-bold text-slate-200 text-[11px] truncate">
-                      {alert.id}
-                    </span>
-                  </div>
-
-                  {/* Entity & Account */}
-                  <div className="col-span-3 truncate">
-                    <div className="font-medium text-slate-100 truncate">{alert.entityName}</div>
-                    <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1.5">
-                      <PiiText value={alert.account} type="account" className="text-slate-400" />
-                      <span>•</span>
-                      <span>BIC: {alert.bic}</span>
-                    </div>
-                  </div>
-
-                  {/* Amount */}
-                  <div className="col-span-2 text-right">
-                    <div className="font-mono font-bold text-slate-100">
-                      ${alert.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                    </div>
-                    <div className="text-[10px] font-mono text-slate-500">
-                      ৳{alert.amountBdt.toLocaleString()}
-                    </div>
-                  </div>
-
-                  {/* Rail */}
-                  <div className="col-span-1 text-[11px] font-mono text-slate-300 truncate">
-                    {alert.rail}
-                  </div>
-
-                  {/* CRC Tier Badge */}
-                  <div className="col-span-1 text-center">
-                    <span
-                      className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
-                        alert.tierCode === 1
-                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                          : alert.tierCode === 2
-                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                          : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                  return (
+                    <div
+                      key={alert.id}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${virtualRow.start}px)`,
+                      }}
+                      className={`grid grid-cols-12 gap-2 px-4 items-center text-xs transition-colors group ${
+                        isSelected ? 'bg-emerald-950/20' : 'hover:bg-[#1E293B]/40'
                       }`}
                     >
-                      Tier {alert.tierCode}
-                    </span>
-                  </div>
+                      {/* Select + Alert ID */}
+                      <div className="col-span-1 flex items-center gap-2">
+                        <button
+                          onClick={() => toggleSelectRow(alert.id)}
+                          className="text-slate-400 hover:text-slate-200 cursor-pointer"
+                        >
+                          {isSelected ? (
+                            <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
+                          ) : (
+                            <Square className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+                        <span className="font-mono font-bold text-slate-200 text-[11px] truncate">
+                          {alert.id}
+                        </span>
+                      </div>
 
-                  {/* Conformal Set */}
-                  <div className="col-span-1 text-center font-mono text-[11px] text-slate-300">
-                    {alert.decisionSet}
-                  </div>
+                      {/* Entity & Account */}
+                      <div className="col-span-3 truncate">
+                        <div className="font-medium text-slate-100 truncate">{alert.entityName}</div>
+                        <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1.5 truncate">
+                          <PiiText value={alert.account} type="account" className="text-slate-400" />
+                          <span>•</span>
+                          <span>BIC: {alert.bic}</span>
+                        </div>
+                      </div>
 
-                  {/* Risk Score */}
-                  <div className="col-span-1 text-center font-mono font-bold text-[11px] text-slate-200">
-                    {alert.riskScore}
-                  </div>
+                      {/* Amount with Tabular-Nums */}
+                      <div className="col-span-2 text-right">
+                        <div className="font-mono font-bold text-slate-100 tabular-nums">
+                          ${alert.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        </div>
+                        <div className="text-[10px] font-mono text-slate-500 tabular-nums">
+                          ৳{alert.amountBdt.toLocaleString()}
+                        </div>
+                      </div>
 
-                  {/* SLA */}
-                  <div className="col-span-1 text-center font-mono text-[10px] text-slate-400">
-                    {alert.slaMinutesLeft}m
-                  </div>
+                      {/* Rail */}
+                      <div className="col-span-1 text-[11px] font-mono text-slate-300 truncate">
+                        {alert.rail}
+                      </div>
 
-                  {/* Actions */}
-                  <div className="col-span-1 flex items-center justify-end gap-1.5">
-                    <Link
-                      href={`/graph?node=${encodeURIComponent(alert.account)}`}
-                      title="Inspect Ego-Graph"
-                      className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 transition-colors"
-                    >
-                      <GitFork className="w-3.5 h-3.5" />
-                    </Link>
-                    <Link
-                      href={`/cases/${alert.caseId}`}
-                      title="Open Case File"
-                      className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 transition-colors"
-                    >
-                      <FileText className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+                      {/* CRC Tier Badge with Left-Border Risk Accent */}
+                      <div className="col-span-1 text-center">
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold whitespace-nowrap border-l-2 ${
+                            alert.tierCode === 1
+                              ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30 border-l-rose-500'
+                              : alert.tierCode === 2
+                              ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30 border-l-amber-500'
+                              : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 border-l-emerald-500'
+                          }`}
+                        >
+                          Tier {alert.tierCode}
+                        </span>
+                      </div>
+
+                      {/* Explicit Conformal Prediction Set */}
+                      <div className="col-span-1 text-center font-mono text-[11px]">
+                        <span className={
+                          alert.tierCode === 1
+                            ? 'text-rose-400 font-bold'
+                            : alert.tierCode === 2
+                            ? 'text-amber-400 font-bold'
+                            : 'text-emerald-400'
+                        }>
+                          {alert.decisionSet || (alert.tierCode === 1 ? 'Γ = {1}' : alert.tierCode === 2 ? 'Γ = {0, 1}' : 'Γ = {0}')}
+                        </span>
+                      </div>
+
+                      {/* Calibrated Risk Score */}
+                      <div className="col-span-1 text-center font-mono font-bold text-[11px] text-slate-200 tabular-nums">
+                        {alert.riskScore}
+                      </div>
+
+                      {/* SLA Countdown */}
+                      <div className="col-span-1 text-center font-mono text-[10px] text-slate-400 tabular-nums">
+                        {alert.slaMinutesLeft}m
+                      </div>
+
+                      {/* Right-Aligned Fixed Action Buttons */}
+                      <div className="col-span-1 flex items-center justify-end gap-1.5">
+                        <Link
+                          href={`/graph?node=${encodeURIComponent(alert.account)}`}
+                          title="Inspect Ego-Graph"
+                          className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 transition-colors"
+                        >
+                          <GitFork className="w-3.5 h-3.5" />
+                        </Link>
+                        <Link
+                          href={`/cases/${alert.caseId}`}
+                          title="Open Case Dossier"
+                          className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 transition-colors"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Sticky Floating Bulk Action Drawer */}
       {selectedRowIds.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#0F172A] border border-[#334155] shadow-2xl rounded-2xl px-6 py-3 flex items-center gap-6 text-xs text-slate-200 animate-in slide-in-from-bottom duration-200">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#0F172A] border border-[#334155] shadow-2xl rounded-2xl px-5 sm:px-6 py-3 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-200 animate-in slide-in-from-bottom duration-200">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-semibold text-slate-100">
               {selectedRowIds.size} Alerts Selected
             </span>
-            <span className="text-slate-400">
-              (Total Exposure: <strong className="font-mono text-emerald-400">${totalSelectedExposure.toLocaleString()}</strong>)
+            <span className="text-slate-400 hidden sm:inline">
+              (Total Exposure: <strong className="font-mono text-emerald-400 tabular-nums">${totalSelectedExposure.toLocaleString()}</strong>)
             </span>
           </div>
 
-          <div className="h-4 w-px bg-[#334155]" />
+          <div className="h-4 w-px bg-[#334155] hidden sm:block" />
 
           <div className="flex items-center gap-2">
             <button
@@ -364,10 +371,10 @@ export default function AlertTriagePage() {
                   details: `Execute batch escalation and SAR filing for selected alerts. Total exposure: $${totalSelectedExposure.toLocaleString()}`
                 });
               }}
-              className="px-3 py-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 font-semibold transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <AlertTriangle className="w-3.5 h-3.5" />
-              <span>Batch 4-Eyes Escalate</span>
+              <span>4-Eyes Escalate</span>
             </button>
 
             <Link
@@ -375,12 +382,12 @@ export default function AlertTriagePage() {
               className="px-3 py-1.5 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium transition-colors flex items-center gap-1.5"
             >
               <MailQuestion className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Initiate Batch RFI</span>
+              <span>Initiate RFI</span>
             </Link>
 
             <button
               onClick={() => setSelectedRowIds(new Set())}
-              className="px-2.5 py-1.5 text-slate-400 hover:text-slate-200"
+              className="px-2.5 py-1.5 text-slate-400 hover:text-slate-200 cursor-pointer"
             >
               Clear
             </button>

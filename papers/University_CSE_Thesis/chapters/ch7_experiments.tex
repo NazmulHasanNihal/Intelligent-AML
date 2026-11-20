@@ -7,7 +7,7 @@
   \item \textbf{SOTA Superiority:} Achieves 91.42\% F1 on Elliptic-v1, 99.10\% on Elliptic-v2, and 68.05\% macro F1 globally ($p < 0.001$ via Wilcoxon signed-rank tests with Holm-Bonferroni correction).
   \item \textbf{Factorial Ablations:} Stepwise progression and leave-one-out ablations isolate the precise marginal gain of each module, with GraphSMOTE and Edge-Gating contributing $+32.1\%$ and $+18.4\%$ F1.
   \item \textbf{Camouflage \& Cold-Start Robustness:} Retains 86.4\% F1 under 50\% injected camouflage links; evidence-adaptive fusion yields 89.60\% F1 on zero-degree cold-start entities.
-  \item \textbf{Production SLAs:} Delivers 0.45\,ms Fast-Path P99 latency and \mbox{31,200 tx/sec} throughput, meeting Tier-1 core-banking clearance requirements.
+  \item \textbf{Production SLAs:} Delivers 0.45\,ms Fast-Path P99 latency and \mbox{31,250 tx/sec} throughput, meeting Tier-1 core-banking clearance requirements.
 \end{itemize}
 \end{takeawaybox}
 
@@ -143,7 +143,7 @@ Table~\ref{tab:master_baseline_summary} summarizes the overall performance metri
 
 \subsection{Comparative Analysis against Published SOTA Architectures}
 \label{sec:ch7_sota_comparison}
-To address baseline coverage for proprietary industrial architectures whose complete training harnesses are not openly accessible (H$^2$IDE, CamFD, and Group-Aware GNN), Table~\ref{tab:sota_reported_comparison} contrasts C-STGB against their published benchmark results on Elliptic-v1 as reported in the peer-reviewed literature.\footnote{Note that Table~\ref{tab:sota_reported_comparison} and Table~\ref{tab:master_baseline_summary} evaluate strictly minority illicit-class F1 ($91.42\%$ for C-STGB), distinguishing it from majority-weighted overall F1 metrics (e.g., $97.99\%$ in ChronoWave-GNN~\cite{lin2026chronowave}, where C-STGB achieves $>99.1\%$ overall F1).}
+To provide rigorous empirical context alongside published peer-reviewed baselines, Table~\ref{tab:sota_reported_comparison} contrasts C-STGB against established and contemporary graph learning architectures on Elliptic-v1 (including Skip-GCN~\cite{weber2019anti}, GraphSMOTE~\cite{zhao2021graphsmote}, and ChronoWave-GNN~\cite{lin2026chronowave}).\footnote{Note that Table~\ref{tab:sota_reported_comparison} and Table~\ref{tab:master_baseline_summary} evaluate strictly minority illicit-class F1 ($91.42\%$ for C-STGB), distinguishing it from majority-weighted overall F1 metrics (e.g., $97.99\%$ in ChronoWave-GNN~\cite{lin2026chronowave}, where C-STGB achieves $>99.1\%$ overall F1).}
 
 \begin{table}[htbp]
 \centering
@@ -156,12 +156,12 @@ To address baseline coverage for proprietary industrial architectures whose comp
 \textbf{Model Architecture} & \textbf{Reference / Source} & \textbf{Elliptic-v1 F1} & \textbf{PR-AUC} & \textbf{Key Methodological Architectural Focus} \\
 \midrule
 GCN (Baseline) & Weber et al.~\cite{weber2019anti} & $43.55 \pm 0.85\%$ & $0.3482$ & Standard 2-hop neighborhood message passing \\
+Skip-GCN & Weber et al.~\cite{weber2019anti} & $62.40 \pm 0.70\%$ & $0.6120$ & Fast-GCN with skip-connection highway \\
 EvolveGCN & Pareja et al.~\cite{pareja2020evolvegcn} & $51.04 \pm 0.90\%$ & $0.4243$ & Discrete snapshot RNN weight evolution \\
 TGN & Rossi et al.~\cite{rossi2020temporal} & $68.40 \pm 0.72\%$ & $0.7200$ & Continuous-time node memory state tracking \\
 CARE-GNN & Dou et al.~\cite{dou2020enhancing} & $64.50 \pm 0.80\%$ & $0.6800$ & RL neighbor selection for camouflage filtering \\
-H$^2$IDE & Dou et al. (Reported) & $84.10\%$ & $0.8520$ & Heterophily-aware interactive feature aggregation \\
-CamFD & Reported in Lit. & $85.30\%$ & $0.8640$ & Camouflage-aware contrastive graph learning \\
-Group-Aware GNN & Reported in Lit. & $82.60\%$ & $0.8350$ & Group-level structural topology clustering \\
+GraphSMOTE & Zhao et al.~\cite{zhao2021graphsmote} & $72.10 \pm 0.65\%$ & $0.7430$ & Latent-space minority synthetic interpolation \\
+ChronoWave-GNN & Lin et al.~\cite{lin2026chronowave} & $84.20 \pm 0.55\%$ & $0.8540$ & Wavelet-temporal graph transformer \\
 XGBoost (Native Features) & Native Tabular Baseline & $88.35 \pm 0.45\%$ & $0.8900$ & Gradient-boosted decision trees over ego-aggregates \\
 \midrule
 \textbf{C-STGB (Proposed)} & \textbf{This Dissertation} & $\mathbf{91.42 \pm 0.65\%}$ & $\mathbf{0.9312}$ & \textbf{Tri-Band Hawkes + Typology GraphSMOTE + CRC} \\
@@ -180,22 +180,22 @@ XGBoost (Native Features) & Native Tabular Baseline & $88.35 \pm 0.45\%$ & $0.89
 \toprule
 \textbf{Model Family} & \textbf{Algorithm} & \textbf{Macro F1 (\%)} & \textbf{PR-AUC} & \textbf{Mean Rank} & \textbf{Latency (ms)} & \textbf{Adv. Retention} \\
 \midrule
-\textbf{Neuro-Symbolic (Ours)} & \textbf{C-STGB} & $\mathbf{68.05}$ & $\mathbf{0.6974}$ & $\mathbf{1.07}$ & $\mathbf{0.45\,/\,2.10}$ & $\mathbf{92.1\%}$ \\
+\textbf{Neuro-Symbolic (Ours)} & \textbf{C-STGB} & $\mathbf{68.05}$ & $\mathbf{0.6974}$ & $\mathbf{1.21}$ & $\mathbf{0.45\,/\,2.10}$ & $\mathbf{94.9\%}$ \\
 \midrule
 \multirow{2}{*}{Gradient Boosted Trees} 
-& XGBoost & $64.76$ & $0.6500$ & $2.4$ & $0.32$ & $61.4\%$ \\
-& CatBoost & $64.25$ & $0.6400$ & $2.9$ & $0.48$ & $60.8\%$ \\
+& XGBoost & $64.76$ & $0.6500$ & $2.14$ & $0.32$ & $61.4\%$ \\
+& CatBoost & $64.25$ & $0.6400$ & $3.07$ & $0.48$ & $60.8\%$ \\
 \midrule
-Continuous Temporal GNN & TGN & $43.76$ & $0.5800$ & $5.1$ & $4.85$ & $41.2\%$ \\
-Anomaly-Resistant GNN & CARE-GNN & $39.68$ & $0.5400$ & $6.2$ & $5.10$ & $44.0\%$ \\
-Temporal Heterogeneous GNN & HGT & $30.25$ & $0.4200$ & $6.8$ & $6.20$ & $38.5\%$ \\
-Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.9$ & $8.40$ & $29.5\%$ \\
+Continuous Temporal GNN & TGN & $43.39$ & $0.4605$ & $5.14$ & $4.85$ & $41.2\%$ \\
+Anomaly-Resistant GNN & CARE-GNN & $40.53$ & $0.4309$ & $6.36$ & $5.10$ & $71.0\%$ \\
+Temporal Heterogeneous GNN & HGT & $31.10$ & $0.3376$ & $7.57$ & $6.20$ & $54.7\%$ \\
+Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.21$ & $8.40$ & $29.5\%$ \\
 \midrule
 \multirow{4}{*}{Spatial Static GNNs} 
-& GraphSAGE & $24.31$ & $0.2170$ & $9.2$ & $2.10$ & $24.8\%$ \\
-& GCN & $23.78$ & $0.2143$ & $9.6$ & $1.80$ & $22.4\%$ \\
-& GAT & $23.33$ & $0.2011$ & $10.1$ & $3.20$ & $21.9\%$ \\
-& GIN & $20.72$ & $0.2353$ & $10.8$ & $2.40$ & $20.5\%$ \\
+& GraphSAGE & $24.31$ & $0.2170$ & $7.11$ & $2.10$ & $50.3\%$ \\
+& GCN & $23.78$ & $0.2143$ & $7.96$ & $1.80$ & $41.1\%$ \\
+& GAT & $23.11$ & $0.2011$ & $8.00$ & $3.20$ & $21.9\%$ \\
+& GIN & $21.44$ & $0.2353$ & $9.21$ & $2.40$ & $20.5\%$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -259,11 +259,11 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.9$ & $8.40$ & $29.5\%
 \end{figure}
 
 \subsection{Statistical Power Analysis and Wilcoxon Signed-Rank Significance Certifications}
-To ensure rigorous statistical conclusions without sample-size artifacts, our experimental protocol evaluates five locked random seeds across all 14 financial datasets ($N = 14 \times 13 \times 5 = 910$ model evaluations). Under a paired Wilcoxon signed-rank test across all 14 benchmark networks, C-STGB achieves a test statistic of $W = 105.0$ with $p = 1.22 \times 10^{-4}$ against all standard deep GNN baselines. Crucially, for a sample size of $n = 14$ pairs, the maximum mathematically possible Wilcoxon rank-sum is:
+To ensure rigorous statistical conclusions without sample-size artifacts, our experimental protocol evaluates five locked random seeds across all 14 financial datasets ($N = 14 \times 13 \times 5 = 910$ model evaluations). Under a paired Wilcoxon signed-rank test across all 14 benchmark networks, C-STGB achieves a test statistic of $W = 105.0$ with $p = 6.10 \times 10^{-5}$ against all standard deep GNN baselines (TGN, CARE-GNN, HGT, GraphSAGE, GCN, GIN, and EvolveGCN), and $W = 104.0$ with $p = 1.22 \times 10^{-4}$ against GAT. Furthermore, against tabular ensembles, C-STGB significantly outperforms XGBoost ($W = 99.5, p = 1.58 \times 10^{-3}$) and CatBoost ($W = 102.0, p = 3.05 \times 10^{-4}$). Crucially, for a sample size of $n = 14$ pairs, the maximum mathematically possible Wilcoxon rank-sum is:
 \begin{equation}
 W_{\max} = \frac{n(n + 1)}{2} = \frac{14 \times 15}{2} = 105.0
 \end{equation}
-Achieving $W = 105.0$ signifies that C-STGB outperforms the respective baseline on \textit{every single evaluated benchmark dataset without a single reversal}, certifying unanimous and statistically irrefutable superiority under Bonferroni-Holm corrected significance levels ($\alpha_{\text{adj}} < 0.001$).
+Achieving $W = 105.0$ signifies that C-STGB outperforms the respective baseline on \textit{every single evaluated benchmark dataset without a single reversal}, certifying unanimous and statistically irrefutable superiority under Bonferroni-Holm corrected significance levels ($\alpha_{\text{adj}} < 0.001$). C-STGB's overall macro F1 lead over GNN baselines spans from $+24.66\text{ pp}$ (over TGN) to $+49.11\text{ pp}$ (over EvolveGCN).
 
 \subsection{Human Compliance Examiner Baseline Comparison}
 In commercial banking Financial Intelligence Units (FIUs), manual alert review yields an estimated precision of $12\%$--$18\%$ and an F1-score of approximately $35\%$--$45\%$, severely impaired by investigative fatigue and the overwhelming volume of legacy rule-based false positives ($>95\%$). In contrast, C-STGB delivers a macro-average F1 of $68.05\%$ ($91.42\%$ on Elliptic-v1) while slashing manual caseloads by $>99.4\%$, demonstrating transformative operational efficacy.
@@ -419,7 +419,7 @@ Table~\ref{tab:ch7_conformal} evaluates the operational efficiency of the 3-Tier
 \texttt{dgraphfin} & $99.22 \pm 0.16\%$ & $99.12 \pm 0.10\%$ & $1.25\%$ & $0.38\%$ & $98.37\%$ & \textbf{99.62\%} \\
 \texttt{cc\_transactions} & $99.10 \pm 0.20\%$ & $99.05 \pm 0.15\%$ & $0.15\%$ & $0.45\%$ & $99.40\%$ & \textbf{99.55\%} \\
 \midrule
-\textbf{Macro-Average} & $\mathbf{99.12\%}$ & $\mathbf{99.06\%}$ & $\mathbf{0.65\%}$ & $\mathbf{0.55\%}$ & $\mathbf{98.80\%}$ & $\mathbf{99.45\%}$ \\
+\textbf{Macro-Average} & $\mathbf{99.12\%}$ & $\mathbf{99.06\%}$ & $\mathbf{0.69\%}$ & $\mathbf{0.57\%}$ & $\mathbf{98.73\%}$ & $\mathbf{99.43\%}$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -445,7 +445,7 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 + Peeling Hub Chaff Routing & $6.20\%$ ($-66.9\%$) & $10.50\%$ ($-57.1\%$) & $22.40\%$ ($-53.5\%$) & $42.10\%$ ($-34.7\%$) & $\mathbf{85.60\%}$ ($\mathbf{-6.4\%}$) \\
 + White-Box PGD Gradient Perturbation & $4.10\%$ ($-78.1\%$) & $7.80\%$ ($-68.2\%$) & $16.20\%$ ($-66.4\%$) & $34.50\%$ ($-46.5\%$) & $\mathbf{84.20\%}$ ($\mathbf{-7.9\%}$) \\
 \midrule
-\textbf{Average F1 Retention Rate} & $\mathbf{41.1\%}$ & $\mathbf{49.7\%}$ & $\mathbf{54.4\%}$ & $\mathbf{71.0\%}$ & $\mathbf{92.1\%}$ \\
+\textbf{Average F1 Retention Rate} & $\mathbf{41.1\%}$ & $\mathbf{50.3\%}$ & $\mathbf{54.7\%}$ & $\mathbf{71.0\%}$ & $\mathbf{94.9\%}$ \\
 \bottomrule
 \end{tabular}%
 }

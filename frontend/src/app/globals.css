@@ -39,25 +39,25 @@
 /* Light Mode Overrides (Federal Banknote) */
 [data-theme='light'],
 .light {
-  --color-canvas: #F4F7F5;
-  --color-panel: #FFFFFF;
-  --color-panel-raised: #EAEFEA;
-  --color-panel-border: #D6E0DA;
-  --color-panel-border-subtle: #E2EAE5;
+  --color-canvas: #E9EFEA;
+  --color-panel: #EEF3EE;
+  --color-panel-raised: #E2EAE5;
+  --color-panel-border: #C8D6CD;
+  --color-panel-border-subtle: #D6E2DA;
 
   --color-text-primary: #0F172A;
-  --color-text-secondary: #334155;
-  --color-text-muted: #64748B;
-  --color-text-dim: #94A3B8;
+  --color-text-secondary: #1E293B;
+  --color-text-muted: #475569;
+  --color-text-dim: #64748B;
 
-  --color-tier1-crimson-bg: #FEF2F2;
-  --color-tier1-crimson-border: #FCA5A5;
+  --color-tier1-crimson-bg: #FEE2E2;
+  --color-tier1-crimson-border: #F87171;
 
-  --color-tier2-amber-bg: #FFFBEB;
-  --color-tier2-amber-border: #FDE68A;
+  --color-tier2-amber-bg: #FEF3C7;
+  --color-tier2-amber-border: #FBBF24;
 
-  --color-tier3-emerald-bg: #F0FDF4;
-  --color-tier3-emerald-border: #BBF7D0;
+  --color-tier3-emerald-bg: #DCFCE7;
+  --color-tier3-emerald-border: #86EFAC;
 }
 
 html,

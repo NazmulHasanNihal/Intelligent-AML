@@ -155,23 +155,41 @@ CREATE TABLE high_risk_jurisdictions (
 Listing~\ref{app_lst:duckdb_ego_query} specifies the vectorized analytical SQL kernel executing within the embedded DuckDB columnar engine. The query dynamically evaluates the target transaction context $(u_{\text{eval}}, t_{\text{eval}})$ using zero-copy Apache Arrow memory buffers. It extracts the 2-hop causal ego-graph over a 90-day historical window with sub-millisecond execution latency.
 
 \begin{lstlisting}[language=SQL, caption={Vectorized Causal Ego-Graph Extraction Query.}, label={app_lst:duckdb_ego_query}]
-SELECT 
-    t.source_entity_id,
-    t.target_entity_id,
-    t.amount_usd,
-    t.timestamp_epoch,
-    ( ? - t.timestamp_epoch ) AS delta_time,
+WITH RECURSIVE causal_ego AS (
+    -- Anchor: 1-hop inbound and outbound transactions within lookback window
+    SELECT 
+        tx_id, src_id, dst_id, amount_usd, timestamp_epoch,
+        ( ? - timestamp_epoch ) AS delta_seconds,
+        1 AS hop_depth
+    FROM transactions
+    WHERE (src_id = ? OR dst_id = ?)
+      AND timestamp_epoch <= ?
+      AND timestamp_epoch >= ( ? - 7776000 ) -- 90-day lookback horizon
+    UNION ALL
+    -- Recursive Step: 2-hop causal expansion strictly forward/backward in time
+    SELECT 
+        t.tx_id, t.src_id, t.dst_id, t.amount_usd, t.timestamp_epoch,
+        ( ? - t.timestamp_epoch ) AS delta_seconds,
+        e.hop_depth + 1 AS hop_depth
+    FROM transactions t
+    INNER JOIN causal_ego e ON (
+        (t.src_id = e.dst_id AND t.timestamp_epoch >= e.timestamp_epoch) OR
+        (t.dst_id = e.src_id AND t.timestamp_epoch <= e.timestamp_epoch)
+    )
+    WHERE e.hop_depth < 2
+      AND t.timestamp_epoch <= ?
+      AND t.timestamp_epoch >= ( ? - 7776000 )
+)
+SELECT DISTINCT 
+    ce.tx_id, ce.src_id, ce.dst_id, ce.amount_usd, ce.delta_seconds, ce.hop_depth,
     e_src.kyc_risk_tier AS src_risk,
     e_dst.kyc_risk_tier AS dst_risk,
     j_dst.fatf_status AS dst_jurisdiction_status
-FROM streaming_transactions t
-JOIN entities_master e_src ON t.source_entity_id = e_src.entity_id
-JOIN entities_master e_dst ON t.target_entity_id = e_dst.entity_id
+FROM causal_ego ce
+JOIN entities_master e_src ON ce.src_id = e_src.entity_id
+JOIN entities_master e_dst ON ce.dst_id = e_dst.entity_id
 LEFT JOIN high_risk_jurisdictions j_dst ON e_dst.country_iso = j_dst.country_iso
-WHERE (t.source_entity_id = ? OR t.target_entity_id = ?)
-  AND t.timestamp_epoch <= ?
-  AND t.timestamp_epoch >= ( ? - 7776000 ) -- 90-Day Seasonal Horizon
-ORDER BY t.timestamp_epoch DESC
+ORDER BY ce.delta_seconds ASC
 LIMIT 50;
 \end{lstlisting}
 
@@ -224,8 +242,8 @@ All 13 baseline models and C-STGB were tuned using Tree-structured Parzen Estima
 \textbf{Model} & \textbf{Hyperparameter} & \textbf{Search Space Range} & \textbf{Optimal Setting (Elliptic-v1)} \\
 \midrule
 \multirow{4}{*}{\textbf{C-STGB (Ours)}} & Learning Rate ($\eta$) & $[10^{-4}, 10^{-2}]$ & $1.2 \times 10^{-3}$ \\
-& Edge Trust Floor ($\delta_{\text{floor}}$) & $[0.05, 0.30]$ & $0.10$ \\
-& Latent Typology Clusters ($K$) & $\{2, 4, 8, 12\}$ & $4$ \\
+& Edge Trust Floor ($\delta_{\text{floor}}$) & $[0.02, 0.30]$ & $0.10$ \\
+& Latent Typology Clusters ($K$) & $\{2, 3, 4, 6, 8\}$ & $4$ \\
 & Conformal Significance ($\alpha$) & $[0.005, 0.05]$ & $0.010$ \\
 & Hawkes Base Rate ($\mu_0$) & $[0.1, 5.0]$ & $1.20$ \\
 & Multi-Task Weights ($\gamma_1, \gamma_2$) & $[0.05, 0.50]$ & $\gamma_1=0.50, \gamma_2=0.10$ \\
@@ -276,7 +294,7 @@ Table~\ref{app_tab:master_baseline_results} reports the full multi-baseline benc
 \midrule
 \texttt{cc\_transactions} & $48.20 / 0.4900$ & $47.90 / 0.4800$ & $48.16 / 0.3472$ & $49.24 / 0.3555$ & $45.62 / 0.3441$ & $42.74 / 0.3883$ & $26.50 / 0.3000$ & $34.20 / 0.3800$ & $4.79 / 0.0215$ & $38.20 / 0.4200$ & $\mathbf{56.48 \pm 0.70 / 0.6476}$ \\
 \midrule
-\textbf{Macro-Average} & $64.76 / 0.6500$ & $64.25 / 0.6400$ & $23.78 / 0.2143$ & $24.31 / 0.2170$ & $23.33 / 0.2011$ & $20.72 / 0.2353$ & $30.25 / 0.4200$ & $39.68 / 0.5400$ & $18.94 / 0.1480$ & $43.76 / 0.5800$ & $\mathbf{68.05 / 0.6974}$ \\
+\textbf{Macro-Average} & $64.76 / 0.6500$ & $64.25 / 0.6400$ & $23.78 / 0.2143$ & $24.31 / 0.2170$ & $23.11 / 0.2011$ & $21.44 / 0.2353$ & $31.10 / 0.3376$ & $40.53 / 0.4309$ & $18.94 / 0.1480$ & $43.39 / 0.4605$ & $\mathbf{68.05 / 0.6974}$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -314,7 +332,7 @@ The user interface is structured into dedicated operational desks and governance
     \item \textbf{Algorithmic Recourse \& Customer Remediation Sandbox:} Solves counterfactual feature perturbations to determine the minimal, cost-optimal modifications required for falsely flagged customers to achieve legitimate clearance, guaranteeing statutory compliance with CFPB and FCRA fair lending mandates.
     \item \textbf{Model Governance \& Benchmark Hub (SR 11-7 / SR 21-8):} Hosts immutable SHA-256 Merkle audit receipts, monitors streaming non-conformity Kolmogorov-Smirnov drift statistics, and displays comprehensive comparative benchmarks across all 14 financial networks.
     \item \textbf{Tamper-Evident Cryptographic WORM Audit Vault:} Provides an immutable Merkle tree ledger and verification console for digital evidence records conforming to Federal Rules of Evidence FRE 902(11) and SEC Rule 17a-4.
-    \item \textbf{Operator Explainability \& Plain-English Glossary Portals:} Features a plain-English translation interface and an interactive Jargon Buster dictionary to demystify spat-io-temporal graph neural signals for front-line compliance analysts and non-technical examiners.
+    \item \textbf{Operator Explainability \& Plain-English Glossary Portals:} Features a plain-English translation interface and an interactive Jargon Buster dictionary to demystify spatio-temporal graph neural signals for front-line compliance analysts and non-technical examiners.
 \end{enumerate}
 
 \subsection{Operational Dashboard UI Visualizations}
@@ -432,18 +450,19 @@ class CausalHopSchema(BaseModel):
     edge_trust_gate: float = Field(..., ge=0.0, le=1.0)
 
 class SARDocumentSchema(BaseModel):
-    case_id: str = Field(..., regex=r"^SAR-[0-9]{4}-[A-Z0-9]{8}$")
+    case_id: str = Field(..., pattern=r"^SAR-[0-9]{4}-[A-Z0-9]{8}$")
     filing_timestamp: datetime
     conformal_tier: Literal["Tier_1_Quarantine", "Tier_2_Abstention"]
     predicted_risk_score: float = Field(..., ge=0.0, le=1.0)
     primary_typology: Literal["Smurfing", "CircularWash", "RapidLayering", 
                               "DormantPassThrough", "HubCamouflage"]
     flow_conservation_ratio: float = Field(..., ge=0.0)
-    causal_trajectory: List[CausalHopSchema] = Field(..., min_items=1)
+    causal_trajectory: List[CausalHopSchema] = Field(..., min_length=1)
     merkle_root_hash: str = Field(..., min_length=64, max_length=64)
 
-    @validator("causal_trajectory")
-    def verify_topological_chain_integrity(cls, v):
+    @field_validator("causal_trajectory")
+    @classmethod
+    def verify_topological_chain_integrity(cls, v: List[CausalHopSchema]) -> List[CausalHopSchema]:
         for i in range(len(v) - 1):
             assert v[i].target_entity_id == v[i+1].source_entity_id, \
                 "Disconnected non-causal topological chain detected."
@@ -488,7 +507,7 @@ Listing~\ref{app_lst:fincen_xml_sample} provides the finalized, schema-validated
 
   <Model_Governance_SR11_7_Receipt>
     <MerkleRoot>
-      58094599e6f7d26e4428ee564ffbce1ace404f3424b6eae6daa6f1db23c299e1
+      9c72f16eb2befae4bcf1e1b7cbb510a6a13ba5b4d7a8f0aaee5337609c7ad42b
     </MerkleRoot>
     <SHA256Proof Algorithm='SHA-256' Validated='true'/>
     <Timestamp>2026-08-28T14:32:01.452Z</Timestamp>
@@ -515,14 +534,16 @@ async def score_transaction(
     # 2. Execute C-STGB Tensor Inference
     pred_risk, conformal_set = engine.predict_conformal(subgraph)
     
-    # 3. Determine 3-Tier Action
+    # 3. Determine 3-Tier Action (Conservative Fail-Safe Routing)
     if conformal_set == {1}:
         action = TriageAction.TIER1_QUARANTINE
         asyncio.create_task(engine.dispatch_sar_agent_swarm(tx, subgraph))
-    elif conformal_set == {0, 1}:
-        action = TriageAction.TIER2_ABSTENTION_QUEUE
-    else:
+    elif conformal_set == {0}:
         action = TriageAction.TIER3_AUTO_CLEAR
+    else:
+        # Conservative Fail-Safe: Both ambiguous set {0, 1} AND empty set set()
+        # are routed to Tier 2 Human Compliance Officer Review
+        action = TriageAction.TIER2_ABSTENTION_QUEUE
         
     latency_ms = (time.perf_counter() - start_time) * 1000.0
     return TriageResponse(
@@ -539,19 +560,34 @@ async def score_transaction(
 Listings~\ref{app_lst:dockerfile} and~\ref{app_lst:k8s_deployment} detail the production containerization and orchestration manifests.
 
 \begin{lstlisting}[caption={Multi-Stage Production Dockerfile for C-STGB Platform.}, label={app_lst:dockerfile}]
-FROM python:3.11-slim
+# Stage 1: Build & Dependencies
+FROM python:3.11-slim AS builder
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PIP_NO_CACHE_DIR=1
-WORKDIR /app
+WORKDIR /build
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential curl git libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt pyproject.toml ./
-RUN pip install --upgrade pip setuptools wheel && \
-    pip install -r requirements.txt && pip install -e .
-COPY src/ ./src/
-COPY configs/ ./configs/
-ENTRYPOINT ["intelligent-aml"]
-CMD ["demo"]
+RUN pip install --user --no-warn-script-location -r requirements.txt
+
+# Stage 2: Hardened Non-Root Distroless-Style Runtime
+FROM python:3.11-slim AS runner
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PATH="/home/amlapp/.local/bin:${PATH}"
+RUN groupadd -g 10001 amlgroup && \
+    useradd -u 10001 -g amlgroup -s /bin/bash -m amlapp && \
+    apt-get update && apt-get install -y --no-install-recommends libgomp1 curl && \
+    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY --from=builder --chown=amlapp:amlgroup /root/.local /home/amlapp/.local
+COPY --chown=amlapp:amlgroup src/ ./src/
+COPY --chown=amlapp:amlgroup configs/ ./configs/
+COPY --chown=amlapp:amlgroup pyproject.toml ./
+RUN pip install --no-deps -e .
+USER 10001:10001
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+ENTRYPOINT ["uvicorn", "src.engine.api:app", "--host", "0.0.0.0", "--port", "8000"]
 \end{lstlisting}
 
 \clearpage
@@ -571,14 +607,23 @@ spec:
       labels:
         app: cstgb-inference
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
       containers:
       - name: inference-worker
         image: intelligent-aml/cstgb:v1.0.0
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
         resources:
           limits:
             cpu: "8"
             memory: "16Gi"
-            nvidia.com/gpu: "1"
           requests:
             cpu: "4"
             memory: "8Gi"
@@ -591,6 +636,18 @@ spec:
           value: "0.01"
         - name: DUCKDB_THREADS
           value: "8"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler

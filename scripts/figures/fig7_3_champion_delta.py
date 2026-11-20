@@ -59,7 +59,7 @@ def generate():
     badges = [
         {
             "header": "GLOBAL MEAN RANK",
-            "val": "1.07",
+            "val": "1.21",
             "sub": "Outperforms all 10 baseline\nfamilies across 14 networks",
             "border": COLOR_INGEST, "bg": COLOR_INGEST_BG
         },
@@ -71,8 +71,8 @@ def generate():
         },
         {
             "header": "WORKLOAD SLASHING",
-            "val": "-99.51%",
-            "sub": "Only 49 of 10,000 alerts\nrouted to human review",
+            "val": "-99.43%",
+            "sub": "Cross-benchmark macro mean\n(99.51% on live stream)",
             "border": COLOR_SAFE, "bg": COLOR_SAFE_BG
         },
         {

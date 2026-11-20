@@ -70,26 +70,31 @@ To eliminate Large Language Model (LLM) entity hallucinations (e.g., inventing f
 All generated narratives must strictly conform to the formal grammar formalized in Listing~\ref{lst:sar_ebnf}:
 
 \begin{lstlisting}[caption={Extended Backus-Naur Form (EBNF) Grammar for Deterministic SAR Generation ($\mathcal{G}_{\text{SAR}}$).}, label={lst:sar_ebnf}]
-SAR_Document       ::= Header SubjectSection ActivitySection 
-                       EvidenceSection AuditTrailer
-Header             ::= "<SAR_Form111" " Version='2.0'>" 
-                       FilingInstitution FilingTimestamp CaseID "</SAR_Form111>"
-SubjectSection     ::= "<Subjects>" Subject+ "</Subjects>"
-Subject            ::= "<Subject" " ID='" EntityID "'>" IdentityType 
-                       RiskScore ConformalTier Jurisdiction "</Subject>"
-ActivitySection    ::= "<SuspiciousActivity>" PrimaryTypology AggregatedAmount 
-                       TemporalSpan NarrativeSummary "</SuspiciousActivity>"
-PrimaryTypology    ::= "Smurfing" | "CircularWash" | "RapidLayering" 
+SAR_Document       ::= "<SAR_Form111 Version='2.0' Standard='BSA_AML_FinCEN'>"
+                       FilingHeader SubjectEntity CampaignSummary
+                       TopologicalEvidence ModelGovernance "</SAR_Form111>"
+FilingHeader       ::= "<FilingHeader>" CaseID FilingInstitution Jurisdiction 
+                       Timestamp FilingStatus "</FilingHeader>"
+SubjectEntity      ::= "<SubjectEntity>" EntityID RiskScore ConformalTier 
+                       PrimaryTypology FlowConservation "</SubjectEntity>"
+PrimaryTypology    ::= "Smurfing_FanOut_Wash" | "CircularWash" | "RapidLayering" 
                        | "DormantPassThrough" | "HubCamouflage"
-EvidenceSection    ::= "<TopologicalEvidence>" SubgraphRoot CausalChain+ 
-                       FlowConservation HawkesIntensity "</TopologicalEvidence>"
-CausalChain        ::= "<Hop" " Seq='" Integer "'>" SourceNode "-->" TargetNode 
-                       Amount Timestamp EdgeTrust "</Hop>"
-FlowConservation   ::= "<FlowConservation" " Inflow='" Real "' Outflow='" Real 
-                       "' Ratio='" Real "/>"
-AuditTrailer       ::= "<Fed_SR11_7_Receipt>" MerkleRoot SHA256Proof Timestamp 
-                       "</Fed_SR11_7_Receipt>"
+CampaignSummary    ::= "<CampaignSummary" " TotalHops='" Integer 
+                       "' AggregatedAmount='" Decimal "' StructuringThreshold='" Decimal 
+                       "' WindowMinutes='" Integer "'/>"
+TopologicalEvidence ::= "<TopologicalEvidence" " SubgraphNodes='" Integer 
+                        "' SubgraphEdges='" Integer "'>" CausalChain "</TopologicalEvidence>"
+CausalChain        ::= "<CausalChain" " Hops='" Integer "' ExemplarPathAmount='" Decimal "'>" 
+                       Hop+ "</CausalChain>"
+Hop                ::= "<Hop Seq='" Integer "' Src='" EntityID "' Dst='" EntityID 
+                       "' Amount='" Decimal "' Timestamp='" TimeString 
+                       "' EdgeTrust='" Decimal "'/>"
+ModelGovernance    ::= "<Model_Governance_SR11_7_Receipt>" MerkleRoot 
+                       SHA256Proof Timestamp "</Model_Governance_SR11_7_Receipt>"
+MerkleRoot         ::= "<MerkleRoot>" Hex64 "</MerkleRoot>"
+SHA256Proof        ::= "<SHA256Proof Algorithm='SHA-256' Validated='true'/>"
 EntityID           ::= [a-zA-Z0-9_]{1,64}
+Hex64              ::= [a-f0-9]{64}
 \end{lstlisting}
 
 \subsection{Pydantic Runtime Schema Specification ($\mathcal{S}_{\text{AML}}$)}

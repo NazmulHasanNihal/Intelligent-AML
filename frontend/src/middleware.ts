@@ -6,9 +6,14 @@ export function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   
   // Construct Strict Air-Gap Production CSP (Zero Remote CDN Egress)
+  const isDev = process.env.NODE_ENV !== 'production';
+  const scriptSrc = isDev
+    ? `'self' 'unsafe-eval' 'unsafe-inline'`
+    : `'self' 'nonce-${nonce}' 'strict-dynamic'`;
+
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    script-src ${scriptSrc};
     style-src 'self' 'unsafe-inline';
     img-src 'self' data: blob:;
     font-src 'self' data:;

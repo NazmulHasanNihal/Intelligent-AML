@@ -18,7 +18,10 @@ if exist ".\.venv\Scripts\python.exe" (
     start "Intelligent-AML Backend" cmd /k "python -m uvicorn src.engine.api:app --host 127.0.0.1 --port 8000 --reload"
 )
 
-echo [2/2] Launching React 18 + Vite Web Dashboard (Port 3000)...
+echo [2/2] Launching React 18 / Next.js Web Dashboard (Port 3000)...
+if exist "%APPDATA%\fnm\node-versions\v26.13.1\installation" (
+    set "PATH=%APPDATA%\fnm\node-versions\v26.13.1\installation;%PATH%"
+)
 cd frontend
 start "Intelligent-AML Frontend" cmd /k "npm run dev"
 cd ..

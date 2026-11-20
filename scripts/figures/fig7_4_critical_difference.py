@@ -28,11 +28,11 @@ def generate():
     # SUBPLOT (A): CRITICAL DIFFERENCE (CD) RANK SPECTRUM (DEMSAR 2006)
     # =========================================================================
     ax_cd.axis("off")
-    ax_cd.set_xlim(0.4, 8.6)
+    ax_cd.set_xlim(0.4, 9.6)
     ax_cd.set_ylim(-0.15, 1.15)
 
     # Title
-    ax_cd.text(4.5, 1.12, "(a) Critical Difference Rank Spectrum (Wilcoxon-Holm)",
+    ax_cd.text(5.0, 1.12, "(a) Critical Difference Rank Spectrum (Wilcoxon-Holm)",
                ha="center", va="center", fontsize=9.0, weight="bold", color=COLOR_DARK)
 
     # Critical Difference Caliper at top
@@ -45,37 +45,31 @@ def generate():
                ha="center", va="bottom", fontsize=6.8, weight="bold", color=COLOR_RISK)
 
     # Main Horizontal Rank Axis (y = 0.50)
-    ax_cd.plot([1.0, 8.0], [0.50, 0.50], color=COLOR_DARK, lw=2.0, zorder=2)
+    ax_cd.plot([1.0, 9.0], [0.50, 0.50], color=COLOR_DARK, lw=2.0, zorder=2)
 
     # Rank Ticks and Numbers
-    for r in range(1, 9):
+    for r in range(1, 10):
         ax_cd.plot([r, r], [0.47, 0.53], color=COLOR_DARK, lw=1.2, zorder=3)
-        tick_label = f"{r} (Best)" if r == 1 else (f"{r} (Worst)" if r == 8 else f"{r}")
+        tick_label = f"{r} (Best)" if r == 1 else (f"{r} (Worst)" if r == 9 else f"{r}")
         ax_cd.text(r, 0.42, tick_label, ha="center", va="top", fontsize=6.4, weight="bold", color=COLOR_DARK)
 
-    # Multi-tier staggered layout to eliminate all overlaps:
-    # Top Tier 1: y = 0.82 (C-STGB 1.07, GraphSAGE 6.86)
-    # Top Tier 2: y = 0.68 (CatBoost 2.79, CARE-GNN 5.14)
-    # Bottom Tier 1: y = 0.28 (XGBoost 2.43, TGN 4.21)
-    # Bottom Tier 2: y = 0.14 (GCN 6.71, EvolveGCN 7.79)
     models = [
-        {"name": "C-STGB (Ours)", "rank": 1.07, "tier": "top1", "color": COLOR_SAFE,   "marker": "o", "sz": 65},
-        {"name": "XGBoost",       "rank": 2.43, "tier": "bot1", "color": COLOR_INGEST, "marker": "s", "sz": 45},
-        {"name": "CatBoost",      "rank": 2.79, "tier": "top2", "color": "#1d4ed8",    "marker": "s", "sz": 45},
-        {"name": "TGN",           "rank": 4.21, "tier": "bot1", "color": COLOR_REVIEW, "marker": "D", "sz": 45},
-        {"name": "CARE-GNN",      "rank": 5.14, "tier": "top2", "color": "#ea580c",    "marker": "D", "sz": 45},
-        {"name": "GCN",           "rank": 6.71, "tier": "bot2", "color": COLOR_RISK,   "marker": "^", "sz": 45},
-        {"name": "GraphSAGE",     "rank": 6.86, "tier": "top1", "color": "#991b1b",    "marker": "^", "sz": 45},
-        {"name": "EvolveGCN",     "rank": 7.79, "tier": "bot2", "color": "#7f1d1d",    "marker": "v", "sz": 45},
+        {"name": "C-STGB (Ours)", "rank": 1.21, "tier": "top1", "color": COLOR_SAFE,   "marker": "o", "sz": 65},
+        {"name": "XGBoost",       "rank": 2.14, "tier": "bot1", "color": COLOR_INGEST, "marker": "s", "sz": 45},
+        {"name": "CatBoost",      "rank": 3.07, "tier": "top2", "color": "#1d4ed8",    "marker": "s", "sz": 45},
+        {"name": "TGN",           "rank": 5.14, "tier": "bot1", "color": COLOR_REVIEW, "marker": "D", "sz": 45},
+        {"name": "CARE-GNN",      "rank": 6.36, "tier": "top2", "color": "#ea580c",    "marker": "D", "sz": 45},
+        {"name": "GraphSAGE",     "rank": 7.11, "tier": "bot2", "color": "#991b1b",    "marker": "^", "sz": 45},
+        {"name": "HGT",           "rank": 7.57, "tier": "top1", "color": "#7c3aed",    "marker": "D", "sz": 45},
+        {"name": "GCN",           "rank": 7.96, "tier": "bot1", "color": COLOR_RISK,   "marker": "^", "sz": 45},
+        {"name": "EvolveGCN",     "rank": 8.21, "tier": "bot2", "color": "#7f1d1d",    "marker": "v", "sz": 45},
     ]
 
     # Non-significant clique horizontal bars above axis
-    # Tree clique: XGBoost (2.43) to CatBoost (2.79)
-    ax_cd.plot([2.43, 2.79], [0.55, 0.55], color=COLOR_INGEST, lw=3.2, solid_capstyle="round", zorder=4)
-    # Temporal GNN clique: TGN (4.21) to CARE-GNN (5.14)
-    ax_cd.plot([4.21, 5.14], [0.55, 0.55], color=COLOR_REVIEW, lw=3.2, solid_capstyle="round", zorder=4)
-    # Static GNN clique: GCN (6.71) to EvolveGCN (7.79)
-    ax_cd.plot([6.71, 7.79], [0.55, 0.55], color=COLOR_RISK, lw=3.2, solid_capstyle="round", zorder=4)
+    # Tree clique: XGBoost (2.14) to CatBoost (3.07)
+    ax_cd.plot([2.14, 3.07], [0.55, 0.55], color=COLOR_INGEST, lw=3.2, solid_capstyle="round", zorder=4)
+    # Static GNN clique: GraphSAGE (7.11) to EvolveGCN (8.21)
+    ax_cd.plot([7.11, 8.21], [0.55, 0.55], color=COLOR_RISK, lw=3.2, solid_capstyle="round", zorder=4)
 
     tier_y = {
         "top1": (0.84, 0.77),

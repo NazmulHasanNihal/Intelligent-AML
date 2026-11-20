@@ -65,7 +65,7 @@ def generate():
             "title": "Evidence Artifact 1",
             "type": "Wire Transfer Payload",
             "entity": "Motijheel Corporate Acc",
-            "hash": "SHA-256: 4a2f8c...901e",
+            "hash": "SHA-256: e9011e...583f",
             "fc": COLOR_INGEST_BG, "ec": COLOR_INGEST
         },
         {
@@ -73,7 +73,7 @@ def generate():
             "title": "Evidence Artifact 2",
             "type": "15-Node Subgraph Ring",
             "entity": "Smurfing & Wash Chains",
-            "hash": "SHA-256: 7d1e34...fa82",
+            "hash": "SHA-256: 32961d...d2d0",
             "fc": COLOR_REVIEW_BG, "ec": COLOR_REVIEW
         },
         {
@@ -81,7 +81,7 @@ def generate():
             "title": "Evidence Artifact 3",
             "type": "Model Decision Dossier",
             "entity": "Tier 1 Conformal Quarantine",
-            "hash": "SHA-256: 9b204c...18d5",
+            "hash": "SHA-256: 7e1d34...4e0f",
             "fc": COLOR_RISK_BG, "ec": COLOR_RISK
         },
         {
@@ -89,7 +89,7 @@ def generate():
             "title": "Evidence Artifact 4",
             "type": "Compliance Officer Signoff",
             "entity": "Dual 4-Eyes Governance",
-            "hash": "SHA-256: 3c89aa...44f0",
+            "hash": "SHA-256: bbcc2b...5bd8",
             "fc": COLOR_SAFE_BG, "ec": COLOR_SAFE
         }
     ]
@@ -159,14 +159,14 @@ def generate():
             "cx": 25.5,
             "title": "Left Branch Digest: H(Evidence 1 + 2)",
             "sub": "Binds Transaction Wire to Typology Subgraph",
-            "hash": "Branch Hash: e71a08...bb43",
+            "hash": "Branch Hash: 4dfbe7...b885",
             "ec": COLOR_GNN, "fc": COLOR_GNN_BG
         },
         {
             "cx": 74.5,
             "title": "Right Branch Digest: H(Evidence 3 + 4)",
             "sub": "Binds Model Decision to Human Sign-Off",
-            "hash": "Branch Hash: b82c40...39d1",
+            "hash": "Branch Hash: b48987...31cc",
             "ec": COLOR_GNN, "fc": COLOR_GNN_BG
         }
     ]
@@ -233,7 +233,7 @@ def generate():
                                    facecolor="#ffffff", edgecolor=COLOR_RISK, lw=1.6))
     ax.text(50.0, root_y + root_h - 3.8, "SEALED REGULATORY MERKLE ROOT DIGEST",
             ha="center", va="center", fontsize=8.0, fontweight="bold", color=COLOR_RISK)
-    ax.text(50.0, root_y + root_h - 8.5, "Root Digest: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+    ax.text(50.0, root_y + root_h - 8.5, "Root Digest: 9c72f16eb2befae4bcf1e1b7cbb510a6a13ba5b4d7a8f0aaee5337609c7ad42b",
             ha="center", va="center", fontsize=6.6, fontweight="bold", color=COLOR_DARK,
             bbox=dict(boxstyle="square,pad=0.25", fc="#fee2e2", ec=COLOR_RISK, lw=0.8))
     ax.text(50.0, root_y + 3.2, "Hardware Security Module (HSM) Signed | S3 Object Lock Enforced (7-Year Statutory Hold)",

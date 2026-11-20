@@ -33,8 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen bg-[#0B0F17] text-slate-100 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden">
+    <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable} overflow-x-hidden w-full max-w-full`}>
+      <body className="min-h-screen bg-[#0B0F17] text-slate-100 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden w-full max-w-full">
         {/* Top 56px Institutional Command Bar */}
         <CommandHeader />
 
@@ -43,7 +43,7 @@ export default function RootLayout({
           <NavigationRail />
 
           {/* Main Application Viewport */}
-          <main className="flex-1 min-w-0 bg-[#0B0F17] text-slate-200 overflow-y-auto">
+          <main className="flex-1 min-w-0 bg-[#0B0F17] text-slate-200 overflow-y-auto pb-16 md:pb-0">
             {children}
           </main>
         </div>

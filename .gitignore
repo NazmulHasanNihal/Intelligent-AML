@@ -121,6 +121,7 @@ catboost_info/
 *.xdv
 
 # Debug and temporary files
+UI_AUDIT_*.json
 papers/**/page*.png
 papers/**/debug_pages/
 Real Test Data/

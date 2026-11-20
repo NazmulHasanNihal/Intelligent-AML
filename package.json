@@ -3,13 +3,15 @@
   "version": "3.0.0",
   "private": true,
   "bin": {
-    "vite": "./frontend/bin/vite-compat.cjs"
+    "vite": "./bin/vite"
   },
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
+    "preinstall": "node -e \"const fs=require('fs'); fs.mkdirSync('node_modules/.bin', {recursive:true}); try { fs.copyFileSync('bin/vite', 'node_modules/.bin/vite'); fs.chmodSync('node_modules/.bin/vite', 0o755); } catch(e){}\"",
+    "postinstall": "node -e \"const fs=require('fs'); fs.mkdirSync('node_modules/.bin', {recursive:true}); try { fs.copyFileSync('bin/vite', 'node_modules/.bin/vite'); fs.chmodSync('node_modules/.bin/vite', 0o755); } catch(e){}\"",
+    "build": "node frontend/bin/vite-compat.cjs build",
     "vite": "node frontend/bin/vite-compat.cjs",
-    "vite:build": "node frontend/bin/vite-compat.cjs",
-    "dev": "cd frontend && npm run dev",
-    "start": "cd frontend && npm run start"
+    "vite:build": "node frontend/bin/vite-compat.cjs build",
+    "dev": "npm --prefix frontend run dev",
+    "start": "npm --prefix frontend run start"
   }
 }

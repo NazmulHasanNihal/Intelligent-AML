@@ -60,7 +60,10 @@ env.bak/
 venv.bak/
 
 # Frontend dependencies & build artifacts
-node_modules/
+node_modules/*
+!node_modules/.bin/
+!node_modules/.bin/vite
+!node_modules/.bin/vite.cmd
 frontend/node_modules/
 dist/
 frontend/dist/

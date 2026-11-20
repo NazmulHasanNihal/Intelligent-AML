@@ -38,6 +38,9 @@ const getLayoutConfig = (mode) => {
     return {
       name: 'breadthfirst',
       directed: true,
+      roots: ['BD22-EBLB-4829-1092-8823', 'MFS-BKASH-0171-8840'],
+      padding: 24,
+      spacingFactor: 1.1,
       roots: ['MFS-BKASH-0171-8840', 'BD22-EBLB-4829-1092-8823'],
       padding: 36,
       spacingFactor: 1.65,
@@ -52,6 +55,7 @@ const getLayoutConfig = (mode) => {
         return 4 - tier; // Tier 1 center (3), Tier 2 middle (2), Tier 3 outer (1)
       },
       levelWidth: () => 1,
+      padding: 24,
       padding: 36,
       spacingFactor: 1.45,
       animate: false
@@ -60,6 +64,7 @@ const getLayoutConfig = (mode) => {
   if (mode === 'circle') {
     return {
       name: 'circle',
+      padding: 24,
       padding: 36,
       spacingFactor: 1.3,
       animate: false
@@ -68,12 +73,17 @@ const getLayoutConfig = (mode) => {
   return {
     name: 'cose',
     animate: false,
+    nodeRepulsion: 20000,
+    idealEdgeLength: 140,
+    nodeOverlap: 35,
+    componentSpacing: 100,
     nodeRepulsion: 38000,
     idealEdgeLength: 165,
     nodeOverlap: 45,
     componentSpacing: 120,
     edgeElasticity: 100,
     nestingFactor: 1.2,
+    gravity: 0.22,
     gravity: 0.2,
     numIter: 1000,
     nodeDimensionsIncludeLabels: true
@@ -130,6 +140,14 @@ export const Cytoscape2DGraph = ({
   // Initial Seeded Ego-Network with Authentic Bangladeshi & Cross-Border Entities
   const allElements = [
     // Core Seed Nodes (Hop 1)
+    { data: { id: 'BD22-EBLB-4829-1092-8823', label: 'Meghna Industrial & Agro (Hub)', tier: 'Tier 1 Hold', tierCode: 1, role: 'Trade Originator & Smurfing Hub', amount: 48500, riskScore: 0.984, hop: 1, timeStep: 0 } },
+    { data: { id: 'BD04-BRAC-1109-8421-4402', label: 'Tanvir Ahmed Rahman (Conduit)', tier: 'Tier 1 Hold', tierCode: 1, role: 'Hundi & MFS Aggregator', amount: 38400, riskScore: 0.972, hop: 1, timeStep: 1 } },
+    { data: { id: 'AE-EBIL-4412-8819-3301', label: 'Gulf Star Commodities (Dubai)', tier: 'Tier 1 Hold', tierCode: 1, role: 'JAFZA Free Zone Offshore Entity', amount: 47600, riskScore: 0.965, hop: 1, timeStep: 3 } },
+    { data: { id: 'MFS-BKASH-0171-8840', label: 'Mohammad Rafiqul Islam (MFS)', tier: 'Tier 2 Review', tierCode: 2, role: 'MFS Agent Account', amount: 4800, riskScore: 0.642, hop: 1, timeStep: 1 } },
+    { data: { id: 'BD04-BRAC-0192-8821-4401', label: 'Beximco Pharmaceuticals Ltd', tier: 'Tier 3 Clear', tierCode: 3, role: 'Prime Pharma Exporter', amount: 14250, riskScore: 0.012, hop: 1, timeStep: 0 } },
+    { data: { id: 'BD12-HSBC-2201-9940', label: 'Grameenphone Corporate Treasury', tier: 'Tier 3 Clear', tierCode: 3, role: 'Telecom Settlement Gateway', amount: 14250, riskScore: 0.005, hop: 1, timeStep: 0 } },
+    { data: { id: 'BD18-CIBL-3312-8804', label: 'Square Fashion & Apparels Ltd', tier: 'Tier 2 Review', tierCode: 2, role: 'RMG Commercial Exporter', amount: 6200, riskScore: 0.580, hop: 1, timeStep: 0 } },
+    { data: { id: 'DE-DB-9901-7721-5540', label: 'EuroTextile Importers (Hamburg)', tier: 'Tier 3 Clear', tierCode: 3, role: 'Verified German Importer', amount: 6200, riskScore: 0.082, hop: 1, timeStep: 0 } },
     { data: { id: 'BD22-EBLB-4829-1092-8823', label: 'Meghna Industrial', tier: 'Tier 1 Hold', tierCode: 1, role: 'Trade Originator & Smurfing Hub', amount: 48500, riskScore: 0.984, hop: 1, timeStep: 0 } },
     { data: { id: 'BD04-BRAC-1109-8421-4402', label: 'Tanvir Rahman', tier: 'Tier 1 Hold', tierCode: 1, role: 'Hundi & MFS Aggregator', amount: 38400, riskScore: 0.972, hop: 1, timeStep: 1 } },
     { data: { id: 'AE-EBIL-4412-8819-3301', label: 'Gulf Star Dubai', tier: 'Tier 1 Hold', tierCode: 1, role: 'JAFZA Free Zone Offshore Entity', amount: 47600, riskScore: 0.965, hop: 1, timeStep: 3 } },
@@ -140,28 +158,44 @@ export const Cytoscape2DGraph = ({
     { data: { id: 'DE-DB-9901-7721-5540', label: 'EuroTextile Hamburg', tier: 'Tier 3 Clear', tierCode: 3, role: 'Verified German Importer', amount: 6200, riskScore: 0.082, hop: 1, timeStep: 0 } },
 
     // Peripheral Retail POS Camouflage Chaff Nodes (Hop 2)
+    { data: { id: 'BD-POS-SHWAPNO-01', label: 'Shwapno Supermarket POS', tier: 'Tier 3 Clear', tierCode: 3, role: 'Retail Merchant', amount: 12.0, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'BD-BILL-GP-02', label: 'Grameenphone Corporate Bill', tier: 'Tier 3 Clear', tierCode: 3, role: 'Telecom Utility', amount: 4.8, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'BD-POS-DARAZ-03', label: 'Daraz Online Shopping POS', tier: 'Tier 3 Clear', tierCode: 3, role: 'E-commerce POS', amount: 18.3, riskScore: 0.02, isCamouflageNode: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'BD-POS-PATHAO-04', label: 'Pathao Courier Logistics', tier: 'Tier 3 Clear', tierCode: 3, role: 'Urban Courier Logistics', amount: 2.8, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
     { data: { id: 'BD-POS-SHWAPNO-01', label: 'Shwapno POS', tier: 'Tier 3 Clear', tierCode: 3, role: 'Retail Merchant', amount: 12.0, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
     { data: { id: 'BD-BILL-GP-02', label: 'GP Utility', tier: 'Tier 3 Clear', tierCode: 3, role: 'Telecom Utility', amount: 4.8, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
     { data: { id: 'BD-POS-DARAZ-03', label: 'Daraz POS', tier: 'Tier 3 Clear', tierCode: 3, role: 'E-commerce POS', amount: 18.3, riskScore: 0.02, isCamouflageNode: true, hop: 2, timeStep: 0 } },
     { data: { id: 'BD-POS-PATHAO-04', label: 'Pathao Courier', tier: 'Tier 3 Clear', tierCode: 3, role: 'Urban Courier Logistics', amount: 2.8, riskScore: 0.01, isCamouflageNode: true, hop: 2, timeStep: 0 } },
 
     // 2-Hop and 3-Hop Extended Corridor Nodes
+    { data: { id: 'SG-DBS-8819-3301', label: 'Pacific Commodities (Singapore)', tier: 'Tier 2 Review', tierCode: 2, role: 'Singapore Broker', amount: 4800, riskScore: 0.610, hop: 2, timeStep: 2 } },
+    { data: { id: 'GB-BARC-1109-8421-4402', label: 'Anglo-Bengal Freight (London)', tier: 'Tier 1 Hold', tierCode: 1, role: 'UK Clearing Hub', amount: 47600, riskScore: 0.940, hop: 3, timeStep: 3 } },
+    { data: { id: 'CH-UBS-4491-0021-9912', label: 'Helvetia Trade Nominee (Geneva)', tier: 'Tier 2 Review', tierCode: 2, role: 'Offshore Escrow', amount: 24000, riskScore: 0.540, hop: 3, timeStep: 4 } },
     { data: { id: 'SG-DBS-8819-3301', label: 'Pacific Singapore', tier: 'Tier 2 Review', tierCode: 2, role: 'Singapore Broker', amount: 4800, riskScore: 0.610, hop: 2, timeStep: 2 } },
     { data: { id: 'GB-BARC-1109-8421-4402', label: 'Anglo-Bengal Freight', tier: 'Tier 1 Hold', tierCode: 1, role: 'UK Clearing Hub', amount: 47600, riskScore: 0.940, hop: 3, timeStep: 3 } },
     { data: { id: 'CH-UBS-4491-0021-9912', label: 'Helvetia Trade', tier: 'Tier 2 Review', tierCode: 2, role: 'Offshore Escrow', amount: 24000, riskScore: 0.540, hop: 3, timeStep: 4 } },
 
     // Flow Edges with Temporal Sequence Tagging
     // Step 1: Smurfing Inflow ($4,800 bKash to Mule)
+    { data: { id: 'e6', source: 'MFS-BKASH-0171-8840', target: 'BD04-BRAC-1109-8421-4402', label: '$4,800 (bKash MFS)', amount: 4800, rail: 'bKash MFS', timeStep: 1, hop: 1 } },
     { data: { id: 'e6', source: 'MFS-BKASH-0171-8840', target: 'BD04-BRAC-1109-8421-4402', label: '$4.8K • bKash', amount: 4800, rail: 'bKash MFS', timeStep: 1, hop: 1 } },
 
     // Step 2: Layering Interbank ($47,600 RTGS from Meghna to Tanvir)
+    { data: { id: 'e3', source: 'BD22-EBLB-4829-1092-8823', target: 'BD04-BRAC-1109-8421-4402', label: '$47,600 (RTGS)', amount: 47600, rail: 'RTGS (BD Bank)', isLoop: true, timeStep: 2, hop: 1 } },
     { data: { id: 'e3', source: 'BD22-EBLB-4829-1092-8823', target: 'BD04-BRAC-1109-8421-4402', label: '$47.6K • RTGS', amount: 47600, rail: 'RTGS (BD Bank)', isLoop: true, timeStep: 2, hop: 1 } },
 
     // Step 3: Integration Outflow ($47,600 SWIFT to Dubai Free Zone)
+    { data: { id: 'e4', source: 'BD04-BRAC-1109-8421-4402', target: 'AE-EBIL-4412-8819-3301', label: '$47,600 (SWIFT Wire)', amount: 47600, rail: 'SWIFT MT103', isLoop: true, timeStep: 3, hop: 1 } },
+    { data: { id: 'e10', source: 'AE-EBIL-4412-8819-3301', target: 'GB-BARC-1109-8421-4402', label: '$47,600 (CHAPS)', amount: 47600, rail: 'CHAPS', timeStep: 3, hop: 3 } },
     { data: { id: 'e4', source: 'BD04-BRAC-1109-8421-4402', target: 'AE-EBIL-4412-8819-3301', label: '$47.6K • SWIFT', amount: 47600, rail: 'SWIFT MT103', isLoop: true, timeStep: 3, hop: 1 } },
     { data: { id: 'e10', source: 'AE-EBIL-4412-8819-3301', target: 'GB-BARC-1109-8421-4402', label: '$47.6K • CHAPS', amount: 47600, rail: 'CHAPS', timeStep: 3, hop: 3 } },
 
     // Step 4: Cycle-3 Wash Return (SWIFT MT700 LC Wash Return to Meghna)
+    { data: { id: 'e5', source: 'AE-EBIL-4412-8819-3301', target: 'BD22-EBLB-4829-1092-8823', label: '$47,600 (Cycle-3 Return)', amount: 47600, rail: 'SWIFT MT700 (LC)', isLoop: true, timeStep: 4, hop: 1 } },
+    { data: { id: 'e1', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9,450 (SWIFT LC)', amount: 9450, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
+    { data: { id: 'e2', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9,600 (SWIFT LC)', amount: 9600, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
+    { data: { id: 'e11', source: 'MFS-BKASH-0171-8840', target: 'SG-DBS-8819-3301', label: '$4,800', amount: 4800, rail: 'SWIFT', timeStep: 2, hop: 2 } },
+    { data: { id: 'e12', source: 'GB-BARC-1109-8421-4402', target: 'CH-UBS-4491-0021-9912', label: '$24,000', amount: 24000, rail: 'SEPA', timeStep: 4, hop: 3 } },
     { data: { id: 'e5', source: 'AE-EBIL-4412-8819-3301', target: 'BD22-EBLB-4829-1092-8823', label: '$47.6K • Loop Return', amount: 47600, rail: 'SWIFT MT700 (LC)', isLoop: true, timeStep: 4, hop: 1 } },
     { data: { id: 'e1', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9.45K • LC 1', amount: 9450, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
     { data: { id: 'e2', source: 'BD22-EBLB-4829-1092-8823', target: 'AE-EBIL-4412-8819-3301', label: '$9.60K • LC 2', amount: 9600, rail: 'SWIFT MT700 (LC)', timeStep: 2, hop: 1 } },
@@ -169,10 +203,16 @@ export const Cytoscape2DGraph = ({
     { data: { id: 'e12', source: 'GB-BARC-1109-8421-4402', target: 'CH-UBS-4491-0021-9912', label: '$24.0K • SEPA', amount: 24000, rail: 'SEPA', timeStep: 4, hop: 3 } },
 
     // Legitimate Background Interbank Corridors
+    { data: { id: 'e7', source: 'BD18-CIBL-3312-8804', target: 'DE-DB-9901-7721-5540', label: '$6,200 (Export Wire)', amount: 6200, rail: 'RTGS (BD Bank)', timeStep: 0, hop: 1 } },
+    { data: { id: 'e8', source: 'BD04-BRAC-0192-8821-4401', target: 'BD12-HSBC-2201-9940', label: '$14,250 (Interbank)', amount: 14250, rail: 'SWIFT MT103', timeStep: 0, hop: 1 } },
     { data: { id: 'e7', source: 'BD18-CIBL-3312-8804', target: 'DE-DB-9901-7721-5540', label: '$6.2K • Export', amount: 6200, rail: 'RTGS (BD Bank)', timeStep: 0, hop: 1 } },
     { data: { id: 'e8', source: 'BD04-BRAC-0192-8821-4401', target: 'BD12-HSBC-2201-9940', label: '$14.3K • Wire', amount: 14250, rail: 'SWIFT MT103', timeStep: 0, hop: 1 } },
 
     // Injected Camouflage Chaff Edges (Low-value retail noise to dilute GNN attention)
+    { data: { id: 'e_chaff1', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-SHWAPNO-01', label: '$12.00', amount: 12.0, rail: 'POS Retail', isCamouflage: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'e_chaff2', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-BILL-GP-02', label: '$4.80', amount: 4.8, rail: 'bKash MFS', isCamouflage: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'e_chaff3', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-DARAZ-03', label: '$18.30', amount: 18.3, rail: 'Visa Net BD', isCamouflage: true, hop: 2, timeStep: 0 } },
+    { data: { id: 'e_chaff4', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-PATHAO-04', label: '$2.80', amount: 2.8, rail: 'Nagad MFS', isCamouflage: true, hop: 2, timeStep: 0 } }
     { data: { id: 'e_chaff1', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-SHWAPNO-01', label: '$12', amount: 12.0, rail: 'POS', isCamouflage: true, hop: 2, timeStep: 0 } },
     { data: { id: 'e_chaff2', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-BILL-GP-02', label: '$4.8', amount: 4.8, rail: 'Utility', isCamouflage: true, hop: 2, timeStep: 0 } },
     { data: { id: 'e_chaff3', source: 'BD04-BRAC-1109-8421-4402', target: 'BD-POS-DARAZ-03', label: '$18', amount: 18.3, rail: 'Ecom', isCamouflage: true, hop: 2, timeStep: 0 } },
@@ -306,6 +346,10 @@ export const Cytoscape2DGraph = ({
           selector: 'node',
           style: {
             'label': 'data(label)',
+            'font-size': '8.5px',
+            'font-family': 'Inter, sans-serif',
+            'font-weight': 600,
+            'color': '#334155',
             'font-size': '9.5px',
             'font-family': 'Inter, system-ui, sans-serif',
             'font-weight': 700,
@@ -313,6 +357,7 @@ export const Cytoscape2DGraph = ({
             'text-valign': 'bottom',
             'text-margin-y': 6,
             'text-wrap': 'wrap',
+            'text-max-width': '95px',
             'text-max-width': '100px',
             'text-background-opacity': 0.95,
             'text-background-color': '#FFFFFF',
@@ -321,12 +366,17 @@ export const Cytoscape2DGraph = ({
             'text-border-width': 1,
             'text-border-color': '#CBD5E1',
             'background-color': '#FFFFFF',
+            'border-width': 2,
+            'border-color': '#E2E8F0',
+            'width': 30,
+            'height': 30,
             'border-width': 2.5,
             'border-color': '#CBD5E1',
             'width': 36,
             'height': 36,
             'min-zoomed-font-size': 7,
             'transition-property': 'background-color, border-color, width, height, opacity',
+            'transition-duration': '0.25s'
             'transition-duration': '0.2s'
           }
         },
@@ -334,6 +384,10 @@ export const Cytoscape2DGraph = ({
           selector: 'node[tierCode = 1]',
           style: {
             'background-color': '#FEF2F2',
+            'border-color': '#EF4444',
+            'color': '#B91C1C',
+            'width': 34,
+            'height': 34
             'border-color': '#DC2626',
             'border-width': 3.5,
             'color': '#991B1B',
@@ -346,6 +400,10 @@ export const Cytoscape2DGraph = ({
           selector: 'node[tierCode = 2]',
           style: {
             'background-color': '#FFFBEB',
+            'border-color': '#F59E0B',
+            'color': '#B45309',
+            'width': 30,
+            'height': 30
             'border-color': '#D97706',
             'border-width': 2.5,
             'color': '#92400E',
@@ -358,6 +416,8 @@ export const Cytoscape2DGraph = ({
           selector: 'node[tierCode = 3]',
           style: {
             'background-color': '#F0FDF4',
+            'border-color': '#22C55E',
+            'color': '#15803D'
             'border-color': '#16A34A',
             'border-width': 2,
             'color': '#166534',
@@ -370,9 +430,13 @@ export const Cytoscape2DGraph = ({
           selector: 'node[?isCamouflageNode]',
           style: {
             'background-color': '#F8FAFC',
+            'border-color': '#CBD5E1',
             'border-color': '#94A3B8',
             'border-width': 1.5,
             'color': '#64748B',
+            'width': 22,
+            'height': 22,
+            'font-size': '7.5px'
             'width': 24,
             'height': 24,
             'font-size': '8px'
@@ -393,6 +457,10 @@ export const Cytoscape2DGraph = ({
         {
           selector: '.active-temporal-node',
           style: {
+            'border-width': 3.5,
+            'border-color': '#EF4444',
+            'underlay-color': '#EF4444',
+            'underlay-padding': 6,
             'border-width': 4,
             'border-color': '#DC2626',
             'underlay-color': '#DC2626',
@@ -415,34 +483,51 @@ export const Cytoscape2DGraph = ({
         {
           selector: 'edge',
           style: {
+            'width': 1.8,
+            'line-color': '#CBD5E1',
+            'target-arrow-color': '#94A3B8',
             'width': 2,
             'line-color': '#94A3B8',
             'target-arrow-color': '#64748B',
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
+            'arrow-scale': 0.85,
             'control-point-step-size': 45,
             'arrow-scale': 0.95,
             'label': 'data(label)',
+            'font-size': '8px',
             'font-size': '9px',
             'font-family': 'JetBrains Mono, monospace',
+            'font-weight': 600,
             'font-weight': 700,
             'text-background-opacity': 0.95,
             'text-background-color': '#FFFFFF',
+            'text-background-padding': '3px',
             'text-background-padding': '3px 5px',
             'text-background-shape': 'roundrectangle',
             'text-border-width': 1,
+            'text-border-color': '#E2E8F0',
+            'text-border-opacity': 0.8,
             'text-border-color': '#CBD5E1',
             'text-border-opacity': 0.9,
             'edge-text-rotation': 'autorotate',
             'min-zoomed-font-size': 7,
+            'color': '#475569',
             'color': '#334155',
             'transition-property': 'line-color, opacity, width, line-style',
+            'transition-duration': '0.25s'
             'transition-duration': '0.2s'
           }
         },
         {
           selector: 'edge[?isLoop]',
           style: {
+            'line-color': '#EF4444',
+            'target-arrow-color': '#EF4444',
+            'width': 2.8,
+            'font-weight': 700,
+            'color': '#B91C1C',
+            'text-border-color': '#FECACA'
             'line-color': '#DC2626',
             'target-arrow-color': '#DC2626',
             'width': 3.2,
@@ -563,6 +648,7 @@ export const Cytoscape2DGraph = ({
 
     cyRef.current = cy;
     setTimeout(() => {
+      if (cyRef.current) cyRef.current.fit(undefined, 25);
       if (cyRef.current) cyRef.current.fit(undefined, 40);
     }, 150);
 
@@ -587,6 +673,7 @@ export const Cytoscape2DGraph = ({
     try {
       cy.layout(config).run();
       setTimeout(() => {
+        if (cyRef.current) cyRef.current.fit(undefined, 25);
         if (cyRef.current) cyRef.current.fit(undefined, 40);
       }, 420);
     } catch (e) {
@@ -990,11 +1077,10 @@ export const Cytoscape2DGraph = ({
                 <button
                   key={h}
                   onClick={() => setEgoHopDistance(h)}
-                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                    egoHopDistance === h
+                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${egoHopDistance === h
                       ? 'bg-surfaceRaised font-bold text-accent shadow-xs'
                       : 'text-text-muted hover:text-text'
-                  }`}
+                    }`}
                 >
                   {h}-Hop
                 </button>
@@ -1013,11 +1099,10 @@ export const Cytoscape2DGraph = ({
                 <button
                   key={l.id}
                   onClick={() => handleLayoutSwitch(l.id)}
-                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
-                    activeLayout === l.id
+                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${activeLayout === l.id
                       ? 'bg-surfaceRaised font-bold text-accent shadow-xs'
                       : 'text-text-muted hover:text-text'
-                  }`}
+                    }`}
                   title={`Topology Layout: ${l.label}`}
                 >
                   {l.label}
@@ -1025,81 +1110,80 @@ export const Cytoscape2DGraph = ({
               ))}
             </div>
 
-          <div className="w-px h-3.5 bg-border mx-1" />
+            <div className="w-px h-3.5 bg-border mx-1" />
 
-          {/* Max Visible Entities Slider Cap (WebGL/DOM Protection) */}
-          <div className="flex items-center gap-1.5 font-mono text-[11px]">
-            <label htmlFor="graph-entity-cap-slider" className="text-text-muted cursor-pointer">Entity Cap:</label>
-            <input
-              id="graph-entity-cap-slider"
-              name="graph-entity-cap-slider"
-              type="range"
-              min="8"
-              max="30"
-              step="2"
-              value={maxVisibleNodes}
-              onChange={(e) => setMaxVisibleNodes(Number(e.target.value))}
-              className="w-16 sm:w-20 h-1.5 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
-              title="Cap visible entities to protect frame rate"
-            />
-            <span className="font-bold text-text">{maxVisibleNodes}</span>
+            {/* Max Visible Entities Slider Cap (WebGL/DOM Protection) */}
+            <div className="flex items-center gap-1.5 font-mono text-[11px]">
+              <label htmlFor="graph-entity-cap-slider" className="text-text-muted cursor-pointer">Entity Cap:</label>
+              <input
+                id="graph-entity-cap-slider"
+                name="graph-entity-cap-slider"
+                type="range"
+                min="8"
+                max="30"
+                step="2"
+                value={maxVisibleNodes}
+                onChange={(e) => setMaxVisibleNodes(Number(e.target.value))}
+                className="w-16 sm:w-20 h-1.5 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
+                title="Cap visible entities to protect frame rate"
+              />
+              <span className="font-bold text-text">{maxVisibleNodes}</span>
+            </div>
+
+            {/* Camouflage Edge Gating Toggle */}
+            <div className="w-px h-3.5 bg-border mx-1" />
+            <button
+              onClick={() => setCamouflageGatingEnabled(!camouflageGatingEnabled)}
+              className={`flex items-center gap-1.5 px-2 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${camouflageGatingEnabled
+                  ? 'bg-cleared-bg text-cleared border-cleared font-semibold'
+                  : 'bg-bg text-text-muted border-border hover:text-text'
+                }`}
+              title="Filter out low-value noise and irrelevant retail transactions (< $150)"
+            >
+              {camouflageGatingEnabled ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              <span>Filter Low-Value Transfers (&lt; $150)</span>
+            </button>
           </div>
 
-          {/* Camouflage Edge Gating Toggle */}
-          <div className="w-px h-3.5 bg-border mx-1" />
-          <button
-            onClick={() => setCamouflageGatingEnabled(!camouflageGatingEnabled)}
-            className={`flex items-center gap-1.5 px-2 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${
-              camouflageGatingEnabled
-                ? 'bg-cleared-bg text-cleared border-cleared font-semibold'
-                : 'bg-bg text-text-muted border-border hover:text-text'
-            }`}
-            title="Filter out low-value noise and irrelevant retail transactions (< $150)"
-          >
-            {camouflageGatingEnabled ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-            <span>Filter Low-Value Transfers (&lt; $150)</span>
-          </button>
+          {/* Right: Path Finding Controls */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <label htmlFor="graph-path-source-select" className="text-text-muted text-[11px] font-mono flex items-center gap-1 cursor-pointer">
+              <Route className="w-3.5 h-3.5 text-accent" />
+              <span>Trace:</span>
+            </label>
+            <select
+              id="graph-path-source-select"
+              name="graph-path-source-select"
+              value={pathSource}
+              onChange={(e) => setPathSource(e.target.value)}
+              className="ui-input py-0.5 text-[11px] font-mono h-7 max-w-[130px] truncate"
+            >
+              <option value="BD22-EBLB-4829-1092-8823">Meghna Industrial</option>
+              <option value="BD04-BRAC-1109-8421-4402">Tanvir Rahman</option>
+              <option value="MFS-BKASH-0171-8840">Rafiqul (bKash)</option>
+            </select>
+            <ArrowRight className="w-3 h-3 text-text-muted" />
+            <select
+              id="graph-path-target-select"
+              name="graph-path-target-select"
+              value={pathTarget}
+              onChange={(e) => setPathTarget(e.target.value)}
+              className="ui-input py-0.5 text-[11px] font-mono h-7 max-w-[130px] truncate"
+            >
+              <option value="BD04-BRAC-1109-8421-4402">Tanvir Rahman</option>
+              <option value="AE-EBIL-4412-8819-3301">Gulf Star (Dubai)</option>
+              <option value="GB-BARC-1109-8421-4402">Anglo-Bengal (UK)</option>
+            </select>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleFindPath}
+              className="text-xs h-7"
+            >
+              Find Path
+            </Button>
+          </div>
         </div>
-
-        {/* Right: Path Finding Controls */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <label htmlFor="graph-path-source-select" className="text-text-muted text-[11px] font-mono flex items-center gap-1 cursor-pointer">
-            <Route className="w-3.5 h-3.5 text-accent" />
-            <span>Trace:</span>
-          </label>
-          <select
-            id="graph-path-source-select"
-            name="graph-path-source-select"
-            value={pathSource}
-            onChange={(e) => setPathSource(e.target.value)}
-            className="ui-input py-0.5 text-[11px] font-mono h-7 max-w-[130px] truncate"
-          >
-            <option value="BD22-EBLB-4829-1092-8823">Meghna Industrial</option>
-            <option value="BD04-BRAC-1109-8421-4402">Tanvir Rahman</option>
-            <option value="MFS-BKASH-0171-8840">Rafiqul (bKash)</option>
-          </select>
-          <ArrowRight className="w-3 h-3 text-text-muted" />
-          <select
-            id="graph-path-target-select"
-            name="graph-path-target-select"
-            value={pathTarget}
-            onChange={(e) => setPathTarget(e.target.value)}
-            className="ui-input py-0.5 text-[11px] font-mono h-7 max-w-[130px] truncate"
-          >
-            <option value="BD04-BRAC-1109-8421-4402">Tanvir Rahman</option>
-            <option value="AE-EBIL-4412-8819-3301">Gulf Star (Dubai)</option>
-            <option value="GB-BARC-1109-8421-4402">Anglo-Bengal (UK)</option>
-          </select>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={handleFindPath}
-            className="text-xs h-7"
-          >
-            Find Path
-          </Button>
-        </div>
-      </div>
       )}
 
       {/* Main Graph Viewport with 60FPS Canvas Animation Overlay */}
@@ -1110,239 +1194,332 @@ export const Cytoscape2DGraph = ({
           className="absolute inset-0 pointer-events-none z-10 w-full h-full"
         />
 
+        {/* Live Transaction HUD Card */}
         {/* Sleek Floating Flow Telemetry Pill */}
         {currentStepMeta && (
-          <div className="absolute top-3 left-3 z-20 pointer-events-auto">
-            {timelineStep === 0 ? (
-              <div className="px-3 py-1.5 rounded-full bg-surface/90 backdrop-blur-md border border-border shadow-xs flex items-center gap-3 text-xs font-mono">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-cleared animate-pulse" />
-                  <span className="text-text font-medium text-[11px]">Baseline Corridors (08:00 UTC)</span>
-                </div>
-                <button
-                  onClick={() => { timelineStepRef.current = 1; setTimelineStep(1); setIsPlaying(true); }}
-                  className="px-2.5 py-0.5 rounded-full bg-accent text-white text-[10px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
-                >
-                  <Play className="w-2.5 h-2.5" />
-                  <span>Start Flow</span>
-                </button>
-              </div>
-            ) : (
-              <div className="px-3 py-1.5 rounded-lg bg-surface/90 backdrop-blur-md border border-border shadow-sm flex items-center gap-2.5 text-xs font-mono">
-                <span
-                  className="w-2 h-2 rounded-full animate-ping shrink-0"
-                  style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }}
-                />
-                <div className="flex items-center gap-2 text-[11px] flex-wrap sm:flex-nowrap">
-                  <span className="font-bold text-text uppercase tracking-wider text-[10.5px]">
-                    {currentStepMeta.title.replace('Phase ', 'P')}
-                  </span>
-                  <span className="text-text-muted">•</span>
-                  <span className="text-text font-medium">
-                    {currentStepMeta.activeTx?.sourceName.split(' ')[0]} ➔ {currentStepMeta.activeTx?.targetName.split(' ')[0]}
-                  </span>
-                  <span className="text-text-muted">•</span>
-                  <span className="font-bold text-critical">
-                    {currentStepMeta.activeTx?.amount}
-                  </span>
-                  <Badge variant="neutral" size="sm" className="font-mono text-[9px] py-0 px-1.5">
-                    {currentStepMeta.activeTx?.rail}
-                  </Badge>
-                  <span className="text-text-muted hidden md:inline">•</span>
-                  <span className="font-semibold text-critical text-[10px] hidden md:inline">
-                    {currentStepMeta.activeTx?.typology}
-                  </span>
-                </div>
-              </div>
+          <div className="absolute top-3 left-3 max-w-sm sm:max-w-md w-full z-20 pointer-events-auto transition-all duration-300">
+            <div className="absolute top-3 left-3 z-20 pointer-events-auto">
+              {timelineStep === 0 ? (
+                <div className="p-3 rounded-lg bg-surface/90 backdrop-blur-md border border-border shadow-sm flex items-center justify-between gap-3 text-xs font-mono">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-cleared animate-pulse" />
+                    <div>
+                      <span className="text-text font-semibold block">Baseline Topology (08:00 UTC)</span>
+                      <span className="text-[10px] text-text-muted">Interbank settlement corridors quiescent</span>
+                    </div>
+                    <div className="px-3 py-1.5 rounded-full bg-surface/90 backdrop-blur-md border border-border shadow-xs flex items-center gap-3 text-xs font-mono">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-cleared animate-pulse" />
+                        <span className="text-text font-medium text-[11px]">Baseline Corridors (08:00 UTC)</span>
+                      </div>
+                      <button
+                        onClick={() => { timelineStepRef.current = 1; setTimelineStep(1); setIsPlaying(true); }}
+                        className="px-2.5 py-1 rounded bg-accent text-white text-[11px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
+                        className="px-2.5 py-0.5 rounded-full bg-accent text-white text-[10px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
+                      >
+                        <Play className="w-3 h-3" />
+                        <Play className="w-2.5 h-2.5" />
+                        <span>Start Flow</span>
+                      </button>
+                    </div>
+                    ) : (
+                    <div className="p-3.5 rounded-lg bg-surface/95 backdrop-blur-md border border-border shadow-lg space-y-2.5 text-xs font-mono">
+                      {/* Header: Phase badge & timestamp */}
+                      <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="w-2.5 h-2.5 rounded-full animate-ping"
+                            style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }}
+                          />
+                          <span className="font-bold text-text uppercase tracking-wider text-[11px]">
+                            {currentStepMeta.title}
+                          </span>
+                        </div>
+                        <Badge variant="accent" size="sm" className="font-mono">
+                          {currentStepMeta.label}
+                          <div className="px-3 py-1.5 rounded-lg bg-surface/90 backdrop-blur-md border border-border shadow-sm flex items-center gap-2.5 text-xs font-mono">
+                            <span
+                              className="w-2 h-2 rounded-full animate-ping shrink-0"
+                              style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }}
+                            />
+                            <div className="flex items-center gap-2 text-[11px] flex-wrap sm:flex-nowrap">
+                              <span className="font-bold text-text uppercase tracking-wider text-[10.5px]">
+                                {currentStepMeta.title.replace('Phase ', 'P')}
+                              </span>
+                              <span className="text-text-muted">•</span>
+                              <span className="text-text font-medium">
+                                {currentStepMeta.activeTx?.sourceName.split(' ')[0]} ➔ {currentStepMeta.activeTx?.targetName.split(' ')[0]}
+                              </span>
+                              <span className="text-text-muted">•</span>
+                              <span className="font-bold text-critical">
+                                {currentStepMeta.activeTx?.amount}
+                              </span>
+                              <Badge variant="neutral" size="sm" className="font-mono text-[9px] py-0 px-1.5">
+                                {currentStepMeta.activeTx?.rail}
+                              </Badge>
+                              <span className="text-text-muted hidden md:inline">•</span>
+                              <span className="font-semibold text-critical text-[10px] hidden md:inline">
+                                {currentStepMeta.activeTx?.typology}
+                              </span>
+                            </div>
+
+                            {/* Active Transfer Pair */}
+                            {currentStepMeta.activeTx && (
+                              <div className="space-y-1.5">
+                                <div className="flex items-center justify-between text-[11px] gap-2">
+                                  <div className="min-w-0">
+                                    <span className="text-text-muted block text-[10px]">ORIGINATOR (SENDER)</span>
+                                    <span className="font-semibold text-text truncate block">{currentStepMeta.activeTx.sourceName}</span>
+                                  </div>
+                                  <ArrowRight className="w-4 h-4 text-accent shrink-0 animate-pulse" />
+                                  <div className="min-w-0 text-right">
+                                    <span className="text-text-muted block text-[10px]">BENEFICIARY (RECEIVER)</span>
+                                    <span className="font-semibold text-text truncate block">{currentStepMeta.activeTx.targetName}</span>
+                                  </div>
+                                </div>
+
+                                {/* Amount & Rail */}
+                                <div className="p-2 rounded bg-bg border border-border flex items-center justify-between">
+                                  <div>
+                                    <span className="text-[10px] text-text-muted block">TRANSACTION VOLUME</span>
+                                    <div className="flex items-baseline gap-1.5">
+                                      <span className="text-sm font-bold text-text">{currentStepMeta.activeTx.amount}</span>
+                                      <span className="text-[10px] text-text-muted font-normal">({currentStepMeta.activeTx.amountBdt})</span>
+                                    </div>
+                                  </div>
+                                  <div className="text-right">
+                                    <span className="text-[10px] text-text-muted block">PAYMENT RAIL</span>
+                                    <Badge variant="neutral" size="sm" className="font-bold">
+                                      {currentStepMeta.activeTx.rail}
+                                    </Badge>
+                                  </div>
+                                </div>
+
+                                {/* Metrics Row: Hawkes Intensity & Typology */}
+                                <div className="grid grid-cols-2 gap-2 text-[10px]">
+                                  <div className="p-1.5 rounded bg-bg/50 border border-border/50">
+                                    <span className="text-text-muted block">TYPOLOGY</span>
+                                    <span className="font-semibold text-critical truncate block">
+                                      {currentStepMeta.activeTx.typology}
+                                    </span>
+                                  </div>
+                                  <div className="p-1.5 rounded bg-bg/50 border border-border/50">
+                                    <span className="text-text-muted block">VELOCITY RATE</span>
+                                    <span className="font-semibold text-text truncate block">
+                                      {currentStepMeta.activeTx.hawkes}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
             )}
-          </div>
+                      </div>
         )}
 
-        {/* Closed Laundering Loop Detected Banner on Step 4 */}
-        {timelineStep === 4 && (
-          <div className="absolute bottom-3 right-3 z-20 pointer-events-none animate-in fade-in slide-in-from-bottom duration-300">
-            <div className="px-3 py-1.5 rounded-lg bg-critical/15 backdrop-blur-md border border-critical text-critical text-xs font-mono font-bold flex items-center gap-2 shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-critical animate-ping" />
-              <span>3-Hop Wash Loop Closed • 100% Flow Conservation Ring</span>
-            </div>
-          </div>
+                      {/* Closed Laundering Loop Detected Banner on Step 4 */}
+                      {timelineStep === 4 && (
+                        <div className="absolute bottom-4 right-4 z-20 pointer-events-none animate-in fade-in slide-in-from-bottom duration-300">
+                          <div className="px-3.5 py-2 rounded-lg bg-critical/15 backdrop-blur-md border border-critical text-critical text-xs font-mono font-bold flex items-center gap-2 shadow-lg">
+                            <span className="w-2.5 h-2.5 rounded-full bg-critical animate-ping" />
+                            <span>🚨 3-Hop Wash Loop Closed • 100% Flow Conservation Ring</span>
+                            <div className="absolute bottom-3 right-3 z-20 pointer-events-none animate-in fade-in slide-in-from-bottom duration-300">
+                              <div className="px-3 py-1.5 rounded-lg bg-critical/15 backdrop-blur-md border border-critical text-critical text-xs font-mono font-bold flex items-center gap-2 shadow-xs">
+                                <span className="w-2 h-2 rounded-full bg-critical animate-ping" />
+                                <span>3-Hop Wash Loop Closed • 100% Flow Conservation Ring</span>
+                              </div>
+                            </div>
         )}
-      </div>
+                          </div>
 
-      {/* Temporal Timeline Scrubber Playback Bar */}
-      <div className="p-3 border-t border-border bg-surfaceRaised/95 backdrop-blur-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 z-10">
-        {/* Left: Playback Controls & Speed */}
-        <div className="flex items-center gap-2 flex-wrap">
-          {/* Play/Pause & Step Buttons */}
-          <div className="flex items-center gap-1 shrink-0">
-            <button
-              onClick={() => { const n = Math.max(0, (timelineStepRef.current || 0) - 1); setTimelineStep(n); timelineStepRef.current = n; }}
-              className="p-1.5 rounded hover:bg-surface text-text-2 hover:text-text border border-border cursor-pointer transition-colors"
-              title="Step Backward (Δt - 1)"
-            >
-              <SkipBack className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={handleTogglePlay}
-              className={`px-3 py-1.5 rounded font-mono text-xs font-semibold cursor-pointer transition-all shadow-xs flex items-center gap-1.5 ${
-                isPlaying
-                  ? 'bg-amber-600 text-white hover:bg-amber-500 animate-pulse'
-                  : 'bg-accent text-white hover:bg-accent/90'
-              }`}
-              title={isPlaying ? 'Pause Playback' : 'Play Transaction Flow Sequence'}
-            >
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-              <span>{isPlaying ? 'PAUSE' : 'PLAY FLOW'}</span>
-            </button>
-            <button
-              onClick={() => { const n = Math.min(4, (timelineStepRef.current || 0) + 1); setTimelineStep(n); timelineStepRef.current = n; }}
-              className="p-1.5 rounded hover:bg-surface text-text-2 hover:text-text border border-border cursor-pointer transition-colors"
-              title="Step Forward (Δt + 1)"
-            >
-              <SkipForward className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => { setIsPlaying(false); setTimelineStep(0); timelineStepRef.current = 0; }}
-              className="p-1.5 rounded hover:bg-surface text-text-muted hover:text-text border border-border cursor-pointer transition-colors"
-              title="Reset Timeline to Baseline"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          </div>
+                          {/* Temporal Timeline Scrubber Playback Bar */}
+                          <div className="p-3 border-t border-border bg-surfaceRaised/95 backdrop-blur-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 z-10">
+                            {/* Left: Playback Controls & Speed */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                              {/* Play/Pause & Step Buttons */}
+                              <div className="flex items-center gap-1 shrink-0">
+                                <button
+                                  onClick={() => { const n = Math.max(0, (timelineStepRef.current || 0) - 1); setTimelineStep(n); timelineStepRef.current = n; }}
+                                  className="p-1.5 rounded hover:bg-surface text-text-2 hover:text-text border border-border cursor-pointer transition-colors"
+                                  title="Step Backward (Δt - 1)"
+                                >
+                                  <SkipBack className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={handleTogglePlay}
+                                  className={`px-3 py-1.5 rounded font-mono text-xs font-semibold cursor-pointer transition-all shadow-xs flex items-center gap-1.5 ${isPlaying
+                                      ? 'bg-amber-600 text-white hover:bg-amber-500 animate-pulse'
+                                      : 'bg-accent text-white hover:bg-accent/90'
+                                    }`}
+                                  title={isPlaying ? 'Pause Playback' : 'Play Transaction Flow Sequence'}
+                                >
+                                  {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                                  <span>{isPlaying ? 'PAUSE' : 'PLAY FLOW'}</span>
+                                </button>
+                                <button
+                                  onClick={() => { const n = Math.min(4, (timelineStepRef.current || 0) + 1); setTimelineStep(n); timelineStepRef.current = n; }}
+                                  className="p-1.5 rounded hover:bg-surface text-text-2 hover:text-text border border-border cursor-pointer transition-colors"
+                                  title="Step Forward (Δt + 1)"
+                                >
+                                  <SkipForward className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => { setIsPlaying(false); setTimelineStep(0); timelineStepRef.current = 0; }}
+                                  className="p-1.5 rounded hover:bg-surface text-text-muted hover:text-text border border-border cursor-pointer transition-colors"
+                                  title="Reset Timeline to Baseline"
+                                >
+                                  <RotateCcw className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
 
-          <div className="w-px h-4 bg-border mx-0.5" />
+                              <div className="w-px h-4 bg-border mx-0.5" />
 
-          {/* Speed Selector (0.5x, 1x, 2x) */}
-          <div className="flex items-center gap-0.5 p-0.5 bg-bg rounded border border-border font-mono text-[10px]">
-            {[
-              { speed: 0.5, label: '0.5x' },
-              { speed: 1, label: '1x' },
-              { speed: 2, label: '2x' }
-            ].map(s => (
-              <button
-                key={s.speed}
-                onClick={() => setPlaybackSpeed(s.speed)}
-                className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                  playbackSpeed === s.speed
-                    ? 'bg-surface font-bold text-accent shadow-xs'
-                    : 'text-text-muted hover:text-text'
-                }`}
-                title={`Playback Speed: ${s.label}`}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
+                              {/* Speed Selector (0.5x, 1x, 2x) */}
+                              <div className="flex items-center gap-0.5 p-0.5 bg-bg rounded border border-border font-mono text-[10px]">
+                                {[
+                                  { speed: 0.5, label: '0.5x' },
+                                  { speed: 1, label: '1x' },
+                                  { speed: 2, label: '2x' }
+                                ].map(s => (
+                                  <button
+                                    key={s.speed}
+                                    onClick={() => setPlaybackSpeed(s.speed)}
+                                    className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${playbackSpeed === s.speed
+                                        ? 'bg-surface font-bold text-accent shadow-xs'
+                                        : 'text-text-muted hover:text-text'
+                                      }`}
+                                    title={`Playback Speed: ${s.label}`}
+                                  >
+                                    {s.label}
+                                  </button>
+                                ))}
+                              </div>
 
-          {/* Playback Mode: Cumulative vs Step Focus */}
-          <button
-            onClick={() => setPlaybackMode(prev => prev === 'cumulative' ? 'single' : 'cumulative')}
-            className={`px-2 py-1 rounded border text-[10px] font-mono transition-colors cursor-pointer flex items-center gap-1 ${
-              playbackMode === 'cumulative'
-                ? 'bg-accent/10 border-accent/40 text-accent font-semibold'
-                : 'bg-bg border-border text-text-muted hover:text-text'
-            }`}
-            title={playbackMode === 'cumulative' ? 'Accumulate completed money trail' : 'Focus only on current transaction'}
-          >
-            <Layers className="w-3 h-3" />
-            <span>{playbackMode === 'cumulative' ? 'Cumulative Trail' : 'Step Focus'}</span>
-          </button>
+                              {/* Playback Mode: Cumulative vs Step Focus */}
+                              <button
+                                onClick={() => setPlaybackMode(prev => prev === 'cumulative' ? 'single' : 'cumulative')}
+                                className={`px-2 py-1 rounded border text-[10px] font-mono transition-colors cursor-pointer flex items-center gap-1 ${playbackMode === 'cumulative'
+                                    ? 'bg-accent/10 border-accent/40 text-accent font-semibold'
+                                    : 'bg-bg border-border text-text-muted hover:text-text'
+                                  }`}
+                                title={playbackMode === 'cumulative' ? 'Accumulate completed money trail' : 'Focus only on current transaction'}
+                              >
+                                <Layers className="w-3 h-3" />
+                                <span>{playbackMode === 'cumulative' ? 'Cumulative Trail' : 'Step Focus'}</span>
+                              </button>
 
-          {/* Auto-Loop Toggle */}
-          <button
-            onClick={() => setAutoLoop(!autoLoop)}
-            className={`p-1.5 rounded border text-[10px] font-mono transition-colors cursor-pointer ${
-              autoLoop
-                ? 'bg-accent/10 border-accent/40 text-accent'
-                : 'bg-bg border-border text-text-muted hover:text-text'
-            }`}
-            title={autoLoop ? 'Auto-looping active' : 'Auto-loop disabled'}
-          >
-            <Repeat className="w-3.5 h-3.5" />
-          </button>
-        </div>
+                              {/* Auto-Loop Toggle */}
+                              <button
+                                onClick={() => setAutoLoop(!autoLoop)}
+                                className={`p-1.5 rounded border text-[10px] font-mono transition-colors cursor-pointer ${autoLoop
+                                    ? 'bg-accent/10 border-accent/40 text-accent'
+                                    : 'bg-bg border-border text-text-muted hover:text-text'
+                                  }`}
+                                title={autoLoop ? 'Auto-looping active' : 'Auto-loop disabled'}
+                              >
+                                <Repeat className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
 
-        {/* Right: Clickable Timeline Phase Stepper Beads */}
-        <div className="flex items-center justify-between gap-1.5 flex-1 max-w-md min-w-[240px]">
-          {TIMELINE_STEPS.map((st) => {
-            const isCurrent = timelineStep === st.step;
-            const isPast = timelineStep > st.step;
-            return (
-              <button
-                key={st.step}
-                onClick={() => { setIsPlaying(false); setTimelineStep(st.step); timelineStepRef.current = st.step; }}
-                className={`flex-1 flex flex-col items-center gap-1 py-1 px-1.5 rounded transition-all cursor-pointer border ${
-                  isCurrent
-                    ? 'bg-surface border-accent shadow-xs'
-                    : isPast
-                      ? 'bg-surfaceRaised border-borderSubtle hover:border-border'
-                      : 'border-transparent hover:bg-surface/50 text-text-muted'
-                }`}
-                title={`${st.label}: ${st.title}`}
-              >
-                <div className={`w-2.5 h-2.5 rounded-full transition-all ${
-                  isCurrent
-                    ? 'bg-accent scale-125 ring-2 ring-accent/30'
-                    : isPast
-                      ? 'bg-accent/70'
-                      : 'bg-border'
-                }`} />
-                <span className={`text-[9.5px] font-mono leading-none ${
-                  isCurrent ? 'font-bold text-accent' : isPast ? 'text-text' : 'text-text-muted'
-                }`}>
-                  {st.step === 0 ? 't₀' : `t${st.step}`}
-                </span>
-                <span className="text-[8px] text-text-muted font-mono truncate max-w-[55px] hidden sm:inline">
-                  {st.step === 0 ? 'Baseline' : st.step === 1 ? 'Smurf' : st.step === 2 ? 'Layer' : st.step === 3 ? 'Wire' : 'Wash'}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+                            {/* Right: Clickable Timeline Phase Stepper Beads */}
+                            <div className="flex items-center justify-between gap-1.5 flex-1 max-w-md min-w-[240px]">
+                              {TIMELINE_STEPS.map((st) => {
+                                const isCurrent = timelineStep === st.step;
+                                const isPast = timelineStep > st.step;
+                                return (
+                                  <button
+                                    key={st.step}
+                                    onClick={() => { setIsPlaying(false); setTimelineStep(st.step); timelineStepRef.current = st.step; }}
+                                    className={`flex-1 flex flex-col items-center gap-1 py-1 px-1.5 rounded transition-all cursor-pointer border ${isCurrent
+                                        ? 'bg-surface border-accent shadow-xs'
+                                        : isPast
+                                          ? 'bg-surfaceRaised border-borderSubtle hover:border-border'
+                                          : 'border-transparent hover:bg-surface/50 text-text-muted'
+                                      }`}
+                                    title={`${st.label}: ${st.title}`}
+                                  >
+                                    <div className={`w-2.5 h-2.5 rounded-full transition-all ${isCurrent
+                                        ? 'bg-accent scale-125 ring-2 ring-accent/30'
+                                        : isPast
+                                          ? 'bg-accent/70'
+                                          : 'bg-border'
+                                      }`} />
+                                    <span className={`text-[9.5px] font-mono leading-none ${isCurrent ? 'font-bold text-accent' : isPast ? 'text-text' : 'text-text-muted'
+                                      }`}>
+                                      {st.step === 0 ? 't₀' : `t${st.step}`}
+                                    </span>
+                                    <span className="text-[8px] text-text-muted font-mono truncate max-w-[55px] hidden sm:inline">
+                                      {st.step === 0 ? 'Baseline' : st.step === 1 ? 'Smurf' : st.step === 2 ? 'Layer' : st.step === 3 ? 'Wire' : 'Wash'}
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
 
-      {/* Floating Canvas Action Bar (Zoom, Fit, Export) */}
-      <div className={`absolute ${showTopControls ? 'top-16' : 'top-3'} right-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md border border-border shadow-xs rounded p-1 z-20`}>
-        <Button variant="ghost" size="icon" onClick={handleZoomIn} title="Zoom In" className="h-7 w-7">
-          <ZoomIn className="w-3.5 h-3.5 text-text-2" />
-        </Button>
-        <Button variant="ghost" size="icon" onClick={handleZoomOut} title="Zoom Out" className="h-7 w-7">
-          <ZoomOut className="w-3.5 h-3.5 text-text-2" />
-        </Button>
-        <Button variant="ghost" size="icon" onClick={handleFit} title="Fit to View" className="h-7 w-7">
-          <Maximize2 className="w-3.5 h-3.5 text-text-2" />
-        </Button>
-        <div className="w-px h-3.5 bg-border mx-0.5" />
-        <Button
-          variant={trackCamera ? "secondary" : "ghost"}
-          size="icon"
-          onClick={() => setTrackCamera(!trackCamera)}
-          title={trackCamera ? "Auto-Track Camera Active" : "Enable Auto-Track Camera"}
-          className="h-7 w-7"
-        >
-          <Crosshair className={`w-3.5 h-3.5 ${trackCamera ? 'text-accent' : 'text-text-2'}`} />
-        </Button>
-        <div className="w-px h-3.5 bg-border mx-0.5" />
-        <Button variant="ghost" size="icon" onClick={handleExportPNG} title="Export PNG" className="h-7 w-7">
-          <Download className="w-3.5 h-3.5 text-text-2" />
-        </Button>
-      </div>
+                          {/* Floating Canvas Action Bar (Zoom, Fit, Export) */}
+                          <div className="absolute top-16 right-3 flex items-center gap-1.5 bg-surface border border-border shadow-md rounded p-1 z-20">
+                            <Button variant="ghost" size="icon" onClick={handleZoomIn} title="Zoom In">
+                              <ZoomIn className="w-4 h-4 text-text-2" />
+                              <div className={`absolute ${showTopControls ? 'top-16' : 'top-3'} right-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md border border-border shadow-xs rounded p-1 z-20`}>
+                                <Button variant="ghost" size="icon" onClick={handleZoomIn} title="Zoom In" className="h-7 w-7">
+                                  <ZoomIn className="w-3.5 h-3.5 text-text-2" />
+                                </Button>
+                                <Button variant="ghost" size="icon" onClick={handleZoomOut} title="Zoom Out">
+                                  <ZoomOut className="w-4 h-4 text-text-2" />
+                                  <Button variant="ghost" size="icon" onClick={handleZoomOut} title="Zoom Out" className="h-7 w-7">
+                                    <ZoomOut className="w-3.5 h-3.5 text-text-2" />
+                                  </Button>
+                                  <Button variant="ghost" size="icon" onClick={handleFit} title="Fit to View">
+                                    <Maximize2 className="w-4 h-4 text-text-2" />
+                                    <Button variant="ghost" size="icon" onClick={handleFit} title="Fit to View" className="h-7 w-7">
+                                      <Maximize2 className="w-3.5 h-3.5 text-text-2" />
+                                    </Button>
+                                    <div className="w-px h-4 bg-border mx-0.5" />
+                                    <div className="w-px h-3.5 bg-border mx-0.5" />
+                                    <Button
+                                      variant={trackCamera ? "secondary" : "ghost"}
+                                      size="icon"
+                                      onClick={() => setTrackCamera(!trackCamera)}
+                                      title={trackCamera ? "Auto-Track Camera Active" : "Enable Auto-Track Camera"}
+                                      className="h-7 w-7"
+                                    >
+                                      <Crosshair className={`w-4 h-4 ${trackCamera ? 'text-accent' : 'text-text-2'}`} />
+                                      <Crosshair className={`w-3.5 h-3.5 ${trackCamera ? 'text-accent' : 'text-text-2'}`} />
+                                    </Button>
+                                    <div className="w-px h-4 bg-border mx-0.5" />
+                                    <Button variant="ghost" size="icon" onClick={handleExportPNG} title="Export PNG">
+                                      <Download className="w-4 h-4 text-text-2" />
+                                      <div className="w-px h-3.5 bg-border mx-0.5" />
+                                      <Button variant="ghost" size="icon" onClick={handleExportPNG} title="Export PNG" className="h-7 w-7">
+                                        <Download className="w-3.5 h-3.5 text-text-2" />
+                                      </Button>
+                                    </div>
 
-      {/* Floating Minimal Legend (Compact Bottom Pill) */}
-      <div className="absolute bottom-3 left-3 bg-surface/90 backdrop-blur-md border border-border shadow-xs rounded px-2.5 py-1 z-20 text-[10px] flex items-center gap-2.5 font-mono">
-        <div className="flex items-center gap-1.5 text-text-2">
-          <span className="w-2 h-2 rounded-full bg-critical border border-critical inline-block" />
-          <span>Tier 1 Hold</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-text-2">
-          <span className="w-2 h-2 rounded-full bg-review border border-review inline-block" />
-          <span>Tier 2 Review</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-text-2">
-          <span className="w-2 h-2 rounded-full bg-cleared border border-cleared inline-block" />
-          <span>Tier 3 Clear</span>
-        </div>
-      </div>
-    </div>
-  );
+                                    {/* Floating Minimal Legend */}
+                                    <div className="absolute bottom-20 left-3 bg-surface/95 backdrop-blur-xs border border-border shadow-sm rounded p-2 z-20 text-[10px] space-y-1 font-mono">
+                                      <span className="font-semibold text-text text-[9px] uppercase tracking-wider block">Topology Tiers</span>
+                                      <div className="flex items-center gap-2 text-text-2">
+                                        {/* Floating Minimal Legend (Compact Bottom Pill) */}
+                                        <div className="absolute bottom-3 left-3 bg-surface/90 backdrop-blur-md border border-border shadow-xs rounded px-2.5 py-1 z-20 text-[10px] flex items-center gap-2.5 font-mono">
+                                          <div className="flex items-center gap-1.5 text-text-2">
+                                            <span className="w-2 h-2 rounded-full bg-critical border border-critical inline-block" />
+                                            <span>Tier 1 Hold (&gt;85% Risk)</span>
+                                            <span>Tier 1 Hold</span>
+                                          </div>
+                                          <div className="flex items-center gap-2 text-text-2">
+                                            <div className="flex items-center gap-1.5 text-text-2">
+                                              <span className="w-2 h-2 rounded-full bg-review border border-review inline-block" />
+                                              <span>Tier 2 Review Queue</span>
+                                              <span>Tier 2 Review</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-text-2">
+                                              <div className="flex items-center gap-1.5 text-text-2">
+                                                <span className="w-2 h-2 rounded-full bg-cleared border border-cleared inline-block" />
+                                                <span>Tier 3 Straight-Through</span>
+                                                <span>Tier 3 Clear</span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          );
 };

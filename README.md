@@ -3,7 +3,7 @@
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-intelligent--aml.vercel.app-000000.svg?logo=vercel&logoColor=white&style=for-the-badge)](https://intelligent-aml.vercel.app/)
 [![Python 3.11 | 3.12](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg?logo=fastapi&logoColor=white)](src/engine/api.py)
-[![React 18](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite-61DAFB.svg?logo=react&logoColor=black)](frontend/)
+[![Next.js 16.4+](https://img.shields.io/badge/Frontend-Next.js%2016.4+%20%7C%20React%2019.3%20%7C%20TS%205.8+-000000.svg?logo=nextdotjs&logoColor=white)](frontend/)
 [![Tests Passing](https://img.shields.io/badge/Tests-175%2F175%20Passing-brightgreen.svg)](tests/)
 [![Regulatory Compliance](https://img.shields.io/badge/Compliance-FinCEN_%7C_BFIU_%7C_goAML-purple.svg)](src/agents/sar_drafter_agent.py)
 [![Research Under Review](https://img.shields.io/badge/Elsevier-EAAI%20Under%20Review-blue.svg)](papers/EAAI_Research_Paper/)
@@ -453,8 +453,10 @@ To guarantee forensic accuracy and eliminate artificial intelligence hallucinati
 
 ## 🚀 Quickstart & Deployment Guide
 
+### 🌐 Free Online Lite Demo (Instant Live Web Showcase)
 ### 🌐 Live Production Demo & Instant Cloud Deployment
 
+You can launch and showcase the complete web version online on **free cloud infrastructure** in under 60 seconds with **zero cost**:
 > 🚀 **Direct Web Access:** **[https://intelligent-aml.vercel.app/](https://intelligent-aml.vercel.app/)**
 > The platform runs live on Vercel's global edge network with zero setup required. Explore simulated real-time streaming, interactive 2D/3D cash flow graphs, two-officer maker-checker workflows, and autonomous SAR generation.
 

@@ -1,24 +1,24 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  ShieldAlert, 
-  ShieldCheck, 
-  AlertTriangle, 
-  Lock, 
-  Unlock, 
-  Sliders, 
-  Activity, 
-  Search, 
-  Filter, 
-  CheckCircle2, 
-  XCircle, 
-  RotateCcw, 
-  Zap, 
-  Layers, 
-  ExternalLink, 
-  ArrowUpRight, 
-  FileText, 
-  UserCheck, 
-  Play, 
+import {
+  ShieldAlert,
+  ShieldCheck,
+  AlertTriangle,
+  Lock,
+  Unlock,
+  Sliders,
+  Activity,
+  Search,
+  Filter,
+  CheckCircle2,
+  XCircle,
+  RotateCcw,
+  Zap,
+  Layers,
+  ExternalLink,
+  ArrowUpRight,
+  FileText,
+  UserCheck,
+  Play,
   Eye,
   Shield,
   HelpCircle,
@@ -31,13 +31,13 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 
 export const MonitoringView = () => {
-  const { 
-    liveTransactions, 
-    blockedTransactions, 
-    fraudRules, 
-    blockTransaction, 
-    unblockTransaction, 
-    toggleFraudRule, 
+  const {
+    liveTransactions,
+    blockedTransactions,
+    fraudRules,
+    blockTransaction,
+    unblockTransaction,
+    toggleFraudRule,
     openDrawer,
     navigate,
     addToast
@@ -46,7 +46,7 @@ export const MonitoringView = () => {
   const [activeTab, setActiveTab] = useState('live'); // 'live' | 'rules' | 'blocked' | 'screen'
   const [searchQuery, setSearchQuery] = useState('');
   const [ruleCategoryFilter, setRuleCategoryFilter] = useState('ALL');
-  
+
   // Manual Block Modal State
   const [selectedTxToBlock, setSelectedTxToBlock] = useState(null);
   const [blockReason, setBlockReason] = useState('Sub-threshold CTR structuring pattern detected');
@@ -114,7 +114,7 @@ export const MonitoringView = () => {
   const handleRunSimulation = (e) => {
     e.preventDefault();
     const amountNum = parseFloat(simAmount) || 0;
-    
+
     // Evaluate against active fraud rules
     const matches = [];
     if (amountNum >= 9000 && amountNum <= 9950) {
@@ -234,11 +234,10 @@ export const MonitoringView = () => {
       <div className="flex items-center gap-1 border-b border-border text-xs font-mono">
         <button
           onClick={() => setActiveTab('live')}
-          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
-            activeTab === 'live'
+          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${activeTab === 'live'
               ? 'border-accent text-accent'
               : 'border-transparent text-text-muted hover:text-text'
-          }`}
+            }`}
         >
           <Activity className="w-3.5 h-3.5" />
           <span>Real-Time Stream Monitoring</span>
@@ -249,11 +248,10 @@ export const MonitoringView = () => {
 
         <button
           onClick={() => setActiveTab('blocked')}
-          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
-            activeTab === 'blocked'
+          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${activeTab === 'blocked'
               ? 'border-accent text-accent'
               : 'border-transparent text-text-muted hover:text-text'
-          }`}
+            }`}
         >
           <Lock className="w-3.5 h-3.5" />
           <span>Blocked Transactions Ledger</span>
@@ -264,11 +262,10 @@ export const MonitoringView = () => {
 
         <button
           onClick={() => setActiveTab('rules')}
-          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
-            activeTab === 'rules'
+          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${activeTab === 'rules'
               ? 'border-accent text-accent'
               : 'border-transparent text-text-muted hover:text-text'
-          }`}
+            }`}
         >
           <Sliders className="w-3.5 h-3.5" />
           <span>Fraud Detection Rules ({fraudRules.length})</span>
@@ -276,11 +273,10 @@ export const MonitoringView = () => {
 
         <button
           onClick={() => setActiveTab('screen')}
-          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
-            activeTab === 'screen'
+          className={`px-3 py-2 border-b-2 font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${activeTab === 'screen'
               ? 'border-accent text-accent'
               : 'border-transparent text-text-muted hover:text-text'
-          }`}
+            }`}
         >
           <Zap className="w-3.5 h-3.5" />
           <span>Interactive Wire Screener</span>
@@ -338,128 +334,126 @@ export const MonitoringView = () => {
                     </tr>
                   ) : (
                     filteredLiveTxs.map((tx, idx) => {
-                    const isAlreadyBlocked = blockedTransactions.some(b => b.txId === tx.id && b.status === 'BLOCKED');
-                    const isHighRisk = tx.tierCode === 1 || tx.riskScore > 0.85;
+                      const isAlreadyBlocked = blockedTransactions.some(b => b.txId === tx.id && b.status === 'BLOCKED');
+                      const isHighRisk = tx.tierCode === 1 || tx.riskScore > 0.85;
 
-                    return (
-                      <tr 
-                        key={`${tx.id}-${idx}`}
-                        className={`hover:bg-surfaceHover transition-colors ${
-                          isAlreadyBlocked ? 'bg-critical/5' : isHighRisk ? 'bg-amber-500/5' : ''
-                        }`}
-                      >
-                        <td className="py-2.5 px-3 whitespace-nowrap">
-                          <span className="font-semibold text-text block">{tx.timestamp || '08:24 UTC'}</span>
-                          <span className="text-[10px] text-accent block">{tx.swiftReference || tx.id}</span>
-                        </td>
+                      return (
+                        <tr
+                          key={`${tx.id}-${idx}`}
+                          className={`hover:bg-surfaceHover transition-colors ${isAlreadyBlocked ? 'bg-critical/5' : isHighRisk ? 'bg-amber-500/5' : ''
+                            }`}
+                        >
+                          <td className="py-2.5 px-3 whitespace-nowrap">
+                            <span className="font-semibold text-text block">{tx.timestamp || '08:24 UTC'}</span>
+                            <span className="text-[10px] text-accent block">{tx.swiftReference || tx.id}</span>
+                          </td>
 
-                        <td className="py-2.5 px-3 max-w-[180px]">
-                          <span className="font-semibold text-text truncate block">{tx.sourceEntity}</span>
-                          <span className="text-[10px] text-text-muted truncate block">{tx.sourceAccount}</span>
-                        </td>
+                          <td className="py-2.5 px-3 max-w-[180px]">
+                            <span className="font-semibold text-text truncate block">{tx.sourceEntity}</span>
+                            <span className="text-[10px] text-text-muted truncate block">{tx.sourceAccount}</span>
+                          </td>
 
-                        <td className="py-2.5 px-3 max-w-[180px]">
-                          <span className="font-semibold text-text truncate block">{tx.targetEntity}</span>
-                          <span className="text-[10px] text-text-muted truncate block">{tx.targetAccount}</span>
-                        </td>
+                          <td className="py-2.5 px-3 max-w-[180px]">
+                            <span className="font-semibold text-text truncate block">{tx.targetEntity}</span>
+                            <span className="text-[10px] text-text-muted truncate block">{tx.targetAccount}</span>
+                          </td>
 
-                        <td className="py-2.5 px-3 whitespace-nowrap">
-                          <Badge variant="neutral" size="sm">
-                            {tx.rail}
-                          </Badge>
-                        </td>
+                          <td className="py-2.5 px-3 whitespace-nowrap">
+                            <Badge variant="neutral" size="sm">
+                              {tx.rail}
+                            </Badge>
+                          </td>
 
-                        <td className="py-2.5 px-3 text-right whitespace-nowrap">
-                          <span className="font-bold text-text tabular-nums block">
-                            ${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                          </span>
-                          <span className="text-[10px] text-text-muted block">
-                            ৳{Number(tx.amountBdt || tx.amount * 120).toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                          </span>
-                        </td>
-
-                        <td className="py-2.5 px-3 text-center whitespace-nowrap">
-                          <span className={`font-bold block ${
-                            tx.riskScore > 0.85 ? 'text-critical' : tx.riskScore > 0.30 ? 'text-review' : 'text-cleared'
-                          }`}>
-                            {(tx.riskScore * 100).toFixed(1)}%
-                          </span>
-                          <span className="text-[9px] text-text-muted block">
-                            {tx.tierCode === 1 ? 'High Risk' : tx.tierCode === 2 ? 'Borderline' : 'Standard'}
-                          </span>
-                        </td>
-
-                        <td className="py-2.5 px-3 text-center whitespace-nowrap">
-                          {isAlreadyBlocked ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-critical/15 text-critical border border-critical/30 animate-pulse">
-                              <Lock className="w-2.5 h-2.5" />
-                              BLOCKED
+                          <td className="py-2.5 px-3 text-right whitespace-nowrap">
+                            <span className="font-bold text-text tabular-nums block">
+                              ${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                             </span>
-                          ) : tx.tierCode === 1 ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-500 border border-amber-500/30">
-                              <AlertTriangle className="w-2.5 h-2.5" />
-                              HOLD PENDING
+                            <span className="text-[10px] text-text-muted block">
+                              ৳{Number(tx.amountBdt || tx.amount * 120).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-cleared/10 text-cleared border border-cleared/20">
-                              <CheckCircle2 className="w-2.5 h-2.5" />
-                              CLEARED
+                          </td>
+
+                          <td className="py-2.5 px-3 text-center whitespace-nowrap">
+                            <span className={`font-bold block ${tx.riskScore > 0.85 ? 'text-critical' : tx.riskScore > 0.30 ? 'text-review' : 'text-cleared'
+                              }`}>
+                              {(tx.riskScore * 100).toFixed(1)}%
                             </span>
-                          )}
-                        </td>
+                            <span className="text-[9px] text-text-muted block">
+                              {tx.tierCode === 1 ? 'High Risk' : tx.tierCode === 2 ? 'Borderline' : 'Standard'}
+                            </span>
+                          </td>
 
-                        <td className="py-2.5 px-3 text-right whitespace-nowrap">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <button
-                              onClick={() => openDrawer({
-                                account: tx.sourceAccount,
-                                entityName: tx.sourceEntity,
-                                tier: tx.tierLabel,
-                                tierCode: tx.tierCode,
-                                amount: tx.amount,
-                                riskScore: tx.riskScore,
-                                whyFlagged: tx.whyFlagged || 'Real-time evaluated telemetry'
-                              })}
-                              className="p-1.5 rounded hover:bg-surface border border-border text-text-muted hover:text-text cursor-pointer transition-colors"
-                              title="Inspect Details"
-                            >
-                              <Eye className="w-3.5 h-3.5" />
-                            </button>
-
+                          <td className="py-2.5 px-3 text-center whitespace-nowrap">
                             {isAlreadyBlocked ? (
-                              <button
-                                onClick={() => {
-                                  const block = blockedTransactions.find(b => b.txId === tx.id);
-                                  setSelectedBlockToRelease(block);
-                                  setIsUnblockModalOpen(true);
-                                }}
-                                className="px-2 py-1 rounded bg-cleared/10 text-cleared hover:bg-cleared/20 border border-cleared/30 font-semibold text-[10px] cursor-pointer flex items-center gap-1 transition-colors"
-                                title="Release Administrative Hold"
-                              >
-                                <Unlock className="w-3 h-3" />
-                                <span>Release</span>
-                              </button>
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-critical/15 text-critical border border-critical/30 animate-pulse">
+                                <Lock className="w-2.5 h-2.5" />
+                                BLOCKED
+                              </span>
+                            ) : tx.tierCode === 1 ? (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-500 border border-amber-500/30">
+                                <AlertTriangle className="w-2.5 h-2.5" />
+                                HOLD PENDING
+                              </span>
                             ) : (
-                              <button
-                                onClick={() => {
-                                  setSelectedTxToBlock(tx);
-                                  setIsBlockModalOpen(true);
-                                }}
-                                className={`px-2 py-1 rounded font-semibold text-[10px] cursor-pointer flex items-center gap-1 transition-colors ${
-                                  isHighRisk
-                                    ? 'bg-critical text-white hover:bg-critical/90 shadow-xs'
-                                    : 'bg-surface hover:bg-critical/10 text-text hover:text-critical border border-border hover:border-critical/30'
-                                }`}
-                                title="Block & Quarantine Transaction"
-                              >
-                                <Lock className="w-3 h-3" />
-                                <span>Block</span>
-                              </button>
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-cleared/10 text-cleared border border-cleared/20">
+                                <CheckCircle2 className="w-2.5 h-2.5" />
+                                CLEARED
+                              </span>
                             )}
-                          </div>
-                        </td>
-                      </tr>
-                    );
+                          </td>
+
+                          <td className="py-2.5 px-3 text-right whitespace-nowrap">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                onClick={() => openDrawer({
+                                  account: tx.sourceAccount,
+                                  entityName: tx.sourceEntity,
+                                  tier: tx.tierLabel,
+                                  tierCode: tx.tierCode,
+                                  amount: tx.amount,
+                                  riskScore: tx.riskScore,
+                                  whyFlagged: tx.whyFlagged || 'Real-time evaluated telemetry'
+                                })}
+                                className="p-1.5 rounded hover:bg-surface border border-border text-text-muted hover:text-text cursor-pointer transition-colors"
+                                title="Inspect Details"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                              </button>
+
+                              {isAlreadyBlocked ? (
+                                <button
+                                  onClick={() => {
+                                    const block = blockedTransactions.find(b => b.txId === tx.id);
+                                    setSelectedBlockToRelease(block);
+                                    setIsUnblockModalOpen(true);
+                                  }}
+                                  className="px-2 py-1 rounded bg-cleared/10 text-cleared hover:bg-cleared/20 border border-cleared/30 font-semibold text-[10px] cursor-pointer flex items-center gap-1 transition-colors"
+                                  title="Release Administrative Hold"
+                                >
+                                  <Unlock className="w-3 h-3" />
+                                  <span>Release</span>
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    setSelectedTxToBlock(tx);
+                                    setIsBlockModalOpen(true);
+                                  }}
+                                  className={`px-2 py-1 rounded font-semibold text-[10px] cursor-pointer flex items-center gap-1 transition-colors ${isHighRisk
+                                      ? 'bg-critical text-white hover:bg-critical/90 shadow-xs'
+                                      : 'bg-surface hover:bg-critical/10 text-text hover:text-critical border border-border hover:border-critical/30'
+                                    }`}
+                                  title="Block & Quarantine Transaction"
+                                >
+                                  <Lock className="w-3 h-3" />
+                                  <span>Block</span>
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   }))}
                 </tbody>
               </table>
@@ -603,17 +597,15 @@ export const MonitoringView = () => {
               const isActive = rule.status === 'ACTIVE';
 
               return (
-                <Card 
+                <Card
                   key={rule.id}
-                  className={`transition-all ${
-                    isActive ? 'border-border' : 'border-borderSubtle opacity-60 bg-bg'
-                  }`}
+                  className={`transition-all ${isActive ? 'border-border' : 'border-borderSubtle opacity-60 bg-bg'
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs font-mono ${
-                        rule.severity === 'CRITICAL' ? 'bg-critical/15 text-critical' : 'bg-amber-500/15 text-amber-500'
-                      }`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs font-mono ${rule.severity === 'CRITICAL' ? 'bg-critical/15 text-critical' : 'bg-amber-500/15 text-amber-500'
+                        }`}>
                         {rule.code}
                       </div>
                       <div>
@@ -624,11 +616,10 @@ export const MonitoringView = () => {
 
                     <button
                       onClick={() => toggleFraudRule(rule.id)}
-                      className={`px-2.5 py-1 rounded text-xs font-mono font-bold cursor-pointer transition-colors border ${
-                        isActive
+                      className={`px-2.5 py-1 rounded text-xs font-mono font-bold cursor-pointer transition-colors border ${isActive
                           ? 'bg-cleared/15 text-cleared border-cleared/40 hover:bg-cleared/25'
                           : 'bg-surface text-text-muted border-border hover:text-text'
-                      }`}
+                        }`}
                     >
                       {isActive ? 'ACTIVE' : 'DISABLED'}
                     </button>
@@ -646,9 +637,8 @@ export const MonitoringView = () => {
 
                     <div>
                       <span className="text-[10px] text-text-muted uppercase block">Enforcement</span>
-                      <span className={`font-bold text-[11px] ${
-                        rule.action === 'AUTOMATIC_BLOCK' ? 'text-critical' : 'text-amber-500'
-                      }`}>
+                      <span className={`font-bold text-[11px] ${rule.action === 'AUTOMATIC_BLOCK' ? 'text-critical' : 'text-amber-500'
+                        }`}>
                         {rule.action.replace('_', ' ')}
                       </span>
                     </div>
@@ -745,9 +735,8 @@ export const MonitoringView = () => {
                   <div className="p-3 rounded-lg border bg-bg flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-text-muted uppercase block">DECISION VERDICT</span>
-                      <span className={`text-base font-bold ${
-                        simResult.status === 'BLOCKED' ? 'text-critical' : simResult.status === 'REVIEW' ? 'text-review' : 'text-cleared'
-                      }`}>
+                      <span className={`text-base font-bold ${simResult.status === 'BLOCKED' ? 'text-critical' : simResult.status === 'REVIEW' ? 'text-review' : 'text-cleared'
+                        }`}>
                         {simResult.decision}
                       </span>
                     </div>
@@ -805,7 +794,7 @@ export const MonitoringView = () => {
                 </div>
                 <h3 className="font-bold text-text text-sm">Intercept & Block Transaction</h3>
               </div>
-              <button 
+              <button
                 onClick={() => setIsBlockModalOpen(false)}
                 className="text-text-muted hover:text-text cursor-pointer"
               >
@@ -898,7 +887,7 @@ export const MonitoringView = () => {
                 </div>
                 <h3 className="font-bold text-text text-sm">Four-Eyes Dual Control Release</h3>
               </div>
-              <button 
+              <button
                 onClick={() => setIsUnblockModalOpen(false)}
                 className="text-text-muted hover:text-text cursor-pointer"
               >

@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Institutional Dark Terminal (Obsidian Void / Deep Slate) */
+  --color-canvas: #0B0F17;
+  --color-panel: #131B2B;
+  --color-panel-raised: #1A2438;
+  --color-panel-border: #1E293B;
+  --color-panel-border-subtle: #162032;
+
+  /* Typography Colors */
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #CBD5E1;
+  --color-text-muted: #94A3B8;
+  --color-text-dim: #64748B;
+
+  /* Semantic Banking Risk Tiers */
+  --color-tier1-crimson: #EF4444;
+  --color-tier1-crimson-bg: rgba(239, 68, 68, 0.12);
+  --color-tier1-crimson-border: rgba(239, 68, 68, 0.35);
+
+  --color-tier2-amber: #F59E0B;
+  --color-tier2-amber-bg: rgba(245, 158, 11, 0.12);
+  --color-tier2-amber-border: rgba(245, 158, 11, 0.35);
+
+  --color-tier3-emerald: #10B981;
+  --color-tier3-emerald-bg: rgba(16, 185, 129, 0.12);
+  --color-tier3-emerald-border: rgba(16, 185, 129, 0.35);
+
+  /* Primary Accents */
+  --color-brand-accent: #3B82F6;
+  --color-brand-cyan: #38BDF8;
+  --color-brand-indigo: #818CF8;
+}
+
+/* Light Mode Overrides (Federal Banknote) */
+[data-theme='light'],
+.light {
+  --color-canvas: #F4F7F5;
+  --color-panel: #FFFFFF;
+  --color-panel-raised: #EAEFEA;
+  --color-panel-border: #D6E0DA;
+  --color-panel-border-subtle: #E2EAE5;
+
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748B;
+  --color-text-dim: #94A3B8;
+
+  --color-tier1-crimson-bg: #FEF2F2;
+  --color-tier1-crimson-border: #FCA5A5;
+
+  --color-tier2-amber-bg: #FFFBEB;
+  --color-tier2-amber-border: #FDE68A;
+
+  --color-tier3-emerald-bg: #F0FDF4;
+  --color-tier3-emerald-border: #BBF7D0;
+}
+
+html,
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Strict Financial Numerical Alignment */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-panel-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-dim);
+}

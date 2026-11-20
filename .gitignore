@@ -64,6 +64,8 @@ node_modules/
 frontend/node_modules/
 dist/
 frontend/dist/
+.next/
+frontend/.next/
 .eslintcache
 *.tsbuildinfo
 npm-debug.log*

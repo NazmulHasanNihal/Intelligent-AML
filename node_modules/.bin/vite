@@ -6,8 +6,12 @@ if [ -f "$DIR/../../frontend/bin/vite-compat.cjs" ]; then
     BRIDGE="$DIR/../../frontend/bin/vite-compat.cjs"
 elif [ -f "$DIR/../frontend/bin/vite-compat.cjs" ]; then
     BRIDGE="$DIR/../frontend/bin/vite-compat.cjs"
+elif [ -f "$DIR/../bin/vite-compat.cjs" ]; then
+    BRIDGE="$DIR/../bin/vite-compat.cjs"
 elif [ -f "./frontend/bin/vite-compat.cjs" ]; then
     BRIDGE="./frontend/bin/vite-compat.cjs"
+elif [ -f "./bin/vite-compat.cjs" ]; then
+    BRIDGE="./bin/vite-compat.cjs"
 else
     BRIDGE="$(pwd)/frontend/bin/vite-compat.cjs"
 fi

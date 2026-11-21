@@ -1,0 +1,23 @@
+# Vercel Deployment Ignore Manifest
+# Prevent Vercel from detecting Python serverless environment and downloading backend ML wheels
+requirements.txt
+configs/
+data/
+models/
+papers/
+reports/
+scripts/
+src/
+tests/
+bin/python/
+bin/tectonic.exe
+.venv/
+venv/
+*.py
+*.tex
+*.pdf
+*.h5
+*.pt
+*.parquet
+*.duckdb
+*.log

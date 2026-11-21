@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
+    "postinstall": "node -e \"const fs=require('fs'); const path=require('path'); const binDir=path.join('node_modules', '.bin'); fs.mkdirSync(binDir, {recursive:true}); const shim='#!/bin/sh\\nexec node \\\"' + path.resolve('bin/vite-compat.cjs') + '\\\" \\\"$@\\\"\\n'; fs.writeFileSync(path.join(binDir, 'vite'), shim); try { fs.chmodSync(path.join(binDir, 'vite'), 0o755); } catch(e){}\"",
     "vite": "node ./bin/vite-compat.cjs",
     "vite:build": "node ./bin/vite-compat.cjs",
     "start": "next start --port 3000",

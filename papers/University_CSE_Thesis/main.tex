@@ -3,9 +3,14 @@
 % Page Geometry & Binding Margins (1.5" Left Margin for National University)
 \usepackage[left=1.5in, right=1.0in, top=1.0in, bottom=1.0in]{geometry}
 
+% Mathematics & Algorithms
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools,bm}
+\usepackage{algorithm,algpseudocode}
+\usepackage{placeins}
+
 % Typography & Spacing
 \usepackage[T1]{fontenc}
-\usepackage{times}
+\usepackage{newtxtext,newtxmath}
 \usepackage{microtype}
 \usepackage{ragged2e}
 \usepackage{pifont}
@@ -18,12 +23,6 @@
 \emergencystretch=3em
 \hfuzz=1pt
 \hbadness=2000
-
-% Mathematics & Algorithms
-\usepackage{amsmath,amssymb,amsfonts,bm,mathtools}
-\usepackage{algorithm,algpseudocode}
-\usepackage{amsthm}
-\usepackage{placeins}
 
 \providecommand{\REQUIRE}{\Require}
 \providecommand{\ENSURE}{\Ensure}
@@ -45,14 +44,20 @@
 \usepackage{listings}
 \usepackage{upquote}
 \usepackage{caption}
-\captionsetup{font=small,labelfont=bf,skip=8pt,singlelinecheck=false,justification=justified}
+\captionsetup{font={small,singlespacing},labelfont=bf,skip=8pt,singlelinecheck=false,justification=justified}
+\usepackage{etoolbox}
+\AtBeginEnvironment{table}{\singlespacing}
+\AtBeginEnvironment{longtable}{\singlespacing}
+\AtBeginEnvironment{algorithm}{\singlespacing}
 \graphicspath{{figures/}{figs/}}
 
 % Float Placement & Page Density Optimization
 \renewcommand{\topfraction}{0.92}
 \renewcommand{\bottomfraction}{0.85}
-\renewcommand{\textfraction}{0.08}
-\renewcommand{\floatpagefraction}{0.80}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.78}
+\widowpenalty=10000
+\clubpenalty=10000
 \setlength{\floatsep}{14pt plus 4pt minus 2pt}
 \setlength{\textfloatsep}{16pt plus 4pt minus 3pt}
 \setlength{\intextsep}{14pt plus 4pt minus 2pt}
@@ -74,7 +79,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\nouppercase{\leftmark}}
-\fancyhead[R]{\small\nouppercase{\textit{C-STGB Thesis Monograph}}}
+\fancyhead[R]{\small\nouppercase{\textit{Risk-Controlled Spatio-Temporal Graph Learning for Financial Forensics}}}
 \fancyfoot[C]{\textbf{\thepage}}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
@@ -124,7 +129,7 @@
 }
 
 \lstset{
-  basicstyle=\ttfamily\footnotesize,
+  basicstyle=\ttfamily\footnotesize\singlespacing,
   columns=fullflexible,
   keepspaces=true,
   upquote=true,
@@ -143,14 +148,17 @@
   showstringspaces=false
 }
 
+\title{Risk-Controlled Spatio-Temporal Graph Learning for High-Velocity Financial Forensics and Compliance Automation}
+\author{Md. Nazmul, Musrat Jahan Gungun, and Sagor Chandra}
+
 % Citations & Hyperlinks
 \usepackage{cite}
 \usepackage{hyperref}
 \hypersetup{
   breaklinks=true,
   hidelinks,
-  pdftitle={C-STGB: Conformal Spatio-Temporal GraphBoost for High-Velocity Financial Forensics and Compliance Automation},
-  pdfauthor={Md. Nazmul and Musrat Jahan Gungun}
+  pdftitle={Risk-Controlled Spatio-Temporal Graph Learning for High-Velocity Financial Forensics and Compliance Automation},
+  pdfauthor={Md. Nazmul, Musrat Jahan Gungun, and Sagor Chandra}
 }
 
 % Formal Theorem Environments (amsthm Styled)

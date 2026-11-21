@@ -249,7 +249,7 @@ Automated Test Suites & Disclosed & 175 automated unit, integration, and regress
 All 13 baseline models and C-STGB were tuned using Tree-structured Parzen Estimator (TPE) over 50 Bayesian optimization trials on the validation split $\mathcal{D}_{\text{val}}$. Table~\ref{app_tab:hyperparam_grid} summarizes the search spaces and optimal configurations for C-STGB alongside representative exemplars across tabular, temporal, and heterogeneous baseline families.
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/fig_hyperparam_sensitivity_4panel.pdf}
+\includegraphics[width=\textwidth]{figures/fig_hyperparam_sensitivity_4panel.pdf}
 \caption[Four-Panel Hyperparameter Sensitivity Analysis]{Four-panel hyperparameter sensitivity analysis of the C-STGB framework: (a) Macro F1 stability across edge-trust floor thresholds $\delta_{\text{floor}} \in [0.02, 0.30]$, peaking at $\delta_{\text{floor}}=0.10$; (b) Precision versus recall frontier across regulatory asymmetric cost ratios $C_{\text{FN}}/C_{\text{FP}} \in [5, 30]$, stabilizing at the calibrated 15:1 ratio; (c) Minority F1-score and inference latency scaling across neighborhood degree caps $K \in [5, 30]$, establishing $K=15$ as the optimal Pareto operating knee ($0.45$\,ms latency); (d) Finite-sample empirical coverage reliability under non-stationary temporal drift across Adaptive Conformal Inference (ACI) step sizes $\gamma \in [0.001, 0.05]$.}
 \label{fig:app_hyperparam_sensitivity}
 \end{figure}
@@ -363,40 +363,40 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_explainability_portals} (F
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.88\textwidth]{figures/01_surveillance_desk.png}
+\includegraphics[width=0.98\textwidth]{figures/01_surveillance_desk.png}
 \caption[Real-Time Surveillance Desk and Live Alert Triage Queue Console]{Real-Time Surveillance Desk and Alert Triage Queue, displaying streaming ingestion telemetry, non-conformity drift distribution, and class-conditional conformal triage tiers ($\Gamma(u)$).}
 \label{fig:app_surveillance_desk}
 \vspace{0.3cm}
-\includegraphics[width=0.88\textwidth]{figures/02_network_topology.png}
+\includegraphics[width=0.98\textwidth]{figures/02_network_topology.png}
 \caption[3D Multi-Hop Counterparty Forensic Graph Studio Console]{3D Multi-Hop Counterparty Forensic Graph Studio (Three.js WebGL rendering) visualizing directed laundering conduits with real-time edge-trust camouflage filtering ($\hat{g}_{ij} \ge 0.10$).}
 \label{fig:app_graph_studio}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.88\textwidth]{figures/03_case_management.png}
+\includegraphics[width=0.98\textwidth]{figures/03_case_management.png}
 \caption[Case Management \& Regulatory SLA Docket Console]{Case Management \& Regulatory SLA Docket: tracking prioritized forensic review queues, regulatory filing SLA deadlines, case assignment dockets, and supervisory triage workflows.}
 \label{fig:app_case_management}
 \vspace{0.3cm}
-\includegraphics[width=0.88\textwidth]{figures/04_case_detail_four_eyes.png}
+\includegraphics[width=0.98\textwidth]{figures/04_case_detail_four_eyes.png}
 \caption[Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console]{Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console: displaying dual-investigator concurrence workflows, calibrated non-conformity scores, and counterfactual recourse action paths.}
 \label{fig:app_case_detail_four_eyes}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.88\textwidth]{figures/05_multi_agent_sar.png}
+\includegraphics[width=0.98\textwidth]{figures/05_multi_agent_sar.png}
 \caption[Multi-Agent SAR Narrative Generation Console]{Multi-Agent SAR Narrative Generation Console: displaying real-time collaborative draft synthesis across the 4-agent swarm, FinCEN Form 111 XML validation, and Grounds of Suspicion breakdown.}
 \label{fig:app_multi_agent_sar}
 \vspace{0.3cm}
-\includegraphics[width=0.88\textwidth]{figures/06_model_governance_drift.png}
+\includegraphics[width=0.98\textwidth]{figures/06_model_governance_drift.png}
 \caption[Model Governance and Drift Monitoring Console]{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 11-7 / SR 21-8.}
 \label{fig:app_model_governance_drift}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.88\textwidth]{figures/07_audit_vault.png}
+\includegraphics[width=0.98\textwidth]{figures/07_audit_vault.png}
 \caption[Tamper-Evident Cryptographic WORM Audit Vault Console]{Tamper-Evident Cryptographic WORM Audit Vault: immutable SHA-256 Merkle tree audit receipt ledger, satisfying Federal Rules of Evidence FRE 902(11) self-authenticating digital records and SEC Rule 17a-4 regulatory compliance.}
 \label{fig:app_audit_vault}
 \end{figure}

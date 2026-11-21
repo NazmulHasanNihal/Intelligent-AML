@@ -1,6 +1,7 @@
 """
 Figure 8.2: Real-Time Operational UML Sequence Lifeline
-Redesigned with reduced text, large legible fonts (>= 7.0pt), and a clean, intuitive 2-phase sequence.
+Standalone publication script for C-STGB monograph.
+Fixes all text overlapping between lifeline actors and message arrows with compact 2-line badges.
 """
 import sys
 from pathlib import Path
@@ -14,19 +15,17 @@ from common import (
     COLOR_INGEST, COLOR_INGEST_BG,
     COLOR_GNN, COLOR_GNN_BG,
     COLOR_SAFE, COLOR_SAFE_BG,
-    COLOR_RISK, COLOR_RISK_BG,
-    COLOR_REVIEW, COLOR_REVIEW_BG,
     COLOR_DARK, COLOR_MUTED, COLOR_BORDER
 )
 
 def generate():
     setup_plt(font_size=8.5, title_size=10.0, label_size=8.5)
-    fig, ax = plt.subplots(figsize=(11.5, 6.2), dpi=300)
+    fig, ax = plt.subplots(figsize=(12.0, 6.8), dpi=300)
     ax.axis('off')
     ax.set_xlim(0.0, 100.0)
     ax.set_ylim(0.0, 100.0)
 
-    # Master Background
+    # Master Canvas Background
     ax.add_patch(patches.Rectangle((0, 0), 100, 100, facecolor='#ffffff', edgecolor='none'))
 
     # Top Header Banner
@@ -34,32 +33,32 @@ def generate():
         (1.5, 92.5), 97.0, 6.5,
         facecolor=COLOR_DARK, edgecolor='none'
     ))
-    ax.text(2.8, 96.5, 'REAL-TIME OPERATIONAL SEQUENCE LIFELINE & EXECUTION TRACE',
-            ha='left', va='center', fontsize=9.8, fontweight='bold', color='#ffffff')
-    ax.text(2.8, 94.0, 'Deterministic In-Flight Pipeline: Ingress -> Cache -> Neural Forward Pass -> Conformal Triage -> Merkle WORM',
+    ax.text(3.0, 96.6, 'REAL-TIME OPERATIONAL SEQUENCE LIFELINE & EXECUTION TRACE',
+            ha='left', va='center', fontsize=9.6, fontweight='bold', color='#ffffff')
+    ax.text(3.0, 94.2, 'Deterministic In-Flight Pipeline: Ingress -> Cache -> Neural Forward Pass -> Conformal Triage -> Merkle WORM',
             ha='left', va='center', fontsize=7.2, color='#94a3b8')
 
     # Top Right SLA Badge
     ax.add_patch(patches.Rectangle(
-        (76.0, 93.2), 22.0, 5.0,
+        (75.5, 93.3), 22.0, 4.8,
         facecolor='#065f46', edgecolor='#10b981', linewidth=1.0
     ))
-    ax.text(87.0, 95.7, 'FAST-PATH: 0.45 ms (SLA < 10 ms)',
+    ax.text(86.5, 95.7, 'FAST-PATH: 0.45 ms (SLA < 10 ms)',
             ha='center', va='center', fontsize=6.8, fontweight='bold', color='#ecfdf5')
 
     # 6 Lifeline Actors
     actors = [
-        {"name": "Core Banking", "sub": "ISO 20022 Webhook", "x": 9.0, "col": COLOR_DARK, "bg": "#f8fafc"},
-        {"name": "FastAPI Gateway", "sub": "Async Event Worker", "x": 25.5, "col": COLOR_INGEST, "bg": COLOR_INGEST_BG},
-        {"name": "DuckDB Cache", "sub": "Zero-Copy Arrow", "x": 42.0, "col": COLOR_GNN, "bg": COLOR_GNN_BG},
+        {"name": "Core Banking", "sub": "ISO 20022 Webhook", "x": 8.5, "col": COLOR_DARK, "bg": "#f8fafc"},
+        {"name": "FastAPI Gateway", "sub": "Async Event Worker", "x": 25.0, "col": COLOR_INGEST, "bg": COLOR_INGEST_BG},
+        {"name": "DuckDB Cache", "sub": "Zero-Copy Arrow", "x": 41.5, "col": COLOR_GNN, "bg": COLOR_GNN_BG},
         {"name": "C-STGB Neural Pod", "sub": "TorchScript GNN", "x": 58.5, "col": "#ea580c", "bg": "#fff7ed"},
-        {"name": "Conformal Arbiter", "sub": "Class-Cond. CRC", "x": 75.0, "col": "#7c3aed", "bg": "#faf5ff"},
-        {"name": "WORM Vault", "sub": "SHA-256 S3 Lock", "x": 91.5, "col": COLOR_SAFE, "bg": COLOR_SAFE_BG},
+        {"name": "Conformal Arbiter", "sub": "Class-Cond. CRC", "x": 75.5, "col": "#7c3aed", "bg": "#faf5ff"},
+        {"name": "WORM Vault", "sub": "SHA-256 S3 Lock", "x": 92.0, "col": COLOR_SAFE, "bg": COLOR_SAFE_BG},
     ]
 
     header_y = 83.5
     header_h = 7.0
-    header_w = 14.5
+    header_w = 14.8
     lifeline_bottom_y = 6.0
 
     # Draw Actor Headers and Vertical Lifelines
@@ -83,73 +82,134 @@ def generate():
                 ha='center', va='center', fontsize=6.2, color=COLOR_MUTED, zorder=6)
 
     # =========================================================================
-    # PHASE 1 FRAME: SYNCHRONOUS FAST-PATH (y: 38.0 to 81.5)
+    # PHASE 1 FRAME: SYNCHRONOUS FAST-PATH (y: 37.0 to 82.0)
     # =========================================================================
     ax.add_patch(patches.Rectangle(
-        (2.0, 38.0), 96.0, 43.5,
+        (2.0, 37.0), 96.0, 45.0,
         facecolor='#f0fdf4', edgecolor=COLOR_SAFE, linewidth=1.2, linestyle='-', zorder=1
     ))
     ax.add_patch(patches.Rectangle(
-        (2.0, 78.5), 45.0, 3.0,
+        (2.0, 79.0), 45.0, 3.0,
         facecolor=COLOR_SAFE, edgecolor='none', zorder=2
     ))
-    ax.text(3.5, 80.0, "SYNCHRONOUS IN-FLIGHT FAST PATH (< 0.45 ms SLA)",
+    ax.text(3.5, 80.5, "SYNCHRONOUS IN-FLIGHT FAST PATH (< 0.45 ms SLA)",
             ha='left', va='center', fontsize=7.2, fontweight='bold', color='#ffffff', zorder=3)
-    ax.text(96.0, 80.0, "22.2x Safety Margin vs 10 ms Banking SLA",
+    ax.text(96.0, 80.5, "22.2x Safety Margin vs 10 ms Banking SLA",
             ha='right', va='center', fontsize=6.8, fontweight='bold', color='#15803d', zorder=3)
 
     # Sync Messages (Numbered 1 to 6)
+    # Formatted with clean 2-line labels to guarantee zero overlap across lifelines
     sync_msgs = [
-        {"y": 74.0, "x1": 9.0, "x2": 25.5, "txt": "1. POST /api/v1/inference/score (ISO 20022)", "col": COLOR_DARK},
-        {"y": 67.0, "x1": 25.5, "x2": 42.0, "txt": "2. Query 2-Hop Historical Subgraph", "col": COLOR_INGEST},
-        {"y": 60.0, "x1": 42.0, "x2": 58.5, "txt": "3. Zero-Copy Arrow Tensor Stream (<0.12 ms)", "col": COLOR_GNN},
-        {"y": 53.0, "x1": 58.5, "x2": 75.0, "txt": "4. Forward Pass & Edge-Trust Gating (<0.28 ms)", "col": "#ea580c"},
-        {"y": 46.0, "x1": 75.0, "x2": 25.5, "txt": "5. CRC Prediction Set: {0} Safe, {0,1} Review, {1} Quarantined", "col": "#7c3aed"},
-        {"y": 40.0, "x1": 25.5, "x2": 9.0, "txt": "6. Return Decision (HTTP 200 STP Clear / Review / Quarantine)", "col": COLOR_SAFE},
+        {
+            "y": 74.0, "x1": 8.5, "x2": 25.0,
+            "title": "1. POST /inference/score",
+            "sub": "ISO 20022 Webhook Ingest",
+            "col": COLOR_DARK
+        },
+        {
+            "y": 67.0, "x1": 25.0, "x2": 41.5,
+            "title": "2. Query Ego-Graph Cache",
+            "sub": "DuckDB Zero-Copy Arrow",
+            "col": COLOR_INGEST
+        },
+        {
+            "y": 60.0, "x1": 41.5, "x2": 58.5,
+            "title": "3. Arrow Tensor Stream",
+            "sub": "< 0.12 ms IPC Transport",
+            "col": COLOR_GNN
+        },
+        {
+            "y": 53.0, "x1": 58.5, "x2": 75.5,
+            "title": "4. Forward Pass & Edge Gating",
+            "sub": "< 0.28 ms C-STGB Inference",
+            "col": "#ea580c"
+        },
+        {
+            "y": 46.0, "x1": 75.5, "x2": 25.0,
+            "title": "5. Calibrated CRC Prediction Set",
+            "sub": "{0} Safe · {0,1} Review · {1} Quarantine",
+            "col": "#7c3aed"
+        },
+        {
+            "y": 39.5, "x1": 25.0, "x2": 8.5,
+            "title": "6. Return Decision (HTTP 200)",
+            "sub": "STP Clear / Review / Quarantine",
+            "col": COLOR_SAFE
+        },
     ]
 
     for m in sync_msgs:
         y, x1, x2 = m["y"], m["x1"], m["x2"]
         # Draw Arrow
-        ax.annotate("", xy=(x2, y), xytext=(x1, y),
-                    arrowprops=dict(arrowstyle="-|>", lw=1.6, color=m["col"], mutation_scale=10), zorder=4)
-        # Message Label with white background pill
-        mid_x = (x1 + x2) / 2
-        ax.text(mid_x, y + 1.8, m["txt"], ha="center", va="bottom",
-                fontsize=6.8, fontweight="bold", color=m["col"],
-                bbox=dict(boxstyle="square,pad=0.2", fc="#ffffff", ec=m["col"], lw=0.8), zorder=5)
+        ax.annotate(
+            "", xy=(x2, y), xytext=(x1, y),
+            arrowprops=dict(arrowstyle="-|>", lw=1.6, color=m["col"], mutation_scale=10),
+            zorder=4
+        )
+        mid_x = (x1 + x2) / 2.0
+        label_text = f"{m['title']}\n{m['sub']}"
+        ax.text(
+            mid_x, y + 1.2, label_text,
+            ha="center", va="bottom",
+            fontsize=6.2, fontweight="bold", color=m["col"], linespacing=1.15,
+            bbox=dict(boxstyle="round,pad=0.22", fc="#ffffff", ec=m["col"], lw=0.75, alpha=0.96),
+            zorder=6
+        )
 
     # =========================================================================
-    # PHASE 2 FRAME: ASYNCHRONOUS TIER-1/2 SWARM & WORM AUDIT (y: 8.0 to 35.5)
+    # PHASE 2 FRAME: ASYNCHRONOUS TIER-1/2 SWARM & WORM AUDIT (y: 8.0 to 35.0)
     # =========================================================================
     ax.add_patch(patches.Rectangle(
-        (2.0, 8.0), 96.0, 27.5,
+        (2.0, 8.0), 96.0, 27.0,
         facecolor='#fefce8', edgecolor='#ca8a04', linewidth=1.2, linestyle='--', zorder=1
     ))
     ax.add_patch(patches.Rectangle(
-        (2.0, 32.5), 52.0, 3.0,
+        (2.0, 32.0), 52.0, 3.0,
         facecolor='#ca8a04', edgecolor='none', zorder=2
     ))
-    ax.text(3.5, 34.0, "ASYNCHRONOUS SWARM FORENSICS & WORM AUDIT (TIER 1 & 2)",
+    ax.text(3.5, 33.5, "ASYNCHRONOUS SWARM FORENSICS & WORM AUDIT (TIER 1 & 2)",
             ha='left', va='center', fontsize=7.2, fontweight='bold', color='#ffffff', zorder=3)
-    ax.text(96.0, 34.0, "Non-blocking background queue | Zero core banking impact",
+    ax.text(96.0, 33.5, "Non-blocking background queue | Zero core banking impact",
             ha='right', va='center', fontsize=6.8, fontweight='bold', color='#854d0e', zorder=3)
 
     # Async Messages (Numbered 7 to 9)
     async_msgs = [
-        {"y": 26.5, "x1": 25.5, "x2": 58.5, "txt": "7. Async Dispatch: High-Risk Alert to Forensic Queue", "col": '#b45309'},
-        {"y": 19.5, "x1": 58.5, "x2": 75.0, "txt": "8. 4-Agent LLM Swarm Generates Certified SAR Dossier", "col": '#b45309'},
-        {"y": 12.5, "x1": 75.0, "x2": 91.5, "txt": "9. Seal SHA-256 Merkle Leaf in Immutable S3 WORM Vault", "col": COLOR_SAFE},
+        {
+            "y": 25.5, "x1": 25.0, "x2": 58.5,
+            "title": "7. Async Dispatch to Forensic Queue",
+            "sub": "High-Risk Tier-1/2 Ambiguous Events",
+            "col": '#b45309'
+        },
+        {
+            "y": 19.0, "x1": 58.5, "x2": 75.5,
+            "title": "8. 4-Agent Forensic LLM Swarm",
+            "sub": "Generates Certified SAR Dossier",
+            "col": '#b45309'
+        },
+        {
+            "y": 12.5, "x1": 75.5, "x2": 92.0,
+            "title": "9. Seal Immutable Audit Record",
+            "sub": "SHA-256 Merkle Leaf in WORM Vault",
+            "col": COLOR_SAFE
+        },
     ]
 
     for m in async_msgs:
         y, x1, x2 = m["y"], m["x1"], m["x2"]
-        ax.annotate("", xy=(x2, y), xytext=(x1, y),
-                    arrowprops=dict(arrowstyle="-|>", lw=1.6, color=m["col"], linestyle="--", mutation_scale=10), zorder=4)
-        mid_x = (x1 + x2) / 2
-        ax.text(mid_x, y + 1.8, m["txt"], ha="center", va="bottom",
-                fontsize=6.8, fontweight="bold", color=m["col"],
-                bbox=dict(boxstyle="square,pad=0.2", fc="#ffffff", ec=m["col"], lw=0.8), zorder=5)
+        ax.annotate(
+            "", xy=(x2, y), xytext=(x1, y),
+            arrowprops=dict(arrowstyle="-|>", lw=1.6, color=m["col"], linestyle="--", mutation_scale=10),
+            zorder=4
+        )
+        mid_x = (x1 + x2) / 2.0
+        label_text = f"{m['title']}\n{m['sub']}"
+        ax.text(
+            mid_x, y + 1.2, label_text,
+            ha="center", va="bottom",
+            fontsize=6.2, fontweight="bold", color=m["col"], linespacing=1.15,
+            bbox=dict(boxstyle="round,pad=0.22", fc="#ffffff", ec=m["col"], lw=0.75, alpha=0.96),
+            zorder=6
+        )
 
     # Bottom Takeaway Ribbon
     ax.add_patch(patches.Rectangle(

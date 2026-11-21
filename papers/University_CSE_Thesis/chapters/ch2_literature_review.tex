@@ -100,7 +100,7 @@ However, standard GraphSMOTE exhibits three major pathologies in financial crime
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\textwidth]{figures/fig21_adversarial_camouflage_topology.pdf}
+\includegraphics[width=0.98\textwidth]{figures/fig21_adversarial_camouflage_topology.pdf}
 \caption[Adversarial Camouflage Topology and Edge-Trust Filter Pruning]{Topological impact of adversarial camouflage and edge-trust pruning in financial networks: (a) Raw camouflaged transaction graph where an illicit laundering cycle (C4) deliberately injects over 50 spurious edges to high-degree legitimate merchant hubs to induce feature over-smoothing; (b) C-STGB context-aware edge-trust gating ($\hat{g}_{ij} \ge 0.92$), successfully filtering out 65.9\% of adversarial camouflage chaff to isolate the true laundering wash cycle.}
 \label{fig:ch2_camouflage_topology}
 \end{figure}
@@ -141,7 +141,7 @@ Morris et al.~\cite{morris2019weisfeiler} and Xu et al.~\cite{xu2019powerful} pr
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/fig_2_3_1wl_failure_vs_invariants.pdf}
+\includegraphics[width=\textwidth]{figures/fig_2_3_1wl_failure_vs_invariants.pdf}
 \caption[1-WL Graph Isomorphism Bottleneck vs. 12-D Invariant Disambiguation]{Representational capacity contrast: (Left) Standard spatial GNNs bounded by the 1-WL graph isomorphism test assign identical in-degree multisets ($\deg_{\text{in}} = 4$, $\{\{1, 1, 1, 1\}\}$) to a legitimate retail store (Account~A) and a structured smurfing mule (Account~B), generating identical node embeddings $\mathbf{h}_A = \mathbf{h}_B$; (Right) C-STGB canonical invariants ($\tilde{\Phi}_{\text{flow}}$, $\mu_A$, $\sigma_A^2$, $\sigma_{\Delta t}$) establish an injective representation space that completely separates absorptive commercial merchants ($\Phi_{\text{flow}} \approx 0.05$) from high-velocity pass-through structuring conduits ($\Phi_{\text{flow}} \approx 0.994$).}
 \label{fig:ch2_1wl_disambiguation}
 \end{figure}
@@ -184,11 +184,12 @@ Table~\ref{tab:lit_matrix} presents an exhaustive 18-model comparative taxonomy 
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/fig_lit_evolution_frontier.pdf}
+\includegraphics[width=\textwidth]{figures/fig_lit_evolution_frontier.pdf}
 \caption[Chronological SOTA Progression Frontier on Elliptic-v1]{Chronological SOTA progression frontier on the Elliptic-v1 benchmark across paradigm eras (x-axis) vs.\ minority illicit F1-score (y-axis). C-STGB (91.42\% F1) establishes the new empirical frontier, decisively outperforming published spatial, temporal, and imbalanced graph learning architectures as well as strong tabular gradient boosted trees (XGBoost 88.35\% F1).}
 \label{fig:ch2_lit_evolution}
 \end{figure}
 
+\FloatBarrier
 \section{Chapter Summary}
 This chapter established the theoretical foundation and literature taxonomy across GNN architectures, temporal representation models, imbalanced graph oversampling, spectral over-smoothing dynamics, and distribution-free conformal inference. The comparative analysis demonstrated that existing approaches address individual failure modes in isolation, leaving severe operational gaps. The next chapter presents the complete mathematical formulation and tensor derivations of the unified C-STGB architecture.
 

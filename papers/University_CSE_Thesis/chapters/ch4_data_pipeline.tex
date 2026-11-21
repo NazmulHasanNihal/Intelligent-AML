@@ -58,7 +58,7 @@ These composite indexes reduce the 2-hop causal ego-graph extraction time to und
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/fig_4_3_causal_slicing.pdf}
+\includegraphics[width=\textwidth]{figures/fig_4_3_causal_slicing.pdf}
 \caption[Time-Causal 2-Hop Ego-Graph Extraction Window]{Time-causal 2-hop ego-graph extraction window enforced by DuckDB composite B-tree indexes (\texttt{idx\_source\_time}, \texttt{idx\_target\_time}), restricting neighborhood aggregation strictly to historical events ($t_e \le t_{\text{eval}}$) with $0.18\text{ ms}$ query latency and zero lookahead bias.}
 \label{fig:causal_slicing}
 \end{figure}
@@ -106,5 +106,6 @@ To eliminate redundant graph reconstruction for recurring financial hubs, C-STGB
 \subsection{Cache Architecture and Hit Rates}
 The cache stores pre-computed 2-hop topological ego-graphs and canonical invariant states indexed by entity ID. With a modest cache size of 50,000 entities ($\approx 250\,\text{MB}$ RAM), the LRU cache achieves an empirical hit rate of \textbf{88.4\%} across the Elliptic-v1 and SAML-D transaction streams, reducing average end-to-end inference latency on cached entities to \textbf{0.45 ms} (Fast-Path mode). Full latency distributions and Pareto trade-offs are evaluated in Section~\ref{sec:ch7_latency}.
 
+\FloatBarrier
 \section{Chapter Summary}
 This chapter presented the vectorized data engineering pipeline underpinning C-STGB, detailing DuckDB embedded SQL data contracts, Apache Arrow zero-copy memory management, dynamic heterogeneous schema mapping, and LRU subgraph caching. The next chapter establishes the mathematical foundations of Class-Conditional Conformal Risk Control and ethical compliance audits.

@@ -102,7 +102,7 @@ To enable seamless zero-shot cross-network generalization across heterogeneous f
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/fig_12d_toy_model_schematic.pdf}
+\includegraphics[width=\textwidth]{figures/fig_12d_toy_model_schematic.pdf}
 \caption[Physical Toy-Model Anatomy of Canonical Invariants]{Physical toy-model and flow anatomy of canonical invariants: (a) Hydrodynamic mass-flow balance where illicit wash accounts exhibit near-complete throughput ($A_{\text{out}} \approx A_{\text{in}}$) contrasting with absorptive benign merchants; (b) Temporal arrival dynamics contrasting coordinated Hawkes smurfing bursts against random Poisson arrivals; (c) Bi-directional causal taint reachability tracking forward fund dispersal and backward syndicate origin; (d) Multi-moment normalized invariant signature comparison distinguishing syndicates from commercial flows.}
 \label{fig:ch3_12d_toy_schematic}
 \end{figure}
@@ -222,6 +222,13 @@ provides a universal, schema-agnostic feature foundation. Table~\ref{tab:12d_inv
 }
 \end{table}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_canonical_invariants_empirical.pdf}
+\caption[Empirical Separability Distributions of Canonical Invariants]{Empirical separability distributions of the 12 canonical physical and temporal invariants $\mathbf{z}_{\text{inv}}(u, t)$ contrasting confirmed illicit entities ($y=1$, red) versus benign accounts ($y=0$, green) across benchmark datasets. Invariants such as flow regularity $\tilde{\Phi}_{\text{flow}}$, Hawkes burst arrival rate $\lambda_u$, and causal taints ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) provide decisive orthogonal discriminatory power even on isolated, cold-start nodes.}
+\label{fig:ch3_invariant_violins}
+\end{figure}
+
 \section{Module 1: Continuous-Time Multi-Scale Temporal Graph Encoder}\label{sec:ch3_mod1}
 To simultaneously capture microsecond smurfing bursts and 90-day dormant holding patterns, C-STGB employs continuous harmonic positional embeddings combined with a tri-band multi-frequency decay kernel.
 
@@ -257,14 +264,14 @@ The minimum floor parameter $w_{\min} = 0.05$ ensures that historical topologica
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\textwidth]{figures/fig_triband_decay_comparison.pdf}
+\includegraphics[width=0.98\textwidth]{figures/fig_triband_decay_comparison.pdf}
 \caption[Tri-Band Continuous Harmonic Temporal Decay Comparison]{Multi-scale tri-band continuous harmonic temporal attention kernel decay curve contrasting burst, diurnal (24h/48h resonance), and macro dormancy bands against standard monotonic exponential decay.}
 \label{fig:triband_decay_comparison}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/fig_triband_waveform_spectrum.pdf}
+\includegraphics[width=\textwidth]{figures/fig_triband_waveform_spectrum.pdf}
 \caption[Tri-Band Multi-Scale Harmonic Attention Spectrum]{Tri-band continuous harmonic temporal attention spectrum: Band 1 ($2.4\text{ h}$) captures sub-second smurfing bursts; Band 2 ($24\text{ h}$) captures circadian business hours; Band 3 ($168\text{ h}$) captures 90-day dormant hibernation holding chains, resolving the temporal decay failure mode of conventional GNNs.}
 \label{fig:ch3_triband_spectrum}
 \end{figure}
@@ -368,6 +375,13 @@ The unified anomaly representation $\mathbf{h}_u^*$ dynamically fuses graph embe
 where $\mathbf{W}_{\text{proj}} \in \mathbb{R}^{d \times (12 + d_v)}$ is a learnable projection matrix projecting concatenated tabular invariants and raw node features into the $d$-dimensional embedding space.
 When graph evidence is sparse ($\deg(u) \to 0$), $\alpha_u \to 0$, causing C-STGB to gracefully fall back on robust domain invariants, boosting zero-degree account F1-score to $89.60\%$ F1 ($+71.20\text{ pp}$ over standalone GNN's $18.40\%$ F1).
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig22_triband_spectral_coldstart.pdf}
+\caption[Evidence-Adaptive Gating and Spectral Cold-Start Convergence]{Evidence-adaptive gating dynamics $\alpha_u \in [0, 1]$ and spectral cold-start representation behavior across network density regimes. When entities possess sparse topological neighborhoods ($\deg(u) \le 1$), the learnable gating mechanism suppresses unreliable message aggregation ($\alpha_u \to 0$, empirically $\alpha_u \in [0.08, 0.12]$), transferring inductive reliance to the 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u, t)$ and securing $89.60\%$ F1 on newly created accounts. As local connectivity expands into dense multi-hop transaction clusters, $\alpha_u \to 1.0$, harnessing high-order spatio-temporal graph structures.}
+\label{fig:ch3_spectral_coldstart}
+\end{figure}
+
 \section{Module 5: Cost-Sensitive Risk Optimization Head}\label{sec:ch3_mod5}
 Anomaly risk probabilities are predicted via a multi-layer perceptron:
 \begin{equation}
@@ -408,7 +422,7 @@ with balancing multipliers $\gamma_1 = 0.50, \gamma_2 = 0.10, \lambda_{\text{ort
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.88\textwidth]{figures/fig_3_10_gradient_dynamics.pdf}
+\includegraphics[width=0.98\textwidth]{figures/fig_3_10_gradient_dynamics.pdf}
 \caption[Gradient Magnitude Dynamics of Cost-Sensitive Focal Tversky Loss]{Gradient magnitude dynamics of the Cost-Sensitive Asymmetric Focal Tversky Loss (Eq.~3.29), illustrating the $5.67\times$ false-negative gradient amplification ($\beta_{\text{FN}}=0.85$ vs.\ $\beta_{\text{FP}}=0.15$) that prevents minority recall collapse under $\pi < 0.05\%$ skew.}
 \label{fig:gradient_dynamics}
 \end{figure}
@@ -472,19 +486,7 @@ The complete multi-stage training pipeline is formalized in Algorithm~\ref{alg:c
 \label{fig:ch3_algorithm1_flowchart}
 \end{figure}
 
+\FloatBarrier
 \section{Chapter Summary}
 This chapter delivered the complete mathematical formulation of the C-STGB architecture, detailing continuous harmonic time encodings, Hawkes point process intensities, context-aware edge gating, typology-aware latent GraphSMOTE, evidence-adaptive graph-tabular fusion, and multi-task loss optimization. The next chapter presents the vectorized streaming data engineering pipeline.
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.98\textwidth]{figures/fig_canonical_invariants_empirical.pdf}
-\caption[Empirical Separability Distributions of Canonical Invariants]{Empirical separability distributions of the 12 canonical physical and temporal invariants $\mathbf{z}_{\text{inv}}(u, t)$ contrasting confirmed illicit entities ($y=1$, red) versus benign accounts ($y=0$, green) across benchmark datasets. Invariants such as flow regularity $\tilde{\Phi}_{\text{flow}}$, Hawkes burst arrival rate $\lambda_u$, and causal taints ($\mathbf{s}_{\text{fwd}}, \mathbf{s}_{\text{bwd}}$) provide decisive orthogonal discriminatory power even on isolated, cold-start nodes.}
-\label{fig:ch3_invariant_violins}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.98\textwidth]{figures/fig22_triband_spectral_coldstart.pdf}
-\caption[Evidence-Adaptive Gating and Spectral Cold-Start Convergence]{Evidence-adaptive gating dynamics $\alpha_u \in [0, 1]$ and spectral cold-start representation behavior across network density regimes. When entities possess sparse topological neighborhoods ($\deg(u) \le 1$), the learnable gating mechanism suppresses unreliable message aggregation ($\alpha_u \to 0$, empirically $\alpha_u \in [0.08, 0.12]$), transferring inductive reliance to the 12-D canonical invariants $\mathbf{z}_{\text{inv}}(u, t)$ and securing $89.60\%$ F1 on newly created accounts. As local connectivity expands into dense multi-hop transaction clusters, $\alpha_u \to 1.0$, harnessing high-order spatio-temporal graph structures.}
-\label{fig:ch3_spectral_coldstart}
-\end{figure}
 

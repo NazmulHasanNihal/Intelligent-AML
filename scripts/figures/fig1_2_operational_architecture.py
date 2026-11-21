@@ -180,7 +180,7 @@ def generate():
             "DuckDB Slices",
             "Shared Memory View"
         ],
-        COLOR_INGEST, COLOR_INGEST_BG, COLOR_INGEST, badge="SLA: < 0.05 ms"
+        COLOR_INGEST, COLOR_INGEST_BG, COLOR_INGEST, badge="SLA: 0.11 ms"
     )
 
     # Stream Feed Connectors (Gap from 7.4 to 12.0 is 4.6 units -> floating labels have 100% clearance)
@@ -199,7 +199,7 @@ def generate():
             "Fan-In / Fan-Out Velocity",
             "Cold-Start Tabular Features"
         ],
-        COLOR_GNN, COLOR_GNN_BG, COLOR_GNN, badge="Compute SLA: < 0.07 ms"
+        COLOR_GNN, COLOR_GNN_BG, COLOR_GNN, badge="Compute SLA: 0.18 ms"
     )
 
     # Arrow from Stage 1 to Stage 2 (Gap from 21.5 to 25.0 is 3.5 units -> Batch floats cleanly above arrow)
@@ -218,7 +218,7 @@ def generate():
             "65.9% Chaff Pruned",
             "Dirichlet Retention"
         ],
-        COLOR_GNN_PURPLE, "#faf5ff", COLOR_GNN_PURPLE, badge="GNN SLA: < 0.16 ms"
+        COLOR_GNN_PURPLE, "#faf5ff", COLOR_GNN_PURPLE, badge="GNN SLA: 0.12 ms"
     )
 
     # Offline Latent GraphSMOTE Auxiliary Component (Below GNN)
@@ -232,7 +232,7 @@ def generate():
             fontweight="bold", color="#d97706", zorder=3)
     ax.text(52.0, 36.0, "[Offline Training]", ha="center", va="center", fontsize=5.0,
             fontstyle="italic", color=COLOR_MUTED, zorder=3)
-    ax.text(45.6, 32.2, "> K-Means Clustering", fontsize=5.3, color="#1e293b", zorder=3)
+    ax.text(45.6, 32.2, "> Cosine Centroid Clustering (K=4)", fontsize=5.3, color="#1e293b", zorder=3)
     ax.text(45.6, 29.0, "> Bilinear Reconstruction", fontsize=5.3, color="#1e293b", zorder=3)
     ax.text(45.6, 25.8, "> Skew Rectification", fontsize=5.3, color="#1e293b", zorder=3)
 
@@ -255,7 +255,7 @@ def generate():
             "Asymmetric Loss Head",
             "Cutoff (Tau*=0.18)"
         ],
-        COLOR_REVIEW, COLOR_REVIEW_BG, COLOR_REVIEW, badge="Fusion SLA: < 0.04 ms"
+        COLOR_REVIEW, COLOR_REVIEW_BG, COLOR_REVIEW, badge="Fusion SLA: 0.04 ms"
     )
 
     # Arrow from GNN to Bayes Head (Gap from 59.5 to 64.0 is 4.5 units -> Embed floats cleanly)
@@ -284,7 +284,7 @@ def generate():
 
     # 1. TOP BRANCH: Tier 1 Quarantined (High Risk / Auto-SAR)
     draw_clean_pipe(ax, (diamond_cx, diamond_cy + diamond_ry), (out_x, 79.5),
-                    color=COLOR_RISK, lw=1.5, label="p >= q1 (0.18%)", label_pos=0.50, label_dy=1.6,
+                    color=COLOR_RISK, lw=1.5, label=r"p >= \tau_{high} (0.18%)", label_pos=0.50, label_dy=1.6,
                     style="-|>", rad=-0.08, va="bottom")
 
     t1_box = patches.FancyBboxPatch(
@@ -303,7 +303,7 @@ def generate():
     # 2. MIDDLE BRANCH: Tier 2 Human Review (Uncertainty Band)
     # Gap from diamond right tip (83.9) to box (89.8) is 5.9 units -> label floats cleanly!
     draw_clean_pipe(ax, (diamond_cx + diamond_rx, diamond_cy), (out_x, 62.0),
-                    color=COLOR_REVIEW, lw=1.5, label="q0 < p < q1", label_pos=0.50, label_dy=1.4, va="bottom")
+                    color=COLOR_REVIEW, lw=1.5, label=r"\tau_{low} < p < \tau_{high} (0.49%)", label_pos=0.50, label_dy=1.4, va="bottom")
 
     t2_box = patches.FancyBboxPatch(
         (out_x, 55.5), out_w, out_h,
@@ -321,7 +321,7 @@ def generate():
     # 3. BOTTOM BRANCH: Tier 3 Straight-Through Processed (Benign Safe)
     # Originates from lower facet of diamond to avoid overlapping the vertical audit line!
     draw_clean_pipe(ax, (diamond_cx + 1.2, diamond_cy - 4.2), (out_x, 44.5),
-                    color=COLOR_SAFE, lw=1.5, label="p <= q0 (99.33%)", label_pos=0.52, label_dy=-1.6,
+                    color=COLOR_SAFE, lw=1.5, label=r"p <= \tau_{low} (99.33%)", label_pos=0.52, label_dy=-1.6,
                     style="-|>", rad=0.08, va="top")
 
     t3_box = patches.FancyBboxPatch(

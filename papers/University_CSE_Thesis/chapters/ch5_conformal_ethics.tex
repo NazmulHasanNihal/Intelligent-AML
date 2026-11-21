@@ -101,7 +101,7 @@ Let $F_t^{(y)}(s) = \mathbb{P}_t(S^{(y)} \le s)$ and $F_{\text{cal}}^{(y)}(s) = 
 & + \big| \hat{F}_{\text{cal}}^{(y)}(\hat{q}^{(y)}) - (1 - \alpha_y) \big|
 \end{aligned}
 \end{equation}
-By maximal coupling of total variation distance, $\big| \mathbb{P}_t(S^{(y)} \in A) - \mathbb{P}_{\text{cal}}(S^{(y)} \in A) \big| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$ for all Borel sets $A$, yielding $|F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)})| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$. Applying the Dvoretzky-Kiefer-Wolfowitz (DKW) inequality to the exchangeable calibration sample $\mathcal{D}_{\text{cal}}^{(y)}$ ensures:
+By maximal coupling of total variation distance, $\big| \mathbb{P}_t(S^{(y)} \in A) - \mathbb{P}_{\text{cal}}(S^{(y)} \in A) \big| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$ for all Borel sets $A$, yielding $|F_t^{(y)}(\hat{q}^{(y)}) - F_{\text{cal}}^{(y)}(\hat{q}^{(y)})| \le d_{\mathrm{TV}}(\mathcal{P}_t^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$. Applying the Dvoretzky-Kiefer-Wolfowitz (DKW) inequality~\cite{massart1990tight} to the exchangeable calibration sample $\mathcal{D}_{\text{cal}}^{(y)}$ ensures:
 \begin{equation}
 \mathbb{P}\left( \sup_{s} \big| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \big| \le \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} \right) \ge 1 - \delta
 \end{equation}

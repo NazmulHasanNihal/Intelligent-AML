@@ -32,13 +32,13 @@ def generate():
         {"name": "TGN", "year": 4.3, "f1": 68.40, "cat": "Temporal GNN", "col": COLOR_INGEST, "ox": -10, "oy": 10, "ha": "right"},
         {"name": "GraphSMOTE", "year": 5.0, "f1": 72.10, "cat": "Imbalance GNN", "col": "#7c3aed", "ox": 10, "oy": -12, "ha": "left"},
         {"name": "ChronoWave-GNN", "year": 6.2, "f1": 84.20, "cat": "Temporal GNN", "col": COLOR_INGEST, "ox": -12, "oy": 10, "ha": "right"},
-        {"name": "XGBoost", "year": 2.6, "f1": 88.35, "cat": "Industrial Tabular", "col": COLOR_DARK, "ox": -12, "oy": 10, "ha": "right"},
+        {"name": "XGBoost", "year": 2.6, "f1": 88.35, "cat": "Industrial Tabular", "col": COLOR_DARK, "ox": 12, "oy": 10, "ha": "left"},
         {"name": "C-STGB (Proposed)", "year": 8.0, "f1": 91.42, "cat": "Proposed Framework", "col": COLOR_SAFE, "ox": -14, "oy": 12, "ha": "right"},
     ]
 
     # Draw Horizontal Tabular Baseline (XGBoost line)
     ax.axhline(88.35, color="#64748b", linestyle="--", lw=1.2, alpha=0.75, zorder=2)
-    ax.text(0.45, 90.0, "Industrial Baseline: XGBoost (88.35% F1)", fontsize=7.4, fontweight="bold", color="#475569",
+    ax.text(0.40, 89.8, "Industrial Tabular Baseline: 88.35%", fontsize=7.2, fontweight="bold", color="#475569",
             bbox=dict(boxstyle="square,pad=0.2", fc="#ffffff", ec="#cbd5e1", lw=0.6, alpha=0.9))
 
     # SOTA Frontier Curve (Pareto frontier connecting GCN -> Skip-GCN -> TGN -> GraphSMOTE -> ChronoWave -> C-STGB)
@@ -83,8 +83,8 @@ def generate():
         "2018\n(Attention)",
         "2020\n(Dynamic Time)",
         "2021\n(SMOTE Balance)",
-        "2022–2023\n(Camouflage Def.)",
-        "2024–2025\n(C-STGB Proposed)"
+        "2024–2026\n(Wavelet/Transf.)",
+        "2026\n(C-STGB Proposed)"
     ], fontsize=7.8, fontweight="bold")
 
     ax.set_xlabel("Chronological Evolution & Architectural Paradigm Milestones", fontsize=8.8, fontweight="bold", labelpad=8)

@@ -57,7 +57,7 @@ def generate():
     # ----------------------------------------------------
     # Right Panel: Adversarial Smurfing & Structuring Tree
     # ----------------------------------------------------
-    ax_m.set_xlim([-1.55, 1.50])
+    ax_m.set_xlim([-1.55, 1.65])
     ax_m.set_ylim([-1.60, 1.35])
     ax_m.set_title("(b) Synthetic Smurfing & Mule Network", fontweight="bold", fontsize=9.2, pad=12)
 

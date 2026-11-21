@@ -105,9 +105,9 @@ However, standard GraphSMOTE exhibits three major pathologies in financial crime
 \label{fig:ch2_camouflage_topology}
 \end{figure}
 
-Laundering syndicates actively obfuscate transaction patterns by interweaving illicit transfers with high-degree merchant accounts and utility hubs. To counter this, specialized GNNs have introduced camouflage-filtering mechanisms. CARE-GNN~\cite{dou2020enhancing} utilizes reinforcement learning to select informative neighbors across multi-relational graphs. Continual and multi-view gating architectures such as Liu et al.~\cite{liu2021overcoming} deploy gating mechanisms to suppress feature noise and prevent representation degradation. More recently, domain-specific architectures such as H$^2$IDE, CamFD, and Group-Aware GNN have explored heterophily-aware aggregation and homophily-preserving clustering. 
+Laundering syndicates actively obfuscate transaction patterns by interweaving illicit transfers with high-degree merchant accounts and utility hubs. To counter this, specialized GNNs have introduced camouflage-filtering mechanisms. CARE-GNN~\cite{dou2020enhancing} utilizes reinforcement learning to select informative neighbors across multi-relational graphs. Continual and multi-view gating architectures such as Liu et al.~\cite{liu2021overcoming} deploy gating mechanisms to suppress feature noise and prevent representation degradation.
 
-While open-source weights and reproduction harnesses for proprietary architectures (H$^2$IDE, CamFD, Group-Aware GNN) are not publicly released for full multi-dataset replication, Section~\ref{sec:ch7_sota_comparison} directly contrasts C-STGB against their published Elliptic-v1 benchmarks (where CamFD reported 85.30\% F1 and H$^2$IDE reported 84.10\% F1, both significantly trailing C-STGB's 91.42\% F1).
+Section~\ref{sec:ch7_sota_comparison} directly contrasts C-STGB against established and contemporary published Elliptic-v1 benchmarks (including Skip-GCN~\cite{weber2019anti}, CARE-GNN~\cite{dou2020enhancing}, GraphSMOTE~\cite{zhao2021graphsmote}, TGN~\cite{rossi2020temporal}, and ChronoWave-GNN~\cite{lin2026chronowave}), where C-STGB achieves 91.42\% minority illicit F1.
 
 \section{Conformal Prediction and Conformal Risk Control}
 In safety-critical regulatory environments, point predictions $\hat{p}_u \in [0, 1]$ lack formal uncertainty quantification, leading to unpredictable false positive cascades.
@@ -226,7 +226,7 @@ This chapter established the theoretical foundation and literature taxonomy acro
 & CARE-GNN~\cite{dou2020enhancing} & Multi-Relational & RL Neighbor Selector & \ding{55} & \ding{55} & \ding{55} & Relation Saliency \\
 & Liu et al.~\cite{liu2021overcoming} & Multi-View Graph & Gated Edge Filtering & \ding{55} & \ding{55} & \ding{55} & Gate Weights \\
 & Johannessen \& Jullum~\cite{johannessen2023predicting} & Heterogeneous Snapshot & Edge-Type Attention & Cost-Sensitive Loss & \ding{55} & \ding{55} & \ding{55} \\
-& CamFD / H$^2$IDE & Heterophilic Metric & Camouflage Pruning & Class Weighting & \ding{55} & \ding{55} & Subgraph Salience \\
+& Skip-GCN~\cite{weber2019anti} & Static Graph & Skip Residuals & \ding{55} & Highway Fallback & \ding{55} & \ding{55} \\
 \midrule
 \multirow{3}{*}{\textbf{(v) Imbalance \& Conformal}} 
 & GraphSMOTE~\cite{zhao2021graphsmote} & Static Graph & \ding{55} & Latent SMOTE & \ding{55} & \ding{55} & \ding{55} \\

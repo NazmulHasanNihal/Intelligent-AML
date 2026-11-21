@@ -46,7 +46,7 @@ With the rise of decentralized finance (DeFi), automated cross-chain bridges, an
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.96\textwidth]{figures/fig_benign_vs_smurfing_topology.pdf}
-\caption[Topological Contrast Between Legitimate Flows and Smurfing Syndicates]{Topological contrast between legitimate commercial banking flows and structured money laundering syndicates: (a) Benign retail merchant star topology with high inbound degree ($\deg \approx 85$) but minimal outbound forwarding ($\tilde{\Phi}_{\text{flow}} \approx 0.02$); (b) Illicit Source -> Mule 1--4 -> Exfil Account: multi-stage adversarial laundering syndicate exhibiting fan-out smurfing from placement source to intermediate mules and eventual consolidation into an exfiltration account ($\tilde{\Phi}_{\text{flow}} \approx 0.994$, structured amounts near statutory reporting thresholds).}
+\caption[Topological Contrast Between Legitimate Flows and Smurfing Syndicates]{Topological contrast between legitimate commercial banking flows and structured money laundering syndicates: (a) Benign retail merchant star topology with high inbound degree ($\deg \approx 85$) but minimal outbound forwarding ($\Phi_{\text{flow}} \approx 0.02$); (b) Illicit Source -> Mule 1--4 -> Exfil Account: multi-stage adversarial laundering syndicate exhibiting fan-out smurfing from placement source to intermediate mules and eventual consolidation into an exfiltration account ($\Phi_{\text{flow}} \approx 0.994$, structured amounts near statutory reporting thresholds).}
 \label{fig:ch1_topology_contrast}
 \end{figure}
 
@@ -72,7 +72,7 @@ Real-world deployment of Graph Neural Networks in financial transaction streams 
     \item \textbf{Long-Dwell Hibernation Evasion (30--90+ Days):} Sophisticated laundering rings deliberately introduce 30- to 90-day dormant delays between layering hops to avoid triggering velocity alarms. Conventional exponential temporal decay kernels ($\exp(-\lambda \Delta t)$) vanish toward zero, rendering continuous-time dynamic GNNs completely blind to dormant fund transfers.
     \item \textbf{Adversarial Topological Camouflage:} Fraudsters strategically route micro-transactions through high-degree merchant, utility, or exchange accounts. In standard GNN message-passing, this adversarial chaff induces severe feature over-smoothing, causing illicit nodes to blend into benign commercial clusters and diluting anomaly signals~\cite{dou2020enhancing}.
     \item \textbf{The Bayes Risk Imbalance Barrier ($\pi < 0.05\%$):} In real-world enterprise banking streams, illicit entities represent less than 0.05\% of accounts. Under such extreme skew, cross-entropy training causes the neural classification head to output conservative risk scores ($\hat{p} \le 0.35$), resulting in an 88\% \textit{Recall Collapse} under default decision boundaries ($\tau = 0.50$).
-    \item \textbf{The $k$-Hop Latency \& Memory Explosion:} High-density payment hubs with degrees exceeding 10,000 trigger combinatorial graph expansion, exhausting GPU VRAM and exceeding the 35\,ms real-time webhook Service Level Agreement (SLA) required for payment authorizations.
+    \item \textbf{The $k$-Hop Latency \& Memory Explosion:} High-density payment hubs with degrees exceeding 10,000 trigger combinatorial graph expansion, exhausting GPU VRAM and exceeding the 10\,ms Tier-1 real-time payment authorization Service Level Agreement (SLA).
     \item \textbf{Black-Box Uncertainty \& Queue Saturation:} Conventional point predictions provide no formal confidence bounds. Standard marginal conformal prediction inflates ambiguous prediction sets under extreme skew, flooding compliance queues with up to 18\% of total transaction volume.
 \end{enumerate}
 
@@ -149,5 +149,9 @@ The remainder of this dissertation is organized into eight core technical chapte
     \item \textbf{Chapter~\ref{ch:experiments}} reports comprehensive experimental campaigns, baseline matrices, ablation studies, and adversarial robustness benchmarks.
     \item \textbf{Chapter~\ref{ch:software}} details the enterprise software engineering architecture, asynchronous FastAPI streaming endpoints, and deployment specifications.
     \item \textbf{Chapter~\ref{ch:conclusion}} synthesizes research conclusions, discusses structural limitations, and outlines future research pathways.
-    \item \textbf{Appendices~\ref{app:proofs}--\ref{app:schemas}} provide extended non-asymptotic DKW drift bounds, ACI martingale proofs, and full ingestion attribute schema mappings across all 14 evaluated networks.
+    \item \textbf{Appendix~\ref{app:glossary}} provides a cross-disciplinary financial crime, graph machine learning, and conformal risk glossary.
+    \item \textbf{Appendix~\ref{app:proofs}} establishes the complete non-asymptotic DKW drift bounds and statistical coverage proofs.
+    \item \textbf{Appendix~\ref{app:schemas}} provides full benchmark schema mappings and DuckDB SQL contracts across all 14 evaluated networks.
+    \item \textbf{Appendix~\ref{app:reproducibility}} formalizes the reproducibility checklist, hyperparameter grids, and 14-network execution environment.
+    \item \textbf{Appendix~\ref{app:operator_manual}} delivers the enterprise operator manual, UI consoles walkthrough, and production code listings.
 \end{itemize}

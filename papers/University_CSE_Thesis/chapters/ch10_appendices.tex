@@ -32,7 +32,7 @@ To facilitate cross-disciplinary clarity across academic examiners, quantitative
 \textbf{GraphSMOTE} & An algorithmic framework synthesizing synthetic minority nodes in latent GNN representation space paired with localized edge-generator reconstruction. \\
 \textbf{Conformal Risk Control} & A distribution-free statistical framework providing finite-sample risk coverage guarantees $\mathbb{P}(Y \in \Gamma(X)) \ge 1 - \alpha$ under within-class exchangeability. \\
 \textbf{Adaptive Conformal Inference} & An online conformal calibration technique dynamically updating the significance level $\alpha_t$ via martingale convergence under temporal concept drift. \\
-\textbf{Selective Abstention} & The routing of ambiguous model predictions ($\Gamma(u) = \{0, 1\}$) to human compliance analysts while clearing decisive instances automatically. \\
+\textbf{Selective Abstention} & The routing of ambiguous model predictions ($\Gamma(u) = \{0, 1\}$ or $\emptyset$) to human compliance analysts while clearing decisive instances automatically. \\
 \textbf{Fast-Path Inference} & Sub-millisecond single-event transaction scoring ($0.45\,\text{ms}$) utilizing in-memory LRU caches and vectorized DuckDB/Arrow analytical tables. \\
 \textbf{FinCEN Form 111} & The statutory Suspicious Activity Report (SAR) XML specification mandated by the United States Treasury for documenting suspicious financial transactions. \\
 \textbf{AST Grammar Compiler} & A deterministic parser enforcing Extended Backus-Naur Form ($\mathcal{G}_{\text{SAR}}$) syntactic and semantic validity over LLM narrative outputs. \\
@@ -62,7 +62,7 @@ Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{test}}}(S(X, y) \
 \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| \le \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| + \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right|
 \end{equation}
 By maximal coupling of total variation distance on conditional measures, $\sup_{s \in \mathbb{R}} |F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s)| \le d_{\mathrm{TV}}(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$.
-By the classical Dvoretzky-Kiefer-Wolfowitz (DKW) inequality with optimal Massart constant applied to exchangeable sample $\mathcal{D}_{\text{cal}}^{(y)}$:
+By the classical Dvoretzky-Kiefer-Wolfowitz (DKW) inequality with optimal Massart constant~\cite{massart1990tight} applied to exchangeable sample $\mathcal{D}_{\text{cal}}^{(y)}$:
 \begin{equation}
 \mathbb{P}\left( \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| > \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} \right) \le \delta
 \end{equation}
@@ -218,6 +218,7 @@ LIMIT 50;
 
 \chapter{Hyperparameter Search Grids \& Formal Reproducibility Checklist}
 \label{app:hyperparams}
+\label{app:reproducibility}
 
 \section{Official Reproducibility Checklist}
 In compliance with international open-science reproducibility standards, Table~\ref{app_tab:reproducibility} provides the complete empirical disclosure checklist.
@@ -549,11 +550,14 @@ Listing~\ref{app_lst:fincen_xml_sample} provides the finalized, schema-validated
   <TopologicalEvidence SubgraphNodes='15' SubgraphEdges='18'>
     <CausalChain Hops='3' ExemplarPathAmount='29350.00'>
       <Hop Seq='1' Src='ACC_9941' Dst='ACC_MULE_02'
-           Amount='9850.00' Timestamp='2026-08-28T14:19:12Z' EdgeTrust='0.94'/>
+           Amount='9850.00' Timestamp='2026-08-28T14:19:12Z'
+           EdgeTrust='0.94'/>
       <Hop Seq='2' Src='ACC_MULE_02' Dst='ACC_MULE_08'
-           Amount='9800.00' Timestamp='2026-08-28T14:23:01Z' EdgeTrust='0.91'/>
+           Amount='9800.00' Timestamp='2026-08-28T14:23:01Z'
+           EdgeTrust='0.91'/>
       <Hop Seq='3' Src='ACC_MULE_08' Dst='ACC_OFFSHORE_08'
-           Amount='9700.00' Timestamp='2026-08-28T14:27:45Z' EdgeTrust='0.96'/>
+           Amount='9700.00' Timestamp='2026-08-28T14:27:45Z'
+           EdgeTrust='0.96'/>
     </CausalChain>
   </TopologicalEvidence>
 
@@ -631,7 +635,8 @@ FROM python:3.11-slim AS runner
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PATH="/opt/venv/bin:$PATH"
 RUN groupadd -g 10001 amlgroup && \
     useradd -u 10001 -g amlgroup -s /bin/bash -m amlapp && \
-    apt-get update && apt-get install -y --no-install-recommends libgomp1 curl && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends libgomp1 curl && \
     rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=builder --chown=amlapp:amlgroup /opt/venv /opt/venv
@@ -640,7 +645,8 @@ USER 10001:10001
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
-ENTRYPOINT ["uvicorn", "src.engine.api:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["uvicorn", "src.engine.api:app", \
+            "--host", "0.0.0.0", "--port", "8000"]
 \end{lstlisting}
 
 \clearpage

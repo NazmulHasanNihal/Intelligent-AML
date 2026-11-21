@@ -40,7 +40,7 @@ Table~\ref{tab:master_dataset_profiles} provides the structural characteristics 
 & \texttt{ibm\_amlsim\_hi\_medium}~\cite{suzumura2019amlsim} & Multi-Tier Wire & 300,000 & 550,000 & 0.23\% & 180,000 / 30,000 / 30,000 / 60,000 \\
 & \texttt{ibm\_amlsim\_li\_small}~\cite{suzumura2019amlsim} & Multi-Tier Wire & 100,000 & 180,000 & 0.75\% & 60,000 / 10,000 / 10,000 / 20,000 \\
 & \texttt{ibm\_amlsim\_li\_medium}~\cite{suzumura2019amlsim} & Multi-Tier Wire & 300,000 & 550,000 & 0.75\% & 180,000 / 30,000 / 30,000 / 60,000 \\
-& \texttt{dgraphfin} & Dynamic Credit & 3,064,288 & 967,956 & 1.30\% & 1,838,573 / 306,429 / 306,429 / 612,857 \\
+& \texttt{dgraphfin}~\cite{huang2022dgraph} & Dynamic Credit & 3,064,288 & 967,956 & 1.30\% & 1,838,573 / 306,429 / 306,429 / 612,857 \\
 \midrule
 Synthetic Typology & \texttt{data\_generator} & Complex Cycles & 100,000 & 250,000 & 1.50\% & 60,000 / 10,000 / 10,000 / 20,000 \\
 \midrule
@@ -80,7 +80,7 @@ Table~\ref{tab:dataset_licenses} details the formal licensing, public repositori
 \texttt{paysim1} & Lopez-Rojas et al.~\cite{lopez2016paysim} & CC BY-SA 4.0 & Yes & \url{https://www.kaggle.com/ntnu-testimon/paysim1} \\
 \texttt{paysim\_extended} & Lopez-Rojas et al.~\cite{lopez2016paysim} & CC BY-SA 4.0 & Yes & \url{https://github.com/edwarder/PaySimExtended} \\
 \texttt{ibm\_amlsim (4x)} & IBM Research~\cite{suzumura2019amlsim} & Apache 2.0 & Yes & \url{https://github.com/IBM/AMLSim} \\
-\texttt{dgraphfin} & FinV / DGraph Consortium & Academic Open & Yes & \url{https://dgraph.pku.edu.cn} \\
+\texttt{dgraphfin}~\cite{huang2022dgraph} & FinV / DGraph Consortium & Academic Open & Yes & \url{https://dgraph.pku.edu.cn} \\
 \texttt{data\_generator} & C-STGB Typology Generator & MIT License & Yes & Open Codebase Repository \\
 \texttt{cc\_transactions} & ULB / Dal Pozzolo et al.~\cite{dalpozzolo2018credit} & DbCL Open Data & Yes & \url{https://www.kaggle.com/mlg-ulb/creditcardfraud} \\
 \bottomrule
@@ -455,7 +455,7 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.96\textwidth]{figures/fig9_adversarial_camouflage_robustness.pdf}
-\caption[Adversarial Camouflage Link Robustness on Elliptic-v1]{Adversarial camouflage link robustness on Elliptic-v1 across increasing injected camouflage link ratios ($\rho \in [0.0, 0.80]$), demonstrating C-STGB's superior F1-score retention compared to baseline spatial and heterogeneous GNNs.}
+\caption[Adversarial Camouflage Link Robustness on Elliptic-v1]{Adversarial camouflage link robustness on Elliptic-v1 across increasing injected camouflage link ratios ($\rho \in [0.0, 0.80]$), demonstrating C-STGB's superior F1-score retention compared to baseline spatial and heterogeneous GNNs (all baselines evaluated under validation-tuned $\tau^*$ decision thresholds).}
 \label{fig:ch7_camouflage_robustness}
 \end{figure}
 

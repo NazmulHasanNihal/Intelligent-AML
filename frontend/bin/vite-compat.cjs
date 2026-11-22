@@ -19,13 +19,29 @@ console.log('===============================================================');
 const rootDir = process.cwd();
 const isFrontendDir = fs.existsSync(path.join(rootDir, 'src', 'app'));
 const frontendDir = isFrontendDir ? rootDir : path.join(rootDir, 'frontend');
+const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 console.log(`[Vercel Bridge] Target frontend directory: ${frontendDir}`);
+
+// Always ensure vite shims exist
+try {
+  const ensureShimsScript = path.join(frontendDir, 'bin', 'ensure-vite-shim.cjs');
+  if (fs.existsSync(ensureShimsScript)) {
+    require(ensureShimsScript);
+  }
+} catch (e) {
+  console.warn('[Vercel Bridge] Notice: ensure-vite-shim notice:', e.message);
+}
+
+if (process.argv.includes('--setup-shims')) {
+  console.log('[Vercel Bridge] Shims initialized. Exiting early.');
+  process.exit(0);
+}
 
 // 1. Ensure frontend dependencies are installed
 if (!fs.existsSync(path.join(frontendDir, 'node_modules', 'next'))) {
   console.log('[Vercel Bridge] Installing frontend dependencies...');
-  execSync('npm install --prefer-offline --no-audit', {
+  execSync(`${npmCmd} install --prefer-offline --no-audit`, {
     cwd: frontendDir,
     stdio: 'inherit',
     env: { ...process.env, VERCEL: '1' }
@@ -35,7 +51,7 @@ if (!fs.existsSync(path.join(frontendDir, 'node_modules', 'next'))) {
 // 2. Execute Next.js build
 console.log('[Vercel Bridge] Executing Next.js 16 production build...');
 try {
-  execSync('npm run build', {
+  execSync(`${npmCmd} run build`, {
     cwd: frontendDir,
     stdio: 'inherit',
     env: { ...process.env, VERCEL: '1' }

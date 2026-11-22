@@ -1,19 +1,16 @@
 #!/bin/sh
-# Intelligent-AML POSIX Shell Shim for Vercel
-# Intercepts 'vite build' or 'vite' calls on Linux containers
+# Universal Intelligent-AML Vercel Shim for Vite -> Next.js Bridge
 DIR="$(cd "$(dirname "$0")" && pwd)"
-if [ -f "$DIR/../../frontend/bin/vite-compat.cjs" ]; then
-    BRIDGE="$DIR/../../frontend/bin/vite-compat.cjs"
-elif [ -f "$DIR/../frontend/bin/vite-compat.cjs" ]; then
-    BRIDGE="$DIR/../frontend/bin/vite-compat.cjs"
-elif [ -f "$DIR/../bin/vite-compat.cjs" ]; then
-    BRIDGE="$DIR/../bin/vite-compat.cjs"
-elif [ -f "./frontend/bin/vite-compat.cjs" ]; then
-    BRIDGE="./frontend/bin/vite-compat.cjs"
-elif [ -f "./bin/vite-compat.cjs" ]; then
-    BRIDGE="./bin/vite-compat.cjs"
-else
-    BRIDGE="$(pwd)/frontend/bin/vite-compat.cjs"
-fi
-
-exec node "$BRIDGE" "$@"
+for candidate in \
+  "$DIR/../../frontend/bin/vite-compat.cjs" \
+  "$DIR/../frontend/bin/vite-compat.cjs" \
+  "$DIR/../bin/vite-compat.cjs" \
+  "$DIR/vite-compat.cjs" \
+  "$(pwd)/frontend/bin/vite-compat.cjs" \
+  "$(pwd)/bin/vite-compat.cjs"; do
+  if [ -f "$candidate" ]; then
+    exec node "$candidate" "$@"
+  fi
+done
+echo "[Vercel Shim] ERROR: Could not locate vite-compat.cjs bridge." >&2
+exit 1

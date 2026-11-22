@@ -1,6 +1,11 @@
 # Vercel Deployment Ignore Manifest
 # Prevent Vercel from detecting Python serverless environment and downloading backend ML wheels
 requirements.txt
+pyproject.toml
+uv.lock
+Dockerfile*
+docker-compose.yaml
+Makefile
 configs/
 data/
 models/
@@ -10,7 +15,7 @@ scripts/
 src/
 tests/
 bin/python/
-bin/tectonic.exe
+bin/tectonic*
 .venv/
 venv/
 *.py

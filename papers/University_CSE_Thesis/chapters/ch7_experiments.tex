@@ -6,7 +6,7 @@
   \item \textbf{Master Benchmark Suite:} 14 financial transaction networks, 9,534,980 entities, 9,528,355 transactions, contrasting 10 full-corpus baselines and 3 Elliptic-v1 literature architectures across public crypto and commercial banking rails.
   \item \textbf{SOTA Superiority:} Achieves 91.42\% F1 on Elliptic-v1, 99.10\% on Elliptic-v2, and 68.05\% macro F1 globally ($p < 0.001$ via Wilcoxon signed-rank tests with Holm-Bonferroni correction).
   \item \textbf{Factorial Ablations:} Stepwise progression and leave-one-out ablations isolate the precise marginal gain of each module, with GraphSMOTE and Edge-Gating contributing $+9.92\text{ pp}$ and $+7.70\text{ pp}$ stepwise F1.
-  \item \textbf{Camouflage \& Cold-Start Robustness:} Retains 86.4\% F1 under 50\% injected camouflage links; evidence-adaptive fusion yields 89.60\% F1 on zero-degree cold-start entities.
+  \item \textbf{Camouflage \& Cold-Start Robustness:} Retains 89.5\% F1 under 50\% injected camouflage links and 86.4\% at 70\%; evidence-adaptive fusion yields 89.60\% F1 on zero-degree cold-start entities.
   \item \textbf{Production SLAs:} Delivers 0.45\,ms Fast-Path P50 (0.82\,ms P99) latency and \mbox{31,250 tx/sec} throughput, meeting Tier-1 core-banking clearance requirements.
 \end{itemize}
 \end{takeawaybox}
@@ -259,7 +259,7 @@ Discrete Dynamic GNN & EvolveGCN & $18.94$ & $0.1480$ & $8.21$ & $8.40$ & $29.5\
 \end{figure}
 
 \subsection{Statistical Power Analysis and Wilcoxon Signed-Rank Significance Certifications}
-To ensure rigorous statistical conclusions without sample-size artifacts, our experimental protocol evaluates five locked random seeds across all 14 financial datasets ($N = 14 \times 13 \times 5 = 910$ model evaluations). Under a paired Wilcoxon signed-rank test across all 14 benchmark networks, C-STGB achieves a test statistic of $W = 105.0$ with $p = 6.10 \times 10^{-5}$ against all standard deep GNN baselines (TGN, CARE-GNN, HGT, GraphSAGE, GCN, GIN, and EvolveGCN), and $W = 104.0$ with $p = 1.22 \times 10^{-4}$ against GAT. Furthermore, against tabular ensembles, C-STGB significantly outperforms XGBoost ($W = 99.5, p = 1.58 \times 10^{-3}$) and CatBoost ($W = 102.0, p = 3.05 \times 10^{-4}$). Crucially, for a sample size of $n = 14$ pairs, the maximum mathematically possible Wilcoxon rank-sum is:
+To ensure rigorous statistical conclusions without sample-size artifacts, our experimental protocol evaluates five locked random seeds across all 14 financial datasets (770 primary runs [11 full-corpus models $\times$ 14 networks $\times$ 5 seeds] plus 140 ablation and literature-baseline runs totaling 910 evaluations). Under a paired Wilcoxon signed-rank test across all 14 benchmark networks, C-STGB achieves a test statistic of $W = 105.0$ with $p = 6.10 \times 10^{-5}$ against all standard deep GNN baselines (TGN, CARE-GNN, HGT, GraphSAGE, GCN, GIN, and EvolveGCN), and $W = 104.0$ with $p = 1.22 \times 10^{-4}$ against GAT. Furthermore, against tabular ensembles, C-STGB significantly outperforms XGBoost ($W = 99.5, p = 1.58 \times 10^{-3}$) and CatBoost ($W = 102.0, p = 3.05 \times 10^{-4}$). Crucially, for a sample size of $n = 14$ pairs, the maximum mathematically possible Wilcoxon rank-sum is:
 \begin{equation}
 W_{\max} = \frac{n(n + 1)}{2} = \frac{14 \times 15}{2} = 105.0
 \end{equation}
@@ -462,7 +462,7 @@ Clean Unperturbed Graph & $18.73\%$ & $24.50\%$ & $48.20\%$ & $64.50\%$ & $\math
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.96\textwidth]{figures/fig_edge_gate_distribution.pdf}
-\caption[Empirical Distribution of Learnable Edge-Trust Gating Weights]{Empirical distribution of learnable edge-trust gating weights $\hat{g}_{ij}$ on \texttt{elliptic\_v1} under adversarial camouflage injection. Spurious camouflage edges are suppressed below the safety floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial chaff connections while preserving authentic transaction conduits.}
+\caption[Empirical Distribution of Learnable Edge-Trust Gating Weights]{Empirical distribution of learnable edge-trust gating weights $\hat{g}_{ij}$ on \texttt{elliptic\_v1} under adversarial camouflage injection. Panel (b) plots pre-floor raw MLP gate outputs $g_{ij}$ before clamping to the safety floor $\delta_{\text{floor}} = 0.10$ (Eq.~\ref{eq:edge_trust_gating}). Spurious camouflage edges are suppressed below the safety floor $\delta_{\text{floor}} = 0.10$, pruning $65.9\%$ of adversarial chaff connections while preserving authentic transaction conduits.}
 \label{fig:ch7_edge_gate_distribution}
 \end{figure}
 
@@ -487,6 +487,7 @@ Table~\ref{tab:zero_shot_transfer} evaluates zero-shot cross-network generalizat
 \centering
 \caption[Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix]{Expanded 8-Pair Zero-Shot Cross-Domain Transfer Matrix under Completely Frozen Neural Backbones ($\eta=0$).}
 \label{tab:zero_shot_transfer}
+\setlength{\tabcolsep}{6pt}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llcccc}
 \toprule

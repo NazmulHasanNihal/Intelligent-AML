@@ -107,7 +107,7 @@ However, standard GraphSMOTE exhibits three major pathologies in financial crime
 
 Laundering syndicates actively obfuscate transaction patterns by interweaving illicit transfers with high-degree merchant accounts and utility hubs. To counter this, specialized GNNs have introduced camouflage-filtering mechanisms. CARE-GNN~\cite{dou2020enhancing} utilizes reinforcement learning to select informative neighbors across multi-relational graphs. Continual and multi-view gating architectures such as Liu et al.~\cite{liu2021overcoming} deploy gating mechanisms to suppress feature noise and prevent representation degradation.
 
-Section~\ref{sec:ch7_sota_comparison} directly contrasts C-STGB against established and contemporary published Elliptic-v1 benchmarks (including Skip-GCN~\cite{weber2019anti}, CARE-GNN~\cite{dou2020enhancing}, GraphSMOTE~\cite{zhao2021graphsmote}, TGN~\cite{rossi2020temporal}, and ChronoWave-GNN~\cite{lin2026chronowave}), where C-STGB achieves 91.42\% minority illicit F1.
+Section~\ref{sec:ch7_sota_comparison} directly contrasts C-STGB against published Elliptic-v1 baselines in Table~\ref{tab:sota_benchmark} (including ChronoWave-GNN 84.20\% F1~\cite{lin2026chronowave}, GraphSMOTE 72.10\% F1~\cite{zhao2021graphsmote}, and CARE-GNN 64.50\% F1~\cite{dou2020enhancing}), where C-STGB achieves 91.42\% minority illicit F1.
 
 \section{Conformal Prediction and Conformal Risk Control}
 In safety-critical regulatory environments, point predictions $\hat{p}_u \in [0, 1]$ lack formal uncertainty quantification, leading to unpredictable false positive cascades.

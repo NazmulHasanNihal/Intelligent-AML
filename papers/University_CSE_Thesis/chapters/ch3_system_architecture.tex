@@ -6,7 +6,7 @@
   \item \textbf{12-D Canonical Invariants ($\mathbf{z}_{\text{inv}}$):} Formulates physical mass-flow conservation ($\Phi_{\text{flow}}$), marked Hawkes burst rates ($\lambda_u$), pass-through layering ratios, and directed taint exposure.
   \item \textbf{Tri-Band Temporal Attention Kernel:} Synthesizes multi-scale exponential decay spanning burst ($\lambda_1=0.80\,\text{h}^{-1}$, $\tau_1=2.4\,\text{h}$), operational diurnal ($\lambda_2=0.05\,\text{h}^{-1}$, $\tau_2=24\,\text{h}$), and seasonal dormancy ($\lambda_3=0.01\,\text{h}^{-1}$, $\tau_3=168\,\text{h}$) regimes with continuous Fourier encodings.
   \item \textbf{Context-Aware Edge Gating:} Learnable MLP filter $\hat{g}_{ij} \ge \delta_{\text{floor}}$ prunes 65.9\% of spurious merchant camouflage noise prior to message passing.
-  \item \textbf{Typology GraphSMOTE:} Discovers latent topological clusters via Cosine-Similarity Centroid Clustering ($K=4$, $\tau_{\text{sim}}=0.75$) and generates synthetic illicit nodes with localized bilinear edge synthesis preserving mass conservation.
+  \item \textbf{Typology GraphSMOTE:} Discovers latent topological clusters via cosine-similarity centroid partitioning ($K=4$, $\tau_{\text{sim}}=0.75$) and generates synthetic illicit nodes with localized bilinear edge synthesis preserving mass conservation.
   \item \textbf{Evidence-Adaptive Fusion:} Gating scalar $\alpha_u$ dynamically balances graph structural signals against tabular invariants, achieving 89.60\% F1 on zero-degree cold-start nodes.
 \end{itemize}
 \end{takeawaybox}
@@ -300,10 +300,12 @@ Empirical evaluations demonstrate that setting $\delta_{\text{floor}} = 0.10$ pr
 \subsection{Unified Degree-Capped Dynamic Attention}
 To maintain sub-millisecond streaming SLAs, we enforce a strict top-$K$ degree cap ($K \le 15$) on active neighborhoods $\mathcal{N}_K(u)$. Message aggregation combines structural compatibility, continuous temporal decay, and edge-trust gating:
 \begin{equation}
-\tilde{\alpha}_{uv}^{(t)} = \frac{\exp\left( \mathbf{q}_u^T (\mathbf{k}_v + \mathbf{W}_E \mathbf{e}_{uv}) / \sqrt{d_k} \right) \cdot w(\Delta t_{uv}) \cdot \hat{g}_{uv}}{\sum_{w \in \mathcal{N}_K(u)} \exp\left( \mathbf{q}_u^T (\mathbf{k}_w + \mathbf{W}_E \mathbf{e}_{uw}) / \sqrt{d_k} \right) \cdot w(\Delta t_{uw}) \cdot \hat{g}_{uw}}
+\label{eq:temporal_attention_weights}
+\tilde{\alpha}_{uv}^{(l)} = \frac{\exp\left( \mathbf{q}_u^T (\mathbf{k}_v + \mathbf{W}_E \mathbf{e}_{uv}) / \sqrt{d_k} \right) \cdot w(\Delta t_{uv}) \cdot \hat{g}_{uv}}{\sum_{w \in \mathcal{N}_K(u)} \exp\left( \mathbf{q}_u^T (\mathbf{k}_w + \mathbf{W}_E \mathbf{e}_{uw}) / \sqrt{d_k} \right) \cdot w(\Delta t_{uw}) \cdot \hat{g}_{uw}}
 \end{equation}
 \begin{equation}
-\mathbf{h}_u^{(l+1)} = \sigma\left( \sum_{v \in \mathcal{N}_K(u)} \tilde{\alpha}_{uv}^{(t)} \mathbf{W}_V \mathbf{h}_v^{(l)} \right)
+\label{eq:message_aggregation}
+\mathbf{h}_u^{(l+1)} = \sigma\left( \sum_{v \in \mathcal{N}_K(u)} \tilde{\alpha}_{uv}^{(l)} \mathbf{W}_V \mathbf{h}_v^{(l)} \right)
 \end{equation}
 
 \section{Module 3: Typology-Clustered Latent GraphSMOTE}\label{sec:ch3_mod3}

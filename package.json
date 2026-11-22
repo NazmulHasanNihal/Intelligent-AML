@@ -11,8 +11,9 @@
   },
   "scripts": {
     "dev": "npm --prefix frontend run dev",
+    "prebuild": "node bin/ensure-vite-shim.cjs",
     "build": "npm --prefix frontend run build && node -e \"const fs=require('fs'); fs.cpSync('frontend/.next', '.next', {recursive:true}); try { fs.cpSync('frontend/public', 'public', {recursive:true}); } catch(e){}\"",
-    "postinstall": "node -e \"const fs=require('fs'); const path=require('path'); const binDir=path.join('node_modules', '.bin'); fs.mkdirSync(binDir, {recursive:true}); const shim='#!/bin/sh\\nexec node \\\"' + path.resolve('frontend/bin/vite-compat.cjs') + '\\\" \\\"$@\\\"\\n'; fs.writeFileSync(path.join(binDir, 'vite'), shim); try { fs.chmodSync(path.join(binDir, 'vite'), 0o755); } catch(e){}\"",
+    "postinstall": "node bin/ensure-vite-shim.cjs",
     "start": "npm --prefix frontend run start",
     "vite": "node frontend/bin/vite-compat.cjs",
     "vite:build": "node frontend/bin/vite-compat.cjs build",

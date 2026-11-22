@@ -1,0 +1,17 @@
+# Enforce LF line endings for POSIX compatibility on Linux (Vercel, Docker, CI)
+* text=auto eol=lf
+
+# Explicit LF for executable shims and scripts
+bin/vite text eol=lf
+frontend/bin/vite text eol=lf
+node_modules/.bin/vite text eol=lf
+*.sh text eol=lf
+*.cjs text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+
+# Windows batch files require CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf

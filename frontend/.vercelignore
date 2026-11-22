@@ -1,0 +1,12 @@
+# Vercel Deployment Ignore Manifest
+requirements.txt
+pyproject.toml
+uv.lock
+*.py
+*.tex
+*.pdf
+*.h5
+*.pt
+*.parquet
+*.duckdb
+*.log

@@ -49,7 +49,7 @@ To facilitate cross-disciplinary clarity across academic examiners, quantitative
 Let $\mathcal{P}_{\text{cal}}^{(y)}$ and $\mathcal{P}_{\text{test}}^{(y)}$ be the class-conditional probability measures defined on $\mathcal{X} \times \{y\}$ such that their class-conditional Total Variation distance satisfies $d_{\mathrm{TV}}(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}) = \frac{1}{2} \int |\, d\mathcal{P}_{\text{test}}^{(y)} - d\mathcal{P}_{\text{cal}}^{(y)} \,| \le \epsilon_{\text{drift}}$. Then for any non-conformity score function $S: \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$ with continuous non-atomic marginal CDF $F(s)$, the class-conditional conformal prediction set $\Gamma(X) = \{y \mid S(X, y) \le \hat{q}^{(y)}\}$ calibrated at level $\alpha \in (0, 1)$ on $n(y)$ exchangeable samples from $\mathcal{P}_{\text{cal}}^{(y)}$ satisfies:
 \begin{equation}
 \begin{aligned}
-\big| \mathbb{P}_{\mathcal{P}_{\text{test}}}\left( Y \in \Gamma(X) \mid Y=y \right) & - (1 - \alpha) \big| \\
+\big| \mathbb{P}_{\text{test}}\left( Y \in \Gamma(X) \mid Y=y \right) & - (1 - \alpha) \big| \\
 & \le d_{\mathrm{TV}}\left(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)}\right) + \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} + \frac{1}{n(y)}
 \end{aligned}
 \end{equation}
@@ -57,7 +57,7 @@ with probability at least $1 - \delta$ over the randomness of the calibration sp
 \end{theorem}
 
 \begin{proof}
-Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{test}}}(S(X, y) \le s \mid Y=y)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\mathcal{P}_{\text{cal}}}(S(X, y) \le s \mid Y=y)$ denote the true class-conditional cumulative distribution functions under test distribution $\mathcal{P}_{\text{test}}$ and calibration distribution $\mathcal{P}_{\text{cal}}^{(y)}$, with empirical CDF $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$. By definition of calibrated quantile $\hat{q}^{(y)}$, test coverage evaluates to $\mathbb{P}_{\mathcal{P}_{\text{test}}}(Y \in \Gamma(X) \mid Y=y) = F_{\text{test}}^{(y)}(\hat{q}^{(y)})$. Applying the triangle inequality on the uniform supremum norm:
+Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\text{test}}(S(X, y) \le s \mid Y=y)$ and $F_{\text{cal}}^{(y)}(s) = \mathbb{P}_{\text{cal}}(S(X, y) \le s \mid Y=y)$ denote the true class-conditional cumulative distribution functions under test distribution $\mathcal{P}_{\text{test}}$ and calibration distribution $\mathcal{P}_{\text{cal}}^{(y)}$, with empirical CDF $\hat{F}_{\text{cal}}^{(y)}(s) = \frac{1}{n(y)} \sum_{i=1}^{n(y)} \mathbb{I}(s_i^{(y)} \le s)$. By definition of calibrated quantile $\hat{q}^{(y)}$, test coverage evaluates to $\mathbb{P}_{\text{test}}(Y \in \Gamma(X) \mid Y=y) = F_{\text{test}}^{(y)}(\hat{q}^{(y)})$. Applying the triangle inequality on the uniform supremum norm:
 \begin{equation}
 \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| \le \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| + \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right|
 \end{equation}
@@ -340,9 +340,9 @@ The user interface is structured into dedicated operational desks and governance
     \item \textbf{Unified Command Center:} Serves as the executive surveillance cockpit. Displays live transaction throughput, sub-millisecond fast-path latency breakdown ($0.11\,\text{ms}$ invariant extraction, $0.18\,\text{ms}$ DuckDB LRU cache lookup, $0.12\,\text{ms}$ neural fusion, and $0.04\,\text{ms}$ conformal calibration), a real-time 3D ego-graph canvas, and an interactive transaction scoring sandbox.
     \item \textbf{Alert Triage Queue \& Batch Ingestion Desk:} Operationalizes Class-Conditional Conformal Risk Control ($\alpha=0.01$). Incoming transactions are partitioned into:
     \begin{itemize}
-        \item \textit{Tier 1 ($\Gamma=\{1\}$):} High-confidence illicit structuring ($<0.6\%$ volume) routed directly to administrative quarantine and automated SAR filing.
-        \item \textit{Tier 2 ($\Gamma=\{0, 1\}$):} Epistemic uncertainty alerts routed to senior compliance officers for Four-Eyes verification.
-        \item \textit{Tier 3 ($\Gamma=\{0\}$):} Confirmed licit activity ($>99.4\%$ volume) cleared straight-through without manual review.
+        \item \textit{Tier 1 ($\Gamma=\{1\}$):} High-confidence illicit structuring ($0.18\%$ exemplar volume; benchmark mean $0.69\%$) routed directly to administrative quarantine and automated SAR filing.
+        \item \textit{Tier 2 ($\Gamma=\{0, 1\}$):} Epistemic uncertainty alerts ($0.49\%$ exemplar volume; benchmark mean $0.57\%$) routed to senior compliance officers for Four-Eyes verification.
+        \item \textit{Tier 3 ($\Gamma=\{0\}$):} Confirmed licit activity ($99.33\%$ exemplar volume; benchmark mean $98.73\%$, Table~\ref{tab:ch7_conformal}) cleared straight-through without manual review.
     \end{itemize}
     Includes a drag-and-drop batch CSV ingestion gateway supporting Elliptic Bitcoin UTXO, SAML-D inter-bank clearing, and corporate ACH payroll schemas.
     \item \textbf{3D Multi-Hop Counterparty Forensic Graph Studio:} Renders court-admissible directed causal subgraphs. Incorporates learnable edge-trust gating ($g_{ij} \ge \delta_{\text{floor}}$) to filter up to $65.9\%$ of adversarial camouflage chaff while isolating 3-hop and 4-hop wash trading rings and smurfing dispersal trees.
@@ -360,7 +360,7 @@ The user interface is structured into dedicated operational desks and governance
 \end{enumerate}
 
 \subsection{Operational Dashboard UI Visualizations}
-Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_explainability_portals} (Figures~E.1--E.8) illustrate the real-time production interface desks operating on live transaction feeds, captured across a continuous 24-hour live burst window on production banking and blockchain rails. Figures~E.1--E.8 display a live 24-hour banking/MFS simulation burst with a 98.6\% Straight-Through Processing (STP) rate.
+Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_explainability_portals} (Figures~E.1--E.8) illustrate the real-time production interface desks operating on live transaction feeds, captured across a continuous 24-hour live burst window on production banking and blockchain rails with a 98.6\% Straight-Through Processing (STP) rate.
 
 \begin{figure}[htbp]
 \centering

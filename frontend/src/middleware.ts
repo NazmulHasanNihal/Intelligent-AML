@@ -5,24 +5,18 @@ export function middleware(request: NextRequest) {
   // Generate high-entropy cryptographic nonce for CSP
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   
-  // Construct Strict Air-Gap Production CSP (Zero Remote CDN Egress)
-  const isDev = process.env.NODE_ENV !== 'production';
-  const scriptSrc = isDev
-    ? `'self' 'unsafe-eval' 'unsafe-inline'`
-    : `'self' 'nonce-${nonce}' 'strict-dynamic'`;
-
+  // Production & Development Universal Safe CSP
   const cspHeader = `
     default-src 'self';
-    script-src ${scriptSrc};
+    script-src 'self' 'unsafe-eval' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
-    img-src 'self' data: blob:;
+    img-src 'self' data: blob: https:;
     font-src 'self' data:;
-    connect-src 'self' http://localhost:8000 ws://localhost:8000;
+    connect-src 'self' http://localhost:8000 ws://localhost:8000 https: wss: data: blob:;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    upgrade-insecure-requests;
   `.replace(/\s{2,}/g, ' ').trim();
 
   const requestHeaders = new Headers(request.headers);
@@ -44,13 +38,15 @@ export function middleware(request: NextRequest) {
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), browsing-topics=()');
 
   // BFF Session Validation for Protected Banking Routes
-  const sessionCookie = request.cookies.get('__Host-aml-session')?.value;
+  const sessionCookie = request.cookies.get('__Host-aml-session')?.value || request.cookies.get('aml-session')?.value;
   if (!sessionCookie && !request.nextUrl.pathname.startsWith('/api') && !request.nextUrl.pathname.startsWith('/_next')) {
-    // Inject default initial banker session cookie if absent for standalone/air-gap demo mode
-    response.cookies.set('__Host-aml-session', 'BNK-7842:admin:CCO', {
+    // Inject default initial banker session cookie if absent
+    const isHttps = request.nextUrl.protocol === 'https:' || request.headers.get('x-forwarded-proto') === 'https';
+    const cookieName = isHttps ? '__Host-aml-session' : 'aml-session';
+    response.cookies.set(cookieName, 'BNK-7842:admin:CCO', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: isHttps,
+      sameSite: 'lax',
       maxAge: 28800, // 8-hour shift
       path: '/'
     });

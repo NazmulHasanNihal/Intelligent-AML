@@ -123,6 +123,7 @@ k_1 = \lceil (n_1 + 1)(1 - \alpha) \rceil = \lceil 373 \times 0.99 \rceil = 370
 With $k_1 = 370$ out of 372, the quantile resides at the 3rd extreme order statistic. By the Dvoretzky-Kiefer-Wolfowitz (DKW) inequality, the two-sided $95\%$ confidence band for empirical CDF estimation with $n_1 = 372$ is bounded by $\epsilon = \sqrt{\ln(2 / 0.05) / (2 \times 372)} \approx 0.070$. To stabilize quantile estimation under small minority counts, C-STGB incorporates rolling multi-horizon calibration pooling over $W_{\text{cal}} = 4$ weeks, elevating effective calibration size to $n_1 > 1,200$ and narrowing quantile sampling variance to $\pm 0.18\%$.
 
 \subsection{Martingale Convergence of Adaptive Conformal Inference}
+\label{sec:aci_theory}
 \begin{theorem}[ACI Long-Term Average Coverage Guarantee]
 Let $\{\text{err}_t\}_{t=1}^T$ be the binary coverage loss sequence under the ACI update rule $\alpha_{t+1} = \alpha_t + \gamma (\alpha - \text{err}_t)$ with step-size $\gamma > 0$. For any arbitrary, non-stationary data distribution and any bounded horizon $T$:
 \begin{equation}

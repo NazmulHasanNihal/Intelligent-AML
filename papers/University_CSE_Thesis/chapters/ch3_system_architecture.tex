@@ -292,7 +292,7 @@ The learnable edge-trust gate $\mathbf{g}_{ij} \in (0, 1)$ is computed via a 2-l
 \mathbf{g}_{ij} = \sigma\left( \mathbf{W}_{g2} \mathbf{z}_{ij} + \mathbf{b}_{g2} \right)
 \end{equation}
 To preserve stable backpropagation while filtering camouflage noise, we apply a lower floor $\delta_{\text{floor}} = 0.10$:
-\begin{equation}
+\begin{equation}\label{eq:edge_trust_gating}
 \hat{g}_{ij} = \delta_{\text{floor}} + (1 - \delta_{\text{floor}}) \mathbf{g}_{ij}
 \end{equation}
 Empirical evaluations demonstrate that setting $\delta_{\text{floor}} = 0.10$ prunes $65.9\%$ of adversarial camouflage links while preserving $>98\%$ of legitimate commercial edge weights.

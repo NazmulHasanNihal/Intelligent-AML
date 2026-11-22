@@ -3,16 +3,9 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
-  "bin": {
-    "vite": "./bin/vite-compat.cjs"
-  },
   "scripts": {
     "dev": "next dev --port 3000",
-    "prebuild": "node bin/ensure-vite-shim.cjs",
     "build": "next build",
-    "postinstall": "node bin/ensure-vite-shim.cjs",
-    "vite": "node ./bin/vite-compat.cjs",
-    "vite:build": "node ./bin/vite-compat.cjs",
     "start": "next start --port 3000",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit"

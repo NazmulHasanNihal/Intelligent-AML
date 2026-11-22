@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import cytoscape from 'cytoscape';
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import {
   GitFork,
   Sliders,
@@ -351,17 +352,19 @@ function ForensicGraphStudioContent() {
 
           {/* Graph Viewport */}
           <div className="flex-1 relative bg-[#090D14] overflow-hidden">
-            {viewMode === '2D' ? (
-              <div ref={cyContainerRef} className="w-full h-full" />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 space-y-3">
-                <Box className="w-12 h-12 text-purple-400 animate-bounce" />
-                <div className="text-center">
-                  <h3 className="font-semibold text-slate-200 text-sm">Hardware-Accelerated 3D Force Graph</h3>
-                  <p className="text-xs text-slate-500 mt-1">WebGL dynamic force simulation active. Click nodes to orbit and inspect ego-sphere.</p>
+            <ErrorBoundary viewName="Forensic Graph Studio Viewport">
+              {viewMode === '2D' ? (
+                <div ref={cyContainerRef} className="w-full h-full" />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 space-y-3">
+                  <Box className="w-12 h-12 text-purple-400 animate-bounce" />
+                  <div className="text-center">
+                    <h3 className="font-semibold text-slate-200 text-sm">Hardware-Accelerated 3D Force Graph</h3>
+                    <p className="text-xs text-slate-500 mt-1">WebGL dynamic force simulation active. Click nodes to orbit and inspect ego-sphere.</p>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </ErrorBoundary>
 
             {/* Bottom-Right Compass / Minimap Badge */}
             <div className="absolute bottom-4 right-4 p-2 rounded-lg bg-[#0F172A]/85 backdrop-blur-sm border border-[#334155] flex items-center gap-2 text-[10px] font-mono text-slate-400 pointer-events-none select-none">

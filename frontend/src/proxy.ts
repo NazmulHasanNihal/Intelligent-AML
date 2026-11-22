@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // Generate high-entropy cryptographic nonce for CSP
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  // Generate high-entropy cryptographic nonce using standard Web Crypto and Web Base64
+  const nonce = btoa(crypto.randomUUID());
   
   // Production & Development Universal Safe CSP
   const cspHeader = `
@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
     },
   });
 
-  // Set Security Headers on HTTP Response
+  // Set Institutional Security Headers on HTTP Response
   response.headers.set('Content-Security-Policy', cspHeader);
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
@@ -37,7 +37,7 @@ export function middleware(request: NextRequest) {
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), browsing-topics=()');
 
-  // BFF Session Validation for Protected Banking Routes
+  // BFF Session Validation for Protected Institutional Banking Routes
   const sessionCookie = request.cookies.get('__Host-aml-session')?.value || request.cookies.get('aml-session')?.value;
   if (!sessionCookie && !request.nextUrl.pathname.startsWith('/api') && !request.nextUrl.pathname.startsWith('/_next')) {
     // Inject default initial banker session cookie if absent
@@ -55,11 +55,14 @@ export function middleware(request: NextRequest) {
   return response;
 }
 
+// Next.js 16 dual export compatibility
+export const proxy = middleware;
+
 export const config = {
   matcher: [
     /*
-     * Match all request paths except static files, favicon, etc.
+     * Match all request paths except static files, favicon, fonts, and images
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$).*)',
   ],
 };

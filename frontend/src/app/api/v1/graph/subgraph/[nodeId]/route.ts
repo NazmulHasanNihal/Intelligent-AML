@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { fetchFastApiWithFallback } from '@/lib/apiAdapter';
 
 interface SubgraphNode {
   id: string;
@@ -172,7 +173,7 @@ export async function GET(
     }
   ];
 
-  return NextResponse.json({
+  const localCompute = () => ({
     centerNodeId: nodeId,
     nodes,
     edges,
@@ -185,4 +186,13 @@ export async function GET(
       circuitComplete: true
     }
   });
+
+  const result = await fetchFastApiWithFallback(
+    `/api/v1/subgraph/${encodeURIComponent(nodeId)}`,
+    { method: 'GET' },
+    localCompute,
+    { timeoutMs: 2500 }
+  );
+
+  return NextResponse.json(result);
 }

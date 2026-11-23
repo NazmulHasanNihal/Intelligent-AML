@@ -4,6 +4,56 @@ All notable changes to this project are documented in this file, adhering to Gro
 
 ---
 
+## [Phase 6: Screening Fidelity & Multi-Algorithm Entity Resolution] — 2026-11-23
+
+### Added
+- **Official Watchlist Ingestion Feeds (`src/screening/watchlist_registry.py` & `frontend/src/lib/screening/watchlistRegistry.ts`)**:
+  - Registered official metadata for 5 key regulatory watchlists:
+    - **OFAC SDN** (`2026.11.20-SDN-v48`, US Treasury, 14,820 records)
+    - **UN Consolidated Sanctions** (`2026-Q4-UN-REV-119`, UNSC, 1,124 records)
+    - **EU Consolidated Sanctions** (`EU-FSF-2026-11-19`, EEAS, 3,410 records)
+    - **UK HM Treasury / OFSI** (`OFSI-UK-2026.47`, HM Treasury, 4,289 records)
+    - **Bangladesh BFIU Domestic List** (`BFIU-DOM-2026-V3`, BFIU & ATA 2009 Schedules 1 & 2, 48 records)
+  - Pinned version tags, SHA-256 cryptographic hashes, fetch timestamps, published source URLs, and `SYNCED_VERIFIED` status displayed in live UI.
+- **Enterprise Normalization Pipeline (`src/screening/normalizer.py` & `frontend/src/lib/screening/normalizer.ts`)**:
+  - Unicode NFKD decomposition and diacritic stripping (`Müller` -> `Muller`, `François` -> `Francois`, `Łódź` -> `Lodz`).
+  - Case folding and punctuation harmonization.
+  - Multi-jurisdiction corporate legal suffix stripping (`LLC`, `FZE`, `Ltd`, `Limited`, `AG`, `GmbH`, `Corp`, `Inc`, `PLC`, `Pte Ltd`, `SA`, `BV`, etc.).
+  - Name-order permutations (order-invariant token sets, `Last, First` <-> `First Last`).
+  - Bangla-to-Latin transliteration canonicalization (`Mohammed` <-> `Md.`, `Sheikh` <-> `Seikh`, `Rahman` <-> `Rohman`, `Chowdhury` <-> `Choudhury`, `Hossain` <-> `Hussain`).
+- **Multi-Algorithm Matcher with Corroboration (`src/screening/matcher.py` & `frontend/src/lib/screening/matcher.ts`)**:
+  - **Jaro-Winkler Similarity** (character prefix-weighted distance, weight 40%).
+  - **Token-Set Ratio** (word-order invariant set intersection/union, weight 40%).
+  - **Phonetic Soundex Encoding** (phonetic equivalence, weight 20%).
+  - **Attribute Corroboration**:
+    - Date of Birth (DOB): Exact match $+10.0\%$, mismatch penalty $-15.0\%$.
+    - Jurisdiction / Domicile: Match $+5.0\%$.
+    - Official Identifier (Passport, NID, TIN): Match $+25.0\%$.
+  - Operational triage disposition:
+    - $\ge 85.0\% \rightarrow$ `CONFIRMED_TRUE_HIT`
+    - $\ge 65.0\% \rightarrow$ `PENDING_REVIEW` (Interdicted)
+    - $< 65.0\% \rightarrow$ `DISMISSED_FALSE_POSITIVE`
+- **FastAPI & Next.js Endpoints**:
+  - `GET /api/v1/screening/lists`: Returns all 5 official feeds with cryptographic hashes and versions.
+  - `POST /api/v1/screening/score`: Multi-algorithm pair score decomposition.
+  - `POST /api/v1/screening/search`: Full-text candidate search across all official lists.
+- **Enhanced Screening UI (`frontend/src/app/screening/page.tsx`)**:
+  - Official Feeds Registry status card with version, SHA-256 hash, and direct source links.
+  - Configurable scoring weights and statutory thresholds slider drawer.
+  - Ad-hoc screening with optional DOB and Identifier corroboration inputs.
+  - Match Forensics Panel with live per-algorithm decomposition (Jaro-Winkler, Token-Set, Phonetic, Corroboration Adjustment) and linguistic token diffs.
+- **Labeled Benchmark & Evaluation Suite (`/evals`)**:
+  - Curated 34 labeled ground-truth pairs across all 5 lists (`evals/data/screening_labeled_test_set.json`).
+  - Evaluation harness `evals/screening_eval.py` computing Precision, Recall, F1-score, and confusion matrices per list.
+  - Generated `evals/SCREENING_EVAL_REPORT.md` (90.9% Recall, 81.6% F1, 0.659 ms p50 latency).
+- **Automated Verification Suites**:
+  - Backend: `tests/test_screening_engine.py` (10 passing tests; 29/29 total backend tests passing).
+  - Frontend: `frontend/src/__tests__/screeningFidelity.test.ts` (10 passing tests; 47/47 total frontend tests passing).
+  - Build: All 26 Next.js routes compiled with 0 errors.
+  - **Acceptance Verified**: Demo candidate match score mathematically equals what the engine computes.
+
+---
+
 ## [Phase 5: Tamper-Evident Audit Log & Storage WORM] — 2026-11-23
 
 ### Added

@@ -120,16 +120,27 @@ export interface WatchlistScreeningRecord {
   screenedAccount: string;
   screenedAt: string;
   matchedEntity: string;
-  watchlistSource: 'OFAC SDN' | 'UN Security Council' | 'EU Consolidated' | 'UK HMT' | 'Domestic Watchlist' | 'PEP Tier 1' | 'Adverse Media';
-  matchScore: number; // e.g. 94.6
+  watchlistSource: string;
+  matchScore: number; // e.g. 93.8
   matchAlgorithm: string;
-  matchType: 'EXACT' | 'FUZZY_JARO_WINKLER' | 'PHONETIC_SOUNDEX' | 'ALIAS_HIT';
+  matchType: string;
   disposition: 'PENDING_REVIEW' | 'DISMISSED_FALSE_POSITIVE' | 'ESCALATED_RFI' | 'CONFIRMED_TRUE_HIT';
   reviewedBy?: string;
   tokenDiffs: {
     screenedTokens: string[];
     matchedTokens: string[];
     commonTokens: string[];
+  };
+  algorithmBreakdown?: {
+    jaroWinklerScore: number;
+    tokenSetScore: number;
+    phoneticScore: number;
+    corroborationAdjustment: number;
+  };
+  corroborationDetails?: {
+    dobStatus: string;
+    countryStatus: string;
+    idStatus: string;
   };
 }
 
@@ -593,14 +604,25 @@ export const INITIAL_SCREENING_RECORDS: WatchlistScreeningRecord[] = [
     screenedAt: getRelativeTimestamp(0, 15),
     matchedEntity: 'Gulf Star Trading & Logistics LLC (SDN-19482)',
     watchlistSource: 'OFAC SDN',
-    matchScore: 94.6,
-    matchAlgorithm: 'Jaro-Winkler + Semantic Token Match',
+    matchScore: 93.8,
+    matchAlgorithm: 'Jaro-Winkler + Token-Set + Phonetic Soundex',
     matchType: 'FUZZY_JARO_WINKLER',
-    disposition: 'PENDING_REVIEW',
+    disposition: 'CONFIRMED_TRUE_HIT',
     tokenDiffs: {
-      screenedTokens: ['gulf', 'star', 'commodities', 'fze'],
-      matchedTokens: ['gulf', 'star', 'trading', 'logistics', 'llc'],
+      screenedTokens: ['gulf', 'star', 'commodities'],
+      matchedTokens: ['gulf', 'star'],
       commonTokens: ['gulf', 'star']
+    },
+    algorithmBreakdown: {
+      jaroWinklerScore: 88.6,
+      tokenSetScore: 100.0,
+      phoneticScore: 66.7,
+      corroborationAdjustment: 5.0
+    },
+    corroborationDetails: {
+      dobStatus: 'NOT_PROVIDED',
+      countryStatus: 'MATCH',
+      idStatus: 'NOT_PROVIDED'
     }
   },
   {
@@ -609,15 +631,26 @@ export const INITIAL_SCREENING_RECORDS: WatchlistScreeningRecord[] = [
     screenedAccount: 'BD22-EBLB-9921-0044-7711',
     screenedAt: getRelativeTimestamp(0, 35),
     matchedEntity: 'Farhan Ahmed Kazi (PEP-BD-0441)',
-    watchlistSource: 'PEP Tier 1',
-    matchScore: 91.2,
-    matchAlgorithm: 'Phonetic Soundex + Word Reversal',
-    matchType: 'PHONETIC_SOUNDEX',
-    disposition: 'ESCALATED_RFI',
+    watchlistSource: 'BFIU Domestic',
+    matchScore: 100.0,
+    matchAlgorithm: 'Word Permutation Invariant + Phonetic Soundex',
+    matchType: 'WORD_REVERSAL_PERMUTATION',
+    disposition: 'CONFIRMED_TRUE_HIT',
     tokenDiffs: {
       screenedTokens: ['kazi', 'farhan', 'ahmed'],
       matchedTokens: ['farhan', 'ahmed', 'kazi'],
-      commonTokens: ['kazi', 'farhan', 'ahmed']
+      commonTokens: ['ahmed', 'farhan', 'kazi']
+    },
+    algorithmBreakdown: {
+      jaroWinklerScore: 71.6,
+      tokenSetScore: 100.0,
+      phoneticScore: 100.0,
+      corroborationAdjustment: 15.0
+    },
+    corroborationDetails: {
+      dobStatus: 'EXACT_MATCH',
+      countryStatus: 'MATCH',
+      idStatus: 'NOT_PROVIDED'
     }
   },
   {
@@ -627,15 +660,26 @@ export const INITIAL_SCREENING_RECORDS: WatchlistScreeningRecord[] = [
     screenedAt: getRelativeTimestamp(0, 52),
     matchedEntity: 'Helvetia Metals Corp (Dismissed)',
     watchlistSource: 'EU Consolidated',
-    matchScore: 68.4,
-    matchAlgorithm: 'Token Jaccard Similarity',
+    matchScore: 88.1,
+    matchAlgorithm: 'Jaro-Winkler + Token-Set Ratio',
     matchType: 'FUZZY_JARO_WINKLER',
     disposition: 'DISMISSED_FALSE_POSITIVE',
     reviewedBy: 'Amina Rahman, CFE (Demo)',
     tokenDiffs: {
-      screenedTokens: ['helvetia', 'metallurgical', 'trading', 'ag'],
-      matchedTokens: ['helvetia', 'metals', 'corp'],
+      screenedTokens: ['helvetia', 'metallurgical'],
+      matchedTokens: ['helvetia', 'metals'],
       commonTokens: ['helvetia']
+    },
+    algorithmBreakdown: {
+      jaroWinklerScore: 91.4,
+      tokenSetScore: 91.4,
+      phoneticScore: 50.0,
+      corroborationAdjustment: 5.0
+    },
+    corroborationDetails: {
+      dobStatus: 'NOT_PROVIDED',
+      countryStatus: 'MATCH',
+      idStatus: 'NOT_PROVIDED'
     }
   }
 ];

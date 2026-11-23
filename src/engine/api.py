@@ -1774,6 +1774,101 @@ def get_fast_path_telemetry():
 
 
 # =============================================================================
+# Screening Fidelity & Watchlist Entity Resolution Endpoints
+# =============================================================================
+from src.screening.watchlist_registry import watchlist_registry
+from src.screening.matcher import compute_screening_score, ScreeningThresholdConfig
+
+
+class ScreeningPairScoreRequest(BaseModel):
+    query_name: str
+    target_name: str
+    query_dob: Optional[str] = None
+    target_dob: Optional[str] = None
+    query_country: Optional[str] = None
+    target_country: Optional[str] = None
+    query_id: Optional[str] = None
+    target_id: Optional[str] = None
+    auto_freeze_threshold: Optional[float] = 85.0
+    quarantine_threshold: Optional[float] = 65.0
+
+
+class ScreeningSearchRequest(BaseModel):
+    name: str
+    country: Optional[str] = None
+    dob: Optional[str] = None
+    national_id: Optional[str] = None
+    watchlist_filter: Optional[str] = None
+    limit: Optional[int] = 10
+
+
+@app.get("/api/v1/screening/lists", tags=["Watchlist Screening"])
+def get_official_screening_lists():
+    """
+    Returns official watchlist feeds metadata:
+    OFAC SDN, UN Consolidated, EU Consolidated, UK HMT/OFSI, and BFIU Domestic List
+    with verified version tags, SHA-256 hashes, fetch timestamps, and record counts.
+    """
+    return {
+        "status": "HEALTHY",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "total_feeds": len(watchlist_registry.feeds),
+        "feeds": watchlist_registry.get_feeds()
+    }
+
+
+@app.post("/api/v1/screening/score", tags=["Watchlist Screening"])
+def score_screening_pair(req: ScreeningPairScoreRequest):
+    """
+    Computes exact multi-algorithm match score between candidate and watchlist target,
+    returning detailed decomposition for Jaro-Winkler, Token-Set, Phonetic Soundex, and Corroboration.
+    """
+    cfg = ScreeningThresholdConfig(
+        auto_freeze_threshold=req.auto_freeze_threshold or 85.0,
+        quarantine_threshold=req.quarantine_threshold or 65.0
+    )
+    result = compute_screening_score(
+        query_name=req.query_name,
+        target_name=req.target_name,
+        query_dob=req.query_dob,
+        target_dob=req.target_dob,
+        query_country=req.query_country,
+        target_country=req.target_country,
+        query_id=req.query_id,
+        target_id=req.target_id,
+        config=cfg
+    )
+    return result.to_dict()
+
+
+@app.post("/api/v1/screening/search", tags=["Watchlist Screening"])
+def search_watchlist_entities(req: ScreeningSearchRequest):
+    """
+    Executes screening search across all official watchlists,
+    evaluating normalization, permutations, phonetic matching, and attribute corroboration.
+    """
+    hits = watchlist_registry.screen_candidate(
+        name=req.name,
+        country=req.country,
+        dob=req.dob,
+        national_id=req.national_id,
+        watchlist_filter=req.watchlist_filter
+    )
+    limit = req.limit or 10
+    return {
+        "query": {
+            "name": req.name,
+            "country": req.country,
+            "dob": req.dob,
+            "national_id": req.national_id,
+            "watchlist_filter": req.watchlist_filter
+        },
+        "total_hits": len(hits),
+        "hits": hits[:limit]
+    }
+
+
+# =============================================================================
 # Production Web Platform Serving (Frontend Static Assets & SPA Catch-All)
 # =============================================================================
 from fastapi.staticfiles import StaticFiles

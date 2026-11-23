@@ -1,0 +1,729 @@
+{
+  "timestamp": "2026-11-23T08:42:45Z",
+  "thresholds": {
+    "quarantine_threshold": 65.0,
+    "true_hit_threshold": 85.0
+  },
+  "overall": {
+    "tp": 20,
+    "fp": 7,
+    "tn": 5,
+    "fn": 2,
+    "total_pairs": 34,
+    "precision": 0.7407,
+    "recall": 0.9091,
+    "f1_score": 0.8163,
+    "accuracy": 0.7353
+  },
+  "per_list": {
+    "OFAC_SDN": {
+      "tp": 5,
+      "fp": 1,
+      "tn": 2,
+      "fn": 0,
+      "total_pairs": 8,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "f1_score": 0.9091,
+      "accuracy": 0.875
+    },
+    "UN_CONSOLIDATED": {
+      "tp": 5,
+      "fp": 1,
+      "tn": 1,
+      "fn": 1,
+      "total_pairs": 8,
+      "precision": 0.8333,
+      "recall": 0.8333,
+      "f1_score": 0.8333,
+      "accuracy": 0.75
+    },
+    "EU_CONSOLIDATED": {
+      "tp": 4,
+      "fp": 2,
+      "tn": 0,
+      "fn": 0,
+      "total_pairs": 6,
+      "precision": 0.6667,
+      "recall": 1.0,
+      "f1_score": 0.8,
+      "accuracy": 0.6667
+    },
+    "UK_HMT": {
+      "tp": 3,
+      "fp": 2,
+      "tn": 0,
+      "fn": 0,
+      "total_pairs": 5,
+      "precision": 0.6,
+      "recall": 1.0,
+      "f1_score": 0.75,
+      "accuracy": 0.6
+    },
+    "BFIU_DOMESTIC": {
+      "tp": 3,
+      "fp": 1,
+      "tn": 2,
+      "fn": 1,
+      "total_pairs": 7,
+      "precision": 0.75,
+      "recall": 0.75,
+      "f1_score": 0.75,
+      "accuracy": 0.7143
+    }
+  },
+  "latency_benchmarks": {
+    "p50_ms": 0.659,
+    "p95_ms": 1.126,
+    "p99_ms": 1.834,
+    "mean_ms": 0.735
+  },
+  "detailed_results": [
+    {
+      "pair_id": "OFAC-001",
+      "watchlist_id": "OFAC_SDN",
+      "query_name": "Gulf Star Commodities FZE",
+      "target_name": "Gulf Star Trading & Logistics LLC",
+      "category": "LEGAL_SUFFIX_STRIP",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 93.8,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 88.6,
+        "token_set": 100.0,
+        "phonetic": 66.7,
+        "corroboration": 5.0
+      },
+      "latency_ms": 1.834
+    },
+    {
+      "pair_id": "OFAC-002",
+      "watchlist_id": "OFAC_SDN",
+      "query_name": "Star Commodities Gulf",
+      "target_name": "Gulf Star Trading & Logistics LLC",
+      "category": "WORD_ORDER_PERMUTATION",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 76.9,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 46.5,
+        "token_set": 100.0,
+        "phonetic": 66.7,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.986
+    },
+    {
+      "pair_id": "OFAC-003",
+      "watchlist_id": "OFAC_SDN",
+      "query_name": "Mansoor Petrochem",
+      "target_name": "Al-Mansoor Petrochemical Intermediaries Ltd",
+      "category": "PREFIX_AND_ABBREVIATION",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 80.4,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 75.3,
+        "token_set": 88.2,
+        "phonetic": 50.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 1.126
+    },
+    {
+      "pair_id": "OFAC-004",
+      "watchlist_id": "OFAC_SDN",
+      "query_name": "Al Mansoor Trading Group",
+      "target_name": "Al-Mansoor Petrochemical Intermediaries Ltd",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 89.1,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 85.1,
+        "token_set": 100.0,
+        "phonetic": 50.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.958
+    },
+    {
+      "pair_id": "OFAC-005",
+      "watchlist_id": "OFAC_SDN",
+      "query_name": "Gulf Star Shipping Marine Services",
+      "target_name": "Pacific Star Shipping Corp",
+      "category": "HARD_NEGATIVE",
+      "ground_truth": false,
+      "predicted_match": false,
+      "classification": "TN",
+      "match_score": 61.9,
+      "disposition": "DISMISSED_FALSE_POSITIVE",
+      "algorithm_breakdown": {
+        "jaro_winkler": 55.5,
+        "token_set": 86.7,
+        "phonetic": 25.0,
+        "corroboration": 0.0
+      },
+      "latency_ms": 0.965
+    },
+    {
+      "pair_id": "OFAC-006",
+      "watchlist_id": "OFAC_SDN",
+      "query_name": "Mansoor Textile Mills Ltd",
+      "target_name": "Al-Mansoor Petrochemical Intermediaries Ltd",
+      "category": "HARD_NEGATIVE",
+      "ground_truth": false,
+      "predicted_match": true,
+      "classification": "FP",
+      "match_score": 65.9,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 65.7,
+        "token_set": 86.7,
+        "phonetic": 25.0,
+        "corroboration": 0.0
+      },
+      "latency_ms": 0.833
+    },
+    {
+      "pair_id": "OFAC-007",
+      "watchlist_id": "OFAC_SDN",
+      "query_name": "Emirates Petrochemicals FZC",
+      "target_name": "Gulf Star Trading & Logistics LLC",
+      "category": "UNRELATED_CLEAN",
+      "ground_truth": false,
+      "predicted_match": false,
+      "classification": "TN",
+      "match_score": 41.6,
+      "disposition": "DISMISSED_FALSE_POSITIVE",
+      "algorithm_breakdown": {
+        "jaro_winkler": 45.8,
+        "token_set": 45.8,
+        "phonetic": 0.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.633
+    },
+    {
+      "pair_id": "OFAC-008",
+      "watchlist_id": "OFAC_SDN",
+      "query_name": "Gulf Star Trading and Logistics L.L.C.",
+      "target_name": "Gulf Star Trading & Logistics LLC",
+      "category": "PUNCTUATION_AND_AND",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 83.9,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 84.9,
+        "token_set": 100.0,
+        "phonetic": 25.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.727
+    },
+    {
+      "pair_id": "UN-001",
+      "watchlist_id": "UN_CONSOLIDATED",
+      "query_name": "Farhan Ahmed Kazi",
+      "target_name": "Mohammed Farooq Sheikh",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 65.5,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 63.1,
+        "token_set": 63.1,
+        "phonetic": 0.0,
+        "corroboration": 15.0
+      },
+      "latency_ms": 0.559
+    },
+    {
+      "pair_id": "UN-002",
+      "watchlist_id": "UN_CONSOLIDATED",
+      "query_name": "Seikh Mohammad Faruq",
+      "target_name": "Mohammed Farooq Sheikh",
+      "category": "BANGLA_TRANSLITERATION",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 90.4,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 66.3,
+        "token_set": 97.2,
+        "phonetic": 100.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.591
+    },
+    {
+      "pair_id": "UN-003",
+      "watchlist_id": "UN_CONSOLIDATED",
+      "query_name": "Sheikh Mohammed Faruk",
+      "target_name": "Mohammed Farooq Sheikh",
+      "category": "WORD_ORDER_PERMUTATION",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 90.5,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 68.4,
+        "token_set": 95.4,
+        "phonetic": 100.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.588
+    },
+    {
+      "pair_id": "UN-004",
+      "watchlist_id": "UN_CONSOLIDATED",
+      "query_name": "Al-Anfal Trust for Humanitarian Relief",
+      "target_name": "Lashkar-e-Taiba Relief Foundation",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 70.9,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 71.9,
+        "token_set": 84.6,
+        "phonetic": 16.7,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.777
+    },
+    {
+      "pair_id": "UN-005",
+      "watchlist_id": "UN_CONSOLIDATED",
+      "query_name": "Jamaat-ud-Dawa Welfare Wing",
+      "target_name": "Lashkar-e-Taiba Relief Foundation",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": false,
+      "classification": "FN",
+      "match_score": 52.5,
+      "disposition": "DISMISSED_FALSE_POSITIVE",
+      "algorithm_breakdown": {
+        "jaro_winkler": 59.7,
+        "token_set": 58.9,
+        "phonetic": 0.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.698
+    },
+    {
+      "pair_id": "UN-006",
+      "watchlist_id": "UN_CONSOLIDATED",
+      "query_name": "Farooq Sheikh Mohammed",
+      "target_name": "Mohammed Farooq Sheikh",
+      "category": "WORD_ORDER_PERMUTATION",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 100.0,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 75.1,
+        "token_set": 100.0,
+        "phonetic": 100.0,
+        "corroboration": 15.0
+      },
+      "latency_ms": 0.556
+    },
+    {
+      "pair_id": "UN-007",
+      "watchlist_id": "UN_CONSOLIDATED",
+      "query_name": "Farooq Ahmed Sheikh",
+      "target_name": "Mohammed Farooq Sheikh",
+      "category": "HARD_NEGATIVE",
+      "ground_truth": false,
+      "predicted_match": true,
+      "classification": "FP",
+      "match_score": 71.5,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 86.7,
+        "token_set": 96.2,
+        "phonetic": 66.7,
+        "corroboration": -15.0
+      },
+      "latency_ms": 0.577
+    },
+    {
+      "pair_id": "UN-008",
+      "watchlist_id": "UN_CONSOLIDATED",
+      "query_name": "Lashkar Food Products Ltd",
+      "target_name": "Lashkar-e-Taiba Relief Foundation",
+      "category": "HARD_NEGATIVE",
+      "ground_truth": false,
+      "predicted_match": false,
+      "classification": "TN",
+      "match_score": 64.9,
+      "disposition": "DISMISSED_FALSE_POSITIVE",
+      "algorithm_breakdown": {
+        "jaro_winkler": 65.6,
+        "token_set": 86.7,
+        "phonetic": 20.0,
+        "corroboration": 0.0
+      },
+      "latency_ms": 0.67
+    },
+    {
+      "pair_id": "EU-001",
+      "watchlist_id": "EU_CONSOLIDATED",
+      "query_name": "Helvetia Metals Corp",
+      "target_name": "Helvetia Metallurgical Trading AG",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 88.1,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 91.4,
+        "token_set": 91.4,
+        "phonetic": 50.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.602
+    },
+    {
+      "pair_id": "EU-002",
+      "watchlist_id": "EU_CONSOLIDATED",
+      "query_name": "Helvetia Rohstoffhandel AG",
+      "target_name": "Helvetia Metallurgical Trading AG",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 76.6,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 66.7,
+        "token_set": 87.3,
+        "phonetic": 50.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.638
+    },
+    {
+      "pair_id": "EU-003",
+      "watchlist_id": "EU_CONSOLIDATED",
+      "query_name": "Helvetia Metallurgical Trading A.G.",
+      "target_name": "Helvetia Metallurgical Trading AG",
+      "category": "LEGAL_SUFFIX_STRIP",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 90.2,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 92.9,
+        "token_set": 100.0,
+        "phonetic": 40.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.704
+    },
+    {
+      "pair_id": "EU-004",
+      "watchlist_id": "EU_CONSOLIDATED",
+      "query_name": "Helvetia Insurance Group AG",
+      "target_name": "Helvetia Metallurgical Trading AG",
+      "category": "HARD_NEGATIVE",
+      "ground_truth": false,
+      "predicted_match": true,
+      "classification": "FP",
+      "match_score": 85.1,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 86.3,
+        "token_set": 88.9,
+        "phonetic": 50.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.659
+    },
+    {
+      "pair_id": "EU-005",
+      "watchlist_id": "EU_CONSOLIDATED",
+      "query_name": "Swiss Metallurgical Refining SA",
+      "target_name": "Helvetia Metallurgical Trading AG",
+      "category": "UNRELATED_CLEAN",
+      "ground_truth": false,
+      "predicted_match": true,
+      "classification": "FP",
+      "match_score": 72.4,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 60.0,
+        "token_set": 91.8,
+        "phonetic": 33.3,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.689
+    },
+    {
+      "pair_id": "EU-006",
+      "watchlist_id": "EU_CONSOLIDATED",
+      "query_name": "Helvetia Metals International",
+      "target_name": "Helvetia Metallurgical Trading AG",
+      "category": "FUZZY_JARO_WINKLER",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 88.1,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 91.4,
+        "token_set": 91.4,
+        "phonetic": 50.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.632
+    },
+    {
+      "pair_id": "UK-001",
+      "watchlist_id": "UK_HMT",
+      "query_name": "Caspian Freight UK",
+      "target_name": "Caspian Petroleum Freight Services Ltd",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 92.1,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 87.8,
+        "token_set": 96.7,
+        "phonetic": 66.7,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.638
+    },
+    {
+      "pair_id": "UK-002",
+      "watchlist_id": "UK_HMT",
+      "query_name": "Caspian Maritime Agency Ltd",
+      "target_name": "Caspian Petroleum Freight Services Ltd",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 79.3,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 83.0,
+        "token_set": 86.1,
+        "phonetic": 33.3,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.961
+    },
+    {
+      "pair_id": "UK-003",
+      "watchlist_id": "UK_HMT",
+      "query_name": "Caspian Petroleum Freight Services Limited",
+      "target_name": "Caspian Petroleum Freight Services Ltd",
+      "category": "LEGAL_SUFFIX_STRIP",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 100.0,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 100.0,
+        "token_set": 100.0,
+        "phonetic": 100.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.379
+    },
+    {
+      "pair_id": "UK-004",
+      "watchlist_id": "UK_HMT",
+      "query_name": "Caspian Sea Logistics Corp",
+      "target_name": "Caspian Petroleum Freight Services Ltd",
+      "category": "HARD_NEGATIVE",
+      "ground_truth": false,
+      "predicted_match": true,
+      "classification": "FP",
+      "match_score": 77.2,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 83.6,
+        "token_set": 92.7,
+        "phonetic": 33.3,
+        "corroboration": 0.0
+      },
+      "latency_ms": 0.952
+    },
+    {
+      "pair_id": "UK-005",
+      "watchlist_id": "UK_HMT",
+      "query_name": "Black Sea Freight Services Ltd",
+      "target_name": "Caspian Petroleum Freight Services Ltd",
+      "category": "UNRELATED_CLEAN",
+      "ground_truth": false,
+      "predicted_match": true,
+      "classification": "FP",
+      "match_score": 73.0,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 65.2,
+        "token_set": 88.2,
+        "phonetic": 33.3,
+        "corroboration": 5.0
+      },
+      "latency_ms": 1.002
+    },
+    {
+      "pair_id": "BD-001",
+      "watchlist_id": "BFIU_DOMESTIC",
+      "query_name": "Ansar al-Islam Bangladesh",
+      "target_name": "Ansarullah Bangla Team (ABT)",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 81.5,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 85.4,
+        "token_set": 80.9,
+        "phonetic": 50.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.662
+    },
+    {
+      "pair_id": "BD-002",
+      "watchlist_id": "BFIU_DOMESTIC",
+      "query_name": "ABT Welfare Front",
+      "target_name": "Ansarullah Bangla Team (ABT)",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": false,
+      "classification": "FN",
+      "match_score": 64.6,
+      "disposition": "DISMISSED_FALSE_POSITIVE",
+      "algorithm_breakdown": {
+        "jaro_winkler": 55.8,
+        "token_set": 80.8,
+        "phonetic": 25.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.603
+    },
+    {
+      "pair_id": "BD-003",
+      "watchlist_id": "BFIU_DOMESTIC",
+      "query_name": "Kazi Farhan Ahmed",
+      "target_name": "Farhan Ahmed Kazi",
+      "category": "WORD_ORDER_PERMUTATION",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 100.0,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 71.6,
+        "token_set": 100.0,
+        "phonetic": 100.0,
+        "corroboration": 40.0
+      },
+      "latency_ms": 0.51
+    },
+    {
+      "pair_id": "BD-004",
+      "watchlist_id": "BFIU_DOMESTIC",
+      "query_name": "Farhan Kazi",
+      "target_name": "Kazi Farhan Ahmed",
+      "category": "ALIAS_MATCH",
+      "ground_truth": true,
+      "predicted_match": true,
+      "classification": "TP",
+      "match_score": 87.6,
+      "disposition": "CONFIRMED_TRUE_HIT",
+      "algorithm_breakdown": {
+        "jaro_winkler": 73.1,
+        "token_set": 100.0,
+        "phonetic": 66.7,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.495
+    },
+    {
+      "pair_id": "BD-005",
+      "watchlist_id": "BFIU_DOMESTIC",
+      "query_name": "Farhan Ahmed",
+      "target_name": "Kazi Farhan Ahmed",
+      "category": "HARD_NEGATIVE",
+      "ground_truth": false,
+      "predicted_match": true,
+      "classification": "FP",
+      "match_score": 75.0,
+      "disposition": "PENDING_REVIEW",
+      "algorithm_breakdown": {
+        "jaro_winkler": 79.1,
+        "token_set": 100.0,
+        "phonetic": 66.7,
+        "corroboration": -10.0
+      },
+      "latency_ms": 0.501
+    },
+    {
+      "pair_id": "BD-006",
+      "watchlist_id": "BFIU_DOMESTIC",
+      "query_name": "Ansar Welfare Society Dhaka",
+      "target_name": "Ansarullah Bangla Team (ABT)",
+      "category": "HARD_NEGATIVE",
+      "ground_truth": false,
+      "predicted_match": false,
+      "classification": "TN",
+      "match_score": 56.7,
+      "disposition": "DISMISSED_FALSE_POSITIVE",
+      "algorithm_breakdown": {
+        "jaro_winkler": 59.0,
+        "token_set": 57.7,
+        "phonetic": 25.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.653
+    },
+    {
+      "pair_id": "BD-007",
+      "watchlist_id": "BFIU_DOMESTIC",
+      "query_name": "Bengal Agro Products Ltd",
+      "target_name": "Ansarullah Bangla Team (ABT)",
+      "category": "UNRELATED_CLEAN",
+      "ground_truth": false,
+      "predicted_match": false,
+      "classification": "TN",
+      "match_score": 55.3,
+      "disposition": "DISMISSED_FALSE_POSITIVE",
+      "algorithm_breakdown": {
+        "jaro_winkler": 53.6,
+        "token_set": 59.7,
+        "phonetic": 25.0,
+        "corroboration": 5.0
+      },
+      "latency_ms": 0.629
+    }
+  ]
+}

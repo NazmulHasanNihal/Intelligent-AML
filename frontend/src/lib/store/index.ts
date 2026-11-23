@@ -26,6 +26,7 @@ import {
   INITIAL_SCREENING_RECORDS,
   INITIAL_CTR_RECORDS
 } from '@/lib/data/commercialSeed';
+import { screenWatchlistCandidate } from '@/lib/screening/watchlistRegistry';
 
 export interface ToastItem {
   id: string;
@@ -130,7 +131,7 @@ export interface UnifiedBankingState {
   addCaseNote: (caseId: string, note: string) => void;
   updateCaseMilestone: (caseId: string, milestoneIndex: number, status: 'COMPLETE' | 'IN_PROGRESS' | 'PENDING') => void;
   dispositionScreening: (recordId: string, disposition: WatchlistScreeningRecord['disposition'], reason?: string) => void;
-  addScreeningSearch: (name: string, account?: string) => WatchlistScreeningRecord;
+  addScreeningSearch: (name: string, account?: string, country?: string, dob?: string, nationalId?: string) => WatchlistScreeningRecord;
   updateCustomerRiskRating: (customerId: string, newRating: CommercialCustomer['riskRating'], reason: string) => void;
   triggerEddRefresh: (customerId: string) => void;
 
@@ -604,27 +605,58 @@ export const useAppStore = create<UnifiedBankingState>()(
         get().addToast('Screening Disposition Saved', `Watchlist record ${recordId} set to ${disposition}`, 'info');
       },
 
-      addScreeningSearch: (name, account = 'ADHOC_SEARCH') => {
+      addScreeningSearch: (name, account = 'ADHOC_SEARCH', country, dob, nationalId) => {
         const id = `SCR-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-        const record: WatchlistScreeningRecord = {
-          id,
-          screenedName: name,
-          screenedAccount: account,
-          screenedAt: new Date().toISOString(),
-          matchedEntity: name.toLowerCase().includes('iran') || name.toLowerCase().includes('syria') || name.toLowerCase().includes('russia')
-            ? 'High-Risk Sanctioned Geographic Entity (OFAC Executive Order)'
-            : 'No Direct Exact Match (Clean)',
-          watchlistSource: name.toLowerCase().includes('gulf') ? 'OFAC SDN' : 'Domestic Watchlist',
-          matchScore: name.toLowerCase().includes('gulf') ? 94.6 : 12.0,
-          matchAlgorithm: 'Jaro-Winkler + Semantic Token Match',
-          matchType: 'FUZZY_JARO_WINKLER',
-          disposition: name.toLowerCase().includes('gulf') ? 'PENDING_REVIEW' : 'DISMISSED_FALSE_POSITIVE',
-          tokenDiffs: {
-            screenedTokens: name.toLowerCase().split(' '),
-            matchedTokens: ['sample', 'match'],
-            commonTokens: []
-          }
-        };
+        const hits = screenWatchlistCandidate(name, { country, dob, nationalId });
+        const topHit = hits[0];
+
+        let record: WatchlistScreeningRecord;
+        if (topHit) {
+          record = {
+            id,
+            screenedName: name,
+            screenedAccount: account,
+            screenedAt: new Date().toISOString(),
+            matchedEntity: `${topHit.officialPrimaryName} (${topHit.entityId})`,
+            watchlistSource: topHit.watchlistName,
+            matchScore: topHit.matchScore,
+            matchAlgorithm: 'Jaro-Winkler + Token-Set + Phonetic Soundex',
+            matchType: topHit.matchType,
+            disposition: topHit.disposition,
+            tokenDiffs: topHit.tokenDiffs,
+            algorithmBreakdown: topHit.algorithmBreakdown,
+            corroborationDetails: topHit.corroborationDetails
+          };
+        } else {
+          record = {
+            id,
+            screenedName: name,
+            screenedAccount: account,
+            screenedAt: new Date().toISOString(),
+            matchedEntity: 'No Sanctions or PEP Hit Detected (Clean)',
+            watchlistSource: 'All Official Feeds (OFAC/UN/EU/UK/BFIU)',
+            matchScore: 0.0,
+            matchAlgorithm: 'Jaro-Winkler + Token-Set + Phonetic Soundex',
+            matchType: 'NO_MATCH',
+            disposition: 'DISMISSED_FALSE_POSITIVE',
+            tokenDiffs: {
+              screenedTokens: name.toLowerCase().split(/\s+/).filter(Boolean),
+              matchedTokens: [],
+              commonTokens: []
+            },
+            algorithmBreakdown: {
+              jaroWinklerScore: 0.0,
+              tokenSetScore: 0.0,
+              phoneticScore: 0.0,
+              corroborationAdjustment: 0.0
+            },
+            corroborationDetails: {
+              dobStatus: 'NOT_PROVIDED',
+              countryStatus: 'NOT_PROVIDED',
+              idStatus: 'NOT_PROVIDED'
+            }
+          };
+        }
 
         set((s) => ({ screeningRecords: [record, ...s.screeningRecords] }));
         return record;

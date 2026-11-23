@@ -1,0 +1,354 @@
+[
+  {
+    "pair_id": "OFAC-001",
+    "watchlist_id": "OFAC_SDN",
+    "query_name": "Gulf Star Commodities FZE",
+    "target_name": "Gulf Star Trading & Logistics LLC",
+    "is_match": true,
+    "category": "LEGAL_SUFFIX_STRIP",
+    "query_country": "United Arab Emirates",
+    "target_country": "United Arab Emirates"
+  },
+  {
+    "pair_id": "OFAC-002",
+    "watchlist_id": "OFAC_SDN",
+    "query_name": "Star Commodities Gulf",
+    "target_name": "Gulf Star Trading & Logistics LLC",
+    "is_match": true,
+    "category": "WORD_ORDER_PERMUTATION",
+    "query_country": "United Arab Emirates",
+    "target_country": "United Arab Emirates"
+  },
+  {
+    "pair_id": "OFAC-003",
+    "watchlist_id": "OFAC_SDN",
+    "query_name": "Mansoor Petrochem",
+    "target_name": "Al-Mansoor Petrochemical Intermediaries Ltd",
+    "is_match": true,
+    "category": "PREFIX_AND_ABBREVIATION",
+    "query_country": "Singapore",
+    "target_country": "Singapore"
+  },
+  {
+    "pair_id": "OFAC-004",
+    "watchlist_id": "OFAC_SDN",
+    "query_name": "Al Mansoor Trading Group",
+    "target_name": "Al-Mansoor Petrochemical Intermediaries Ltd",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Singapore",
+    "target_country": "Singapore"
+  },
+  {
+    "pair_id": "OFAC-005",
+    "watchlist_id": "OFAC_SDN",
+    "query_name": "Gulf Star Shipping Marine Services",
+    "target_name": "Pacific Star Shipping Corp",
+    "is_match": false,
+    "category": "HARD_NEGATIVE",
+    "query_country": "Panama",
+    "target_country": "Liberia"
+  },
+  {
+    "pair_id": "OFAC-006",
+    "watchlist_id": "OFAC_SDN",
+    "query_name": "Mansoor Textile Mills Ltd",
+    "target_name": "Al-Mansoor Petrochemical Intermediaries Ltd",
+    "is_match": false,
+    "category": "HARD_NEGATIVE",
+    "query_country": "Bangladesh",
+    "target_country": "Singapore"
+  },
+  {
+    "pair_id": "OFAC-007",
+    "watchlist_id": "OFAC_SDN",
+    "query_name": "Emirates Petrochemicals FZC",
+    "target_name": "Gulf Star Trading & Logistics LLC",
+    "is_match": false,
+    "category": "UNRELATED_CLEAN",
+    "query_country": "United Arab Emirates",
+    "target_country": "United Arab Emirates"
+  },
+  {
+    "pair_id": "OFAC-008",
+    "watchlist_id": "OFAC_SDN",
+    "query_name": "Gulf Star Trading and Logistics L.L.C.",
+    "target_name": "Gulf Star Trading & Logistics LLC",
+    "is_match": true,
+    "category": "PUNCTUATION_AND_AND",
+    "query_country": "United Arab Emirates",
+    "target_country": "United Arab Emirates"
+  },
+  {
+    "pair_id": "UN-001",
+    "watchlist_id": "UN_CONSOLIDATED",
+    "query_name": "Farhan Ahmed Kazi",
+    "target_name": "Mohammed Farooq Sheikh",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Pakistan",
+    "target_country": "Pakistan",
+    "query_dob": "1974-06-15",
+    "target_dob": "1974-06-15"
+  },
+  {
+    "pair_id": "UN-002",
+    "watchlist_id": "UN_CONSOLIDATED",
+    "query_name": "Seikh Mohammad Faruq",
+    "target_name": "Mohammed Farooq Sheikh",
+    "is_match": true,
+    "category": "BANGLA_TRANSLITERATION",
+    "query_country": "Pakistan",
+    "target_country": "Pakistan"
+  },
+  {
+    "pair_id": "UN-003",
+    "watchlist_id": "UN_CONSOLIDATED",
+    "query_name": "Sheikh Mohammed Faruk",
+    "target_name": "Mohammed Farooq Sheikh",
+    "is_match": true,
+    "category": "WORD_ORDER_PERMUTATION",
+    "query_country": "Pakistan",
+    "target_country": "Pakistan"
+  },
+  {
+    "pair_id": "UN-004",
+    "watchlist_id": "UN_CONSOLIDATED",
+    "query_name": "Al-Anfal Trust for Humanitarian Relief",
+    "target_name": "Lashkar-e-Taiba Relief Foundation",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Pakistan",
+    "target_country": "Pakistan"
+  },
+  {
+    "pair_id": "UN-005",
+    "watchlist_id": "UN_CONSOLIDATED",
+    "query_name": "Jamaat-ud-Dawa Welfare Wing",
+    "target_name": "Lashkar-e-Taiba Relief Foundation",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Pakistan",
+    "target_country": "Pakistan"
+  },
+  {
+    "pair_id": "UN-006",
+    "watchlist_id": "UN_CONSOLIDATED",
+    "query_name": "Farooq Sheikh Mohammed",
+    "target_name": "Mohammed Farooq Sheikh",
+    "is_match": true,
+    "category": "WORD_ORDER_PERMUTATION",
+    "query_country": "Pakistan",
+    "target_country": "Pakistan",
+    "query_dob": "1974-06-15",
+    "target_dob": "1974-06-15"
+  },
+  {
+    "pair_id": "UN-007",
+    "watchlist_id": "UN_CONSOLIDATED",
+    "query_name": "Farooq Ahmed Sheikh",
+    "target_name": "Mohammed Farooq Sheikh",
+    "is_match": false,
+    "category": "HARD_NEGATIVE",
+    "query_country": "United Kingdom",
+    "target_country": "Pakistan",
+    "query_dob": "1992-04-10",
+    "target_dob": "1974-06-15"
+  },
+  {
+    "pair_id": "UN-008",
+    "watchlist_id": "UN_CONSOLIDATED",
+    "query_name": "Lashkar Food Products Ltd",
+    "target_name": "Lashkar-e-Taiba Relief Foundation",
+    "is_match": false,
+    "category": "HARD_NEGATIVE",
+    "query_country": "India",
+    "target_country": "Pakistan"
+  },
+  {
+    "pair_id": "EU-001",
+    "watchlist_id": "EU_CONSOLIDATED",
+    "query_name": "Helvetia Metals Corp",
+    "target_name": "Helvetia Metallurgical Trading AG",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Switzerland",
+    "target_country": "Switzerland"
+  },
+  {
+    "pair_id": "EU-002",
+    "watchlist_id": "EU_CONSOLIDATED",
+    "query_name": "Helvetia Rohstoffhandel AG",
+    "target_name": "Helvetia Metallurgical Trading AG",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Switzerland",
+    "target_country": "Switzerland"
+  },
+  {
+    "pair_id": "EU-003",
+    "watchlist_id": "EU_CONSOLIDATED",
+    "query_name": "Helvetia Metallurgical Trading A.G.",
+    "target_name": "Helvetia Metallurgical Trading AG",
+    "is_match": true,
+    "category": "LEGAL_SUFFIX_STRIP",
+    "query_country": "Switzerland",
+    "target_country": "Switzerland"
+  },
+  {
+    "pair_id": "EU-004",
+    "watchlist_id": "EU_CONSOLIDATED",
+    "query_name": "Helvetia Insurance Group AG",
+    "target_name": "Helvetia Metallurgical Trading AG",
+    "is_match": false,
+    "category": "HARD_NEGATIVE",
+    "query_country": "Switzerland",
+    "target_country": "Switzerland"
+  },
+  {
+    "pair_id": "EU-005",
+    "watchlist_id": "EU_CONSOLIDATED",
+    "query_name": "Swiss Metallurgical Refining SA",
+    "target_name": "Helvetia Metallurgical Trading AG",
+    "is_match": false,
+    "category": "UNRELATED_CLEAN",
+    "query_country": "Switzerland",
+    "target_country": "Switzerland"
+  },
+  {
+    "pair_id": "EU-006",
+    "watchlist_id": "EU_CONSOLIDATED",
+    "query_name": "Helvetia Metals International",
+    "target_name": "Helvetia Metallurgical Trading AG",
+    "is_match": true,
+    "category": "FUZZY_JARO_WINKLER",
+    "query_country": "Switzerland",
+    "target_country": "Switzerland"
+  },
+  {
+    "pair_id": "UK-001",
+    "watchlist_id": "UK_HMT",
+    "query_name": "Caspian Freight UK",
+    "target_name": "Caspian Petroleum Freight Services Ltd",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "United Kingdom",
+    "target_country": "United Kingdom"
+  },
+  {
+    "pair_id": "UK-002",
+    "watchlist_id": "UK_HMT",
+    "query_name": "Caspian Maritime Agency Ltd",
+    "target_name": "Caspian Petroleum Freight Services Ltd",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "United Kingdom",
+    "target_country": "United Kingdom"
+  },
+  {
+    "pair_id": "UK-003",
+    "watchlist_id": "UK_HMT",
+    "query_name": "Caspian Petroleum Freight Services Limited",
+    "target_name": "Caspian Petroleum Freight Services Ltd",
+    "is_match": true,
+    "category": "LEGAL_SUFFIX_STRIP",
+    "query_country": "United Kingdom",
+    "target_country": "United Kingdom"
+  },
+  {
+    "pair_id": "UK-004",
+    "watchlist_id": "UK_HMT",
+    "query_name": "Caspian Sea Logistics Corp",
+    "target_name": "Caspian Petroleum Freight Services Ltd",
+    "is_match": false,
+    "category": "HARD_NEGATIVE",
+    "query_country": "Azerbaijan",
+    "target_country": "United Kingdom"
+  },
+  {
+    "pair_id": "UK-005",
+    "watchlist_id": "UK_HMT",
+    "query_name": "Black Sea Freight Services Ltd",
+    "target_name": "Caspian Petroleum Freight Services Ltd",
+    "is_match": false,
+    "category": "UNRELATED_CLEAN",
+    "query_country": "United Kingdom",
+    "target_country": "United Kingdom"
+  },
+  {
+    "pair_id": "BD-001",
+    "watchlist_id": "BFIU_DOMESTIC",
+    "query_name": "Ansar al-Islam Bangladesh",
+    "target_name": "Ansarullah Bangla Team (ABT)",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Bangladesh",
+    "target_country": "Bangladesh"
+  },
+  {
+    "pair_id": "BD-002",
+    "watchlist_id": "BFIU_DOMESTIC",
+    "query_name": "ABT Welfare Front",
+    "target_name": "Ansarullah Bangla Team (ABT)",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Bangladesh",
+    "target_country": "Bangladesh"
+  },
+  {
+    "pair_id": "BD-003",
+    "watchlist_id": "BFIU_DOMESTIC",
+    "query_name": "Kazi Farhan Ahmed",
+    "target_name": "Farhan Ahmed Kazi",
+    "is_match": true,
+    "category": "WORD_ORDER_PERMUTATION",
+    "query_country": "Bangladesh",
+    "target_country": "Bangladesh",
+    "query_dob": "1982-11-20",
+    "target_dob": "1982-11-20",
+    "query_id": "8022-1984-7712-8823",
+    "target_id": "8022-1984-7712-8823"
+  },
+  {
+    "pair_id": "BD-004",
+    "watchlist_id": "BFIU_DOMESTIC",
+    "query_name": "Farhan Kazi",
+    "target_name": "Kazi Farhan Ahmed",
+    "is_match": true,
+    "category": "ALIAS_MATCH",
+    "query_country": "Bangladesh",
+    "target_country": "Bangladesh"
+  },
+  {
+    "pair_id": "BD-005",
+    "watchlist_id": "BFIU_DOMESTIC",
+    "query_name": "Farhan Ahmed",
+    "target_name": "Kazi Farhan Ahmed",
+    "is_match": false,
+    "category": "HARD_NEGATIVE",
+    "query_country": "Bangladesh",
+    "target_country": "Bangladesh",
+    "query_dob": "1998-05-12",
+    "target_dob": "1982-11-20"
+  },
+  {
+    "pair_id": "BD-006",
+    "watchlist_id": "BFIU_DOMESTIC",
+    "query_name": "Ansar Welfare Society Dhaka",
+    "target_name": "Ansarullah Bangla Team (ABT)",
+    "is_match": false,
+    "category": "HARD_NEGATIVE",
+    "query_country": "Bangladesh",
+    "target_country": "Bangladesh"
+  },
+  {
+    "pair_id": "BD-007",
+    "watchlist_id": "BFIU_DOMESTIC",
+    "query_name": "Bengal Agro Products Ltd",
+    "target_name": "Ansarullah Bangla Team (ABT)",
+    "is_match": false,
+    "category": "UNRELATED_CLEAN",
+    "query_country": "Bangladesh",
+    "target_country": "Bangladesh"
+  }
+]

@@ -69,10 +69,10 @@ export const CommandHeader: React.FC = () => {
       preset === 'TBML'
         ? 'Trade-Based Money Laundering: Over-invoicing +333.7% with rapid sub-$10,000 LC duplicate splitting.'
         : preset === 'STRUCTURING'
-        ? 'Smurfing / Cash Structuring: Consecutive deposits of ৳954,000 BDT ($7,950) beneath ৳1,000,000 BDT statutory CTR ceiling (MLPA 2012 § 2(z) / BFIU Circular 26).'
-        : preset === 'MULE'
-        ? 'Mule Layering: Rapid pass-through across Dubai and Singapore corporate entities with zero overnight balance.'
-        : 'Sanctions Evasion: High-risk counterparty flag in OFAC SDN / UN Security Council database.',
+          ? 'Smurfing / Cash Structuring: Consecutive deposits of ৳954,000 BDT ($7,950) beneath ৳1,000,000 BDT statutory CTR ceiling (MLPA 2012 § 2(z) / BFIU Circular 26).'
+          : preset === 'MULE'
+            ? 'Mule Layering: Rapid pass-through across Dubai and Singapore corporate entities with zero overnight balance.'
+            : 'Sanctions Evasion: High-risk counterparty flag in OFAC SDN / UN Security Council database.',
       'accent'
     );
   };
@@ -104,11 +104,10 @@ export const CommandHeader: React.FC = () => {
         <div className="flex items-center gap-1 bg-[#0B0F17] p-0.5 rounded border border-[#334155]">
           <button
             onClick={toggleStreamRunning}
-            className={`px-2 py-1 rounded text-[11px] font-mono font-semibold cursor-pointer transition-colors flex items-center gap-1.5 shrink-0 ${
-              isStreamRunning
-                ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30'
-                : 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30'
-            }`}
+            className={`px-2 py-1 rounded text-[11px] font-mono font-semibold cursor-pointer transition-colors flex items-center gap-1.5 shrink-0 ${isStreamRunning
+              ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30'
+              : 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30'
+              }`}
             title={isStreamRunning ? "Pause Ingestion Stream" : "Resume Ingestion Stream"}
           >
             <Zap className="w-3 h-3 shrink-0" />
@@ -122,9 +121,8 @@ export const CommandHeader: React.FC = () => {
                 <button
                   key={speed}
                   onClick={() => setStreamSpeed(speed)}
-                  className={`px-1.5 py-0.5 rounded cursor-pointer ${
-                    streamSpeed === speed ? 'bg-[#1E293B] text-emerald-400 font-bold' : 'hover:text-slate-200'
-                  }`}
+                  className={`px-1.5 py-0.5 rounded cursor-pointer ${streamSpeed === speed ? 'bg-[#1E293B] text-emerald-400 font-bold' : 'hover:text-slate-200'
+                    }`}
                 >
                   {speed}x
                 </button>
@@ -178,11 +176,10 @@ export const CommandHeader: React.FC = () => {
                 key={jCode}
                 type="button"
                 onClick={() => setActiveJurisdiction(jCode)}
-                className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                  isSelected
-                    ? 'bg-[#1E293B] font-bold text-emerald-400 border border-emerald-500/30 shadow-xs'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
+                className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${isSelected
+                  ? 'bg-[#1E293B] font-bold text-emerald-400 border border-emerald-500/30 shadow-xs'
+                  : 'text-slate-400 hover:text-slate-200'
+                  }`}
                 title={`${jur.name} (${jur.statutoryAct})`}
               >
                 {jur.shortCode}
@@ -195,11 +192,10 @@ export const CommandHeader: React.FC = () => {
         <button
           type="button"
           onClick={revealPii}
-          className={`px-2 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1.5 border transition-all cursor-pointer ${
-            piiActive
-              ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse'
-              : 'bg-[#0B0F17] text-slate-300 border-[#334155] hover:bg-[#1E293B]'
-          }`}
+          className={`px-2 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1.5 border transition-all cursor-pointer ${piiActive
+            ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse'
+            : 'bg-[#0B0F17] text-slate-300 border-[#334155] hover:bg-[#1E293B]'
+            }`}
           title={piiActive ? "PII is currently unmasked (Auto-expires in 60s)" : "Reveal PII globally for 60 seconds (Audited to WORM Ledger)"}
         >
           {piiActive ? <EyeOff className="w-3.5 h-3.5 text-amber-400" /> : <Eye className="w-3.5 h-3.5 text-slate-400" />}

@@ -25,6 +25,7 @@ import {
 import { useTheme } from 'next-themes';
 import { useBankingStore } from '@/lib/store';
 import { JURISDICTIONS, JurisdictionCode } from '@/lib/compliance/jurisdictions';
+import { APP_MODE, IS_ONPREM_MODE } from '@/lib/config/env';
 
 export const CommandHeader: React.FC = () => {
   const { theme, setTheme } = useTheme();
@@ -80,7 +81,7 @@ export const CommandHeader: React.FC = () => {
   const unreadNotifCount = notifications.filter(n => !n.read).length;
 
   return (
-    <header className="fixed top-0 left-0 right-0 h-14 px-3 sm:px-4 border-b border-[#1E293B] bg-[#0F172A]/95 backdrop-blur-md flex items-center justify-between gap-2 sm:gap-3 shrink-0 z-40 select-none max-w-full overflow-hidden">
+    <header className="w-full h-14 px-3 sm:px-4 border-b border-[#1E293B] bg-[#0F172A]/95 backdrop-blur-md flex items-center justify-between gap-2 sm:gap-3 shrink-0 select-none max-w-full overflow-hidden">
       {/* Left: Brand Node, Environment Badge & Ingestion Stream */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         <Link href="/" className="flex items-center gap-2 pr-2 sm:pr-3 border-r border-[#1E293B] cursor-pointer">
@@ -93,10 +94,10 @@ export const CommandHeader: React.FC = () => {
           </span>
         </Link>
 
-        {/* Air-Gap / Cloud Deployment Badge */}
+        {/* Mode & Deployment Badge */}
         <div className="hidden xl:flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#0B0F17] border border-[#334155] text-slate-300">
-          <span className={`w-1.5 h-1.5 rounded-full ${isAirGap ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
-          <span>{isAirGap ? 'DEPLOYMENT: AIR-GAP INTRANET' : 'DEPLOYMENT: CLOUD SANDBOX (AIR-GAP READY)'}</span>
+          <span className={`w-1.5 h-1.5 rounded-full ${IS_ONPREM_MODE ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
+          <span>{IS_ONPREM_MODE ? 'DEPLOYMENT: AIR-GAP INTRANET (ON-PREM)' : 'DEPLOYMENT: PUBLIC RESEARCH DEMO'}</span>
         </div>
 
         {/* Global Stream Control Pill */}
@@ -111,8 +112,8 @@ export const CommandHeader: React.FC = () => {
             title={isStreamRunning ? "Pause Ingestion Stream" : "Resume Ingestion Stream"}
           >
             <Zap className="w-3 h-3 shrink-0" />
-            <span className="hidden sm:inline">{isStreamRunning ? 'STREAM: LIVE' : 'STREAM: PAUSED'}</span>
-            <span className="sm:hidden">{isStreamRunning ? 'LIVE' : 'PAUSED'}</span>
+            <span className="hidden sm:inline">{isStreamRunning ? 'STREAM: SIMULATED' : 'STREAM: PAUSED'}</span>
+            <span className="sm:hidden">{isStreamRunning ? 'SIMULATED' : 'PAUSED'}</span>
           </button>
 
           {isStreamRunning && (

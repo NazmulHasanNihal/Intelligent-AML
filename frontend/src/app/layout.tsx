@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { CommandHeader } from '@/components/shell/CommandHeader';
+import { DemoDisclaimerBanner } from '@/components/shell/DemoDisclaimerBanner';
 import { NavigationRail } from '@/components/shell/NavigationRail';
 import { GlobalCommandPalette } from '@/components/shell/GlobalCommandPalette';
 import { NotificationDrawer } from '@/components/shell/NotificationDrawer';
@@ -36,11 +37,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable} overflow-x-hidden w-full max-w-full`}>
       <body className="min-h-screen bg-[#0B0F17] text-slate-100 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden w-full max-w-full">
-        {/* Top 56px Institutional Command Bar */}
-        <CommandHeader />
+        {/* Fixed Top Container: Disclaimer Banner & Command Header */}
+        <div className="fixed top-0 left-0 right-0 z-40 bg-[#0F172A]/95 backdrop-blur-md">
+          <DemoDisclaimerBanner />
+          <CommandHeader />
+        </div>
 
-        <div className="flex pt-14 min-h-[calc(100vh-3.5rem)]">
-          {/* Collapsible Left Rail (240px / 64px) */}
+        <div className="flex pt-[5.25rem] min-h-[calc(100vh-5.25rem)]">
+          {/* Collapsible Left Rail */}
           <NavigationRail />
 
           {/* Main Application Viewport */}

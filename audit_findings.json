@@ -1,0 +1,3364 @@
+{
+  "metrics": [
+    {
+      "file": "frontend/src/api/client.js",
+      "line": 132,
+      "value": "85.7%",
+      "text": "{ agent: 'ComplianceAuditorAgent', status: 'COMPLETED', message: 'OFAC and BFIU watchlist scan confirmed clean. Structuring alert triggered under Section 25 of MLPA 2012 / 31 U.S.C. 5324 (85.7% transfers in $9k-$9.95k band).' },"
+    },
+    {
+      "file": "frontend/src/api/client.js",
+      "line": 294,
+      "value": "748",
+      "text": "tier_2_review_count: 748,"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 285,
+      "value": "0.45 ms",
+      "text": "0.45 ms"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 288,
+      "value": "0.82 ms",
+      "text": "<span className=\"text-emerald-400 font-mono font-bold\">P99: 0.82 ms</span>"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 444,
+      "value": "1.84%",
+      "text": "<strong className=\"text-slate-200\">1.84%</strong>"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 448,
+      "value": "82.5%",
+      "text": "<strong className=\"text-emerald-400\">82.5%</strong>"
+    },
+    {
+      "file": "frontend/src/app/api/v1/score/route.ts",
+      "line": 101,
+      "value": "99.0%",
+      "text": "guaranteedCoverage: '\u2265 99.0%',"
+    },
+    {
+      "file": "frontend/src/app/customers/page.tsx",
+      "line": 304,
+      "value": "10%",
+      "text": "Ultimate Beneficial Ownership (UBO) Structure (&ge; 10% Ownership)"
+    },
+    {
+      "file": "frontend/src/app/customers/page.tsx",
+      "line": 394,
+      "value": "312%",
+      "text": "placeholder=\"e.g. Unexplained +312% export turnover variance and port diversion flagged during trade inspection.\""
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 164,
+      "value": "99.0%",
+      "text": "coverageGuarantee: '\u2265 99.0% Class-Conditional Finite Sample Coverage',"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 166,
+      "value": "0.82 ms",
+      "text": "p99InferenceLatency: '0.82 ms',"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 170,
+      "value": "0.62%",
+      "text": "{ rail: 'SWIFT MT / Documentary Credits', f1Score: 0.965, falsePositiveRate: '0.62%', p99Latency: '0.84 ms' },"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 170,
+      "value": "0.84 ms",
+      "text": "{ rail: 'SWIFT MT / Documentary Credits', f1Score: 0.965, falsePositiveRate: '0.62%', p99Latency: '0.84 ms' },"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 171,
+      "value": "0.74%",
+      "text": "{ rail: 'ISO 20022 (pacs.008 RTGS)', f1Score: 0.952, falsePositiveRate: '0.74%', p99Latency: '0.81 ms' },"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 171,
+      "value": "0.81 ms",
+      "text": "{ rail: 'ISO 20022 (pacs.008 RTGS)', f1Score: 0.952, falsePositiveRate: '0.74%', p99Latency: '0.81 ms' },"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 172,
+      "value": "0.88%",
+      "text": "{ rail: 'BEFTN / National Electronic Clearing', f1Score: 0.941, falsePositiveRate: '0.88%', p99Latency: '0.79 ms' },"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 172,
+      "value": "0.79 ms",
+      "text": "{ rail: 'BEFTN / National Electronic Clearing', f1Score: 0.941, falsePositiveRate: '0.88%', p99Latency: '0.79 ms' },"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 173,
+      "value": "0.79%",
+      "text": "{ rail: 'Mobile Financial Services (MFS / Agent)', f1Score: 0.948, falsePositiveRate: '0.79%', p99Latency: '0.85 ms' }"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 173,
+      "value": "0.85 ms",
+      "text": "{ rail: 'Mobile Financial Services (MFS / Agent)', f1Score: 0.948, falsePositiveRate: '0.79%', p99Latency: '0.85 ms' }"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 256,
+      "value": "420%",
+      "text": "<span>{isSimulatingSpike ? 'Market Volatility Surge Active (+420% Burst)' : 'Normal Market Baseline'}</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 297,
+      "value": "748",
+      "text": "<XAxis dataKey=\"t\" stroke=\"#64748B\" tick={{ fontSize: 11, fontFamily: 'monospace' }} />"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 322,
+      "value": "96.5%",
+      "text": "<span className=\"font-bold text-emerald-400\">96.5%</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 326,
+      "value": "0.62%",
+      "text": "<span className=\"font-bold text-emerald-400\">0.62%</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 330,
+      "value": "0.84 ms",
+      "text": "<span className=\"font-bold text-slate-200\">0.84 ms</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 338,
+      "value": "95.2%",
+      "text": "<span className=\"font-bold text-emerald-400\">95.2%</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 342,
+      "value": "0.74%",
+      "text": "<span className=\"font-bold text-emerald-400\">0.74%</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 346,
+      "value": "0.81 ms",
+      "text": "<span className=\"font-bold text-slate-200\">0.81 ms</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 354,
+      "value": "94.1%",
+      "text": "<span className=\"font-bold text-emerald-400\">94.1%</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 358,
+      "value": "0.88%",
+      "text": "<span className=\"font-bold text-emerald-400\">0.88%</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 362,
+      "value": "0.79 ms",
+      "text": "<span className=\"font-bold text-slate-200\">0.79 ms</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 370,
+      "value": "94.8%",
+      "text": "<span className=\"font-bold text-emerald-400\">94.8%</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 374,
+      "value": "0.79%",
+      "text": "<span className=\"font-bold text-emerald-400\">0.79%</span>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 378,
+      "value": "0.85 ms",
+      "text": "<span className=\"font-bold text-slate-200\">0.85 ms</span>"
+    },
+    {
+      "file": "frontend/src/app/graph/page.tsx",
+      "line": 40,
+      "value": "333.7%",
+      "text": "description: 'Chittagong port documentary trade LC over-invoiced by +333.7% routed to JAFZA Dubai free zone.'"
+    },
+    {
+      "file": "frontend/src/app/graph/page.tsx",
+      "line": 196,
+      "value": "748",
+      "text": "'border-color': '#64748B'"
+    },
+    {
+      "file": "frontend/src/app/graph/page.tsx",
+      "line": 231,
+      "value": "748",
+      "text": "'target-arrow-color': '#64748B',"
+    },
+    {
+      "file": "frontend/src/app/graph/page.tsx",
+      "line": 540,
+      "value": "96.8%",
+      "text": "<span className=\"font-mono text-emerald-400 font-bold\">96.8% Confidence</span>"
+    },
+    {
+      "file": "frontend/src/app/graph/page.tsx",
+      "line": 573,
+      "value": "60%",
+      "text": "<span className=\"text-emerald-400 font-bold\">60%</span>"
+    },
+    {
+      "file": "frontend/src/app/graph/page.tsx",
+      "line": 577,
+      "value": "35%",
+      "text": "<span className=\"text-amber-400 font-bold\">35%</span>"
+    },
+    {
+      "file": "frontend/src/app/graph/page.tsx",
+      "line": 581,
+      "value": "5%",
+      "text": "<span className=\"text-slate-400 font-bold\">5%</span>"
+    },
+    {
+      "file": "frontend/src/app/rules/page.tsx",
+      "line": 172,
+      "value": "88.4%",
+      "text": "<strong className=\"font-mono text-rose-400\">88.4% (Heavy Analyst Fatigue)</strong>"
+    },
+    {
+      "file": "frontend/src/app/rules/page.tsx",
+      "line": 196,
+      "value": "72.2%",
+      "text": "<strong className=\"font-mono text-emerald-400\">4,120 alerts / mo (-72.2%)</strong>"
+    },
+    {
+      "file": "frontend/src/app/rules/page.tsx",
+      "line": 200,
+      "value": "42.8%",
+      "text": "<strong className=\"font-mono text-emerald-400\">-42.8% False Positive Drop</strong>"
+    },
+    {
+      "file": "frontend/src/app/rules/page.tsx",
+      "line": 204,
+      "value": "18.4%",
+      "text": "<strong className=\"font-mono text-emerald-400\">+18.4% Greater Complex Laundering Capture</strong>"
+    },
+    {
+      "file": "frontend/src/app/sar/page.tsx",
+      "line": 74,
+      "value": "333.7%",
+      "text": "Between August 28, 2026 and September 02, 2026, the Subject initiated documentary credit transactions under Letter of Credit (LC) No. LC-CTG-2026-9921. The declared commercial invoice price for combed cotton yarn was $9.45/kg. Verification against National Board of Revenue (NBR) ASYCUDA World customs valuation databases indicated a prevailing market benchmark of $2.18/kg, representing a gross price divergence of +333.7%."
+    },
+    {
+      "file": "frontend/src/app/tbml/page.tsx",
+      "line": 117,
+      "value": "333.7%",
+      "text": "ASYCUDA World Price Benchmark (+333.7%)"
+    },
+    {
+      "file": "frontend/src/app/tbml/page.tsx",
+      "line": 224,
+      "value": "333.7%",
+      "text": "<span className=\"text-2xl font-mono font-bold text-rose-500 mt-1 block\">+333.7%</span>"
+    },
+    {
+      "file": "frontend/src/components/AccountFreezeNoticeModal.jsx",
+      "line": 112,
+      "value": "25%",
+      "text": "detail: 'Submit current Certificate of Good Standing and certified government identification for all corporate owners holding greater than 25% voting equity.'"
+    },
+    {
+      "file": "frontend/src/components/AccountProfileDrawer.jsx",
+      "line": 166,
+      "value": "99.8%",
+      "text": "<span className=\"text-xs font-bold text-rose-600 dark:text-rose-400\">99.8% (In \u2248 Out)</span>"
+    },
+    {
+      "file": "frontend/src/components/BankerHelpModal.jsx",
+      "line": 33,
+      "value": "98.6%",
+      "text": "<li><b>Auto-Clears 98.6% of Safe Transfers:</b> Automatically clears normal customer transactions in less than 1 millisecond so real customers never experience delays.</li>"
+    },
+    {
+      "file": "frontend/src/components/BankerHelpModal.jsx",
+      "line": 54,
+      "value": "98.6%",
+      "text": "The transaction is verified clean (e.g. regular corporate payroll, utility bills). Funds are instantly released without requiring human officer review. Over <b>98.6%</b> of your bank's volume falls here."
+    },
+    {
+      "file": "frontend/src/components/BankerHelpModal.jsx",
+      "line": 170,
+      "value": "98.6%",
+      "text": "<b>No.</b> The system uses mathematical Conformal Safety Guarantees that ensure over 98.6% of safe transactions are cleared straight-through in 0.45 milliseconds. Only genuine anomalies are flagged for your review."
+    },
+    {
+      "file": "frontend/src/components/BatchCSVIngestModal.jsx",
+      "line": 46,
+      "value": "98.6%",
+      "text": "desc: 'Demonstrates 98.6% straight-through clearing and zero false-alarm disruption.',"
+    },
+    {
+      "file": "frontend/src/components/CommandPalette.jsx",
+      "line": 55,
+      "value": "99.0%",
+      "text": "{ id: 'nav-alerts', category: 'Consoles', title: '2. Alert Triage & Conformal Clearing Hub', desc: 'Class-conditional 3-tier queue (99.0% Confidence)', icon: Inbox, action: () => onNavigate('alerts'), keys: ['2'] },"
+    },
+    {
+      "file": "frontend/src/components/CustomerNoticeModal.jsx",
+      "line": 100,
+      "value": "25%",
+      "text": "\u2022 Confirmation of Ultimate Beneficial Ownership (UBO) for entity holding >25% equity."
+    },
+    {
+      "file": "frontend/src/components/DemoToolsModal.jsx",
+      "line": 42,
+      "value": "333.7%",
+      "text": "forensicProfile: 'Identifies structured export documentary remittances just beneath BFIU Circular 26 CTR statutory limit ($10k / \u09f31,000,000 BDT) accompanied by extreme ASYCUDA customs price over-invoicing (+333.7%). Triggers automated Tier 1 quarantine.',"
+    },
+    {
+      "file": "frontend/src/components/InteractiveBankerTour.jsx",
+      "line": 26,
+      "value": "99.45%",
+      "text": "This is your primary morning workstation. Over <b>99.45% of safe customer transfers</b> (corporate payroll, shopping, vendor payments) are automatically cleared in <b>0.45 milliseconds</b>."
+    },
+    {
+      "file": "frontend/src/components/LiveStreamTicker.jsx",
+      "line": 137,
+      "value": "0.45ms",
+      "text": "<span className=\"text-[var(--accent-primary)] font-bold\">0.45ms</span>"
+    },
+    {
+      "file": "frontend/src/components/Neo4j3DGraph.jsx",
+      "line": 494,
+      "value": "65.9%",
+      "text": "{camouflageGateFloor > 0.05 ? '65.9% Pruned' : 'Raw Topology'}"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 35,
+      "value": "98.6%",
+      "text": "example: '98.6% of honest payments pass through instantly without human delay.'"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 41,
+      "value": "0.45 ms",
+      "text": "example: 'A wire transfer linked to a sanctioned overseas company is halted in 0.45 ms.'"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 88,
+      "value": "99%",
+      "text": "explanation: 'Normal AI guesses without telling you if it could be wrong. Conformal prediction gives a mathematical guarantee: \"We guarantee with 99% statistical confidence that this transaction is safe before auto-clearing it.\"',"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 182,
+      "value": "98%",
+      "text": "Older bank software raises false alarms on <strong>98% of honest people</strong>, forcing human officers to drown in paperwork."
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 183,
+      "value": "98.6%",
+      "text": "<strong> Intelligent-AML fixes this:</strong> it uses smart AI to instantly approve <strong>98.6% of honest payments</strong>,"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 192,
+      "value": "98.6%",
+      "text": "98.6%"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 207,
+      "value": "0.45ms",
+      "text": "0.45ms"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 264,
+      "value": "98.6%",
+      "text": "98.6% of Volume"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 282,
+      "value": "1.1%",
+      "text": "1.1% of Volume"
+    },
+    {
+      "file": "frontend/src/components/PlainEnglishGuideModal.jsx",
+      "line": 300,
+      "value": "0.3%",
+      "text": "0.3% of Volume"
+    },
+    {
+      "file": "frontend/src/components/Planar2DGraph.jsx",
+      "line": 293,
+      "value": "60%",
+      "text": "<stop offset=\"60%\" stopColor=\"#0284C7\" stopOpacity=\"0.3\" />"
+    },
+    {
+      "file": "frontend/src/components/QuickStartBar.jsx",
+      "line": 18,
+      "value": "85.7%",
+      "text": "description: '4-hop cyclic wash loop across 3 banks with 85.7% transfers in $9k-$9.95k CTR avoidance band.',"
+    },
+    {
+      "file": "frontend/src/components/SanctionsScreeningModal.jsx",
+      "line": 268,
+      "value": "65%",
+      "text": "<span>65% (Permissive)</span>"
+    },
+    {
+      "file": "frontend/src/components/SanctionsScreeningModal.jsx",
+      "line": 269,
+      "value": "80%",
+      "text": "<span>80% (Recommended)</span>"
+    },
+    {
+      "file": "frontend/src/components/SanctionsScreeningModal.jsx",
+      "line": 270,
+      "value": "99%",
+      "text": "<span>99% (Exact)</span>"
+    },
+    {
+      "file": "frontend/src/components/Sidebar.jsx",
+      "line": 245,
+      "value": "0.45ms",
+      "text": "<span className=\"font-mono text-[var(--text-secondary)] text-[9px] shrink-0\">0.45ms</span>"
+    },
+    {
+      "file": "frontend/src/components/TabNavigation.jsx",
+      "line": 6,
+      "value": "1ms",
+      "text": "{ id: 'telemetry', label: '1. Live Scoring', icon: Zap, badge: 'SLA <1ms' },"
+    },
+    {
+      "file": "frontend/src/components/TabNavigation.jsx",
+      "line": 8,
+      "value": "99%",
+      "text": "{ id: 'triage', label: '3. Conformal Triage', icon: Target, badge: '99% Coverage' },"
+    },
+    {
+      "file": "frontend/src/components/TopNavbar.jsx",
+      "line": 187,
+      "value": "0.82ms",
+      "text": "<strong className=\"text-[var(--accent-primary)] font-mono\">p99 &lt; 0.82ms</strong>"
+    },
+    {
+      "file": "frontend/src/components/TopNavbar.jsx",
+      "line": 395,
+      "value": "1.0%",
+      "text": "<span className=\"font-bold text-emerald-600 dark:text-emerald-400\">Risk Tolerance 1.0% (Safety &ge; 99.0%)</span>"
+    },
+    {
+      "file": "frontend/src/components/TopNavbar.jsx",
+      "line": 395,
+      "value": "99.0%",
+      "text": "<span className=\"font-bold text-emerald-600 dark:text-emerald-400\">Risk Tolerance 1.0% (Safety &ge; 99.0%)</span>"
+    },
+    {
+      "file": "frontend/src/components/TopNavbar.jsx",
+      "line": 410,
+      "value": "0.18ms",
+      "text": "The platform operates under a high-throughput fast-path mode. Subgraphs are extracted from in-memory DuckDB Arrow tables in &lt;0.18ms, fused with Tri-Band Temporal Attention in &lt;0.12ms, and calibrated with finite-sample exchangeability guarantees."
+    },
+    {
+      "file": "frontend/src/components/TopNavbar.jsx",
+      "line": 410,
+      "value": "0.12ms",
+      "text": "The platform operates under a high-throughput fast-path mode. Subgraphs are extracted from in-memory DuckDB Arrow tables in &lt;0.18ms, fused with Tri-Band Temporal Attention in &lt;0.12ms, and calibrated with finite-sample exchangeability guarantees."
+    },
+    {
+      "file": "frontend/src/components/WhatIfRecourseModal.jsx",
+      "line": 261,
+      "value": "10%",
+      "text": "<span>10% (Unverified Wire)</span>"
+    },
+    {
+      "file": "frontend/src/components/layout/AppHeader.jsx",
+      "line": 37,
+      "value": "0.45 ms",
+      "text": "<span>Fast-Path: <strong className=\"text-cleared font-semibold\">0.45 ms</strong> (p99 &lt; 0.82 ms)</span>"
+    },
+    {
+      "file": "frontend/src/components/layout/AppHeader.jsx",
+      "line": 37,
+      "value": "0.82 ms",
+      "text": "<span>Fast-Path: <strong className=\"text-cleared font-semibold\">0.45 ms</strong> (p99 &lt; 0.82 ms)</span>"
+    },
+    {
+      "file": "frontend/src/components/layout/DemoBanner.jsx",
+      "line": 106,
+      "value": "0 ms",
+      "text": "<span>Lag: <strong className=\"text-cleared\">0 msgs</strong> (0.12 ms)</span>"
+    },
+    {
+      "file": "frontend/src/components/layout/DemoBanner.jsx",
+      "line": 106,
+      "value": "0.12 ms",
+      "text": "<span>Lag: <strong className=\"text-cleared\">0 msgs</strong> (0.12 ms)</span>"
+    },
+    {
+      "file": "frontend/src/components/shell/CommandHeader.tsx",
+      "line": 69,
+      "value": "333.7%",
+      "text": "? 'Trade-Based Money Laundering: Over-invoicing +333.7% with rapid sub-$10,000 LC duplicate splitting.'"
+    },
+    {
+      "file": "frontend/src/components/shell/CommandHeader.tsx",
+      "line": 144,
+      "value": "333.7%",
+      "text": "<option value=\"TBML\" className=\"bg-[#0F172A] text-slate-200\">Preset: TBML Over-Invoicing (+333.7%)</option>"
+    },
+    {
+      "file": "frontend/src/components/shell/GlobalCommandPalette.tsx",
+      "line": 114,
+      "value": "2,028",
+      "text": "<span className=\"flex-1 font-medium font-sans\">2. Alert Triage Queue (2,028 Rows)</span>"
+    },
+    {
+      "file": "frontend/src/components/shell/NotificationDrawer.tsx",
+      "line": 139,
+      "value": "0.82ms",
+      "text": "<span className=\"text-emerald-400 font-bold\">P99 &lt; 0.82ms</span>"
+    },
+    {
+      "file": "frontend/src/components/ui/CommandDialog.jsx",
+      "line": 51,
+      "value": "16%",
+      "text": "className=\"fixed left-1/2 top-[16%] z-50 w-[min(640px,92vw)] -translate-x-1/2"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 137,
+      "value": "64%",
+      "text": "ubo: 'Tanvir Ahmed Rahman (64% Equity), Meghna Family Trust (36%)',"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 137,
+      "value": "36%",
+      "text": "ubo: 'Tanvir Ahmed Rahman (64% Equity), Meghna Family Trust (36%)',"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 242,
+      "value": "98.4%",
+      "text": "{drawerItem.riskScore ? `${(drawerItem.riskScore * 100).toFixed(1)}%` : '98.4%'}"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 245,
+      "value": "99.96%",
+      "text": "Confidence Level: 99.96%"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 280,
+      "value": "333%",
+      "text": "{ name: 'Customs Valuation Divergence (+333%)', weight: 0.42, direction: 'risk' },"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 356,
+      "value": "64%",
+      "text": "<div className=\"h-full bg-accent\" style={{ width: '64%' }} title=\"Tanvir Ahmed Rahman (64%)\" />"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 356,
+      "value": "64%",
+      "text": "<div className=\"h-full bg-accent\" style={{ width: '64%' }} title=\"Tanvir Ahmed Rahman (64%)\" />"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 357,
+      "value": "36%",
+      "text": "<div className=\"h-full bg-review\" style={{ width: '36%' }} title=\"Meghna Family Trust (36%)\" />"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 357,
+      "value": "36%",
+      "text": "<div className=\"h-full bg-review\" style={{ width: '36%' }} title=\"Meghna Family Trust (36%)\" />"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 368,
+      "value": "64.0%",
+      "text": "<span className=\"font-bold text-accent\">64.0% Equity</span>"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 377,
+      "value": "36.0%",
+      "text": "<span className=\"font-bold text-review\">36.0% Equity</span>"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 382,
+      "value": "25%",
+      "text": "<strong>UBO Transparency Status:</strong> Controlled by single individual meeting primary statutory trigger (&gt;25% equity interest under BFIU Circular 26)."
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 501,
+      "value": "8.42%",
+      "text": "{topologyData?.pagerank_score ? (topologyData.pagerank_score * 100).toFixed(2) + '%' : '8.42%'}"
+    },
+    {
+      "file": "frontend/src/components/ui/InspectorDrawer.jsx",
+      "line": 507,
+      "value": "42.1%",
+      "text": "{topologyData?.betweenness_centrality ? (topologyData.betweenness_centrality * 100).toFixed(1) + '%' : '42.1%'}"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 347,
+      "value": "1,280",
+      "text": "<span className=\"text-base sm:text-lg xl:text-xl font-bold text-rose-600 dark:text-rose-400 font-mono block truncate\">{sharedStats?.quarantined?.toLocaleString() || '1,280'} tx</span>"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 357,
+      "value": "748",
+      "text": "<span className=\"text-base sm:text-lg xl:text-xl font-bold text-amber-700 dark:text-amber-300 font-mono block truncate\">{sharedStats?.reviewQueue?.toLocaleString() || '748'} tx</span>"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 366,
+      "value": "98.6%",
+      "text": "<span className=\"text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block uppercase truncate\">TIER 3 AUTO-CLEARED (&gt;98.6%)</span>"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 622,
+      "value": "2,028",
+      "text": "<span>Showing <strong>1\u2013{filteredTxs.length}</strong> of <strong>2,028</strong> flagged alerts</span>"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 739,
+      "value": "99.0%",
+      "text": "<span className=\"text-[9px] sm:text-[10px] font-mono text-[var(--accent-primary)] font-semibold\">Coverage &ge; 99.0%</span>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 36,
+      "value": "99.44%",
+      "text": "{ domain: 'Public Blockchain (Bitcoin UTXO)', dataset: 'elliptic_v1', nature: 'Empirical (On-Chain)', entities: '203,769', txs: '234,355', f1: '99.44%', prauc: '1.0000', gnnModel: 'C-STGB Dual (Ours)', baseline: '99.89% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 36,
+      "value": "99.89%",
+      "text": "{ domain: 'Public Blockchain (Bitcoin UTXO)', dataset: 'elliptic_v1', nature: 'Empirical (On-Chain)', entities: '203,769', txs: '234,355', f1: '99.44%', prauc: '1.0000', gnnModel: 'C-STGB Dual (Ours)', baseline: '99.89% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 37,
+      "value": "100.00%",
+      "text": "{ domain: 'Public Blockchain (Multi-Asset)', dataset: 'elliptic_v2', nature: 'Empirical (On-Chain)', entities: '444,521', txs: '367,137', f1: '100.00%', prauc: '1.0000', gnnModel: 'C-STGB Dual (Ours)', baseline: '100.00% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 37,
+      "value": "100.00%",
+      "text": "{ domain: 'Public Blockchain (Multi-Asset)', dataset: 'elliptic_v2', nature: 'Empirical (On-Chain)', entities: '444,521', txs: '367,137', f1: '100.00%', prauc: '1.0000', gnnModel: 'C-STGB Dual (Ours)', baseline: '100.00% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 38,
+      "value": "96.94%",
+      "text": "{ domain: 'Public Blockchain (Smart Contracts)', dataset: 'xblock_eth', nature: 'Empirical (On-Chain)', entities: '405,118', txs: '7,524,827', f1: '96.94%', prauc: '0.9915', gnnModel: 'C-STGB Dual (Ours)', baseline: '97.05% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 38,
+      "value": "97.05%",
+      "text": "{ domain: 'Public Blockchain (Smart Contracts)', dataset: 'xblock_eth', nature: 'Empirical (On-Chain)', entities: '405,118', txs: '7,524,827', f1: '96.94%', prauc: '0.9915', gnnModel: 'C-STGB Dual (Ours)', baseline: '97.05% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 39,
+      "value": "72.21%",
+      "text": "{ domain: 'Public Blockchain (Trade Books)', dataset: 'mtgox_leaked', nature: 'Empirical (Exchange)', entities: '119,343', txs: '6,775,117', f1: '72.21%', prauc: '0.8306', gnnModel: 'C-STGB Dual (Ours)', baseline: '74.39% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 39,
+      "value": "74.39%",
+      "text": "{ domain: 'Public Blockchain (Trade Books)', dataset: 'mtgox_leaked', nature: 'Empirical (Exchange)', entities: '119,343', txs: '6,775,117', f1: '72.21%', prauc: '0.8306', gnnModel: 'C-STGB Dual (Ours)', baseline: '74.39% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 40,
+      "value": "97.91%",
+      "text": "{ domain: 'Large-Scale P2P Financial Graph', dataset: 'dgraphfin', nature: 'Empirical (P2P Rail)', entities: '3,700,550', txs: '1,604,218', f1: '97.91%', prauc: '0.9979', gnnModel: 'C-STGB Dual (Ours)', baseline: '98.59% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 40,
+      "value": "98.59%",
+      "text": "{ domain: 'Large-Scale P2P Financial Graph', dataset: 'dgraphfin', nature: 'Empirical (P2P Rail)', entities: '3,700,550', txs: '1,604,218', f1: '97.91%', prauc: '0.9979', gnnModel: 'C-STGB Dual (Ours)', baseline: '98.59% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 41,
+      "value": "93.68%",
+      "text": "{ domain: 'Multi-Bank Rails (15-Bank Wire)', dataset: 'saml_d', nature: 'Semi-Synthetic', entities: '855,460', txs: '9,504,852', f1: '93.68%', prauc: '0.9574', gnnModel: 'C-STGB Dual (Ours)', baseline: '93.74% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 41,
+      "value": "93.74%",
+      "text": "{ domain: 'Multi-Bank Rails (15-Bank Wire)', dataset: 'saml_d', nature: 'Semi-Synthetic', entities: '855,460', txs: '9,504,852', f1: '93.68%', prauc: '0.9574', gnnModel: 'C-STGB Dual (Ours)', baseline: '93.74% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 42,
+      "value": "99.80%",
+      "text": "{ domain: 'Mobile Financial Services (E-Wallet)', dataset: 'paysim_extended', nature: 'Semi-Synthetic', entities: '262,649', txs: '6,886,804', f1: '99.80%', prauc: '0.9993', gnnModel: 'C-STGB Dual (Ours)', baseline: '99.80% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 42,
+      "value": "99.80%",
+      "text": "{ domain: 'Mobile Financial Services (E-Wallet)', dataset: 'paysim_extended', nature: 'Semi-Synthetic', entities: '262,649', txs: '6,886,804', f1: '99.80%', prauc: '0.9993', gnnModel: 'C-STGB Dual (Ours)', baseline: '99.80% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 43,
+      "value": "42.85%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim HI Med)', dataset: 'ibm_amlsim_hi_medium', nature: 'Synthetic Simulator', entities: '2,076,999', txs: '15,661,350', f1: '42.85%', prauc: '0.4609', gnnModel: 'C-STGB Dual (Ours)', baseline: '43.66% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 43,
+      "value": "43.66%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim HI Med)', dataset: 'ibm_amlsim_hi_medium', nature: 'Synthetic Simulator', entities: '2,076,999', txs: '15,661,350', f1: '42.85%', prauc: '0.4609', gnnModel: 'C-STGB Dual (Ours)', baseline: '43.66% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 44,
+      "value": "37.70%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim HI Small)', dataset: 'ibm_amlsim_hi_small', nature: 'Synthetic Simulator', entities: '515,080', txs: '5,078,345', f1: '37.70%', prauc: '0.3550', gnnModel: 'C-STGB Dual (Ours)', baseline: '36.66% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 44,
+      "value": "36.66%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim HI Small)', dataset: 'ibm_amlsim_hi_small', nature: 'Synthetic Simulator', entities: '515,080', txs: '5,078,345', f1: '37.70%', prauc: '0.3550', gnnModel: 'C-STGB Dual (Ours)', baseline: '36.66% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 45,
+      "value": "23.38%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim LI Med)', dataset: 'ibm_amlsim_li_medium', nature: 'Synthetic Simulator', entities: '2,032,061', txs: '16,733,211', f1: '23.38%', prauc: '0.2077', gnnModel: 'C-STGB Dual (Ours)', baseline: '23.55% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 45,
+      "value": "23.55%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim LI Med)', dataset: 'ibm_amlsim_li_medium', nature: 'Synthetic Simulator', entities: '2,032,061', txs: '16,733,211', f1: '23.38%', prauc: '0.2077', gnnModel: 'C-STGB Dual (Ours)', baseline: '23.55% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 46,
+      "value": "15.76%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim LI Small)', dataset: 'ibm_amlsim_li_small', nature: 'Synthetic Simulator', entities: '705,903', txs: '6,924,049', f1: '15.76%', prauc: '0.1485', gnnModel: 'C-STGB Dual (Ours)', baseline: '15.31% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 46,
+      "value": "15.31%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim LI Small)', dataset: 'ibm_amlsim_li_small', nature: 'Synthetic Simulator', entities: '705,903', txs: '6,924,049', f1: '15.76%', prauc: '0.1485', gnnModel: 'C-STGB Dual (Ours)', baseline: '15.31% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 47,
+      "value": "51.40%",
+      "text": "{ domain: 'Card Fraud Streams (Bipartite)', dataset: 'cc_transactions', nature: 'Empirical (Retail)', entities: '102,343', txs: '11,948,327', f1: '51.40%', prauc: '0.5213', gnnModel: 'C-STGB Dual (Ours)', baseline: '52.76% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 47,
+      "value": "52.76%",
+      "text": "{ domain: 'Card Fraud Streams (Bipartite)', dataset: 'cc_transactions', nature: 'Empirical (Retail)', entities: '102,343', txs: '11,948,327', f1: '51.40%', prauc: '0.5213', gnnModel: 'C-STGB Dual (Ours)', baseline: '52.76% (LightGBM)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 48,
+      "value": "99.93%",
+      "text": "{ domain: 'Synthetic Complex Cycles', dataset: 'data_generator', nature: 'Synthetic Simulator', entities: '300,000', txs: '1,664,526', f1: '99.93%', prauc: '1.0000', gnnModel: 'C-STGB Dual (Ours)', baseline: '100.00% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 48,
+      "value": "100.00%",
+      "text": "{ domain: 'Synthetic Complex Cycles', dataset: 'data_generator', nature: 'Synthetic Simulator', entities: '300,000', txs: '1,664,526', f1: '99.93%', prauc: '1.0000', gnnModel: 'C-STGB Dual (Ours)', baseline: '100.00% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 49,
+      "value": "10.68%",
+      "text": "{ domain: 'Mobile Money Transfers (PaySim-1)', dataset: 'paysim1', nature: 'Semi-Synthetic', entities: '9,073,900', txs: '6,362,620', f1: '10.68%', prauc: '0.1173', gnnModel: 'C-STGB Dual (Ours)', baseline: '18.90% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 49,
+      "value": "18.90%",
+      "text": "{ domain: 'Mobile Money Transfers (PaySim-1)', dataset: 'paysim1', nature: 'Semi-Synthetic', entities: '9,073,900', txs: '6,362,620', f1: '10.68%', prauc: '0.1173', gnnModel: 'C-STGB Dual (Ours)', baseline: '18.90% (XGBoost)', status: 'COMPLETED (15/15)' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 50,
+      "value": "95.12%",
+      "text": "{ domain: 'Cross-Border Real-Time Settlement', dataset: 'rtgs_swift_crossborder', nature: 'Semi-Synthetic', entities: '1,120,400', txs: '8,420,190', f1: '95.12%', prauc: '0.9740', gnnModel: 'C-STGB Dual (Ours)', baseline: '95.30% (XGBoost)', status: 'COMPLETED (15/15)' }"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 50,
+      "value": "95.30%",
+      "text": "{ domain: 'Cross-Border Real-Time Settlement', dataset: 'rtgs_swift_crossborder', nature: 'Semi-Synthetic', entities: '1,120,400', txs: '8,420,190', f1: '95.12%', prauc: '0.9740', gnnModel: 'C-STGB Dual (Ours)', baseline: '95.30% (XGBoost)', status: 'COMPLETED (15/15)' }"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 115,
+      "value": "0.45ms",
+      "text": "{ name: 'Latency SLA (0.45ms)', max: 100 },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 116,
+      "value": "99%",
+      "text": "{ name: 'Finite Coverage (99%)', max: 100 },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 118,
+      "value": "52%",
+      "text": "radius: '52%',"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 119,
+      "value": "48%",
+      "text": "center: ['50%', '48%'],"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 126,
+      "value": "1%",
+      "text": "bottom: '1%',"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 166,
+      "value": "1.0%",
+      "text": "'Target Risk Tolerance (1.0%)'"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 171,
+      "value": "8%",
+      "text": "grid: { left: '8%', right: '8%', top: '12%', bottom: '20%' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 171,
+      "value": "8%",
+      "text": "grid: { left: '8%', right: '8%', top: '12%', bottom: '20%' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 171,
+      "value": "12%",
+      "text": "grid: { left: '8%', right: '8%', top: '12%', bottom: '20%' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 171,
+      "value": "20%",
+      "text": "grid: { left: '8%', right: '8%', top: '12%', bottom: '20%' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 175,
+      "value": "748",
+      "text": "axisLabel: { color: '#64748b', fontSize: 9, fontFamily: 'monospace' }"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 183,
+      "value": "748",
+      "text": "axisLabel: { color: '#64748b', fontSize: 9, fontFamily: 'monospace' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 191,
+      "value": "748",
+      "text": "axisLabel: { color: '#64748b', fontSize: 9, fontFamily: 'monospace' },"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 226,
+      "value": "1.0%",
+      "text": "name: 'Target Risk Tolerance (1.0%)',"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 245,
+      "value": "0.45 ms",
+      "text": "inference_latency: \"0.45 ms / query (batch_size=1)\","
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 258,
+      "value": "1.0%",
+      "text": "plain_english_guarantee: \"At most 1.0% of true money laundering cases are missed on average under exchangeability.\","
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 259,
+      "value": "99.04%",
+      "text": "empirical_coverage: \"99.04%\","
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 472,
+      "value": "99.0%",
+      "text": "Coverage Guaranteed &ge; 99.0%"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 492,
+      "value": "1.0%",
+      "text": "Under exchangeability, at most 1.0% of true laundering cases are missed on average."
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 672,
+      "value": "94.2%",
+      "text": "<div className=\"flex justify-between\"><span>Macro F1:</span> <strong className=\"text-[var(--accent-primary)]\">94.2%</strong></div>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 674,
+      "value": "0.45 ms",
+      "text": "<div className=\"flex justify-between\"><span>Inference Latency:</span> <strong className=\"text-[var(--accent-primary)]\">0.45 ms</strong></div>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 675,
+      "value": "96.0%",
+      "text": "<div className=\"flex justify-between\"><span>Camouflage Filter:</span> <strong className=\"text-[var(--accent-primary)]\">96.0%</strong></div>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 676,
+      "value": "99%",
+      "text": "<div className=\"flex justify-between\"><span>Conformal Bound:</span> <strong className=\"text-[var(--accent-primary)]\">&alpha; &le; 0.01 (99%)</strong></div>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 687,
+      "value": "86.8%",
+      "text": "<div className=\"flex justify-between\"><span>Macro F1:</span> <strong>86.8%</strong></div>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 689,
+      "value": "2.80 ms",
+      "text": "<div className=\"flex justify-between\"><span>Inference Latency:</span> <strong>2.80 ms</strong></div>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 690,
+      "value": "48.0%",
+      "text": "<div className=\"flex justify-between\"><span>Camouflage Filter:</span> <strong>48.0%</strong></div>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 699,
+      "value": "34.2%",
+      "text": "C-STGB demonstrates statistically significant superiority across 15 suites (Wilcoxon p = 2.44e-4) while cutting false positive rates by 34.2% relative to the Challenger architecture."
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 715,
+      "value": "0.45 ms",
+      "text": "<span className=\"font-mono font-bold text-[var(--accent-primary)]\">&lt; 0.45 ms</span>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 719,
+      "value": "0.82 ms",
+      "text": "<span className=\"font-mono font-bold text-[var(--accent-primary)]\">&lt; 0.82 ms</span>"
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 740,
+      "value": "50ms",
+      "text": "* Real-time settlement SLA requires sub-50ms clearance. Subgraph inference at 0.45ms operates 110x faster than ISO 20022 clearing limits."
+    },
+    {
+      "file": "frontend/src/consoles/BenchmarkGovernanceHub.jsx",
+      "line": 740,
+      "value": "0.45ms",
+      "text": "* Real-time settlement SLA requires sub-50ms clearance. Subgraph inference at 0.45ms operates 110x faster than ISO 20022 clearing limits."
+    },
+    {
+      "file": "frontend/src/consoles/ConformalTriageConsole.jsx",
+      "line": 30,
+      "value": "76%",
+      "text": "radius: ['50%', '76%'],"
+    },
+    {
+      "file": "frontend/src/consoles/ConformalTriageConsole.jsx",
+      "line": 31,
+      "value": "44%",
+      "text": "center: ['50%', '44%'],"
+    },
+    {
+      "file": "frontend/src/consoles/ConformalTriageConsole.jsx",
+      "line": 111,
+      "value": "99.0%",
+      "text": "<span className=\"text-[10px] font-mono text-emerald-400\">Coverage \u2265 99.0%</span>"
+    },
+    {
+      "file": "frontend/src/consoles/ConformalTriageConsole.jsx",
+      "line": 119,
+      "value": "0.05%",
+      "text": "<span className=\"text-[8px] text-slate-400\">0.05% Volume</span>"
+    },
+    {
+      "file": "frontend/src/consoles/ConformalTriageConsole.jsx",
+      "line": 209,
+      "value": "99.45%",
+      "text": "<span className=\"text-emerald-400 font-semibold\">Decisive Singletons: 99.45%</span>"
+    },
+    {
+      "file": "frontend/src/consoles/CounterfactualSandbox.jsx",
+      "line": 41,
+      "value": "1%",
+      "text": "const [alphaThreshold, setAlphaThreshold] = useState(0.01); // 1% error rate"
+    },
+    {
+      "file": "frontend/src/consoles/CounterfactualSandbox.jsx",
+      "line": 60,
+      "value": "30%",
+      "text": "let simulatedTier = 'Tier 3 Clear (<30%)';"
+    },
+    {
+      "file": "frontend/src/consoles/CounterfactualSandbox.jsx",
+      "line": 78,
+      "value": "0.86%",
+      "text": "// Baseline: at alpha=0.01, quarantine rate is ~0.86% (1,280 alerts)"
+    },
+    {
+      "file": "frontend/src/consoles/CounterfactualSandbox.jsx",
+      "line": 78,
+      "value": "1,280",
+      "text": "// Baseline: at alpha=0.01, quarantine rate is ~0.86% (1,280 alerts)"
+    },
+    {
+      "file": "frontend/src/consoles/CounterfactualSandbox.jsx",
+      "line": 279,
+      "value": "94.0%",
+      "text": "<span className=\"text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400\">94.0%</span>"
+    },
+    {
+      "file": "frontend/src/consoles/CounterfactualSandbox.jsx",
+      "line": 321,
+      "value": "25%",
+      "text": "<span>Ultimate Beneficial Ownership (UBO) declaration for all entities holding &ge; 25% equity.</span>"
+    },
+    {
+      "file": "frontend/src/consoles/ForensicGraphStudio.jsx",
+      "line": 144,
+      "value": "99.8%",
+      "text": "setPathFeedback(`\u2713 Identified 3-hop wash loop between ${pathSource.substring(0, 12)} and ${pathTarget.substring(0, 12)} (Flow Match: 99.8%).`);"
+    },
+    {
+      "file": "frontend/src/consoles/ForensicGraphStudio.jsx",
+      "line": 302,
+      "value": "65.9%",
+      "text": "title=\"Calibrated safety floor delta_floor = 0.10: prunes 65.9% of adversarial chaff connections\""
+    },
+    {
+      "file": "frontend/src/consoles/ForensicGraphStudio.jsx",
+      "line": 305,
+      "value": "65.9%",
+      "text": "{courtPruningActive ? '65.9% Pruned' : 'Bypass'}"
+    },
+    {
+      "file": "frontend/src/consoles/ForensicGraphStudio.jsx",
+      "line": 509,
+      "value": "65.9%",
+      "text": "<span className=\"text-cyan-300 font-bold\">65.9% Filtered</span>"
+    },
+    {
+      "file": "frontend/src/consoles/ForensicGraphStudio.jsx",
+      "line": 512,
+      "value": "65.9%",
+      "text": "<div className=\"h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-fuchsia-500 rounded-full w-[65.9%] animate-pulse\" />"
+    },
+    {
+      "file": "frontend/src/consoles/ForensicGraphStudio.jsx",
+      "line": 516,
+      "value": "65.9%",
+      "text": "Adversarial money launderers deliberately create connections to high-degree commercial merchants to dilute their graph anomaly signatures. C-STGB's learnable MLP edge-trust filter suppresses up to <strong className=\"text-cyan-300 font-semibold\">65.9%</strong> of camouflage noise."
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 98,
+      "value": "98%",
+      "text": "radius: '98%',"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 99,
+      "value": "72%",
+      "text": "center: ['50%', '72%'],"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 102,
+      "value": "12%",
+      "text": "pointer: { length: '12%', width: 10, offsetCenter: [0, '-60%'], itemStyle: { color: '#F8FAFC' } },"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 102,
+      "value": "60%",
+      "text": "pointer: { length: '12%', width: 10, offsetCenter: [0, '-60%'], itemStyle: { color: '#F8FAFC' } },"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 116,
+      "value": "748",
+      "text": "axisLabel: { distance: 14, color: '#64748B', fontSize: 10, fontFamily: 'JetBrains Mono' },"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 121,
+      "value": "10%",
+      "text": "offsetCenter: [0, '-10%'],"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 142,
+      "value": "748",
+      "text": "xAxis: { type: 'value', axisLabel: { color: '#64748b', fontSize: 9, fontFamily: 'JetBrains Mono' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } } },"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 166,
+      "value": "0.45 ms",
+      "text": "{fastPath ? 'FAST-PATH (0.45 ms)' : 'DEEP SPATIOTEMPORAL GNN'}"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 257,
+      "value": "1 ms",
+      "text": "<span className=\"text-[11px] text-slate-300\">Fast-Path (&lt;1 ms)</span>"
+    },
+    {
+      "file": "frontend/src/consoles/LiveScoringConsole.jsx",
+      "line": 358,
+      "value": "10ms",
+      "text": "{result.total_latency_ms} ms (Sub-10ms SLA Met)"
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 198,
+      "value": "51%",
+      "text": "\u2022 Beneficial Ownership (UBO): Registered signatory Dmitry Rostov (51% equity interest)."
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 210,
+      "value": "0.2%",
+      "text": "\u2022 Circular Flow Conservation: Total inflow and outflow values match within 0.2%, demonstrating that intermediate entities served solely as transit conduits and conducted zero commercial processing."
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 256,
+      "value": "2%",
+      "text": "The subject entity conducted a closed-loop fund transfer sequence routing $${targetAccount.amount.toLocaleString()} through four separate jurisdictions in twenty-one minutes. The funds returned to the originating entity with less than 2% deduction for transit fees. No commercial freight or trade documentation has been produced to support the transaction sequence."
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 345,
+      "value": "99.8%",
+      "text": "details: 'Retrieved core banking raw wire tickets. Validated timestamp sequence 08:10 -> 08:18 -> 08:24 -> 08:31 UTC. Mass flow match: 99.8%.'"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 204,
+      "value": "3%",
+      "text": "grid: { left: '3%', right: '4%', bottom: '8%', top: '15%', containLabel: true },"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 204,
+      "value": "4%",
+      "text": "grid: { left: '3%', right: '4%', bottom: '8%', top: '15%', containLabel: true },"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 204,
+      "value": "8%",
+      "text": "grid: { left: '3%', right: '4%', bottom: '8%', top: '15%', containLabel: true },"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 204,
+      "value": "15%",
+      "text": "grid: { left: '3%', right: '4%', bottom: '8%', top: '15%', containLabel: true },"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 314,
+      "value": "1,280",
+      "text": "<div className=\"text-xl font-bold font-mono text-rose-500 mt-0.5\">1,280 <span className=\"text-xs font-normal text-[var(--text-muted)]\">tx (0.86%)</span></div>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 314,
+      "value": "0.86%",
+      "text": "<div className=\"text-xl font-bold font-mono text-rose-500 mt-0.5\">1,280 <span className=\"text-xs font-normal text-[var(--text-muted)]\">tx (0.86%)</span></div>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 332,
+      "value": "748",
+      "text": "<div className=\"text-xl font-bold font-mono text-amber-500 mt-0.5\">748 <span className=\"text-xs font-normal text-[var(--text-muted)]\">tx (0.50%)</span></div>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 332,
+      "value": "0.50%",
+      "text": "<div className=\"text-xl font-bold font-mono text-amber-500 mt-0.5\">748 <span className=\"text-xs font-normal text-[var(--text-muted)]\">tx (0.50%)</span></div>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 342,
+      "value": "98.6%",
+      "text": "{/* Card 4: Straight-Through Clear (Mathematically Corrected: 146,284 / 148,312 = 98.6%) */}"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 350,
+      "value": "98.6%",
+      "text": "<div className=\"text-xl font-bold font-mono text-[var(--accent-primary)] mt-0.5\">98.6%</div>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 352,
+      "value": "99.0%",
+      "text": "146,284 Safe Cleared (99.0% Confidence)"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 370,
+      "value": "0.45ms",
+      "text": "<span>Latency: <strong className=\"text-emerald-500\">0.45ms avg / 0.82ms p99</strong></span>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 370,
+      "value": "0.82ms",
+      "text": "<span>Latency: <strong className=\"text-emerald-500\">0.45ms avg / 0.82ms p99</strong></span>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 665,
+      "value": "99.0%",
+      "text": ": 'Transaction satisfies finite-sample exchangeability coverage (Safety Confidence >= 99.0%). Routed through Tier-3 Straight-Through Execution with zero customer friction.'}"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 695,
+      "value": "99.8%",
+      "text": "<div className=\"text-xl font-bold font-mono text-[var(--text-primary)]\">99.8% Zero Retention</div>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 697,
+      "value": "0.2%",
+      "text": "Inflows match outflows within 0.2% across transit nodes, verifying pass-through wash loops without legitimate commercial absorption."
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 711,
+      "value": "65.9%",
+      "text": "<div className=\"text-xl font-bold font-mono text-emerald-500\">65.9% Filtered</div>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 719,
+      "value": "99.0%",
+      "text": "<div className=\"text-xl font-bold font-mono text-[var(--accent-primary)]\">&ge; 99.0% Coverage</div>"
+    },
+    {
+      "file": "frontend/src/consoles/UnifiedCommandCenter.jsx",
+      "line": 721,
+      "value": "98.6%",
+      "text": "Statutory safety guarantee ensures finite-sample reliability while automating 98.6% of routine commercial clearances."
+    },
+    {
+      "file": "frontend/src/features/alerts/AlertsView.jsx",
+      "line": 203,
+      "value": "85%",
+      "text": "<option value=\"TIER1\">Tier 1 Hold (&gt;85%)</option>"
+    },
+    {
+      "file": "frontend/src/features/alerts/AlertsView.jsx",
+      "line": 205,
+      "value": "30%",
+      "text": "<option value=\"TIER3\">Tier 3 Clear (&lt;30%)</option>"
+    },
+    {
+      "file": "frontend/src/features/cases/CaseDetailView.jsx",
+      "line": 328,
+      "value": "99.96%",
+      "text": "<span className=\"text-[10px] text-text-muted block mt-0.5\">Confidence: 99.96%</span>"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 52,
+      "value": "333.7%",
+      "text": "priceDeviation: '+333.7% Over-Invoiced',"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 103,
+      "value": "333.7%",
+      "text": "Transactions were initiated under Documentary Letter of Credit ${activeCase.tbmlDetails?.lcNumber || 'LC-2026-CTG-88912'} declaring export cargo under ${activeCase.tbmlDetails?.hsCode || 'HS 5201.00 (Raw Cotton / Yarn)'}. Customs verification against the National Board of Revenue (NBR) ASYCUDA valuation system revealed an extreme unit price deviation (${activeCase.tbmlDetails?.priceDeviation || '+333.7% Over-Invoiced'}) with declared rate of ${activeCase.tbmlDetails?.declaredPrice || '$42.50/kg'} against the reference median of ${activeCase.tbmlDetails?.benchmarkPrice || '$9.80/kg'}. Funds were routed through ${activeCase.tbmlDetails?.ports || 'Chittagong Port (BDCGP) to Jebel Ali, Dubai (AEJEA)'}."
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 119,
+      "value": "98.2%",
+      "text": "The outbound funds were routed to cross-border correspondent entities through intermediary clearing channels. Telemetry analysis indicates this intermediate account acted as a conduit pass-through, holding funds for an average dwell time of less than 24 minutes before re-routing 98.2% of liquidity offshore."
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 301,
+      "value": "333.7%",
+      "text": "\u2022 Stated Commercial Price: ${activeCase.tbmlDetails?.declaredPrice || '$42.50/kg'} (${activeCase.tbmlDetails?.priceDeviation || '+333.7%'})"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 611,
+      "value": "333.7%",
+      "text": "<span className=\"text-critical font-bold\">{activeCase.tbmlDetails?.priceDeviation || '+333.7% Over-Invoiced'}</span>"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 29,
+      "value": "748",
+      "text": "const labelColor = isDark ? '#94A3B8' : '#64748B';"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 38,
+      "value": "1%",
+      "text": "data: ['Statistical Drift Index', 'Calibrated Risk Tolerance (1%)', 'Target Error Tolerance (1%)'],"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 38,
+      "value": "1%",
+      "text": "data: ['Statistical Drift Index', 'Calibrated Risk Tolerance (1%)', 'Target Error Tolerance (1%)'],"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 42,
+      "value": "7%",
+      "text": "grid: { left: '7%', right: '11%', top: '12%', bottom: '15%' },"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 42,
+      "value": "11%",
+      "text": "grid: { left: '7%', right: '11%', top: '12%', bottom: '15%' },"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 42,
+      "value": "12%",
+      "text": "grid: { left: '7%', right: '11%', top: '12%', bottom: '15%' },"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 42,
+      "value": "15%",
+      "text": "grid: { left: '7%', right: '11%', top: '12%', bottom: '15%' },"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 83,
+      "value": "1%",
+      "text": "name: 'Calibrated Risk Tolerance (1%)',"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 91,
+      "value": "1%",
+      "text": "name: 'Target Error Tolerance (1%)',"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 110,
+      "value": "0.45 ms",
+      "text": "single_query_latency: '0.45 ms',"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 111,
+      "value": "0.82 ms",
+      "text": "two_hop_subgraph_expansion: '0.82 ms'"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 115,
+      "value": "99.04%",
+      "text": "empirical_coverage: '99.04%',"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 116,
+      "value": "1.0%",
+      "text": "finite_sample_guarantee: 'At most 1.0% true positive cases missed on average.'"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 206,
+      "value": "91.42%",
+      "text": "<span className=\"font-bold text-accent text-sm\">91.42%</span>"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 210,
+      "value": "68.05%",
+      "text": "<span className=\"font-bold text-accent text-sm\">68.05%</span>"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 214,
+      "value": "0.45 ms",
+      "text": "<span className=\"font-bold text-cleared text-sm\">&lt; 0.45 ms</span>"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 218,
+      "value": "99.0%",
+      "text": "<span className=\"font-bold text-cleared text-sm\">&ge; 99.0% Coverage</span>"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 250,
+      "value": "12ms",
+      "text": "ONLINE (12ms ACK)"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 298,
+      "value": "50 ms",
+      "text": "<span className=\"font-semibold text-text\">&lt; 50 ms Limit</span>"
+    },
+    {
+      "file": "frontend/src/features/models/ModelsView.jsx",
+      "line": 302,
+      "value": "0.45 ms",
+      "text": "<span className=\"font-bold text-cleared\">&lt; 0.45 ms</span>"
+    },
+    {
+      "file": "frontend/src/features/monitoring/MonitoringView.jsx",
+      "line": 199,
+      "value": "0.45 ms",
+      "text": "&lt; 0.45 ms"
+    },
+    {
+      "file": "frontend/src/features/monitoring/MonitoringView.jsx",
+      "line": 845,
+      "value": "200%",
+      "text": "<option value=\"Trade-Based Pricing Discrepancy >200% against Customs Benchmark\">"
+    },
+    {
+      "file": "frontend/src/features/network/Cytoscape2DGraph.jsx",
+      "line": 436,
+      "value": "748",
+      "text": "'color': '#64748B',"
+    },
+    {
+      "file": "frontend/src/features/network/Cytoscape2DGraph.jsx",
+      "line": 491,
+      "value": "748",
+      "text": "'target-arrow-color': '#64748B',"
+    },
+    {
+      "file": "frontend/src/features/network/Cytoscape2DGraph.jsx",
+      "line": 1507,
+      "value": "85%",
+      "text": "<span>Tier 1 Hold (&gt;85% Risk)</span>"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 638,
+      "value": "99.2%",
+      "text": "{entityDossier?.flowConservation?.phiFlow || 0.992} (99.2% Pass-Through)"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 691,
+      "value": "38%",
+      "text": "{ name: 'Dwell Deficit (<120s)', impact: '+38%', width: '38%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 691,
+      "value": "38%",
+      "text": "{ name: 'Dwell Deficit (<120s)', impact: '+38%', width: '38%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 692,
+      "value": "99.8%",
+      "text": "{ name: 'Conservation (99.8%)', impact: '+29%', width: '29%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 692,
+      "value": "29%",
+      "text": "{ name: 'Conservation (99.8%)', impact: '+29%', width: '29%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 692,
+      "value": "29%",
+      "text": "{ name: 'Conservation (99.8%)', impact: '+29%', width: '29%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 693,
+      "value": "19%",
+      "text": "{ name: 'Offshore Conduit', impact: '+19%', width: '19%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 693,
+      "value": "19%",
+      "text": "{ name: 'Offshore Conduit', impact: '+19%', width: '19%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 694,
+      "value": "10%",
+      "text": "{ name: 'Frequency Burst', impact: '+10%', width: '10%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 694,
+      "value": "10%",
+      "text": "{ name: 'Frequency Burst', impact: '+10%', width: '10%', isRisk: true },"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 695,
+      "value": "6%",
+      "text": "{ name: 'Commercial License', impact: '-6%', width: '12%', isRisk: false }"
+    },
+    {
+      "file": "frontend/src/features/network/NetworkView.jsx",
+      "line": 695,
+      "value": "12%",
+      "text": "{ name: 'Commercial License', impact: '-6%', width: '12%', isRisk: false }"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 80,
+      "value": "748",
+      "text": "const labelColor = isDark ? '#94A3B8' : '#64748B';"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 92,
+      "value": "7%",
+      "text": "{ left: '7%', right: '4%', top: '12%', height: '50%' },"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 92,
+      "value": "4%",
+      "text": "{ left: '7%', right: '4%', top: '12%', height: '50%' },"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 92,
+      "value": "12%",
+      "text": "{ left: '7%', right: '4%', top: '12%', height: '50%' },"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 93,
+      "value": "7%",
+      "text": "{ left: '7%', right: '4%', top: '72%', height: '20%' }"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 93,
+      "value": "4%",
+      "text": "{ left: '7%', right: '4%', top: '72%', height: '20%' }"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 93,
+      "value": "72%",
+      "text": "{ left: '7%', right: '4%', top: '72%', height: '20%' }"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 93,
+      "value": "20%",
+      "text": "{ left: '7%', right: '4%', top: '72%', height: '20%' }"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 149,
+      "value": "35%",
+      "text": "barWidth: '35%'"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 169,
+      "value": "0.12 ms",
+      "text": "<span>Latency: <strong className=\"text-text font-bold\">0.12 ms</strong></span>"
+    },
+    {
+      "file": "frontend/src/features/overview/OverviewView.jsx",
+      "line": 199,
+      "value": "1ms",
+      "text": "<span className=\"text-[10px] text-text-muted block mt-0.5\">Cleared in &lt;1ms without human delays</span>"
+    },
+    {
+      "file": "frontend/src/features/requests/RequestsView.jsx",
+      "line": 132,
+      "value": "25%",
+      "text": "'Beneficial ownership (UBO) verification for entities >25% equity'"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 8,
+      "value": "99.44%",
+      "text": "{ domain: 'Public Blockchain (Bitcoin UTXO)', dataset: 'elliptic_v1', nature: 'Empirical (On-Chain)', entities: '203,769', txs: '234,355', f1: '99.44%', prauc: '1.0000', baseline: '99.89% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 8,
+      "value": "99.89%",
+      "text": "{ domain: 'Public Blockchain (Bitcoin UTXO)', dataset: 'elliptic_v1', nature: 'Empirical (On-Chain)', entities: '203,769', txs: '234,355', f1: '99.44%', prauc: '1.0000', baseline: '99.89% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 9,
+      "value": "100.00%",
+      "text": "{ domain: 'Public Blockchain (Multi-Asset)', dataset: 'elliptic_v2', nature: 'Empirical (On-Chain)', entities: '444,521', txs: '367,137', f1: '100.00%', prauc: '1.0000', baseline: '100.00% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 9,
+      "value": "100.00%",
+      "text": "{ domain: 'Public Blockchain (Multi-Asset)', dataset: 'elliptic_v2', nature: 'Empirical (On-Chain)', entities: '444,521', txs: '367,137', f1: '100.00%', prauc: '1.0000', baseline: '100.00% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 10,
+      "value": "96.94%",
+      "text": "{ domain: 'Public Blockchain (Smart Contracts)', dataset: 'xblock_eth', nature: 'Empirical (On-Chain)', entities: '405,118', txs: '7,524,827', f1: '96.94%', prauc: '0.9915', baseline: '97.05% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 10,
+      "value": "97.05%",
+      "text": "{ domain: 'Public Blockchain (Smart Contracts)', dataset: 'xblock_eth', nature: 'Empirical (On-Chain)', entities: '405,118', txs: '7,524,827', f1: '96.94%', prauc: '0.9915', baseline: '97.05% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 11,
+      "value": "72.21%",
+      "text": "{ domain: 'Public Blockchain (Trade Books)', dataset: 'mtgox_leaked', nature: 'Empirical (Exchange)', entities: '119,343', txs: '6,775,117', f1: '72.21%', prauc: '0.8306', baseline: '74.39% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 11,
+      "value": "74.39%",
+      "text": "{ domain: 'Public Blockchain (Trade Books)', dataset: 'mtgox_leaked', nature: 'Empirical (Exchange)', entities: '119,343', txs: '6,775,117', f1: '72.21%', prauc: '0.8306', baseline: '74.39% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 12,
+      "value": "97.91%",
+      "text": "{ domain: 'Large-Scale P2P Financial Graph', dataset: 'dgraphfin', nature: 'Empirical (P2P Rail)', entities: '3,700,550', txs: '1,604,218', f1: '97.91%', prauc: '0.9979', baseline: '98.59% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 12,
+      "value": "98.59%",
+      "text": "{ domain: 'Large-Scale P2P Financial Graph', dataset: 'dgraphfin', nature: 'Empirical (P2P Rail)', entities: '3,700,550', txs: '1,604,218', f1: '97.91%', prauc: '0.9979', baseline: '98.59% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 13,
+      "value": "93.68%",
+      "text": "{ domain: 'Multi-Bank Rails (15-Bank Wire)', dataset: 'saml_d', nature: 'Semi-Synthetic', entities: '855,460', txs: '9,504,852', f1: '93.68%', prauc: '0.9574', baseline: '93.74% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 13,
+      "value": "93.74%",
+      "text": "{ domain: 'Multi-Bank Rails (15-Bank Wire)', dataset: 'saml_d', nature: 'Semi-Synthetic', entities: '855,460', txs: '9,504,852', f1: '93.68%', prauc: '0.9574', baseline: '93.74% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 14,
+      "value": "99.80%",
+      "text": "{ domain: 'Mobile Financial Services (E-Wallet)', dataset: 'paysim_extended', nature: 'Semi-Synthetic', entities: '262,649', txs: '6,886,804', f1: '99.80%', prauc: '0.9993', baseline: '99.80% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 14,
+      "value": "99.80%",
+      "text": "{ domain: 'Mobile Financial Services (E-Wallet)', dataset: 'paysim_extended', nature: 'Semi-Synthetic', entities: '262,649', txs: '6,886,804', f1: '99.80%', prauc: '0.9993', baseline: '99.80% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 15,
+      "value": "42.85%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim HI Med)', dataset: 'ibm_amlsim_hi_medium', nature: 'Synthetic Simulator', entities: '2,076,999', txs: '15,661,350', f1: '42.85%', prauc: '0.4609', baseline: '43.66% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 15,
+      "value": "43.66%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim HI Med)', dataset: 'ibm_amlsim_hi_medium', nature: 'Synthetic Simulator', entities: '2,076,999', txs: '15,661,350', f1: '42.85%', prauc: '0.4609', baseline: '43.66% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 16,
+      "value": "37.70%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim HI Small)', dataset: 'ibm_amlsim_hi_small', nature: 'Synthetic Simulator', entities: '515,080', txs: '5,078,345', f1: '37.70%', prauc: '0.3550', baseline: '36.66% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 16,
+      "value": "36.66%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim HI Small)', dataset: 'ibm_amlsim_hi_small', nature: 'Synthetic Simulator', entities: '515,080', txs: '5,078,345', f1: '37.70%', prauc: '0.3550', baseline: '36.66% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 17,
+      "value": "23.38%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim LI Med)', dataset: 'ibm_amlsim_li_medium', nature: 'Synthetic Simulator', entities: '2,032,061', txs: '16,733,211', f1: '23.38%', prauc: '0.2077', baseline: '23.55% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 17,
+      "value": "23.55%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim LI Med)', dataset: 'ibm_amlsim_li_medium', nature: 'Synthetic Simulator', entities: '2,032,061', txs: '16,733,211', f1: '23.38%', prauc: '0.2077', baseline: '23.55% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 18,
+      "value": "15.76%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim LI Small)', dataset: 'ibm_amlsim_li_small', nature: 'Synthetic Simulator', entities: '705,903', txs: '6,924,049', f1: '15.76%', prauc: '0.1485', baseline: '15.31% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 18,
+      "value": "15.31%",
+      "text": "{ domain: 'Synthetic Banking (IBM-AMLSim LI Small)', dataset: 'ibm_amlsim_li_small', nature: 'Synthetic Simulator', entities: '705,903', txs: '6,924,049', f1: '15.76%', prauc: '0.1485', baseline: '15.31% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 19,
+      "value": "51.40%",
+      "text": "{ domain: 'Card Fraud Streams (Bipartite)', dataset: 'cc_transactions', nature: 'Empirical (Retail)', entities: '102,343', txs: '11,948,327', f1: '51.40%', prauc: '0.5213', baseline: '52.76% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 19,
+      "value": "52.76%",
+      "text": "{ domain: 'Card Fraud Streams (Bipartite)', dataset: 'cc_transactions', nature: 'Empirical (Retail)', entities: '102,343', txs: '11,948,327', f1: '51.40%', prauc: '0.5213', baseline: '52.76% (LightGBM)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 20,
+      "value": "99.93%",
+      "text": "{ domain: 'Synthetic Complex Cycles', dataset: 'data_generator', nature: 'Synthetic Simulator', entities: '300,000', txs: '1,664,526', f1: '99.93%', prauc: '1.0000', baseline: '100.00% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 20,
+      "value": "100.00%",
+      "text": "{ domain: 'Synthetic Complex Cycles', dataset: 'data_generator', nature: 'Synthetic Simulator', entities: '300,000', txs: '1,664,526', f1: '99.93%', prauc: '1.0000', baseline: '100.00% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 21,
+      "value": "10.68%",
+      "text": "{ domain: 'Mobile Money Transfers (PaySim-1)', dataset: 'paysim1', nature: 'Semi-Synthetic', entities: '9,073,900', txs: '6,362,620', f1: '10.68%', prauc: '0.1173', baseline: '18.90% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 21,
+      "value": "18.90%",
+      "text": "{ domain: 'Mobile Money Transfers (PaySim-1)', dataset: 'paysim1', nature: 'Semi-Synthetic', entities: '9,073,900', txs: '6,362,620', f1: '10.68%', prauc: '0.1173', baseline: '18.90% (XGBoost)' },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 22,
+      "value": "95.12%",
+      "text": "{ domain: 'Cross-Border Real-Time Settlement', dataset: 'rtgs_swift_crossborder', nature: 'Semi-Synthetic', entities: '1,120,400', txs: '8,420,190', f1: '95.12%', prauc: '0.9740', baseline: '95.30% (XGBoost)' }"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 22,
+      "value": "95.30%",
+      "text": "{ domain: 'Cross-Border Real-Time Settlement', dataset: 'rtgs_swift_crossborder', nature: 'Semi-Synthetic', entities: '1,120,400', txs: '8,420,190', f1: '95.12%', prauc: '0.9740', baseline: '95.30% (XGBoost)' }"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 35,
+      "value": "0.45ms",
+      "text": "{ name: 'Latency SLA (0.45ms)', max: 100 },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 36,
+      "value": "99%",
+      "text": "{ name: 'Finite Coverage (99%)', max: 100 },"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 38,
+      "value": "45%",
+      "text": "radius: '45%',"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 39,
+      "value": "40%",
+      "text": "center: ['50%', '40%'],"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 46,
+      "value": "2%",
+      "text": "bottom: '2%',"
+    },
+    {
+      "file": "frontend/src/features/research/ResearchView.jsx",
+      "line": 126,
+      "value": "99.04%",
+      "text": "<span className=\"font-bold text-cleared text-sm block\">99.04% Empirical Bound</span>"
+    },
+    {
+      "file": "frontend/src/features/settings/SettingsView.jsx",
+      "line": 166,
+      "value": "0.0ms",
+      "text": "Processes real-time mirrored SWIFT/RTGS transaction streams with 0.0ms delay on live customer clearing. Evaluates false-positive reduction without blocking customer funds."
+    },
+    {
+      "file": "frontend/src/lib/scoringEngine.js",
+      "line": 18,
+      "value": "99.0%",
+      "text": "targetCoverage: 0.990, // >= 99.0% finite-sample guaranteed coverage"
+    },
+    {
+      "file": "frontend/src/lib/scoringEngine.js",
+      "line": 20,
+      "value": "65.9%",
+      "text": "deltaFloorDefault: 0.10 // Default edge trust threshold pruning 65.9% camouflage edges"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 9,
+      "value": "748",
+      "text": "tier2ReviewQueue: 748,"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 22,
+      "value": "2,028",
+      "text": "return RAW_TELEMETRY.tier1Quarantined + RAW_TELEMETRY.tier2ReviewQueue; // 2,028"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 25,
+      "value": "98.6%",
+      "text": "return Number(((RAW_TELEMETRY.tier3AutoCleared / RAW_TELEMETRY.totalProcessed24h) * 100).toFixed(1)); // 98.6%"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 28,
+      "value": "0.86%",
+      "text": "return Number(((RAW_TELEMETRY.tier1Quarantined / RAW_TELEMETRY.totalProcessed24h) * 100).toFixed(2)); // 0.86%"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 31,
+      "value": "0.50%",
+      "text": "return Number(((RAW_TELEMETRY.tier2ReviewQueue / RAW_TELEMETRY.totalProcessed24h) * 100).toFixed(2)); // 0.50%"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 61,
+      "value": "333.7%",
+      "text": "whyFlagged: 'Documentary Credit (LC) unit price for raw cotton exceeds ASYCUDA customs valuation by +333.7%, structured beneath $10k (\u09f31,000,000 BDT BFIU CTR threshold).',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 67,
+      "value": "333.7%",
+      "text": "priceDeviation: '+333.7% Over-Invoiced',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 74,
+      "value": "333%",
+      "text": "{ name: 'Customs Valuation Divergence (+333%)', weight: 0.42, direction: 'risk' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 110,
+      "value": "333.7%",
+      "text": "priceDeviation: '+333.7% Over-Invoiced',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 273,
+      "value": "333.7%",
+      "text": "priceDeviation: '+333.7% Over-Invoiced',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 393,
+      "value": "64%",
+      "text": "ubo: 'Tanvir Ahmed Rahman (64% Equity), Meghna Family Trust (36%)',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 393,
+      "value": "36%",
+      "text": "ubo: 'Tanvir Ahmed Rahman (64% Equity), Meghna Family Trust (36%)',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 402,
+      "value": "99.8%",
+      "text": "massBalanceRatio: '0.998 (Pass-Through Ratio 99.8%)',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 417,
+      "value": "333.7%",
+      "text": "{ id: 'ACT-901', timestamp: '2026-09-02 08:24:10 UTC', action: 'TRANSACTION_INTERCEPTED', officer: 'Surveillance Engine', details: 'Statutory hold placed on wire TX-BFIU-948201 ($9,450 USD). Price divergence +333.7% triggered.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 574,
+      "value": "54%",
+      "text": "ubo: 'BSRM Group Family Holding (54%), Institutional & Public Float (46%)',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 574,
+      "value": "46%",
+      "text": "ubo: 'BSRM Group Family Holding (54%), Institutional & Public Float (46%)',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 49,
+      "value": "333.7%",
+      "text": "whyFlagged: 'Documentary LC declared valuation ($42.50/kg) diverges +333.7% from NBR ASYCUDA benchmark ($9.80/kg). Near-CTR sub-threshold allocation.'"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 85,
+      "value": "10%",
+      "text": "remittanceInfo: 'CORPORATE SALARY DISBURSEMENT / BATCH #492 / 1,420 BENEFICIARIES / TDS 10%',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 691,
+      "value": "0 ms",
+      "text": "consumerLagMsgs: 0, // 0 msgs behind head (synchronized)"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 848,
+      "value": "333.7%",
+      "text": "reason: 'Structuring ($9,450 directly beneath $10k CTR limit) + TBML Unit Price Divergence (+333.7%)',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 929,
+      "value": "200%",
+      "text": "thresholdValue: '> 200% Price Divergence',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 937,
+      "value": "95%",
+      "text": "description: 'Detects rapid inbound-to-outbound fund matching with >95% flow conservation and dwell times under 30 minutes.',"
+    },
+    {
+      "file": "frontend/src/lib/streamGenerator.js",
+      "line": 282,
+      "value": "98.6%",
+      "text": "// Conformal empirical probabilities: 98.6% STP, ~0.9% Tier 1, ~0.5% Tier 2"
+    },
+    {
+      "file": "frontend/src/lib/streamGenerator.js",
+      "line": 282,
+      "value": "0.9%",
+      "text": "// Conformal empirical probabilities: 98.6% STP, ~0.9% Tier 1, ~0.5% Tier 2"
+    },
+    {
+      "file": "frontend/src/lib/streamGenerator.js",
+      "line": 282,
+      "value": "0.5%",
+      "text": "// Conformal empirical probabilities: 98.6% STP, ~0.9% Tier 1, ~0.5% Tier 2"
+    },
+    {
+      "file": "frontend/src/lib/streamGenerator.js",
+      "line": 406,
+      "value": "10%",
+      "text": "remittance = `MONTHLY SALARY DISBURSEMENT / BATCH #${batch} / ${Math.floor(350 + Math.random() * 1800)} BENEFICIARIES / TDS 10% DEDUCTED`;"
+    },
+    {
+      "file": "frontend/src/lib/streamGenerator.js",
+      "line": 473,
+      "value": "10%",
+      "text": "remittance = `DSE LISTED FINAL CASH DIVIDEND WARRANT #${warrant} / TAX WITHHELD AT 10% / FOLIO #${Math.floor(1000 + Math.random() * 9000)}`;"
+    },
+    {
+      "file": "frontend/src/lib/audit/hashChain.ts",
+      "line": 148,
+      "value": "333.7%",
+      "text": "details: 'Automated administrative hold on documentary LC wire $9,450 (\u09f31,134,000 BDT). ASYCUDA price divergence +333.7%.',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 181,
+      "value": "333.7%",
+      "text": "whyFlagged: 'Documentary Credit (LC) unit price for raw cotton exceeds ASYCUDA customs valuation by +333.7%, split into duplicate LCs under internal $10,000 correspondent threshold.',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 309,
+      "value": "2,028",
+      "text": "// Helper to expand initial alerts into 2,028 deterministic records matching exact KPI invariants"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 331,
+      "value": "2,028",
+      "text": "// Seed up to 2,028: 1,280 Tier 1 Hold and 748 Tier 2 Review"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 331,
+      "value": "1,280",
+      "text": "// Seed up to 2,028: 1,280 Tier 1 Hold and 748 Tier 2 Review"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 331,
+      "value": "748",
+      "text": "// Seed up to 2,028: 1,280 Tier 1 Hold and 748 Tier 2 Review"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 333,
+      "value": "748",
+      "text": "const neededTier2 = 748 - alerts.filter(a => a.tierCode === 2).length;"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 452,
+      "value": "333.7%",
+      "text": "content: 'Cross-checked declared unit price $42.50/kg against Chittagong customs historical tariff benchmark ($9.80/kg). Discrepancy represents 333.7% capital flight premium.'"
+    },
+    {
+      "file": "frontend/src/lib/store/index.ts",
+      "line": 291,
+      "value": "94.6%",
+      "text": "description: 'Pre-settlement screening detected 94.6% Jaro-Winkler match for Gulf Star Commodities.',"
+    }
+  ],
+  "personas": [
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 117,
+      "persona": "Sarah L. Jenkins",
+      "text": "assignee: 'Sarah L. Jenkins',"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 421,
+      "persona": "Sarah L. Jenkins",
+      "text": "{ name: 'Sarah L. Jenkins, CFE', role: 'Lead Investigator', activeCases: 4, openAlerts: 18, ahtMin: 14.2, status: 'NORMAL' },"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 422,
+      "persona": "Tanvir Mahmud",
+      "text": "{ name: 'Tanvir Mahmud', role: 'Senior AML Analyst', activeCases: 3, openAlerts: 24, ahtMin: 18.5, status: 'ELEVATED' },"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 423,
+      "persona": "Musrat Jahan",
+      "text": "{ name: 'Musrat Jahan Gungun', role: 'First-Line Triage', activeCases: 1, openAlerts: 42, ahtMin: 9.4, status: 'NORMAL' },"
+    },
+    {
+      "file": "frontend/src/app/cases/page.tsx",
+      "line": 42,
+      "persona": "Sarah Jenkins",
+      "text": "const [newAssignee, setNewAssignee] = useState('Sarah Jenkins (L2 Senior)');"
+    },
+    {
+      "file": "frontend/src/app/cases/page.tsx",
+      "line": 363,
+      "persona": "Sarah Jenkins",
+      "text": "<option value=\"Sarah Jenkins (L2 Senior)\">Sarah Jenkins (L2 Senior)</option>"
+    },
+    {
+      "file": "frontend/src/app/governance/page.tsx",
+      "line": 134,
+      "persona": "Sarah Jenkins",
+      "text": "authorizedOfficer: 'Sarah Jenkins (Analyst ID: L2-4491)',"
+    },
+    {
+      "file": "frontend/src/app/rfi/page.tsx",
+      "line": 112,
+      "persona": "Sarah Jenkins",
+      "text": "actionBy: 'Sarah Jenkins (Analyst)'"
+    },
+    {
+      "file": "frontend/src/app/rules/page.tsx",
+      "line": 29,
+      "persona": "Kazi Farhan",
+      "text": "authorizedBy: 'Kazi Farhan (CCO)',"
+    },
+    {
+      "file": "frontend/src/app/rules/page.tsx",
+      "line": 47,
+      "persona": "Kazi Farhan",
+      "text": "authorizedBy: 'Kazi Farhan (CCO)',"
+    },
+    {
+      "file": "frontend/src/app/sar/page.tsx",
+      "line": 144,
+      "persona": "Sarah Jenkins",
+      "text": "actionBy: 'Sarah Jenkins (Analyst)'"
+    },
+    {
+      "file": "frontend/src/app/tbml/page.tsx",
+      "line": 49,
+      "persona": "Sarah Jenkins",
+      "text": "actionBy: 'Sarah Jenkins (Analyst)'"
+    },
+    {
+      "file": "frontend/src/app/tbml/page.tsx",
+      "line": 64,
+      "persona": "Sarah Jenkins",
+      "text": "actionBy: 'Sarah Jenkins (Analyst)'"
+    },
+    {
+      "file": "frontend/src/app/triage/page.tsx",
+      "line": 64,
+      "persona": "Sarah Jenkins",
+      "text": "const [assigneeTarget, setAssigneeTarget] = useState<string>('Sarah Jenkins (L2 Senior)');"
+    },
+    {
+      "file": "frontend/src/app/triage/page.tsx",
+      "line": 611,
+      "persona": "Sarah Jenkins",
+      "text": "<option value=\"Sarah Jenkins (L2 Senior)\">Sarah Jenkins (L2 Senior)</option>"
+    },
+    {
+      "file": "frontend/src/components/AccountFreezeNoticeModal.jsx",
+      "line": 59,
+      "persona": "Sarah Jenkins",
+      "text": "const officerName = currentBanker?.name || 'Sarah Jenkins, CAMS';"
+    },
+    {
+      "file": "frontend/src/components/AccountProfileDrawer.jsx",
+      "line": 35,
+      "persona": "Sarah L. Jenkins",
+      "text": "holderName: account.holderName || (isCorp ? 'Apex Global Logistics Ltd' : 'Sarah L. Jenkins'),"
+    },
+    {
+      "file": "frontend/src/components/BankerActionModal.jsx",
+      "line": 182,
+      "persona": "Sarah Jenkins",
+      "text": "<option value=\"BNK-1044\">Sarah Jenkins (Senior L2)</option>"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 60,
+      "persona": "Sarah L. Jenkins",
+      "text": "assignee: 'Sarah L. Jenkins, CFE',"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 94,
+      "persona": "Sarah L. Jenkins",
+      "text": "assignee: 'Sarah L. Jenkins, CFE',"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 127,
+      "persona": "Musrat Jahan",
+      "text": "assignee: 'Musrat Jahan Gungun',"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 192,
+      "persona": "Musrat Jahan",
+      "text": "assignee: 'Musrat Jahan Gungun',"
+    },
+    {
+      "file": "frontend/src/consoles/AlertTriageQueue.jsx",
+      "line": 225,
+      "persona": "Sarah L. Jenkins",
+      "text": "assignee: 'Sarah L. Jenkins, CFE',"
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 40,
+      "persona": "Nazmul Hasan",
+      "text": "const bankerName = currentBanker?.name || 'Nazmul Hasan, CAMS';"
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 112,
+      "persona": "Sarah L. Jenkins",
+      "text": "{ author: 'Sarah L. Jenkins, CFE (Senior Investigator)', time: '08:45 UTC', text: 'Verified wire reference MT103 #994821 and confirmed conduit hop timing. Replaced speculative model tags with factual transaction evidence.' },"
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 113,
+      "persona": "Nazmul Hasan",
+      "text": "{ author: 'Nazmul Hasan, CAMS (CCO)', time: '08:52 UTC', text: 'Approved for Four-Eyes FinCEN Form 111 XML filing upon final verification of beneficiary bank BIC CHASUS33.' }"
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 225,
+      "persona": "Sarah L. Jenkins",
+      "text": "\u2022 Prepared by: Sarah L. Jenkins, CFE (Senior AML Investigator, SIU)"
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 259,
+      "persona": "Sarah L. Jenkins",
+      "text": "\u2022 Senior Compliance Investigator: Sarah L. Jenkins, CFE"
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 318,
+      "persona": "Sarah L. Jenkins",
+      "text": "<PreparedBy>Sarah L. Jenkins, CFE (Senior Investigator)</PreparedBy>"
+    },
+    {
+      "file": "frontend/src/consoles/MultiAgentSARWorkbench.jsx",
+      "line": 428,
+      "persona": "Sarah L. Jenkins",
+      "text": "initiatorName: 'Sarah L. Jenkins, CFE (Senior Investigator)',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 6,
+      "persona": "Nazmul Hasan",
+      "text": "name: 'Nazmul Hasan, CAMS',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 17,
+      "persona": "Sarah L. Jenkins",
+      "text": "name: 'Sarah L. Jenkins, CFE',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 28,
+      "persona": "Musrat Jahan",
+      "text": "name: 'Musrat Jahan Gungun',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 55,
+      "persona": "Nazmul Hasan",
+      "text": "bankerName: 'Nazmul Hasan, CAMS',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 58,
+      "persona": "Sarah L. Jenkins",
+      "text": "initiatorName: 'Sarah L. Jenkins, CFE (Senior Investigator)',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 59,
+      "persona": "Nazmul Hasan",
+      "text": "approverName: 'Nazmul Hasan, CAMS (Chief Compliance Officer)',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 71,
+      "persona": "Sarah L. Jenkins",
+      "text": "bankerName: 'Sarah L. Jenkins, CFE',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 74,
+      "persona": "Sarah L. Jenkins",
+      "text": "initiatorName: 'Sarah L. Jenkins, CFE (Senior Investigator)',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 87,
+      "persona": "Nazmul Hasan",
+      "text": "bankerName: 'Nazmul Hasan, CAMS',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 90,
+      "persona": "Sarah L. Jenkins",
+      "text": "initiatorName: 'Sarah L. Jenkins, CFE (Senior Investigator)',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 91,
+      "persona": "Nazmul Hasan",
+      "text": "approverName: 'Nazmul Hasan, CAMS (Chief Compliance Officer)',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 150,
+      "persona": "Sarah L. Jenkins",
+      "text": "initiatorName: initiatorName || (bankerRole === 'admin' ? 'Sarah L. Jenkins, CFE (Senior Investigator)' : `${bankerName} (${bankerRoleTitle})`),"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 151,
+      "persona": "Nazmul Hasan",
+      "text": "approverName: approverName || (bankerRole === 'admin' ? `${bankerName} (CCO Dual-Approval)` : 'Nazmul Hasan, CAMS (CCO Counter-Signature)'),"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 48,
+      "persona": "Sarah Jenkins",
+      "text": "fourEyesInitiator: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 109,
+      "persona": "Sarah Jenkins",
+      "text": "Compiled in accordance with BFIU Master Circular 26 by Senior Investigator ${activeCase.fourEyesInitiator || 'Sarah Jenkins'} and ratified under Four-Eyes Dual Control by Chief Compliance Officer Nazmul Hasan, CAMS.`;"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 109,
+      "persona": "Nazmul Hasan",
+      "text": "Compiled in accordance with BFIU Master Circular 26 by Senior Investigator ${activeCase.fourEyesInitiator || 'Sarah Jenkins'} and ratified under Four-Eyes Dual Control by Chief Compliance Officer Nazmul Hasan, CAMS.`;"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 263,
+      "persona": "Sarah Jenkins",
+      "text": "maker: activeCase.fourEyesInitiator || 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 303,
+      "persona": "Sarah Jenkins",
+      "text": "\u2022 Signatories: Maker [${activeCase.fourEyesInitiator || 'Sarah Jenkins'}], Checker [${activeCase.fourEyesApprover || 'Nazmul Hasan, CCO'}]"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 303,
+      "persona": "Nazmul Hasan",
+      "text": "\u2022 Signatories: Maker [${activeCase.fourEyesInitiator || 'Sarah Jenkins'}], Checker [${activeCase.fourEyesApprover || 'Nazmul Hasan, CCO'}]"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 649,
+      "persona": "Sarah Jenkins",
+      "text": "<span className=\"font-bold text-text\">{activeCase.fourEyesInitiator || 'Sarah Jenkins'}</span>"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 653,
+      "persona": "Nazmul Hasan",
+      "text": "<span className=\"font-bold text-cleared\">{activeCase.fourEyesApprover || 'Nazmul Hasan, CCO'}</span>"
+    },
+    {
+      "file": "frontend/src/features/monitoring/MonitoringView.jsx",
+      "line": 96,
+      "persona": "Sarah Jenkins",
+      "text": "blockTransaction(selectedTxToBlock.id, blockReason, 'Sarah Jenkins (Compliance Desk)');"
+    },
+    {
+      "file": "frontend/src/features/monitoring/MonitoringView.jsx",
+      "line": 107,
+      "persona": "Nazmul Hasan",
+      "text": "unblockTransaction(selectedBlockToRelease.id, unblockJustification, 'Nazmul Hasan, Chief Compliance Officer');"
+    },
+    {
+      "file": "frontend/src/features/requests/RequestsView.jsx",
+      "line": 127,
+      "persona": "Sarah Jenkins",
+      "text": "complianceOfficer: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 56,
+      "persona": "Sarah Jenkins",
+      "text": "assignee: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 99,
+      "persona": "Sarah Jenkins",
+      "text": "assignee: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 141,
+      "persona": "Nazmul Hasan",
+      "text": "assignee: 'Nazmul Hasan',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 203,
+      "persona": "Sarah Jenkins",
+      "text": "assignee: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 259,
+      "persona": "Sarah Jenkins",
+      "text": "assignedTo: 'Sarah Jenkins (Senior Investigator)',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 260,
+      "persona": "Sarah Jenkins",
+      "text": "fourEyesInitiator: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 281,
+      "persona": "Sarah Jenkins",
+      "text": "{ id: 2, time: '08:16:00 UTC', event: 'Administrative hold placed on outbound LC settlement by Senior Investigator Sarah Jenkins.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 284,
+      "persona": "Nazmul Hasan",
+      "text": "{ id: 5, time: '08:40:00 UTC', event: 'Four-Eyes Dual Sign-Off requested from Chief Compliance Officer Nazmul Hasan.' }"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 289,
+      "persona": "Sarah Jenkins",
+      "text": "author: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 295,
+      "persona": "Sarah Jenkins",
+      "text": "author: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 297,
+      "persona": "Nazmul Hasan",
+      "text": "text: 'Drafted BFIU STR-1 Form XML. Four-Eyes sign-off submitted to CCO Nazmul Hasan. Do not contact client directly to prevent tipping off under Section 27 of MLPA 2012 / 31 U.S.C. \u00a7 5318(g)(2).'"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 308,
+      "persona": "Sarah Jenkins",
+      "text": "{ id: 'pin-1', type: 'subgraph', title: 'Cycle-3 Dubai Laundering Subgraph (3 Nodes)', timestamp: '08:26 UTC', pinnedBy: 'Sarah Jenkins' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 309,
+      "persona": "Sarah Jenkins",
+      "text": "{ id: 'pin-2', type: 'document', title: 'ASYCUDA World Customs Declaration #CTG-88912', timestamp: '08:30 UTC', pinnedBy: 'Sarah Jenkins' }"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 317,
+      "persona": "Sarah Jenkins",
+      "text": "{ id: 'att-1', name: 'Letter_of_Credit_LC2026CTG88912_EBL_Bank.pdf', size: '245 KB', type: 'application/pdf', uploadedAt: '08:25 UTC', uploadedBy: 'Sarah Jenkins' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 318,
+      "persona": "Sarah Jenkins",
+      "text": "{ id: 'att-2', name: 'ASYCUDA_World_Customs_Declaration_Chittagong.pdf', size: '1.2 MB', type: 'application/pdf', uploadedAt: '08:30 UTC', uploadedBy: 'Sarah Jenkins' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 319,
+      "persona": "Sarah Jenkins",
+      "text": "{ id: 'att-3', name: 'BFIU_Form_STR1_Draft_Dossier_Confidential.pdf', size: '480 KB', type: 'application/pdf', uploadedAt: '08:34 UTC', uploadedBy: 'Sarah Jenkins' }"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 333,
+      "persona": "Nazmul Hasan",
+      "text": "assignedTo: 'Nazmul Hasan (Chief Compliance Officer)',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 334,
+      "persona": "Sarah Jenkins",
+      "text": "fourEyesInitiator: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 350,
+      "persona": "Nazmul Hasan",
+      "text": "{ id: 'pin-101', type: 'subgraph', title: 'bKash MFS Aggregation Fan-In Subgraph', timestamp: '08:26 UTC', pinnedBy: 'Nazmul Hasan' }"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 359,
+      "persona": "Nazmul Hasan",
+      "text": "author: 'Nazmul Hasan',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 368,
+      "persona": "Nazmul Hasan",
+      "text": "{ id: 'att-101', name: 'BEFTN_Settlement_Audit_Stream_1109.csv', size: '82 KB', type: 'text/csv', uploadedAt: '08:28 UTC', uploadedBy: 'Nazmul Hasan' }"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 418,
+      "persona": "Nazmul Hasan",
+      "text": "{ id: 'ACT-902', timestamp: '2026-09-02 08:20:00 UTC', action: 'FOUR_EYES_HOLD_RATIFIED', officer: 'Nazmul Hasan (CCO)', details: 'Four-Eyes dual signature ratified administrative freeze under BFIU \u00a715.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 419,
+      "persona": "Sarah Jenkins",
+      "text": "{ id: 'ACT-903', timestamp: '2026-09-02 08:10:00 UTC', action: 'RFI_DISPATCHED', officer: 'Sarah Jenkins', details: 'Dispatched Form RFI-2026-1092 requesting certified Bill of Lading and ASYCUDA port clearance.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 465,
+      "persona": "Sarah Jenkins",
+      "text": "{ id: 'ACT-801', timestamp: '2026-09-02 08:22:15 UTC', action: 'OUTBOUND_WIRE_BLOCKED', officer: 'Sarah Jenkins', details: 'SWIFT MT103 wire of $47,600 USD blocked. Zero account dwell time flagged.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 613,
+      "persona": "Sarah Jenkins",
+      "text": "complianceOfficer: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 632,
+      "persona": "Sarah Jenkins",
+      "text": "complianceOfficer: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 646,
+      "persona": "Sarah Jenkins",
+      "text": "bankerName: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 648,
+      "persona": "Sarah Jenkins",
+      "text": "initiator: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 660,
+      "persona": "Nazmul Hasan",
+      "text": "bankerName: 'Nazmul Hasan',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 662,
+      "persona": "Sarah Jenkins",
+      "text": "initiator: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 663,
+      "persona": "Nazmul Hasan",
+      "text": "approver: 'Nazmul Hasan',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 674,
+      "persona": "Sarah Jenkins",
+      "text": "bankerName: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 676,
+      "persona": "Sarah Jenkins",
+      "text": "initiator: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 677,
+      "persona": "Sarah Jenkins",
+      "text": "approver: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 443,
+      "persona": "Sarah Jenkins",
+      "text": "createCaseFromAlert: (alertId, title, assignee = 'Sarah Jenkins') => {"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 549,
+      "persona": "Sarah Jenkins",
+      "text": "alerts: state.alerts.map(a => a.id === alertId ? { ...a, status: 'UNDER_INVESTIGATION', assignee: 'Sarah Jenkins' } : a)"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 570,
+      "persona": "Sarah Jenkins",
+      "text": "complianceOfficer: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 619,
+      "persona": "Sarah Jenkins",
+      "text": "complianceOfficer: 'Sarah Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 650,
+      "persona": "Nazmul Hasan",
+      "text": "pinnedBy: 'Nazmul Hasan, CAMS',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 864,
+      "persona": "Sarah Jenkins",
+      "text": "blockedBy: 'Sarah Jenkins (Senior Investigator)',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 947,
+      "persona": "Sarah Jenkins",
+      "text": "blockTransaction: (txId, reason, bankerName = 'Sarah Jenkins') => {"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 990,
+      "persona": "Nazmul Hasan",
+      "text": "unblockTransaction: (blockId, justification, approverName = 'Nazmul Hasan, CCO') => {"
+    },
+    {
+      "file": "frontend/src/lib/audit/hashChain.ts",
+      "line": 164,
+      "persona": "Nazmul Hasan",
+      "text": "actorName: 'Nazmul Hasan, CAMS',"
+    },
+    {
+      "file": "frontend/src/lib/audit/hashChain.ts",
+      "line": 169,
+      "persona": "Sarah L. Jenkins",
+      "text": "details: 'Case CASE-2026-0881 formally docketed and assigned to Lead Investigator Sarah L. Jenkins, CFE.',"
+    },
+    {
+      "file": "frontend/src/lib/audit/hashChain.ts",
+      "line": 176,
+      "persona": "Nazmul Hasan",
+      "text": "officerName: 'Nazmul Hasan'"
+    },
+    {
+      "file": "frontend/src/lib/auth/session.ts",
+      "line": 17,
+      "persona": "Nazmul Hasan",
+      "text": "name: 'Nazmul Hasan, CAMS',"
+    },
+    {
+      "file": "frontend/src/lib/auth/session.ts",
+      "line": 36,
+      "persona": "Sarah L. Jenkins",
+      "text": "name: 'Sarah L. Jenkins, CFE',"
+    },
+    {
+      "file": "frontend/src/lib/auth/session.ts",
+      "line": 53,
+      "persona": "Musrat Jahan",
+      "text": "name: 'Musrat Jahan Gungun',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 174,
+      "persona": "Sarah L. Jenkins",
+      "text": "assignee: 'Sarah L. Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 219,
+      "persona": "Tanvir Mahmud",
+      "text": "assignee: 'Tanvir Mahmud',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 254,
+      "persona": "Musrat Jahan",
+      "text": "assignee: 'Musrat Jahan Gungun',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 355,
+      "persona": "Sarah L. Jenkins",
+      "text": "assignee: i % 2 === 0 ? 'Sarah L. Jenkins' : 'Tanvir Mahmud',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 355,
+      "persona": "Tanvir Mahmud",
+      "text": "assignee: i % 2 === 0 ? 'Sarah L. Jenkins' : 'Tanvir Mahmud',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 385,
+      "persona": "Musrat Jahan",
+      "text": "assignee: 'Musrat Jahan Gungun',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 403,
+      "persona": "Sarah L. Jenkins",
+      "text": "leadInvestigator: 'Sarah L. Jenkins, CFE',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 417,
+      "persona": "Sarah Jenkins",
+      "text": "{ title: '2. Triage & Intake', status: 'COMPLETE', time: '2026-09-02 08:35 UTC', detail: 'Sarah Jenkins assigned as Lead' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 449,
+      "persona": "Sarah L. Jenkins",
+      "text": "author: 'Sarah L. Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 456,
+      "persona": "Nazmul Hasan",
+      "text": "author: 'Nazmul Hasan',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 466,
+      "persona": "Tanvir Mahmud",
+      "text": "leadInvestigator: 'Tanvir Mahmud',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 480,
+      "persona": "Tanvir Mahmud",
+      "text": "{ title: '2. Triage & Intake', status: 'COMPLETE', time: '2026-09-02 09:05 UTC', detail: 'Tanvir Mahmud assigned' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 498,
+      "persona": "Tanvir Mahmud",
+      "text": "author: 'Tanvir Mahmud',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 528,
+      "persona": "Kazi Farhan",
+      "text": "{ name: 'Kazi Farhan Ahmed', shareholdingPct: 65.0, pepStatus: false, jurisdiction: 'Bangladesh' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 601,
+      "persona": "Kazi Farhan",
+      "text": "screenedName: 'Kazi Farhan Ahmed',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 627,
+      "persona": "Sarah L. Jenkins",
+      "text": "reviewedBy: 'Sarah L. Jenkins',"
+    },
+    {
+      "file": "frontend/src/lib/store/index.ts",
+      "line": 179,
+      "persona": "Sarah L. Jenkins",
+      "text": "userName: 'Sarah L. Jenkins, CFE',"
+    },
+    {
+      "file": "frontend/src/lib/store/index.ts",
+      "line": 282,
+      "persona": "Sarah L. Jenkins",
+      "text": "description: 'Sarah L. Jenkins submitted Emergency Account Freeze for Meghna Industrial.',"
+    }
+  ],
+  "claims": [
+    {
+      "file": "frontend/src/app/layout.tsx",
+      "line": 25,
+      "claim": "Air-Gap",
+      "text": "description: 'Tier-1 Air-Gap-Ready Anti-Money Laundering & Conformal Risk Control Operating System for Central Banks & Enterprise Financial Institutions.',"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 142,
+      "claim": "Air-Gap",
+      "text": "{/* Air-Gap Intranet Telemetry Watermark & Live Banner */}"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 151,
+      "claim": "Air-Gap",
+      "text": "Air-Gap Verified Intranet Node"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 154,
+      "claim": "EXTERNAL EGRESS",
+      "text": "0 EXTERNAL EGRESS"
+    },
+    {
+      "file": "frontend/src/app/page.tsx",
+      "line": 176,
+      "claim": "LIVE",
+      "text": "<span>LIVE</span>"
+    },
+    {
+      "file": "frontend/src/app/rules/page.tsx",
+      "line": 161,
+      "claim": "LIVE",
+      "text": "PRODUCTION LIVE"
+    },
+    {
+      "file": "frontend/src/app/screening/page.tsx",
+      "line": 92,
+      "claim": "00:04:12",
+      "text": "<span>List Sync: <strong>LIVE (00:04:12 ago)</strong></span>"
+    },
+    {
+      "file": "frontend/src/app/screening/page.tsx",
+      "line": 92,
+      "claim": "LIVE",
+      "text": "<span>List Sync: <strong>LIVE (00:04:12 ago)</strong></span>"
+    },
+    {
+      "file": "frontend/src/components/LiveStreamTicker.jsx",
+      "line": 70,
+      "claim": "LIVE",
+      "text": "<span className=\"font-bold text-white text-[10px] font-mono tracking-wider\">LIVE STREAM</span>"
+    },
+    {
+      "file": "frontend/src/components/layout/DemoBanner.jsx",
+      "line": 57,
+      "claim": "LIVE",
+      "text": "<span>{isStreamRunning ? 'LIVE STREAM' : 'PAUSED'}</span>"
+    },
+    {
+      "file": "frontend/src/components/shell/CommandHeader.tsx",
+      "line": 96,
+      "claim": "Air-Gap",
+      "text": "{/* Air-Gap / Cloud Deployment Badge */}"
+    },
+    {
+      "file": "frontend/src/components/shell/CommandHeader.tsx",
+      "line": 114,
+      "claim": "LIVE",
+      "text": "<span className=\"hidden sm:inline\">{isStreamRunning ? 'STREAM: LIVE' : 'STREAM: PAUSED'}</span>"
+    },
+    {
+      "file": "frontend/src/components/shell/CommandHeader.tsx",
+      "line": 115,
+      "claim": "LIVE",
+      "text": "<span className=\"sm:hidden\">{isStreamRunning ? 'LIVE' : 'PAUSED'}</span>"
+    }
+  ],
+  "timestamps": [
+    {
+      "file": "frontend/src/app/api/v1/graph/subgraph/[nodeId]/route.ts",
+      "line": 126,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:24:10 UTC',"
+    },
+    {
+      "file": "frontend/src/app/api/v1/graph/subgraph/[nodeId]/route.ts",
+      "line": 137,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 07:15:00 UTC',"
+    },
+    {
+      "file": "frontend/src/app/api/v1/graph/subgraph/[nodeId]/route.ts",
+      "line": 148,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 09:10:00 UTC',"
+    },
+    {
+      "file": "frontend/src/app/api/v1/graph/subgraph/[nodeId]/route.ts",
+      "line": 159,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 10:45:00 UTC',"
+    },
+    {
+      "file": "frontend/src/app/rfi/page.tsx",
+      "line": 49,
+      "timestamp": "2026-09-02",
+      "text": "issuedAt: '2026-09-02 09:00:00 UTC',"
+    },
+    {
+      "file": "frontend/src/app/rfi/page.tsx",
+      "line": 60,
+      "timestamp": "2026-09-02",
+      "text": "issuedAt: '2026-09-02 10:15:00 UTC',"
+    },
+    {
+      "file": "frontend/src/components/AccountProfileDrawer.jsx",
+      "line": 52,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-88491', date: '2026-09-02 08:42', type: 'OUT', to: 'GB-BARC-1109-MULE-HUB', amount: '$9,450.00', rail: 'SWIFT Wire', status: 'FLAGGED' },"
+    },
+    {
+      "file": "frontend/src/components/AccountProfileDrawer.jsx",
+      "line": 53,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-88488', date: '2026-09-02 08:14', type: 'IN', from: 'US-WF-4412-FEEDER-LLC', amount: '$9,800.00', rail: 'Fedwire', status: 'COMPLETED' },"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 53,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:14:22 UTC',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 69,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 07:58:10 UTC',"
+    },
+    {
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 85,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 07:42:05 UTC',"
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 100,
+      "timestamp": "2026-09-02",
+      "text": "Under Section 25 of the Money Laundering Prevention Act, 2012 (Act No. V of 2012), the compliance monitoring desk of the Authorized Dealer bank hereby submits this Suspicious Transaction Report regarding ${activeCase.subjectEntity} holding commercial account ${activeCase.subjectAccount}. Between 08:14 UTC and 08:28 UTC on 2026-09-02, the subject originated high-velocity wire transactions aggregating $${totalExp.toLocaleString()} USD (\u09f3${totalExpBdt} BDT). Each transfer was systematically structured directly below the $10,000 / \u09f31,000,000 BDT BFIU Currency Transaction Reporting (CTR) threshold."
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 116,
+      "timestamp": "2026-09-02",
+      "text": "Between 08:14 UTC and 08:28 UTC on 2026-09-02, subject ${activeCase.subjectEntity} (${activeCase.subjectAccount}) initiated rapid outbound settlement instructions aggregating $${totalExp.toLocaleString()} USD (\u09f3${totalExpBdt} BDT). Each transfer was systematically structured directly below the statutory reporting threshold."
+    },
+    {
+      "file": "frontend/src/features/filings/FilingsView.jsx",
+      "line": 131,
+      "timestamp": "2026-09-02",
+      "text": "<SubmissionDate>2026-09-02T08:35:00Z</SubmissionDate>"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 40,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:14:22 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 83,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:22:15 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 125,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:31:04 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 156,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:37:50 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 187,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:42:19 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 217,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:45:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 263,
+      "timestamp": "2026-09-02",
+      "text": "openedAt: '2026-09-02 08:15:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 337,
+      "timestamp": "2026-09-02",
+      "text": "openedAt: '2026-09-02 08:20:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 410,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-BFIU-948201', date: '2026-09-02 08:24:10', type: 'OUT', counterparty: 'Gulf Star Commodities FZE', counterpartyAccount: 'AE-EBIL-4412-8819-3301', amount: 9450.00, amountBdt: 1134000.00, rail: 'SWIFT MT700 (LC)', status: 'BLOCKED', memo: 'DOC-CREDIT DRAWDOWN / COMBED COTTON YARN' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 411,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-BFIU-948192', date: '2026-09-02 08:16:00', type: 'IN', counterparty: 'Tanvir Ahmed Rahman', counterpartyAccount: 'BD04-BRAC-1109-8421-4402', amount: 47600.00, amountBdt: 5712000.00, rail: 'RTGS (BD Bank)', status: 'FLAGGED', memo: 'INTERBANK CONDUIT SETTLEMENT / BATCH 88' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 417,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'ACT-901', timestamp: '2026-09-02 08:24:10 UTC', action: 'TRANSACTION_INTERCEPTED', officer: 'Surveillance Engine', details: 'Statutory hold placed on wire TX-BFIU-948201 ($9,450 USD). Price divergence +333.7% triggered.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 418,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'ACT-902', timestamp: '2026-09-02 08:20:00 UTC', action: 'FOUR_EYES_HOLD_RATIFIED', officer: 'Nazmul Hasan (CCO)', details: 'Four-Eyes dual signature ratified administrative freeze under BFIU \u00a715.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 419,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'ACT-903', timestamp: '2026-09-02 08:10:00 UTC', action: 'RFI_DISPATCHED', officer: 'Sarah Jenkins', details: 'Dispatched Form RFI-2026-1092 requesting certified Bill of Lading and ASYCUDA port clearance.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 459,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-BFIU-948190', date: '2026-09-02 08:22:15', type: 'OUT', counterparty: 'Gulf Star Commodities FZE', counterpartyAccount: 'AE-EBIL-4412-8819-3301', amount: 47600.00, amountBdt: 5712000.00, rail: 'SWIFT MT103', status: 'BLOCKED', memo: 'OFFSHORE TELEGRAPHIC WIRE / JAFZA DUBAI' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 460,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-BFIU-948185', date: '2026-09-02 08:14:20', type: 'IN', counterparty: 'Mohammad Rafiqul Islam (MFS)', counterpartyAccount: 'MFS-BKASH-0171-8840', amount: 4800.00, amountBdt: 576000.00, rail: 'bKash MFS', status: 'FLAGGED', memo: 'MFS BATCH DISBURSEMENT SETTLEMENT' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 465,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'ACT-801', timestamp: '2026-09-02 08:22:15 UTC', action: 'OUTBOUND_WIRE_BLOCKED', officer: 'Sarah Jenkins', details: 'SWIFT MT103 wire of $47,600 USD blocked. Zero account dwell time flagged.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 466,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'ACT-802', timestamp: '2026-09-02 08:15:00 UTC', action: 'VELOCITY_ALERT_TRIGGERED', officer: 'Hawkes Engine', details: 'Transaction velocity flared to 9.1 tx/min. Account flagged for smurfing fan-in.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 505,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-BFIU-948201', date: '2026-09-02 08:24:10', type: 'IN', counterparty: 'Meghna Industrial & Agro', counterpartyAccount: 'BD22-EBLB-4829-1092-8823', amount: 9450.00, amountBdt: 1134000.00, rail: 'SWIFT MT700 (LC)', status: 'BLOCKED', memo: 'DOC-CREDIT DRAWDOWN BENEFICIARY' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 506,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-BFIU-948190', date: '2026-09-02 08:22:15', type: 'IN', counterparty: 'Tanvir Ahmed Rahman', counterpartyAccount: 'BD04-BRAC-1109-8421-4402', amount: 47600.00, amountBdt: 5712000.00, rail: 'SWIFT MT103', status: 'BLOCKED', memo: 'INCOMING TELEGRAPHIC WIRE' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 510,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'ACT-701', timestamp: '2026-09-02 08:24:10 UTC', action: 'CORRESPONDENT_MONITORING_ALERT', officer: 'BFIU Liaison Desk', details: 'Offshore counterparty identified in circular trade loop back to Dhaka origin.' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 549,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-BFIU-948185', date: '2026-09-02 08:14:20', type: 'OUT', counterparty: 'Tanvir Ahmed Rahman', counterpartyAccount: 'BD04-BRAC-1109-8421-4402', amount: 4800.00, amountBdt: 576000.00, rail: 'bKash MFS', status: 'FLAGGED', memo: 'MFS B2C WALLET TRANSFER' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 550,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-MFS-7712', date: '2026-09-02 08:10:00', type: 'IN', counterparty: 'Retail Cash In (Walk-in)', counterpartyAccount: 'CASH-OVER-COUNTER', amount: 4800.00, amountBdt: 576000.00, rail: 'Over Counter Cash', status: 'COMPLETED', memo: 'CASH INGESTION MULTI-SLOT' }"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 553,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'ACT-601', timestamp: '2026-09-02 08:14:20 UTC', action: 'DORMANCY_SURGE_FLAGGED', officer: 'MFS Surveillance Gateway', details: 'Account dormant for 340 days initiated sudden remittance transfer.' }"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 591,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'TX-BFIU-948202', date: '2026-09-02 08:23:55', type: 'OUT', counterparty: 'Chittagong Port Authority', counterpartyAccount: 'BD00-CPA-PORT-AUTH-02', amount: 28750.00, amountBdt: 3450000.00, rail: 'RTGS (BD Bank)', status: 'CLEARED', memo: 'PORT WHARFAGE & BERTHING DUES / BERTH #4' },"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 595,
+      "timestamp": "2026-09-02",
+      "text": "{ id: 'ACT-501', timestamp: '2026-09-02 08:23:55 UTC', action: 'STRAIGHT_THROUGH_CLEARED', officer: 'Autonomous Filter', details: 'Routine commercial port authority dues cleared via automated straight-through processing.' }"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 611,
+      "timestamp": "2026-09-02",
+      "text": "issuedDate: '2026-09-02',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 651,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:16:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 665,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:24:10 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/seedData.js",
+      "line": 679,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:30:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 846,
+      "timestamp": "2026-09-02",
+      "text": "blockedAt: '2026-09-02 08:24:10 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/store.legacy.js",
+      "line": 863,
+      "timestamp": "2026-09-02",
+      "text": "blockedAt: '2026-09-02 08:22:15 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/audit/hashChain.ts",
+      "line": 119,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:00:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/audit/hashChain.ts",
+      "line": 140,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:14:22 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/audit/hashChain.ts",
+      "line": 161,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:35:10 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 159,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:14:22 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 204,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:29:45 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 239,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:44:11 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 274,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 08:52:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 340,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: `2026-09-02 ${String(8 + Math.floor(i / 120)).padStart(2, '0')}:${String((i * 7) % 60).padStart(2, '0')}:12 UTC`,"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 370,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: `2026-09-02 ${String(9 + Math.floor(i / 120)).padStart(2, '0')}:${String((i * 11) % 60).padStart(2, '0')}:44 UTC`,"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 404,
+      "timestamp": "2026-09-02",
+      "text": "createdAt: '2026-09-02 08:35:10 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 416,
+      "timestamp": "2026-09-02",
+      "text": "{ title: '1. Alert Quarantined', status: 'COMPLETE', time: '2026-09-02 08:14 UTC', detail: 'Automated Tier 1 hold executed' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 417,
+      "timestamp": "2026-09-02",
+      "text": "{ title: '2. Triage & Intake', status: 'COMPLETE', time: '2026-09-02 08:35 UTC', detail: 'Sarah Jenkins assigned as Lead' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 418,
+      "timestamp": "2026-09-02",
+      "text": "{ title: '3. Compliance RFI Issued', status: 'COMPLETE', time: '2026-09-02 09:00 UTC', detail: 'Commercial invoice requested' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 419,
+      "timestamp": "2026-09-02",
+      "text": "{ title: '4. Evidence Hash Chain Sealed', status: 'COMPLETE', time: '2026-09-02 10:15 UTC', detail: '3 documents sealed with SHA-256' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 451,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 09:12 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 458,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 10:30 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 467,
+      "timestamp": "2026-09-02",
+      "text": "createdAt: '2026-09-02 09:05:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 479,
+      "timestamp": "2026-09-02",
+      "text": "{ title: '1. Alert Quarantined', status: 'COMPLETE', time: '2026-09-02 08:30 UTC', detail: 'Rapid burst cash deposits intercepted' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 480,
+      "timestamp": "2026-09-02",
+      "text": "{ title: '2. Triage & Intake', status: 'COMPLETE', time: '2026-09-02 09:05 UTC', detail: 'Tanvir Mahmud assigned' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 481,
+      "timestamp": "2026-09-02",
+      "text": "{ title: '3. Compliance RFI Issued', status: 'COMPLETE', time: '2026-09-02 09:30 UTC', detail: 'Proof of commercial cash origin requested' },"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 500,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 09:45 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 586,
+      "timestamp": "2026-09-02",
+      "text": "screenedAt: '2026-09-02 08:14:25 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 603,
+      "timestamp": "2026-09-02",
+      "text": "screenedAt: '2026-09-02 08:35:12 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 620,
+      "timestamp": "2026-09-02",
+      "text": "screenedAt: '2026-09-02 08:52:01 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 639,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 10:14:00 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 653,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 10:45:22 UTC',"
+    },
+    {
+      "file": "frontend/src/lib/data/commercialSeed.ts",
+      "line": 667,
+      "timestamp": "2026-09-02",
+      "text": "timestamp: '2026-09-02 11:20:15 UTC',"
+    }
+  ]
+}

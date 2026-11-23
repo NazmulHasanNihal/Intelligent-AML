@@ -149,14 +149,21 @@ export interface CashThresholdReport {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// Certified Deterministic Data Sets
+// Certified Deterministic Data Sets & Relative Dynamic Timestamps
 // ─────────────────────────────────────────────────────────────────
+
+export function getRelativeTimestamp(hoursAgo: number, minutesAgo: number = 0): string {
+  // Uses deterministic anchor or current runtime date to prevent stale hardcoded dates
+  const now = typeof window !== 'undefined' ? new Date() : new Date('2026-11-23T12:00:00Z');
+  const d = new Date(now.getTime() - (hoursAgo * 3600000 + minutesAgo * 60000));
+  return d.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+}
 
 export const INITIAL_ALERTS: CommercialAlert[] = [
   {
     id: 'ALT-994821',
     caseId: 'CASE-2026-0881',
-    timestamp: '2026-09-02 08:14:22 UTC',
+    timestamp: getRelativeTimestamp(1, 14),
     account: 'BD22-EBLB-4829-1092-8823',
     entityName: 'Meghna Industrial & Agro Processing Ltd',
     amount: 9450.00,
@@ -171,7 +178,7 @@ export const INITIAL_ALERTS: CommercialAlert[] = [
     tierCode: 1,
     riskScore: 0.984,
     status: 'UNDER_INVESTIGATION',
-    assignee: 'Sarah L. Jenkins',
+    assignee: 'Amina Rahman, CFE (Demo)',
     typology: 'TBML Over-Invoicing & Sub-Threshold Structuring',
     typologyBadge: 'TBML Over-Invoice',
     decisionSet: 'Γ = {1}',
@@ -201,7 +208,7 @@ export const INITIAL_ALERTS: CommercialAlert[] = [
   {
     id: 'ALT-994824',
     caseId: 'CASE-2026-0894',
-    timestamp: '2026-09-02 08:29:45 UTC',
+    timestamp: getRelativeTimestamp(1, 29),
     account: 'BD22-SCBL-9912-3341-7719',
     entityName: 'Delta River Logistics & Freight Agency',
     amount: 7950.00,
@@ -216,7 +223,7 @@ export const INITIAL_ALERTS: CommercialAlert[] = [
     tierCode: 1,
     riskScore: 0.946,
     status: 'UNDER_INVESTIGATION',
-    assignee: 'Tanvir Mahmud',
+    assignee: 'Tanvir Ahmed (Demo)',
     typology: 'Smurfing & Multi-Agent Cash Structuring',
     typologyBadge: 'Cash Structuring',
     decisionSet: 'Γ = {1}',
@@ -236,9 +243,9 @@ export const INITIAL_ALERTS: CommercialAlert[] = [
   },
   {
     id: 'ALT-994828',
-    timestamp: '2026-09-02 08:44:11 UTC',
+    timestamp: getRelativeTimestamp(1, 44),
     account: 'BD22-CITY-5512-8819-0021',
-    entityName: 'Apex Apex Meridian Apparel Exporters',
+    entityName: 'Apex Meridian Apparel Exporters',
     amount: 148500.00,
     amountBdt: 17820000.00,
     rail: 'ISO 20022 pacs.008',
@@ -251,7 +258,7 @@ export const INITIAL_ALERTS: CommercialAlert[] = [
     tierCode: 2,
     riskScore: 0.642,
     status: 'PENDING_TRIAGE',
-    assignee: 'Musrat Jahan Gungun',
+    assignee: 'Tanvir Ahmed (Demo)',
     typology: 'Rapid Pass-Through Cross-Border Settlement',
     typologyBadge: 'Pass-Through',
     decisionSet: 'Γ = {0, 1}',
@@ -271,7 +278,7 @@ export const INITIAL_ALERTS: CommercialAlert[] = [
   },
   {
     id: 'ALT-994832',
-    timestamp: '2026-09-02 08:52:00 UTC',
+    timestamp: getRelativeTimestamp(2, 5),
     account: 'BD22-BRAC-7712-4410-9901',
     entityName: 'Karnaphuli Steel & Re-Rolling Mills Ltd',
     amount: 320000.00,
@@ -282,18 +289,18 @@ export const INITIAL_ALERTS: CommercialAlert[] = [
     counterpartyName: 'Helvetia Metallurgical Trading AG',
     counterpartyBic: 'UBSWCHZH',
     counterpartyCountry: 'Switzerland',
-    tier: 'Tier 3 Clear',
-    tierCode: 3,
-    riskScore: 0.048,
-    status: 'FALSE_POSITIVE_DISMISSED',
-    assignee: 'Auto-Cleared STP',
-    typology: 'Verified Heavy Machinery Capital Import',
+    tier: 'Tier 2 Review',
+    tierCode: 2,
+    riskScore: 0.548,
+    status: 'PENDING_TRIAGE',
+    assignee: 'Tanvir Ahmed (Demo)',
+    typology: 'Capital Goods Import Verification',
     typologyBadge: 'Capital Import',
-    decisionSet: 'Γ = {0}',
-    slaMinutesLeft: 999,
+    decisionSet: 'Γ = {0, 1}',
+    slaMinutesLeft: 180,
     flowConservationRatio: 0.120,
-    velocityBurstScore: 0.05,
-    whyFlagged: 'Standard industrial equipment payment matching registered Bangladesh Bank Import Form IMP and verified customs bill.',
+    velocityBurstScore: 0.85,
+    whyFlagged: 'Industrial equipment payment exceeding high-value monitoring threshold under standard documentation verification.',
     wirePayload: {
       messageType: 'MT103',
       orderingCustomer: 'Karnaphuli Steel & Re-Rolling Mills Ltd',
@@ -301,7 +308,7 @@ export const INITIAL_ALERTS: CommercialAlert[] = [
       beneficiaryCustomer: 'Helvetia Metallurgical Trading AG',
       beneficiaryInstitution: 'UBS Switzerland AG',
       remittanceInfo: 'SETTLEMENT FOR INDUCTION FURNACE LINE 4',
-      regulatoryFlags: ['REGISTERED_BB_IMP_MATCH']
+      regulatoryFlags: ['HIGH_VALUE_THRESHOLD_HOLD']
     }
   }
 ];
@@ -328,7 +335,7 @@ export function generateFullAlertQueue(): CommercialAlert[] {
     'Circular UBO Loop'
   ];
 
-  // Seed up to 2,028: 1,280 Tier 1 Hold and 748 Tier 2 Review
+  // Seed up to exactly 2,028: 1,280 Tier 1 Hold and 748 Tier 2 Review
   const neededTier1 = 1280 - alerts.filter(a => a.tierCode === 1).length;
   const neededTier2 = 748 - alerts.filter(a => a.tierCode === 2).length;
 
@@ -337,8 +344,8 @@ export function generateFullAlertQueue(): CommercialAlert[] {
     alerts.push({
       id: `ALT-99${seq}`,
       caseId: i % 4 === 0 ? `CASE-2026-${Math.floor(1000 + (i % 30))}` : undefined,
-      timestamp: `2026-09-02 ${String(8 + Math.floor(i / 120)).padStart(2, '0')}:${String((i * 7) % 60).padStart(2, '0')}:12 UTC`,
-      account: `BD22-BANK-${String(1000 + (i % 9000))}-8823`,
+      timestamp: getRelativeTimestamp(Math.floor(i / 120), (i * 7) % 60),
+      account: `BD22-CORP-${String(1000 + (i % 8900))}-${String(1000 + ((i * 37) % 8900))}`,
       entityName: entities[i % entities.length]!,
       amount: 4500 + ((i * 137) % 8500),
       amountBdt: (4500 + ((i * 137) % 8500)) * 120,
@@ -352,7 +359,7 @@ export function generateFullAlertQueue(): CommercialAlert[] {
       tierCode: 1,
       riskScore: Number((0.85 + ((i % 15) * 0.01)).toFixed(3)),
       status: i % 3 === 0 ? 'UNDER_INVESTIGATION' : 'PENDING_TRIAGE',
-      assignee: i % 2 === 0 ? 'Sarah L. Jenkins' : 'Tanvir Mahmud',
+      assignee: i % 2 === 0 ? 'Amina Rahman, CFE (Demo)' : 'Tanvir Ahmed (Demo)',
       typology: typologies[i % typologies.length]!,
       typologyBadge: typologies[i % typologies.length]!.split(' ')[0]!,
       decisionSet: 'Γ = {1}',
@@ -367,8 +374,8 @@ export function generateFullAlertQueue(): CommercialAlert[] {
     const seq = 5000 + i;
     alerts.push({
       id: `ALT-99${seq}`,
-      timestamp: `2026-09-02 ${String(9 + Math.floor(i / 120)).padStart(2, '0')}:${String((i * 11) % 60).padStart(2, '0')}:44 UTC`,
-      account: `BD22-BANK-${String(3000 + (i % 7000))}-4412`,
+      timestamp: getRelativeTimestamp(Math.floor(i / 120), (i * 11) % 60),
+      account: `BD22-SME-${String(3000 + (i % 6900))}-${String(1000 + ((i * 43) % 8900))}`,
       entityName: entities[(i + 3) % entities.length]!,
       amount: 15000 + ((i * 241) % 55000),
       amountBdt: (15000 + ((i * 241) % 55000)) * 120,
@@ -382,7 +389,7 @@ export function generateFullAlertQueue(): CommercialAlert[] {
       tierCode: 2,
       riskScore: Number((0.45 + ((i % 25) * 0.01)).toFixed(3)),
       status: 'PENDING_TRIAGE',
-      assignee: 'Musrat Jahan Gungun',
+      assignee: 'Tanvir Ahmed (Demo)',
       typology: typologies[(i + 2) % typologies.length]!,
       typologyBadge: typologies[(i + 2) % typologies.length]!.split(' ')[0]!,
       decisionSet: 'Γ = {0, 1}',
@@ -400,11 +407,11 @@ export const INITIAL_CASES: CommercialCase[] = [
   {
     id: 'CASE-2026-0881',
     title: 'Meghna Agro & Industrial — TBML Over-Invoicing Syndicate',
-    leadInvestigator: 'Sarah L. Jenkins, CFE',
-    createdAt: '2026-09-02 08:35:10 UTC',
+    leadInvestigator: 'Amina Rahman, CFE (Demo)',
+    createdAt: getRelativeTimestamp(2, 30),
     status: 'INVESTIGATION_OPEN',
     slaHours: 72,
-    slaDeadline: '2026-09-05 08:35:10 UTC',
+    slaDeadline: getRelativeTimestamp(-70, 0),
     riskExposureUsd: 148500.00,
     riskExposureBdt: 17820000.00,
     targetAccount: 'BD22-EBLB-4829-1092-8823',
@@ -453,9 +460,9 @@ export const INITIAL_CASES: CommercialCase[] = [
       },
       {
         id: 'NOTE-2',
-        author: 'Nazmul Hasan',
+        author: 'Kazi Rafiqul Islam, CAMS (Demo)',
         role: 'CCO_L3',
-        timestamp: '2026-09-02 10:30 UTC',
+        timestamp: getRelativeTimestamp(1, 0),
         content: 'Reviewed beneficiary Gulf Star Commodities in JAFZA. No operating warehouse found at declared address. Recommending emergency quarantine and SAR drafting.'
       }
     ]
@@ -463,11 +470,11 @@ export const INITIAL_CASES: CommercialCase[] = [
   {
     id: 'CASE-2026-0894',
     title: 'Delta River Logistics — Multi-Branch Cash Smurfing Ring',
-    leadInvestigator: 'Tanvir Mahmud',
-    createdAt: '2026-09-02 09:05:00 UTC',
+    leadInvestigator: 'Tanvir Ahmed (Demo)',
+    createdAt: getRelativeTimestamp(2, 5),
     status: 'INVESTIGATION_OPEN',
     slaHours: 72,
-    slaDeadline: '2026-09-05 09:05:00 UTC',
+    slaDeadline: getRelativeTimestamp(-69, 55),
     riskExposureUsd: 87500.00,
     riskExposureBdt: 10500000.00,
     targetAccount: 'BD22-SCBL-9912-3341-7719',
@@ -476,9 +483,9 @@ export const INITIAL_CASES: CommercialCase[] = [
     milestonesCompleted: 3,
     milestonesTotal: 6,
     milestones: [
-      { title: '1. Alert Quarantined', status: 'COMPLETE', time: '2026-09-02 08:30 UTC', detail: 'Rapid burst cash deposits intercepted' },
-      { title: '2. Triage & Intake', status: 'COMPLETE', time: '2026-09-02 09:05 UTC', detail: 'Tanvir Mahmud assigned' },
-      { title: '3. Compliance RFI Issued', status: 'COMPLETE', time: '2026-09-02 09:30 UTC', detail: 'Proof of commercial cash origin requested' },
+      { title: '1. Alert Quarantined', status: 'COMPLETE', time: getRelativeTimestamp(2, 30), detail: 'Rapid burst cash deposits intercepted' },
+      { title: '2. Triage & Intake', status: 'COMPLETE', time: getRelativeTimestamp(2, 5), detail: 'Tanvir Ahmed assigned' },
+      { title: '3. Compliance RFI Issued', status: 'COMPLETE', time: getRelativeTimestamp(1, 35), detail: 'Proof of commercial cash origin requested' },
       { title: '4. Evidence Hash Chain Sealed', status: 'IN_PROGRESS', detail: 'Gathering branch CCTV & deposit slips' },
       { title: '5. Regulatory SAR Drafted', status: 'PENDING', detail: 'Awaiting deposit slip confirmation' },
       { title: '6. 4-Eyes CCO Sign-Off', status: 'PENDING', detail: 'Awaiting dual signatory ratification' }
@@ -495,9 +502,9 @@ export const INITIAL_CASES: CommercialCase[] = [
     notes: [
       {
         id: 'NOTE-1',
-        author: 'Tanvir Mahmud',
+        author: 'Tanvir Ahmed (Demo)',
         role: 'INVESTIGATOR_L2',
-        timestamp: '2026-09-02 09:45 UTC',
+        timestamp: getRelativeTimestamp(1, 20),
         content: 'Pattern demonstrates deliberate structuring at ৳954,000 BDT to evade mandatory ৳1,000,000 CTR filing under MLPA 2012 § 25.'
       }
     ]
@@ -583,7 +590,7 @@ export const INITIAL_SCREENING_RECORDS: WatchlistScreeningRecord[] = [
     id: 'SCR-2026-001',
     screenedName: 'Gulf Star Commodities FZE',
     screenedAccount: 'AE-EBIL-1109-8421-4402',
-    screenedAt: '2026-09-02 08:14:25 UTC',
+    screenedAt: getRelativeTimestamp(0, 15),
     matchedEntity: 'Gulf Star Trading & Logistics LLC (SDN-19482)',
     watchlistSource: 'OFAC SDN',
     matchScore: 94.6,
@@ -599,8 +606,8 @@ export const INITIAL_SCREENING_RECORDS: WatchlistScreeningRecord[] = [
   {
     id: 'SCR-2026-002',
     screenedName: 'Kazi Farhan Ahmed',
-    screenedAccount: 'BD22-EBLB-4829-1092-8823',
-    screenedAt: '2026-09-02 08:35:12 UTC',
+    screenedAccount: 'BD22-EBLB-9921-0044-7711',
+    screenedAt: getRelativeTimestamp(0, 35),
     matchedEntity: 'Farhan Ahmed Kazi (PEP-BD-0441)',
     watchlistSource: 'PEP Tier 1',
     matchScore: 91.2,
@@ -617,14 +624,14 @@ export const INITIAL_SCREENING_RECORDS: WatchlistScreeningRecord[] = [
     id: 'SCR-2026-003',
     screenedName: 'Helvetia Metallurgical Trading AG',
     screenedAccount: 'CH-UBSW-4412-0091-8822',
-    screenedAt: '2026-09-02 08:52:01 UTC',
+    screenedAt: getRelativeTimestamp(0, 52),
     matchedEntity: 'Helvetia Metals Corp (Dismissed)',
     watchlistSource: 'EU Consolidated',
     matchScore: 68.4,
     matchAlgorithm: 'Token Jaccard Similarity',
     matchType: 'FUZZY_JARO_WINKLER',
     disposition: 'DISMISSED_FALSE_POSITIVE',
-    reviewedBy: 'Sarah L. Jenkins',
+    reviewedBy: 'Amina Rahman, CFE (Demo)',
     tokenDiffs: {
       screenedTokens: ['helvetia', 'metallurgical', 'trading', 'ag'],
       matchedTokens: ['helvetia', 'metals', 'corp'],
@@ -636,7 +643,7 @@ export const INITIAL_SCREENING_RECORDS: WatchlistScreeningRecord[] = [
 export const INITIAL_CTR_RECORDS: CashThresholdReport[] = [
   {
     id: 'CTR-2026-9901',
-    timestamp: '2026-09-02 10:14:00 UTC',
+    timestamp: getRelativeTimestamp(1, 10),
     accountNumber: 'BD22-IBBL-4412-9901-2211',
     entityName: 'Al-Madina Trading Syndicate',
     branch: 'Chawkbazar Commercial Branch, Dhaka',
@@ -650,7 +657,7 @@ export const INITIAL_CTR_RECORDS: CashThresholdReport[] = [
   },
   {
     id: 'CTR-2026-9902',
-    timestamp: '2026-09-02 10:45:22 UTC',
+    timestamp: getRelativeTimestamp(1, 45),
     accountNumber: 'BD22-SCBL-9912-3341-7719',
     entityName: 'Delta River Logistics & Freight Agency',
     branch: 'Agrabad Corporate Branch, Chittagong',
@@ -664,7 +671,7 @@ export const INITIAL_CTR_RECORDS: CashThresholdReport[] = [
   },
   {
     id: 'CTR-2026-9903',
-    timestamp: '2026-09-02 11:20:15 UTC',
+    timestamp: getRelativeTimestamp(2, 20),
     accountNumber: 'BD22-EBLB-1192-8812-4412',
     entityName: 'Chittagong Maritime Supply Agency',
     branch: 'Khatunganj Commodity Branch',

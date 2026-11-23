@@ -34,6 +34,7 @@ import { useBankingStore } from '@/lib/store';
 import { JURISDICTIONS, formatCurrencyByJurisdiction } from '@/lib/compliance/jurisdictions';
 import { PiiText } from '@/components/ui/PiiText';
 import { CommercialAlert } from '@/lib/data/commercialSeed';
+import { IS_ONPREM_MODE } from '@/lib/config/env';
 
 export default function SurveillanceOverviewPage() {
   const router = useRouter();
@@ -148,10 +149,10 @@ export default function SurveillanceOverviewPage() {
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <span className="font-semibold text-slate-100 uppercase tracking-wide truncate text-xs font-sans">
-                Air-Gap Verified Intranet Node
+                {IS_ONPREM_MODE ? 'On-Prem Secure Node' : 'Simulated Surveillance Node'}
               </span>
               <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
-                0 EXTERNAL EGRESS
+                {IS_ONPREM_MODE ? 'EGRESS CONFINED' : 'SYNTHETIC WORKLOAD DATA'}
               </span>
             </div>
             <p className="text-[11px] text-slate-400 mt-0.5 break-words font-mono">
@@ -173,7 +174,7 @@ export default function SurveillanceOverviewPage() {
             {isLiveStreamActive ? (
               <>
                 <Pause className="w-3.5 h-3.5" />
-                <span>LIVE</span>
+                <span>SIMULATED STREAM</span>
               </>
             ) : (
               <>

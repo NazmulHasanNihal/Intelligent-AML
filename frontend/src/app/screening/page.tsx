@@ -89,7 +89,7 @@ export default function SanctionsScreeningPage() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>List Sync: <strong>LIVE (00:04:12 ago)</strong></span>
+            <span>Watchlist Feed: <strong>Simulated Snapshot (OFAC/UN/BFIU)</strong></span>
           </div>
         </div>
       </div>

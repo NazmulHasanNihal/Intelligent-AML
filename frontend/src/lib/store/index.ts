@@ -176,8 +176,8 @@ export const useAppStore = create<UnifiedBankingState>()(
       currentBanker: BANKER_PERSONAS.INVESTIGATOR_L2,
       session: {
         role: 'INVESTIGATOR_L2',
-        userName: 'Sarah L. Jenkins, CFE',
-        institution: 'Citibank N.A. — High-Risk Surveillance Hub'
+        userName: BANKER_PERSONAS.INVESTIGATOR_L2.name,
+        institution: BANKER_PERSONAS.INVESTIGATOR_L2.institution
       },
       switchBankerRole: (role) => {
         const profile = BANKER_PERSONAS[role];
@@ -279,7 +279,7 @@ export const useAppStore = create<UnifiedBankingState>()(
           id: 'NOTIF-2',
           timestamp: '25m ago',
           title: '4-Eyes Ratification Required',
-          description: 'Sarah L. Jenkins submitted Emergency Account Freeze for Meghna Industrial.',
+          description: 'Amina Rahman (Lead Investigator) submitted Emergency Account Freeze for Meghna Industrial.',
           type: 'FOUR_EYES_REQUEST',
           read: false,
           linkedHref: '/cases/CASE-2026-0881'

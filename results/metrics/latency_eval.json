@@ -1,0 +1,112 @@
+{
+  "benchmark_name": "Intelligent-AML Micro & End-to-End Latency Benchmark",
+  "run_id": "LATENCY_EVAL_20261123_065825",
+  "metadata": {
+    "os": "Windows 10 (10.0.19045)",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+    "python_version": "3.14.6",
+    "timestamp": "2026-11-23T06:58:25Z"
+  },
+  "scorer_inference_only": {
+    "batch_1": {
+      "cold_start_ms": 5.76,
+      "warm_p50_ms": 0.022,
+      "warm_p95_ms": 0.0227,
+      "warm_p99_ms": 0.0243,
+      "warm_mean_ms": 0.0222,
+      "warm_std_ms": 0.0009,
+      "throughput_samples_per_sec": 45131.1
+    },
+    "batch_16": {
+      "cold_start_ms": 2.0263,
+      "warm_p50_ms": 0.035,
+      "warm_p95_ms": 0.0636,
+      "warm_p99_ms": 0.0755,
+      "warm_mean_ms": 0.0391,
+      "warm_std_ms": 0.0104,
+      "throughput_samples_per_sec": 409451.5
+    },
+    "batch_64": {
+      "cold_start_ms": 0.0685,
+      "warm_p50_ms": 0.0466,
+      "warm_p95_ms": 0.0762,
+      "warm_p99_ms": 0.0799,
+      "warm_mean_ms": 0.0537,
+      "warm_std_ms": 0.0126,
+      "throughput_samples_per_sec": 1190727.2
+    },
+    "batch_256": {
+      "cold_start_ms": 0.91,
+      "warm_p50_ms": 0.1249,
+      "warm_p95_ms": 0.146,
+      "warm_p99_ms": 0.1827,
+      "warm_mean_ms": 0.1282,
+      "warm_std_ms": 0.0105,
+      "throughput_samples_per_sec": 1996942.2
+    },
+    "batch_1024": {
+      "cold_start_ms": 0.4684,
+      "warm_p50_ms": 0.317,
+      "warm_p95_ms": 0.3286,
+      "warm_p99_ms": 0.3689,
+      "warm_mean_ms": 0.3194,
+      "warm_std_ms": 0.013,
+      "throughput_samples_per_sec": 3206232.1
+    }
+  },
+  "end_to_end_pipeline": {
+    "batch_1": {
+      "cold_start_ms": 0.0647,
+      "warm_p50_ms": 0.0373,
+      "warm_p95_ms": 0.04,
+      "warm_p99_ms": 0.0615,
+      "warm_mean_ms": 0.0428,
+      "warm_std_ms": 0.0597,
+      "throughput_samples_per_sec": 23372.1
+    },
+    "batch_16": {
+      "cold_start_ms": 0.0245,
+      "warm_p50_ms": 0.0472,
+      "warm_p95_ms": 0.0542,
+      "warm_p99_ms": 0.0948,
+      "warm_mean_ms": 0.0471,
+      "warm_std_ms": 0.0089,
+      "throughput_samples_per_sec": 339919.3
+    },
+    "batch_64": {
+      "cold_start_ms": 0.0231,
+      "warm_p50_ms": 0.0623,
+      "warm_p95_ms": 0.0635,
+      "warm_p99_ms": 0.0694,
+      "warm_mean_ms": 0.0608,
+      "warm_std_ms": 0.0029,
+      "throughput_samples_per_sec": 1052147.0
+    },
+    "batch_256": {
+      "cold_start_ms": 0.0243,
+      "warm_p50_ms": 0.1145,
+      "warm_p95_ms": 0.118,
+      "warm_p99_ms": 0.1476,
+      "warm_mean_ms": 0.1157,
+      "warm_std_ms": 0.0053,
+      "throughput_samples_per_sec": 2213282.0
+    },
+    "batch_1024": {
+      "cold_start_ms": 0.0254,
+      "warm_p50_ms": 0.2913,
+      "warm_p95_ms": 0.3371,
+      "warm_p99_ms": 0.4228,
+      "warm_mean_ms": 0.3015,
+      "warm_std_ms": 0.0298,
+      "throughput_samples_per_sec": 3396539.3
+    }
+  },
+  "summary": {
+    "single_item_scorer_inference_p50_ms": 0.022,
+    "single_item_scorer_inference_p99_ms": 0.0243,
+    "single_item_end_to_end_p50_ms": 0.0373,
+    "single_item_end_to_end_p99_ms": 0.0615,
+    "distinction_notice": "Sub-millisecond latency applies strictly to raw model tensor scorer execution on warm caches. Full end-to-end payment interdiction (including wire SerDe, graph state traversal, Conformal Risk calibration, and WORM SHA-256 block hashing) operates in the 1-25ms envelope."
+  }
+}

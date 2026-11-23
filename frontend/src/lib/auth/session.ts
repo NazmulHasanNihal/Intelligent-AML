@@ -11,15 +11,19 @@ export interface BankerProfile {
   permissions: string[];
 }
 
+/**
+ * Standardized Institutional Demonstration Personas (Ground Rule 1 & Phase 1 Compliance)
+ * Clearly designated fictional institutional operators for research evaluation and BFIU workflow demonstration.
+ */
 export const BANKER_PERSONAS: Record<BankingRole, BankerProfile> = {
   CCO_L3: {
     id: 'BNK-7842',
-    name: 'Nazmul Hasan, CAMS',
+    name: 'Kazi Rafiqul Islam, CAMS (Demo CCO)',
     role: 'CCO_L3',
-    roleTitle: 'Chief Compliance Officer (CCO / L3 Checker)',
-    department: 'Global Financial Crimes Division',
-    institution: 'JPMorgan Chase & Co. — Global FIU Operations',
-    avatar: 'NH',
+    roleTitle: 'Chief Compliance Officer & MLRO (Demo L3 Checker)',
+    department: 'Financial Crime Compliance Directorate (Demo)',
+    institution: 'Eastern Commercial Bank PLC — BFIU Compliance Desk',
+    avatar: 'KR',
     permissions: [
       'ALL',
       'FREEZE_FUNDS_DUAL_AUTH',
@@ -33,12 +37,12 @@ export const BANKER_PERSONAS: Record<BankingRole, BankerProfile> = {
   },
   INVESTIGATOR_L2: {
     id: 'BNK-4419',
-    name: 'Sarah L. Jenkins, CFE',
+    name: 'Amina Rahman, CFE (Demo Lead Investigator)',
     role: 'INVESTIGATOR_L2',
-    roleTitle: 'Senior AML Compliance Investigator (L2 Maker)',
-    department: 'Special Investigations Unit (SIU)',
-    institution: 'Citibank N.A. — High-Risk Surveillance Hub',
-    avatar: 'SJ',
+    roleTitle: 'Senior AML Forensic Investigator (Demo L2 Maker)',
+    department: 'Special Investigations & Trade AML Unit (Demo)',
+    institution: 'Eastern Commercial Bank PLC — High-Risk Surveillance Hub',
+    avatar: 'AR',
     permissions: [
       'TRIAGE_EVALUATE',
       'PROPOSE_FREEZE',
@@ -50,12 +54,12 @@ export const BANKER_PERSONAS: Record<BankingRole, BankerProfile> = {
   },
   ANALYST_L1: {
     id: 'BNK-1092',
-    name: 'Musrat Jahan Gungun',
+    name: 'Tanvir Ahmed (Demo Triage Analyst)',
     role: 'ANALYST_L1',
-    roleTitle: 'First-Line Triage Analyst (L1 Maker)',
-    department: 'Real-Time Clearing Surveillance Desk',
-    institution: 'Standard Chartered Bank — Transaction Gateway',
-    avatar: 'MJ',
+    roleTitle: 'First-Line Triage Analyst (Demo L1 Maker)',
+    department: 'Real-Time Clearing Surveillance Desk (Demo)',
+    institution: 'Eastern Commercial Bank PLC — Ingestion Gateway',
+    avatar: 'TA',
     permissions: [
       'TRIAGE_READ',
       'FLAG_ANOMALOUS_EVENT',
@@ -64,12 +68,12 @@ export const BANKER_PERSONAS: Record<BankingRole, BankerProfile> = {
   },
   MODEL_AUDITOR: {
     id: 'BNK-9901',
-    name: 'Dr. Tariq Rahman, FRM',
+    name: 'Dr. S. K. Haque, FRM (Demo Model Validator)',
     role: 'MODEL_AUDITOR',
-    roleTitle: 'Independent Model Risk Auditor (MRM Lead)',
-    department: 'Quantitative Validation Group (SR 11-7)',
-    institution: 'Bank for International Settlements (BIS)',
-    avatar: 'TR',
+    roleTitle: 'Independent Quantitative Risk Validator (Demo SR 11-7 Lead)',
+    department: 'Model Risk Management & Algorithmic Audit (Demo)',
+    institution: 'Supervisory Audit Group — Research Prototype Evaluation',
+    avatar: 'SH',
     permissions: [
       'SR11_7_READ',
       'CALIBRATION_AUDIT',

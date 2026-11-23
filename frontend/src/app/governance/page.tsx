@@ -22,7 +22,14 @@ import {
   Check,
   XCircle,
   Copy,
-  Table
+  Table,
+  BookOpen,
+  ExternalLink,
+  Building2,
+  Database,
+  FileKey,
+  Globe2,
+  Info
 } from 'lucide-react';
 import {
   LineChart,
@@ -37,6 +44,9 @@ import {
 } from 'recharts';
 import { useBankingStore } from '@/lib/store';
 import { verifyAuditChain, tamperAuditBlock, restoreAuditChain, computeSha256 } from '@/lib/audit/hashChain';
+import { REGULATORY_CONFIG, BFIU_GUIDANCE_MAPPING, BfiuGuidanceMappingItem } from '@/lib/config/regulatory';
+import { METRICS_REGISTRY, getMetricDisplay } from '@/lib/metrics/registry';
+import { BANKER_PERSONAS } from '@/lib/auth/session';
 
 const BASE_DRIFT_SERIES = [
   { t: 'W-1', f1: 0.942, p99Latency: 0.81, ksStatistic: 0.021 },
@@ -57,7 +67,9 @@ export default function ModelGovernancePage() {
     addToast
   } = useBankingStore();
 
-  const [activeTab, setActiveTab] = useState<'MODEL_HEALTH' | 'WEBHOOK_HUB' | 'WORM_LEDGER'>('MODEL_HEALTH');
+  const [activeTab, setActiveTab] = useState<
+    'MODEL_HEALTH' | 'BFIU_MAPPING' | 'POLICIES' | 'WEBHOOK_HUB' | 'WORM_LEDGER'
+  >('MODEL_HEALTH');
   const [isSimulatingSpike, setIsSimulatingSpike] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isTampered, setIsTampered] = useState(false);
@@ -68,6 +80,9 @@ export default function ModelGovernancePage() {
   const [targetAccount, setTargetAccount] = useState('BD22-EBLB-4829-1092-8823');
   const [webhookResponse, setWebhookResponse] = useState<string | null>(null);
   const [isDispatchingWebhook, setIsDispatchingWebhook] = useState(false);
+
+  // Search filter for BFIU Guidance Mapping
+  const [mappingSearch, setMappingSearch] = useState('');
 
   // Drift data based on volatility spike toggle
   const driftChartData = useMemo(() => {
@@ -84,6 +99,19 @@ export default function ModelGovernancePage() {
       return d;
     });
   }, [isSimulatingSpike]);
+
+  // Filtered BFIU guidance mappings
+  const filteredMappings = useMemo(() => {
+    if (!mappingSearch.trim()) return BFIU_GUIDANCE_MAPPING;
+    const q = mappingSearch.toLowerCase();
+    return BFIU_GUIDANCE_MAPPING.filter(
+      (m) =>
+        m.frameworkName.toLowerCase().includes(q) ||
+        m.officialRef.toLowerCase().includes(q) ||
+        m.appModule.toLowerCase().includes(q) ||
+        m.operationalRequirements.toLowerCase().includes(q)
+    );
+  }, [mappingSearch]);
 
   // Handle Real Client WebCrypto WORM Verification
   const handleRunAuditVerification = async () => {
@@ -131,8 +159,8 @@ export default function ModelGovernancePage() {
     const payload = {
       event: selectedWebhook === 'DEBIT_HOLD' ? 'BANKING_RAIL_DEBIT_HOLD_TRIGGERED' : 'BANKING_RAIL_ACCOUNT_FREEZE_ORDER',
       targetAccount,
-      authorizedOfficer: 'Sarah Jenkins (Analyst ID: L2-4491)',
-      reason: 'Automated Tier 1 Calibrated Surveillance Quarantining',
+      authorizedOfficer: `${BANKER_PERSONAS.INVESTIGATOR_L2.name} (Officer ID: L2-4491)`,
+      reason: 'Automated Tier 1 Calibrated Surveillance Interception (MLPA 2012 § 25)',
       timestamp,
       callbackUrl: 'https://corebanking.ebl.com.bd/api/v2/holds/settlement'
     };
@@ -158,23 +186,31 @@ export default function ModelGovernancePage() {
   const handleDownloadGovernancePack = () => {
     const pack = {
       productionSystem: 'Intelligent-AML Enterprise Banking Operating System',
-      complianceFramework: 'Federal Reserve SR 11-7 / OCC 2011-12 / BFIU Core Risk Guideline',
+      complianceFramework: 'Aligned with Federal Reserve SR 11-7 / OCC 2011-12 Model-Risk Practice & BFIU Master Circular No. 26',
       timestamp: new Date().toISOString(),
+      statutoryStatutes: {
+        primaryAct: REGULATORY_CONFIG.statuteReferences.primaryAmlAct.title,
+        retentionPolicy: `${REGULATORY_CONFIG.retentionPolicy.statutoryYears} Years (${REGULATORY_CONFIG.retentionPolicy.statutoryBasis})`,
+        dataResidency: REGULATORY_CONFIG.dataResidencyPolicy.primaryMandate,
+        antiTippingOff: REGULATORY_CONFIG.statuteReferences.primaryAmlAct.tippingOffSection
+      },
       productionModelHealth: {
-        coverageGuarantee: '≥ 99.0% Class-Conditional Finite Sample Coverage',
+        coverageGuarantee: '≥ 99.0% Class-Conditional Finite Sample Coverage [Empirical Run ID: MASTER_14_DATASET_EVAL_20260904]',
         activeChampionModel: 'Production Spatio-Temporal Graph Surveillance Engine v3.0',
-        p99InferenceLatency: '0.82 ms',
-        meanThroughput: '12,500 transactions / sec'
+        scorerP50InferenceLatency: '0.022 ms (Raw Tensor Scorer Math Only)',
+        pipelineInProcessP50: '0.037 ms (In-Memory Feature Extraction + Scoring)',
+        networkApiP50: '14.8 ms (HTTP Roundtrip Latency)'
       },
       paymentRailsScorecard: [
-        { rail: 'SWIFT MT / Documentary Credits', f1Score: 0.965, falsePositiveRate: '0.62%', p99Latency: '0.84 ms' },
-        { rail: 'ISO 20022 (pacs.008 RTGS)', f1Score: 0.952, falsePositiveRate: '0.74%', p99Latency: '0.81 ms' },
-        { rail: 'BEFTN / National Electronic Clearing', f1Score: 0.941, falsePositiveRate: '0.88%', p99Latency: '0.79 ms' },
-        { rail: 'Mobile Financial Services (MFS / Agent)', f1Score: 0.948, falsePositiveRate: '0.79%', p99Latency: '0.85 ms' }
+        { rail: 'SWIFT MT / Documentary Credits', f1Score: 0.965, falsePositiveRate: '0.62%', p99ScorerLatency: '0.84 ms' },
+        { rail: 'ISO 20022 (pacs.008 RTGS)', f1Score: 0.952, falsePositiveRate: '0.74%', p99ScorerLatency: '0.81 ms' },
+        { rail: 'BEFTN / National Electronic Clearing', f1Score: 0.941, falsePositiveRate: '0.88%', p99ScorerLatency: '0.79 ms' },
+        { rail: 'Mobile Financial Services (MFS / Agent)', f1Score: 0.948, falsePositiveRate: '0.79%', p99ScorerLatency: '0.85 ms' }
       ],
       cryptographicAuditIntegrity: {
         totalLedgerBlocks: auditLedger.length,
         status: isTampered ? 'CORRUPTED' : 'VERIFIED_CHAIN_VALID',
+        legalStandard: 'Bangladesh Evidence Act (Amended 2022) § 65B Certified Electronic Records',
         headHash: auditLedger[auditLedger.length - 1]?.currentHash || ''
       }
     };
@@ -183,9 +219,10 @@ export default function ModelGovernancePage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `SR11-7-Institutional-Compliance-Pack-${Date.now()}.json`;
+    a.download = `Model-Risk-Governance-Pack-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    addToast('Governance Pack Downloaded', 'Audit pack exported with full BFIU statutory mapping.', 'success');
   };
 
   return (
@@ -195,49 +232,69 @@ export default function ModelGovernancePage() {
         <div>
           <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-sans">
             <Scale className="w-5 h-5 text-cyan-400" />
-            Model Operations, Core Banking Webhooks &amp; WORM Audit Ledger
+            Model Governance, BFIU Compliance Mapping &amp; WORM Ledger
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Federal Reserve SR 11-7 model risk management, production rail telemetry, and SEC 17a-4 / FINRA 4511 WORM cryptographic audit ledger.
+            Model risk governance (aligned with SR 11-7 practice), BFIU statutory guidance mapping, and Evidence Act § 65B WORM cryptographic audit ledger.
           </p>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155] text-xs font-semibold">
+        <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155] text-xs font-semibold overflow-x-auto">
           <button
             onClick={() => setActiveTab('MODEL_HEALTH')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
               activeTab === 'MODEL_HEALTH'
                 ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            Model Health &amp; SR 11-7 Risk
+            Model Operations &amp; Risk Health
+          </button>
+          <button
+            onClick={() => setActiveTab('BFIU_MAPPING')}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+              activeTab === 'BFIU_MAPPING'
+                ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            BFIU Guidance Mapping ({BFIU_GUIDANCE_MAPPING.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('POLICIES')}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+              activeTab === 'POLICIES'
+                ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Retention, Residency &amp; GDPR
           </button>
           <button
             onClick={() => setActiveTab('WEBHOOK_HUB')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
               activeTab === 'WEBHOOK_HUB'
                 ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            Core Banking Integration Webhooks
+            Core Banking Webhooks
           </button>
           <button
             onClick={() => setActiveTab('WORM_LEDGER')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
               activeTab === 'WORM_LEDGER'
                 ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            WORM Cryptographic Audit Trail ({auditLedger.length})
+            WORM Audit Trail ({auditLedger.length})
           </button>
         </div>
       </div>
 
-      {/* Tab 1: Model Health & SR 11-7 Risk Governance */}
+      {/* Tab 1: Model Health & Aligned SR 11-7 Risk Governance */}
       {activeTab === 'MODEL_HEALTH' && (
         <div className="space-y-5">
           {/* Top Actions & Volatility Spike Toggle */}
@@ -262,8 +319,16 @@ export default function ModelGovernancePage() {
               className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-600/20"
             >
               <Download className="w-4 h-4" />
-              <span>Download SR 11-7 Compliance Pack (JSON)</span>
+              <span>Download Governance Compliance Pack (JSON)</span>
             </button>
+          </div>
+
+          {/* Model Risk Practice Alignment Notice */}
+          <div className="p-3 bg-sky-950/30 border border-sky-800/50 rounded-xl flex items-center gap-2.5 text-xs text-sky-300">
+            <Info className="w-4 h-4 shrink-0 text-sky-400" />
+            <span>
+              <strong>Framework Note:</strong> Model risk practices are aligned with international supervisory standards (Federal Reserve SR 11-7 / OCC 2011-12) for conceptual soundness, drift monitoring, and independent validation under Bangladesh Bank AML/CFT supervisory guidelines.
+            </span>
           </div>
 
           {/* Dual Y-Axis Production Drift Chart */}
@@ -271,10 +336,10 @@ export default function ModelGovernancePage() {
             <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
               <div>
                 <h3 className="text-sm font-bold text-slate-100 font-mono">
-                  Production Model Drift &amp; P99 Inference Latency Telemetry
+                  Production Distribution Drift &amp; Scorer Latency Telemetry
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Left Axis: Macro F1 Surveillance Fidelity • Right Axis: P99 End-to-End Decision Latency (ms)
+                  Left Axis: Macro F1 Surveillance Fidelity • Right Axis: Scorer P99 Latency (ms) [Scorer Only]
                 </p>
               </div>
 
@@ -285,7 +350,7 @@ export default function ModelGovernancePage() {
                 </span>
                 <span className="flex items-center gap-1.5 text-sky-400">
                   <span className="w-2.5 h-2.5 rounded-full bg-sky-400" />
-                  <span>P99 Latency (ms)</span>
+                  <span>Scorer P99 Latency (ms)</span>
                 </span>
               </div>
             </div>
@@ -300,7 +365,7 @@ export default function ModelGovernancePage() {
                   <Tooltip
                     contentStyle={{ backgroundColor: '#0B0F17', borderColor: '#334155', borderRadius: 8, fontSize: 12 }}
                   />
-                  <ReferenceLine yAxisId="left" y={0.90} stroke="#EF4444" strokeDasharray="3 3" label={{ value: 'SR 11-7 Floor (0.90)', fill: '#EF4444', fontSize: 10 }} />
+                  <ReferenceLine yAxisId="left" y={0.90} stroke="#EF4444" strokeDasharray="3 3" label={{ value: 'Aligned Model-Risk Floor (0.90)', fill: '#EF4444', fontSize: 10 }} />
                   <Line yAxisId="left" type="monotone" dataKey="f1" stroke="#10B981" strokeWidth={2.5} dot={{ r: 4 }} activeDot={{ r: 6 }} />
                   <Line yAxisId="right" type="monotone" dataKey="p99Latency" stroke="#38BDF8" strokeWidth={2} dot={{ r: 3 }} />
                 </LineChart>
@@ -308,10 +373,10 @@ export default function ModelGovernancePage() {
             </div>
           </div>
 
-          {/* Core Banking Payment Rails Scorecard */}
+          {/* Payment Rails Scorecard */}
           <div className="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-xl space-y-4">
             <h3 className="text-sm font-bold text-slate-100 font-mono">
-              Live Core Banking Rail Performance Scorecard
+              Live Payment Rail Surveillance Scorecard
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-mono">
@@ -326,7 +391,7 @@ export default function ModelGovernancePage() {
                   <span className="font-bold text-emerald-400">0.62%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">P99 Latency:</span>
+                  <span className="text-slate-400">Scorer P99:</span>
                   <span className="font-bold text-slate-200">0.84 ms</span>
                 </div>
               </div>
@@ -342,7 +407,7 @@ export default function ModelGovernancePage() {
                   <span className="font-bold text-emerald-400">0.74%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">P99 Latency:</span>
+                  <span className="text-slate-400">Scorer P99:</span>
                   <span className="font-bold text-slate-200">0.81 ms</span>
                 </div>
               </div>
@@ -358,7 +423,7 @@ export default function ModelGovernancePage() {
                   <span className="font-bold text-emerald-400">0.88%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">P99 Latency:</span>
+                  <span className="text-slate-400">Scorer P99:</span>
                   <span className="font-bold text-slate-200">0.79 ms</span>
                 </div>
               </div>
@@ -374,7 +439,7 @@ export default function ModelGovernancePage() {
                   <span className="font-bold text-emerald-400">0.79%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">P99 Latency:</span>
+                  <span className="text-slate-400">Scorer P99:</span>
                   <span className="font-bold text-slate-200">0.85 ms</span>
                 </div>
               </div>
@@ -383,17 +448,241 @@ export default function ModelGovernancePage() {
         </div>
       )}
 
-      {/* Tab 2: Core Banking Integration & Outbound Webhook Hub */}
+      {/* Tab 2: BFIU Guidance Mapping Table */}
+      {activeTab === 'BFIU_MAPPING' && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-4 shadow-xl">
+            <div>
+              <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
+                <BookOpen className="w-4 h-4 text-cyan-400" />
+                Bangladesh Financial Intelligence Unit (BFIU) Guidance Mapping Matrix
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Statutory cross-reference mapping every Intelligent-AML system module directly to enacted Bangladesh laws and official BFIU circulars.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="Search statutes or modules..."
+                value={mappingSearch}
+                onChange={(e) => setMappingSearch(e.target.value)}
+                className="px-3 py-1.5 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 text-xs font-mono focus:outline-none focus:border-cyan-500 w-64"
+              />
+            </div>
+          </div>
+
+          <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-slate-300">
+                <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-mono uppercase text-slate-400">
+                  <tr>
+                    <th className="px-4 py-3">ID</th>
+                    <th className="px-4 py-3">Statutory Framework &amp; Section</th>
+                    <th className="px-4 py-3">System Module</th>
+                    <th className="px-4 py-3">Regulatory Mandate</th>
+                    <th className="px-4 py-3">Technical Implementation</th>
+                    <th className="px-4 py-3 text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#1E293B]">
+                  {filteredMappings.map((m) => (
+                    <tr key={m.id} className="hover:bg-[#1E293B]/40 transition-colors">
+                      <td className="px-4 py-3 font-mono font-bold text-cyan-400">{m.id}</td>
+                      <td className="px-4 py-3 font-semibold text-slate-100">
+                        <div className="flex items-center gap-1.5">
+                          <span>{m.frameworkName}</span>
+                          <a
+                            href={m.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-cyan-400 hover:text-cyan-300 inline-flex items-center"
+                          >
+                            <ExternalLink className="w-3 h-3 ml-0.5" />
+                          </a>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400 block mt-0.5">{m.officialRef}</span>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-emerald-400">{m.appModule}</td>
+                      <td className="px-4 py-3 text-slate-300 max-w-[280px] leading-relaxed">{m.operationalRequirements}</td>
+                      <td className="px-4 py-3 text-slate-400 font-mono text-[11px] max-w-[280px] leading-relaxed">
+                        {m.technicalImplementation}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span
+                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                            m.verificationStatus === 'CERTIFIED_STATUTE'
+                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                              : m.verificationStatus === 'OFFICIAL_GUIDELINE'
+                              ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40'
+                              : m.verificationStatus === 'ALIGNED_PRACTICE'
+                              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                          }`}
+                        >
+                          {m.verificationStatus}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 3: Retention, Data Residency & GDPR Research Policies */}
+      {activeTab === 'POLICIES' && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-xl">
+            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
+              <Building2 className="w-4 h-4 text-cyan-400" />
+              Statutory Record Retention, In-Country Data Residency &amp; GDPR Evaluation
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Configurable compliance policies governing record longevity, sovereign data custody, and EU research exemptions for the ETH Zurich research prototype.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Policy Card 1: Statutory Record Retention */}
+            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-emerald-400" />
+                  Statutory Record Retention Policy
+                </span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  {REGULATORY_CONFIG.retentionPolicy.statutoryYears} Years Mandatory
+                </span>
+              </div>
+
+              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Statutory Mandate:</span>
+                  <span className="text-slate-200">{REGULATORY_CONFIG.retentionPolicy.statutoryBasis}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Scope of Coverage:</span>
+                  <span className="text-slate-300 font-sans text-xs">{REGULATORY_CONFIG.retentionPolicy.scope}</span>
+                </div>
+              </div>
+
+              <div className="p-2.5 bg-amber-950/20 border border-amber-800/40 rounded-lg text-xs text-amber-300/90 font-mono">
+                <span className="font-bold text-amber-400 block mb-0.5">Gazette Verification:</span>
+                <span>{REGULATORY_CONFIG.retentionPolicy.verificationTag}</span>
+              </div>
+            </div>
+
+            {/* Policy Card 2: Sovereign Data Residency */}
+            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                  <Database className="w-4 h-4 text-cyan-400" />
+                  Sovereign In-Country Data Residency
+                </span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                  Air-Gap Confinement
+                </span>
+              </div>
+
+              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Central Bank Standard:</span>
+                  <span className="text-slate-200">{REGULATORY_CONFIG.dataResidencyPolicy.primaryMandate}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Custody Requirement:</span>
+                  <span className="text-slate-300 font-sans text-xs">{REGULATORY_CONFIG.dataResidencyPolicy.cloudPolicy}</span>
+                </div>
+              </div>
+
+              <div className="p-2.5 bg-amber-950/20 border border-amber-800/40 rounded-lg text-xs text-amber-300/90 font-mono">
+                <span className="font-bold text-amber-400 block mb-0.5">Central Bank Cloud Verification:</span>
+                <span>{REGULATORY_CONFIG.dataResidencyPolicy.verificationTag}</span>
+              </div>
+            </div>
+
+            {/* Policy Card 3: Domestic PII Secrecy */}
+            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                  <FileKey className="w-4 h-4 text-sky-400" />
+                  Banking Duty of Secrecy &amp; PII Masking
+                </span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40">
+                  BCA 1991 § 46
+                </span>
+              </div>
+
+              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Governing Standard:</span>
+                  <span className="text-slate-200">{REGULATORY_CONFIG.piiPrivacyPolicy.bangladeshStandard}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Technical Pseudonymization:</span>
+                  <span className="text-slate-300 font-sans text-xs">
+                    Client-side SHA-256 masking on accounts and national IDs via PiiText component before render or logging.
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-2.5 bg-amber-950/20 border border-amber-800/40 rounded-lg text-xs text-amber-300/90 font-mono">
+                <span className="font-bold text-amber-400 block mb-0.5">Draft Data Protection Act:</span>
+                <span>{REGULATORY_CONFIG.piiPrivacyPolicy.verificationTag}</span>
+              </div>
+            </div>
+
+            {/* Policy Card 4: EU GDPR Research Prototype Notes (ETH Zurich Context) */}
+            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                  <Globe2 className="w-4 h-4 text-purple-400" />
+                  EU GDPR Research Prototype Alignment
+                </span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                  ETH Zurich Evaluation
+                </span>
+              </div>
+
+              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Statutory Processing Basis:</span>
+                  <span className="text-slate-200">{REGULATORY_CONFIG.piiPrivacyPolicy.gdprResearchNotes.complianceBasis}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Crime Prevention Exception:</span>
+                  <span className="text-slate-300 text-xs font-sans">{REGULATORY_CONFIG.piiPrivacyPolicy.gdprResearchNotes.crimePreventionExemption}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 text-[10px] block">Scientific Research Safeguards:</span>
+                  <span className="text-slate-300 text-xs font-sans">{REGULATORY_CONFIG.piiPrivacyPolicy.gdprResearchNotes.researchExemption}</span>
+                </div>
+              </div>
+
+              <div className="p-2.5 bg-purple-950/20 border border-purple-800/40 rounded-lg text-xs text-purple-300/90 font-mono">
+                <span className="font-bold text-purple-400 block mb-0.5">Article 32 Security Controls:</span>
+                <span>{REGULATORY_CONFIG.piiPrivacyPolicy.gdprResearchNotes.securityOfProcessing}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 4: Core Banking Integration & Outbound Webhook Hub */}
       {activeTab === 'WEBHOOK_HUB' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Dispatch Config */}
           <div className="lg:col-span-5 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-xl space-y-4">
             <h3 className="text-sm font-bold text-slate-100 font-mono flex items-center gap-2">
               <Radio className="w-4 h-4 text-cyan-400" />
-              Core Banking Interception Webhooks
+              Core Banking Settlement Interception Webhooks
             </h3>
             <p className="text-xs text-slate-400">
-              Real-time API integrations that instruct core banking engines to place immediate settlement holds or freeze accounts.
+              Real-time API integrations instructing core banking engines to place immediate settlement holds or freeze accounts under MLPA 2012 § 25.
             </p>
 
             <div className="space-y-3 text-xs font-sans">
@@ -474,7 +763,7 @@ export default function ModelGovernancePage() {
         </div>
       )}
 
-      {/* Tab 3: WORM Cryptographic Audit Trail */}
+      {/* Tab 5: WORM Cryptographic Audit Trail (Evidence Act § 65B Standard) */}
       {activeTab === 'WORM_LEDGER' && (
         <div className="space-y-4">
           {/* Controls Bar */}
@@ -507,7 +796,7 @@ export default function ModelGovernancePage() {
                 {verificationResult.isValid ? (
                   <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4" />
-                    Chain 100% Cryptographically Valid ({verificationResult.totalEntries} blocks)
+                    Chain 100% Cryptographically Valid ({verificationResult.totalEntries} blocks) • Evidence Act § 65B Certified
                   </span>
                 ) : (
                   <span className="text-rose-400 font-bold flex items-center gap-1.5 animate-pulse">
@@ -517,6 +806,19 @@ export default function ModelGovernancePage() {
                 )}
               </div>
             )}
+          </div>
+
+          {/* Legal Standards Banner */}
+          <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl flex items-center justify-between text-xs font-mono text-slate-400">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>
+                Evidence Standard: <strong>Bangladesh Evidence Act (Amended 2022) § 65B</strong> (Electronic Records Admissibility) &amp; BB ICT Security Guidelines v3.0
+              </span>
+            </div>
+            <span className="text-slate-500 text-[11px]">
+              SHA-256 Merkle Ledger
+            </span>
           </div>
 
           {/* Ledger Table */}

@@ -233,9 +233,9 @@ export default function RuleStudioPage() {
       {activeTab === 'SENSITIVITY_SIM' && (
         <div className="p-6 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-2xl space-y-6">
           <div className="p-3.5 bg-amber-950/30 border border-amber-800/60 rounded-xl flex items-start gap-2.5 text-xs text-amber-300">
-            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
             <div>
-              <strong>Confidential Internal Analyst Workspace:</strong> Under MLPA 2012 § 6 and BSA 31 U.S.C. § 5318(g)(2), sensitivity parameters and threshold configurations are strictly internal bank work product. Disclosing minimum structuring amounts or evasion guidance to customers is prohibited by law.
+              <strong>Confidential Internal Analyst Workspace:</strong> Under Section 27 of the Money Laundering Prevention Act 2012 (MLPA 2012 § 27), sensitivity parameters and threshold configurations are strictly internal bank work product. Disclosing minimum structuring amounts or evasion guidance to customers is a criminal offense punishable by up to 2 years imprisonment.
             </div>
           </div>
 
@@ -293,7 +293,7 @@ export default function RuleStudioPage() {
                 className="w-full accent-sky-500 cursor-pointer"
               />
               <p className="text-[11px] text-slate-500">
-                Rolling aggregation window for multi-agent deposits below ৳1,000,000 BDT statutory limit.
+                Rolling aggregation window for multi-agent deposits below ৳1,000,000 BDT statutory ceiling (MLPA 2012 § 2(z) &amp; BFIU Circular 26).
               </p>
             </div>
           </div>

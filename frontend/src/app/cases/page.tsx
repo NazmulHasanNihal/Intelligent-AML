@@ -39,7 +39,7 @@ export default function CasesPage() {
   const [newSubject, setNewSubject] = useState('');
   const [newExposure, setNewExposure] = useState('250000');
   const [newPriority, setNewPriority] = useState<'CRITICAL' | 'HIGH' | 'MEDIUM'>('HIGH');
-  const [newAssignee, setNewAssignee] = useState('Sarah Jenkins (L2 Senior)');
+  const [newAssignee, setNewAssignee] = useState('Amina Rahman, CFE (Lead Investigator)');
 
   const filteredCases = cases.filter((c) => {
     const matchesStatus = statusFilter === 'ALL' || c.status === statusFilter;
@@ -360,10 +360,10 @@ export default function CasesPage() {
                   onChange={(e) => setNewAssignee(e.target.value)}
                   className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 cursor-pointer"
                 >
-                  <option value="Sarah Jenkins (L2 Senior)">Sarah Jenkins (L2 Senior)</option>
-                  <option value="Tariq Rahman (AML Operations)">Tariq Rahman (AML Operations)</option>
+                  <option value="Amina Rahman, CFE (Lead Investigator)">Amina Rahman, CFE (Lead Investigator)</option>
+                  <option value="Tanvir Ahmed (Triage Analyst)">Tanvir Ahmed (Triage Analyst)</option>
+                  <option value="Kazi Rafiqul Islam, CAMS (Demo CCO)">Kazi Rafiqul Islam, CAMS (Demo CCO)</option>
                   <option value="Nadia Hossain (Trade Specialist)">Nadia Hossain (Trade Specialist)</option>
-                  <option value="Elena Rostova (Sanctions)">Elena Rostova (Sanctions)</option>
                 </select>
               </div>
 

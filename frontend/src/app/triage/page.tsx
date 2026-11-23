@@ -61,7 +61,7 @@ export default function AlertTriagePage() {
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string>>(new Set());
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const [inspectingAlert, setInspectingAlert] = useState<CommercialAlert | null>(null);
-  const [assigneeTarget, setAssigneeTarget] = useState<string>('Sarah Jenkins (L2 Senior)');
+  const [assigneeTarget, setAssigneeTarget] = useState<string>('Amina Rahman, CFE (Lead Investigator)');
   const [dismissReasonModalOpen, setDismissReasonModalOpen] = useState(false);
   const [dismissReason, setDismissReason] = useState('');
 
@@ -608,10 +608,10 @@ export default function AlertTriagePage() {
               onChange={(e) => setAssigneeTarget(e.target.value)}
               className="px-2.5 py-1 bg-[#1E293B] border border-[#334155] rounded text-slate-200 text-xs focus:outline-none"
             >
-              <option value="Sarah Jenkins (L2 Senior)">Sarah Jenkins (L2 Senior)</option>
-              <option value="Tariq Rahman (AML Operations)">Tariq Rahman (AML Operations)</option>
+              <option value="Amina Rahman, CFE (Lead Investigator)">Amina Rahman, CFE (Lead Investigator)</option>
+              <option value="Tanvir Ahmed (Triage Analyst)">Tanvir Ahmed (Triage Analyst)</option>
               <option value="Nadia Hossain (Trade Specialist)">Nadia Hossain (Trade Specialist)</option>
-              <option value="Elena Rostova (Sanctions)">Elena Rostova (Sanctions)</option>
+              <option value="Kazi Rafiqul Islam, CAMS (Demo CCO)">Kazi Rafiqul Islam, CAMS (Demo CCO)</option>
             </select>
             <button
               onClick={handleBatchAssign}

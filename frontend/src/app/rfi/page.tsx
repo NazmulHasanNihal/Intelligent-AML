@@ -109,7 +109,7 @@ export default function RfiHubPage() {
       eventType: 'DOCUMENT_UPLOADED',
       entityId: newRfi.id,
       details: `Dispatched customer RFI notice for ${targetEntity}. Reason verified safe under tipping-off laws.`,
-      actionBy: 'Sarah Jenkins (Analyst)'
+      actionBy: 'Amina Rahman, CFE (Lead Investigator)'
     });
   };
 

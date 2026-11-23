@@ -4,6 +4,8 @@
  * SLA countdowns, and reporting standards across central bank regimes.
  */
 
+import { REGULATORY_CONFIG } from '@/lib/config/regulatory';
+
 export type JurisdictionCode = 'BD_BFIU' | 'US_FINCEN' | 'EU_AMLA';
 
 export interface JurisdictionProfile {
@@ -38,18 +40,21 @@ export const JURISDICTIONS: Record<JurisdictionCode, JurisdictionProfile> = {
     country: 'Bangladesh',
     currency: 'BDT',
     currencySymbol: '৳',
-    usdFxRate: 120.0, // 1 USD = 120 BDT
-    ctrThresholdNative: 1000000, // ৳1,000,000 BDT
-    ctrThresholdUsd: 8333.33,
-    structuringRangeNative: [800000, 999999], // ৳800,000 - ৳999,999 BDT
-    statutoryAct: 'Money Laundering Prevention Act 2012 (Act No. 5 of 2012)',
-    strMandate: 'Section 25, Money Laundering Prevention Act 2012 & BFIU Circular 26',
-    antiTippingOffStatute: 'Section 6, MLPA 2012 (Strict Criminal Penalties for Tipping Off)',
+    usdFxRate: REGULATORY_CONFIG.fxRatePolicy.usdToBdt, // 1 USD = 120 BDT
+    ctrThresholdNative: REGULATORY_CONFIG.ctrPolicy.thresholdBdt, // ৳1,000,000 BDT
+    ctrThresholdUsd: REGULATORY_CONFIG.ctrPolicy.thresholdUsd,
+    structuringRangeNative: [
+      REGULATORY_CONFIG.structuringPolicy.lowerBoundBdt,
+      REGULATORY_CONFIG.structuringPolicy.upperBoundBdt
+    ], // ৳800,000 - ৳999,999 BDT
+    statutoryAct: REGULATORY_CONFIG.statuteReferences.primaryAmlAct.title,
+    strMandate: `${REGULATORY_CONFIG.statuteReferences.primaryAmlAct.strReportingSection} & BFIU Circular 26`,
+    antiTippingOffStatute: `${REGULATORY_CONFIG.statuteReferences.primaryAmlAct.tippingOffSection} (Strict Criminal Penalties for Tipping Off)`,
     evidenceRule: 'Bangladesh Evidence Act (Amended 2022) § 65B Certified Electronic Records',
-    modelGovernanceRule: 'Bangladesh Bank Core Risk Management Guidelines (AML/CFT Module)',
+    modelGovernanceRule: 'Bangladesh Bank Core Risk Management Guidelines (AML/CFT Module) aligned with model-risk practice',
     urgentSlaHours: 72,
     standardSlaHours: 120, // 5 Banking Days
-    sarTemplateName: 'BFIU Suspicious Transaction Report (STR-1) / goAML XML',
+    sarTemplateName: 'BFIU Suspicious Transaction Report (STR/SAR) / goAML XML',
     sarSchemaVersion: 'BFIU-goAML-v4.2-XML'
   },
   US_FINCEN: {

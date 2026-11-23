@@ -115,7 +115,7 @@ export default function SurveillanceOverviewPage() {
       tierCode: scoringResult.tierCode,
       riskScore: scoringResult.rawProbability,
       status: 'PENDING_TRIAGE',
-      assignee: 'Sarah L. Jenkins',
+      assignee: 'Amina Rahman, CFE',
       typology: testPriceDev > 100 ? 'TBML Over-Invoicing' : 'High-Velocity Structuring Burst',
       typologyBadge: testPriceDev > 100 ? 'TBML' : 'Structuring',
       decisionSet: scoringResult.conformalSet,
@@ -419,9 +419,9 @@ export default function SurveillanceOverviewPage() {
 
             <div className="space-y-3 pt-3">
               {[
-                { name: 'Sarah L. Jenkins, CFE', role: 'Lead Investigator', activeCases: 4, openAlerts: 18, ahtMin: 14.2, status: 'NORMAL' },
-                { name: 'Tanvir Mahmud', role: 'Senior AML Analyst', activeCases: 3, openAlerts: 24, ahtMin: 18.5, status: 'ELEVATED' },
-                { name: 'Musrat Jahan Gungun', role: 'First-Line Triage', activeCases: 1, openAlerts: 42, ahtMin: 9.4, status: 'NORMAL' },
+                { name: 'Amina Rahman, CFE (Demo Lead)', role: 'Lead Investigator', activeCases: 4, openAlerts: 18, ahtMin: 14.2, status: 'NORMAL' },
+                { name: 'Tanvir Ahmed (Demo Analyst)', role: 'Senior Triage Analyst', activeCases: 3, openAlerts: 24, ahtMin: 18.5, status: 'ELEVATED' },
+                { name: 'Nadia Hossain (Demo Specialist)', role: 'Trade Compliance Specialist', activeCases: 1, openAlerts: 42, ahtMin: 9.4, status: 'NORMAL' },
                 { name: 'Unassigned Escalation Pool', role: 'System Queue', activeCases: 2, openAlerts: 112, ahtMin: 0, status: 'PENDING_DISPATCH' }
               ].map((member, idx) => (
                 <div key={idx} className="p-3 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-xs">

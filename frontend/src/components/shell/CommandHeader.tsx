@@ -69,7 +69,7 @@ export const CommandHeader: React.FC = () => {
       preset === 'TBML'
         ? 'Trade-Based Money Laundering: Over-invoicing +333.7% with rapid sub-$10,000 LC duplicate splitting.'
         : preset === 'STRUCTURING'
-        ? 'Smurfing / Cash Structuring: Consecutive deposits of ৳954,000 BDT ($7,950) beneath ৳1,000,000 BDT statutory CTR limit.'
+        ? 'Smurfing / Cash Structuring: Consecutive deposits of ৳954,000 BDT ($7,950) beneath ৳1,000,000 BDT statutory CTR ceiling (MLPA 2012 § 2(z) / BFIU Circular 26).'
         : preset === 'MULE'
         ? 'Mule Layering: Rapid pass-through across Dubai and Singapore corporate entities with zero overnight balance.'
         : 'Sanctions Evasion: High-risk counterparty flag in OFAC SDN / UN Security Council database.',

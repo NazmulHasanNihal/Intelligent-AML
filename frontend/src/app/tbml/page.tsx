@@ -46,7 +46,7 @@ export default function TradeFinanceTbmlPage() {
         eventType: 'DOCUMENT_UPLOADED',
         entityId: 'TBML-PKG-2026-0881',
         details: `Uploaded trade document ${file.name} with verified SHA-256 digest: ${hash}`,
-        actionBy: 'Sarah Jenkins (Analyst)'
+        actionBy: 'Amina Rahman, CFE (Lead Investigator)'
       });
     } catch (err) {
       console.error('Failed to hash file:', err);
@@ -61,7 +61,7 @@ export default function TradeFinanceTbmlPage() {
       eventType: 'CASE_ESCALATED',
       entityId: 'CASE-2026-0881',
       details: 'Trade-Based Money Laundering (TBML) Over-Invoicing Dossier pinned to active institutional case and regulatory SAR draft.',
-      actionBy: 'Sarah Jenkins (Analyst)'
+      actionBy: 'Amina Rahman, CFE (Lead Investigator)'
     });
   };
 
@@ -227,10 +227,24 @@ export default function TradeFinanceTbmlPage() {
               </div>
 
               <div className="p-3 bg-rose-950/20 border border-rose-800/40 rounded-xl text-xs text-rose-300 flex items-start gap-2.5">
-                <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />
-                <span>
-                  <strong>Money Laundering Prevention Act 2012 § 25 Alert:</strong> Over-invoicing exceeds statutory threshold (&gt; 50%). Capital siphoning to JAFZA offshore entity indicated. Automated reporting to Bangladesh Bank BFIU mandatory within 24 hours.
-                </span>
+                <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
+                <div className="space-y-1">
+                  <span>
+                    <strong>BFIU TBML Guidelines &amp; MLPA 2012 § 25 Alert:</strong> Over-invoicing exceeds trade surveillance variance ceiling (&gt; 50%). Capital siphoning to JAFZA offshore entity indicated. Automated STR filing to Bangladesh Bank BFIU mandatory within 24 hours.
+                  </span>
+                  <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-0.5">
+                    <span>Statutory Reference: BFIU Guidelines for Prevention of Trade Based Money Laundering (2019)</span>
+                    <a
+                      href="https://www.bb.org.bd/en/index.php/bfiu/publication"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-0.5"
+                    >
+                      <span>BFIU Publication</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           )}

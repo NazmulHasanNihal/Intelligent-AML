@@ -37,16 +37,23 @@ const nextConfig: NextConfig = {
     ];
   },
   async headers() {
-    return [
-      {
-        source: '/app/:path*',
-        headers: [
+    const allowPublicAudit = process.env.ALLOW_PUBLIC_AUDIT !== 'false';
+    const conditionalAppHeaders = !allowPublicAudit
+      ? [
           {
-            key: 'X-Robots-Tag',
-            value: 'noindex, nofollow, noarchive'
+            source: '/app/:path*',
+            headers: [
+              {
+                key: 'X-Robots-Tag',
+                value: 'noindex, nofollow, noarchive'
+              }
+            ]
           }
         ]
-      },
+      : [];
+
+    return [
+      ...conditionalAppHeaders,
       {
         source: '/triage/:path*',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }]
@@ -61,10 +68,6 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/sar/:path*',
-        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }]
-      },
-      {
-        source: '/governance/:path*',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }]
       },
       {

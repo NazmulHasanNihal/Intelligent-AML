@@ -14,6 +14,8 @@
 
 > 🚀 **Live Interactive Web Platform:** **[https://intelligent-aml.vercel.app/](https://intelligent-aml.vercel.app/)**
 > Explore the live deployed web application with real-time streaming, interactive 2D/3D cash flow network forensics, autonomous multi-agent SAR drafting, and regulatory compliance dockets.
+>
+> ⚠️ **Important Notice:** Research prototype. Not legal advice. Not a certified regulated product.
 
 An institutional-grade, real-time banking surveillance, financial network forensics, and regulatory compliance platform. Engineered with **C-STGB (Conformal Spatio-Temporal GraphBoost)** to eliminate false alarms, auto-clear honest payments in sub-millisecond timeframes, freeze high-risk financial crime instantly, and empower human compliance officers with interactive graph intelligence and an autonomous team of multi-agent AI forensic investigators.
 
@@ -21,7 +23,11 @@ An institutional-grade, real-time banking surveillance, financial network forens
 
 ## 📌 Table of Contents
 1. [Executive Summary & Institutional Impact](#executive-summary--institutional-impact)
-2. [System Architecture & Visual Platform Showcase](#system-architecture--visual-platform-showcase)
+2. [Single-Command Metric Reproduction](#-single-command-metric-reproduction)
+3. [Benchmark Datasets & Explicit Licenses](#-benchmark-datasets--explicit-licenses)
+4. [Model Risk Governance & Validation Documentation](#-model-risk-governance--validation-documentation)
+5. [Limitations & Non-Goals](#-limitations--non-goals)
+6. [System Architecture & Visual Platform Showcase](#system-architecture--visual-platform-showcase)
    * [1. End-to-End System Architecture & Data Flow](#1-end-to-end-system-architecture--data-flow)
    * [2. Multi-Agent Forensic Reasoning & Dual-Governance Pipeline](#2-multi-agent-forensic-reasoning--dual-governance-pipeline)
    * [3. How the Platform Operates: What It Does & How It Does It](#3-how-the-platform-operates-what-it-does--how-it-does-it)
@@ -35,16 +41,16 @@ An institutional-grade, real-time banking surveillance, financial network forens
      * [Screen 07: Tamper-Evident Cryptographic WORM Vault (FRE 902(11))](#screen-07--tamper-evident-cryptographic-worm-audit-vault-fre-90211--sec-17a-4)
      * [Screen 08: Built-In Interactive Plain-English Guide Modal](#screen-08--interactive-plain-english-guide-modal)
      * [Screen 09: Built-In Searchable Jargon Buster Dictionary](#screen-09--in-app-searchable-jargon-buster-dictionary)
-3. [The 3-Tier Operational Safety Framework](#the-3-tier-operational-safety-framework)
-4. [Jargon Buster: Plain-English Reference](#jargon-buster-plain-english-reference)
-5. [Autonomous Multi-Agent AI Forensic Swarm](#autonomous-multi-agent-ai-forensic-swarm)
-6. [Core Functional Modules](#core-functional-modules)
-7. [Quickstart & Deployment Guide](#quickstart--deployment-guide)
-8. [Automated Testing](#automated-testing)
-9. [Repository Architecture & Directory Layout](#repository-architecture--directory-layout)
-10. [Academic Research Publications & Citations](#academic-research-publications--citations)
-11. [Authors & Project Governance](#authors--project-governance)
-12. [License & Research Availability](#license--research-availability)
+7. [The 3-Tier Operational Safety Framework](#the-3-tier-operational-safety-framework)
+8. [Jargon Buster: Plain-English Reference](#jargon-buster-plain-english-reference)
+9. [Autonomous Multi-Agent AI Forensic Swarm](#autonomous-multi-agent-ai-forensic-swarm)
+10. [Core Functional Modules](#core-functional-modules)
+11. [Quickstart & Deployment Guide](#quickstart--deployment-guide)
+12. [Automated Testing](#automated-testing)
+13. [Repository Architecture & Directory Layout](#repository-architecture--directory-layout)
+14. [Academic Research Publications & Citations](#academic-research-publications--citations)
+15. [Authors & Project Governance](#authors--project-governance)
+16. [License & Research Availability](#license--research-availability)
 
 ---
 
@@ -86,6 +92,73 @@ Between **$800 Billion and $2 Trillion** in illicit capital traverses the global
 
 > [!TIP]
 > **Commodity Hardware & Zero-GPU Footprint:** The 0.45 ms Fast-Path streaming engine (0.12 ms GNN core) and universal 12-D invariant kernels execute on standard **commodity x86-64 / ARM64 enterprise CPU infrastructure** without requiring dedicated GPU acceleration, enabling drop-in integration with on-premise core banking systems (Finacle, Temenos T24, FIS). Offline model training and high-throughput burst clusters (>31,250 tx/s) support optional GPU acceleration.
+
+---
+
+## 🔬 Single-Command Metric Reproduction
+
+Every performance claim, latency number, screening metric, and conformal risk bound presented in this documentation and web application can be verified independently with a **single terminal command**:
+
+```bash
+# Verify and cross-examine all headline metrics end-to-end
+python evals/reproduce_headlines.py
+```
+
+### Individual Modular Evaluation Harnesses
+
+Reviewers, auditors, and researchers may also execute each modular evaluator independently:
+
+```bash
+# 1. Micro-Latency & Throughput Benchmark (Raw CPU Tensor Scorer vs. Full Ingestion Pipeline)
+python evals/latency.py --iterations 500
+
+# 2. Watchlist Screening Accuracy Benchmark (OFAC SDN, UN, EU, UK HMT, BFIU Domestic)
+python evals/screening_eval.py
+
+# 3. Champion vs. Challenger Continuous Shadow Replay Benchmark (7-Day Replay Cohort)
+python evals/shadow_replay.py --samples 2500
+
+# 4. Automated Python Regulatory & Security Test Suite (175+ Tests)
+pytest tests/ -q
+```
+
+---
+
+## 📊 Benchmark Datasets & Explicit Licenses
+
+Intelligent-AML is evaluated against five open and synthetic financial network datasets with unambiguous provenance and licensing:
+
+| Dataset Name | Domain / Data Modality | Volume / Graph Topology | Primary Typologies Modelled | Open-Source License & Attribution |
+| :--- | :--- | :--- | :--- | :--- |
+| **PaySim Mobile Money** | Synthetic Mobile Financial Services (MFS) | 6,362,620 transactions | Cash-out fraud, transfer layering, smurfing | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) (Lopez-Rojas et al.) |
+| **Elliptic Bitcoin Dataset** | Real-world UTXO Blockchain Graph | 203,769 node entities, 234k directed edges | Mixer routing, ransomware, darknet markets | [ODbL v1.0](https://opendatacommons.org/licenses/odbl/) (Weber et al.) |
+| **SAML-D Benchmark** | Synthetic Anti-Money Laundering Graph | 9,548,200 transactions | Fan-in/fan-out dispersion, cycle laundering | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
+| **IBM AMLSim Benchmark** | Multi-Agent Financial Simulator | 1,000,000 transactions | Scatter-gather, structuring loops, shell entities | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
+| **BFIU Synthetic Banking Benchmark** | Trade Finance (TBML) & Commercial Banking | 148,312 transactions | TBML over/under-invoicing, ৳1,000,000 CTR structuring | [CC0 / MIT](LICENSE) |
+
+*Zero proprietary or non-public personally identifiable customer banking data was used during training, evaluation, or public repository demonstration.*
+
+---
+
+## 🛡️ Model Risk Governance & Validation Documentation
+
+In alignment with **Federal Reserve SR 11-7 / OCC 2011-12 Model Risk Management** guidelines and **Bangladesh Bank BFIU Master Circular No. 26**, the platform maintains complete supervisory documentation:
+
+- 📋 **Model Card (C-STGB v3.2):** [docs/governance/MODEL_CARD_CSTGB.md](docs/governance/MODEL_CARD_CSTGB.md) — Comprehensive technical specification, input 12-D invariant definitions, demographic parity metrics, and operating scope.
+- 📑 **Independent Validation Report (SR 11-7 Aligned):** [docs/governance/SR11_7_VALIDATION_REPORT.md](docs/governance/SR11_7_VALIDATION_REPORT.md) — Tier-1 model evaluation, conceptual soundness proofs, perturbation stress tests, and ongoing monitoring plan.
+- 🎯 **Screening Fidelity Evaluation Report:** [evals/SCREENING_EVAL_REPORT.md](evals/SCREENING_EVAL_REPORT.md) — Multi-algorithm precision/recall breakdown across official global and domestic watchlists.
+- 🔒 **STRIDE Threat Model & Security Posture:** [docs/security/STRIDE_THREAT_MODEL.md](docs/security/STRIDE_THREAT_MODEL.md) — Formal application security analysis, OWASP ASVS Level 2 compliance, and server-side RBAC verification.
+- 📦 **Object Lock Storage & WORM Compliance:** [docs/security/OBJECT_LOCK_STORAGE_WORM.md](docs/security/OBJECT_LOCK_STORAGE_WORM.md) — S3 Object Lock and Evidence Act § 65B tamper-evident hash chaining documentation.
+
+---
+
+## ⚠️ Limitations & Non-Goals
+
+1. **Research Prototype Disclaimer:** Intelligent-AML is an academic research reference implementation and institutional technology demonstration. It does not constitute legal, regulatory, or tax advice. It is not a certified regulated product.
+2. **Synthetic Data in Demo Mode:** The live web platform operates on synthetic seed data with deterministic cryptographic seals. Real-world commercial deployments require integration with the host bank's core banking system (CBS) and payment switches via ISO 20022 `pacs.008` or SWIFT MT connectors.
+3. **Hardware Security Modules (HSM):** In production environments, Ed25519 checkpoint signing and WORM audit vault keys must be stored in FIPS 140-2 Level 3 certified hardware security modules (HSM) using PKCS#11 interfaces.
+4. **Graph Convolution Horizon:** Real-time sub-millisecond graph inferences are bounded to 3-hop ego-neighborhoods ($\mathcal{N}_3$). Global network topology analysis (e.g. multi-hop international syndicate discovery) is executed asynchronously in near-real-time or batch intervals.
+5. **Concept Drift & Recalibration:** While conformal prediction guarantees finite-sample validity under exchangeability, adversarial evasions and emerging macroeconomic shocks will degrade calibration over time. Continuous PSI/KS surveillance and scheduled recalibration are mandatory operational requirements.
 
 ---
 
@@ -727,3 +800,7 @@ If you utilize this codebase, models, or architectural framework in your researc
 
 * **Software Codebase:** The Intelligent-AML software platform and implementation scripts are licensed under the **[MIT License](LICENSE)** (Copyright © 2025–2026 Md. Nazmul). You are free to inspect, execute, adapt, and build upon this platform for academic, industrial, or commercial use with appropriate attribution.
 * **Open Science & Research Reproducibility:** The academic manuscripts and thesis monograph ([Elsevier EAAI](papers/EAAI_Research_Paper/) and [National University CSE Thesis](papers/University_CSE_Thesis/)) adhere to open science principles. This repository serves as the official open-source companion codebase supporting reproducible evaluation and benchmarking.
+
+---
+
+> ⚠️ **Notice:** Research prototype. Not legal advice. Not a certified regulated product.

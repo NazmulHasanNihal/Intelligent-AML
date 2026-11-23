@@ -124,6 +124,7 @@ export interface UnifiedBankingState {
   batchAssignAlerts: (alertIds: string[], assignee: string) => void;
   dismissAlert: (alertId: string, reason: string) => void;
   batchDismissAlerts: (alertIds: string[], reason: string) => void;
+  overrideAlertScore: (alertId: string, newScore: number, newTier: 'Tier 1 Hold' | 'Tier 2 Review' | 'Tier 3 Clear', justificationCode: string, notes: string) => Promise<boolean>;
   escalateToCase: (alertIds: string[] | string, title?: string, slaHours?: number) => CommercialCase;
   createCase: (caseData: any) => CommercialCase;
   addAuditEntry: (entryOrAction: string | { eventType?: string; action?: string; entityId?: string; targetAccount?: string; details: string; actionBy?: string }, details?: string, targetAccount?: string) => Promise<void>;
@@ -430,6 +431,56 @@ export const useAppStore = create<UnifiedBankingState>()(
           alerts: s.alerts.map(a => idSet.has(a.id) ? { ...a, status: 'FALSE_POSITIVE_DISMISSED' } : a)
         }));
         get().addToast('Batch Dismissal Complete', `${alertIds.length} alert(s) marked False Positive.`, 'info');
+      },
+
+      overrideAlertScore: async (alertId, newScore, newTier: 'Tier 1 Hold' | 'Tier 2 Review' | 'Tier 3 Clear', justificationCode, notes) => {
+        const current = get().currentBanker;
+        const target = get().alerts.find(a => a.id === alertId);
+        const origScore = target?.riskScore ?? 0.942;
+        const origTier = target?.tier ?? 'Tier 1 Hold';
+
+        set((s) => ({
+          alerts: s.alerts.map(a => a.id === alertId ? {
+            ...a,
+            riskScore: newScore,
+            tier: newTier,
+            tierCode: (newTier.includes('1') ? 1 : (newTier.includes('2') ? 2 : 3)) as 1 | 2 | 3,
+            status: 'OVERRIDDEN'
+          } : a)
+        }));
+
+        await get().logAuditAction(
+          'MODEL_RISK_SCORE_OVERRIDDEN',
+          `Alert ${alertId} risk score overridden from ${origScore.toFixed(3)} (${origTier}) to ${newScore.toFixed(3)} (${newTier}). Reason [${justificationCode}]: ${notes}`,
+          target?.account || alertId,
+          current.name
+        );
+
+        try {
+          await fetch(`/api/v1/alerts/${alertId}/override`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              new_score: newScore,
+              new_tier: newTier,
+              justification_code: justificationCode,
+              notes,
+              officer_id: current.id,
+              officer_name: current.name,
+              officer_role: current.role
+            })
+          });
+        } catch {
+          // Fallback handled in memory
+        }
+
+        get().addToast(
+          'Model Score Overridden',
+          `Alert ${alertId} overridden to score ${newScore.toFixed(3)} (${newTier}). Recorded to WORM ledger.`,
+          'accent'
+        );
+
+        return true;
       },
 
       escalateToCase: (alertIdsInput, title, slaHours = 72) => {

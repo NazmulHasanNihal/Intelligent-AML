@@ -5,12 +5,12 @@
     5
   ],
   "root_hash": "6496baded5fbdf4e088076472763978fe3ec7c9bc831eb35a077ee020af3ec50",
-  "head_hash": "e80c74376e1b215a90278090106db64452b04290287a5ecc25e0e5cc0e9906ca",
-  "merkle_root": "1b73413124053d51af0dfd4f5b61f2cf01e9fb55c48bc79a5d40711ec772ad8a",
-  "timestamp": "2026-11-23T08:43:52Z",
+  "head_hash": "f059fbff6cf5484f9d8b0c82e19113cc91cf620869c6399d73eb59e2768a393e",
+  "merkle_root": "50948d73fe11e2939977083380b020babc27857ef2a8f213ef726458d830497a",
+  "timestamp": "2026-11-23T09:19:48Z",
   "signature_algorithm": "Ed25519 (RFC 8032)",
-  "ed25519_signature": "8e498f90d84aa2ea47f8e8d153632683275da5eaae8e4a81d0af90341dba24f0cb31d90dd7aaadbabd80c49871799c3f4f01ac7533b01ad8eba43c07f4777709",
-  "public_key_hex": "af5e3a2d403345c1baa6a531a11cdc490292b984df103bc26d9f376796a93fe9",
+  "ed25519_signature": "460bb95e9fb58b14686068d1f067ae4e12d17cfefc461d19744b12b119d35276b9b49985d201c924f7210249653f871794ed06a638b7032473cac364ccd04b01",
+  "public_key_hex": "87063c07e6062e3f927793305a1677ed59dcfabe2c14158af6e774c6b7c4a7cd",
   "anchored_object_lock_uri": "s3://intelligent-aml-compliance-vault/audit-checkpoints/CHK-000000-000005.json",
   "object_lock_retention": {
     "mode": "COMPLIANCE",

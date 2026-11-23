@@ -4,6 +4,50 @@ All notable changes to this project are documented in this file, adhering to Gro
 
 ---
 
+## [Phase 7: Model Governance, SR 11-7 Validation & Research Credibility] — 2026-11-23
+
+### Added
+- **Model Card & SR 11-7 Model Risk Validation Report**:
+  - Authored standard Federal Reserve SR 11-7 / OCC 2011-12 model risk card in `docs/governance/MODEL_CARD_CSTGB.md` covering model architecture, the 12 canonical topological/transactional invariants, dataset provenance with explicit licenses, quantitative metrics, known limitations, and operational guardrails.
+  - Authored formal validation report in `docs/governance/SR11_7_VALIDATION_REPORT.md` covering conceptual soundness, baseline comparisons (Wilcoxon signed-rank tests proving statistically significant superiority at $p < 10^{-6}$), stress testing under Gaussian feature perturbation ($\sigma \in \{0.05, 0.10, 0.20\}$) and dynamic edge dropout ($p \in [0.05, 0.20]$), ongoing monitoring policies, and Maker-Checker dual control.
+- **Model Drift & Algorithmic Fairness Engine (`src/governance/drift_monitor.py` & `src/governance/__init__.py`)**:
+  - **Population Stability Index (PSI)**: Discretizes reference vs current score distributions into 10 quantiles, applying standard Basel/OCC thresholds ($< 0.10$ Stable, $0.10 \le \text{PSI} < 0.25$ Moderate, $\ge 0.25$ Significant Shift).
+  - **Two-Sample Kolmogorov-Smirnov (KS) Test**: Detects continuous feature distribution shifts with asymptotic $p$-values.
+  - **EEOC 4/5ths Rule Fairness Verification**: Evaluates disparate impact ratio ($\ge 0.80$) and demographic parity across entity segments (`Corporate`, `SME`, `Retail`, `Non-Resident`) and Bangladesh divisions (`Dhaka`, `Chittagong`, `Sylhet`, `Rajshahi`, `Khulna`).
+  - **Lipschitz Stability Assessment**: Verifies model prediction stability under small bounded perturbations.
+  - **RFC 8785 Canonical JSON Merkle Attestation Seal**: Immutably seals drift and fairness reports.
+- **Per-Alert 12-Invariant Feature Attribution Explainer (`src/explainability/scorer_explainer.py`)**:
+  - Decomposes alert risk scores across the 12 canonical invariants (`pass_through_ratio`, `fan_in_burst_rate`, `fan_out_dispersion`, `cycle_particip_prob`, `rapid_movement_velocity`, `structuring_proximity`, `pep_sanction_hop`, `asycuda_tbml_divergence`, `cross_border_offshore_ratio`, `dormant_reactivation_rate`, `network_entropy_drop`, `layering_depth_index`).
+  - Computes directionality (`RISK_INCREASING` vs `RISK_DECREASING`), percentage contribution, and regulatory statutory citations (BFIU Master Circular 26 § 4, MLPA 2012 § 2(z), BFIU TBML Guidelines).
+  - Generates actionable, plain-language counterfactual recourse suggestions.
+- **Supervisory Risk Score Override in WORM Ledger**:
+  - Implemented `POST /api/v1/alerts/{alert_id}/override` in FastAPI backend with server-side RBAC: `Supervisor` or `MLRO/CAMLCO` required; `Analyst L1` rejected with HTTP 403 Forbidden.
+  - Enforced mandatory justification reason codes and audit rationale ($\ge 10$ characters).
+  - Updated alert state to `OVERRIDDEN` and wrote cryptographic block to the tamper-evident WORM ledger.
+- **Champion vs Challenger Continuous Shadow Replay (`src/governance/shadow_replay.py` & `evals/shadow_replay.py`)**:
+  - Replays 2,500 historical transactions across 7 consecutive days (Nov 16–23, 2026) evaluating Champion (`C-STGB v3.2`) vs Challenger (`LightGBM-v2.1`).
+  - Proves empirical Champion superiority: Macro F1 ($94.5\%$ vs $88.7\%$), False Positive Rate ($0.76\%$ vs $4.82\%$), and noise reduction ($84.2\%$) with zero unbacked 30-day claims.
+  - Immutably sealed with RFC 8785 canonical hash.
+- **Single-Command Metric Reproduction Harness (`evals/reproduce_headlines.py`)**:
+  - Standalone script reproducing all 9 platform headline figures (latencies, screening recall/F1, champion/challenger F1, noise reduction, conformal coverage) in under 1 second.
+- **Frontend Enhancements**:
+  - `frontend/src/app/triage/page.tsx`: Added SHAP Feature Attribution Waterfall (12 invariants), counterfactual recourse card, and Supervisory Override modal with justification code.
+  - `frontend/src/app/governance/page.tsx`: Added Champion vs Challenger Continuous Shadow Replay card and Algorithmic Fairness & Demographic Parity (EEOC 4/5ths) table.
+  - Added BFF proxy routes in `frontend/src/app/api/v1/models/` and `frontend/src/app/api/v1/alerts/`.
+- **README Overhaul**:
+  - Prominent mandatory research prototype disclaimer: `> ⚠️ **Notice:** Research prototype. Not legal advice. Not a certified regulated product.`
+  - Single-Command Metric Reproduction instructions and CLI flags.
+  - Benchmark Datasets & Explicit Licenses table (PaySim, Elliptic, SAML-D, IBM AMLSim, BFIU Synthetic).
+  - Model Risk Governance documentation links.
+  - Limitations & Non-Goals section.
+- **Automated Verification Suites**:
+  - Backend: `tests/test_model_governance.py` (9 passing tests; 38/38 total backend tests passing).
+  - Frontend: `frontend/src/__tests__/modelGovernance.test.ts` (5 passing tests; 52/52 total frontend tests passing across 9 test files).
+  - Next.js 16 build: 28 static routes generated, zero errors (`npm run build` exited 0).
+  - Single-command reproduction: `python evals/reproduce_headlines.py --fast` returned 100% PASS on all 9 headline metrics.
+
+---
+
 ## [Phase 6: Screening Fidelity & Multi-Algorithm Entity Resolution] — 2026-11-23
 
 ### Added

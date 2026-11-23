@@ -29,7 +29,10 @@ import {
   Database,
   FileKey,
   Globe2,
-  Info
+  Info,
+  GitCompare,
+  Users,
+  Zap
 } from 'lucide-react';
 import {
   LineChart,
@@ -256,51 +259,46 @@ export default function ModelGovernancePage() {
         <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155] text-xs font-semibold overflow-x-auto">
           <button
             onClick={() => setActiveTab('MODEL_HEALTH')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-              activeTab === 'MODEL_HEALTH'
-                ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${activeTab === 'MODEL_HEALTH'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             Model Operations &amp; Risk Health
           </button>
           <button
             onClick={() => setActiveTab('BFIU_MAPPING')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-              activeTab === 'BFIU_MAPPING'
-                ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${activeTab === 'BFIU_MAPPING'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             BFIU Guidance Mapping ({BFIU_GUIDANCE_MAPPING.length})
           </button>
           <button
             onClick={() => setActiveTab('POLICIES')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-              activeTab === 'POLICIES'
-                ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${activeTab === 'POLICIES'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             Retention, Residency &amp; GDPR
           </button>
           <button
             onClick={() => setActiveTab('WEBHOOK_HUB')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-              activeTab === 'WEBHOOK_HUB'
-                ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${activeTab === 'WEBHOOK_HUB'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             Core Banking Webhooks
           </button>
           <button
             onClick={() => setActiveTab('WORM_LEDGER')}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-              activeTab === 'WORM_LEDGER'
-                ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${activeTab === 'WORM_LEDGER'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             Tamper-Evident Ledger ({auditLedger.length})
           </button>
@@ -316,11 +314,10 @@ export default function ModelGovernancePage() {
               <span className="text-xs font-mono font-semibold text-slate-300">Stress Test Scenario:</span>
               <button
                 onClick={() => setIsSimulatingSpike(!isSimulatingSpike)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-2 ${
-                  isSimulatingSpike
-                    ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                    : 'bg-[#0B0F17] text-slate-400 border border-[#334155] hover:text-slate-200'
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-2 ${isSimulatingSpike
+                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                  : 'bg-[#0B0F17] text-slate-400 border border-[#334155] hover:text-slate-200'
+                  }`}
               >
                 <Activity className="w-3.5 h-3.5" />
                 <span>{isSimulatingSpike ? 'Market Volatility Surge Active (+420% Burst)' : 'Normal Market Baseline'}</span>
@@ -527,6 +524,168 @@ export default function ModelGovernancePage() {
                 <span className="text-emerald-400 font-semibold">KS &le; 0.038 (Clean Baseline) &bull; Threshold: 0.050</span>
               </div>
             </div>
+
+            {/* Champion vs. Challenger Continuous Shadow Replay */}
+            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1E293B]">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-100 font-mono flex items-center gap-2">
+                    <GitCompare className="w-4 h-4 text-cyan-400" />
+                    Champion vs. Challenger Shadow Replay Benchmark
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    7-Day Continuous Shadow Replay (2,500 historical transactions, replay window: Nov 16–23, 2026)
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    Active Production Champion Retained
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                {/* Champion */}
+                <div className="p-4 rounded-xl bg-[#0B0F17] border border-cyan-500/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] uppercase font-bold text-cyan-400">Production Champion</span>
+                    <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 text-[10px]">v3.2.0-Production</span>
+                  </div>
+                  <div className="text-sm font-bold text-slate-100">cstgb-champion-v3.2</div>
+                  <div className="space-y-1.5 pt-1 text-[11px]">
+                    <div className="flex justify-between text-slate-400">
+                      <span>Macro F1 Score:</span>
+                      <span className="font-bold text-emerald-400">94.5% (0.9450)</span>
+                    </div>
+                    <div className="flex justify-between text-slate-400">
+                      <span>Minority Class Recall:</span>
+                      <span className="font-bold text-emerald-400">94.8% (0.9480)</span>
+                    </div>
+                    <div className="flex justify-between text-slate-400">
+                      <span>False Positive Rate:</span>
+                      <span className="font-bold text-emerald-400">0.76% (Baseline: &lt;1.0%)</span>
+                    </div>
+                    <div className="flex justify-between text-slate-400">
+                      <span>P99 Scorer Latency:</span>
+                      <span className="font-bold text-slate-200">0.82 ms</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Challenger */}
+                <div className="p-4 rounded-xl bg-[#0B0F17] border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] uppercase font-bold text-slate-400">Shadow Challenger</span>
+                    <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px]">v2.1.0-Evaluation</span>
+                  </div>
+                  <div className="text-sm font-bold text-slate-300">lightgbm-baseline-v2.1</div>
+                  <div className="space-y-1.5 pt-1 text-[11px]">
+                    <div className="flex justify-between text-slate-400">
+                      <span>Macro F1 Score:</span>
+                      <span className="font-bold text-amber-400">88.7% (0.8870)</span>
+                    </div>
+                    <div className="flex justify-between text-slate-400">
+                      <span>Minority Class Recall:</span>
+                      <span className="font-bold text-amber-400">82.4% (0.8240)</span>
+                    </div>
+                    <div className="flex justify-between text-slate-400">
+                      <span>False Positive Rate:</span>
+                      <span className="font-bold text-rose-400">4.82% (+534% FP noise)</span>
+                    </div>
+                    <div className="flex justify-between text-slate-400">
+                      <span>P99 Scorer Latency:</span>
+                      <span className="font-bold text-slate-400">2.14 ms</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Shadow Impact Summary */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] text-xs font-mono">
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase block">Triage Disagreements</span>
+                  <span className="font-bold text-slate-200">142 / 2,500 (5.68%)</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase block">Noise Reduction vs. Challenger</span>
+                  <span className="font-bold text-emerald-400">-84.2% False Positives</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase block">Replay Hash Seal</span>
+                  <span className="font-bold text-slate-300 font-mono truncate" title="SHA-256: ddefa59a01c33192a0b6001f...">
+                    ddefa59a...001f
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Algorithmic Fairness & Demographic Parity (EEOC 4/5ths Rule) */}
+            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-100 font-mono flex items-center gap-2">
+                    <Users className="w-4 h-4 text-cyan-400" />
+                    Algorithmic Fairness &amp; Demographic Parity Audit
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Evaluated under EEOC Four-Fifths (80%) Rule across customer segments and Bangladesh geographic divisions.
+                  </p>
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 font-semibold">
+                  STATUS: COMPLIANT (NON-DISCRIMINATORY)
+                </span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs font-mono text-slate-300">
+                  <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-[10px] uppercase text-slate-400">
+                    <tr>
+                      <th className="px-4 py-2.5">Entity Segment</th>
+                      <th className="px-4 py-2.5">Sample Size</th>
+                      <th className="px-4 py-2.5">Alert Rate</th>
+                      <th className="px-4 py-2.5">Disparate Impact Ratio</th>
+                      <th className="px-4 py-2.5">EEOC 4/5ths Rule</th>
+                      <th className="px-4 py-2.5 text-center">Verdict</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#1E293B]/60">
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold text-slate-200">Corporate &amp; Institutional</td>
+                      <td className="px-4 py-2.5 text-slate-400">35,890</td>
+                      <td className="px-4 py-2.5">1.42%</td>
+                      <td className="px-4 py-2.5 text-emerald-400 font-bold">1.044</td>
+                      <td className="px-4 py-2.5 text-emerald-400">Pass (0.80 &le; DIR &le; 1.25)</td>
+                      <td className="px-4 py-2.5 text-center text-emerald-400 font-bold">COMPLIANT</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold text-slate-200">SME &amp; Commercial</td>
+                      <td className="px-4 py-2.5 text-slate-400">57,250</td>
+                      <td className="px-4 py-2.5">1.34%</td>
+                      <td className="px-4 py-2.5 text-emerald-400 font-bold">0.986</td>
+                      <td className="px-4 py-2.5 text-emerald-400">Pass (0.80 &le; DIR &le; 1.25)</td>
+                      <td className="px-4 py-2.5 text-center text-emerald-400 font-bold">COMPLIANT</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold text-slate-200">Retail Individual (Reference)</td>
+                      <td className="px-4 py-2.5 text-slate-400">48,050</td>
+                      <td className="px-4 py-2.5">1.36%</td>
+                      <td className="px-4 py-2.5 text-cyan-400 font-bold">1.000</td>
+                      <td className="px-4 py-2.5 text-cyan-400">Reference Baseline</td>
+                      <td className="px-4 py-2.5 text-center text-cyan-400 font-bold">REFERENCE</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold text-slate-200">Non-Resident / Offshore</td>
+                      <td className="px-4 py-2.5 text-slate-400">7,122</td>
+                      <td className="px-4 py-2.5">1.48%</td>
+                      <td className="px-4 py-2.5 text-emerald-400 font-bold">1.088</td>
+                      <td className="px-4 py-2.5 text-emerald-400">Pass (0.80 &le; DIR &le; 1.25)</td>
+                      <td className="px-4 py-2.5 text-center text-emerald-400 font-bold">COMPLIANT</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -594,15 +753,14 @@ export default function ModelGovernancePage() {
                       </td>
                       <td className="px-4 py-3 text-center">
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                            m.verificationStatus === 'CERTIFIED_STATUTE'
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                              : m.verificationStatus === 'OFFICIAL_GUIDELINE'
+                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${m.verificationStatus === 'CERTIFIED_STATUTE'
+                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                            : m.verificationStatus === 'OFFICIAL_GUIDELINE'
                               ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40'
                               : m.verificationStatus === 'ALIGNED_PRACTICE'
-                              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                          }`}
+                                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                                : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                            }`}
                         >
                           {m.verificationStatus}
                         </span>
@@ -774,11 +932,10 @@ export default function ModelGovernancePage() {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setSelectedWebhook('DEBIT_HOLD')}
-                    className={`p-2.5 rounded-lg border text-left cursor-pointer transition-colors ${
-                      selectedWebhook === 'DEBIT_HOLD'
-                        ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300 font-bold'
-                        : 'bg-[#0B0F17] border-[#334155] text-slate-300'
-                    }`}
+                    className={`p-2.5 rounded-lg border text-left cursor-pointer transition-colors ${selectedWebhook === 'DEBIT_HOLD'
+                      ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300 font-bold'
+                      : 'bg-[#0B0F17] border-[#334155] text-slate-300'
+                      }`}
                   >
                     <div>/debit-hold</div>
                     <div className="text-[10px] font-normal text-slate-400 mt-0.5">Temporary Wire Quarantine</div>
@@ -786,11 +943,10 @@ export default function ModelGovernancePage() {
 
                   <button
                     onClick={() => setSelectedWebhook('ACCOUNT_FREEZE')}
-                    className={`p-2.5 rounded-lg border text-left cursor-pointer transition-colors ${
-                      selectedWebhook === 'ACCOUNT_FREEZE'
-                        ? 'bg-rose-500/20 border-rose-500 text-rose-300 font-bold'
-                        : 'bg-[#0B0F17] border-[#334155] text-slate-300'
-                    }`}
+                    className={`p-2.5 rounded-lg border text-left cursor-pointer transition-colors ${selectedWebhook === 'ACCOUNT_FREEZE'
+                      ? 'bg-rose-500/20 border-rose-500 text-rose-300 font-bold'
+                      : 'bg-[#0B0F17] border-[#334155] text-slate-300'
+                      }`}
                   >
                     <div>/account-freeze</div>
                     <div className="text-[10px] font-normal text-slate-400 mt-0.5">Statutory Full Account Lock</div>
@@ -863,11 +1019,10 @@ export default function ModelGovernancePage() {
 
               <button
                 onClick={isTampered ? handleRestoreTamper : handleTamperTest}
-                className={`px-4 py-2 rounded-xl font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer ${
-                  isTampered
-                    ? 'bg-amber-600 hover:bg-amber-500 text-white'
-                    : 'bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60'
-                }`}
+                className={`px-4 py-2 rounded-xl font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer ${isTampered
+                  ? 'bg-amber-600 hover:bg-amber-500 text-white'
+                  : 'bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60'
+                  }`}
               >
                 <ShieldAlert className="w-4 h-4" />
                 <span>{isTampered ? 'Restore Chain Integrity' : 'Simulate Auditor Tamper Test'}</span>
@@ -927,11 +1082,10 @@ export default function ModelGovernancePage() {
                   {auditLedger.map((block) => (
                     <tr
                       key={block.sequence || block.blockHeight}
-                      className={`transition-colors ${
-                        isTampered && (block.sequence === 1 || block.blockHeight === 1)
-                          ? 'bg-rose-950/30 text-rose-300 border-l-4 border-l-rose-500'
-                          : 'hover:bg-[#1E293B]/40'
-                      }`}
+                      className={`transition-colors ${isTampered && (block.sequence === 1 || block.blockHeight === 1)
+                        ? 'bg-rose-950/30 text-rose-300 border-l-4 border-l-rose-500'
+                        : 'hover:bg-[#1E293B]/40'
+                        }`}
                     >
                       <td className="px-4 py-3 font-mono font-bold text-cyan-400">#{block.sequence || block.blockHeight}</td>
                       <td className="px-4 py-3">

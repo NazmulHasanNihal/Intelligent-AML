@@ -21,7 +21,7 @@ export interface CommercialAlert {
   tier: 'Tier 1 Hold' | 'Tier 2 Review' | 'Tier 3 Clear';
   tierCode: 1 | 2 | 3;
   riskScore: number;
-  status: 'PENDING_TRIAGE' | 'UNDER_INVESTIGATION' | 'SAR_DRAFTED' | 'QUARANTINED' | 'FALSE_POSITIVE_DISMISSED';
+  status: 'PENDING_TRIAGE' | 'UNDER_INVESTIGATION' | 'SAR_DRAFTED' | 'QUARANTINED' | 'FALSE_POSITIVE_DISMISSED' | 'OVERRIDDEN';
   assignee: string;
   typology: string;
   typologyBadge: string;

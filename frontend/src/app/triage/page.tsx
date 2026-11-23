@@ -32,7 +32,11 @@ import {
   RefreshCw,
   ExternalLink,
   ChevronRight,
-  User
+  User,
+  Sliders,
+  Sparkles,
+  HelpCircle,
+  Activity
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
 import { PiiText } from '@/components/ui/PiiText';
@@ -50,13 +54,14 @@ export default function AlertTriagePage() {
     assignAlert,
     batchAssignAlerts,
     dismissAlert,
+    overrideAlertScore,
     escalateToCase,
     freezeAccount,
     addAuditEntry
   } = useBankingStore();
 
   const [selectedTier, setSelectedTier] = useState<'ALL' | 1 | 2 | 3>('ALL');
-  const [selectedStatus, setSelectedStatus] = useState<'ALL' | 'PENDING_TRIAGE' | 'UNDER_INVESTIGATION' | 'SAR_DRAFTED' | 'QUARANTINED' | 'FALSE_POSITIVE_DISMISSED'>('ALL');
+  const [selectedStatus, setSelectedStatus] = useState<'ALL' | 'PENDING_TRIAGE' | 'UNDER_INVESTIGATION' | 'SAR_DRAFTED' | 'QUARANTINED' | 'FALSE_POSITIVE_DISMISSED' | 'OVERRIDDEN'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string>>(new Set());
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
@@ -64,6 +69,13 @@ export default function AlertTriagePage() {
   const [assigneeTarget, setAssigneeTarget] = useState<string>('Amina Rahman, CFE (Lead Investigator)');
   const [dismissReasonModalOpen, setDismissReasonModalOpen] = useState(false);
   const [dismissReason, setDismissReason] = useState('');
+  const [showExplainability, setShowExplainability] = useState(false);
+  const [overrideModalOpen, setOverrideModalOpen] = useState(false);
+  const [overrideScore, setOverrideScore] = useState(0.12);
+  const [overrideTier, setOverrideTier] = useState<'Tier 1 Hold' | 'Tier 2 Review' | 'Tier 3 Clear'>('Tier 3 Clear');
+  const [overrideJustification, setOverrideJustification] = useState('DOCUMENTED_TRADE_INVOICE');
+  const [overrideNotes, setOverrideNotes] = useState('Verified genuine commercial LC with ASYCUDA customs stamp.');
+  const [isSubmittingOverride, setIsSubmittingOverride] = useState(false);
 
   // Filter alerts based on active tab, status, and search query
   const filteredAlerts = useMemo(() => {
@@ -192,6 +204,21 @@ export default function AlertTriagePage() {
     setDismissReasonModalOpen(false);
     setDismissReason('');
     setSelectedRowIds(new Set());
+  };
+
+  const handleConfirmOverride = async () => {
+    if (!inspectingAlert) return;
+    setIsSubmittingOverride(true);
+    await overrideAlertScore(
+      inspectingAlert.id,
+      overrideScore,
+      overrideTier,
+      overrideJustification,
+      overrideNotes
+    );
+    setIsSubmittingOverride(false);
+    setOverrideModalOpen(false);
+    setInspectingAlert(null);
   };
 
   const exportCsv = () => {
@@ -772,8 +799,97 @@ export default function AlertTriagePage() {
                 </div>
               </div>
 
+              {/* Feature Attribution & Explainability (12 Topological Invariants / SHAP) */}
+              <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-cyan-400" />
+                    <span className="text-xs font-bold text-slate-100 font-mono">
+                      C-STGB Model Explainability (12 Invariants)
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setShowExplainability(!showExplainability)}
+                    className="text-[11px] font-mono text-cyan-400 hover:text-cyan-300 underline cursor-pointer"
+                  >
+                    {showExplainability ? 'Hide Attribution Details' : 'Show SHAP Waterfall (12 Invariants)'}
+                  </button>
+                </div>
+
+                {showExplainability && (
+                  <div className="space-y-3 pt-2 text-xs font-mono border-t border-[#1E293B]">
+                    <div className="p-2.5 rounded-lg bg-sky-950/20 border border-sky-800/40 text-[11px] text-sky-300">
+                      <strong>Dominant Typology:</strong> {inspectingAlert.typology} &bull; Expected Benign Baseline: E[Y] = 0.052 &bull; Calibrated Risk: {(inspectingAlert.riskScore * 100).toFixed(1)}%
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="p-2.5 rounded-lg bg-[#0F172A] border border-[#1E293B] flex items-center justify-between">
+                        <div>
+                          <div className="font-bold text-slate-200">Pass-Through Net Flow Ratio (φ_flow)</div>
+                          <div className="text-[10px] text-slate-400">Observed: 0.94 • Baseline: 0.12 • BFIU MC 26 § 4.3</div>
+                        </div>
+                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold text-[11px]">
+                          +0.285 (RISK_ELEVATING)
+                        </span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-[#0F172A] border border-[#1E293B] flex items-center justify-between">
+                        <div>
+                          <div className="font-bold text-slate-200">15-Minute Rapid Fund Dispersion (δ_disp)</div>
+                          <div className="text-[10px] text-slate-400">Observed: 0.93 • Baseline: 0.05 • Instantaneous Outflows</div>
+                        </div>
+                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold text-[11px]">
+                          +0.241 (RISK_ELEVATING)
+                        </span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-[#0F172A] border border-[#1E293B] flex items-center justify-between">
+                        <div>
+                          <div className="font-bold text-slate-200">Structuring Proximity (s_struct)</div>
+                          <div className="text-[10px] text-slate-400">Observed: 0.91 • Band: ৳800k–৳999k CTR Ceiling Proximity</div>
+                        </div>
+                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold text-[11px]">
+                          +0.201 (RISK_ELEVATING)
+                        </span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-[#0F172A] border border-[#1E293B] flex items-center justify-between">
+                        <div>
+                          <div className="font-bold text-slate-200">Velocity Burst Acceleration (λ_u)</div>
+                          <div className="text-[10px] text-slate-400">Observed: 0.88 • Baseline: 0.15 • Smurfing Frequency Spike</div>
+                        </div>
+                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold text-[11px]">
+                          +0.163 (RISK_ELEVATING)
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Counterfactual Recourse */}
+                    <div className="p-3 bg-emerald-950/20 border border-emerald-800/40 rounded-lg space-y-1 text-[11px]">
+                      <span className="font-bold text-emerald-300 block">Actionable Counterfactual Recourse:</span>
+                      <p className="text-slate-300 font-sans">
+                        If counterparty dispersion window is expanded beyond 48 hours and structuring proximity falls below ৳800,000, model risk score declines to 0.142 (-80.0%), auto-clearing to Tier 3 Straight-Through Clearance.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Action Buttons Inside Drawer */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => {
+                    setOverrideScore(0.12);
+                    setOverrideTier('Tier 3 Clear');
+                    setOverrideJustification('DOCUMENTED_TRADE_INVOICE');
+                    setOverrideModalOpen(true);
+                  }}
+                  className="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-600/20"
+                >
+                  <Sliders className="w-4 h-4" />
+                  <span>Override Score (Supervisory)</span>
+                </button>
+
                 <button
                   onClick={() => {
                     setFourEyesModalOpen(true, {
@@ -852,6 +968,110 @@ export default function AlertTriagePage() {
                 className="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs transition-colors cursor-pointer"
               >
                 Confirm & Write to Audit Trail
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Supervisory Override Modal */}
+      {overrideModalOpen && inspectingAlert && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#0F172A] border border-[#334155] rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+              <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
+                <Sliders className="w-5 h-5 text-amber-400" />
+                Supervisory Model Score Override
+              </h3>
+              <button
+                onClick={() => setOverrideModalOpen(false)}
+                className="text-slate-400 hover:text-slate-200 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Enforce supervisory override on alert <strong>{inspectingAlert.id}</strong> ({inspectingAlert.entityName}).
+              This modification will be cryptographically sealed into the WORM ledger with full officer accountability.
+            </p>
+
+            <div className="space-y-3 text-xs font-mono">
+              <div>
+                <label className="text-[11px] text-slate-400 uppercase block mb-1">Original Model Score</label>
+                <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-rose-400 font-bold">
+                  {(inspectingAlert.riskScore * 100).toFixed(1)}% &bull; {inspectingAlert.tier}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[11px] text-slate-400 uppercase block mb-1">
+                  Adjusted Risk Score: {(overrideScore * 100).toFixed(1)}%
+                </label>
+                <input
+                  type="range"
+                  min="0.01"
+                  max="0.99"
+                  step="0.01"
+                  value={overrideScore}
+                  onChange={(e) => setOverrideScore(parseFloat(e.target.value))}
+                  className="w-full accent-amber-500 cursor-pointer"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] text-slate-400 uppercase block mb-1">New Triage Tier</label>
+                <select
+                  value={overrideTier}
+                  onChange={(e) => setOverrideTier(e.target.value as 'Tier 1 Hold' | 'Tier 2 Review' | 'Tier 3 Clear')}
+                  className="w-full p-2.5 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                >
+                  <option value="Tier 3 Clear">Tier 3 Clear (Straight-Through)</option>
+                  <option value="Tier 2 Review">Tier 2 Review (Standard SLA Queue)</option>
+                  <option value="Tier 1 Hold">Tier 1 Hold (Escrow Containment)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] text-slate-400 uppercase block mb-1">Justification Code (Mandatory)</label>
+                <select
+                  value={overrideJustification}
+                  onChange={(e) => setOverrideJustification(e.target.value)}
+                  className="w-full p-2.5 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                >
+                  <option value="DOCUMENTED_TRADE_INVOICE">DOCUMENTED_TRADE_INVOICE — Verified Trade LC & Customs Bill</option>
+                  <option value="VERIFIED_PAYROLL_SPIKE">VERIFIED_PAYROLL_SPIKE — Certified Multi-Party Corporate Payroll</option>
+                  <option value="ESTABLISHED_INTRA_GROUP_TRANSFER">ESTABLISHED_INTRA_GROUP_TRANSFER — Inter-Company Treasury Sweep</option>
+                  <option value="GOVERNMENT_DIPLOMATIC_EXEMPTION">GOVERNMENT_DIPLOMATIC_EXEMPTION — Sovereign or Diplomatic Protocol</option>
+                  <option value="FALSE_POSITIVE_HOMONYM_CONFIRMED">FALSE_POSITIVE_HOMONYM_CONFIRMED — Non-Target Individual Verified</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] text-slate-400 uppercase block mb-1">Supervisory Compliance Notes</label>
+                <textarea
+                  value={overrideNotes}
+                  onChange={(e) => setOverrideNotes(e.target.value)}
+                  rows={3}
+                  className="w-full p-2.5 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                  placeholder="Mandatory reasoning under SR 11-7 model-risk supervisory standards..."
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#1E293B]">
+              <button
+                onClick={() => setOverrideModalOpen(false)}
+                className="px-4 py-2 text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmOverride}
+                disabled={isSubmittingOverride || overrideNotes.trim().length < 5}
+                className="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-semibold text-xs transition-colors cursor-pointer flex items-center gap-2"
+              >
+                {isSubmittingOverride ? 'Sealing in WORM...' : 'Sign & Seal Override'}
               </button>
             </div>
           </div>

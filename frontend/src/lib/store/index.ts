@@ -27,6 +27,8 @@ import {
   INITIAL_CTR_RECORDS
 } from '@/lib/data/commercialSeed';
 import { screenWatchlistCandidate } from '@/lib/screening/watchlistRegistry';
+import { Language, DisplayCurrency, TRANSLATIONS } from '@/lib/i18n/translations';
+import { formatCurrencyAmount } from '@/lib/i18n/formatters';
 
 export interface ToastItem {
   id: string;
@@ -46,6 +48,16 @@ export interface NotificationItem {
 }
 
 export interface UnifiedBankingState {
+  // i18n & Currency Engine
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  toggleLanguage: () => void;
+  displayCurrency: DisplayCurrency;
+  setDisplayCurrency: (curr: DisplayCurrency) => void;
+  toggleDisplayCurrency: () => void;
+  t: (key: keyof typeof TRANSLATIONS['en']) => string;
+  formatMoney: (amountBdt: number) => string;
+
   // Density and Theme
   density: 'comfortable' | 'compact';
   densityMode: 'comfortable' | 'compact';
@@ -221,6 +233,22 @@ export const useAppStore = create<UnifiedBankingState>()(
           }
         }
       },
+      // i18n & Currency Engine
+      language: 'en',
+      setLanguage: (lang) => set({ language: lang }),
+      toggleLanguage: () => set((state) => ({ language: state.language === 'en' ? 'bn' : 'en' })),
+      displayCurrency: 'BDT',
+      setDisplayCurrency: (curr) => set({ displayCurrency: curr }),
+      toggleDisplayCurrency: () => set((state) => ({ displayCurrency: state.displayCurrency === 'BDT' ? 'USD' : 'BDT' })),
+      t: (key) => {
+        const lang = get().language;
+        return TRANSLATIONS[lang]?.[key] || TRANSLATIONS.en[key] || (key as string);
+      },
+      formatMoney: (amountBdt) => {
+        const { language, displayCurrency } = get();
+        return formatCurrencyAmount(amountBdt, displayCurrency, language);
+      },
+
       // Density and Theme
       density: 'compact',
       densityMode: 'compact',

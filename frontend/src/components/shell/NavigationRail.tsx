@@ -41,17 +41,17 @@ export const NavigationRail: React.FC = () => {
   const openCases = cases.filter(c => c.status === 'INVESTIGATION_OPEN').length;
 
   const NAV_ITEMS: NavItem[] = [
-    { href: '/', label: '1. Executive Surveillance', shortLabel: 'Overview', icon: LayoutDashboard, shortcut: '1' },
-    { href: '/triage', label: '2. Alert Triage', shortLabel: 'Triage', icon: ShieldAlert, badge: tier1Count, badgeColor: 'crimson', shortcut: '2' },
-    { href: '/screening', label: '3. Sanctions & PEP', shortLabel: 'Screening', icon: UserCheck, badge: pendingScreening, badgeColor: 'crimson', shortcut: '3' },
-    { href: '/customers', label: '4. Customer 360° KYC', shortLabel: 'Customers', icon: Building2, shortcut: '4' },
-    { href: '/cases', label: '5. Institutional Cases', shortLabel: 'Cases', icon: Briefcase, badge: openCases, badgeColor: 'amber', shortcut: '5' },
-    { href: '/graph', label: '6. Forensic Cash Flow', shortLabel: 'Graph', icon: GitBranch, shortcut: '6' },
-    { href: '/tbml', label: '7. Trade Finance TBML', shortLabel: 'TBML', icon: FileSpreadsheet, badge: '1', badgeColor: 'amber', shortcut: '7' },
-    { href: '/sar', label: '8. SAR & CTR Workbench', shortLabel: 'SAR/CTR', icon: FileCheck2, badge: '2', badgeColor: 'crimson', shortcut: '8' },
-    { href: '/rfi', label: '9. Compliance RFI Hub', shortLabel: 'RFI', icon: Mail, badge: '3', badgeColor: 'neutral', shortcut: '9' },
-    { href: '/rules', label: '10. Rule Studio & Recourse', shortLabel: 'Rules', icon: Sliders, shortcut: '0' },
-    { href: '/governance', label: '11. Model Ops & WORM', shortLabel: 'Governance', icon: Scale, shortcut: 'G' },
+    { href: '/app', label: '1. Executive Surveillance', shortLabel: 'Overview', icon: LayoutDashboard, shortcut: '1' },
+    { href: '/app/triage', label: '2. Alert Triage', shortLabel: 'Triage', icon: ShieldAlert, badge: tier1Count, badgeColor: 'crimson', shortcut: '2' },
+    { href: '/app/screening', label: '3. Sanctions & PEP', shortLabel: 'Screening', icon: UserCheck, badge: pendingScreening, badgeColor: 'crimson', shortcut: '3' },
+    { href: '/app/customers', label: '4. Customer 360° KYC', shortLabel: 'Customers', icon: Building2, shortcut: '4' },
+    { href: '/app/cases', label: '5. Institutional Cases', shortLabel: 'Cases', icon: Briefcase, badge: openCases, badgeColor: 'amber', shortcut: '5' },
+    { href: '/app/graph', label: '6. Forensic Cash Flow', shortLabel: 'Graph', icon: GitBranch, shortcut: '6' },
+    { href: '/app/tbml', label: '7. Trade Finance TBML', shortLabel: 'TBML', icon: FileSpreadsheet, badge: '1', badgeColor: 'amber', shortcut: '7' },
+    { href: '/app/sar', label: '8. SAR & CTR Workbench', shortLabel: 'SAR/CTR', icon: FileCheck2, badge: '2', badgeColor: 'crimson', shortcut: '8' },
+    { href: '/app/rfi', label: '9. Compliance RFI Hub', shortLabel: 'RFI', icon: Mail, badge: '3', badgeColor: 'neutral', shortcut: '9' },
+    { href: '/app/rules', label: '10. Rule Studio & Recourse', shortLabel: 'Rules', icon: Sliders, shortcut: '0' },
+    { href: '/app/governance', label: '11. Model Ops & WORM', shortLabel: 'Governance', icon: Scale, shortcut: 'G' },
   ];
 
   return (
@@ -82,7 +82,10 @@ export const NavigationRail: React.FC = () => {
           {/* Nav Links */}
           <nav className="p-2 space-y-0.5">
             {NAV_ITEMS.map((item) => {
-              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+              const strippedItemHref = item.href.replace('/app', '') || '/app';
+              const isActive = pathname === item.href || 
+                (strippedItemHref !== '/app' && (pathname === strippedItemHref || pathname.startsWith(strippedItemHref))) ||
+                (item.href !== '/app' && pathname.startsWith(item.href));
               const Icon = item.icon;
 
               return (
@@ -143,7 +146,8 @@ export const NavigationRail: React.FC = () => {
       {/* Mobile Bottom Fixed Nav Bar (< 768px) */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-[#0F172A] border-t border-[#1E293B] flex items-center justify-around z-30 px-2 select-none">
         {NAV_ITEMS.slice(0, 5).map((item) => {
-          const isActive = pathname === item.href;
+          const strippedItemHref = item.href.replace('/app', '') || '/app';
+          const isActive = pathname === item.href || (strippedItemHref !== '/app' && pathname === strippedItemHref);
           const Icon = item.icon;
           return (
             <Link

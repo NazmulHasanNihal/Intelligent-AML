@@ -66,6 +66,7 @@ function ForensicGraphStudioContent() {
   const [viewMode, setViewMode] = useState<'2D' | '3D'>('2D');
   const [deltaFloor, setDeltaFloor] = useState<number>(0.10);
   const [egoHops, setEgoHops] = useState<number>(2);
+  const [maxNodes, setMaxNodes] = useState<number>(100);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [temporalStep, setTemporalStep] = useState<number>(100);
   const [selectedNode, setSelectedNode] = useState<any>(null);
@@ -134,7 +135,7 @@ function ForensicGraphStudioContent() {
 
     const filteredNodes = (subgraphData.nodes || []).filter(
       (n: any) => activeNodeIds.has(n.id) || n.id === initialNode
-    ).slice(0, 16);
+    ).slice(0, maxNodes);
 
     const elements: cytoscape.ElementDefinition[] = [
       ...filteredNodes.map((n: any) => ({
@@ -273,7 +274,7 @@ function ForensicGraphStudioContent() {
     return () => {
       cy.destroy();
     };
-  }, [subgraphData, deltaFloor, viewMode, egoHops, initialNode]);
+  }, [subgraphData, deltaFloor, viewMode, egoHops, maxNodes, initialNode]);
 
   return (
     <div ref={containerRef} className="p-4 sm:p-5 lg:p-6 max-w-[1750px] mx-auto space-y-4">
@@ -318,6 +319,24 @@ function ForensicGraphStudioContent() {
                 }`}
               >
                 {h}-Hop
+              </button>
+            ))}
+          </div>
+
+          {/* Progressive Disclosure Node Capping */}
+          <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
+            <span className="text-slate-400 px-2 text-[11px]">Node Cap:</span>
+            {([25, 50, 100, 250] as const).map((cap) => (
+              <button
+                key={cap}
+                onClick={() => setMaxNodes(cap)}
+                className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+                  maxNodes === cap
+                    ? 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/40'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {cap}
               </button>
             ))}
           </div>

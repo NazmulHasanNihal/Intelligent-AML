@@ -415,9 +415,9 @@ export default function AlertTriagePage() {
       {/* TanStack Virtualized High-Density Table */}
       <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
-          <div className="min-w-[1100px]">
+          <div className="min-w-[1100px]" role="table" aria-label="Alert triage queue" aria-rowcount={filteredAlerts.length}>
             {/* Table Header */}
-            <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-semibold text-slate-400 uppercase tracking-wider items-center select-none font-mono">
+            <div role="row" className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-semibold text-slate-400 uppercase tracking-wider items-center select-none font-mono">
               <div className="col-span-1 flex items-center gap-2">
                 <button onClick={toggleSelectAll} className="text-slate-400 hover:text-slate-200 cursor-pointer">
                   {selectedRowIds.size === filteredAlerts.length && filteredAlerts.length > 0 ? (

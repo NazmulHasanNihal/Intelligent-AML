@@ -22,8 +22,51 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', 'recharts']
   },
+  async rewrites() {
+    return [
+      { source: '/app/triage', destination: '/triage' },
+      { source: '/app/screening', destination: '/screening' },
+      { source: '/app/customers', destination: '/customers' },
+      { source: '/app/cases', destination: '/cases' },
+      { source: '/app/graph', destination: '/graph' },
+      { source: '/app/tbml', destination: '/tbml' },
+      { source: '/app/sar', destination: '/sar' },
+      { source: '/app/rfi', destination: '/rfi' },
+      { source: '/app/rules', destination: '/rules' },
+      { source: '/app/governance', destination: '/governance' },
+    ];
+  },
   async headers() {
     return [
+      {
+        source: '/app/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow, noarchive'
+          }
+        ]
+      },
+      {
+        source: '/triage/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }]
+      },
+      {
+        source: '/screening/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }]
+      },
+      {
+        source: '/cases/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }]
+      },
+      {
+        source: '/sar/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }]
+      },
+      {
+        source: '/governance/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }]
+      },
       {
         source: '/:path*',
         headers: [

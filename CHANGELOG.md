@@ -4,6 +4,52 @@ All notable changes to this project are documented in this file, adhering to Gro
 
 ---
 
+## [Phase 8: Front End Quality, Site Structure & i18n] — 2026-11-23
+
+### Added
+- **Public Technical & Commercial Landing Page at `/`**:
+  - Authored comprehensive enterprise landing page at `/` covering:
+    - **The Problem**: 95%+ false positive deluge, analyst fatigue, opaque black-boxes, and BFIU MLPA 2012 compliance mandates.
+    - **The Differentiators**: C-STGB 12 topological invariants, Inductive Conformal Prediction, RFC 8785 / Ed25519 WORM ledger, and air-gapped sovereign deployment.
+    - **Conformal Tiering Explainer**: Interactive visual walkthrough of the 3-Tier operational pipeline (Tier 1 Hold, Tier 2 Review, Tier 3 Clear).
+    - **Institutional Security Posture**: OWASP ASVS Level 2, server-side Maker-Checker dual control, server-side PII masking with audited 60-second reveal gate, and UNODC goAML v4.2 XML schema generation.
+    - **Commercial Deployment Tiers**: Institutional Evaluation Sandbox, Enterprise Bank On-Premises, and National FIU / Central Bank.
+    - **Interactive Request Demo Modal**: Client-side form with officer name, institutional email, organization type, deployment model, and instant confirmation feedback.
+    - **Regulatory Modals**: Privacy Policy (GDPR Articles 6/9/32/89, Banking Companies Act 1991 § 46), Terms of Service, and Essential Cookie Notice banner.
+- **App Relocation to `/app` & Navigation Architecture**:
+  - Relocated primary surveillance dashboard to `/app` (`frontend/src/app/app/page.tsx`).
+  - Added clean client `AppShellWrapper.tsx` ensuring `/` renders public marketing chrome, while `/app` and compliance subroutes render the institutional banking OS with `CommandHeader`, `DemoDisclaimerBanner`, `NavigationRail`, and modal drawers.
+  - Added Next.js rewrites in `frontend/next.config.ts` mapping `/app/triage`, `/app/screening`, `/app/cases`, `/app/customers`, `/app/graph`, `/app/tbml`, `/app/sar`, `/app/rfi`, `/app/rules`, and `/app/governance`.
+  - Updated `NavigationRail.tsx` and `GlobalCommandPalette.tsx` to target `/app`.
+- **Route-Level Metadata, Open Graph Image, Sitemap & Robots.txt**:
+  - Authored individual Server Layouts (`layout.tsx`) for all 11 compliance routes (`/app`, `/triage`, `/screening`, `/customers`, `/cases`, `/graph`, `/tbml`, `/sar`, `/rfi`, `/rules`, `/governance`) with unique titles, descriptions, and `robots: { index: false, follow: false, noarchive: true }`.
+  - Created `robots.ts` indexing only the public landing page (`/`) while strictly disallowing compliance routes (`/app/*`, `/api/*`, `/triage`, `/sar`, etc.).
+  - Created dynamic `sitemap.ts` (`priority: 1.0` for landing).
+  - Authored dynamic 1200x630 Open Graph preview in `frontend/src/app/opengraph-image.tsx`.
+- **Server-Render Skeletons, Error Boundaries & Reusable Feedback**:
+  - Implemented SSR loading skeletons: `graph/loading.tsx`, `sar/loading.tsx`, and `app/loading.tsx`.
+  - Implemented React Error Boundaries: `graph/error.tsx` (WebGL context-loss recovery), `sar/error.tsx` (goAML serialization recovery), and `app/error.tsx` (dashboard recovery).
+  - Built reusable `<EmptyState />`, `<LoadingState />`, and `<ErrorState />` in `frontend/src/components/ui/StateFeedback.tsx`.
+- **English & Bangla (i18n) and BDT/USD Currency Engine**:
+  - Built comprehensive bilingual dictionary `frontend/src/lib/i18n/translations.ts` covering all navigation modules, compliance actions, tiers, and landing copy.
+  - Built currency formatter `frontend/src/lib/i18n/formatters.ts` converting between BDT (`৳` with Indian/Bengali digit notation) and USD (`$` at official Bangladesh Bank 120.00 BDT/USD reference rate) with `toBengaliDigits()`.
+  - Integrated `language`, `displayCurrency`, `toggleLanguage`, and `toggleDisplayCurrency` into `useBankingStore` and `CommandHeader.tsx`.
+- **Formal Case Dossier Printing & Export**:
+  - Implemented `@media print` styling in `frontend/src/app/globals.css` formatting an official **BFIU Statutory Investigation Dossier** under Section 65B of Evidence Act 1872.
+  - Added "Print Formal Dossier" with interactive preview modal in `frontend/src/app/cases/page.tsx`.
+  - Added "Export All (JSON)" docket export in `frontend/src/app/cases/page.tsx`.
+- **WCAG 2.2 AA Contrast & Progressive Disclosure**:
+  - High-contrast color tokens in dark theme (`text-slate-100`, `text-slate-200`, `text-emerald-400`, `text-amber-300`, `text-rose-300`).
+  - Added ARIA markup (`role="table"`, `role="dialog"`, `aria-rowcount`, `scope="col"`).
+  - Added `prefers-reduced-motion` overrides in `globals.css`.
+  - Added progressive disclosure node capping (25, 50, 100, 250 nodes) in `frontend/src/app/graph/page.tsx`.
+- **Automated Verification Suites**:
+  - Unit tests: `frontend/src/__tests__/frontendQualityPhase8.test.ts` (11 passing tests; 63/63 total Vitest tests passing across 10 test files).
+  - Production build: All 32 routes compiled with 0 errors (`npm run build` exited 0).
+  - All 38 backend Python tests and single-command evals (`reproduce_headlines.py`) passing 100%.
+
+---
+
 ## [Phase 7: Model Governance, SR 11-7 Validation & Research Credibility] — 2026-11-23
 
 ### Added

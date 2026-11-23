@@ -47,7 +47,11 @@ export const CommandHeader: React.FC = () => {
     notifications,
     revealPii,
     isPiiRevealed,
-    resetWorkspaceData
+    resetWorkspaceData,
+    language,
+    toggleLanguage,
+    displayCurrency,
+    toggleDisplayCurrency
   } = useBankingStore();
 
   const [activePreset, setActivePreset] = useState<string>('TBML');
@@ -187,6 +191,36 @@ export const CommandHeader: React.FC = () => {
             );
           })}
         </div>
+
+        {/* Currency Switcher (BDT / USD) */}
+        <button
+          type="button"
+          onClick={toggleDisplayCurrency}
+          className="px-2 py-1 rounded text-xs font-mono font-bold bg-[#0B0F17] hover:bg-[#1E293B] text-emerald-400 border border-[#334155] transition-all cursor-pointer flex items-center gap-1"
+          title={`Display Currency: ${displayCurrency}. Click to toggle BDT (৳) / USD ($) conversion.`}
+        >
+          <span>{displayCurrency === 'BDT' ? '৳ BDT' : '$ USD'}</span>
+        </button>
+
+        {/* Language Switcher (EN / BN) */}
+        <button
+          type="button"
+          onClick={toggleLanguage}
+          className="px-2 py-1 rounded text-xs font-mono font-bold bg-[#0B0F17] hover:bg-[#1E293B] text-slate-300 border border-[#334155] transition-all cursor-pointer flex items-center gap-1"
+          title={`Active Language: ${language === 'en' ? 'English' : 'Bangla (বাংলা)'}. Click to switch.`}
+        >
+          <Globe className="w-3.5 h-3.5 text-cyan-400" />
+          <span>{language === 'en' ? 'EN' : 'বাং'}</span>
+        </button>
+
+        {/* Link to Public Landing Page */}
+        <Link
+          href="/"
+          className="px-2 py-1 rounded text-xs font-mono font-medium text-slate-400 hover:text-slate-100 border border-[#334155] hover:bg-[#1E293B] transition-all hidden xl:flex items-center gap-1.5"
+          title="Exit to Public Marketing & Technical Landing Page"
+        >
+          <span>Public Site</span>
+        </Link>
 
         {/* Audited 60-Second PII Reveal Button */}
         <button

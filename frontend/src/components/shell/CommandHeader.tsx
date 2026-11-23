@@ -101,7 +101,7 @@ export const CommandHeader: React.FC = () => {
         {/* Mode & Deployment Badge */}
         <div className="hidden xl:flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#0B0F17] border border-[#334155] text-slate-300">
           <span className={`w-1.5 h-1.5 rounded-full ${IS_ONPREM_MODE ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
-          <span>{IS_ONPREM_MODE ? 'DEPLOYMENT: AIR-GAP INTRANET (ON-PREM)' : 'DEPLOYMENT: PUBLIC RESEARCH DEMO'}</span>
+          <span>{IS_ONPREM_MODE ? 'DEPLOYMENT: AIR-GAP INTRANET (ON-PREM)' : 'DEPLOYMENT: CLOUD EVALUATION SANDBOX (AIR-GAP READY)'}</span>
         </div>
 
         {/* Global Stream Control Pill */}

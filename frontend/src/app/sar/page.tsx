@@ -156,9 +156,10 @@ Furthermore, individual multi-agent transfers were structured beneath the mandat
 
 3. REMEDIAL ACTION TAKEN & STATUTORY DISCLOSURE:
 The Subject account has been placed on Tier 1 administrative hold pending formal regulatory direction under Section 2(v) and Section 25 of the Money Laundering Prevention Act 2012.
-Pursuant to Section 27 of MLPA 2012, no disclosure of this filing has been or will be made to the customer or any unauthorized party.`;
+Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or will be made to the customer or any unauthorized party.`;
 
   const [narrativeText, setNarrativeText] = useState(initialNarrative);
+  const [narrativeViewMode, setNarrativeViewMode] = useState<'edit' | 'diff'>('edit');
   const [merkleRoot, setMerkleRoot] = useState('9c72f16eb2befae4bcf1e1b7cbb510a6a13ba5b4d7a8f0aaee5337609c7ad42b');
   const [isRecalculatingHash, setIsRecalculatingHash] = useState(false);
 
@@ -293,7 +294,7 @@ Pursuant to Section 27 of MLPA 2012, no disclosure of this filing has been or wi
   BFIU goAML XML Schema Specification (Version 4.2 / UNODC Compliant)
   Regulatory Authority: Bangladesh Financial Intelligence Unit (BFIU), Bangladesh Bank
   Governing Statute: Money Laundering Prevention Act 2012 § 25
-  Anti-Tipping-Off Mandate: Money Laundering Prevention Act 2012 § 27
+  Anti-Tipping-Off Mandate: Money Laundering Prevention Act 2012 § 6
   TODO(verify: BFIU goAML XML Schema v4.x local namespace prefix and reporting entity code dictionary)
 -->
 <report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -470,13 +471,13 @@ Pursuant to Section 27 of MLPA 2012, no disclosure of this filing has been or wi
         </div>
       </div>
 
-      {/* Mandatory Non-Dismissible Anti-Tipping-Off Warning Banner (MLPA 2012 § 27) */}
+      {/* Mandatory Non-Dismissible Anti-Tipping-Off Warning Banner (MLPA 2012 § 6) */}
       <div className="p-3.5 bg-amber-950/40 border border-amber-600/60 rounded-xl flex items-start gap-3 text-xs text-amber-200 shadow-lg">
         <AlertOctagon className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="font-bold tracking-wide uppercase text-amber-300">
-              Statutory Prohibition of Tipping-Off (Money Laundering Prevention Act 2012 § 27)
+              Statutory Prohibition of Tipping-Off (Money Laundering Prevention Act 2012 § 6)
             </span>
             <a
               href="http://bdlaws.minlaw.gov.bd/act-1088.html"
@@ -495,10 +496,10 @@ Pursuant to Section 27 of MLPA 2012, no disclosure of this filing has been or wi
       </div>
 
       {activeSubTab === 'SAR_STUDIO' ? (
-        /* STR/SAR Studio Workspace */
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        /* STR/SAR Studio Workspace: 50/50 Split Screen on Large Displays */
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {/* Left Column: Form, Attachments, Decision Log & Narrative Editor */}
-          <div className="lg:col-span-8 space-y-4">
+          <div className="space-y-4">
             {/* Top Toolbar: Jurisdiction Format & Maker-Checker Status */}
             <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-3 shadow-xl">
               <div className="flex items-center gap-2">
@@ -736,28 +737,78 @@ Pursuant to Section 27 of MLPA 2012, no disclosure of this filing has been or wi
               </div>
             </div>
 
-            {/* SECTION 3: Structured Narrative Textarea */}
+            {/* SECTION 3: Structured Narrative Textarea with Red/Green Officer Edit Diff Viewer */}
             <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
-                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">
-                  Official Regulatory Narrative (Factual Chronology)
-                </span>
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#1E293B]">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">
+                    Official Regulatory Narrative
+                  </span>
+                  <div className="flex items-center bg-[#0B0F17] p-0.5 rounded border border-[#334155] text-[11px] font-mono">
+                    <button
+                      type="button"
+                      onClick={() => setNarrativeViewMode('edit')}
+                      className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
+                        narrativeViewMode === 'edit'
+                          ? 'bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      Editor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setNarrativeViewMode('diff')}
+                      className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
+                        narrativeViewMode === 'diff'
+                          ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      Officer Edit Diff
+                    </button>
+                  </div>
+                </div>
                 <span className="text-[11px] font-mono text-slate-400">
                   {narrativeText.length} Characters • Ready for BFIU Intake
                 </span>
               </div>
 
-              <textarea
-                value={narrativeText}
-                onChange={(e) => setNarrativeText(e.target.value)}
-                rows={14}
-                className="w-full p-4 bg-[#0B0F17] border border-[#334155] rounded-xl text-xs font-mono text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 leading-relaxed"
-              />
+              {narrativeViewMode === 'edit' ? (
+                <textarea
+                  value={narrativeText}
+                  onChange={(e) => setNarrativeText(e.target.value)}
+                  rows={14}
+                  className="w-full p-4 bg-[#0B0F17] border border-[#334155] rounded-xl text-xs font-mono text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 leading-relaxed"
+                />
+              ) : (
+                <div className="w-full p-4 bg-[#0B0F17] border border-[#334155] rounded-xl text-xs font-mono max-h-[320px] overflow-y-auto space-y-1">
+                  <div className="text-[10px] text-slate-500 mb-2 border-b border-[#1E293B] pb-1">
+                    Red = Original Draft Lines Removed • Green = Officer Edit Additions
+                  </div>
+                  {narrativeText.split('\n').map((line, idx) => {
+                    const originalLines = initialNarrative.split('\n');
+                    const isNew = !originalLines.includes(line);
+                    return (
+                      <div
+                        key={idx}
+                        className={`p-1 rounded ${
+                          isNew
+                            ? 'bg-emerald-950/40 text-emerald-300 border-l-2 border-emerald-500'
+                            : 'text-slate-300'
+                        }`}
+                      >
+                        {line || <span className="opacity-30">&nbsp;</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
 
           {/* Right Column: Case Manifest, Four-Eyes Controls & XML Generation */}
-          <div className="lg:col-span-4 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-2xl flex flex-col justify-between space-y-5">
+          <div className="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-2xl flex flex-col justify-between space-y-5">
             <div className="space-y-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">

@@ -92,7 +92,7 @@ describe('Commercial AML Compliance & Statutory Rules Suite', () => {
 
     // 4. Primary Statute & Announced 2025 Amendment with TODO(verify)
     expect(REGULATORY_CONFIG.statuteReferences.primaryAmlAct.title).toContain('Money Laundering Prevention Act, 2012');
-    expect(REGULATORY_CONFIG.statuteReferences.primaryAmlAct.tippingOffSection).toContain('Section 27');
+    expect(REGULATORY_CONFIG.statuteReferences.primaryAmlAct.tippingOffSection).toContain('Section 6');
     expect(REGULATORY_CONFIG.statuteReferences.amendment2025.verificationTag).toContain('TODO(verify');
 
     // 5. Retention & Data Residency Policies with TODO(verify)

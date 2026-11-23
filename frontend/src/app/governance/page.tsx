@@ -367,7 +367,7 @@ export default function ModelGovernancePage() {
 
             <div className="h-72 w-full pt-2">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={driftChartData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+                <LineChart data={driftChartData} margin={{ top: 16, right: 56, left: 16, bottom: 16 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
                   <XAxis dataKey="t" stroke="#64748B" tick={{ fontSize: 11, fontFamily: 'monospace' }} />
                   <YAxis yAxisId="left" domain={[0.80, 1.00]} stroke="#10B981" tick={{ fontSize: 11, fontFamily: 'monospace' }} />

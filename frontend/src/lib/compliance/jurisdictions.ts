@@ -47,15 +47,15 @@ export const JURISDICTIONS: Record<JurisdictionCode, JurisdictionProfile> = {
       REGULATORY_CONFIG.structuringPolicy.lowerBoundBdt,
       REGULATORY_CONFIG.structuringPolicy.upperBoundBdt
     ], // ৳800,000 - ৳999,999 BDT
-    statutoryAct: REGULATORY_CONFIG.statuteReferences.primaryAmlAct.title,
-    strMandate: `${REGULATORY_CONFIG.statuteReferences.primaryAmlAct.strReportingSection} & BFIU Circular 26`,
-    antiTippingOffStatute: `${REGULATORY_CONFIG.statuteReferences.primaryAmlAct.tippingOffSection} (Strict Criminal Penalties for Tipping Off)`,
-    evidenceRule: 'Bangladesh Evidence Act (Amended 2022) § 65B Certified Electronic Records',
-    modelGovernanceRule: 'Bangladesh Bank Core Risk Management Guidelines (AML/CFT Module) aligned with model-risk practice',
+    statutoryAct: 'Money Laundering Prevention Act, 2012 (Act V of 2012 §§ 6, 25), ATA 2009 & MLPR 2019',
+    strMandate: 'Money Laundering Prevention Act 2012 Section 25 (§ 25) / BFIU Master Circular No. 26 & Circular No. 24 (TBML), Circular 32 (2026), Circular Letters 02/03/05 (2026)',
+    antiTippingOffStatute: 'MLPA 2012 § 6 (Prohibition of Disclosure / Anti-Tipping-Off — up to 2 years imprisonment & fine)',
+    evidenceRule: 'Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B & 73A (Officer Certificate)',
+    modelGovernanceRule: 'Bangladesh Bank Core Risk Management Guidelines (AML/CFT) & BFIU Circular Letters 02/03 (2026)',
     urgentSlaHours: 72,
     standardSlaHours: 120, // 5 Banking Days
-    sarTemplateName: 'BFIU Suspicious Transaction Report (STR/SAR) / goAML XML',
-    sarSchemaVersion: 'BFIU-goAML-v4.2-XML'
+    sarTemplateName: 'BFIU Suspicious Transaction Report (STR/SAR) / UNODC goAML XML',
+    sarSchemaVersion: 'UNODC-goAML-v4.2-XML'
   },
   US_FINCEN: {
     id: 'US_FINCEN',

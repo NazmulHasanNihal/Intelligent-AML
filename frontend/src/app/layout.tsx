@@ -52,8 +52,34 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Intelligent-AML',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web, Linux (Air-Gapped Kubernetes)',
+    description: 'Tier-1 Anti-Money Laundering & Conformal Risk Control Operating System for Central Banks & Enterprise Financial Institutions. 84% noise reduction with provable coverage guarantees.',
+    softwareVersion: 'Platform v3.0 | C-STGB v3.2 Engine',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Intelligent-AML Platform',
+      url: 'https://intelligent-aml.vercel.app',
+    },
+  };
+
   return (
     <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable} overflow-x-hidden w-full max-w-full`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-screen bg-[#070B12] text-slate-100 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden w-full max-w-full">
         <AppShellWrapper>
           {children}

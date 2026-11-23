@@ -235,7 +235,7 @@ export default function RuleStudioPage() {
           <div className="p-3.5 bg-amber-950/30 border border-amber-800/60 rounded-xl flex items-start gap-2.5 text-xs text-amber-300">
             <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
             <div>
-              <strong>Confidential Internal Analyst Workspace:</strong> Under Section 27 of the Money Laundering Prevention Act 2012 (MLPA 2012 § 27), sensitivity parameters and threshold configurations are strictly internal bank work product. Disclosing minimum structuring amounts or evasion guidance to customers is a criminal offense punishable by up to 2 years imprisonment.
+              <strong>Confidential Internal Analyst Workspace:</strong> Under Section 6 of the Money Laundering Prevention Act 2012 (MLPA 2012 § 6), sensitivity parameters and threshold configurations are strictly internal bank work product. Disclosing minimum structuring amounts or evasion guidance to customers is a criminal offense punishable by up to 2 years imprisonment.
             </div>
           </div>
 

@@ -294,7 +294,7 @@ export const SEEDED_CASES = [
         id: 'note-2',
         author: 'Sarah Jenkins',
         time: '08:38 UTC',
-        text: 'Drafted BFIU STR-1 Form XML. Four-Eyes sign-off submitted to CCO Nazmul Hasan. Do not contact client directly to prevent tipping off under Section 27 of MLPA 2012 / 31 U.S.C. § 5318(g)(2).'
+        text: 'Drafted BFIU STR-1 Form XML. Four-Eyes sign-off submitted to CCO Nazmul Hasan. Do not contact client directly to prevent tipping off under Section 6 of MLPA 2012 / 31 U.S.C. § 5318(g)(2).'
       }
     ],
     milestones: [

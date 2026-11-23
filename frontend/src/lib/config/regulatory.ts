@@ -128,9 +128,9 @@ export const REGULATORY_CONFIG: RegulatoryConfig = {
       sourceLink: 'http://bdlaws.minlaw.gov.bd/act-1088.html',
       strReportingSection: 'Section 25 (Reporting of Suspicious Transactions by Reporting Organizations)',
       penaltiesSection: 'Section 4 (Offences and Punishments of Money Laundering)',
-      tippingOffSection: 'Section 27 (Punishment for Disclosure of Information / Tipping-Off)',
+      tippingOffSection: 'Section 6 (Prohibition of Disclosure of Information / Anti-Tipping-Off)',
       recordRetentionSection: 'Section 8 (Maintenance and Preservation of Records)',
-      tippingOffWarning: 'LEGAL STATUTORY WARNING (MLPA 2012 § 27): Disclosing any information relating to an STR/SAR, investigative query, or freezing order to the subject account holder or any unauthorized third party is a criminal offense punishable by imprisonment for up to 2 years and/or fine. Absolute confidentiality is legally enforced.'
+      tippingOffWarning: 'LEGAL STATUTORY WARNING (MLPA 2012 § 6): Disclosing any information relating to an STR/SAR, investigative query, or freezing order to the subject account holder or any unauthorized third party is a criminal offense punishable by imprisonment for up to 2 years and/or fine. Absolute confidentiality is legally enforced under Section 6 of the Money Laundering Prevention Act, 2012.'
     },
     amendment2025: {
       status: 'ANNOUNCED_PENDING_GAZETTE_VERIFICATION',
@@ -189,21 +189,31 @@ export const BFIU_GUIDANCE_MAPPING: BfiuGuidanceMappingItem[] = [
   {
     id: 'BFIU-MAP-01',
     frameworkName: 'Money Laundering Prevention Act, 2012',
-    officialRef: 'MLPA 2012 (Act No. V of 2012) §§ 2(z), 4, 8, 25, 27',
+    officialRef: 'MLPA 2012 (Act No. V of 2012) §§ 2(z), 4, 6, 8, 25',
     sourceUrl: 'http://bdlaws.minlaw.gov.bd/act-1088.html',
     appModule: 'SAR & CTR Workbench (/sar), Rule Studio (/rules), Cases (/cases)',
-    operationalRequirements: 'Mandatory STR filing on suspicion (§ 25); CTR compilation for cash ≥ ৳10 Lakh (§ 2(z)); 5-year record retention (§ 8); Strict criminal ban on tipping-off (§ 27).',
-    technicalImplementation: 'Automated STR/CTR compiler with goAML XML schema, tamper-evident FRE 902(11) / § 65B WORM ledger, and non-dismissible tipping-off barriers.',
+    operationalRequirements: 'Mandatory STR filing on suspicion (§ 25); CTR compilation for cash ≥ ৳10 Lakh (§ 2(z)); 5-year record retention (§ 8); Strict criminal ban on tipping-off (§ 6).',
+    technicalImplementation: 'Automated STR/CTR compiler with UNODC goAML v4.2 XML schema, tamper-evident Evidence Act (Amended 2022) §§ 65A-65B & 73A WORM ledger, and non-dismissible tipping-off barriers under Section 6.',
     verificationStatus: 'CERTIFIED_STATUTE'
   },
   {
     id: 'BFIU-MAP-02',
-    frameworkName: 'BFIU Master Circular No. 26',
-    officialRef: 'BFIU Master Circular No. 26 (Customer Due Diligence & Reporting)',
+    frameworkName: 'BFIU Master Circular No. 26 & Circular No. 24 (TBML)',
+    officialRef: 'BFIU Master Circular No. 26 (Scheduled Banks) & Circular No. 24 (Trade Based Money Laundering)',
     sourceUrl: 'https://www.bb.org.bd/en/index.php/bfiu/circular',
-    appModule: 'Alert Triage (/triage), Sanctions & PEP (/screening), Customer 360 (/customers)',
-    operationalRequirements: 'Tiered KYC/CDD, mandatory PEP & beneficial ownership verification, automated near-threshold structuring detection (৳800k-৳999k).',
-    technicalImplementation: 'Conformal 3-tier alert triaging with calibrated false-positive bounds (≤ 0.62%), PEP risk multipliers, and multi-agent structuring sequence detection.',
+    appModule: 'Alert Triage (/triage), Sanctions & PEP (/screening), Customer 360 (/customers), TBML (/tbml)',
+    operationalRequirements: 'Tiered KYC/CDD, mandatory PEP & beneficial ownership verification, automated near-threshold structuring detection (৳800k-৳999k), and documentary trade credit scrutiny.',
+    technicalImplementation: 'Conformal 3-tier alert triaging with calibrated false-positive bounds (≤ 0.62%), PEP risk multipliers, and ASYCUDA trade divergence scoring.',
+    verificationStatus: 'OFFICIAL_GUIDELINE'
+  },
+  {
+    id: 'BFIU-MAP-02B',
+    frameworkName: 'BFIU 2026 Mandates (Circular 32 & Circular Letters 02/03/05)',
+    officialRef: 'BFIU Circular 32 (Sept 2026), Circular Letters 02 & 03 (Feb 2026), Circular Letter 05 (Aug 2026)',
+    sourceUrl: 'https://www.bb.org.bd/en/index.php/bfiu/circular',
+    appModule: 'Surveillance Desk (/app), Sanctions (/screening), Cases (/cases)',
+    operationalRequirements: 'Mandatory enforcement of automated transaction monitoring systems for banks & MFS; reporting of related accounts following BFIU freezing orders; PSP/PSO compliance.',
+    technicalImplementation: 'Real-time multi-rail streaming ingestion, automated related-account correlation following statutory freeze triggers, and goAML XML reporting.',
     verificationStatus: 'OFFICIAL_GUIDELINE'
   },
   {

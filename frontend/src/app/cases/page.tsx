@@ -205,9 +205,11 @@ export default function CasesPage() {
                   <span className="font-mono text-xs font-bold text-sky-400">{c.id}</span>
                   <span
                     className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                      c.slaHours <= 24
-                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                        : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                      c.slaHours <= 12
+                        ? 'bg-rose-950/80 text-rose-400 border border-rose-600/50 animate-pulse'
+                        : c.slaHours <= 24
+                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                          : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                     }`}
                   >
                     {c.slaHours}H SLA
@@ -296,7 +298,11 @@ export default function CasesPage() {
                     </td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                        c.slaHours <= 24 ? 'bg-rose-500/20 text-rose-300' : 'bg-amber-500/20 text-amber-300'
+                        c.slaHours <= 12
+                          ? 'bg-rose-950/80 text-rose-400 border border-rose-600/50 animate-pulse'
+                          : c.slaHours <= 24
+                            ? 'bg-rose-500/20 text-rose-300'
+                            : 'bg-amber-500/20 text-amber-300'
                       }`}>
                         {c.slaHours}H SLA
                       </span>

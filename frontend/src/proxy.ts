@@ -85,8 +85,8 @@ export const proxy = middleware;
 export const config = {
   matcher: [
     /*
-     * Match all request paths except static files, favicon, fonts, and images
+     * Match all request paths except static files, favicon, robots.txt, sitemap.xml, fonts, and images
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$).*)',
   ],
 };

@@ -379,7 +379,7 @@ function ForensicGraphStudioContent() {
             <div className="flex items-center gap-3 bg-[#0F172A] px-3 py-1.5 rounded-lg border border-[#334155]">
               <span className="font-semibold text-slate-300 flex items-center gap-1.5">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
-                Adaptive Noise Filter Gate:
+                Adaptive Edge-Trust Gate (ĝ_ij ≥ δ_floor):
               </span>
               <input
                 type="range"
@@ -393,6 +393,12 @@ function ForensicGraphStudioContent() {
               <span className="font-mono font-bold text-purple-300 text-xs min-w-[3ch] tabular-nums">
                 {deltaFloor.toFixed(2)}
               </span>
+            </div>
+
+            {/* Fusion Weight Pill */}
+            <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0F172A] border border-[#334155] text-[11px] font-mono text-slate-300">
+              <span className="text-purple-400 font-bold">α_u = 0.65</span>
+              <span className="text-slate-500">GNN/Tabular Fusion</span>
             </div>
 
             {/* Invariant Stats & Camera Controls */}
@@ -427,12 +433,18 @@ function ForensicGraphStudioContent() {
               {viewMode === '2D' ? (
                 <div ref={cyContainerRef} className="w-full h-full" />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 space-y-3">
+                <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 space-y-3 p-4">
                   <Box className="w-12 h-12 text-purple-400 animate-bounce" />
-                  <div className="text-center">
+                  <div className="text-center max-w-sm">
                     <h3 className="font-semibold text-slate-200 text-sm font-sans">Hardware-Accelerated 3D Force Graph</h3>
                     <p className="text-xs text-slate-500 mt-1">WebGL dynamic force simulation active. Click nodes to orbit and inspect ego-sphere.</p>
                   </div>
+                  <button
+                    onClick={() => setViewMode('2D')}
+                    className="px-3 py-1.5 bg-[#1E293B] hover:bg-[#334155] text-slate-200 rounded-lg text-xs font-mono border border-[#334155] transition-colors cursor-pointer"
+                  >
+                    Switch to 2D Planar Canvas (WebGL Fallback)
+                  </button>
                 </div>
               )}
             </ErrorBoundary>

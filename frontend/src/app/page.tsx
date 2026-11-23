@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   ShieldAlert,
@@ -23,71 +23,91 @@ import {
   Users,
   Terminal,
   Shield,
-  X
+  X,
+  Menu,
+  Info
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
-import { TRANSLATIONS } from '@/lib/i18n/translations';
+import { ConformalLivePreviewWidget } from '@/components/landing/ConformalLivePreviewWidget';
+import { ProductVisualPreview } from '@/components/landing/ProductVisualPreview';
+import { InstitutionalInquiryModal } from '@/components/landing/InstitutionalInquiryModal';
 
 export default function EnterpriseLandingPage() {
   const { language, toggleLanguage, t } = useBankingStore();
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  
+  // Institutional Inquiry Modal State
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
+  const [inquiryType, setInquiryType] = useState<'EVALUATION' | 'BANK_POC' | 'SOVEREIGN'>('BANK_POC');
+  
+  // Regulatory Modal States
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
-  const [isCookieNoticeDismissed, setIsCookieNoticeDismissed] = useState(false);
+  
+  // Mobile Nav Drawer
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
-  // Demo Form State
-  const [demoFormData, setDemoFormData] = useState({
-    name: '',
-    email: '',
-    institution: '',
-    orgType: 'Tier-1 Commercial Bank',
-    deployment: 'Air-Gapped Sovereign On-Premises',
-    notes: ''
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // Cookie Notice State with Zero CLS on hydration
+  const [isCookieDismissed, setIsCookieDismissed] = useState(true);
 
-  const handleDemoSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setIsDemoModalOpen(false);
-      setDemoFormData({
-        name: '',
-        email: '',
-        institution: '',
-        orgType: 'Tier-1 Commercial Bank',
-        deployment: 'Air-Gapped Sovereign On-Premises',
-        notes: ''
-      });
-    }, 2500);
+  useEffect(() => {
+    // Read consent from localStorage on client mount without layout shift
+    const consent = localStorage.getItem('aml_cookie_consent');
+    if (!consent) {
+      setIsCookieDismissed(false);
+    }
+  }, []);
+
+  const handleAcknowledgeCookie = () => {
+    localStorage.setItem('aml_cookie_consent', 'acknowledged');
+    document.cookie = 'aml_consent=1; path=/; max-age=31536000; SameSite=Strict; Secure';
+    setIsCookieDismissed(true);
   };
+
+  const handleOpenInquiry = (type: 'EVALUATION' | 'BANK_POC' | 'SOVEREIGN') => {
+    setInquiryType(type);
+    setInquiryModalOpen(true);
+    setIsMobileNavOpen(false);
+  };
+
+  // Close mobile drawer on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsMobileNavOpen(false);
+        setInquiryModalOpen(false);
+        setIsPrivacyModalOpen(false);
+        setIsTermsModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#070B12] text-slate-100 flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
-      {/* 1. Top Enterprise Navigation Bar */}
-      <header className="sticky top-0 z-50 w-full border-b border-[#1E293B] bg-[#070B12]/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      {/* 1. Top Enterprise Navigation Bar (<= 56px height) */}
+      <header className="sticky top-0 z-40 w-full h-14 border-b border-[#1E293B] bg-[#070B12]/95 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between gap-3">
           {/* Brand */}
-          <Link href="/" className="flex items-center gap-2.5 group cursor-pointer">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-              <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+          <Link href="/" className="flex items-center gap-2.5 group cursor-pointer shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
             </div>
             <div>
-              <span className="font-bold text-sm tracking-wider uppercase text-slate-100 flex items-center gap-1.5">
+              <span className="font-bold text-xs tracking-wider uppercase text-slate-100 flex items-center gap-1.5">
                 Intelligent-AML
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold bg-[#1E293B] text-emerald-400 border border-emerald-500/30">
-                  v3.0
+                <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold bg-[#1E293B] text-emerald-400 border border-emerald-500/30">
+                  Platform v3.0
                 </span>
               </span>
-              <p className="text-[10px] font-mono text-slate-400 hidden sm:block">
-                Conformal Risk Control OS
+              <p className="text-[9px] font-mono text-slate-400 hidden sm:block">
+                C-STGB v3.2 Engine
               </p>
             </div>
           </Link>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-6 text-xs font-mono text-slate-300">
+          {/* Desktop Nav Links (Promoted Model Card) */}
+          <nav className="hidden lg:flex items-center gap-5 text-xs font-mono text-slate-300">
             <a href="#problem" className="hover:text-emerald-400 transition-colors">
               The Problem
             </a>
@@ -97,8 +117,12 @@ export default function EnterpriseLandingPage() {
             <a href="#tiering" className="hover:text-emerald-400 transition-colors">
               Conformal Tiering
             </a>
+            <Link href="/governance" className="text-cyan-400 hover:text-cyan-300 font-bold transition-colors flex items-center gap-1">
+              <span>Model Card</span>
+              <span className="text-[9px] px-1 py-0.2 rounded bg-cyan-950/60 border border-cyan-800 text-cyan-300">SR 11-7</span>
+            </Link>
             <a href="#security" className="hover:text-emerald-400 transition-colors">
-              Security & BFIU
+              Security &amp; BFIU
             </a>
             <a href="#pricing" className="hover:text-emerald-400 transition-colors">
               Deployment Tiers
@@ -106,25 +130,25 @@ export default function EnterpriseLandingPage() {
           </nav>
 
           {/* Action CTAs */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             {/* Language Switcher */}
             <button
               type="button"
               onClick={toggleLanguage}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#0F172A] hover:bg-[#1E293B] text-slate-200 border border-[#334155] transition-all cursor-pointer flex items-center gap-1.5"
+              className="px-2 py-1 rounded text-xs font-mono font-bold bg-[#0F172A] hover:bg-[#1E293B] text-slate-200 border border-[#334155] transition-all cursor-pointer flex items-center gap-1"
               title="Toggle English / বাংলা"
             >
-              <Globe className="w-3.5 h-3.5 text-cyan-400" />
+              <Globe className="w-3 h-3 text-cyan-400" />
               <span>{language === 'en' ? 'EN' : 'বাং'}</span>
             </button>
 
             {/* Request Demo Trigger */}
             <button
               type="button"
-              onClick={() => setIsDemoModalOpen(true)}
+              onClick={() => handleOpenInquiry('EVALUATION')}
               className="hidden sm:inline-flex px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[#1E293B] hover:bg-[#334155] text-slate-200 border border-[#475569] transition-all cursor-pointer"
             >
-              Request Demo
+              Request Briefing
             </button>
 
             {/* Launch App Main CTA */}
@@ -135,18 +159,98 @@ export default function EnterpriseLandingPage() {
               <span>{language === 'en' ? 'Launch Banking OS' : 'ওএস চালু করুন'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
+
+            {/* Mobile Hamburger Toggle */}
+            <button
+              type="button"
+              onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+              className="p-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-slate-400 hover:text-slate-200 lg:hidden cursor-pointer"
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMobileNavOpen}
+            >
+              {isMobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {isMobileNavOpen && (
+          <div className="lg:hidden fixed inset-x-0 top-14 bg-[#0F172A] border-b border-[#334155] p-5 shadow-2xl space-y-4 animate-in slide-in-from-top-3 z-50">
+            <nav className="flex flex-col space-y-3 font-mono text-sm">
+              <a
+                href="#problem"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="text-slate-300 hover:text-emerald-400 py-1"
+              >
+                1. The Problem (False Positives)
+              </a>
+              <a
+                href="#differentiators"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="text-slate-300 hover:text-emerald-400 py-1"
+              >
+                2. Differentiators (12 Invariants)
+              </a>
+              <a
+                href="#tiering"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="text-slate-300 hover:text-emerald-400 py-1"
+              >
+                3. Conformal Tiering Pipeline
+              </a>
+              <Link
+                href="/governance"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="text-cyan-400 hover:text-cyan-300 font-bold py-1 flex items-center justify-between"
+              >
+                <span>4. Model Card (SR 11-7 / BFIU)</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-950 border border-cyan-800">Verified</span>
+              </Link>
+              <a
+                href="#security"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="text-slate-300 hover:text-emerald-400 py-1"
+              >
+                5. Security &amp; Bangladesh BFIU
+              </a>
+              <a
+                href="#pricing"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="text-slate-300 hover:text-emerald-400 py-1"
+              >
+                6. Commercial Licensure &amp; PoC
+              </a>
+            </nav>
+
+            <div className="pt-3 border-t border-[#1E293B] flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => handleOpenInquiry('BANK_POC')}
+                className="w-full py-2.5 rounded-lg text-xs font-mono font-bold bg-[#1E293B] hover:bg-[#334155] text-slate-200 border border-[#475569] text-center"
+              >
+                Request Bank PoC &amp; Brief
+              </button>
+              <Link
+                href="/app"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="w-full py-2.5 rounded-lg text-xs font-mono font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-center flex items-center justify-center gap-1.5"
+              >
+                <span>Launch Banking OS (/app)</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* 2. Hero Section */}
-      <section className="relative pt-20 pb-24 overflow-hidden border-b border-[#1E293B]/60">
+      <section className="relative pt-16 pb-20 overflow-hidden border-b border-[#1E293B]/60">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-950/20 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 text-center">
           {/* Eyebrow Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 mb-6">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>{t('landing_badge')}</span>
+            <span>Platform v3.0 // C-STGB v3.2 Engine // BFIU 2026 Mandate Aligned</span>
           </div>
 
           {/* Main Headline */}
@@ -160,7 +264,7 @@ export default function EnterpriseLandingPage() {
           </p>
 
           {/* Dual Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
             <Link
               href="/app"
               className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-sm font-mono font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 cursor-pointer"
@@ -170,16 +274,16 @@ export default function EnterpriseLandingPage() {
             </Link>
             <button
               type="button"
-              onClick={() => setIsDemoModalOpen(true)}
+              onClick={() => handleOpenInquiry('BANK_POC')}
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl text-sm font-mono font-semibold bg-[#0F172A] hover:bg-[#1E293B] text-slate-200 border border-[#334155] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Schedule Institutional Briefing</span>
+              <span>Request Bank PoC &amp; Brief</span>
               <ExternalLink className="w-4 h-4 text-slate-400" />
             </button>
           </div>
 
           {/* 4 Verified Metric Scorecards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-left mb-6">
             <div className="p-4 rounded-xl bg-[#0F172A]/80 border border-[#1E293B] shadow-xs">
               <span className="text-[11px] font-mono font-semibold text-slate-400 uppercase tracking-wider block mb-1">
                 Champion Macro F1
@@ -220,6 +324,39 @@ export default function EnterpriseLandingPage() {
               </p>
             </div>
           </div>
+
+          {/* Rigorous Benchmark Footnote & Scope Reconciliation */}
+          <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-[11px] font-mono text-slate-400 flex items-start gap-2.5 text-left">
+            <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+            <div>
+              <strong className="text-slate-300">Empirical Benchmark Scope Reconciliation:</strong>
+              <span className="ml-1">
+                <strong>(1) 7-Day Bangladesh Synthetic Bank Replay:</strong> 94.5% Macro F1, 84.2% noise reduction, &lt; 200 µs P50 FastPath latency, 99.04% empirical coverage.
+                <strong className="ml-2">(2) 14-Dataset Cross-Domain Research Corpus:</strong> 68.05% cross-domain Macro F1 (91.42% Elliptic-v1), 0.45 ms full-pipeline P50 (0.12 ms GNN forward pass), 99.33% offline conformal STP. Verified in{' '}
+                <Link href="/governance" className="text-cyan-400 underline hover:text-cyan-300 font-bold">
+                  SR 11-7 Model Card (/governance) &rarr;
+                </Link>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2.5 Product Visual Preview (New Phase 2 Item) */}
+      <section className="py-14 border-b border-[#1E293B]/60 bg-[#070B12]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 block mb-1">
+              Production Architecture Showcase
+            </span>
+            <h2 className="text-2xl font-bold text-slate-100">
+              Interactive 11-Module Banking OS Preview
+            </h2>
+            <p className="text-xs text-slate-400 mt-1 font-sans">
+              Inspect the real-time Forensic Graph Studio and Virtualized Alert Triage Queue before entering the live workspace.
+            </p>
+          </div>
+          <ProductVisualPreview />
         </div>
       </section>
 
@@ -345,7 +482,7 @@ export default function EnterpriseLandingPage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span>Zero false alarms in Tier 3 clearance</span>
+                  <span>Statistically bounded missed-illicit risk in Tier 3 clearance (FNR ≤ α = 1.00%)</span>
                 </li>
               </ul>
             </div>
@@ -363,11 +500,11 @@ export default function EnterpriseLandingPage() {
               <ul className="space-y-1.5 text-[11px] font-mono text-slate-300">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                  <span>Bangladesh Evidence Act § 65B certified</span>
+                  <span>Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B &amp; 73A</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                  <span>Anchored to AWS S3 / MinIO Object Lock</span>
+                  <span>Anchored to AWS S3 / MinIO Object Lock Compliance Mode</span>
                 </li>
               </ul>
             </div>
@@ -375,10 +512,10 @@ export default function EnterpriseLandingPage() {
         </div>
       </section>
 
-      {/* 5. Conformal Tiering Explainer */}
+      {/* 5. Conformal Tiering Explainer & Live Preview Widget */}
       <section id="tiering" className="py-20 border-b border-[#1E293B]/60 bg-[#0B0F17]/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-3xl mx-auto mb-14">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12">
+          <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2">
               Operational Pipeline
             </h2>
@@ -389,6 +526,9 @@ export default function EnterpriseLandingPage() {
               {t('conformal_desc')}
             </p>
           </div>
+
+          {/* Interactive Live Preview Component */}
+          <ConformalLivePreviewWidget />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Tier 1 */}
@@ -430,7 +570,7 @@ export default function EnterpriseLandingPage() {
               <div className="text-[11px] font-mono text-slate-300 p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B]">
                 <p className="text-amber-400 font-bold mb-1">Investigation Support:</p>
                 <p>• 12-Invariant SHAP Waterfall attribution</p>
-                <p>• Counterfactual recourse suggestions</p>
+                <p>• Internal analyst sensitivity &amp; false-positive analysis (strictly non-customer-facing)</p>
                 <p>• Maker-Checker sign-off workflow</p>
               </div>
             </div>
@@ -451,7 +591,7 @@ export default function EnterpriseLandingPage() {
               </p>
               <div className="text-[11px] font-mono text-slate-300 p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B]">
                 <p className="text-emerald-400 font-bold mb-1">Statistical Guarantee:</p>
-                <p>• Empirical False Positive Rate: 0.76%</p>
+                <p>• Empirical Missed-Illicit Rate (FNR): 0.76% (within α = 1.00% conformal bound)</p>
                 <p>• 84.2% noise stripped before analyst queue</p>
                 <p>• Decision hash stamped in audit ledger</p>
               </div>
@@ -465,13 +605,13 @@ export default function EnterpriseLandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 uppercase tracking-wider mb-3 inline-block">
-              {t('security_badge')}
+              OWASP ASVS LEVEL 2 ALIGNED ARCHITECTURE
             </span>
             <h3 className="text-2xl sm:text-3xl font-bold text-slate-100 mt-2">
               {t('security_title')}
             </h3>
             <p className="text-sm text-slate-400 mt-3 font-sans">
-              Tailored specifically for the Bangladesh regulatory regime (BFIU, MLPA 2012, ATA 2009) with full air-gapped sovereign deployment readiness.
+              Tailored specifically for the Bangladesh regulatory regime: BFIU Master Circular 26 &amp; Circular 24 (TBML), Circular 32 (Sept 2026), Circular Letters 02 &amp; 03 (Feb 2026), Circular Letter 05 (Aug 2026), MLPA 2012 (§§ 6, 25), ATA 2009, and MLPR 2019.
             </p>
           </div>
 
@@ -485,7 +625,7 @@ export default function EnterpriseLandingPage() {
                   {t('security_point1')}
                 </h4>
                 <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                  Blocks are chained via SHA-256 over RFC 8785 canonical JSON and signed with Ed25519 private keys. Verified under Section 65B of Bangladesh Evidence Act.
+                  Blocks are chained via SHA-256 over RFC 8785 canonical JSON and signed with Ed25519 private keys. Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B &amp; 73A with responsible officer certificate.
                 </p>
               </div>
             </div>
@@ -527,7 +667,7 @@ export default function EnterpriseLandingPage() {
                   {t('security_point4')}
                 </h4>
                 <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                  Automated generation of UNODC goAML v4.2 XML with mandatory supporting attachment validation and anti-tipping-off warnings under MLPA 2012 § 27.
+                  Automated generation of UNODC goAML v4.2 XML with mandatory supporting attachment validation and anti-tipping-off prohibitions under MLPA 2012 § 6.
                 </p>
               </div>
             </div>
@@ -551,7 +691,7 @@ export default function EnterpriseLandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Tier A */}
+            {/* Tier A: Evaluation */}
             <div className="p-6 rounded-2xl bg-[#0F172A] border border-[#1E293B] flex flex-col justify-between">
               <div>
                 <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">Evaluation</span>
@@ -583,7 +723,7 @@ export default function EnterpriseLandingPage() {
               </Link>
             </div>
 
-            {/* Tier B */}
+            {/* Tier B: Bank On-Premises (Most Popular) */}
             <div className="p-6 rounded-2xl bg-[#0F172A] border-2 border-emerald-500/50 flex flex-col justify-between relative shadow-lg shadow-emerald-950/20">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500 text-slate-950 uppercase tracking-wider">
                 Most Popular
@@ -602,11 +742,11 @@ export default function EnterpriseLandingPage() {
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Core banking & SWIFT MT700 connectors</span>
+                    <span>Core banking &amp; SWIFT MT700 connectors</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Ed25519 WORM ledger & Object-Lock</span>
+                    <span>Ed25519 WORM ledger &amp; Object-Lock</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
@@ -616,14 +756,14 @@ export default function EnterpriseLandingPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setIsDemoModalOpen(true)}
+                onClick={() => handleOpenInquiry('BANK_POC')}
                 className="w-full py-2.5 rounded-lg text-xs font-mono font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-center transition-all cursor-pointer shadow-md shadow-emerald-500/20"
               >
-                Request Enterprise Quote
+                Request Bank PoC &amp; Architecture Brief
               </button>
             </div>
 
-            {/* Tier C */}
+            {/* Tier C: National FIU / Central Bank */}
             <div className="p-6 rounded-2xl bg-[#0F172A] border border-[#1E293B] flex flex-col justify-between">
               <div>
                 <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">Sovereign Authority</span>
@@ -649,10 +789,10 @@ export default function EnterpriseLandingPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setIsDemoModalOpen(true)}
+                onClick={() => handleOpenInquiry('SOVEREIGN')}
                 className="w-full py-2.5 rounded-lg text-xs font-mono font-semibold bg-[#1E293B] hover:bg-[#334155] text-slate-200 text-center border border-[#475569] transition-all cursor-pointer"
               >
-                Inquire Sovereign License
+                Schedule Sovereign Briefing
               </button>
             </div>
           </div>
@@ -666,7 +806,7 @@ export default function EnterpriseLandingPage() {
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
               <span className="font-bold text-slate-200">Intelligent-AML Enterprise Banking Platform</span>
-              <span className="text-[10px] text-slate-500">v3.0.0</span>
+              <span className="text-[10px] text-slate-400">Platform v3.0 | C-STGB v3.2 Engine</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-6 text-[11px]">
@@ -704,128 +844,12 @@ export default function EnterpriseLandingPage() {
         </div>
       </footer>
 
-      {/* 9. Request Demo Modal */}
-      {isDemoModalOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="demo-dialog-title"
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
-        >
-          <div className="w-full max-w-lg bg-[#0F172A] border border-[#334155] rounded-2xl shadow-2xl p-6 relative text-slate-100">
-            <button
-              type="button"
-              onClick={() => setIsDemoModalOpen(false)}
-              className="absolute top-4 right-4 p-1 rounded-lg hover:bg-[#1E293B] text-slate-400 hover:text-slate-200"
-              aria-label="Close dialog"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <h3 id="demo-dialog-title" className="text-lg font-bold text-slate-100 mb-1">
-              Schedule Institutional Demonstration
-            </h3>
-            <p className="text-xs text-slate-400 font-sans mb-6">
-              Connect with our compliance architects to evaluate C-STGB on your transaction volume.
-            </p>
-
-            {isSubmitted ? (
-              <div className="p-8 text-center bg-emerald-500/10 border border-emerald-500/30 rounded-xl animate-in zoom-in-95">
-                <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
-                <h4 className="text-base font-bold text-slate-100">Briefing Request Received</h4>
-                <p className="text-xs text-slate-300 mt-2 font-sans">
-                  Our compliance team will dispatch the technical briefing kit and demo credentials to <span className="font-mono text-emerald-400">{demoFormData.email || 'your email'}</span> within 2 hours.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleDemoSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-mono text-slate-400 mb-1">Officer Name *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Kazi Rafiqul Islam"
-                      value={demoFormData.name}
-                      onChange={(e) => setDemoFormData({ ...demoFormData, name: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-mono text-slate-400 mb-1">Institutional Email *</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="officer@bank.com.bd"
-                      value={demoFormData.email}
-                      onChange={(e) => setDemoFormData({ ...demoFormData, email: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-mono text-slate-400 mb-1">Institution Name *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Eastern Bank PLC"
-                      value={demoFormData.institution}
-                      onChange={(e) => setDemoFormData({ ...demoFormData, institution: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-mono text-slate-400 mb-1">Organization Type</label>
-                    <select
-                      value={demoFormData.orgType}
-                      onChange={(e) => setDemoFormData({ ...demoFormData, orgType: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
-                    >
-                      <option>Tier-1 Commercial Bank</option>
-                      <option>Central Bank / FIU</option>
-                      <option>MFS / Digital Payment</option>
-                      <option>Law Enforcement Agency</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono text-slate-400 mb-1">Target Deployment Model</label>
-                  <select
-                    value={demoFormData.deployment}
-                    onChange={(e) => setDemoFormData({ ...demoFormData, deployment: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
-                  >
-                    <option>Air-Gapped Sovereign On-Premises (Kubernetes)</option>
-                    <option>Virtual Private Cloud (VPC)</option>
-                    <option>Hosted Evaluation Sandbox</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono text-slate-400 mb-1">Notes / Statutory Requirements</label>
-                  <textarea
-                    rows={3}
-                    placeholder="Describe transaction volume, core-banking integration, or specific BFIU compliance targets..."
-                    value={demoFormData.notes}
-                    onChange={(e) => setDemoFormData({ ...demoFormData, notes: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-lg text-xs font-mono font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all cursor-pointer shadow-md shadow-emerald-500/20"
-                >
-                  Submit Institutional Request
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
+      {/* 9. Institutional Inquiry Modal */}
+      <InstitutionalInquiryModal
+        isOpen={inquiryModalOpen}
+        onClose={() => setInquiryModalOpen(false)}
+        inquiryType={inquiryType}
+      />
 
       {/* 10. Privacy Policy Modal */}
       {isPrivacyModalOpen && (
@@ -846,7 +870,7 @@ export default function EnterpriseLandingPage() {
             </button>
 
             <h3 id="privacy-dialog-title" className="text-lg font-bold text-slate-100 mb-2">
-              Privacy Policy & Sovereign Data Governance
+              Privacy Policy &amp; Sovereign Data Governance
             </h3>
             <p className="text-xs font-mono text-emerald-400 mb-4">
               Bangladesh Bank ICT Security Guidelines v3.0 &amp; Banking Companies Act 1991 § 46
@@ -907,8 +931,8 @@ export default function EnterpriseLandingPage() {
         </div>
       )}
 
-      {/* 12. Cookie Consent Banner */}
-      {!isCookieNoticeDismissed && (
+      {/* 12. Fixed Cookie Consent Banner with zero CLS */}
+      {!isCookieDismissed && (
         <div
           role="region"
           aria-label="Cookie consent banner"
@@ -921,7 +945,7 @@ export default function EnterpriseLandingPage() {
             </div>
             <button
               type="button"
-              onClick={() => setIsCookieNoticeDismissed(true)}
+              onClick={handleAcknowledgeCookie}
               className="text-slate-400 hover:text-slate-200"
               aria-label="Dismiss cookie notice"
             >
@@ -931,13 +955,20 @@ export default function EnterpriseLandingPage() {
           <p className="text-[11px] text-slate-400 font-sans leading-relaxed mb-3">
             We use only strictly necessary local session cookies to maintain your authenticated role and cryptographic WORM verification keys. Zero ad tracking or third-party telemetry.
           </p>
-          <div className="flex items-center justify-end gap-2">
+          <div className="flex items-center justify-end gap-2 pt-1 border-t border-[#1E293B]">
             <button
               type="button"
-              onClick={() => setIsCookieNoticeDismissed(true)}
-              className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all cursor-pointer"
+              onClick={() => setIsPrivacyModalOpen(true)}
+              className="px-2.5 py-1.5 rounded-lg text-xs font-mono text-slate-300 hover:text-slate-100 hover:bg-[#1E293B] transition-colors cursor-pointer"
             >
-              Accept Essential Cookies
+              Security &amp; Cookie Policy
+            </button>
+            <button
+              type="button"
+              onClick={handleAcknowledgeCookie}
+              className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all cursor-pointer shadow-sm shadow-emerald-500/20"
+            >
+              Acknowledge &amp; Continue
             </button>
           </div>
         </div>

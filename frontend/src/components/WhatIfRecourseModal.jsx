@@ -84,11 +84,11 @@ export const WhatIfRecourseModal = () => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-text text-sm">Counterfactual Behavioral Recourse</h3>
-                <Badge variant="accent" size="sm">What-If Sensitivity Engine</Badge>
+                <h3 className="font-semibold text-text text-sm">Internal Analyst Sensitivity &amp; False-Positive Simulator</h3>
+                <Badge variant="accent" size="sm">Internal What-If Engine</Badge>
               </div>
               <p className="text-[11px] text-text-muted mt-0.5">
-                Model-driven prescriptive path to resolve Hawkes burst alerts and de-escalate false positives.
+                Internal bank compliance simulation to analyze model sensitivity parameters. Non-customer-facing (MLPA 2012 § 6 anti-tipping-off).
               </p>
             </div>
           </div>

@@ -149,10 +149,13 @@ export default function SurveillanceOverviewPage() {
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <span className="font-semibold text-slate-100 uppercase tracking-wide truncate text-xs font-sans">
-                {IS_ONPREM_MODE ? 'On-Prem Secure Node' : 'Simulated Surveillance Node'}
+                {IS_ONPREM_MODE ? 'On-Prem Secure Node' : 'Cloud Evaluation Sandbox (Air-Gap Ready)'}
               </span>
               <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
                 {IS_ONPREM_MODE ? 'EGRESS CONFINED' : 'SYNTHETIC WORKLOAD DATA'}
+              </span>
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30 shrink-0">
+                BFF: {IS_ONPREM_MODE ? 'LIVE FASTAPI BACKEND' : 'DETERMINISTIC DEMO ENGINE'}
               </span>
             </div>
             <p className="text-[11px] text-slate-400 mt-0.5 break-words font-mono">

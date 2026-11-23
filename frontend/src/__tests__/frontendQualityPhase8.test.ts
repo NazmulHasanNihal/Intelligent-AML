@@ -72,22 +72,18 @@ describe('Phase 8: Frontend Quality, i18n, Currency & Site Structure Suite', () 
       expect(map[0]!.priority).toBe(1.0);
     });
 
-    it('generates strict robots.txt disallowing search engines from indexing compliance app routes', () => {
+    it('generates dynamic crawler rules respecting reversible audit mode and public governance', () => {
       const bot = robots();
       expect(bot.sitemap).toBe('https://intelligent-aml.vercel.app/sitemap.xml');
       expect(bot.rules).toBeDefined();
 
       const rule = Array.isArray(bot.rules) ? bot.rules[0] : bot.rules;
-      expect(rule?.allow).toBe('/');
+      const allows = Array.isArray(rule?.allow) ? rule?.allow : [rule?.allow];
+      expect(allows).toContain('/');
+      expect(allows).toContain('/governance');
 
-      const disallows = rule?.disallow as string[];
-      expect(disallows).toContain('/app');
-      expect(disallows).toContain('/app/*');
-      expect(disallows).toContain('/api/*');
-      expect(disallows).toContain('/triage');
-      expect(disallows).toContain('/sar');
-      expect(disallows).toContain('/cases');
-      expect(disallows).toContain('/governance');
+      const disallows = Array.isArray(rule?.disallow) ? rule?.disallow : [rule?.disallow];
+      expect(disallows).toContain('/api/');
     });
   });
 

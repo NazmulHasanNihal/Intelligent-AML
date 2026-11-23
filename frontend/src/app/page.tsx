@@ -27,7 +27,8 @@ import {
   Lock,
   PlusCircle,
   Send,
-  Eye
+  Eye,
+  SlidersHorizontal
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
 import { JURISDICTIONS, formatCurrencyByJurisdiction } from '@/lib/compliance/jurisdictions';
@@ -164,11 +165,10 @@ export default function SurveillanceOverviewPage() {
           <span className="text-[11px] font-medium text-slate-400">Feed:</span>
           <button
             onClick={toggleLiveStream}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
-              isLiveStreamActive
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
-                : 'bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30'
-            }`}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${isLiveStreamActive
+              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
+              : 'bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30'
+              }`}
           >
             {isLiveStreamActive ? (
               <>
@@ -188,11 +188,10 @@ export default function SurveillanceOverviewPage() {
               <button
                 key={spd}
                 onClick={() => setStreamSpeed(spd)}
-                className={`px-1.5 py-0.5 rounded cursor-pointer ${
-                  streamSpeed === spd
-                    ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
+                className={`px-1.5 py-0.5 rounded cursor-pointer ${streamSpeed === spd
+                  ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
+                  : 'text-slate-400 hover:text-slate-200'
+                  }`}
               >
                 {spd}x
               </button>
@@ -457,7 +456,7 @@ export default function SurveillanceOverviewPage() {
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1E293B]">
           <div>
             <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2 font-sans">
-              <Sliders className="w-4 h-4 text-emerald-400" />
+              <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
               Real-Time Risk Scoring Sandbox
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -536,7 +535,7 @@ export default function SurveillanceOverviewPage() {
               onChange={(e) => setTestBurst(e.target.value === 'true')}
               className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-100 cursor-pointer"
             >
-              <option value="true">Active (>5 events / 10m)</option>
+              <option value="true">Active (&gt;5 events / 10m)</option>
               <option value="false">Normal (&le; 1 event / hr)</option>
             </select>
           </div>

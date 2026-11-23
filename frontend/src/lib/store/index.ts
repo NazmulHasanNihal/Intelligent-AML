@@ -121,7 +121,9 @@ export interface UnifiedBankingState {
   batchAssignAlerts: (alertIds: string[], assignee: string) => void;
   dismissAlert: (alertId: string, reason: string) => void;
   batchDismissAlerts: (alertIds: string[], reason: string) => void;
-  escalateToCase: (alertIds: string[], title: string, slaHours?: number) => CommercialCase;
+  escalateToCase: (alertIds: string[] | string, title?: string, slaHours?: number) => CommercialCase;
+  createCase: (caseData: any) => CommercialCase;
+  addAuditEntry: (entryOrAction: string | { eventType?: string; action?: string; entityId?: string; targetAccount?: string; details: string; actionBy?: string }, details?: string, targetAccount?: string) => Promise<void>;
   injectAlert: (alert: CommercialAlert) => void;
   addCaseNote: (caseId: string, note: string) => void;
   updateCaseMilestone: (caseId: string, milestoneIndex: number, status: 'COMPLETE' | 'IN_PROGRESS' | 'PENDING') => void;
@@ -362,7 +364,8 @@ export const useAppStore = create<UnifiedBankingState>()(
         get().addToast('Batch Dismissal Complete', `${alertIds.length} alert(s) marked False Positive.`, 'info');
       },
 
-      escalateToCase: (alertIds, title, slaHours = 72) => {
+      escalateToCase: (alertIdsInput, title, slaHours = 72) => {
+        const alertIds = Array.isArray(alertIdsInput) ? alertIdsInput : [alertIdsInput];
         const targetAlert = get().alerts.find(a => alertIds.includes(a.id)) || get().alerts[0]!;
         const newCaseId = `CASE-2026-${Math.floor(1000 + Math.random() * 9000)}`;
         const banker = get().currentBanker;
@@ -410,6 +413,61 @@ export const useAppStore = create<UnifiedBankingState>()(
 
         get().addToast('Case Docketed', `Created Case ${newCaseId} linked to ${alertIds.length} alert(s)`, 'success');
         return newCase;
+      },
+
+      createCase: (caseData: any) => {
+        const newCaseId = `CASE-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+        const banker = get().currentBanker;
+        const newCase: CommercialCase = {
+          id: newCaseId,
+          title: caseData.title || `Investigation: ${caseData.subjectEntity || caseData.entityName || 'Commercial Docket'}`,
+          leadInvestigator: caseData.assignedTo || caseData.leadInvestigator || banker.name,
+          createdAt: new Date().toISOString(),
+          status: 'INVESTIGATION_OPEN',
+          slaHours: 72,
+          slaDeadline: new Date(Date.now() + 72 * 3600000).toISOString(),
+          riskExposureUsd: caseData.exposureUsd || caseData.riskExposureUsd || 100000,
+          riskExposureBdt: (caseData.exposureUsd || 100000) * 121.5,
+          targetAccount: caseData.targetAccount || 'AC-8812903',
+          entityName: caseData.subjectEntity || caseData.entityName || 'Enterprise Subject',
+          primaryTypology: caseData.primaryTypology || 'HIGH_VELOCITY_STRUCTURING',
+          milestonesCompleted: 2,
+          milestonesTotal: 6,
+          milestones: [
+            { title: '1. Alert Quarantined', status: 'COMPLETE', time: new Date().toISOString(), detail: 'Initial risk threshold hold' },
+            { title: '2. Triage & Intake', status: 'COMPLETE', time: new Date().toISOString(), detail: `Assigned to ${caseData.assignedTo || banker.name}` },
+            { title: '3. Compliance RFI Issued', status: 'PENDING', detail: 'Awaiting documentary proof of funds' },
+            { title: '4. Evidence Hash Chain Sealed', status: 'PENDING', detail: 'Awaiting SHA-256 evidence hashing' },
+            { title: '5. Regulatory SAR Drafted', status: 'PENDING', detail: 'Awaiting statutory narrative' },
+            { title: '6. 4-Eyes CCO Sign-Off', status: 'PENDING', detail: 'Awaiting dual signatory ratification' }
+          ],
+          evidenceItems: [],
+          notes: [
+            {
+              id: `NOTE-${Date.now()}`,
+              author: banker.name,
+              role: banker.role,
+              timestamp: new Date().toISOString(),
+              content: `Manual case docket created with initial exposure $${(caseData.exposureUsd || 100000).toLocaleString()}`
+            }
+          ]
+        };
+
+        set((s) => ({ cases: [newCase, ...s.cases] }));
+        get().addToast('Case Created', `Institutional docket ${newCaseId} successfully registered.`, 'success');
+        return newCase;
+      },
+
+      addAuditEntry: async (entryOrAction: any, details?: string, targetAccount?: string) => {
+        if (typeof entryOrAction === 'object' && entryOrAction !== null) {
+          const action = entryOrAction.eventType || entryOrAction.action || 'COMPLIANCE_ACTION';
+          const desc = entryOrAction.details || '';
+          const acc = entryOrAction.entityId || entryOrAction.targetAccount;
+          const actor = entryOrAction.actionBy;
+          await get().logAuditAction(action, desc, acc, actor);
+        } else {
+          await get().logAuditAction(entryOrAction, details || '', targetAccount);
+        }
       },
 
       injectAlert: (newAlert) => {
@@ -590,8 +648,8 @@ export const useAppStore = create<UnifiedBankingState>()(
       name: 'intelligent-aml-workspace-v3',
       storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
         getItem: () => null,
-        setItem: () => {},
-        removeItem: () => {}
+        setItem: () => { },
+        removeItem: () => { }
       })),
       partialize: (state) => ({
         activeJurisdiction: state.activeJurisdiction,

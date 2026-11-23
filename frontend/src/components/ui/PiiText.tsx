@@ -11,21 +11,24 @@ interface PiiTextProps {
 }
 
 export const PiiText: React.FC<PiiTextProps> = ({ value, type = 'account', className = '' }) => {
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [localRevealed, setLocalRevealed] = useState(false);
   const logAuditAction = useAppStore((state) => state.logAuditAction);
   const addToast = useAppStore((state) => state.addToast);
+  const isGlobalRevealed = useAppStore((state) => state.isPiiRevealed());
+
+  const isRevealed = localRevealed || isGlobalRevealed;
 
   const maskValue = (val: string): string => {
     if (!val) return '••••';
     if (type === 'account') {
       const parts = val.split('-');
       if (parts.length >= 3) {
-        return `${parts[0]}-••••-••••-${parts[parts.length - 1]}`;
+        return `${parts[0]}-****-****-${parts[parts.length - 1]}`;
       }
-      return val.length > 8 ? `${val.substring(0, 4)}••••${val.substring(val.length - 4)}` : '••••••••';
+      return val.length > 8 ? `${val.substring(0, 4)}****${val.substring(val.length - 4)}` : '••••••••';
     }
     if (type === 'id') {
-      return val.length > 6 ? `•••-••-${val.substring(val.length - 4)}` : '••••••';
+      return val.length > 6 ? `***-**-${val.substring(val.length - 4)}` : '••••••';
     }
     // Name
     const names = val.split(' ');
@@ -34,33 +37,37 @@ export const PiiText: React.FC<PiiTextProps> = ({ value, type = 'account', class
 
   const toggleReveal = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!isRevealed) {
+    if (!localRevealed) {
       logAuditAction(
         'UNMASK_PII_REQUESTED',
-        `Officer unmasked sensitive customer PII for account/entity: ${value.substring(0, 4)}*** under FRE 902(11) supervision.`,
+        `Officer unmasked sensitive customer PII for account/entity: ${value.substring(0, 4)}*** under supervision.`,
         value,
         'Active Compliance Officer'
       );
       addToast('PII Access Logged', 'Customer unmasking event permanently registered to audit vault.', 'info');
-      setIsRevealed(true);
-      setTimeout(() => setIsRevealed(false), 30000); // Auto-re-mask after 30 seconds
+      setLocalRevealed(true);
+      setTimeout(() => setLocalRevealed(false), 60000); // 60 seconds
     } else {
-      setIsRevealed(false);
+      setLocalRevealed(false);
     }
   };
 
   return (
-    <span className={`inline-flex items-center gap-1.5 font-mono ${className}`}>
-      <span className={isRevealed ? 'text-amber-400 font-semibold selection:bg-amber-500/20' : 'text-text-secondary'}>
+    <span className={`inline-flex items-center gap-1 font-mono group/pii ${className}`}>
+      <span className={isRevealed ? 'text-amber-300 font-bold' : ''}>
         {isRevealed ? value : maskValue(value)}
       </span>
       <button
+        type="button"
         onClick={toggleReveal}
-        className="p-0.5 rounded hover:bg-panel-raised text-text-dim hover:text-text-primary transition-colors cursor-pointer"
-        title={isRevealed ? "Re-mask PII" : "Reveal PII (Logged to WORM Audit Ledger)"}
-        aria-label="Toggle PII visibility"
+        className="opacity-60 hover:opacity-100 p-0.5 rounded hover:bg-[#1E293B] text-slate-400 hover:text-slate-200 transition-opacity cursor-pointer"
+        title={isRevealed ? "Click to re-mask customer PII" : "Reveal PII (Audited 60s Access)"}
       >
-        {isRevealed ? <EyeOff className="w-3 h-3 text-amber-400" /> : <Eye className="w-3 h-3" />}
+        {isRevealed ? (
+          <EyeOff className="w-3 h-3 text-amber-400" />
+        ) : (
+          <Eye className="w-3 h-3 text-slate-500 group-hover/pii:text-slate-300" />
+        )}
       </button>
     </span>
   );

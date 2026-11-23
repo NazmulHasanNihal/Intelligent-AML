@@ -4,6 +4,7 @@ import './globals.css';
 import { CommandHeader } from '@/components/shell/CommandHeader';
 import { NavigationRail } from '@/components/shell/NavigationRail';
 import { GlobalCommandPalette } from '@/components/shell/GlobalCommandPalette';
+import { NotificationDrawer } from '@/components/shell/NotificationDrawer';
 import { FourEyesApprovalModal } from '@/components/auth/FourEyesApprovalModal';
 import { RoleSwitchModal } from '@/components/auth/RoleSwitchModal';
 
@@ -48,8 +49,9 @@ export default function RootLayout({
           </main>
         </div>
 
-        {/* Global Institutional Modals & Palettes */}
+        {/* Global Institutional Modals, Drawers & Palettes */}
         <GlobalCommandPalette />
+        <NotificationDrawer />
         <FourEyesApprovalModal />
         <RoleSwitchModal />
       </body>

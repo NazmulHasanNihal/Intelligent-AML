@@ -11,7 +11,8 @@
     "build": "npm --prefix frontend run build",
     "start": "npm --prefix frontend run start",
     "lint": "npm --prefix frontend run lint",
-    "typecheck": "npm --prefix frontend run typecheck"
+    "typecheck": "npm --prefix frontend run typecheck",
+    "test": "npm --prefix frontend run test"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",

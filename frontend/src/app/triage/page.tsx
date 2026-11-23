@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   ShieldAlert,
@@ -20,44 +21,131 @@ import {
   MailQuestion,
   CheckSquare,
   Square,
-  Sliders,
+  SlidersHorizontal,
   ShieldX,
-  UserCheck
+  UserCheck,
+  X,
+  Send,
+  Eye,
+  FileSpreadsheet,
+  AlertOctagon,
+  RefreshCw,
+  ExternalLink,
+  ChevronRight,
+  User
 } from 'lucide-react';
-import { useAppStore } from '@/lib/store';
-import { SEEDED_ALERTS } from '@/lib/seedData';
+import { useBankingStore } from '@/lib/store';
 import { PiiText } from '@/components/ui/PiiText';
+import { formatCurrencyByJurisdiction } from '@/lib/compliance/jurisdictions';
+import { CommercialAlert } from '@/lib/data/commercialSeed';
 
 export default function AlertTriagePage() {
-  const { densityMode, setDensityMode, setFourEyesModalOpen, addToast } = useAppStore();
+  const router = useRouter();
+  const {
+    alerts,
+    jurisdiction,
+    densityMode,
+    setDensityMode,
+    setFourEyesModalOpen,
+    assignAlert,
+    batchAssignAlerts,
+    dismissAlert,
+    escalateToCase,
+    freezeAccount,
+    addAuditEntry
+  } = useBankingStore();
+
   const [selectedTier, setSelectedTier] = useState<'ALL' | 1 | 2 | 3>('ALL');
+  const [selectedStatus, setSelectedStatus] = useState<'ALL' | 'PENDING_TRIAGE' | 'UNDER_INVESTIGATION' | 'SAR_DRAFTED' | 'QUARANTINED' | 'FALSE_POSITIVE_DISMISSED'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string>>(new Set());
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
+  const [inspectingAlert, setInspectingAlert] = useState<CommercialAlert | null>(null);
+  const [assigneeTarget, setAssigneeTarget] = useState<string>('Sarah Jenkins (L2 Senior)');
+  const [dismissReasonModalOpen, setDismissReasonModalOpen] = useState(false);
+  const [dismissReason, setDismissReason] = useState('');
 
-  // Filter alerts based on active tab and search query
+  // Filter alerts based on active tab, status, and search query
   const filteredAlerts = useMemo(() => {
-    return SEEDED_ALERTS.filter((alert) => {
+    return alerts.filter((alert) => {
       const matchesTier = selectedTier === 'ALL' || alert.tierCode === selectedTier;
+      const matchesStatus = selectedStatus === 'ALL' || alert.status === selectedStatus;
       const matchesSearch =
         searchQuery === '' ||
         alert.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         alert.entityName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         alert.account.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        alert.rail.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesTier && matchesSearch;
+        alert.rail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        alert.typology.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        alert.assignee.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesTier && matchesStatus && matchesSearch;
     });
-  }, [selectedTier, searchQuery]);
+  }, [alerts, selectedTier, selectedStatus, searchQuery]);
 
-  // Virtualization setup connected directly to densityMode
+  // Virtualization setup
   const parentRef = useRef<HTMLDivElement>(null);
-  const rowHeight = densityMode === 'compact' ? 38 : 52;
+  const rowHeight = densityMode === 'compact' ? 40 : 54;
 
   const rowVirtualizer = useVirtualizer({
     count: filteredAlerts.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => rowHeight,
-    overscan: 12,
+    overscan: 15,
   });
+
+  // Keyboard navigation: J/K, Enter, G, F, E, R
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept if typing in an input
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement).tagName)) {
+        return;
+      }
+
+      if (e.key === 'j' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        setFocusedIndex((prev) => Math.min(prev + 1, filteredAlerts.length - 1));
+      } else if (e.key === 'k' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        setFocusedIndex((prev) => Math.max(prev - 1, 0));
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (filteredAlerts[focusedIndex]) {
+          setInspectingAlert(filteredAlerts[focusedIndex]);
+        }
+      } else if (e.key.toLowerCase() === 'g') {
+        e.preventDefault();
+        if (filteredAlerts[focusedIndex]) {
+          router.push(`/graph?node=${encodeURIComponent(filteredAlerts[focusedIndex].account)}`);
+        }
+      } else if (e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        const current = filteredAlerts[focusedIndex];
+        if (current) {
+          setFourEyesModalOpen(true, {
+            actionType: 'ACCOUNT_FREEZE',
+            actionTitle: `Emergency Administrative Account Freeze (${current.entityName})`,
+            targetId: current.account,
+            details: `Execute regulatory freeze on account ${current.account} across SWIFT/RTGS clearing rails pursuant to statutory freeze powers.`
+          });
+        }
+      } else if (e.key.toLowerCase() === 'e') {
+        e.preventDefault();
+        const current = filteredAlerts[focusedIndex];
+        if (current) {
+          escalateToCase(current.id);
+        }
+      } else if (e.key.toLowerCase() === 'x') {
+        e.preventDefault();
+        const current = filteredAlerts[focusedIndex];
+        if (current) {
+          toggleSelectRow(current.id);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [filteredAlerts, focusedIndex, router, setFourEyesModalOpen, escalateToCase]);
 
   const toggleSelectAll = () => {
     if (selectedRowIds.size === filteredAlerts.length) {
@@ -79,21 +167,121 @@ export default function AlertTriagePage() {
   const selectedAlerts = filteredAlerts.filter((a) => selectedRowIds.has(a.id));
   const totalSelectedExposure = selectedAlerts.reduce((sum, a) => sum + a.amount, 0);
 
+  // Bulk actions
+  const handleBatchAssign = () => {
+    if (selectedRowIds.size === 0) return;
+    batchAssignAlerts(Array.from(selectedRowIds), assigneeTarget);
+    setSelectedRowIds(new Set());
+  };
+
+  const handleBatchEscalate = () => {
+    if (selectedRowIds.size === 0) return;
+    selectedRowIds.forEach((id) => escalateToCase(id));
+    setSelectedRowIds(new Set());
+  };
+
+  const handleBatchDismiss = () => {
+    if (selectedRowIds.size === 0) return;
+    setDismissReasonModalOpen(true);
+  };
+
+  const confirmBatchDismiss = () => {
+    selectedRowIds.forEach((id) => {
+      dismissAlert(id, dismissReason || 'Classified as legitimate commercial activity after analyst triage.');
+    });
+    setDismissReasonModalOpen(false);
+    setDismissReason('');
+    setSelectedRowIds(new Set());
+  };
+
+  const exportCsv = () => {
+    const dataToExport = selectedAlerts.length > 0 ? selectedAlerts : filteredAlerts;
+    const headers = ['Alert ID', 'Entity Name', 'Account', 'BIC', 'Amount USD', 'Amount BDT', 'Rail', 'Tier', 'Status', 'Typology', 'Assigned To'];
+    const rows = dataToExport.map((a) => [
+      a.id,
+      `"${a.entityName.replace(/"/g, '""')}"`,
+      `"${a.account}"`,
+      a.bic,
+      a.amount,
+      a.amountBdt,
+      a.rail,
+      a.tierCode,
+      a.status,
+      `"${a.typology}"`,
+      `"${a.assignee}"`
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `AML_Alert_Queue_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportJson = () => {
+    const dataToExport = selectedAlerts.length > 0 ? selectedAlerts : filteredAlerts;
+    const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `AML_Alert_Queue_${new Date().toISOString().slice(0, 10)}.json`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
-    <div className="p-4 sm:p-5 lg:p-6 max-w-[1700px] mx-auto space-y-4 sm:space-y-5">
+    <div className="p-4 sm:p-5 lg:p-6 max-w-[1750px] mx-auto space-y-4">
       {/* Header and Controls */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-sans">
             <ShieldAlert className="w-5 h-5 text-rose-500" />
-            Alert Triage Queue — Conformal Risk Gating (CRC &alpha;=0.01)
+            High-Throughput Alert Triage Queue
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Institutional high-throughput alert management with class-conditional finite sample coverage guarantees (&ge; 99.0%).
+            Real-time calibrated risk prioritization for multi-rail clearing (SWIFT MT, ISO 20022 pacs, BEFTN, MFS). {alerts.length.toLocaleString()} total live alerts loaded.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Quick Shortcuts Pill */}
+          <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-[#0F172A] border border-[#334155] rounded-lg text-[11px] text-slate-400 font-mono">
+            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">J</kbd>/<kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">K</kbd> Navigate</span>
+            <span>•</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">Enter</kbd> Inspect Wire</span>
+            <span>•</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">G</kbd> Graph</span>
+            <span>•</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">F</kbd> Freeze</span>
+            <span>•</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">E</kbd> Escalate</span>
+          </div>
+
+          {/* Export Actions */}
+          <div className="flex items-center gap-1.5 bg-[#0F172A] p-1 rounded-lg border border-[#334155]">
+            <button
+              onClick={exportCsv}
+              title="Export CSV"
+              className="px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:text-white hover:bg-[#1E293B] flex items-center gap-1.5 cursor-pointer"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+              <span>CSV</span>
+            </button>
+            <button
+              onClick={exportJson}
+              title="Export JSON"
+              className="px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:text-white hover:bg-[#1E293B] flex items-center gap-1.5 cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5 text-sky-400" />
+              <span>JSON</span>
+            </button>
+          </div>
+
           {/* Density Mode Sync */}
           <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
             <button
@@ -104,7 +292,7 @@ export default function AlertTriagePage() {
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Compact (25+ rows)
+              Compact
             </button>
             <button
               onClick={() => setDensityMode('comfortable')}
@@ -120,7 +308,7 @@ export default function AlertTriagePage() {
         </div>
       </div>
 
-      {/* Tabs and Search Controls */}
+      {/* Filter Tabs and Search Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-1 border-b border-[#1E293B]">
         {/* Tier Filter Tabs */}
         <div className="flex items-center gap-2">
@@ -132,7 +320,7 @@ export default function AlertTriagePage() {
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            All Alerts ({SEEDED_ALERTS.length})
+            All Alerts ({alerts.length})
           </button>
           <button
             onClick={() => setSelectedTier(1)}
@@ -143,7 +331,7 @@ export default function AlertTriagePage() {
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-rose-500" />
-            <span>Tier 1 Hold ({SEEDED_ALERTS.filter((a) => a.tierCode === 1).length})</span>
+            <span>Tier 1 Hold ({alerts.filter((a) => a.tierCode === 1).length})</span>
           </button>
           <button
             onClick={() => setSelectedTier(2)}
@@ -154,7 +342,7 @@ export default function AlertTriagePage() {
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-amber-500" />
-            <span>Tier 2 Review ({SEEDED_ALERTS.filter((a) => a.tierCode === 2).length})</span>
+            <span>Tier 2 Review ({alerts.filter((a) => a.tierCode === 2).length})</span>
           </button>
           <button
             onClick={() => setSelectedTier(3)}
@@ -165,29 +353,44 @@ export default function AlertTriagePage() {
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span>Tier 3 Clear ({SEEDED_ALERTS.filter((a) => a.tierCode === 3).length})</span>
+            <span>Tier 3 Clear ({alerts.filter((a) => a.tierCode === 3).length})</span>
           </button>
         </div>
 
-        {/* Search */}
-        <div className="relative min-w-[280px]">
-          <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
-          <input
-            type="text"
-            placeholder="Search by ID, Entity, Account, Rail..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-[#0F172A] border border-[#334155] rounded-lg text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
-          />
+        {/* Status Dropdown & Search */}
+        <div className="flex items-center gap-3">
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value as any)}
+            className="px-3 py-1.5 bg-[#0F172A] border border-[#334155] rounded-lg text-xs text-slate-300 focus:outline-none focus:border-emerald-500 cursor-pointer"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="PENDING_TRIAGE">Pending Triage</option>
+            <option value="UNDER_INVESTIGATION">Under Investigation</option>
+            <option value="SAR_DRAFTED">SAR Drafted</option>
+            <option value="QUARANTINED">Quarantined (Hold)</option>
+            <option value="FALSE_POSITIVE_DISMISSED">Dismissed (FP)</option>
+          </select>
+
+          <div className="relative min-w-[300px]">
+            <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
+            <input
+              type="text"
+              placeholder="Search by ID, Entity, Account, BIC, Typology..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 bg-[#0F172A] border border-[#334155] rounded-lg text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
+            />
+          </div>
         </div>
       </div>
 
-      {/* TanStack Virtualized High-Density Table with Overflow Guard */}
+      {/* TanStack Virtualized High-Density Table */}
       <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
-          <div className="min-w-[960px]">
+          <div className="min-w-[1100px]">
             {/* Table Header */}
-            <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-semibold text-slate-400 uppercase tracking-wider items-center select-none">
+            <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-semibold text-slate-400 uppercase tracking-wider items-center select-none font-mono">
               <div className="col-span-1 flex items-center gap-2">
                 <button onClick={toggleSelectAll} className="text-slate-400 hover:text-slate-200 cursor-pointer">
                   {selectedRowIds.size === filteredAlerts.length && filteredAlerts.length > 0 ? (
@@ -199,19 +402,19 @@ export default function AlertTriagePage() {
                 <span>Alert ID</span>
               </div>
               <div className="col-span-3">Entity & Masked Account</div>
-              <div className="col-span-2 text-right">Amount (USD / BDT)</div>
-              <div className="col-span-1">Rail</div>
-              <div className="col-span-1 text-center">CRC Tier</div>
-              <div className="col-span-1 text-center">Conformal Set</div>
-              <div className="col-span-1 text-center">Risk Score</div>
+              <div className="col-span-2 text-right">Transaction Amount</div>
+              <div className="col-span-1">Rail & BIC</div>
+              <div className="col-span-1 text-center">Risk Tier</div>
+              <div className="col-span-1 text-center">Score / Set</div>
               <div className="col-span-1 text-center">SLA</div>
+              <div className="col-span-1">Assignee</div>
               <div className="col-span-1 text-right">Actions</div>
             </div>
 
             {/* Virtualized Body */}
             <div
               ref={parentRef}
-              className="overflow-y-auto max-h-[620px] divide-y divide-[#1E293B]/60"
+              className="overflow-y-auto max-h-[640px] divide-y divide-[#1E293B]/60"
             >
               <div
                 style={{
@@ -224,10 +427,13 @@ export default function AlertTriagePage() {
                   const alert = filteredAlerts[virtualRow.index];
                   if (!alert) return null;
                   const isSelected = selectedRowIds.has(alert.id);
+                  const isFocused = virtualRow.index === focusedIndex;
 
                   return (
                     <div
                       key={alert.id}
+                      onClick={() => setFocusedIndex(virtualRow.index)}
+                      onDoubleClick={() => setInspectingAlert(alert)}
                       style={{
                         position: 'absolute',
                         top: 0,
@@ -236,14 +442,21 @@ export default function AlertTriagePage() {
                         height: `${virtualRow.size}px`,
                         transform: `translateY(${virtualRow.start}px)`,
                       }}
-                      className={`grid grid-cols-12 gap-2 px-4 items-center text-xs transition-colors group ${
-                        isSelected ? 'bg-emerald-950/20' : 'hover:bg-[#1E293B]/40'
+                      className={`grid grid-cols-12 gap-2 px-4 items-center text-xs transition-colors group cursor-pointer ${
+                        isSelected
+                          ? 'bg-emerald-950/20'
+                          : isFocused
+                          ? 'bg-[#1E293B]/60 ring-1 ring-inset ring-sky-500/40'
+                          : 'hover:bg-[#1E293B]/40'
                       }`}
                     >
                       {/* Select + Alert ID */}
                       <div className="col-span-1 flex items-center gap-2">
                         <button
-                          onClick={() => toggleSelectRow(alert.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleSelectRow(alert.id);
+                          }}
                           className="text-slate-400 hover:text-slate-200 cursor-pointer"
                         >
                           {isSelected ? (
@@ -259,30 +472,43 @@ export default function AlertTriagePage() {
 
                       {/* Entity & Account */}
                       <div className="col-span-3 truncate">
-                        <div className="font-medium text-slate-100 truncate">{alert.entityName}</div>
+                        <div className="font-medium text-slate-100 truncate flex items-center gap-1.5">
+                          <span>{alert.entityName}</span>
+                          {alert.status === 'UNDER_INVESTIGATION' && (
+                            <span className="px-1.5 py-0.2 rounded text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">
+                              CASE
+                            </span>
+                          )}
+                          {alert.status === 'FALSE_POSITIVE_DISMISSED' && (
+                            <span className="px-1.5 py-0.2 rounded text-[9px] bg-slate-700 text-slate-300 font-mono">
+                              DISMISSED
+                            </span>
+                          )}
+                        </div>
                         <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1.5 truncate">
                           <PiiText value={alert.account} type="account" className="text-slate-400" />
                           <span>•</span>
-                          <span>BIC: {alert.bic}</span>
+                          <span className="text-slate-500 truncate">{alert.typology}</span>
                         </div>
                       </div>
 
-                      {/* Amount with Tabular-Nums */}
+                      {/* Amount */}
                       <div className="col-span-2 text-right">
                         <div className="font-mono font-bold text-slate-100 tabular-nums">
-                          ${alert.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          {formatCurrencyByJurisdiction(alert.amount, jurisdiction)}
                         </div>
                         <div className="text-[10px] font-mono text-slate-500 tabular-nums">
                           ৳{alert.amountBdt.toLocaleString()}
                         </div>
                       </div>
 
-                      {/* Rail */}
+                      {/* Rail & BIC */}
                       <div className="col-span-1 text-[11px] font-mono text-slate-300 truncate">
-                        {alert.rail}
+                        <div>{alert.rail}</div>
+                        <div className="text-[10px] text-slate-500">{alert.bic}</div>
                       </div>
 
-                      {/* CRC Tier Badge with Left-Border Risk Accent */}
+                      {/* Risk Tier Badge */}
                       <div className="col-span-1 text-center">
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold whitespace-nowrap border-l-2 ${
@@ -293,49 +519,63 @@ export default function AlertTriagePage() {
                               : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 border-l-emerald-500'
                           }`}
                         >
-                          Tier {alert.tierCode}
+                          Tier {alert.tierCode} {alert.tierCode === 1 ? 'HOLD' : alert.tierCode === 2 ? 'REVIEW' : 'CLEAR'}
                         </span>
                       </div>
 
-                      {/* Explicit Conformal Prediction Set */}
+                      {/* Calibrated Risk Score & Decision Set */}
                       <div className="col-span-1 text-center font-mono text-[11px]">
-                        <span className={
-                          alert.tierCode === 1
-                            ? 'text-rose-400 font-bold'
-                            : alert.tierCode === 2
-                            ? 'text-amber-400 font-bold'
-                            : 'text-emerald-400'
-                        }>
-                          {alert.decisionSet || (alert.tierCode === 1 ? 'Γ = {1}' : alert.tierCode === 2 ? 'Γ = {0, 1}' : 'Γ = {0}')}
-                        </span>
-                      </div>
-
-                      {/* Calibrated Risk Score */}
-                      <div className="col-span-1 text-center font-mono font-bold text-[11px] text-slate-200 tabular-nums">
-                        {alert.riskScore}
+                        <div className="font-bold text-slate-200 tabular-nums">{alert.riskScore}</div>
+                        <div className={`text-[10px] ${alert.tierCode === 1 ? 'text-rose-400' : alert.tierCode === 2 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                          {alert.decisionSet}
+                        </div>
                       </div>
 
                       {/* SLA Countdown */}
-                      <div className="col-span-1 text-center font-mono text-[10px] text-slate-400 tabular-nums">
-                        {alert.slaMinutesLeft}m
+                      <div className="col-span-1 text-center font-mono text-[11px] tabular-nums">
+                        <span
+                          className={`px-1.5 py-0.5 rounded ${
+                            alert.slaMinutesLeft < 60
+                              ? 'bg-rose-950/60 text-rose-400 font-bold border border-rose-800/40 animate-pulse'
+                              : alert.slaMinutesLeft < 180
+                              ? 'bg-amber-950/60 text-amber-400'
+                              : 'text-slate-400'
+                          }`}
+                        >
+                          {alert.slaMinutesLeft}m
+                        </span>
                       </div>
 
-                      {/* Right-Aligned Fixed Action Buttons */}
-                      <div className="col-span-1 flex items-center justify-end gap-1.5">
+                      {/* Assignee */}
+                      <div className="col-span-1 text-[11px] text-slate-300 truncate font-mono">
+                        {alert.assignee}
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="col-span-1 flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+                        <button
+                          onClick={() => setInspectingAlert(alert)}
+                          title="Inspect Raw SWIFT / ISO Message"
+                          className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-sky-400" />
+                        </button>
                         <Link
                           href={`/graph?node=${encodeURIComponent(alert.account)}`}
-                          title="Inspect Ego-Graph"
-                          className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 transition-colors"
+                          title="Inspect Multi-Hop Flow Graph"
+                          className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 hover:text-white transition-colors"
                         >
-                          <GitFork className="w-3.5 h-3.5" />
+                          <GitFork className="w-3.5 h-3.5 text-emerald-400" />
                         </Link>
-                        <Link
-                          href={`/cases/${alert.caseId}`}
-                          title="Open Case Dossier"
-                          className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 transition-colors"
-                        >
-                          <FileText className="w-3.5 h-3.5" />
-                        </Link>
+                        {alert.caseId && (
+                          <Link
+                            href={`/cases/${alert.caseId}`}
+                            title="Open Linked Case Dossier"
+                            className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 hover:text-white transition-colors"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5 text-purple-400" />
+                          </Link>
+                        )}
                       </div>
                     </div>
                   );
@@ -361,20 +601,51 @@ export default function AlertTriagePage() {
 
           <div className="h-4 w-px bg-[#334155] hidden sm:block" />
 
+          {/* Assignee Selector */}
+          <div className="flex items-center gap-2">
+            <select
+              value={assigneeTarget}
+              onChange={(e) => setAssigneeTarget(e.target.value)}
+              className="px-2.5 py-1 bg-[#1E293B] border border-[#334155] rounded text-slate-200 text-xs focus:outline-none"
+            >
+              <option value="Sarah Jenkins (L2 Senior)">Sarah Jenkins (L2 Senior)</option>
+              <option value="Tariq Rahman (AML Operations)">Tariq Rahman (AML Operations)</option>
+              <option value="Nadia Hossain (Trade Specialist)">Nadia Hossain (Trade Specialist)</option>
+              <option value="Elena Rostova (Sanctions)">Elena Rostova (Sanctions)</option>
+            </select>
+            <button
+              onClick={handleBatchAssign}
+              className="px-3 py-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-semibold border border-[#334155] cursor-pointer"
+            >
+              Assign
+            </button>
+          </div>
+
+          <div className="h-4 w-px bg-[#334155] hidden sm:block" />
+
+          {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
                 setFourEyesModalOpen(true, {
-                  actionType: 'SAR_FILING',
-                  actionTitle: `Batch 4-Eyes Escalation (${selectedRowIds.size} items)`,
+                  actionType: 'ACCOUNT_FREEZE',
+                  actionTitle: `Batch Administrative Freeze (${selectedRowIds.size} Accounts)`,
                   targetId: Array.from(selectedRowIds).join(', '),
-                  details: `Execute batch escalation and SAR filing for selected alerts. Total exposure: $${totalSelectedExposure.toLocaleString()}`
+                  details: `Execute regulatory freeze on ${selectedRowIds.size} flagged accounts across payment rails. Total exposure: $${totalSelectedExposure.toLocaleString()}`
                 });
               }}
               className="px-3 py-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <AlertTriangle className="w-3.5 h-3.5" />
-              <span>4-Eyes Escalate</span>
+              <Lock className="w-3.5 h-3.5" />
+              <span>Freeze (4-Eyes)</span>
+            </button>
+
+            <button
+              onClick={handleBatchEscalate}
+              className="px-3 py-1.5 rounded-lg bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 border border-purple-800/60 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>Escalate to Case</span>
             </button>
 
             <Link
@@ -382,8 +653,15 @@ export default function AlertTriagePage() {
               className="px-3 py-1.5 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium transition-colors flex items-center gap-1.5"
             >
               <MailQuestion className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Initiate RFI</span>
+              <span>Dispatch RFI</span>
             </Link>
+
+            <button
+              onClick={handleBatchDismiss}
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-medium cursor-pointer"
+            >
+              Dismiss (FP)
+            </button>
 
             <button
               onClick={() => setSelectedRowIds(new Set())}
@@ -391,6 +669,191 @@ export default function AlertTriagePage() {
             >
               Clear
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Raw SWIFT MT700 / ISO 20022 Wire Inspector Slide-Over */}
+      {inspectingAlert && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl bg-[#0F172A] border-l border-[#1E293B] h-full flex flex-col shadow-2xl overflow-hidden">
+            {/* Slide-Over Header */}
+            <div className="p-5 bg-[#0B0F17] border-b border-[#1E293B] flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                    inspectingAlert.tierCode === 1 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                  }`}>
+                    TIER {inspectingAlert.tierCode} HOLD
+                  </span>
+                  <h2 className="text-base font-bold text-slate-100 font-mono">
+                    {inspectingAlert.id} — Raw Wire Inspector
+                  </h2>
+                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  Interbank clearing telemetry • Rail: <strong className="text-slate-200">{inspectingAlert.rail}</strong> • BIC: <strong className="text-slate-200">{inspectingAlert.bic}</strong>
+                </p>
+              </div>
+
+              <button
+                onClick={() => setInspectingAlert(null)}
+                className="p-1.5 rounded-lg hover:bg-[#1E293B] text-slate-400 hover:text-slate-100 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Slide-Over Body */}
+            <div className="p-5 space-y-6 flex-1 overflow-y-auto font-sans">
+              {/* Highlight Ribbon */}
+              <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-400">Flagged Entity:</span>
+                  <span className="font-semibold text-slate-100">{inspectingAlert.entityName}</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-400">Account Number:</span>
+                  <PiiText value={inspectingAlert.account} type="account" className="font-mono text-slate-200" />
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-400">Amount & Currency:</span>
+                  <span className="font-mono font-bold text-emerald-400 text-sm">
+                    ${inspectingAlert.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} USD
+                    <span className="text-slate-500 text-xs ml-1">(৳{inspectingAlert.amountBdt.toLocaleString()} BDT)</span>
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-400">Typology Match:</span>
+                  <span className="font-mono text-rose-300">{inspectingAlert.typology}</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-400">SLA Countdown:</span>
+                  <span className="font-mono text-amber-400 font-bold">{inspectingAlert.slaMinutesLeft} minutes remaining</span>
+                </div>
+              </div>
+
+              {/* Wire Message Payload Decomposition */}
+              <div>
+                <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 font-mono flex items-center justify-between">
+                  <span>Decomposed Clearing Payload ({inspectingAlert.wirePayload?.messageType || 'SWIFT MT700'})</span>
+                  <span className="text-[10px] text-emerald-400 font-normal">Validated Syntax</span>
+                </h3>
+
+                <div className="bg-[#0B0F17] border border-[#1E293B] rounded-xl p-4 font-mono text-xs space-y-2 text-slate-300">
+                  {inspectingAlert.wirePayload ? (
+                    <>
+                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                        <span className="text-sky-400 font-bold w-28 shrink-0">Message Rail:</span>
+                        <span className="text-slate-100">{inspectingAlert.wirePayload.messageType}</span>
+                      </div>
+                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                        <span className="text-sky-400 font-bold w-28 shrink-0">Ordering Party:</span>
+                        <span className="text-slate-200">{inspectingAlert.wirePayload.orderingCustomer}</span>
+                      </div>
+                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                        <span className="text-sky-400 font-bold w-28 shrink-0">Ordering Bank:</span>
+                        <span className="text-slate-200">{inspectingAlert.wirePayload.orderingInstitution}</span>
+                      </div>
+                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                        <span className="text-sky-400 font-bold w-28 shrink-0">Beneficiary:</span>
+                        <span className="text-slate-200">{inspectingAlert.wirePayload.beneficiaryCustomer}</span>
+                      </div>
+                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                        <span className="text-sky-400 font-bold w-28 shrink-0">Remittance:</span>
+                        <span className="text-emerald-400">{inspectingAlert.wirePayload.remittanceInfo}</span>
+                      </div>
+                      <div className="pt-1 text-[11px] text-rose-400">
+                        Regulatory Indicators: {inspectingAlert.wirePayload.regulatoryFlags.join(' • ')}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-slate-400">Standard Clearing Payload Verified</div>
+                  )}
+                </div>
+              </div>
+
+              {/* Action Buttons Inside Drawer */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => {
+                    setFourEyesModalOpen(true, {
+                      actionType: 'ACCOUNT_FREEZE',
+                      actionTitle: `Emergency Freeze (${inspectingAlert.entityName})`,
+                      targetId: inspectingAlert.account,
+                      details: `Execute regulatory freeze on account ${inspectingAlert.account} pursuant to anti-money laundering powers.`
+                    });
+                  }}
+                  className="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span>Freeze Account (4-Eyes)</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    escalateToCase(inspectingAlert.id);
+                    setInspectingAlert(null);
+                  }}
+                  className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <ShieldAlert className="w-4 h-4" />
+                  <span>Escalate to Case</span>
+                </button>
+
+                <Link
+                  href={`/graph?node=${encodeURIComponent(inspectingAlert.account)}`}
+                  className="px-4 py-2 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
+                >
+                  <GitFork className="w-4 h-4 text-emerald-400" />
+                  <span>Inspect Flow Graph</span>
+                </Link>
+
+                <Link
+                  href="/rfi"
+                  className="px-4 py-2 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
+                >
+                  <MailQuestion className="w-4 h-4 text-sky-400" />
+                  <span>Dispatch RFI</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dismiss Reason Modal */}
+      {dismissReasonModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#0F172A] border border-[#334155] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
+              <ShieldX className="w-5 h-5 text-amber-400" />
+              Audited Alert Dismissal Memo
+            </h3>
+            <p className="text-xs text-slate-400">
+              Provide mandatory compliance rationale for dismissing {selectedRowIds.size} selected alert(s) as False Positive. This entry will be cryptographically written to the WORM ledger.
+            </p>
+
+            <textarea
+              value={dismissReason}
+              onChange={(e) => setDismissReason(e.target.value)}
+              placeholder="e.g. Verified ongoing LC trade documentation with genuine ASYCUDA customs clearance bills. Commercial rationale confirmed."
+              className="w-full h-24 p-3 bg-[#0B0F17] border border-[#334155] rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-amber-500"
+            />
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setDismissReasonModalOpen(false)}
+                className="px-4 py-2 text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmBatchDismiss}
+                className="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs transition-colors cursor-pointer"
+              >
+                Confirm & Write to Audit Trail
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   FileCheck2,
@@ -19,10 +19,16 @@ import {
   ShieldCheck,
   Check,
   Building,
-  DollarSign
+  DollarSign,
+  Printer,
+  Copy,
+  Table,
+  FileSpreadsheet
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
 import { PiiText } from '@/components/ui/PiiText';
+import { computeSha256 } from '@/lib/audit/hashChain';
+import { formatCurrencyByJurisdiction } from '@/lib/compliance/jurisdictions';
 
 const ALGO_LEAKAGE_TERMS = [
   'GCN',
@@ -41,18 +47,21 @@ const ALGO_LEAKAGE_TERMS = [
 function SarWorkbenchContent() {
   const searchParams = useSearchParams();
   const caseId = searchParams?.get('caseId') || 'CASE-2026-0881';
-  const { setFourEyesModalOpen, addToast } = useBankingStore();
+  const { jurisdiction, ctrRecords, setFourEyesModalOpen, addToast, addAuditEntry } = useBankingStore();
 
-  const [jurisdictionTemplate, setJurisdictionTemplate] = useState<'BFIU' | 'FINCEN' | 'GOAML'>('BFIU');
-  
+  const [activeSubTab, setActiveSubTab] = useState<'SAR_STUDIO' | 'CTR_AGGREGATOR'>('SAR_STUDIO');
+  const [jurisdictionTemplate, setJurisdictionTemplate] = useState<'BFIU' | 'FINCEN' | 'GOAML'>(
+    jurisdiction === 'BD_BFIU' ? 'BFIU' : jurisdiction === 'US_FINCEN' ? 'FINCEN' : 'GOAML'
+  );
+
   // Structured Form Fields
   const [subjectEntity, setSubjectEntity] = useState('Meghna Industrial & Agro Processing Ltd');
   const [accountNumber, setAccountNumber] = useState('BD22-EBLB-4829-1092-8823');
-  const [transactionAmount, setTransactionAmount] = useState('9,450.00 USD (৳1,134,000 BDT)');
-  const [typologyCategory, setTypologyCategory] = useState('TBML Over-Invoicing & Near-CTR Structuring');
+  const [transactionAmount, setTransactionAmount] = useState('945,000.00 USD (৳113,400,000 BDT)');
+  const [typologyCategory, setTypologyCategory] = useState('Trade-Based Money Laundering (TBML) Over-Invoicing & Near-CTR Structuring');
 
   // Narrative State
-  const initialNarrative = `CONFIDENTIAL SUSPICIOUS TRANSACTION REPORT (STR)
+  const initialNarrative = `CONFIDENTIAL SUSPICIOUS TRANSACTION REPORT (STR / SAR)
 SUBMITTED PURSUANT TO SECTION 25, MONEY LAUNDERING PREVENTION ACT 2012 (ACT NO. 5 OF 2012)
 TO: BANGLADESH FINANCIAL INTELLIGENCE UNIT (BFIU), BANGLADESH BANK
 
@@ -62,267 +71,368 @@ Subject Account: Meghna Industrial & Agro Processing Ltd (Account No: BD22-EBLB-
 Counterparty: Gulf Star Commodities FZE, JAFZA Free Zone, Dubai, UAE (BIC: EBILAEAD).
 
 2. FACTUAL BASIS FOR SUSPICIOUS TRANSACTION DETERMINATION:
-Between August 28, 2026 and September 02, 2026, the Subject initiated documentary credit transactions under Letter of Credit (LC) No. LC-2026-CTG-88912. The declared invoice price for raw cotton imports was $42.50/kg. Verification against National Board of Revenue (NBR) ASYCUDA customs valuation databases indicated a prevailing market benchmark of $9.80/kg, representing a gross price divergence of +333.7%.
+Between August 28, 2026 and September 02, 2026, the Subject initiated documentary credit transactions under Letter of Credit (LC) No. LC-CTG-2026-9921. The declared commercial invoice price for combed cotton yarn was $9.45/kg. Verification against National Board of Revenue (NBR) ASYCUDA World customs valuation databases indicated a prevailing market benchmark of $2.18/kg, representing a gross price divergence of +333.7%.
 
-Furthermore, individual drawdown transfers were structured beneath the mandatory Cash Transaction Reporting (CTR) threshold of ৳1,000,000 BDT ($10,000 USD), specifically executed at $9,450.00 USD. The funds were immediately wired onward from the Dubai counterparty to an offshore jurisdiction in the Cayman Islands with no verifiable economic substance.
+Furthermore, individual multi-agent transfers were structured beneath the mandatory Cash Transaction Reporting (CTR) threshold of ৳1,000,000 BDT, specifically executed at ৳954,000 BDT ($7,950.00 USD). AIS satellite vessel telemetry confirmed anomalous transshipment where the carrying vessel bypassed the declared Port Klang and discharged cargo directly at Jebel Ali / Dubai without re-export documentation.
 
 3. REMEDIAL ACTION TAKEN:
-The Subject account has been placed on Tier 1 institutional hold pending formal regulatory direction under Section 2(v) of the Money Laundering Prevention Act 2012.`;
+The Subject account has been placed on Tier 1 administrative hold pending formal regulatory direction under Section 2(v) and Section 25 of the Money Laundering Prevention Act 2012.`;
 
   const [narrativeText, setNarrativeText] = useState(initialNarrative);
+  const [merkleRoot, setMerkleRoot] = useState('9c72f16eb2befae4bcf1e1b7cbb510a6a13ba5b4d7a8f0aaee5337609c7ad42b');
+  const [isRecalculatingHash, setIsRecalculatingHash] = useState(false);
 
   // Check for ML jargon leakage
-  const detectedLeakage = ALGO_LEAKAGE_TERMS.filter((term) =>
-    new RegExp(`\\b${term}\\b`, 'i').test(narrativeText)
-  );
+  const detectedLeakage = useMemo(() => {
+    return ALGO_LEAKAGE_TERMS.filter((term) =>
+      new RegExp(`\\b${term}\\b`, 'i').test(narrativeText)
+    );
+  }, [narrativeText]);
+
+  const handleCleanJargon = () => {
+    let cleaned = narrativeText;
+    ALGO_LEAKAGE_TERMS.forEach((term) => {
+      const regex = new RegExp(`\\b${term}\\b`, 'gi');
+      cleaned = cleaned.replace(regex, 'calibrated automated surveillance indicators');
+    });
+    setNarrativeText(cleaned);
+    addToast('Jargon Purged', 'All algorithmic terminology replaced with compliant legal surveillance terms.', 'success');
+  };
+
+  const handleRecalculateMerkleRoot = async () => {
+    setIsRecalculatingHash(true);
+    try {
+      const digest = await computeSha256(narrativeText + caseId + subjectEntity);
+      setMerkleRoot(digest);
+      addToast('Merkle Digest Updated', `New evidence root computed: ${digest.slice(0, 16)}...`, 'success');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsRecalculatingHash(false);
+    }
+  };
 
   const handleDownloadXml = () => {
+    if (detectedLeakage.length > 0) {
+      alert('Cannot export SAR: Narrative contains unapproved algorithmic terms that breach regulatory reporting standards. Please click "Purge Algorithmic Jargon" first.');
+      return;
+    }
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<FC2ElectronicFiling xmlns="http://www.fincen.gov/base" version="2.0">
-  <ActivitySeqNum>1</ActivitySeqNum>
-  <ActivityType>SAR</ActivityType>
+<RegulatoryFiling jurisdiction="${jurisdictionTemplate}" version="2.0">
   <CaseIdentifier>${caseId}</CaseIdentifier>
   <SubjectName>${subjectEntity}</SubjectName>
-  <SuspiciousAmount Currency="USD">9450.00</SuspiciousAmount>
+  <AccountNumber>${accountNumber}</AccountNumber>
+  <TotalSuspiciousAmount>${transactionAmount}</TotalSuspiciousAmount>
   <TypologyCategory>${typologyCategory}</TypologyCategory>
-  <CryptographicMerkleRoot>9c72f16eb2befae4bcf1e1b7cbb510a6a13ba5b4d7a8f0aaee5337609c7ad42b</CryptographicMerkleRoot>
+  <CryptographicMerkleRoot>${merkleRoot}</CryptographicMerkleRoot>
   <NarrativeText><![CDATA[${narrativeText}]]></NarrativeText>
-</FC2ElectronicFiling>`;
+</RegulatoryFiling>`;
 
     const blob = new Blob([xml], { type: 'application/xml' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `SAR-Form111-${caseId}.xml`;
+    a.download = `SAR_${jurisdictionTemplate}_${caseId}.xml`;
     a.click();
     URL.revokeObjectURL(url);
-    addToast('XML Downloaded', `FinCEN Form 111 XML filing generated for ${caseId}.`, 'success');
+
+    addAuditEntry({
+      eventType: 'SAR_GENERATED',
+      entityId: caseId,
+      details: `Generated and downloaded regulatory SAR XML for ${subjectEntity} (Template: ${jurisdictionTemplate}).`,
+      actionBy: 'Sarah Jenkins (Analyst)'
+    });
+  };
+
+  const handleExportCtrXml = () => {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<CashTransactionReportBatch jurisdiction="${jurisdiction}" count="${ctrRecords.length}" generatedAt="${new Date().toISOString()}">
+  ${ctrRecords.map((r) => `
+  <TransactionRecord id="${r.id}">
+    <Account>${r.accountNumber}</Account>
+    <CustomerName>${r.entityName}</CustomerName>
+    <Amount currency="${r.currency}">${r.amountUsd}</Amount>
+    <AmountBdt>${r.amountNative}</AmountBdt>
+    <Branch>${r.branch}</Branch>
+    <Timestamp>${r.timestamp}</Timestamp>
+    <Status>${r.status}</Status>
+  </TransactionRecord>`).join('')}
+</CashTransactionReportBatch>`;
+
+    const blob = new Blob([xml], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `CTR_Batch_Report_${new Date().toISOString().slice(0, 10)}.xml`;
+    a.click();
+    URL.revokeObjectURL(url);
+    addToast('CTR Batch Exported', `Generated statutory CTR filing XML for ${ctrRecords.length} transactions.`, 'success');
   };
 
   return (
-    <div className="p-4 sm:p-5 lg:p-6 max-w-[1700px] mx-auto space-y-4 sm:space-y-5">
-      {/* Header and Controls */}
+    <div className="p-4 sm:p-5 lg:p-6 max-w-[1750px] mx-auto space-y-5">
+      {/* Page Title & Main Mode Switcher */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <FileCheck2 className="w-5 h-5 text-rose-500" />
-            Autonomous SAR Filings Workbench
+          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-sans">
+            <FileCheck2 className="w-5 h-5 text-emerald-400" />
+            Automated SAR Filings &amp; CTR Aggregator Workbench
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Autonomous multi-jurisdiction regulatory narrative drafting with algorithm leakage protection and 4-Eyes cryptographic sign-off.
+            Statutory filings engine for BFIU STR (MLPA 2012 § 25), FinCEN Form 111, UNODC goAML 2.0, and Cash Threshold Reports (CTR).
           </p>
         </div>
 
-        {/* Template Switcher & Submission */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155]">
-            <button
-              onClick={() => setJurisdictionTemplate('BFIU')}
-              className={`px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
-                jurisdictionTemplate === 'BFIU'
-                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              BFIU STR-1 (BD)
-            </button>
-            <button
-              onClick={() => setJurisdictionTemplate('FINCEN')}
-              className={`px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
-                jurisdictionTemplate === 'FINCEN'
-                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              FinCEN Form 111 (US)
-            </button>
-            <button
-              onClick={() => setJurisdictionTemplate('GOAML')}
-              className={`px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
-                jurisdictionTemplate === 'GOAML'
-                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              goAML XML (Intl)
-            </button>
-          </div>
-
+        {/* Sub-Tab Switcher */}
+        <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155] text-xs font-semibold">
           <button
-            onClick={() => {
-              setFourEyesModalOpen(true, {
-                actionType: 'SAR_FILING',
-                actionTitle: `Submit SAR to 4-Eyes Sign-Off Gate (${caseId})`,
-                targetId: caseId,
-                details: `Submit drafted regulatory ${jurisdictionTemplate} filing for Subject: ${subjectEntity}`
-              });
-            }}
-            className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs uppercase tracking-wide rounded-lg transition-all shadow-md cursor-pointer"
+            onClick={() => setActiveSubTab('SAR_STUDIO')}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+              activeSubTab === 'SAR_STUDIO'
+                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
           >
-            <Lock className="w-3.5 h-3.5" />
-            <span>4-Eyes Gate</span>
+            Suspicious Activity Report (SAR / STR) Studio
+          </button>
+          <button
+            onClick={() => setActiveSubTab('CTR_AGGREGATOR')}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+              activeSubTab === 'CTR_AGGREGATOR'
+                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Cash Threshold Reports (CTR) Aggregator ({ctrRecords.length})
           </button>
         </div>
       </div>
 
-      {/* Algorithm Leakage Warning Banner */}
-      {detectedLeakage.length > 0 && (
-        <div className="p-3 bg-rose-950/40 border border-rose-700/60 rounded-xl flex items-center justify-between text-xs text-rose-200">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0" />
-            <span>
-              <strong>Regulatory Notice: Algorithm Leakage Detected!</strong> The narrative references internal ML terms: (
-              <span className="font-mono font-bold text-rose-300">{detectedLeakage.join(', ')}</span>). FIU regulators require factual legal reasoning, not algorithmic jargon.
-            </span>
-          </div>
-          <button
-            onClick={() => {
-              let sanitized = narrativeText;
-              detectedLeakage.forEach((term) => {
-                sanitized = sanitized.replace(new RegExp(`\\b${term}\\b`, 'gi'), 'institutional compliance review criteria');
-              });
-              setNarrativeText(sanitized);
-            }}
-            className="px-2.5 py-1 bg-rose-900/60 hover:bg-rose-800/80 rounded border border-rose-600 text-rose-100 font-semibold text-[11px] shrink-0 cursor-pointer"
-          >
-            Auto-Sanitize Jargon
-          </button>
-        </div>
-      )}
-
-      {/* Responsive Split-Screen Workbench (2-Column Grid with Independent Scroll Panes) */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 min-h-[520px]">
-        {/* Left Column: Autonomous Statutory Narrative Draft & Diff Tracker */}
-        <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl flex flex-col overflow-hidden max-h-[calc(100vh-230px)]">
-          <div className="p-3.5 bg-[#0B0F17] border-b border-[#1E293B] flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-              <h2 className="text-sm font-semibold text-slate-100">
-                Statutory Regulatory Narrative (Editable Draft)
-              </h2>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setNarrativeText(initialNarrative)}
-                className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 transition-colors cursor-pointer"
-                title="Reset to Template Narrative"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={handleDownloadXml}
-                className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-200 text-xs font-medium transition-colors cursor-pointer"
-              >
-                <Download className="w-3 h-3 text-slate-400" />
-                <span>Export XML</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="p-4 flex-1 flex flex-col overflow-y-auto">
-            <textarea
-              value={narrativeText}
-              onChange={(e) => setNarrativeText(e.target.value)}
-              className="w-full flex-1 min-h-[380px] p-4 bg-[#090D14] border border-[#1E293B] rounded-xl font-mono text-xs text-slate-200 leading-relaxed focus:outline-none focus:border-rose-500/60 resize-none selection:bg-rose-500/20"
-            />
-
-            <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 font-mono shrink-0">
-              <span>Word count: <strong className="text-slate-300 tabular-nums">{narrativeText.split(/\s+/).filter(Boolean).length}</strong></span>
-              <span>Payload: <strong className="text-slate-300 tabular-nums">{new TextEncoder().encode(narrativeText).length}</strong> bytes</span>
-              <span className="text-emerald-400">AST Grammar Validated</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Grounded Evidence, Merkle Receipt & Sign-Off Cards */}
-        <div className="space-y-4 max-h-[calc(100vh-230px)] overflow-y-auto pr-1">
-          {/* Evidence Card: Trade Divergence & Red Flags */}
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl p-5 space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
-              <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-emerald-400 shrink-0" />
-                Grounded Factual Evidence Dossier
-              </h2>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                FRE 902(11) ATTESTED
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 bg-[#0B0F17] rounded-lg border border-[#1E293B]">
-                <span className="text-slate-500 block text-[10px] uppercase font-mono">Subject Entity</span>
-                <span className="font-semibold text-slate-200 block truncate">{subjectEntity}</span>
-                <span className="text-[10px] text-slate-400 font-mono block mt-0.5">{accountNumber}</span>
+      {activeSubTab === 'SAR_STUDIO' ? (
+        /* SAR Studio Workspace */
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* Left Column: Form & Narrative Editor */}
+          <div className="lg:col-span-8 space-y-4">
+            {/* Top Toolbar: Jurisdiction Template Selection */}
+            <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-3 shadow-xl">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-semibold text-slate-400">Jurisdiction Format:</span>
+                {(['BFIU', 'FINCEN', 'GOAML'] as const).map((fmt) => (
+                  <button
+                    key={fmt}
+                    onClick={() => setJurisdictionTemplate(fmt)}
+                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-colors cursor-pointer ${
+                      jurisdictionTemplate === fmt
+                        ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40'
+                        : 'text-slate-400 hover:text-slate-200 bg-[#0B0F17]'
+                    }`}
+                  >
+                    {fmt === 'BFIU' ? 'BFIU STR (Bangladesh)' : fmt === 'FINCEN' ? 'FinCEN Form 111 (US)' : 'goAML XML 2.0 (EU)'}
+                  </button>
+                ))}
               </div>
-              <div className="p-3 bg-[#0B0F17] rounded-lg border border-[#1E293B]">
-                <span className="text-slate-500 block text-[10px] uppercase font-mono">Suspicious Exposure</span>
-                <span className="font-bold text-rose-400 font-mono text-sm block tabular-nums">{transactionAmount}</span>
-                <span className="text-[10px] text-slate-400 font-mono block mt-0.5">Under CTR $10,000 threshold</span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => window.print()}
+                  className="px-2.5 py-1 rounded-lg bg-[#0B0F17] hover:bg-[#1E293B] text-slate-300 border border-[#334155] text-xs flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Print View</span>
+                </button>
               </div>
             </div>
 
-            <div className="space-y-1.5 pt-1 text-xs">
-              <span className="block text-slate-400 font-medium">Statutory Red Flags Grounded in Audit Trail:</span>
-              {[
-                { label: 'ASYCUDA Customs Divergence', detail: 'Declared $42.50/kg vs $9.80/kg benchmark (+333.7%)' },
-                { label: 'Sub-Threshold CTR Structuring', detail: 'Drawdown split at $9,450 to evade automated reporting' },
-                { label: 'Rapid Offshore Wire Pass-Through', detail: 'Immediate transfer to Cayman Islands shell entity' }
-              ].map((flag, idx) => (
-                <div key={idx} className="flex items-start gap-2 p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-[11px] text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-200">{flag.label}:</strong> {flag.detail}
-                  </div>
+            {/* Jargon Leakage Blocker Banner */}
+            {detectedLeakage.length > 0 && (
+              <div className="p-3.5 bg-rose-950/40 border border-rose-800 rounded-xl flex items-center justify-between gap-3 text-xs text-rose-300">
+                <div className="flex items-center gap-2">
+                  <ShieldAlert className="w-4 h-4 shrink-0 text-rose-400" />
+                  <span>
+                    <strong>Regulatory Gate:</strong> Unapproved internal algorithmic terms detected: (
+                    <span className="font-mono text-white">{detectedLeakage.join(', ')}</span>). Must be purged prior to submission.
+                  </span>
                 </div>
-              ))}
-            </div>
-          </div>
+                <button
+                  onClick={handleCleanJargon}
+                  className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold cursor-pointer shrink-0"
+                >
+                  Purge Algorithmic Jargon
+                </button>
+              </div>
+            )}
 
-          {/* Cryptographic Merkle Root Verification Card */}
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl p-5 space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
-              <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
-                <Hash className="w-4 h-4 text-cyan-400 shrink-0" />
-                Deterministic Merkle Root Receipt
-              </h2>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                TAMPER-EVIDENT
-              </span>
-            </div>
-
-            <div className="p-3 bg-[#0B0F17] rounded-lg border border-[#1E293B] font-mono text-xs space-y-2">
-              <div>
-                <span className="text-slate-500 text-[10px] block uppercase">Root Hash (SHA-256)</span>
-                <span className="text-cyan-300 font-bold break-all text-[11px]">
-                  9c72f16eb2befae4bcf1e1b7cbb510a6a13ba5b4d7a8f0aaee5337609c7ad42b
+            {/* Structured Narrative Textarea */}
+            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">
+                  Official Regulatory Narrative (Factual Chronology)
+                </span>
+                <span className="text-[11px] font-mono text-slate-400">
+                  {narrativeText.length} Characters • Ready for Regulatory Intake
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#1E293B] text-[10px] text-slate-400">
-                <div>Leaf 1 (Wire): <span className="text-slate-300">e9011ecd...</span></div>
-                <div>Leaf 2 (Typology): <span className="text-slate-300">32961dd6...</span></div>
-                <div>Leaf 3 (Model): <span className="text-slate-300">7e1d3430...</span></div>
-                <div>Leaf 4 (Signoff): <span className="text-slate-300">bbcc2bc7...</span></div>
+
+              <textarea
+                value={narrativeText}
+                onChange={(e) => setNarrativeText(e.target.value)}
+                rows={16}
+                className="w-full p-4 bg-[#0B0F17] border border-[#334155] rounded-xl text-xs font-mono text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 leading-relaxed"
+              />
+            </div>
+          </div>
+
+          {/* Right Column: Case Manifest & Cryptographic Merkle Root */}
+          <div className="lg:col-span-4 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-2xl flex flex-col justify-between space-y-5">
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  Filing Dossier &amp; Merkle Root
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Cryptographically binds all evidence files to prevent evidentiary challenge under FRE 902(11).
+                </p>
+              </div>
+
+              {/* Case Parameters */}
+              <div className="space-y-2 text-xs font-mono">
+                <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B]">
+                  <span className="text-slate-500 text-[10px] block">Case Docket ID:</span>
+                  <span className="font-bold text-sky-400">{caseId}</span>
+                </div>
+                <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B]">
+                  <span className="text-slate-500 text-[10px] block">Primary Subject Entity:</span>
+                  <span className="font-bold text-slate-200">{subjectEntity}</span>
+                </div>
+                <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B]">
+                  <span className="text-slate-500 text-[10px] block">Total Suspicious Volume:</span>
+                  <span className="font-bold text-emerald-400">{transactionAmount}</span>
+                </div>
+              </div>
+
+              {/* Cryptographic Merkle Digest Box */}
+              <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl space-y-2">
+                <div className="flex items-center justify-between text-[10px] font-mono">
+                  <span className="text-slate-400 uppercase font-bold">Evidence Merkle Root</span>
+                  <button
+                    onClick={handleRecalculateMerkleRoot}
+                    disabled={isRecalculatingHash}
+                    className="text-sky-400 hover:text-sky-300 flex items-center gap-1 cursor-pointer"
+                  >
+                    <RefreshCw className={`w-3 h-3 ${isRecalculatingHash ? 'animate-spin' : ''}`} />
+                    <span>Recalculate</span>
+                  </button>
+                </div>
+                <div className="p-2 bg-[#090D14] rounded border border-[#334155] font-mono text-[10px] text-emerald-400 break-all select-all">
+                  {merkleRoot}
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-2 text-xs">
-              <span className="text-slate-400">WORM Chain Validation:</span>
-              <span className="text-emerald-400 font-mono font-bold flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                CRYPTOGRAPHICALLY VERIFIED
-              </span>
+            {/* Submission Actions */}
+            <div className="pt-4 border-t border-[#1E293B] space-y-2.5">
+              <button
+                onClick={handleDownloadXml}
+                className="w-full py-2.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-sky-600/20"
+              >
+                <Download className="w-4 h-4" />
+                <span>Export Official {jurisdictionTemplate} XML</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setFourEyesModalOpen(true, {
+                    actionType: 'SAR_FILING',
+                    actionTitle: `Submit Formal Regulatory SAR (${caseId})`,
+                    targetId: caseId,
+                    details: `Transmit validated ${jurisdictionTemplate} SAR filing to regulatory authorities. Subject: ${subjectEntity}. Merkle root: ${merkleRoot.slice(0, 16)}...`
+                  });
+                }}
+                className="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-600/20"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Authorize &amp; Transmit (4-Eyes)</span>
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        /* CTR Aggregator Sub-Tab */
+        <div className="space-y-4">
+          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-4 shadow-xl">
+            <div>
+              <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
+                <Table className="w-4 h-4 text-emerald-400" />
+                Automated Cash Threshold Reports (CTR) Pipeline
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Statutory cash transactions &ge; ৳1,000,000 BDT (Bangladesh) or &ge; $10,000 USD (FinCEN). Automatically compiled from teller systems.
+              </p>
+            </div>
+
+            <button
+              onClick={handleExportCtrXml}
+              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-600/20"
+            >
+              <FileSpreadsheet className="w-4 h-4" />
+              <span>Batch Export CTR XML</span>
+            </button>
+          </div>
+
+          {/* CTR Table */}
+          <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-slate-300">
+                <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-mono uppercase text-slate-400">
+                  <tr>
+                    <th className="px-4 py-3">CTR ID</th>
+                    <th className="px-4 py-3">Customer Legal Name</th>
+                    <th className="px-4 py-3">Account Number</th>
+                    <th className="px-4 py-3 text-right">Cash Amount</th>
+                    <th className="px-4 py-3 text-right">Amount (BDT)</th>
+                    <th className="px-4 py-3">Branch Location</th>
+                    <th className="px-4 py-3">Timestamp</th>
+                    <th className="px-4 py-3 text-center">Filing Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#1E293B]">
+                  {ctrRecords.map((r) => (
+                    <tr key={r.id} className="hover:bg-[#1E293B]/40 transition-colors">
+                      <td className="px-4 py-3 font-mono font-bold text-sky-400">{r.id}</td>
+                      <td className="px-4 py-3 font-semibold text-slate-100">{r.entityName}</td>
+                      <td className="px-4 py-3 font-mono text-slate-400">
+                        <PiiText value={r.accountNumber} type="account" />
+                      </td>
+                      <td className="px-4 py-3 text-right font-mono font-bold text-emerald-400 tabular-nums">
+                        ${r.amountUsd.toLocaleString(undefined, { minimumFractionDigits: 2 })} {r.currency}
+                      </td>
+                      <td className="px-4 py-3 text-right font-mono text-slate-400 tabular-nums">
+                        ৳{r.amountNative.toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3 text-slate-300">{r.branch}</td>
+                      <td className="px-4 py-3 font-mono text-[11px] text-slate-400">{r.timestamp}</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                          {r.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default function SarWorkbenchPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-xs font-mono text-slate-400">Loading SAR Workbench...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading SAR Workbench...</div>}>
       <SarWorkbenchContent />
     </Suspense>
   );

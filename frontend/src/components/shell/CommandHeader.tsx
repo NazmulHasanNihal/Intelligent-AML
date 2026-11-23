@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Activity,
@@ -16,18 +16,17 @@ import {
   Sparkles,
   Zap,
   Globe,
-  Menu,
-  X
+  Bell,
+  Eye,
+  EyeOff,
+  RotateCcw,
+  Check
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useAppStore } from '@/lib/store';
-import { PiiText } from '@/components/ui/PiiText';
+import { useBankingStore } from '@/lib/store';
+import { JURISDICTIONS, JurisdictionCode } from '@/lib/compliance/jurisdictions';
 
-interface CommandHeaderProps {
-  onOpenCommandPalette?: () => void;
-}
-
-export const CommandHeader: React.FC<CommandHeaderProps> = ({ onOpenCommandPalette = () => {} }) => {
+export const CommandHeader: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const {
     currentBanker,
@@ -38,30 +37,51 @@ export const CommandHeader: React.FC<CommandHeaderProps> = ({ onOpenCommandPalet
     setActiveJurisdiction,
     isStreamRunning,
     toggleStreamRunning,
+    streamSpeed,
+    setStreamSpeed,
     consumerLag,
-    addToast
-  } = useAppStore();
+    addToast,
+    setCommandPaletteOpen,
+    setNotificationDrawerOpen,
+    notifications,
+    revealPii,
+    isPiiRevealed,
+    resetWorkspaceData
+  } = useBankingStore();
 
   const [activePreset, setActivePreset] = useState<string>('TBML');
+  const [isClient, setIsClient] = useState(false);
+  const [isAirGap, setIsAirGap] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    if (typeof window !== 'undefined') {
+      const host = window.location.hostname;
+      setIsAirGap(host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.'));
+    }
+  }, []);
 
   const handleSelectPreset = (preset: string) => {
     setActivePreset(preset);
     addToast(
-      'Demo Scenario Loaded',
+      'Operational Scenario Loaded',
       preset === 'TBML'
-        ? 'Trade-Based Money Laundering: Over-invoicing +333.7% with near-CTR structuring ($9,450).'
+        ? 'Trade-Based Money Laundering: Over-invoicing +333.7% with rapid sub-$10,000 LC duplicate splitting.'
         : preset === 'STRUCTURING'
-        ? 'Structuring / Smurfing: Rapid sequential wires under $10,000 CTR reporting threshold.'
+        ? 'Smurfing / Cash Structuring: Consecutive deposits of ৳954,000 BDT ($7,950) beneath ৳1,000,000 BDT statutory CTR limit.'
         : preset === 'MULE'
-        ? 'Mule Layering: Rapid pass-through across Dubai and Cayman entities.'
-        : 'Sanctions Evasion: High-risk counterparty flag in OFAC/SDN database.',
+        ? 'Mule Layering: Rapid pass-through across Dubai and Singapore corporate entities with zero overnight balance.'
+        : 'Sanctions Evasion: High-risk counterparty flag in OFAC SDN / UN Security Council database.',
       'accent'
     );
   };
 
+  const piiActive = isClient ? isPiiRevealed() : false;
+  const unreadNotifCount = notifications.filter(n => !n.read).length;
+
   return (
     <header className="fixed top-0 left-0 right-0 h-14 px-3 sm:px-4 border-b border-[#1E293B] bg-[#0F172A]/95 backdrop-blur-md flex items-center justify-between gap-2 sm:gap-3 shrink-0 z-40 select-none max-w-full overflow-hidden">
-      {/* Left: Brand Node & Ingestion Stream */}
+      {/* Left: Brand Node, Environment Badge & Ingestion Stream */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         <Link href="/" className="flex items-center gap-2 pr-2 sm:pr-3 border-r border-[#1E293B] cursor-pointer">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
@@ -73,33 +93,47 @@ export const CommandHeader: React.FC<CommandHeaderProps> = ({ onOpenCommandPalet
           </span>
         </Link>
 
-        {/* Global Stream Control Pill */}
-        <button
-          onClick={toggleStreamRunning}
-          className={`px-2 py-1 rounded text-xs font-mono font-semibold cursor-pointer transition-colors flex items-center gap-1.5 border shrink-0 ${
-            isStreamRunning
-              ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/25'
-              : 'bg-amber-500/15 text-amber-300 border-amber-500/30 hover:bg-amber-500/25'
-          }`}
-          title={isStreamRunning ? "Pause Ingestion Stream" : "Resume Ingestion Stream"}
-        >
-          <Zap className="w-3 h-3 shrink-0" />
-          <span className="hidden sm:inline">{isStreamRunning ? 'STREAM: LIVE' : 'STREAM: PAUSED'}</span>
-          <span className="sm:hidden">{isStreamRunning ? 'LIVE' : 'PAUSED'}</span>
-        </button>
-
-        {/* Live Fast-Path Telemetry Pill (hidden on narrow screens) */}
-        <div className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded bg-[#0B0F17] border border-[#334155] text-xs font-mono tabular-nums">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-          <span className="text-slate-400">C-STGB:</span>
-          <span className="font-bold text-slate-100">0.45 ms</span>
-          <span className="text-slate-500 text-[10px]">(P99 &lt; 0.82ms)</span>
-          <span className="text-slate-600">•</span>
-          <span className="text-slate-400">Lag: <strong className="text-emerald-400 font-bold">{consumerLag} msgs</strong></span>
+        {/* Air-Gap / Cloud Deployment Badge */}
+        <div className="hidden xl:flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#0B0F17] border border-[#334155] text-slate-300">
+          <span className={`w-1.5 h-1.5 rounded-full ${isAirGap ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
+          <span>{isAirGap ? 'DEPLOYMENT: AIR-GAP INTRANET' : 'DEPLOYMENT: CLOUD SANDBOX (AIR-GAP READY)'}</span>
         </div>
 
-        {/* Unified Scenario Presets Dropdown */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0B0F17] border border-[#334155] text-xs font-mono">
+        {/* Global Stream Control Pill */}
+        <div className="flex items-center gap-1 bg-[#0B0F17] p-0.5 rounded border border-[#334155]">
+          <button
+            onClick={toggleStreamRunning}
+            className={`px-2 py-1 rounded text-[11px] font-mono font-semibold cursor-pointer transition-colors flex items-center gap-1.5 shrink-0 ${
+              isStreamRunning
+                ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30'
+                : 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30'
+            }`}
+            title={isStreamRunning ? "Pause Ingestion Stream" : "Resume Ingestion Stream"}
+          >
+            <Zap className="w-3 h-3 shrink-0" />
+            <span className="hidden sm:inline">{isStreamRunning ? 'STREAM: LIVE' : 'STREAM: PAUSED'}</span>
+            <span className="sm:hidden">{isStreamRunning ? 'LIVE' : 'PAUSED'}</span>
+          </button>
+
+          {isStreamRunning && (
+            <div className="hidden md:flex items-center text-[10px] font-mono pr-1 text-slate-400">
+              {([1, 2, 5] as const).map(speed => (
+                <button
+                  key={speed}
+                  onClick={() => setStreamSpeed(speed)}
+                  className={`px-1.5 py-0.5 rounded cursor-pointer ${
+                    streamSpeed === speed ? 'bg-[#1E293B] text-emerald-400 font-bold' : 'hover:text-slate-200'
+                  }`}
+                >
+                  {speed}x
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Scenarios Preset Dropdown */}
+        <div className="hidden 2xl:flex items-center gap-1.5 px-2 py-1 rounded bg-[#0B0F17] border border-[#334155] text-xs font-mono">
           <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
           <select
             value={activePreset}
@@ -108,54 +142,89 @@ export const CommandHeader: React.FC<CommandHeaderProps> = ({ onOpenCommandPalet
             title="Institutional Scenario Presets"
           >
             <option value="TBML" className="bg-[#0F172A] text-slate-200">Preset: TBML Over-Invoicing (+333.7%)</option>
-            <option value="STRUCTURING" className="bg-[#0F172A] text-slate-200">Preset: Smurfing / CTR Evasion ($9,450)</option>
-            <option value="MULE" className="bg-[#0F172A] text-slate-200">Preset: Fast Mule Layering (Dubai-Cayman)</option>
-            <option value="SANCTION" className="bg-[#0F172A] text-slate-200">Preset: Sanctions Flag (OFAC/SDN)</option>
+            <option value="STRUCTURING" className="bg-[#0F172A] text-slate-200">Preset: Cash Smurfing (৳954,000 / $7,950)</option>
+            <option value="MULE" className="bg-[#0F172A] text-slate-200">Preset: Pass-Through Mule Layering</option>
+            <option value="SANCTION" className="bg-[#0F172A] text-slate-200">Preset: OFAC/UN Sanctions Match</option>
           </select>
         </div>
       </div>
 
       {/* Center: Command Palette Trigger */}
       <button
-        onClick={onOpenCommandPalette}
+        type="button"
+        onClick={() => setCommandPaletteOpen(true)}
         className="flex-1 max-w-xs px-3 py-1.5 rounded-lg bg-[#0B0F17] hover:bg-[#1E293B] border border-[#334155] text-xs text-slate-400 flex items-center justify-between gap-2 cursor-pointer transition-colors hidden md:flex"
       >
         <div className="flex items-center gap-2 truncate">
           <Search className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-          <span className="font-mono text-[11px] truncate">Search or ⌘K...</span>
+          <span className="font-mono text-[11px] truncate">Search alerts, accounts, BICs (⌘K)...</span>
         </div>
         <kbd className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#0F172A] border border-[#334155] text-slate-400 shrink-0">
           ⌘K
         </kbd>
       </button>
 
-      {/* Right: Jurisdiction, Density, Theme & Officer Persona */}
+      {/* Right: Jurisdiction, PII Reveal, Notification Bell, Theme & Officer Persona */}
       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        {/* Jurisdiction Switcher */}
-        <div className="hidden 2xl:flex items-center p-0.5 bg-[#0B0F17] rounded border border-[#334155] text-[11px] font-mono">
-          {[
-            { id: 'US_FINCEN', label: 'FinCEN' },
-            { id: 'BD_BFIU', label: 'BFIU' },
-            { id: 'UN_GOAML', label: 'goAML' }
-          ].map(j => (
-            <button
-              key={j.id}
-              onClick={() => setActiveJurisdiction(j.id as any)}
-              className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                activeJurisdiction === j.id
-                  ? 'bg-[#1E293B] font-bold text-slate-100 shadow-xs'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {j.label}
-            </button>
-          ))}
+        {/* Dynamic Jurisdiction Switcher */}
+        <div className="flex items-center p-0.5 bg-[#0B0F17] rounded border border-[#334155] text-[11px] font-mono">
+          {(['BD_BFIU', 'US_FINCEN', 'EU_AMLA'] as JurisdictionCode[]).map((jCode) => {
+            const jur = JURISDICTIONS[jCode];
+            const isSelected = activeJurisdiction === jCode;
+
+            return (
+              <button
+                key={jCode}
+                type="button"
+                onClick={() => setActiveJurisdiction(jCode)}
+                className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                  isSelected
+                    ? 'bg-[#1E293B] font-bold text-emerald-400 border border-emerald-500/30 shadow-xs'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+                title={`${jur.name} (${jur.statutoryAct})`}
+              >
+                {jur.shortCode}
+              </button>
+            );
+          })}
         </div>
+
+        {/* Audited 60-Second PII Reveal Button */}
+        <button
+          type="button"
+          onClick={revealPii}
+          className={`px-2 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1.5 border transition-all cursor-pointer ${
+            piiActive
+              ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse'
+              : 'bg-[#0B0F17] text-slate-300 border-[#334155] hover:bg-[#1E293B]'
+          }`}
+          title={piiActive ? "PII is currently unmasked (Auto-expires in 60s)" : "Reveal PII globally for 60 seconds (Audited to WORM Ledger)"}
+        >
+          {piiActive ? <EyeOff className="w-3.5 h-3.5 text-amber-400" /> : <Eye className="w-3.5 h-3.5 text-slate-400" />}
+          <span className="hidden xl:inline">{piiActive ? 'PII: UNMASKED' : 'Reveal PII'}</span>
+        </button>
+
+        {/* Operational Notification Bell */}
+        <button
+          type="button"
+          onClick={() => setNotificationDrawerOpen(true)}
+          className="relative p-1.5 sm:p-2 rounded hover:bg-[#1E293B] text-slate-400 hover:text-slate-200 border border-[#334155] transition-colors cursor-pointer"
+          title="Open Operational Notifications"
+        >
+          <Bell className="w-3.5 h-3.5" />
+          {unreadNotifCount > 0 && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-600 text-white font-bold text-[9px] flex items-center justify-center font-mono">
+              {unreadNotifCount}
+            </span>
+          )}
+        </button>
 
         {/* Density Mode Toggle */}
         <button
+          type="button"
           onClick={() => setDensityMode(densityMode === 'comfortable' ? 'compact' : 'comfortable')}
-          className="p-1.5 sm:p-2 rounded hover:bg-[#1E293B] text-slate-400 hover:text-slate-200 border border-[#334155] transition-colors cursor-pointer"
+          className="p-1.5 sm:p-2 rounded hover:bg-[#1E293B] text-slate-400 hover:text-slate-200 border border-[#334155] transition-colors cursor-pointer hidden sm:block"
           title={`Switch to ${densityMode === 'comfortable' ? 'Compact' : 'Comfortable'} row density`}
         >
           <Sliders className="w-3.5 h-3.5" />
@@ -163,15 +232,17 @@ export const CommandHeader: React.FC<CommandHeaderProps> = ({ onOpenCommandPalet
 
         {/* Theme Switcher */}
         <button
+          type="button"
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           className="p-1.5 sm:p-2 rounded hover:bg-[#1E293B] text-slate-400 hover:text-slate-200 border border-[#334155] transition-colors cursor-pointer"
-          title="Toggle Dark Terminal / Federal Banknote Theme"
+          title="Toggle Obsidian Dark / Institutional Light Theme"
         >
           {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-slate-700" />}
         </button>
 
         {/* Active Banker Persona & Step-Up Switcher */}
         <button
+          type="button"
           onClick={() => setRoleModalOpen(true)}
           className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 rounded-lg bg-[#0B0F17] hover:bg-[#1E293B] border border-[#334155] cursor-pointer transition-all text-xs font-mono shrink-0"
           title="Switch Authorized Signatory Role (Maker/Checker)"

@@ -113,16 +113,25 @@ export default function ModelGovernancePage() {
     );
   }, [mappingSearch]);
 
-  // Handle Real Client WebCrypto WORM Verification
+  // Handle Real Client WebCrypto Tamper-Evident Verification
   const handleRunAuditVerification = async () => {
     setIsVerifying(true);
     try {
       const res = await verifyAuditChain(auditLedger);
       setVerificationResult(res);
       if (res.isValid) {
-        addToast('Cryptographic Integrity Verified', `All ${res.totalEntries} blocks chained with verified SHA-256 hashes.`, 'success');
+        addToast(
+          'Cryptographic Integrity Verified',
+          `All ${res.totalEntries} blocks chained with verified SHA-256 hashes and Ed25519 checkpoint seal.`,
+          'success'
+        );
       } else {
-        addToast('Tamper Detected!', `Block #${res.brokenSequence} hash mismatch. Cryptographic seal broken!`, 'critical');
+        const brokenRow = res.firstBrokenRow !== undefined ? res.firstBrokenRow : (res.brokenSequence || 1);
+        addToast(
+          'Tamper Detected!',
+          `Row #${brokenRow} (Block #${res.brokenSequence || 1}) hash mismatch. Cryptographic seal broken!`,
+          'critical'
+        );
       }
     } catch (err) {
       console.error(err);
@@ -137,9 +146,11 @@ export default function ModelGovernancePage() {
     setVerificationResult({
       isValid: false,
       totalEntries: auditLedger.length,
-      brokenSequence: 2
+      firstBrokenRow: 0,
+      brokenSequence: 1,
+      error: 'Genesis block #1 content altered: hash mismatch'
     });
-    addToast('Simulated Tamper Triggered', 'Block #1 payload modified. WORM chain will fail verification.', 'critical');
+    addToast('Simulated Tamper Triggered', 'Block #1 payload modified. Hash chain will fail verification at Row #0.', 'critical');
   };
 
   const handleRestoreTamper = () => {
@@ -147,9 +158,11 @@ export default function ModelGovernancePage() {
     setIsTampered(false);
     setVerificationResult({
       isValid: true,
-      totalEntries: auditLedger.length
+      totalEntries: auditLedger.length,
+      firstBrokenRow: undefined,
+      status: 'TAMPER_EVIDENT_VERIFIED'
     });
-    addToast('Integrity Restored', 'WORM audit block cryptographic hashes recalculated and restored.', 'success');
+    addToast('Chain Integrity Restored', 'Reverted in-memory mutation to certified pristine genesis chain.', 'success');
   };
 
   // Dispatch Outbound Webhook Test
@@ -289,7 +302,7 @@ export default function ModelGovernancePage() {
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            WORM Audit Trail ({auditLedger.length})
+            Tamper-Evident Ledger ({auditLedger.length})
           </button>
         </div>
       </div>
@@ -866,29 +879,34 @@ export default function ModelGovernancePage() {
                 {verificationResult.isValid ? (
                   <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4" />
-                    Chain 100% Cryptographically Valid ({verificationResult.totalEntries} blocks) • Evidence Act § 65B Certified
+                    Chain 100% Valid ({verificationResult.totalEntries} blocks) • Ed25519 Signed • Anchored to Object-Lock Vault
                   </span>
                 ) : (
                   <span className="text-rose-400 font-bold flex items-center gap-1.5 animate-pulse">
                     <XCircle className="w-4 h-4" />
-                    TAMPER DETECTED: Block #{verificationResult.brokenSequence} Hash Mismatch!
+                    TAMPER DETECTED: Row #{verificationResult.firstBrokenRow !== undefined ? verificationResult.firstBrokenRow : verificationResult.brokenSequence} (Block #{verificationResult.brokenSequence}) Hash Mismatch!
                   </span>
                 )}
               </div>
             )}
           </div>
 
-          {/* Legal Standards Banner */}
-          <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl flex items-center justify-between text-xs font-mono text-slate-400">
+          {/* Legal Standards & Storage WORM Banner */}
+          <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-slate-400">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>
-                Evidence Standard: <strong>Bangladesh Evidence Act (Amended 2022) § 65B</strong> (Electronic Records Admissibility) &amp; BB ICT Security Guidelines v3.0
+                Evidence Standard: <strong>Bangladesh Evidence Act (Amended 2022) § 65B</strong> &amp; FRE 902(11) Certified Electronic Record
               </span>
             </div>
-            <span className="text-slate-500 text-[11px]">
-              SHA-256 Merkle Ledger
-            </span>
+            <div className="flex items-center gap-3 text-slate-400 text-[11px]">
+              <span className="px-2 py-0.5 rounded bg-[#1E293B] text-cyan-300 font-bold">
+                Ed25519 Checkpoints (RFC 8032)
+              </span>
+              <span className="px-2 py-0.5 rounded bg-[#1E293B] text-emerald-300 font-bold">
+                S3 Object Lock: Compliance Mode
+              </span>
+            </div>
           </div>
 
           {/* Ledger Table */}

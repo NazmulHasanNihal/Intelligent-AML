@@ -1,0 +1,21 @@
+{
+  "checkpoint_id": "CHK-000000-000006",
+  "block_range": [
+    0,
+    6
+  ],
+  "root_hash": "6496baded5fbdf4e088076472763978fe3ec7c9bc831eb35a077ee020af3ec50",
+  "head_hash": "b48d25e566b5202d2d60ab5114f4b0d0440ddb9980946b3e5524275253db2a89",
+  "merkle_root": "e320fae3343dd7aa2f8616aad05eab0b9e2a5effa44b185924207986643241e9",
+  "timestamp": "2026-11-23T08:24:39Z",
+  "signature_algorithm": "Ed25519 (RFC 8032)",
+  "ed25519_signature": "16da2e818bb1c606b5cf7d579a02c5f8f7abcd12a25bada169fea08ee4832bf73c96a39a8c8b2e053344ee0cb2ac132a57f645566913dd8bfcfec9e333b7050e",
+  "public_key_hex": "0c22133e713b6337e7ac480fde1147ecb8adf0d84ae83ddfafb2b58eda856d99",
+  "anchored_object_lock_uri": "s3://intelligent-aml-compliance-vault/audit-checkpoints/CHK-000000-000006.json",
+  "object_lock_retention": {
+    "mode": "COMPLIANCE",
+    "statute": "Bangladesh MLPA 2012 \u00a7 8 / FRE 902(11)",
+    "retention_years": 5,
+    "legal_hold": false
+  }
+}

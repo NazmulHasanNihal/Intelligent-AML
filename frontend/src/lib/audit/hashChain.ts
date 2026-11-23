@@ -127,8 +127,8 @@ const CERTIFIED_GENESIS_CHAIN: AuditBlock[] = [
     details: 'Genesis cryptographic anchor sealed for Institutional AML Surveillance Cycle 2026-Q3.',
     prevHash: '0000000000000000000000000000000000000000000000000000000000000000',
     previousHash: '0000000000000000000000000000000000000000000000000000000000000000',
-    merkleHash: '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
-    currentHash: '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
+    merkleHash: 'eda87c4a6c7edd76e58c4ea832b272d9a824c6fc6c8f0f4f2acd230abd08645c',
+    currentHash: 'eda87c4a6c7edd76e58c4ea832b272d9a824c6fc6c8f0f4f2acd230abd08645c',
     role: 'SYSTEM',
     officerId: 'SYS-GATEWAY',
     officerName: 'Core Engine'
@@ -146,10 +146,10 @@ const CERTIFIED_GENESIS_CHAIN: AuditBlock[] = [
     targetId: 'ALT-994821',
     justificationCode: 'TBML_ASYCUDA_OVERINVOICE',
     details: 'Automated administrative hold on documentary LC wire $9,450 (৳1,134,000 BDT). ASYCUDA price divergence +333.7%.',
-    prevHash: '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
-    previousHash: '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
-    merkleHash: '4a91959c2a3fd62e89bb15679b57e4be9a284702716c62e77e9d5c49c2633263',
-    currentHash: '4a91959c2a3fd62e89bb15679b57e4be9a284702716c62e77e9d5c49c2633263',
+    prevHash: 'eda87c4a6c7edd76e58c4ea832b272d9a824c6fc6c8f0f4f2acd230abd08645c',
+    previousHash: 'eda87c4a6c7edd76e58c4ea832b272d9a824c6fc6c8f0f4f2acd230abd08645c',
+    merkleHash: 'd517e1444d9f262bf47b2b5f86fdb9d39b66095828e001339ec2d6ab22053ec5',
+    currentHash: 'd517e1444d9f262bf47b2b5f86fdb9d39b66095828e001339ec2d6ab22053ec5',
     role: 'SYSTEM',
     officerId: 'SRV-ENGINE',
     officerName: 'Fast-Path Engine'
@@ -167,10 +167,10 @@ const CERTIFIED_GENESIS_CHAIN: AuditBlock[] = [
     targetId: 'CASE-2026-0881',
     justificationCode: 'SIU_ESCALATION',
     details: 'Case CASE-2026-0881 formally docketed and assigned to Lead Investigator Sarah L. Jenkins, CFE.',
-    prevHash: '4a91959c2a3fd62e89bb15679b57e4be9a284702716c62e77e9d5c49c2633263',
-    previousHash: '4a91959c2a3fd62e89bb15679b57e4be9a284702716c62e77e9d5c49c2633263',
-    merkleHash: '2c11ecb8655b4d5ff449e802046406d338bc16458533c6b9377af1cdf376ccd3',
-    currentHash: '2c11ecb8655b4d5ff449e802046406d338bc16458533c6b9377af1cdf376ccd3',
+    prevHash: 'd517e1444d9f262bf47b2b5f86fdb9d39b66095828e001339ec2d6ab22053ec5',
+    previousHash: 'd517e1444d9f262bf47b2b5f86fdb9d39b66095828e001339ec2d6ab22053ec5',
+    merkleHash: 'dad1094986d6244089743f527d005628401c1e7476ed1ccbd615c2c171e25e27',
+    currentHash: 'dad1094986d6244089743f527d005628401c1e7476ed1ccbd615c2c171e25e27',
     role: 'CCO_L3',
     officerId: 'BNK-7842',
     officerName: 'Nazmul Hasan'
@@ -223,11 +223,54 @@ export async function appendAuditLog(params: {
 export async function verifyAuditChain(chainToVerify?: AuditBlock[]): Promise<{
   isValid: boolean;
   totalEntries: number;
+  firstBrokenRow?: number;
   brokenSequence?: number;
   expectedHash?: string;
   actualHash?: string;
+  error?: string;
+  status: 'TAMPER_EVIDENT_VERIFIED' | 'TAMPER_DETECTED' | 'EMPTY_CHAIN';
 }> {
   const chain = chainToVerify || activeChain;
+
+  if (chain.length === 0) {
+    return {
+      isValid: false,
+      totalEntries: 0,
+      status: 'EMPTY_CHAIN',
+      error: 'Audit chain is empty'
+    };
+  }
+
+  // Check 0: Genesis block content integrity
+  const genesis = chain[0];
+  if (genesis) {
+    const genesisPayload = buildBlockPayload(
+      genesis.prevHash || genesis.previousHash || '0'.repeat(64),
+      genesis.blockHeight || genesis.sequence,
+      genesis.timestamp,
+      genesis.action,
+      genesis.actorId || genesis.officerId || '',
+      genesis.checkerId,
+      genesis.targetAccount || genesis.targetId || '',
+      genesis.justificationCode || 'BOOT_MANDATE',
+      genesis.details
+    );
+    const recomputedGenesisHash = await computeSha256(genesisPayload);
+    const storedGenesisHash = genesis.merkleHash || genesis.currentHash;
+
+    if (recomputedGenesisHash !== storedGenesisHash) {
+      return {
+        isValid: false,
+        totalEntries: chain.length,
+        firstBrokenRow: 0,
+        brokenSequence: genesis.sequence || 1,
+        expectedHash: recomputedGenesisHash,
+        actualHash: storedGenesisHash,
+        error: `Genesis block #${genesis.sequence || 1} content altered: hash mismatch`,
+        status: 'TAMPER_DETECTED'
+      };
+    }
+  }
 
   for (let i = 1; i < chain.length; i++) {
     const prev = chain[i - 1];
@@ -242,9 +285,12 @@ export async function verifyAuditChain(chainToVerify?: AuditBlock[]): Promise<{
       return {
         isValid: false,
         totalEntries: chain.length,
+        firstBrokenRow: i,
         brokenSequence: curr.sequence || i + 1,
         expectedHash: expectedPrevHash,
-        actualHash: actualPrevHash
+        actualHash: actualPrevHash,
+        error: `Pointer mismatch at row #${i} (block #${curr.sequence || i + 1}): prevHash mismatch`,
+        status: 'TAMPER_DETECTED'
       };
     }
 
@@ -261,19 +307,27 @@ export async function verifyAuditChain(chainToVerify?: AuditBlock[]): Promise<{
       curr.details
     );
     const recomputedHash = await computeSha256(payload);
+    const storedHash = curr.merkleHash || curr.currentHash;
 
-    if (recomputedHash !== (curr.merkleHash || curr.currentHash)) {
+    if (recomputedHash !== storedHash) {
       return {
         isValid: false,
         totalEntries: chain.length,
+        firstBrokenRow: i,
         brokenSequence: curr.sequence || i + 1,
         expectedHash: recomputedHash,
-        actualHash: curr.merkleHash || curr.currentHash
+        actualHash: storedHash,
+        error: `Payload tampering at row #${i} (block #${curr.sequence || i + 1}): hash mismatch`,
+        status: 'TAMPER_DETECTED'
       };
     }
   }
 
-  return { isValid: true, totalEntries: chain.length };
+  return {
+    isValid: true,
+    totalEntries: chain.length,
+    status: 'TAMPER_EVIDENT_VERIFIED'
+  };
 }
 
 /**

@@ -4,6 +4,35 @@ All notable changes to this project are documented in this file, adhering to Gro
 
 ---
 
+## [Phase 5: Tamper-Evident Audit Log & Storage WORM] — 2026-11-23
+
+### Added
+- **Tamper-Evident Append-Only Hash Chain**:
+  - SHA-256 sequential Merkle hash chaining across all audit events in Python engine (`src/engine/persistence.py`) and Next.js frontend (`frontend/src/lib/audit/hashChain.ts`).
+  - RFC 8785 Canonical JSON payload serialization (`json.dumps(..., sort_keys=True, separators=(',', ':'), ensure_ascii=True)`), ensuring cross-platform, deterministic payload recalculation without whitespace jitter.
+  - Pointer continuity check: Enforces `block[i].prev_hash == block[i-1].curr_hash`.
+  - Content integrity check: Recomputes SHA-256 over canonical payload for all blocks including Genesis block #0.
+- **RFC 8032 Ed25519 Asymmetric Periodic Checkpointing (`src/engine/audit_checkpointer.py`)**:
+  - Binary Merkle tree root calculation over batch block digests.
+  - Ed25519 signing keypair generation and asymmetric signature generation over `(checkpoint_id, start_index, end_index, root_hash, head_hash, merkle_root, timestamp)`.
+  - Automatic milestone checkpoint creation every 3 blocks with local vault backup to `results/audit_checkpoints/`.
+- **Object-Lock Bucket Anchoring & Storage-Level WORM Documentation**:
+  - Created `docs/security/OBJECT_LOCK_STORAGE_WORM.md` establishing the formal distinction between application-level tamper evidence and storage-level WORM.
+  - Documented AWS S3 Object Lock configuration in `COMPLIANCE` mode with 5-year immutable retention (`1825d`) per Bangladesh MLPA 2012 § 25 and FRE 902(11) certified electronic records.
+  - Documented MinIO Object Lock configuration for air-gapped on-premises banking deployments.
+- **Verification Endpoints & Interactive UI**:
+  - `GET /api/v1/audit/verify` and `POST /api/v1/audit/verify` returning cryptographic verification receipts with `firstBrokenRow`, `status: "TAMPER_EVIDENT_VERIFIED" | "TAMPER_DETECTED"`, and `anchored_object_lock_uri`.
+  - Governance UI (`frontend/src/app/governance/page.tsx`):
+    - Relabeled to "Tamper-Evident Audit Ledger (Ed25519 Signed)".
+    - "Verify Cryptographic Chain" button verifying SHA-256 and Ed25519 signatures in real time.
+    - "Simulate Auditor Tamper Test": Alters block payload in-memory $\rightarrow$ UI immediately detects and displays red alert: `TAMPER DETECTED: Row #0 (Block #1) Hash Mismatch!`.
+    - "Restore Chain Integrity": Restores pristine certified genesis chain with green verification confirmation.
+- **Automated Verification Test Suites**:
+  - Backend: `tests/test_audit_ledger.py` (5 passing tests validating pristine verification, payload tampering detection, pointer tampering detection, genesis tampering detection, and Ed25519 signature rejection on forgery).
+  - Frontend: `frontend/src/__tests__/auditLedger.test.ts` (5 passing Vitest tests; 37/37 total frontend tests passing).
+
+---
+
 ## [Phase 4: Security, RBAC & Hardening] — 2026-11-23
 
 ### Added

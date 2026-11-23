@@ -53,7 +53,8 @@ class AuditBlock:
         self.curr_hash = curr_hash or self.calculate_hash()
 
     def calculate_hash(self) -> str:
-        payload_str = json.dumps(self.payload, sort_keys=True)
+        # RFC 8785 Canonical JSON: sorted keys, compact separators, UTF-8
+        payload_str = json.dumps(self.payload, sort_keys=True, separators=(',', ':'), ensure_ascii=True)
         raw = f"{self.index}:{self.prev_hash}:{self.timestamp}:{self.event_type}:{self.actor}:{payload_str}"
         return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
@@ -120,6 +121,7 @@ class RFIRecord(BaseModel):
 
 
 import threading
+from src.engine.audit_checkpointer import audit_checkpointer, AuditCheckpointer
 
 class IntelligentAMLDatabase:
     """
@@ -152,6 +154,7 @@ class IntelligentAMLDatabase:
         self.cases: Dict[str, CaseRecord] = {}
         self.alerts: Dict[str, AlertRecord] = {}
         self.rfi_requests: Dict[str, RFIRecord] = {}
+        self.checkpointer: AuditCheckpointer = audit_checkpointer
         self._init_sqlite_schema()
         self._init_genesis_block()
         self._seed_initial_data()
@@ -567,6 +570,7 @@ class IntelligentAMLDatabase:
         )
         self.audit_chain.append(genesis)
         self._sync_audit_to_db(genesis)
+        self.checkpointer.create_checkpoint(self.audit_chain)
 
     def append_audit_event(self, event_type: str, actor: str, payload: Dict[str, Any]) -> AuditBlock:
         with self.lock:
@@ -581,14 +585,44 @@ class IntelligentAMLDatabase:
             )
             self.audit_chain.append(new_block)
             self._sync_audit_to_db(new_block)
+            # Create Ed25519 checkpoint on milestone blocks
+            if len(self.audit_chain) % 3 == 0:
+                self.checkpointer.create_checkpoint(self.audit_chain)
             return new_block
 
     def verify_audit_chain(self) -> Dict[str, Any]:
         """
-        Cryptographically validates every link in the append-only ledger.
-        Returns verifiable proof receipt under Federal Rule of Evidence 902(11).
+        Cryptographically validates every link in the tamper-evident hash chain.
+        Validates:
+        1. Genesis integrity: block[0].curr_hash == SHA256(canonical_payload_0).
+        2. Pointer continuity: block[i].prev_hash == block[i-1].curr_hash.
+        3. Canonical JSON recalculation: block[i].curr_hash == SHA256(canonical_payload_i).
+        4. Ed25519 asymmetric signature and Merkle root match on periodic checkpoints.
+        Returns first broken row if corrupted, or full tamper-evident proof receipt.
         """
         with self.lock:
+            if len(self.audit_chain) == 0:
+                return {
+                    "is_valid": False,
+                    "total_blocks": 0,
+                    "first_broken_row": None,
+                    "error": "Audit chain empty",
+                    "status": "EMPTY_CHAIN"
+                }
+
+            # Check 0: Genesis block content integrity
+            genesis = self.audit_chain[0]
+            expected_genesis_hash = genesis.calculate_hash()
+            if genesis.curr_hash != expected_genesis_hash:
+                return {
+                    "is_valid": False,
+                    "total_blocks": len(self.audit_chain),
+                    "first_broken_row": 0,
+                    "broken_block_index": genesis.index,
+                    "error": f"Genesis block #{genesis.index} payload altered: stored hash '{genesis.curr_hash[:16]}...' != recomputed '{expected_genesis_hash[:16]}...'",
+                    "status": "TAMPER_DETECTED"
+                }
+
             for i in range(1, len(self.audit_chain)):
                 prev = self.audit_chain[i - 1]
                 curr = self.audit_chain[i]
@@ -597,26 +631,51 @@ class IntelligentAMLDatabase:
                 if curr.prev_hash != prev.curr_hash:
                     return {
                         "is_valid": False,
+                        "total_blocks": len(self.audit_chain),
+                        "first_broken_row": i,
                         "broken_block_index": curr.index,
-                        "error": f"Pointer mismatch at block {curr.index}: expected {prev.curr_hash[:16]}..., got {curr.prev_hash[:16]}..."
+                        "error": f"Pointer mismatch at row #{i} (block {curr.index}): expected prev_hash '{prev.curr_hash[:16]}...', got '{curr.prev_hash[:16]}...'",
+                        "status": "TAMPER_DETECTED"
                     }
 
-                # Check 2: Content integrity
+                # Check 2: Content integrity over canonical JSON
                 expected_hash = curr.calculate_hash()
                 if curr.curr_hash != expected_hash:
                     return {
                         "is_valid": False,
+                        "total_blocks": len(self.audit_chain),
+                        "first_broken_row": i,
                         "broken_block_index": curr.index,
-                        "error": f"Payload tampering at block {curr.index}: hash {curr.curr_hash[:16]}... != calculated {expected_hash[:16]}..."
+                        "error": f"Payload tampering at row #{i} (block {curr.index}): stored hash '{curr.curr_hash[:16]}...' != recomputed hash '{expected_hash[:16]}...'",
+                        "status": "TAMPER_DETECTED"
                     }
+
+            # Check 3: Checkpoint verification
+            if not self.checkpointer.latest_checkpoint:
+                self.checkpointer.create_checkpoint(self.audit_chain)
+
+            checkpoint = self.checkpointer.latest_checkpoint
+            is_checkpoint_valid = self.checkpointer.verify_checkpoint(checkpoint, self.audit_chain)
+            if not is_checkpoint_valid:
+                return {
+                    "is_valid": False,
+                    "total_blocks": len(self.audit_chain),
+                    "first_broken_row": checkpoint.start_index,
+                    "broken_block_index": checkpoint.start_index,
+                    "error": f"Ed25519 checkpoint signature or Merkle root mismatch on checkpoint '{checkpoint.checkpoint_id}'",
+                    "status": "CHECKPOINT_TAMPER_DETECTED"
+                }
 
             return {
                 "is_valid": True,
                 "total_blocks": len(self.audit_chain),
+                "first_broken_row": None,
                 "root_hash": self.audit_chain[0].curr_hash,
                 "head_hash": self.audit_chain[-1].curr_hash,
+                "latest_checkpoint": checkpoint.to_dict(),
+                "anchored_object_lock_uri": checkpoint.object_lock_uri,
                 "verification_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                "status": "CRYPTOGRAPHICALLY_VERIFIED"
+                "status": "TAMPER_EVIDENT_VERIFIED"
             }
 
     def sign_off_case(self, case_id: str, approver: str, notes: str) -> CaseRecord:

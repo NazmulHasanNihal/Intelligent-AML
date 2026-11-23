@@ -57,6 +57,7 @@ from src.engine.auth import (
     create_access_token,
     get_current_user,
     require_roles,
+    enforce_maker_checker,
     UserRole,
     UserProfile,
     LoginRequest,
@@ -1123,17 +1124,127 @@ def get_case(case_id: str):
     return db.cases[case_id]
 
 
+# -----------------------------------------------------------------------------
+# Server-Side PII Masking & Audited Reveal Infrastructure
+# -----------------------------------------------------------------------------
+_PII_REVEAL_RATE_LIMIT: Dict[str, List[float]] = {}
+PII_REVEAL_MAX_PER_WINDOW = 5
+PII_REVEAL_WINDOW_SECONDS = 600  # 10 minutes
+
+
+class PiiRevealRequest(BaseModel):
+    target_account: str = Field(..., json_schema_extra={"example": "BD22-EBLB-4829-1092-8823"})
+    reason: str = Field(..., min_length=10, json_schema_extra={"example": "Formal court subpoena response under BFIU MLPA 2012 §25 investigation"})
+
+
+class PiiRevealResponse(BaseModel):
+    target_account: str
+    unmasked: bool
+    expires_in_seconds: int
+    actor: str
+    actor_role: str
+    reason: str
+    audit_receipt: str
+    timestamp: str
+
+
+@app.post("/api/v1/pii/reveal", response_model=PiiRevealResponse, tags=["Security & PII Masking"])
+def reveal_pii_endpoint(
+    req: PiiRevealRequest,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """
+    Server-side PII unmasking gate under Banking Secrecy and GDPR/BFIU regulations.
+    Enforces:
+    1. Role gate: Analyst L1 and Auditor are strictly forbidden from revealing raw PII (403 Forbidden).
+    2. Mandatory reason verification: minimum 10 characters required.
+    3. Server-side sliding-window rate limiting (max 5 reveals per 10 minutes per officer).
+    4. Immutable audit entry appended to WORM ledger.
+    """
+    # 1. Role Authorization
+    if current_user.role == UserRole.ANALYST_L1:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access Denied: Analyst L1 lacks authority to unmask customer PII. Formal supervisor escalation required."
+        )
+    if current_user.role == UserRole.AUDITOR:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access Denied: Auditor role operates strictly on pseudonymized records. Unmasked PII access is prohibited under data minimization regulations."
+        )
+
+    # 2. Reason Validation
+    if len(req.reason.strip()) < 10:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Regulatory violation: A specific, verifiable operational reason (minimum 10 characters) is required to access unmasked PII."
+        )
+
+    # 3. Rate Limiting Check
+    now = time.time()
+    user_key = current_user.username
+    timestamps = _PII_REVEAL_RATE_LIMIT.get(user_key, [])
+    timestamps = [t for t in timestamps if now - t < PII_REVEAL_WINDOW_SECONDS]
+    if len(timestamps) >= PII_REVEAL_MAX_PER_WINDOW:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"Rate limit exceeded: Maximum {PII_REVEAL_MAX_PER_WINDOW} PII reveals per {PII_REVEAL_WINDOW_SECONDS // 60} minutes reached. Escalation required."
+        )
+    timestamps.append(now)
+    _PII_REVEAL_RATE_LIMIT[user_key] = timestamps
+
+    # 4. Append to WORM Audit Ledger
+    block = db.append_audit_event(
+        event_type="PII_UNMASKED_AUDIT",
+        actor=current_user.username,
+        payload={
+            "target_account": req.target_account,
+            "reason": req.reason,
+            "actor_role": current_user.role.value,
+            "actor_name": current_user.full_name,
+            "validity_seconds": 60
+        }
+    )
+
+    return PiiRevealResponse(
+        target_account=req.target_account,
+        unmasked=True,
+        expires_in_seconds=60,
+        actor=current_user.full_name,
+        actor_role=current_user.role.value,
+        reason=req.reason,
+        audit_receipt=block.curr_hash,
+        timestamp=block.timestamp
+    )
+
+
 @app.post("/api/v1/cases/{case_id}/sign-off", tags=["Case Management & Four-Eyes"])
-def sign_off_case_endpoint(case_id: str, req: CaseSignOffRequest):
+def sign_off_case_endpoint(
+    case_id: str,
+    req: CaseSignOffRequest,
+    current_user: UserProfile = Depends(get_current_user)
+):
     """
-    Four-Eyes Dual Control Sign-off (OCC 2011-12 / Federal Reserve SR 11-7 / FINRA Rule 3110).
-    Rejects sign-off with 403 Forbidden if approver is identical to case initiator.
+    Four-Eyes Dual Control Sign-off (OCC 2011-12 / Federal Reserve SR 11-7 / FINRA Rule 3110 / BFIU Master Circular 26).
+    Enforces server-side Maker-Checker separation and role-based clearance (SUPERVISOR, MLRO_CAMLCO, ADMIN).
+    Rejects sign-off with 403 Forbidden if approver is identical to case initiator, or has insufficient role clearance.
     """
-    try:
-        updated_case = db.sign_off_case(case_id=case_id, approver=req.approver, notes=req.notes)
-        return updated_case
-    except KeyError:
+    if case_id not in db.cases:
         raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found.")
+
+    target_case = db.cases[case_id]
+    approver_name = req.approver or current_user.full_name
+
+    # Enforce Server-Side Maker-Checker & Role Validation
+    enforce_maker_checker(
+        case_initiator=target_case.initiator,
+        approver_name=approver_name,
+        approver_role=current_user.role
+    )
+
+    try:
+        updated_case = db.sign_off_case(case_id=case_id, approver=approver_name, notes=req.notes)
+        return updated_case
     except PermissionError as pe:
         raise HTTPException(status_code=403, detail=str(pe))
 

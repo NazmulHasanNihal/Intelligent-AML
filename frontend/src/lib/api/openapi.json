@@ -999,14 +999,66 @@
         }
       }
     },
+    "/api/v1/pii/reveal": {
+      "post": {
+        "tags": [
+          "Security & PII Masking"
+        ],
+        "summary": "Reveal Pii Endpoint",
+        "description": "Server-side PII unmasking gate under Banking Secrecy and GDPR/BFIU regulations.\nEnforces:\n1. Role gate: Analyst L1 and Auditor are strictly forbidden from revealing raw PII (403 Forbidden).\n2. Mandatory reason verification: minimum 10 characters required.\n3. Server-side sliding-window rate limiting (max 5 reveals per 10 minutes per officer).\n4. Immutable audit entry appended to WORM ledger.",
+        "operationId": "reveal_pii_endpoint_api_v1_pii_reveal_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PiiRevealRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PiiRevealResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/cases/{case_id}/sign-off": {
       "post": {
         "tags": [
           "Case Management & Four-Eyes"
         ],
         "summary": "Sign Off Case Endpoint",
-        "description": "Four-Eyes Dual Control Sign-off (OCC 2011-12 / Federal Reserve SR 11-7 / FINRA Rule 3110).\nRejects sign-off with 403 Forbidden if approver is identical to case initiator.",
+        "description": "Four-Eyes Dual Control Sign-off (OCC 2011-12 / Federal Reserve SR 11-7 / FINRA Rule 3110 / BFIU Master Circular 26).\nEnforces server-side Maker-Checker separation and role-based clearance (SUPERVISOR, MLRO_CAMLCO, ADMIN).\nRejects sign-off with 403 Forbidden if approver is identical to case initiator, or has insufficient role clearance.",
         "operationId": "sign_off_case_endpoint_api_v1_cases__case_id__sign_off_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "case_id",
@@ -3416,6 +3468,18 @@
           "password": {
             "type": "string",
             "title": "Password"
+          },
+          "mfa_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mfa Code",
+            "default": "123456"
           }
         },
         "type": "object",
@@ -3424,6 +3488,75 @@
           "password"
         ],
         "title": "LoginRequest"
+      },
+      "PiiRevealRequest": {
+        "properties": {
+          "target_account": {
+            "type": "string",
+            "title": "Target Account",
+            "example": "BD22-EBLB-4829-1092-8823"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "title": "Reason",
+            "example": "Formal court subpoena response under BFIU MLPA 2012 \u00a725 investigation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_account",
+          "reason"
+        ],
+        "title": "PiiRevealRequest"
+      },
+      "PiiRevealResponse": {
+        "properties": {
+          "target_account": {
+            "type": "string",
+            "title": "Target Account"
+          },
+          "unmasked": {
+            "type": "boolean",
+            "title": "Unmasked"
+          },
+          "expires_in_seconds": {
+            "type": "integer",
+            "title": "Expires In Seconds"
+          },
+          "actor": {
+            "type": "string",
+            "title": "Actor"
+          },
+          "actor_role": {
+            "type": "string",
+            "title": "Actor Role"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "audit_receipt": {
+            "type": "string",
+            "title": "Audit Receipt"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_account",
+          "unmasked",
+          "expires_in_seconds",
+          "actor",
+          "actor_role",
+          "reason",
+          "audit_receipt",
+          "timestamp"
+        ],
+        "title": "PiiRevealResponse"
       },
       "SARExportRequest": {
         "properties": {
@@ -4146,6 +4279,26 @@
             "type": "boolean",
             "title": "Is Active",
             "default": true
+          },
+          "mfa_enabled": {
+            "type": "boolean",
+            "title": "Mfa Enabled",
+            "default": true
+          },
+          "mfa_verified": {
+            "type": "boolean",
+            "title": "Mfa Verified",
+            "default": true
+          },
+          "auth_method": {
+            "type": "string",
+            "title": "Auth Method",
+            "default": "OIDC_SSO_MFA"
+          },
+          "session_timeout_minutes": {
+            "type": "integer",
+            "title": "Session Timeout Minutes",
+            "default": 15
           }
         },
         "type": "object",
@@ -4163,10 +4316,14 @@
       "UserRole": {
         "type": "string",
         "enum": [
-          "COMPLIANCE_OFFICER",
-          "FORENSIC_INVESTIGATOR",
+          "ANALYST_L1",
+          "ANALYST_L2",
+          "SUPERVISOR",
+          "MLRO_CAMLCO",
           "AUDITOR",
-          "ADMIN"
+          "ADMIN",
+          "SUPERVISOR",
+          "ANALYST_L2"
         ],
         "title": "UserRole"
       },

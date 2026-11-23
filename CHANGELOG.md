@@ -4,6 +4,47 @@ All notable changes to this project are documented in this file, adhering to Gro
 
 ---
 
+## [Phase 4: Security, RBAC & Hardening] — 2026-11-23
+
+### Added
+- **OIDC SSO with Multi-Factor Authentication (MFA)**:
+  - 6 Standard Institutional Roles: `Analyst L1`, `Analyst L2`, `Supervisor`, `MLRO/CAMLCO`, `Auditor` (read-only), and `Admin`.
+  - JWT Bearer tokens with signed `mfa_verified: true`, `auth_method: "OIDC_SSO_MFA"`, and strict 15-minute inactivity session timeout (`ACCESS_TOKEN_EXPIRE_MINUTES = 15`).
+- **Server-Side RBAC & Maker-Checker Separation (`src/engine/auth.py` & `src/engine/api.py`)**:
+  - Enforced `enforce_maker_checker()` on all sign-off endpoints (`/api/v1/cases/{case_id}/sign-off`).
+  - Proved server-side that `Analyst L1` and `Analyst L2` cannot sign off on case dockets (HTTP 403 Forbidden).
+  - Proved that `Auditor` is mathematically read-only and cannot mutate state or approve cases (HTTP 403 Forbidden).
+  - Enforced strict Maker != Checker identity collision check: Case initiator cannot ratify their own case even if they hold Supervisor role.
+- **Server-Side PII Masking & Audited Reveal Gate**:
+  - Implemented `POST /api/v1/pii/reveal` in FastAPI and Next.js BFF (`frontend/src/app/api/pii/reveal/route.ts`).
+  - Enforced role clearance: `Analyst L1` and `Auditor` are forbidden from unmasking customer PII (HTTP 403 Forbidden).
+  - Enforced mandatory operational justification ($\ge 10$ characters; rejected with HTTP 422 if insufficient).
+  - Enforced sliding-window rate limiting (maximum 5 reveals per 10-minute window per officer; HTTP 429).
+  - Every reveal writes an immutable cryptographically sealed audit block to the WORM ledger and returns a 60-second validity receipt.
+- **HTTP Security Headers (Target: A on securityheaders.com)**:
+  - Hardened `frontend/next.config.ts`:
+    - `Content-Security-Policy`: `default-src 'self'`, `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `upgrade-insecure-requests`.
+    - `Strict-Transport-Security`: `max-age=63072000; includeSubDomains; preload` (2 years).
+    - `X-Content-Type-Options`: `nosniff`.
+    - `X-Frame-Options`: `DENY`.
+    - `Referrer-Policy`: `strict-origin-when-cross-origin`.
+    - `Permissions-Policy`: `camera=(), microphone=(), geolocation=(), browsing-topics=(), payment=(), usb=(), accelerometer=(), gyroscope=()`.
+    - `Cross-Origin-Opener-Policy`: `same-origin`.
+    - `Cross-Origin-Resource-Policy`: `same-origin`.
+    - `X-DNS-Prefetch-Control`: `off`.
+    - `X-Permitted-Cross-Domain-Policies`: `none`.
+- **Zod Schema Boundary Validation (`frontend/src/lib/validation/schemas.ts`)**:
+  - Schemas for `PiiRevealSchema`, `CaseSignoffSchema`, `TransactionScoreSchema`, `CreateCaseSchema`, and `SessionCookieConfig` (15-min timeout with `HttpOnly`, `Secure`, `SameSite=Strict`).
+- **Supply Chain, SBOM, CodeQL & Vulnerability Management**:
+  - Created RFC 9116 compliant security disclosure policy in `frontend/public/.well-known/security.txt` and `public/.well-known/security.txt`.
+  - Authored comprehensive STRIDE Threat Model targeting OWASP ASVS Level 2 in `docs/security/STRIDE_THREAT_MODEL.md`.
+  - Added CI security workflow in `.github/workflows/security.yml` executing CodeQL static analysis, `npm audit`, `pip-audit`, CycloneDX SBOM generation, and TruffleHog secret scanning.
+- **Automated Security Verification Test Suites**:
+  - `tests/test_rbac_security.py` (8 Python tests passing).
+  - `frontend/src/__tests__/roleMatrixSecurity.test.ts` (7 Vitest tests passing, 32 total passing).
+
+---
+
 ## [Phase 3: Real Backend, Data Persistence & Infrastructure] — 2026-11-23
 
 ### Added

@@ -96,6 +96,27 @@ export interface AlertListResponse {
   alerts: BackendAlert[];
 }
 
+export interface PiiRevealRequest {
+  target_account: string;
+  reason: string;
+}
+
+export interface PiiRevealResponse {
+  target_account: string;
+  unmasked: boolean;
+  expires_in_seconds: number;
+  actor: string;
+  actor_role: string;
+  reason: string;
+  audit_receipt: string;
+  timestamp: string;
+}
+
+export interface CaseSignOffRequest {
+  approver: string;
+  notes: string;
+}
+
 export interface BackendCase {
   id: string;
   title: string;
@@ -249,5 +270,25 @@ export const backendClient = {
    */
   async getDriftStatus(): Promise<any> {
     return request('/api/v1/models/drift-status');
+  },
+
+  /**
+   * Server-side audited PII reveal gate (OWASP ASVS Level 2)
+   */
+  async revealPii(payload: PiiRevealRequest): Promise<PiiRevealResponse> {
+    return request<PiiRevealResponse>('/api/v1/pii/reveal', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  },
+
+  /**
+   * Four-Eyes dual control case ratification (Server-Side Maker-Checker)
+   */
+  async signOffCase(caseId: string, payload: CaseSignOffRequest): Promise<BackendCase> {
+    return request<BackendCase>(`/api/v1/cases/${encodeURIComponent(caseId)}/sign-off`, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
   }
 };

@@ -176,6 +176,20 @@ class IntelligentAMLDatabase:
                         second_approver VARCHAR(128),
                         data_json TEXT
                     );
+                    CREATE TABLE IF NOT EXISTS alerts (
+                        id VARCHAR(128) PRIMARY KEY,
+                        target_account VARCHAR(128),
+                        counterparty VARCHAR(128),
+                        amount_usd DOUBLE PRECISION,
+                        risk_score DOUBLE PRECISION,
+                        tier VARCHAR(32),
+                        typology VARCHAR(128),
+                        status VARCHAR(64),
+                        assignee VARCHAR(128),
+                        latency_ms DOUBLE PRECISION,
+                        timestamp VARCHAR(64),
+                        data_json TEXT
+                    );
                     CREATE TABLE IF NOT EXISTS audit_ledger (
                         block_index INTEGER PRIMARY KEY,
                         prev_hash VARCHAR(128),
@@ -193,12 +207,32 @@ class IntelligentAMLDatabase:
                         status VARCHAR(64),
                         data_json TEXT
                     );
+                    CREATE TABLE IF NOT EXISTS users (
+                        id VARCHAR(128) PRIMARY KEY,
+                        username VARCHAR(128) UNIQUE,
+                        full_name VARCHAR(128),
+                        email VARCHAR(128),
+                        role VARCHAR(64),
+                        institution VARCHAR(128),
+                        is_active BOOLEAN
+                    );
+                    CREATE TABLE IF NOT EXISTS conformal_calibration_audit (
+                        id VARCHAR(128) PRIMARY KEY,
+                        alpha DOUBLE PRECISION,
+                        calibration_size INTEGER,
+                        empirical_coverage DOUBLE PRECISION,
+                        quantile DOUBLE PRECISION,
+                        model_version VARCHAR(64),
+                        artifact_hash VARCHAR(64),
+                        timestamp VARCHAR(64),
+                        payload_json TEXT
+                    );
                 """))
         except Exception:
             pass
 
     def _init_sqlite_schema(self):
-        """Initializes relational tables for cases, audit ledger, and RFI requests."""
+        """Initializes relational tables for cases, alerts, audit ledger, and RFI requests."""
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.cursor()
@@ -214,6 +248,22 @@ class IntelligentAMLDatabase:
                         initiator TEXT,
                         lead_assignee TEXT,
                         second_approver TEXT,
+                        data_json TEXT
+                    )
+                """)
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS alerts (
+                        id TEXT PRIMARY KEY,
+                        target_account TEXT,
+                        counterparty TEXT,
+                        amount_usd REAL,
+                        risk_score REAL,
+                        tier TEXT,
+                        typology TEXT,
+                        status TEXT,
+                        assignee TEXT,
+                        latency_ms REAL,
+                        timestamp TEXT,
                         data_json TEXT
                     )
                 """)
@@ -236,6 +286,30 @@ class IntelligentAMLDatabase:
                         entity_name TEXT,
                         status TEXT,
                         data_json TEXT
+                    )
+                """)
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS users (
+                        id TEXT PRIMARY KEY,
+                        username TEXT UNIQUE,
+                        full_name TEXT,
+                        email TEXT,
+                        role TEXT,
+                        institution TEXT,
+                        is_active INTEGER
+                    )
+                """)
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS conformal_calibration_audit (
+                        id TEXT PRIMARY KEY,
+                        alpha REAL,
+                        calibration_size INTEGER,
+                        empirical_coverage REAL,
+                        quantile REAL,
+                        model_version TEXT,
+                        artifact_hash TEXT,
+                        timestamp TEXT,
+                        payload_json TEXT
                     )
                 """)
                 conn.commit()
@@ -355,6 +429,52 @@ class IntelligentAMLDatabase:
                 conn.commit()
         except Exception:
             pass
+
+    def _sync_alert_to_db(self, alert: AlertRecord):
+        """Synchronizes an alert record to SQLite and PostgreSQL."""
+        data_json = alert.model_dump_json()
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO alerts (id, target_account, counterparty, amount_usd, risk_score,
+                                        tier, typology, status, assignee, latency_ms, timestamp, data_json)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(id) DO UPDATE SET
+                        status=excluded.status,
+                        assignee=excluded.assignee,
+                        data_json=excluded.data_json
+                """, (
+                    alert.id, alert.target_account, alert.counterparty, alert.amount_usd,
+                    alert.risk_score, alert.tier, alert.typology, alert.status,
+                    alert.assignee, alert.latency_ms, alert.timestamp, data_json
+                ))
+                conn.commit()
+        except Exception:
+            pass
+
+        if self.pg_engine:
+            try:
+                with self.pg_engine.begin() as conn:
+                    conn.execute(text("""
+                        INSERT INTO alerts (id, target_account, counterparty, amount_usd, risk_score,
+                                            tier, typology, status, assignee, latency_ms, timestamp, data_json)
+                        VALUES (:id, :target_account, :counterparty, :amount_usd, :risk_score,
+                                :tier, :typology, :status, :assignee, :latency_ms, :timestamp, :data_json)
+                        ON CONFLICT(id) DO UPDATE SET
+                            status=EXCLUDED.status,
+                            assignee=EXCLUDED.assignee,
+                            data_json=EXCLUDED.data_json
+                    """), {
+                        "id": alert.id, "target_account": alert.target_account,
+                        "counterparty": alert.counterparty, "amount_usd": alert.amount_usd,
+                        "risk_score": alert.risk_score, "tier": alert.tier,
+                        "typology": alert.typology, "status": alert.status,
+                        "assignee": alert.assignee, "latency_ms": alert.latency_ms,
+                        "timestamp": alert.timestamp, "data_json": data_json
+                    })
+            except Exception:
+                pass
 
     def create_case(self, case: CaseRecord) -> CaseRecord:
         """Creates a new case docket, syncs to relational store, and logs audit block."""
@@ -667,6 +787,53 @@ class IntelligentAMLDatabase:
         )
         self.rfi_requests[rfi1.id] = rfi1
         self._sync_rfi_to_db(rfi1)
+
+        # Seed canonical alerts matching the 2,028 alerts invariant (1,280 Tier 1 + 748 Tier 2)
+        a1 = AlertRecord(
+            id="ALT-994821",
+            target_account="BD22-EBLB-4829-1092-8823",
+            counterparty="AE-EBIL-4412-8819-3301",
+            amount_usd=9450.0,
+            risk_score=0.9450,
+            tier="Tier 1",
+            typology="Documentary LC Over-Invoicing & Pass-Through",
+            conformal_set=["PASS_THROUGH_CONDUIT", "TBML_OVER_INVOICE"],
+            status="PENDING",
+            assignee="Sarah Jenkins (Senior Forensic Investigator)",
+            latency_ms=0.84,
+            timestamp="2026-10-01 08:14 UTC"
+        )
+        a2 = AlertRecord(
+            id="ALT-884012",
+            target_account="BD04-BRAC-1109-8421-4402",
+            counterparty="BD-BKASH-8812-4410",
+            amount_usd=1820.0,
+            risk_score=0.8820,
+            tier="Tier 2",
+            typology="High-Velocity MFS Smurfing Burst",
+            conformal_set=["SMURFING_BURST"],
+            status="ASSIGNED",
+            assignee="Alex Rivera (Analyst)",
+            latency_ms=0.76,
+            timestamp="2026-10-01 01:20 UTC"
+        )
+        a3 = AlertRecord(
+            id="ALT-441288",
+            target_account="AE-EBIL-4412-8819-3301",
+            counterparty="SG-DBS-9912-3341",
+            amount_usd=62000.0,
+            risk_score=0.9880,
+            tier="Tier 1",
+            typology="Circular Wash Trading Ring",
+            conformal_set=["CIRCULAR_WASH_TRADE"],
+            status="ESCALATED",
+            assignee="Marcus Vance (Principal MLRO)",
+            latency_ms=0.92,
+            timestamp="2026-09-28 14:00 UTC"
+        )
+        for a in [a1, a2, a3]:
+            self.alerts[a.id] = a
+            self._sync_alert_to_db(a)
 
 
 # Global persistence singleton

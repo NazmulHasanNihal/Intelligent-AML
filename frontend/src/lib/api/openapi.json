@@ -1,0 +1,4221 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Intelligent-AML C-STGB Production API",
+    "description": "Risk-Controlled Spatio-Temporal Graph Learning for Anti-Money Laundering (IEEE TIFS)",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Root Index",
+        "description": "Intelligent-AML C-STGB Engine Root Service Index.\nServes the React Web Platform if built, or returns API service telemetry.",
+        "operationId": "root_index__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "System & Observability"
+        ],
+        "summary": "Health Check",
+        "description": "System health status, memory cache, and component readiness.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "tags": [
+          "System & Observability"
+        ],
+        "summary": "Readiness Probe",
+        "description": "Readiness probe for container orchestration.",
+        "operationId": "readiness_probe_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "tags": [
+          "System & Observability"
+        ],
+        "summary": "Prometheus Metrics",
+        "description": "Prometheus-compatible plaintext metrics exposition for production monitoring.",
+        "operationId": "prometheus_metrics_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication & RBAC"
+        ],
+        "summary": "Login Endpoint",
+        "description": "Authenticates compliance officers and investigators.\nIssues an HMAC-SHA256 signed JWT bearer token with OCC 2011-12 permissions.",
+        "operationId": "login_endpoint_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "tags": [
+          "Authentication & RBAC"
+        ],
+        "summary": "Get Current User Profile",
+        "description": "Returns cryptographic user profile and active RBAC permissions.",
+        "operationId": "get_current_user_profile_api_v1_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/demo-tokens": {
+      "get": {
+        "tags": [
+          "Authentication & RBAC"
+        ],
+        "summary": "List Demo Tokens",
+        "description": "Generates pre-signed tokens for all standard roles to streamline demo testing.",
+        "operationId": "list_demo_tokens_api_v1_auth_demo_tokens_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/graph/analytics/{node_id}": {
+      "get": {
+        "tags": [
+          "Graph & Visualizer"
+        ],
+        "summary": "Get Node Analytics",
+        "description": "Computes live dynamic NetworkX PageRank, betweenness centrality, degree asymmetry,\nvolume flow conservation, and archetype cosine similarity for any entity.",
+        "operationId": "get_node_analytics_api_v1_graph_analytics__node_id__get",
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopologicalNodeAnalytics"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/models/checkpoints": {
+      "get": {
+        "tags": [
+          "Model Governance & Checkpoints"
+        ],
+        "summary": "List Model Checkpoints",
+        "description": "Lists saved cryptographic model checkpoints with SHA-256 integrity digests.",
+        "operationId": "list_model_checkpoints_api_v1_models_checkpoints_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Dataset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sanctions/refresh": {
+      "post": {
+        "tags": [
+          "Sanctions Screening"
+        ],
+        "summary": "Refresh Sanctions Lists",
+        "description": "Reloads and updates active OFAC / UN / EU / BFIU sanctions registries.",
+        "operationId": "refresh_sanctions_lists_api_v1_sanctions_refresh_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/score": {
+      "post": {
+        "tags": [
+          "Scoring & Telemetry"
+        ],
+        "summary": "Score Transaction",
+        "description": "Real-time transaction scoring with sub-millisecond latency profiling,\ndual-stream spatial-temporal fusion, and finite-sample conformal calibration.",
+        "operationId": "score_transaction_api_v1_score_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionScoreRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionScoreResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/graph/subgraph/{node_id}": {
+      "get": {
+        "tags": [
+          "Graph & Visualizer"
+        ],
+        "summary": "Get Ego Subgraph",
+        "description": "Extracts dynamic 2-hop causal ego-subgraph for suspect entity with\nlearnable edge-gating filter weights (g_hat_ij) and laundering typology roles\ndrawn from the authentic real-world entity registry.",
+        "operationId": "get_ego_subgraph_api_v1_graph_subgraph__node_id__get",
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node Id"
+            }
+          },
+          {
+            "name": "depth",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 3,
+              "minimum": 1,
+              "default": 2,
+              "title": "Depth"
+            }
+          },
+          {
+            "name": "delta_floor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "maximum": 0.5,
+              "minimum": 0.0,
+              "default": 0.1,
+              "title": "Delta Floor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conformal/triage": {
+      "post": {
+        "tags": [
+          "Conformal Risk Control"
+        ],
+        "summary": "Evaluate Conformal Triage",
+        "description": "Evaluates Class-Conditional Conformal Risk Control (CRC) triage metrics\nacross any selected error rate alpha in [0.001, 0.20].",
+        "operationId": "evaluate_conformal_triage_api_v1_conformal_triage_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConformalTriageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConformalTriageResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conformal/calibration": {
+      "get": {
+        "tags": [
+          "Conformal Risk Control"
+        ],
+        "summary": "Get Conformal Calibration",
+        "description": "Returns persistent conformal prediction calibration state: alpha, calibration set size,\nnonconformity score quantiles, empirical coverage tracking, and temporal drift notes.",
+        "operationId": "get_conformal_calibration_api_v1_conformal_calibration_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agents/investigate": {
+      "post": {
+        "tags": [
+          "Multi-Agent Swarm"
+        ],
+        "summary": "Run Agent Investigation",
+        "description": "Executes the autonomous 3-agent forensic swarm:\n1. Compliance Auditor Agent (OFAC/CTR)\n2. Forensic Investigator Agent (Topological Cycle & Flow Analysis)\n3. SAR Drafter Agent (FinCEN Form 111 XML Narrative & Merkle Proof)",
+        "operationId": "run_agent_investigation_api_v1_agents_investigate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentInvestigationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentInvestigationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/counterfactual/solve": {
+      "post": {
+        "tags": [
+          "Explainability & Recourse"
+        ],
+        "summary": "Solve Counterfactual",
+        "description": "Solves the minimum actionable perturbation delta* to shift a high-risk\nalert into legitimate non-suspicious status.",
+        "operationId": "solve_counterfactual_api_v1_counterfactual_solve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CounterfactualSolveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CounterfactualSolveResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/benchmark/scorecard": {
+      "get": {
+        "tags": [
+          "Benchmarks & Governance"
+        ],
+        "summary": "Get Benchmark Scorecard",
+        "description": "Returns the master 13-dataset comparative scorecard and model governance audit metrics.",
+        "operationId": "get_benchmark_scorecard_api_v1_benchmark_scorecard_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sar/download-pdf/{target_account}": {
+      "get": {
+        "tags": [
+          "Explainability & Recourse"
+        ],
+        "summary": "Download Sar Pdf",
+        "description": "Compiles and downloads an official FinCEN Form 111 PDF Suspicious Activity Report.\nEnforces strict path sanitization to eliminate path traversal vulnerabilities (SEC-3).",
+        "operationId": "download_sar_pdf_api_v1_sar_download_pdf__target_account__get",
+        "parameters": [
+          {
+            "name": "target_account",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Target Account"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stream/transactions": {
+      "get": {
+        "tags": [
+          "Real-World Banking Stream"
+        ],
+        "summary": "Get Stream Transactions",
+        "description": "Retrieves the latest authentic real-world transactions generated by the backend engine,\ncomplete with SWIFT MT103 / MT700, RTGS, and bKash MFS attributes.",
+        "operationId": "get_stream_transactions_api_v1_stream_transactions_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stream/entities": {
+      "get": {
+        "tags": [
+          "Real-World Banking Stream"
+        ],
+        "summary": "Get Real World Entities",
+        "description": "Returns the master entity registry containing authentic Bangladeshi corporations,\nclearing banks, international trade counterparties, and KYC records.",
+        "operationId": "get_real_world_entities_api_v1_stream_entities_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stream/tick": {
+      "post": {
+        "tags": [
+          "Real-World Banking Stream"
+        ],
+        "summary": "Advance Stream Tick",
+        "description": "Triggers an immediate transaction arrival from the backend real-world engine.",
+        "operationId": "advance_stream_tick_api_v1_stream_tick_post",
+        "parameters": [
+          {
+            "name": "typology",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Typology"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stream/scenario/{scenario_id}": {
+      "post": {
+        "tags": [
+          "Real-World Banking Stream"
+        ],
+        "summary": "Inject Real World Scenario",
+        "description": "Injects an authentic forensic financial crime scenario through C-STGB invariants:\n- 'structuring': TBML LC over-invoicing bursts beneath $10k CTR limits\n- 'cycle3_loop': Closed 3-node wash trading ring with Phi=0.992 mass retention\n- 'cold_start_mule': Dormant individual payroll account sudden $38.4k flare\n- 'camouflage_chaff': Benign consumer retail POS noise filtering",
+        "operationId": "inject_real_world_scenario_api_v1_stream_scenario__scenario_id__post",
+        "parameters": [
+          {
+            "name": "scenario_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Scenario Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/telemetry/kpis": {
+      "get": {
+        "tags": [
+          "Telemetry & Invariants"
+        ],
+        "summary": "Get Derived Kpis",
+        "description": "Returns telemetry metrics strictly derived from the single source of truth data generator:\n- Total 24h Transactions: 148,312\n- Straight-Through Rate: 98.6% (146,284 / 148,312)\n- Conformal Tier 1 Quarantine: 1,280 (0.86%)\n- Conformal Tier 2 Review Queue: 748 (0.50%)\n- Conformal Tier 3 Auto-Clear: 146,284 (98.63%)",
+        "operationId": "get_derived_kpis_api_v1_telemetry_kpis_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/alerts": {
+      "get": {
+        "tags": [
+          "Alert Triage Queue"
+        ],
+        "summary": "List Alerts",
+        "description": "Returns alerts from persistent database, supporting tier and status filtering and pagination.",
+        "operationId": "list_alerts_api_v1_alerts_get",
+        "parameters": [
+          {
+            "name": "tier",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tier"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "List Cases",
+        "description": "Lists compliance cases, optionally filtered by status.",
+        "operationId": "list_cases_api_v1_cases_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Create Case Endpoint",
+        "description": "Creates a new regulatory AML investigation case docket with relational write-through persistence.",
+        "operationId": "create_case_endpoint_api_v1_cases_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseRecord"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{case_id}": {
+      "get": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Get Case",
+        "description": "Retrieves full details for a specific case including timeline, notes, and grounded evidence sources.",
+        "operationId": "get_case_api_v1_cases__case_id__get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{case_id}/sign-off": {
+      "post": {
+        "tags": [
+          "Case Management & Four-Eyes"
+        ],
+        "summary": "Sign Off Case Endpoint",
+        "description": "Four-Eyes Dual Control Sign-off (OCC 2011-12 / Federal Reserve SR 11-7 / FINRA Rule 3110).\nRejects sign-off with 403 Forbidden if approver is identical to case initiator.",
+        "operationId": "sign_off_case_endpoint_api_v1_cases__case_id__sign_off_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseSignOffRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{case_id}/dual-signoff": {
+      "post": {
+        "tags": [
+          "Case Management & Four-Eyes"
+        ],
+        "summary": "Dual Signoff Case Alias Endpoint",
+        "description": "Four-Eyes Dual Control Sign-off canonical route (OCC 2011-12 / FINRA Rule 3110).\nEnforces independent dual authorization; returns 403 Forbidden on maker-checker identity collision.",
+        "operationId": "dual_signoff_case_alias_endpoint_api_v1_cases__case_id__dual_signoff_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseSignOffRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{case_id}/status": {
+      "put": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Update Case Status Endpoint",
+        "description": "Updates the status of an AML case docket and records an immutable audit ledger entry.",
+        "operationId": "update_case_status_endpoint_api_v1_cases__case_id__status_put",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseStatusUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{case_id}/audit-trail": {
+      "get": {
+        "tags": [
+          "Case Management & Four-Eyes"
+        ],
+        "summary": "Get Case Audit Trail",
+        "description": "Retrieves the tamper-evident cryptographically chained audit blocks specific to a case.",
+        "operationId": "get_case_audit_trail_api_v1_cases__case_id__audit_trail_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{case_id}/notes": {
+      "post": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Add Case Note",
+        "description": "Appends an internal note to the case dossier and records an immutable audit log.",
+        "operationId": "add_case_note_api_v1_cases__case_id__notes_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseNoteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{case_id}/attachments": {
+      "post": {
+        "tags": [
+          "Case Management"
+        ],
+        "summary": "Add Case Attachment Endpoint",
+        "description": "Attaches an evidentiary exhibit, subpoena document, or SWIFT MT103 confirmation to the case docket.",
+        "operationId": "add_case_attachment_endpoint_api_v1_cases__case_id__attachments_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseAttachmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/audit/ledger": {
+      "get": {
+        "tags": [
+          "Audit & Governance"
+        ],
+        "summary": "Get Audit Ledger",
+        "description": "Returns the append-only cryptographically linked SHA-256 audit ledger.",
+        "operationId": "get_audit_ledger_api_v1_audit_ledger_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/audit/verify": {
+      "get": {
+        "tags": [
+          "Audit & Governance"
+        ],
+        "summary": "Verify Audit Ledger Chain",
+        "description": "Performs block-by-block cryptographic SHA-256 verification of the audit chain\nand returns a proof receipt under FRE 902(11) / SEC 17a-4.",
+        "operationId": "verify_audit_ledger_chain_api_v1_audit_verify_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rfi": {
+      "get": {
+        "tags": [
+          "RFI Compliance"
+        ],
+        "summary": "List Rfi Requests",
+        "description": "Lists Request for Information (RFI) document workflows strictly adhering to 31 U.S.C. \u00a7 5318(g)(2).",
+        "operationId": "list_rfi_requests_api_v1_rfi_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/screening/query": {
+      "post": {
+        "tags": [
+          "Sanctions & PEP Screening"
+        ],
+        "summary": "Screen Entity Endpoint",
+        "description": "Real-time entity screening against OFAC SDN, UN Security Council, BFIU Adverse List,\nand PEP registries using fuzzy Jaro-Winkler string similarity and token sorting.",
+        "operationId": "screen_entity_endpoint_api_v1_screening_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreeningRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreeningResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/screening/watchlists": {
+      "get": {
+        "tags": [
+          "Sanctions & PEP Screening"
+        ],
+        "summary": "List Watchlists Endpoint",
+        "description": "Returns regulatory watchlist inventory and active record counts.",
+        "operationId": "list_watchlists_endpoint_api_v1_screening_watchlists_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rfi/ingest-document": {
+      "post": {
+        "tags": [
+          "RFI Compliance & Trade OCR"
+        ],
+        "summary": "Ingest And Ocr Trade Document",
+        "description": "Performs automated field extraction and price verification on uploaded trade documents\n(EXP forms, Bills of Lading, ASYCUDA customs declarations), validating unit prices\nagainst ASYCUDA benchmarks and logging to the tamper-evident audit ledger.",
+        "operationId": "ingest_and_ocr_trade_document_api_v1_rfi_ingest_document_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TradeDocumentIngestRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtractedTradeDocument"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sar/sign": {
+      "post": {
+        "tags": [
+          "Audit & Governance"
+        ],
+        "summary": "Cryptographically Sign Sar",
+        "description": "Executes FIPS 140-2 Level 3 Hardware Security Module (HSM) digital signing of a filed SAR\nwith X.509 certificate validation and RFC 3161 cryptographic timestamping.",
+        "operationId": "cryptographically_sign_sar_api_v1_sar_sign_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SARSigRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DigitalSignatureReceipt"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sar/{case_id}/pdf": {
+      "get": {
+        "tags": [
+          "Regulatory Filings"
+        ],
+        "summary": "Export Sar Pdf By Id",
+        "description": "Exports an institutional-grade, tamper-evident SAR dossier PDF with SHA-256 digital seals.\nEnforces strict case_id parameter validation (SEC-3).",
+        "operationId": "export_sar_pdf_by_id_api_v1_sar__case_id__pdf_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sar/export-pdf": {
+      "post": {
+        "tags": [
+          "Regulatory Filings"
+        ],
+        "summary": "Export Custom Sar Pdf",
+        "description": "Dynamically generates and downloads an official Regulatory SAR PDF from submitted case data.",
+        "operationId": "export_custom_sar_pdf_api_v1_sar_export_pdf_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SARExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/models/drift-status": {
+      "get": {
+        "tags": [
+          "Model Governance"
+        ],
+        "summary": "Get Model Drift Status",
+        "description": "Evaluates Population Stability Index (PSI), 2-Sample Kolmogorov-Smirnov test,\nand Wasserstein distance on live streaming distributions versus reference baselines.",
+        "operationId": "get_model_drift_status_api_v1_models_drift_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/models/drift-audit": {
+      "get": {
+        "tags": [
+          "Model Governance & MRM"
+        ],
+        "summary": "Get Mrm Model Drift Audit",
+        "description": "Comprehensive Federal Reserve SR 11-7 / OCC 2011-12 Model Risk Management (MRM) Audit.\nEvaluates Population Stability Index (PSI), Characteristic Stability Index (CSI),\nKolmogorov-Smirnov test, and Wasserstein distance with a cryptographic Merkle attestation seal.",
+        "operationId": "get_mrm_model_drift_audit_api_v1_models_drift_audit_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/models/drift-evaluate": {
+      "post": {
+        "tags": [
+          "Model Governance & MRM"
+        ],
+        "summary": "Evaluate Custom Stream Drift",
+        "description": "Evaluates real-time custom transaction streams against baseline distributions for Model Risk Management.",
+        "operationId": "evaluate_custom_stream_drift_api_v1_models_drift_evaluate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DriftEvaluateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/copilot/explain": {
+      "post": {
+        "tags": [
+          "Autonomous Forensics"
+        ],
+        "summary": "Explain Case With Copilot",
+        "description": "Returns natural language forensic case explanations, statutory references (FATF, FinCEN, BFIU),\nand recommended compliance steps.",
+        "operationId": "explain_case_with_copilot_api_v1_copilot_explain_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CopilotExplainRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inference/score": {
+      "post": {
+        "tags": [
+          "Direct Aliases"
+        ],
+        "summary": "Score Transaction Alias",
+        "operationId": "score_transaction_alias_api_v1_inference_score_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionScoreRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionScoreResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/score/transaction": {
+      "post": {
+        "tags": [
+          "Direct Aliases"
+        ],
+        "summary": "Score Transaction Alias",
+        "operationId": "score_transaction_alias_score_transaction_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionScoreRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionScoreResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/triage/conformal": {
+      "post": {
+        "tags": [
+          "Direct Aliases"
+        ],
+        "summary": "Evaluate Conformal Triage Alias",
+        "operationId": "evaluate_conformal_triage_alias_triage_conformal_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConformalTriageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConformalTriageResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/graph/subgraph/{node_id}": {
+      "get": {
+        "tags": [
+          "Direct Aliases"
+        ],
+        "summary": "Get Ego Subgraph Alias",
+        "operationId": "get_ego_subgraph_alias_graph_subgraph__node_id__get",
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node Id"
+            }
+          },
+          {
+            "name": "depth",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 3,
+              "minimum": 1,
+              "default": 2,
+              "title": "Depth"
+            }
+          },
+          {
+            "name": "delta_floor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "maximum": 0.5,
+              "minimum": 0.0,
+              "default": 0.1,
+              "title": "Delta Floor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sar/generate": {
+      "post": {
+        "tags": [
+          "Direct Aliases"
+        ],
+        "summary": "Run Sar Generate Alias",
+        "operationId": "run_sar_generate_alias_sar_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentInvestigationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentInvestigationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recourse/explain": {
+      "post": {
+        "tags": [
+          "Direct Aliases"
+        ],
+        "summary": "Solve Counterfactual Alias",
+        "operationId": "solve_counterfactual_alias_recourse_explain_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CounterfactualSolveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CounterfactualSolveResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cbs/status": {
+      "get": {
+        "tags": [
+          "Enterprise Banking Gateway"
+        ],
+        "summary": "Get Cbs Gateway Status",
+        "description": "Returns active Core Banking System (CBS) connector configuration and runtime telemetry.",
+        "operationId": "get_cbs_gateway_status_api_v1_cbs_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cbs/configure": {
+      "post": {
+        "tags": [
+          "Enterprise Banking Gateway"
+        ],
+        "summary": "Configure Cbs Gateway",
+        "description": "Configures the core banking connector and toggles between Shadow Surveillance and Inline Settlement Interceptor.",
+        "operationId": "configure_cbs_gateway_api_v1_cbs_configure_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CBSConfigureRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CBSProviderConfig"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cbs/test-intercept": {
+      "post": {
+        "tags": [
+          "Enterprise Banking Gateway"
+        ],
+        "summary": "Test Cbs Intercept",
+        "description": "Executes a simulated real-time pre-clearing settlement intercept against the configured CBS.",
+        "operationId": "test_cbs_intercept_api_v1_cbs_test_intercept_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CBSTestInterceptRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CBSInterceptResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/streaming/bus-status": {
+      "get": {
+        "tags": [
+          "Enterprise Banking Gateway"
+        ],
+        "summary": "Get Streaming Bus Telemetry",
+        "description": "Returns enterprise streaming message bus (Kafka / RabbitMQ) cluster partition health and lag.",
+        "operationId": "get_streaming_bus_telemetry_api_v1_streaming_bus_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreamingBusClusterStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/security/hsm-test": {
+      "post": {
+        "tags": [
+          "Enterprise Banking Gateway"
+        ],
+        "summary": "Test Hsm Cryptographic Token",
+        "description": "Executes FIPS 140-2 Level 3 Hardware Security Module (HSM) signing probe to verify certificate serial.",
+        "operationId": "test_hsm_cryptographic_token_api_v1_security_hsm_test_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/graph/adapter/status": {
+      "get": {
+        "tags": [
+          "Distributed Graph Store"
+        ],
+        "summary": "Get Graph Adapter Status",
+        "description": "Returns cluster connection health, topology cache metrics, and operating mode for the graph adapter.",
+        "operationId": "get_graph_adapter_status_api_v1_graph_adapter_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/graph/adapter/configure": {
+      "post": {
+        "tags": [
+          "Distributed Graph Store"
+        ],
+        "summary": "Configure Graph Adapter",
+        "description": "Dynamically reconfigures the distributed graph cluster connector (Neo4j / Memgraph / Neptune).",
+        "operationId": "configure_graph_adapter_api_v1_graph_adapter_configure_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphAdapterConfigureRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/graph/query": {
+      "post": {
+        "tags": [
+          "Distributed Graph Store"
+        ],
+        "summary": "Execute Graph Query",
+        "description": "Executes a Cypher graph query across the distributed graph engine with automated caching.",
+        "operationId": "execute_graph_query_api_v1_graph_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQueryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/fast-path/telemetry": {
+      "get": {
+        "tags": [
+          "Distributed Graph Store"
+        ],
+        "summary": "Get Fast Path Telemetry",
+        "description": "Returns high-throughput Fast-Path early-exit triage statistics.",
+        "operationId": "get_fast_path_telemetry_api_v1_fast_path_telemetry_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgentInvestigationRequest": {
+        "properties": {
+          "target_account": {
+            "type": "string",
+            "title": "Target Account",
+            "example": "ACC_8823_SUSPECT_MULE"
+          },
+          "urgency": {
+            "type": "string",
+            "title": "Urgency",
+            "default": "IMMEDIATE",
+            "example": "IMMEDIATE"
+          },
+          "include_fincen_xml": {
+            "type": "boolean",
+            "title": "Include Fincen Xml",
+            "default": true,
+            "example": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_account"
+        ],
+        "title": "AgentInvestigationRequest"
+      },
+      "AgentInvestigationResponse": {
+        "properties": {
+          "target_account": {
+            "type": "string",
+            "title": "Target Account"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          },
+          "urgency": {
+            "type": "string",
+            "title": "Urgency"
+          },
+          "risk_score": {
+            "type": "number",
+            "title": "Risk Score"
+          },
+          "case_verdict": {
+            "type": "string",
+            "title": "Case Verdict"
+          },
+          "agent_logs": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Agent Logs"
+          },
+          "executive_summary": {
+            "type": "string",
+            "title": "Executive Summary"
+          },
+          "topological_evidence": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Topological Evidence"
+          },
+          "fincen_form_111_xml": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fincen Form 111 Xml"
+          },
+          "human_narrative": {
+            "type": "string",
+            "title": "Human Narrative"
+          },
+          "sha256_merkle_seal": {
+            "type": "string",
+            "title": "Sha256 Merkle Seal"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_account",
+          "timestamp",
+          "urgency",
+          "risk_score",
+          "case_verdict",
+          "agent_logs",
+          "executive_summary",
+          "topological_evidence",
+          "fincen_form_111_xml",
+          "human_narrative",
+          "sha256_merkle_seal"
+        ],
+        "title": "AgentInvestigationResponse"
+      },
+      "CBSConfigureRequest": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "title": "Provider",
+            "default": "TEMENOS_T24",
+            "example": "TEMENOS_T24"
+          },
+          "operating_mode": {
+            "type": "string",
+            "title": "Operating Mode",
+            "default": "SHADOW_SURVEILLANCE",
+            "example": "SHADOW_SURVEILLANCE"
+          },
+          "endpoint_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Url",
+            "example": "https://cbs-gw.interbank.internal:8443/api/v2/settlement"
+          }
+        },
+        "type": "object",
+        "title": "CBSConfigureRequest"
+      },
+      "CBSInterceptResult": {
+        "properties": {
+          "transaction_reference": {
+            "type": "string",
+            "title": "Transaction Reference"
+          },
+          "cbs_provider": {
+            "type": "string",
+            "title": "Cbs Provider"
+          },
+          "operating_mode": {
+            "type": "string",
+            "title": "Operating Mode"
+          },
+          "action_taken": {
+            "type": "string",
+            "title": "Action Taken"
+          },
+          "account_number": {
+            "type": "string",
+            "title": "Account Number"
+          },
+          "amount": {
+            "type": "number",
+            "title": "Amount"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          },
+          "pacs002_rejection_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pacs002 Rejection Code"
+          },
+          "execution_latency_ms": {
+            "type": "number",
+            "title": "Execution Latency Ms"
+          },
+          "merkle_proof": {
+            "type": "string",
+            "title": "Merkle Proof"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          }
+        },
+        "type": "object",
+        "required": [
+          "transaction_reference",
+          "cbs_provider",
+          "operating_mode",
+          "action_taken",
+          "account_number",
+          "amount",
+          "currency",
+          "execution_latency_ms",
+          "merkle_proof",
+          "timestamp"
+        ],
+        "title": "CBSInterceptResult"
+      },
+      "CBSProviderConfig": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "TEMENOS_T24",
+              "INFOSYS_FINACLE",
+              "ORACLE_FLEXCUBE",
+              "FIS_PROFILE",
+              "ISO20022_GATEWAY"
+            ],
+            "title": "Provider"
+          },
+          "operating_mode": {
+            "type": "string",
+            "enum": [
+              "SHADOW_SURVEILLANCE",
+              "INLINE_INTERCEPTOR"
+            ],
+            "title": "Operating Mode"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "timeout_ms": {
+            "type": "integer",
+            "title": "Timeout Ms",
+            "default": 50
+          },
+          "heartbeat_active": {
+            "type": "boolean",
+            "title": "Heartbeat Active",
+            "default": true
+          },
+          "retry_policy_max_attempts": {
+            "type": "integer",
+            "title": "Retry Policy Max Attempts",
+            "default": 3
+          },
+          "circuit_breaker_threshold": {
+            "type": "number",
+            "title": "Circuit Breaker Threshold",
+            "default": 0.05
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "operating_mode",
+          "endpoint_url"
+        ],
+        "title": "CBSProviderConfig"
+      },
+      "CBSTestInterceptRequest": {
+        "properties": {
+          "account_number": {
+            "type": "string",
+            "title": "Account Number",
+            "default": "BD22-EBLB-4829-1092-8823",
+            "example": "BD22-EBLB-4829-1092-8823"
+          },
+          "amount": {
+            "type": "number",
+            "title": "Amount",
+            "default": 47600.0,
+            "example": 47600.0
+          },
+          "tier": {
+            "type": "string",
+            "title": "Tier",
+            "default": "Tier 1 Hold",
+            "example": "Tier 1 Hold"
+          },
+          "rail": {
+            "type": "string",
+            "title": "Rail",
+            "default": "SWIFT MT103",
+            "example": "SWIFT MT103"
+          }
+        },
+        "type": "object",
+        "title": "CBSTestInterceptRequest"
+      },
+      "CaseAttachmentRequest": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "title": "Filename",
+            "example": "subpoena_grand_jury_notice.pdf"
+          },
+          "file_type": {
+            "type": "string",
+            "title": "File Type",
+            "default": "application/pdf",
+            "example": "application/pdf"
+          },
+          "file_size": {
+            "type": "string",
+            "title": "File Size",
+            "default": "450 KB",
+            "example": "450 KB"
+          },
+          "uploaded_by": {
+            "type": "string",
+            "title": "Uploaded By",
+            "default": "Sarah Jenkins",
+            "example": "Sarah Jenkins"
+          }
+        },
+        "type": "object",
+        "required": [
+          "filename"
+        ],
+        "title": "CaseAttachmentRequest"
+      },
+      "CaseCreateRequest": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "example": "Anomalous Cross-Border Smurfing Aggregation"
+          },
+          "target_account": {
+            "type": "string",
+            "title": "Target Account",
+            "example": "BD04-BRAC-1109-8421-4402"
+          },
+          "priority": {
+            "type": "string",
+            "title": "Priority",
+            "default": "HIGH",
+            "example": "HIGH"
+          },
+          "exposure_usd": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Exposure Usd",
+            "example": 54200.0
+          },
+          "cstgb_risk_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Cstgb Risk Score",
+            "default": 0.85,
+            "example": 0.88
+          },
+          "initiator": {
+            "type": "string",
+            "title": "Initiator",
+            "example": "Sarah Jenkins (Senior Forensic Investigator)"
+          },
+          "lead_assignee": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Assignee",
+            "default": "Sarah Jenkins",
+            "example": "Sarah Jenkins"
+          },
+          "regulatory_framework": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Regulatory Framework",
+            "default": "FinCEN Form 111 (USA)",
+            "example": "FinCEN Form 111 (USA)"
+          },
+          "linked_alert_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Linked Alert Ids"
+          },
+          "grounded_evidence": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grounded Evidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "target_account",
+          "exposure_usd",
+          "initiator"
+        ],
+        "title": "CaseCreateRequest"
+      },
+      "CaseNoteRequest": {
+        "properties": {
+          "author": {
+            "type": "string",
+            "title": "Author",
+            "example": "Sarah Jenkins"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role",
+            "default": "Senior Forensic Investigator",
+            "example": "Senior Forensic Investigator"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "example": "Subpoena response received from correspondent bank confirming beneficial ownership."
+          }
+        },
+        "type": "object",
+        "required": [
+          "author",
+          "text"
+        ],
+        "title": "CaseNoteRequest"
+      },
+      "CaseRecord": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "target_account": {
+            "type": "string",
+            "title": "Target Account"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "priority": {
+            "type": "string",
+            "title": "Priority"
+          },
+          "exposure_usd": {
+            "type": "number",
+            "title": "Exposure Usd"
+          },
+          "cstgb_risk_score": {
+            "type": "number",
+            "title": "Cstgb Risk Score"
+          },
+          "initiator": {
+            "type": "string",
+            "title": "Initiator"
+          },
+          "lead_assignee": {
+            "type": "string",
+            "title": "Lead Assignee"
+          },
+          "second_approver": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Second Approver"
+          },
+          "regulatory_framework": {
+            "type": "string",
+            "title": "Regulatory Framework",
+            "default": "FinCEN Form 111 (USA)"
+          },
+          "linked_alert_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Linked Alert Ids"
+          },
+          "grounded_evidence": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Grounded Evidence"
+          },
+          "timeline": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Timeline"
+          },
+          "notes": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Notes"
+          },
+          "attachments": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Attachments"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "target_account",
+          "status",
+          "priority",
+          "exposure_usd",
+          "cstgb_risk_score",
+          "initiator",
+          "lead_assignee",
+          "created_at"
+        ],
+        "title": "CaseRecord"
+      },
+      "CaseSignOffRequest": {
+        "properties": {
+          "approver": {
+            "type": "string",
+            "title": "Approver",
+            "example": "Elena Rostova (Compliance Director)"
+          },
+          "notes": {
+            "type": "string",
+            "title": "Notes",
+            "example": "Independent four-eyes forensic review completed. SAR approved for FinCEN transmission."
+          }
+        },
+        "type": "object",
+        "required": [
+          "approver",
+          "notes"
+        ],
+        "title": "CaseSignOffRequest"
+      },
+      "CaseStatusUpdateRequest": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "example": "UNDER_REVIEW"
+          },
+          "actor": {
+            "type": "string",
+            "title": "Actor",
+            "example": "Sarah Jenkins"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason",
+            "example": "Correspondent bank subpoena response pending."
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "actor"
+        ],
+        "title": "CaseStatusUpdateRequest"
+      },
+      "ConformalTriageRequest": {
+        "properties": {
+          "alpha": {
+            "type": "number",
+            "maximum": 0.2,
+            "minimum": 0.001,
+            "title": "Alpha",
+            "default": 0.01,
+            "example": 0.01
+          },
+          "dataset_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Name",
+            "default": "elliptic_v1",
+            "example": "elliptic_v1"
+          }
+        },
+        "type": "object",
+        "title": "ConformalTriageRequest"
+      },
+      "ConformalTriageResponse": {
+        "properties": {
+          "alpha": {
+            "type": "number",
+            "title": "Alpha"
+          },
+          "target_coverage_pct": {
+            "type": "number",
+            "title": "Target Coverage Pct"
+          },
+          "empirical_coverage_pct": {
+            "type": "number",
+            "title": "Empirical Coverage Pct"
+          },
+          "tier_1_quarantine_pct": {
+            "type": "number",
+            "title": "Tier 1 Quarantine Pct"
+          },
+          "tier_2_review_queue_pct": {
+            "type": "number",
+            "title": "Tier 2 Review Queue Pct"
+          },
+          "tier_3_auto_clear_pct": {
+            "type": "number",
+            "title": "Tier 3 Auto Clear Pct"
+          },
+          "workload_reduction_pct": {
+            "type": "number",
+            "title": "Workload Reduction Pct"
+          },
+          "mean_prediction_set_size": {
+            "type": "number",
+            "title": "Mean Prediction Set Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "alpha",
+          "target_coverage_pct",
+          "empirical_coverage_pct",
+          "tier_1_quarantine_pct",
+          "tier_2_review_queue_pct",
+          "tier_3_auto_clear_pct",
+          "workload_reduction_pct",
+          "mean_prediction_set_size"
+        ],
+        "title": "ConformalTriageResponse"
+      },
+      "CopilotExplainRequest": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "title": "Case Id",
+            "example": "CASE-9921"
+          },
+          "entity_id": {
+            "type": "string",
+            "title": "Entity Id",
+            "example": "ACC-SHELL-9982"
+          },
+          "risk_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Risk Score",
+            "default": 0.92
+          },
+          "conformal_set": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conformal Set"
+          },
+          "typologies_detected": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Typologies Detected"
+          },
+          "flow_phi": {
+            "type": "number",
+            "title": "Flow Phi",
+            "default": 0.0
+          },
+          "user_query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Query"
+          }
+        },
+        "type": "object",
+        "required": [
+          "case_id",
+          "entity_id"
+        ],
+        "title": "CopilotExplainRequest"
+      },
+      "CounterfactualSolveRequest": {
+        "properties": {
+          "current_amount": {
+            "type": "number",
+            "title": "Current Amount",
+            "example": 9600.0
+          },
+          "current_burst_velocity": {
+            "type": "integer",
+            "title": "Current Burst Velocity",
+            "example": 18
+          },
+          "current_fan_in_degree": {
+            "type": "integer",
+            "title": "Current Fan In Degree",
+            "example": 8
+          },
+          "current_holding_hours": {
+            "type": "number",
+            "title": "Current Holding Hours",
+            "example": 1.2
+          }
+        },
+        "type": "object",
+        "required": [
+          "current_amount",
+          "current_burst_velocity",
+          "current_fan_in_degree",
+          "current_holding_hours"
+        ],
+        "title": "CounterfactualSolveRequest"
+      },
+      "CounterfactualSolveResponse": {
+        "properties": {
+          "original_risk_score": {
+            "type": "number",
+            "title": "Original Risk Score"
+          },
+          "remediated_risk_score": {
+            "type": "number",
+            "title": "Remediated Risk Score"
+          },
+          "recourse_achieved": {
+            "type": "boolean",
+            "title": "Recourse Achieved"
+          },
+          "recommended_amount": {
+            "type": "number",
+            "title": "Recommended Amount"
+          },
+          "recommended_burst_velocity": {
+            "type": "integer",
+            "title": "Recommended Burst Velocity"
+          },
+          "recommended_fan_in_degree": {
+            "type": "integer",
+            "title": "Recommended Fan In Degree"
+          },
+          "recommended_holding_hours": {
+            "type": "number",
+            "title": "Recommended Holding Hours"
+          },
+          "actionable_remediation_steps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Actionable Remediation Steps"
+          }
+        },
+        "type": "object",
+        "required": [
+          "original_risk_score",
+          "remediated_risk_score",
+          "recourse_achieved",
+          "recommended_amount",
+          "recommended_burst_velocity",
+          "recommended_fan_in_degree",
+          "recommended_holding_hours",
+          "actionable_remediation_steps"
+        ],
+        "title": "CounterfactualSolveResponse"
+      },
+      "DigitalSignatureReceipt": {
+        "properties": {
+          "document_hash": {
+            "type": "string",
+            "title": "Document Hash"
+          },
+          "signature_algorithm": {
+            "type": "string",
+            "title": "Signature Algorithm"
+          },
+          "certificate_subject_dn": {
+            "type": "string",
+            "title": "Certificate Subject Dn"
+          },
+          "certificate_issuer_dn": {
+            "type": "string",
+            "title": "Certificate Issuer Dn"
+          },
+          "certificate_serial_number": {
+            "type": "string",
+            "title": "Certificate Serial Number"
+          },
+          "hsm_key_slot": {
+            "type": "string",
+            "title": "Hsm Key Slot"
+          },
+          "rfc3161_timestamp": {
+            "type": "string",
+            "title": "Rfc3161 Timestamp"
+          },
+          "signature_hex": {
+            "type": "string",
+            "title": "Signature Hex"
+          },
+          "verification_status": {
+            "type": "string",
+            "title": "Verification Status"
+          },
+          "legal_statute": {
+            "type": "string",
+            "title": "Legal Statute"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document_hash",
+          "signature_algorithm",
+          "certificate_subject_dn",
+          "certificate_issuer_dn",
+          "certificate_serial_number",
+          "hsm_key_slot",
+          "rfc3161_timestamp",
+          "signature_hex",
+          "verification_status",
+          "legal_statute"
+        ],
+        "title": "DigitalSignatureReceipt"
+      },
+      "DriftEvaluateRequest": {
+        "properties": {
+          "custom_batches": {
+            "additionalProperties": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Custom Batches",
+            "example": {
+              "tx_amount": [
+                5400.0,
+                9200.0,
+                48000.0
+              ]
+            }
+          }
+        },
+        "type": "object",
+        "required": [
+          "custom_batches"
+        ],
+        "title": "DriftEvaluateRequest"
+      },
+      "ExtractedTradeDocument": {
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "rfi_id": {
+            "type": "string",
+            "title": "Rfi Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "document_type": {
+            "type": "string",
+            "title": "Document Type"
+          },
+          "issuing_authority": {
+            "type": "string",
+            "title": "Issuing Authority"
+          },
+          "verification_status": {
+            "type": "string",
+            "title": "Verification Status"
+          },
+          "ocr_confidence_pct": {
+            "type": "number",
+            "title": "Ocr Confidence Pct"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          },
+          "lc_reference": {
+            "type": "string",
+            "title": "Lc Reference"
+          },
+          "exp_form_number": {
+            "type": "string",
+            "title": "Exp Form Number"
+          },
+          "hs_code": {
+            "type": "string",
+            "title": "Hs Code"
+          },
+          "commodity_description": {
+            "type": "string",
+            "title": "Commodity Description"
+          },
+          "declared_quantity_kg": {
+            "type": "number",
+            "title": "Declared Quantity Kg"
+          },
+          "declared_unit_price_usd": {
+            "type": "number",
+            "title": "Declared Unit Price Usd"
+          },
+          "declared_total_usd": {
+            "type": "number",
+            "title": "Declared Total Usd"
+          },
+          "asycuda_benchmark_usd": {
+            "type": "number",
+            "title": "Asycuda Benchmark Usd"
+          },
+          "price_divergence_pct": {
+            "type": "number",
+            "title": "Price Divergence Pct"
+          },
+          "price_status": {
+            "type": "string",
+            "title": "Price Status"
+          },
+          "vessel_name": {
+            "type": "string",
+            "title": "Vessel Name"
+          },
+          "imo_number": {
+            "type": "string",
+            "title": "Imo Number"
+          },
+          "bill_of_lading_number": {
+            "type": "string",
+            "title": "Bill Of Lading Number"
+          },
+          "port_of_loading": {
+            "type": "string",
+            "title": "Port Of Loading"
+          },
+          "port_of_discharge": {
+            "type": "string",
+            "title": "Port Of Discharge"
+          },
+          "exporter_entity": {
+            "type": "string",
+            "title": "Exporter Entity"
+          },
+          "consignee_entity": {
+            "type": "string",
+            "title": "Consignee Entity"
+          },
+          "sha256_document_seal": {
+            "type": "string",
+            "title": "Sha256 Document Seal"
+          },
+          "audit_findings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Audit Findings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document_id",
+          "rfi_id",
+          "filename",
+          "document_type",
+          "issuing_authority",
+          "verification_status",
+          "ocr_confidence_pct",
+          "timestamp",
+          "lc_reference",
+          "exp_form_number",
+          "hs_code",
+          "commodity_description",
+          "declared_quantity_kg",
+          "declared_unit_price_usd",
+          "declared_total_usd",
+          "asycuda_benchmark_usd",
+          "price_divergence_pct",
+          "price_status",
+          "vessel_name",
+          "imo_number",
+          "bill_of_lading_number",
+          "port_of_loading",
+          "port_of_discharge",
+          "exporter_entity",
+          "consignee_entity",
+          "sha256_document_seal",
+          "audit_findings"
+        ],
+        "title": "ExtractedTradeDocument"
+      },
+      "GraphAdapterConfigureRequest": {
+        "properties": {
+          "uri": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uri",
+            "default": "bolt://localhost:7687",
+            "example": "bolt://localhost:7687"
+          },
+          "user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User",
+            "default": "neo4j",
+            "example": "neo4j"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password",
+            "default": "password",
+            "example": "password"
+          },
+          "pool_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pool Size",
+            "default": 50,
+            "example": 50
+          }
+        },
+        "type": "object",
+        "title": "GraphAdapterConfigureRequest"
+      },
+      "GraphQueryRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "example": "MATCH (n:Account) WHERE n.id = $id RETURN n"
+          },
+          "params": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Params"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "GraphQueryRequest"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginRequest": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "LoginRequest"
+      },
+      "SARExportRequest": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "title": "Case Id",
+            "example": "SAR-2026-BD-8842"
+          },
+          "target_entity": {
+            "type": "string",
+            "title": "Target Entity",
+            "example": "ACC-SHELL-9982"
+          },
+          "filing_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filing Date"
+          },
+          "jurisdiction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jurisdiction",
+            "default": "FATF / BFIU / FinCEN Global Tier-1"
+          },
+          "risk_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Risk Score",
+            "default": 0.95
+          },
+          "conformal_bound": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conformal Bound",
+            "default": "[0.912, 0.988] (95% Coverage)"
+          },
+          "typologies": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Typologies"
+          },
+          "agent_chain": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agent Chain"
+          },
+          "transactions": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transactions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "case_id",
+          "target_entity"
+        ],
+        "title": "SARExportRequest"
+      },
+      "SARSigRequest": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "title": "Case Id",
+            "example": "CASE-2026-0881"
+          },
+          "target_account": {
+            "type": "string",
+            "title": "Target Account",
+            "example": "BD22-EBLB-4829-1092-8823"
+          },
+          "sar_narrative": {
+            "type": "string",
+            "title": "Sar Narrative",
+            "example": "BFIU STR-1 Narrative Text"
+          },
+          "approver": {
+            "type": "string",
+            "title": "Approver",
+            "default": "Elena Rostova (Compliance Director)",
+            "example": "Elena Rostova"
+          }
+        },
+        "type": "object",
+        "required": [
+          "case_id",
+          "target_account",
+          "sar_narrative"
+        ],
+        "title": "SARSigRequest"
+      },
+      "ScreeningMatch": {
+        "properties": {
+          "matched_record_id": {
+            "type": "string",
+            "title": "Matched Record Id"
+          },
+          "primary_name": {
+            "type": "string",
+            "title": "Primary Name"
+          },
+          "entity_type": {
+            "type": "string",
+            "title": "Entity Type"
+          },
+          "watchlist": {
+            "type": "string",
+            "title": "Watchlist"
+          },
+          "programs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Programs"
+          },
+          "similarity_score": {
+            "type": "number",
+            "title": "Similarity Score"
+          },
+          "matched_term": {
+            "type": "string",
+            "title": "Matched Term"
+          },
+          "match_type": {
+            "type": "string",
+            "title": "Match Type"
+          },
+          "risk_level": {
+            "type": "string",
+            "title": "Risk Level"
+          },
+          "legal_basis": {
+            "type": "string",
+            "title": "Legal Basis"
+          },
+          "action_required": {
+            "type": "string",
+            "title": "Action Required"
+          }
+        },
+        "type": "object",
+        "required": [
+          "matched_record_id",
+          "primary_name",
+          "entity_type",
+          "watchlist",
+          "programs",
+          "similarity_score",
+          "matched_term",
+          "match_type",
+          "risk_level",
+          "legal_basis",
+          "action_required"
+        ],
+        "title": "ScreeningMatch"
+      },
+      "ScreeningRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "example": "Meghna Industrial"
+          },
+          "entity_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entity Type",
+            "example": "CORPORATE"
+          },
+          "tin_or_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tin Or Id",
+            "example": "TIN-4882-9912-1088"
+          },
+          "threshold": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.5,
+            "title": "Threshold",
+            "default": 0.7
+          }
+        },
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "ScreeningRequest"
+      },
+      "ScreeningResponse": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          },
+          "total_screened_records": {
+            "type": "integer",
+            "title": "Total Screened Records"
+          },
+          "matches_found": {
+            "type": "integer",
+            "title": "Matches Found"
+          },
+          "highest_score": {
+            "type": "number",
+            "title": "Highest Score"
+          },
+          "recommended_action": {
+            "type": "string",
+            "title": "Recommended Action"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/ScreeningMatch"
+            },
+            "type": "array",
+            "title": "Matches"
+          },
+          "audit_merkle_receipt": {
+            "type": "string",
+            "title": "Audit Merkle Receipt"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "timestamp",
+          "total_screened_records",
+          "matches_found",
+          "highest_score",
+          "recommended_action",
+          "matches",
+          "audit_merkle_receipt"
+        ],
+        "title": "ScreeningResponse"
+      },
+      "StreamingBusClusterStatus": {
+        "properties": {
+          "cluster_status": {
+            "type": "string",
+            "title": "Cluster Status"
+          },
+          "brokers_online": {
+            "type": "integer",
+            "title": "Brokers Online"
+          },
+          "active_topics": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Active Topics"
+          },
+          "consumer_group_lag": {
+            "type": "integer",
+            "title": "Consumer Group Lag"
+          },
+          "throughput_msg_per_sec": {
+            "type": "number",
+            "title": "Throughput Msg Per Sec"
+          },
+          "dead_letter_queue_count": {
+            "type": "integer",
+            "title": "Dead Letter Queue Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cluster_status",
+          "brokers_online",
+          "active_topics",
+          "consumer_group_lag",
+          "throughput_msg_per_sec",
+          "dead_letter_queue_count"
+        ],
+        "title": "StreamingBusClusterStatus"
+      },
+      "TokenResponse": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "expires_in_seconds": {
+            "type": "integer",
+            "title": "Expires In Seconds"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserProfile"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "expires_in_seconds",
+          "user"
+        ],
+        "title": "TokenResponse"
+      },
+      "TopologicalNodeAnalytics": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "entity_name": {
+            "type": "string",
+            "title": "Entity Name"
+          },
+          "pagerank_score": {
+            "type": "number",
+            "title": "Pagerank Score"
+          },
+          "betweenness_centrality": {
+            "type": "number",
+            "title": "Betweenness Centrality"
+          },
+          "degree_in": {
+            "type": "integer",
+            "title": "Degree In"
+          },
+          "degree_out": {
+            "type": "integer",
+            "title": "Degree Out"
+          },
+          "degree_asymmetry_ratio": {
+            "type": "number",
+            "title": "Degree Asymmetry Ratio"
+          },
+          "flow_conservation_phi": {
+            "type": "number",
+            "title": "Flow Conservation Phi"
+          },
+          "clustering_coefficient": {
+            "type": "number",
+            "title": "Clustering Coefficient"
+          },
+          "hyperbolic_distance_to_center": {
+            "type": "number",
+            "title": "Hyperbolic Distance To Center"
+          },
+          "nearest_archetype": {
+            "type": "string",
+            "title": "Nearest Archetype"
+          },
+          "archetype_similarity_pct": {
+            "type": "number",
+            "title": "Archetype Similarity Pct"
+          },
+          "structural_role": {
+            "type": "string",
+            "title": "Structural Role"
+          },
+          "recommended_gating_threshold": {
+            "type": "number",
+            "title": "Recommended Gating Threshold"
+          },
+          "risk_indicator": {
+            "type": "string",
+            "title": "Risk Indicator"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "entity_name",
+          "pagerank_score",
+          "betweenness_centrality",
+          "degree_in",
+          "degree_out",
+          "degree_asymmetry_ratio",
+          "flow_conservation_phi",
+          "clustering_coefficient",
+          "hyperbolic_distance_to_center",
+          "nearest_archetype",
+          "archetype_similarity_pct",
+          "structural_role",
+          "recommended_gating_threshold",
+          "risk_indicator"
+        ],
+        "title": "TopologicalNodeAnalytics"
+      },
+      "TradeDocumentIngestRequest": {
+        "properties": {
+          "rfi_id": {
+            "type": "string",
+            "title": "Rfi Id",
+            "example": "RFI-2026-1092"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename",
+            "example": "ASYCUDA_World_Customs_Declaration_Chittagong.pdf"
+          },
+          "file_bytes_base64": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Bytes Base64"
+          },
+          "file_size_str": {
+            "type": "string",
+            "title": "File Size Str",
+            "default": "1.2 MB",
+            "example": "1.2 MB"
+          },
+          "uploaded_by": {
+            "type": "string",
+            "title": "Uploaded By",
+            "default": "Sarah Jenkins",
+            "example": "Sarah Jenkins"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rfi_id",
+          "filename"
+        ],
+        "title": "TradeDocumentIngestRequest"
+      },
+      "TransactionScoreRequest": {
+        "properties": {
+          "tx_id": {
+            "type": "string",
+            "title": "Tx Id",
+            "example": "TX_9928172"
+          },
+          "src_id": {
+            "type": "string",
+            "title": "Src Id",
+            "example": "ACC_8823_KYC_HIGH"
+          },
+          "dst_id": {
+            "type": "string",
+            "title": "Dst Id",
+            "example": "ACC_1109_MULE_HUB"
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0.01,
+            "title": "Amount",
+            "example": 9450.0
+          },
+          "payment_rail": {
+            "type": "string",
+            "title": "Payment Rail",
+            "default": "Wire Transfer",
+            "example": "Wire Transfer"
+          },
+          "cross_border": {
+            "type": "boolean",
+            "title": "Cross Border",
+            "default": true,
+            "example": true
+          },
+          "burst_velocity_spikes": {
+            "type": "boolean",
+            "title": "Burst Velocity Spikes",
+            "default": true,
+            "example": true
+          },
+          "fast_path_mode": {
+            "type": "boolean",
+            "title": "Fast Path Mode",
+            "default": false,
+            "example": false
+          },
+          "conformal_alpha": {
+            "type": "number",
+            "maximum": 0.2,
+            "minimum": 0.001,
+            "title": "Conformal Alpha",
+            "default": 0.01,
+            "example": 0.01
+          }
+        },
+        "type": "object",
+        "required": [
+          "tx_id",
+          "src_id",
+          "dst_id",
+          "amount"
+        ],
+        "title": "TransactionScoreRequest"
+      },
+      "TransactionScoreResponse": {
+        "properties": {
+          "tx_id": {
+            "type": "string",
+            "title": "Tx Id"
+          },
+          "src_id": {
+            "type": "string",
+            "title": "Src Id"
+          },
+          "dst_id": {
+            "type": "string",
+            "title": "Dst Id"
+          },
+          "amount": {
+            "type": "number",
+            "title": "Amount"
+          },
+          "ensemble_posterior_prob": {
+            "type": "number",
+            "title": "Ensemble Posterior Prob"
+          },
+          "p_gnn": {
+            "type": "number",
+            "title": "P Gnn"
+          },
+          "p_tabular": {
+            "type": "number",
+            "title": "P Tabular"
+          },
+          "p_fused": {
+            "type": "number",
+            "title": "P Fused"
+          },
+          "decision_tier": {
+            "type": "string",
+            "title": "Decision Tier"
+          },
+          "conformal_prediction_set": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Conformal Prediction Set"
+          },
+          "conformal_alpha": {
+            "type": "number",
+            "title": "Conformal Alpha"
+          },
+          "conformal_coverage_pct": {
+            "type": "number",
+            "title": "Conformal Coverage Pct"
+          },
+          "rule_engine_action": {
+            "type": "string",
+            "title": "Rule Engine Action"
+          },
+          "latency_breakdown_ms": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Latency Breakdown Ms"
+          },
+          "total_latency_ms": {
+            "type": "number",
+            "title": "Total Latency Ms"
+          },
+          "audit_merkle_receipt": {
+            "type": "string",
+            "title": "Audit Merkle Receipt"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version",
+            "default": "3.2.0"
+          },
+          "model_artifact_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Artifact Hash",
+            "default": "8f3b21c4a9e527d94f2910b875e6d2a13c9071fe39b56da497042a5cb812de40"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tx_id",
+          "src_id",
+          "dst_id",
+          "amount",
+          "ensemble_posterior_prob",
+          "p_gnn",
+          "p_tabular",
+          "p_fused",
+          "decision_tier",
+          "conformal_prediction_set",
+          "conformal_alpha",
+          "conformal_coverage_pct",
+          "rule_engine_action",
+          "latency_breakdown_ms",
+          "total_latency_ms",
+          "audit_merkle_receipt"
+        ],
+        "title": "TransactionScoreResponse"
+      },
+      "UserProfile": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "full_name": {
+            "type": "string",
+            "title": "Full Name"
+          },
+          "role": {
+            "$ref": "#/components/schemas/UserRole"
+          },
+          "department": {
+            "type": "string",
+            "title": "Department"
+          },
+          "institution": {
+            "type": "string",
+            "title": "Institution"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "username",
+          "full_name",
+          "role",
+          "department",
+          "institution",
+          "permissions"
+        ],
+        "title": "UserProfile"
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": [
+          "COMPLIANCE_OFFICER",
+          "FORENSIC_INVESTIGATOR",
+          "AUDITOR",
+          "ADMIN"
+        ],
+        "title": "UserRole"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

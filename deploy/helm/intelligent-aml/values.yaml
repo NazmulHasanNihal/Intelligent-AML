@@ -1,0 +1,83 @@
+# Default values for intelligent-aml chart.
+global:
+  appMode: onprem # onprem | demo
+  environment: production
+
+backend:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/intelligent-aml/backend
+    pullPolicy: IfNotPresent
+    tag: "v3.2.0"
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 8
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  persistence:
+    analytics:
+      enabled: true
+      storageClass: "fast-ebs"
+      size: 50Gi
+      mountPath: /app/data
+
+frontend:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/intelligent-aml/frontend
+    pullPolicy: IfNotPresent
+    tag: "v3.2.0"
+  service:
+    type: ClusterIP
+    port: 3000
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+database:
+  host: postgresql.database.svc.cluster.local
+  port: 5432
+  name: intelligent_aml_db
+  user: aml_admin
+  existingSecret: aml-db-credentials
+  secretKey: password
+
+kafka:
+  bootstrapServers: redpanda.streaming.svc.cluster.local:9092
+  transactionTopic: banking.transactions.v1
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: aml.easternbank.example.com
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: backend
+        - path: /
+          pathType: Prefix
+          service: frontend
+  tls:
+    - secretName: intelligent-aml-tls
+      hosts:
+        - aml.easternbank.example.com

@@ -1,0 +1,17 @@
+{{- if .Values.backend.persistence.analytics.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "intelligent-aml.fullname" . }}-analytics-pvc
+  labels:
+    {{- include "intelligent-aml.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.backend.persistence.analytics.storageClass }}
+  storageClassName: {{ .Values.backend.persistence.analytics.storageClass | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.backend.persistence.analytics.size | quote }}
+{{- end }}

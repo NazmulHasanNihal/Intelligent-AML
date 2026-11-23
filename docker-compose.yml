@@ -1,0 +1,119 @@
+# ==============================================================================
+# Intelligent-AML Banking Surveillance Operating System
+# Production Docker Compose Infrastructure
+# Services:
+#   - PostgreSQL 16 (OLTP System of Record: Cases, Alerts, Users, WORM Audit)
+#   - Redpanda v24 (Kafka-Compatible Real-Time Transaction Ingestion)
+#   - Backend (Python FastAPI + DuckDB/Polars Analytics + Tiered Scorer)
+#   - Frontend (Next.js 16 Production Web Application)
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: intelligent-aml-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aml_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aml_secure_pass_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-intelligent_aml_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deploy/docker/init-postgres.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aml_admin} -d ${POSTGRES_DB:-intelligent_aml_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
+    container_name: intelligent-aml-redpanda
+    restart: unless-stopped
+    command:
+      - redpanda
+      - start
+      - --smp
+      - '1'
+      - --memory
+      - 512M
+      - --reserve-memory
+      - 0M
+      - --overprovisioned
+      - --node-id
+      - '0'
+      - --kafka-addr
+      - PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr
+      - PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: intelligent-aml-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+    environment:
+      APP_MODE: ${APP_MODE:-onprem}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-aml_admin}:${POSTGRES_PASSWORD:-aml_secure_pass_2026}@postgres:5432/${POSTGRES_DB:-intelligent_aml_db}
+      KAFKA_BOOTSTRAP_SERVERS: redpanda:29092
+      KAFKA_TRANSACTION_TOPIC: banking.transactions.v1
+      DUCKDB_PATH: /app/data/analytics.duckdb
+      CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
+    ports:
+      - "8000:8000"
+    volumes:
+      - duckdb_analytics_data:/app/data
+      - ./results:/app/results
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: intelligent-aml-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_APP_MODE: ${APP_MODE:-onprem}
+      NEXT_PUBLIC_BACKEND_URL: http://backend:8000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redpanda_data:
+    driver: local
+  duckdb_analytics_data:
+    driver: local

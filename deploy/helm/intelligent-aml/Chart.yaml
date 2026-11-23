@@ -1,0 +1,16 @@
+apiVersion: v2
+name: intelligent-aml
+description: Production-grade Anti-Money Laundering & Spatio-Temporal Graph Surveillance Platform (BFIU & Basel-aligned)
+type: application
+version: 1.0.0
+appVersion: "3.2.0"
+keywords:
+  - aml
+  - compliance
+  - fraud-detection
+  - banking
+  - graph-neural-networks
+  - conformal-prediction
+maintainers:
+  - name: Intelligent-AML Platform Engineering
+    email: aml-dev@easternbank.example.com

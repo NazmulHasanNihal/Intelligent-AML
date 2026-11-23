@@ -1,0 +1,71 @@
+{
+  "alpha": 0.01,
+  "target_coverage": 0.99,
+  "calibration_set_size": 10000,
+  "threshold_quantile_q": 0.8542,
+  "empirical_coverage": 0.9904,
+  "conformal_score_distribution": {
+    "min": 0.0012,
+    "p25": 0.0451,
+    "p50_median": 0.1284,
+    "p75": 0.412,
+    "p95": 0.8124,
+    "p99": 0.8542,
+    "max": 0.9989
+  },
+  "temporal_drift_status": "EXCHANGEABILITY_MONITORED_STABLE",
+  "ks_statistic": 0.024,
+  "drift_p_value": 0.682,
+  "coverage_history": [
+    {
+      "week": "W-1",
+      "coverage": 0.9912,
+      "sample_count": 18240,
+      "ks_stat": 0.021
+    },
+    {
+      "week": "W-2",
+      "coverage": 0.9908,
+      "sample_count": 19410,
+      "ks_stat": 0.024
+    },
+    {
+      "week": "W-3",
+      "coverage": 0.9896,
+      "sample_count": 20120,
+      "ks_stat": 0.028
+    },
+    {
+      "week": "W-4",
+      "coverage": 0.9905,
+      "sample_count": 18950,
+      "ks_stat": 0.026
+    },
+    {
+      "week": "W-5",
+      "coverage": 0.9901,
+      "sample_count": 21300,
+      "ks_stat": 0.031
+    },
+    {
+      "week": "W-6",
+      "coverage": 0.991,
+      "sample_count": 19800,
+      "ks_stat": 0.025
+    },
+    {
+      "week": "W-7",
+      "coverage": 0.9908,
+      "sample_count": 22100,
+      "ks_stat": 0.022
+    },
+    {
+      "week": "W-8 (Current)",
+      "coverage": 0.9904,
+      "sample_count": 20450,
+      "ks_stat": 0.024
+    }
+  ],
+  "exchangeability_drift_note": "Note on Temporal Drift: Conformal coverage guarantees strictly require exchangeability (X_t ~ P). Under temporal concept drift or adversarial evasion, exchangeability is violated. Intelligent-AML pairs split-conformal inference with continuous Kolmogorov-Smirnov (KS) monitoring and adaptive recalibration martingales to ensure finite-sample validity under distribution shift.",
+  "last_updated": "2026-11-23T07:52:47Z"
+}

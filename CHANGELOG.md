@@ -4,6 +4,32 @@ All notable changes to this project are documented in this file, adhering to Gro
 
 ---
 
+## [Phase 3: Real Backend, Data Persistence & Infrastructure] — 2026-11-23
+
+### Added
+- **Single Source of Truth Decision**: Python FastAPI + DuckDB/Polars + PyTorch backend is authoritative system of record; Next.js 16 is the single enterprise web frontend.
+- **Typed OpenAPI v3.1 Specification Contract**:
+  - Exported complete schema to `api/openapi.json` and mirrored in `frontend/src/lib/api/openapi.json` (121.6 KB, 13 operations).
+  - Built strongly typed client `frontend/src/lib/api/backendClient.ts` with error handling (`BackendConnectionError` rejecting silent mock fallbacks in `APP_MODE=onprem`).
+- **Tiered Scoring Service (`src/scoring/tiered_scorer.py`)**:
+  - **Tier 1 (FastPath)**: Microsecond auto-clear for routine sub-$1,000 domestic transactions (< 200 µs).
+  - **Tier 2 (Statutory Rules)**: Sub-millisecond BFIU CTR structuring checks (৳800k-৳1M) and ASYCUDA TBML price divergence.
+  - **Tier 3 (Online Lightweight Model)**: Precomputed topological flow invariants ($\phi_{flow}, \lambda_u, d_u$) with logistic inference (< 1-2 ms budget).
+  - **Tier 4 (Asynchronous GNN Refresh)**: Background queue for spatio-temporal graph neural network re-indexing.
+  - **Artifact Versioning & Hashing**: Champ model `cstgb-champion-v3.2` with cryptographic SHA-256 artifact hash stamped on every scoring decision receipt.
+- **Conformal Prediction Calibration Registry & Telemetry**:
+  - Calibration state persisted to `results/metrics/conformal_calibration.json` with nominal $\alpha=0.01$, calibration size $n=10,000$, empirical coverage $99.04\%$, and nonconformity quantile $\hat{q}=0.8542$.
+  - Integrated dedicated **Conformal Calibration & Exchangeability under Temporal Drift** telemetry card in `frontend/src/app/governance/page.tsx`.
+- **Relational OLTP & Analytics Infrastructure**:
+  - Initialized relational schemas for PostgreSQL 16 and SQLite (`cases`, `alerts`, `audit_ledger`, `rfi_requests`, `users`, `conformal_calibration_audit`) in `deploy/docker/init-postgres.sql` and `src/engine/persistence.py`.
+  - Created root `docker-compose.yml` orchestrating PostgreSQL 16, Redpanda v24 (Kafka streaming), FastAPI backend, and Next.js 16 frontend.
+  - Created production Helm chart in `deploy/helm/intelligent-aml/` (`Chart.yaml`, `values.yaml`, `configmap.yaml`, `secret.yaml`, `pvc-analytics.yaml`, `deployment-backend.yaml`, `service-backend.yaml`, `deployment-frontend.yaml`, `service-frontend.yaml`, `ingress.yaml`).
+- **Automated API Contract Test Suites**:
+  - Python FastAPI contract test in `tests/test_api_contract.py` (6 tests passing).
+  - Frontend Vitest contract test in `frontend/src/__tests__/apiContract.test.ts` (4 tests passing, 25 total suite passing).
+
+---
+
 ## [Phase 2: Bangladesh Compliance Fit] — 2026-11-23
 
 ### Added

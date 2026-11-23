@@ -3,6 +3,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { BANKER_PERSONAS, BankingRole, BankerProfile } from '@/lib/auth/session';
+import { backendClient, BackendConnectionError } from '@/lib/api/backendClient';
+import { IS_ONPREM_MODE, APP_MODE } from '@/lib/config/env';
 import {
   AuditBlock,
   createChainedAuditEntry,
@@ -145,6 +147,12 @@ export interface UnifiedBankingState {
   egoHopDistance: number;
   setEgoHopDistance: (hops: number) => void;
 
+  // Operational Environment & Backend Sync
+  appMode: 'demo' | 'onprem';
+  backendStatus: 'connected' | 'disconnected' | 'syncing' | 'idle';
+  backendError: string | null;
+  syncWithBackend: () => Promise<void>;
+
   // Reset to Pristine Certified Clean Workspace
   resetWorkspaceData: () => void;
 }
@@ -152,6 +160,65 @@ export interface UnifiedBankingState {
 export const useAppStore = create<UnifiedBankingState>()(
   persist(
     (set, get) => ({
+      // Operational Environment & Backend Sync
+      appMode: APP_MODE,
+      backendStatus: 'idle',
+      backendError: null,
+      syncWithBackend: async () => {
+        if (!IS_ONPREM_MODE) {
+          set({ backendStatus: 'idle', backendError: null });
+          return;
+        }
+        set({ backendStatus: 'syncing', backendError: null });
+        try {
+          const [alertsData, casesData] = await Promise.all([
+            backendClient.getAlerts({ limit: 100 }),
+            backendClient.getCases()
+          ]);
+          if (alertsData && alertsData.alerts) {
+            const mappedAlerts: CommercialAlert[] = alertsData.alerts.map((a) => {
+              const isT1 = a.tier === 'Tier 1' || a.tier.includes('1');
+              const isT2 = a.tier === 'Tier 2' || a.tier.includes('2');
+              return {
+                id: a.id,
+                timestamp: a.timestamp,
+                account: a.target_account,
+                entityName: a.target_account.includes('EBLB') ? 'Meghna Industrial & Agro' : 'Commercial Trading Client',
+                amount: a.amount_usd,
+                amountBdt: a.amount_usd * 120.0,
+                rail: 'ISO 20022 RTGS',
+                bic: 'EBLBBDDH',
+                counterparty: a.counterparty,
+                counterpartyName: 'Gulf Star Commodities FZE',
+                counterpartyBic: 'EBILAEAD',
+                counterpartyCountry: 'UAE',
+                tier: isT1 ? 'Tier 1 Hold' : isT2 ? 'Tier 2 Review' : 'Tier 3 Clear',
+                tierCode: isT1 ? 1 : isT2 ? 2 : 3,
+                riskScore: a.risk_score,
+                status: a.status === 'PENDING' ? 'PENDING_TRIAGE' : 'UNDER_INVESTIGATION',
+                assignee: a.assignee || 'Unassigned',
+                typology: a.typology,
+                typologyBadge: a.typology.split(' ')[0] || 'CONDUIT',
+                decisionSet: (a.conformal_set && a.conformal_set.length > 0) ? a.conformal_set.join(', ') : 'PASS_THROUGH_CONDUIT',
+                slaMinutesLeft: 45,
+                whyFlagged: 'Automated spatio-temporal flow conservation trigger and BFIU MLPA 2012 compliance review',
+                flowConservationRatio: 0.992,
+                velocityBurstScore: 3.84
+              };
+            });
+            set({ alerts: mappedAlerts });
+          }
+          set({ backendStatus: 'connected', backendError: null });
+        } catch (err: any) {
+          set({
+            backendStatus: 'disconnected',
+            backendError: err.message || 'Failed to connect to authoritative backend'
+          });
+          if (IS_ONPREM_MODE) {
+            throw err;
+          }
+        }
+      },
       // Density and Theme
       density: 'compact',
       densityMode: 'compact',

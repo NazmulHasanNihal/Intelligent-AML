@@ -9,6 +9,8 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    globals: true
+    globals: true,
+    include: ['src/__tests__/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    exclude: ['e2e/**', 'node_modules/**']
   }
 });

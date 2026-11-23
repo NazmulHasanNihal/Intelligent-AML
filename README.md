@@ -38,7 +38,7 @@ An institutional-grade, real-time banking surveillance, financial network forens
      * [Screen 04: Case Detail & Two-Officer Four-Eyes Gate](#screen-04--case-detail-workspace--two-officer-maker-checker-four-eyes-gate)
      * [Screen 05: Autonomous Multi-Agent SAR/STR Dossier Workbench](#screen-05--autonomous-multi-agent-ai-forensic-sarstr-dossier-workbench)
      * [Screen 06: Model Governance & Health Console (SR 11-7)](#screen-06--surveillance-engine-health--model-governance-console-sr-11-7)
-     * [Screen 07: Tamper-Evident Cryptographic WORM Vault (FRE 902(11))](#screen-07--tamper-evident-cryptographic-worm-audit-vault-fre-90211--sec-17a-4)
+     * [Screen 07: Tamper-Evident Cryptographic WORM Vault (Evidence Act § 65B)](#screen-07--tamper-evident-cryptographic-worm-audit-vault-evidence-act--65b)
      * [Screen 08: Built-In Interactive Plain-English Guide Modal](#screen-08--interactive-plain-english-guide-modal)
      * [Screen 09: Built-In Searchable Jargon Buster Dictionary](#screen-09--in-app-searchable-jargon-buster-dictionary)
 7. [The 3-Tier Operational Safety Framework](#the-3-tier-operational-safety-framework)
@@ -144,11 +144,14 @@ Intelligent-AML is evaluated against five open and synthetic financial network d
 
 In alignment with **Federal Reserve SR 11-7 / OCC 2011-12 Model Risk Management** guidelines and **Bangladesh Bank BFIU Master Circular No. 26**, the platform maintains complete supervisory documentation:
 
-- 📋 **Model Card (C-STGB v3.2):** [docs/governance/MODEL_CARD_CSTGB.md](docs/governance/MODEL_CARD_CSTGB.md) — Comprehensive technical specification, input 12-D invariant definitions, demographic parity metrics, and operating scope.
+- 📋 **Model Card (C-STGB v3.2):** [MODEL_CARD.md](MODEL_CARD.md) (Mirror) / [docs/governance/MODEL_CARD_CSTGB.md](docs/governance/MODEL_CARD_CSTGB.md) — Comprehensive technical specification, input 12-D invariant definitions, demographic parity metrics, and operating scope.
 - 📑 **Independent Validation Report (SR 11-7 Aligned):** [docs/governance/SR11_7_VALIDATION_REPORT.md](docs/governance/SR11_7_VALIDATION_REPORT.md) — Tier-1 model evaluation, conceptual soundness proofs, perturbation stress tests, and ongoing monitoring plan.
-- 🎯 **Screening Fidelity Evaluation Report:** [evals/SCREENING_EVAL_REPORT.md](evals/SCREENING_EVAL_REPORT.md) — Multi-algorithm precision/recall breakdown across official global and domestic watchlists.
-- 🔒 **STRIDE Threat Model & Security Posture:** [docs/security/STRIDE_THREAT_MODEL.md](docs/security/STRIDE_THREAT_MODEL.md) — Formal application security analysis, OWASP ASVS Level 2 compliance, and server-side RBAC verification.
+- 📜 **Statutory Compliance Matrix:** [COMPLIANCE_MAPPING.md](COMPLIANCE_MAPPING.md) — Complete cross-reference to Bangladesh AMLA 2012, BFIU Master Circular 26, BFIU TBML Guidelines (2019), and European Union GDPR.
+- 🔒 **Institutional Security Policy & OWASP ASVS L2:** [SECURITY.md](SECURITY.md) — Vulnerability disclosure (RFC 9116), Ed25519 key management, 6-tier server RBAC, and PII masking.
+- 🛡️ **STRIDE Threat Model & Security Posture:** [docs/security/STRIDE_THREAT_MODEL.md](docs/security/STRIDE_THREAT_MODEL.md) — Formal application security analysis, OWASP ASVS Level 2 compliance, and server-side RBAC verification.
 - 📦 **Object Lock Storage & WORM Compliance:** [docs/security/OBJECT_LOCK_STORAGE_WORM.md](docs/security/OBJECT_LOCK_STORAGE_WORM.md) — S3 Object Lock and Evidence Act § 65B tamper-evident hash chaining documentation.
+- 🔄 **Disaster Recovery & BCP Runbook:** [docs/operations/DISASTER_RECOVERY_RPO_RTO.md](docs/operations/DISASTER_RECOVERY_RPO_RTO.md) — RPO < 1.0s, RTO < 15 min, cold standby failover runbook, and restore drill evidence.
+- 🎯 **Screening Fidelity Evaluation Report:** [evals/SCREENING_EVAL_REPORT.md](evals/SCREENING_EVAL_REPORT.md) — Multi-algorithm precision/recall breakdown across official global and domestic watchlists.
 
 ---
 
@@ -196,7 +199,7 @@ Intelligent-AML bridges high-throughput quantitative stream processing with dete
    * **Class-Conditional Conformal Risk Control (CRC):** Generates rigorous mathematical error bounds ensuring ≥ 99.0% empirical statistical coverage (α = 0.01). If a transaction's non-conformity score is provably benign, it clears instantly (Tier 3); if ambiguous, it enters the Tier 2 docket; if flagged as severe crime, it is immediately quarantined (Tier 1).
    * **Autonomous 4-Agent Swarm + Formal AST Compiler:** The Subgraph Topology Specialist traces graph subgraphs, the Legal SAR Drafter formats the statutory dossier, and the Compliance Rule Verifier validates statutory citations under the Lead Forensic Coordinator. The draft is verified by an AST compiler that checks every account number, date, and dollar amount against ledger records with zero tolerance for hallucinated entities.
    * **Two-Officer (Maker-Checker) Institutional Gate:** The AI swarm cannot unilaterally freeze funds or file reports. The primary investigating officer (Maker) submits findings, and an independent Senior Officer (Checker) must review and cryptographically authorize the action with a hardware PKI token.
-   * **Cryptographic WORM Audit Vault:** All events, scores, and officer signatures are appended to a Write-Once-Read-Many SHA-256 Merkle chain, producing court-admissible audit receipts compliant with Federal Rules of Evidence FRE 902(11) and SEC Rule 17a-4.
+   * **Cryptographic WORM Audit Vault:** All events, scores, and officer signatures are appended to a Write-Once-Read-Many SHA-256 Merkle chain, producing court-admissible audit receipts compliant with Bangladesh Evidence Act, 1872 (§ 65B Computer Output Admissibility) and Bangladesh Bank ICT Security Guidelines v3.0.
 
 ---
 
@@ -212,7 +215,7 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 | **04** | [Four-Eyes Gate](#screen-04--case-detail-workspace--two-officer-maker-checker-four-eyes-gate) | Two-officer dual approval & asset quarantine | Institutional Maker-Checker state machine + 5-step milestone audit |
 | **05** | [Multi-Agent SAR](#screen-05--autonomous-multi-agent-ai-forensic-sarstr-dossier-workbench) | Courtroom-ready legal SAR/STR report generation | 4-agent swarm (`AMLSwarmOrchestrator`) + AST zero-hallucination compiler |
 | **06** | [Model Governance](#screen-06--surveillance-engine-health--model-governance-console-sr-11-7) | Concept drift, PSI health & connector telemetry | Statistical Population Stability Index (PSI) + Federal Reserve SR 11-7 |
-| **07** | [Audit Vault](#screen-07--tamper-evident-cryptographic-worm-audit-vault-fre-90211--sec-17a-4) | Immutable tamper-proof legal audit ledger | Write-Once-Read-Many (WORM) SHA-256 Merkle hash chain |
+| **07** | [Audit Vault](#screen-07--tamper-evident-cryptographic-worm-audit-vault-evidence-act--65b) | Immutable tamper-proof legal audit ledger | Write-Once-Read-Many (WORM) SHA-256 Merkle hash chain |
 | **08** | [Plain-English Guide](#screen-08--interactive-plain-english-guide-modal) | Accessible explanations for non-technical users | In-app educational modal + plain-language typology translator |
 | **09** | [Jargon Buster](#screen-09--in-app-searchable-jargon-buster-dictionary) | Searchable banking & AML terminology dictionary | Pre-indexed fast-search glossary with practical banking examples |
 
@@ -301,12 +304,12 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 
 * **⚙️ How It Works (Under the Hood):**
   * Visualizes the 5 statutory milestones: **Step 01 (Triggered)** → **Step 02 (Analyst Assigned)** → **Step 03 (RFI Dispatched)** → **Step 04 (SAR Drafted)** → **Step 05 (4-Eyes Approved)**.
-  * Segregates duties between the primary investigating analyst (**Maker**, e.g., Sarah Jenkins) and the approving senior officer (**Checker**, e.g., Nazmul Hasan, Chief Compliance Officer).
+  * Segregates duties between the primary investigating analyst (**Maker**, e.g., Amina Rahman, Senior Analyst) and the approving senior officer (**Checker**, e.g., Kazi Tanvir, Chief Compliance Officer).
   * Displays total financial exposure ($48,500 USD / ৳5,820,000 BDT), fraud risk probability (98.4% with 99.96% confidence), linked alerts, and jurisdiction regulatory deadlines.
   * Maintains an append-only timeline of investigator notes, documenting every interview, document request, and evidentiary finding.
 
 * **🖱️ Key Interactive Analyst Workflows:**
-  * **Maker-Checker Authorization Button:** When logged in as an authorized senior officer, clicking **`✓ Sign Off & File SAR (Nazmul)`** cryptographically ratifies the case and unlocks submission.
+  * **Maker-Checker Authorization Button:** When logged in as an authorized senior officer, clicking **`✓ Sign Off & File SAR (Kazi Tanvir)`** cryptographically ratifies the case and unlocks submission.
   * **Freeze Notice (PDF):** Generates an official, bank-branded legal asset containment notice ready to be served to the customer or correspondent bank.
   * **Create RFI:** Triggers an automated Request for Information (RFI) dispatched to the corporate customer's relationship manager requesting export shipping bills and customs declarations.
   * **View Network:** Instantly navigates to the visual graph studio centered on this specific entity.
@@ -372,7 +375,7 @@ The Intelligent-AML web command center provides banking compliance officers, dat
 
 ---
 
-#### Screen 07: 🔒 Tamper-Evident Cryptographic WORM Audit Vault (FRE 902(11) / SEC 17a-4)
+#### Screen 07: 🔒 Tamper-Evident Cryptographic WORM Audit Vault (Evidence Act § 65B)
 
 ![Tamper-Evident Cryptographic Audit Vault](docs/assets/screenshots/07_audit_vault.png)
 
@@ -385,7 +388,7 @@ The Intelligent-AML web command center provides banking compliance officers, dat
     * Unique sequential Entry ID
     * Exact UTC timestamp
     * Action description & target entity account number
-    * Officer identity and role (`Sarah Jenkins - Senior Investigator`, `Nazmul Hasan - Chief Compliance Officer`)
+    * Officer identity and role (`Amina Rahman - Senior Investigator`, `Kazi Tanvir - Chief Compliance Officer`)
     * Verifiable Merkle proof hash (e.g., `9f8e4b7a12c8...`, `3a4b5c6d7e8f...`).
   * If any party (insider, system administrator, or external attacker) modifies or deletes a single byte of an entry, the hash chain breaks instantly, alerting auditors to tampering.
 
@@ -396,7 +399,7 @@ The Intelligent-AML web command center provides banking compliance officers, dat
   * **Clickable Merkle Proof Links:** Deep-link into individual cryptographic proof hashes for independent third-party verification.
 
 * **⚖️ Regulatory & Legal Compliance Standards:**
-  Fulfills **Federal Rules of Evidence FRE 902(11) (Certified Domestic Records of a Regularly Conducted Activity)**, rendering audit evidence self-authenticating in court without requiring live testimony, and satisfies **SEC Rule 17a-4 (Electronic Storage Requirements)**.
+  Fulfills **Bangladesh Evidence Act, 1872 (§ 65B Admissibility of Electronic Records)** and **Bangladesh Bank ICT Security Guidelines v3.0**, rendering audit evidence self-authenticating in court without requiring live testimony.
 
 ---
 

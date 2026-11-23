@@ -313,21 +313,19 @@ export default function AlertTriagePage() {
           <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
             <button
               onClick={() => setDensityMode('compact')}
-              className={`px-2.5 py-1 rounded transition-all cursor-pointer ${
-                densityMode === 'compact'
-                  ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`px-2.5 py-1 rounded transition-all cursor-pointer ${densityMode === 'compact'
+                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
+                : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               Compact
             </button>
             <button
               onClick={() => setDensityMode('comfortable')}
-              className={`px-2.5 py-1 rounded transition-all cursor-pointer ${
-                densityMode === 'comfortable'
-                  ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`px-2.5 py-1 rounded transition-all cursor-pointer ${densityMode === 'comfortable'
+                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
+                : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               Comfortable
             </button>
@@ -341,43 +339,39 @@ export default function AlertTriagePage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSelectedTier('ALL')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              selectedTier === 'ALL'
-                ? 'bg-[#1E293B] text-slate-100 border border-[#334155]'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 'ALL'
+              ? 'bg-[#1E293B] text-slate-100 border border-[#334155]'
+              : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             All Alerts ({alerts.length})
           </button>
           <button
             onClick={() => setSelectedTier(1)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              selectedTier === 1
-                ? 'bg-rose-950/60 text-rose-300 border border-rose-800/60'
-                : 'text-rose-400/80 hover:bg-rose-950/20'
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 1
+              ? 'bg-rose-950/60 text-rose-300 border border-rose-800/60'
+              : 'text-rose-400/80 hover:bg-rose-950/20'
+              }`}
           >
             <span className="w-2 h-2 rounded-full bg-rose-500" />
             <span>Tier 1 Hold ({alerts.filter((a) => a.tierCode === 1).length})</span>
           </button>
           <button
             onClick={() => setSelectedTier(2)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              selectedTier === 2
-                ? 'bg-amber-950/60 text-amber-300 border border-amber-800/60'
-                : 'text-amber-400/80 hover:bg-amber-950/20'
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 2
+              ? 'bg-amber-950/60 text-amber-300 border border-amber-800/60'
+              : 'text-amber-400/80 hover:bg-amber-950/20'
+              }`}
           >
             <span className="w-2 h-2 rounded-full bg-amber-500" />
             <span>Tier 2 Review ({alerts.filter((a) => a.tierCode === 2).length})</span>
           </button>
           <button
             onClick={() => setSelectedTier(3)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              selectedTier === 3
-                ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60'
-                : 'text-emerald-400/80 hover:bg-emerald-950/20'
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 3
+              ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60'
+              : 'text-emerald-400/80 hover:bg-emerald-950/20'
+              }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
             <span>Tier 3 Clear ({alerts.filter((a) => a.tierCode === 3).length})</span>
@@ -469,13 +463,12 @@ export default function AlertTriagePage() {
                         height: `${virtualRow.size}px`,
                         transform: `translateY(${virtualRow.start}px)`,
                       }}
-                      className={`grid grid-cols-12 gap-2 px-4 items-center text-xs transition-colors group cursor-pointer ${
-                        isSelected
-                          ? 'bg-emerald-950/20'
-                          : isFocused
+                      className={`grid grid-cols-12 gap-2 px-4 items-center text-xs transition-colors group cursor-pointer ${isSelected
+                        ? 'bg-emerald-950/20'
+                        : isFocused
                           ? 'bg-[#1E293B]/60 ring-1 ring-inset ring-sky-500/40'
                           : 'hover:bg-[#1E293B]/40'
-                      }`}
+                        }`}
                     >
                       {/* Select + Alert ID */}
                       <div className="col-span-1 flex items-center gap-2">
@@ -538,13 +531,12 @@ export default function AlertTriagePage() {
                       {/* Risk Tier Badge */}
                       <div className="col-span-1 text-center">
                         <span
-                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold whitespace-nowrap border-l-2 ${
-                            alert.tierCode === 1
-                              ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30 border-l-rose-500'
-                              : alert.tierCode === 2
+                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold whitespace-nowrap border-l-2 ${alert.tierCode === 1
+                            ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30 border-l-rose-500'
+                            : alert.tierCode === 2
                               ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30 border-l-amber-500'
                               : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 border-l-emerald-500'
-                          }`}
+                            }`}
                         >
                           Tier {alert.tierCode} {alert.tierCode === 1 ? 'HOLD' : alert.tierCode === 2 ? 'REVIEW' : 'CLEAR'}
                         </span>
@@ -561,13 +553,12 @@ export default function AlertTriagePage() {
                       {/* SLA Countdown */}
                       <div className="col-span-1 text-center font-mono text-[11px] tabular-nums">
                         <span
-                          className={`px-1.5 py-0.5 rounded ${
-                            alert.slaMinutesLeft < 60
-                              ? 'bg-rose-950/60 text-rose-400 font-bold border border-rose-800/40 animate-pulse'
-                              : alert.slaMinutesLeft < 180
+                          className={`px-1.5 py-0.5 rounded ${alert.slaMinutesLeft < 60
+                            ? 'bg-rose-950/60 text-rose-400 font-bold border border-rose-800/40 animate-pulse'
+                            : alert.slaMinutesLeft < 180
                               ? 'bg-amber-950/60 text-amber-400'
                               : 'text-slate-400'
-                          }`}
+                            }`}
                         >
                           {alert.slaMinutesLeft}m
                         </span>
@@ -708,9 +699,8 @@ export default function AlertTriagePage() {
             <div className="p-5 bg-[#0B0F17] border-b border-[#1E293B] flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                    inspectingAlert.tierCode === 1 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                  }`}>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${inspectingAlert.tierCode === 1 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                    }`}>
                     TIER {inspectingAlert.tierCode} HOLD
                   </span>
                   <h2 className="text-base font-bold text-slate-100 font-mono">

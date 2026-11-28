@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     // Local deterministic C-STGB scoring fallback function
     const localCompute = () => {
       const invariants = compute12DInvariants(tx, {
-        totalAmountIn: tx.amount * 1.05,
+        totalAmountIn: tx.burst ? tx.amount * 1.05 : tx.amount * 4.2,
         totalAmountOut: tx.amount,
         degIn: tx.burst ? 14 : 3,
         degOut: tx.burst ? 18 : 2

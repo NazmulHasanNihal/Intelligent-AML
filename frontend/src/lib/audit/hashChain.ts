@@ -1,9 +1,7 @@
 /**
  * hashChain.ts — Real WebCrypto SHA-256 WORM Audit Chain Engine
- * Enforces tamper-evident sequential chaining satisfying:
- * - Bangladesh Evidence Act (Amended 2022) § 65B
- * - Federal Rules of Evidence FRE 902(11) Certified Domestic Business Records
- * - 31 CFR § 1010.430 & EU eIDAS Digital Custody Regulations
+ * Enforces tamper-evident sequential chaining aligned with the active
+ * jurisdiction profile (BD_BFIU Evidence Act § 65B, US_FINCEN FRE 902(11), EU eIDAS).
  */
 
 export interface AuditBlock {
@@ -145,11 +143,11 @@ const CERTIFIED_GENESIS_CHAIN: AuditBlock[] = [
     targetAccount: 'BD22-EBLB-4829-1092-8823',
     targetId: 'ALT-994821',
     justificationCode: 'TBML_ASYCUDA_OVERINVOICE',
-    details: 'Automated administrative hold on documentary LC wire $9,450 (৳1,134,000 BDT). ASYCUDA price divergence +333.7%.',
+    details: 'Automated administrative hold on documentary LC wire $48,500 (৳5,820,000 BDT). ASYCUDA price divergence +333.7%.',
     prevHash: 'eda87c4a6c7edd76e58c4ea832b272d9a824c6fc6c8f0f4f2acd230abd08645c',
     previousHash: 'eda87c4a6c7edd76e58c4ea832b272d9a824c6fc6c8f0f4f2acd230abd08645c',
-    merkleHash: 'd517e1444d9f262bf47b2b5f86fdb9d39b66095828e001339ec2d6ab22053ec5',
-    currentHash: 'd517e1444d9f262bf47b2b5f86fdb9d39b66095828e001339ec2d6ab22053ec5',
+    merkleHash: '0bebebb668aa6deda2ff585cbf15082db019fe170dc51d677dc1cf51a83aaac6',
+    currentHash: '0bebebb668aa6deda2ff585cbf15082db019fe170dc51d677dc1cf51a83aaac6',
     role: 'SYSTEM',
     officerId: 'SRV-ENGINE',
     officerName: 'Fast-Path Engine'
@@ -167,10 +165,10 @@ const CERTIFIED_GENESIS_CHAIN: AuditBlock[] = [
     targetId: 'CASE-2026-0881',
     justificationCode: 'SIU_ESCALATION',
     details: 'Case CASE-2026-0881 formally docketed and assigned to Lead Investigator Sarah L. Jenkins, CFE.',
-    prevHash: 'd517e1444d9f262bf47b2b5f86fdb9d39b66095828e001339ec2d6ab22053ec5',
-    previousHash: 'd517e1444d9f262bf47b2b5f86fdb9d39b66095828e001339ec2d6ab22053ec5',
-    merkleHash: 'dad1094986d6244089743f527d005628401c1e7476ed1ccbd615c2c171e25e27',
-    currentHash: 'dad1094986d6244089743f527d005628401c1e7476ed1ccbd615c2c171e25e27',
+    prevHash: '0bebebb668aa6deda2ff585cbf15082db019fe170dc51d677dc1cf51a83aaac6',
+    previousHash: '0bebebb668aa6deda2ff585cbf15082db019fe170dc51d677dc1cf51a83aaac6',
+    merkleHash: '14641e085e1588c3259b5e7733ae43fa7b23d442dfdfe22ff9d9b0b6313a520c',
+    currentHash: '14641e085e1588c3259b5e7733ae43fa7b23d442dfdfe22ff9d9b0b6313a520c',
     role: 'CCO_L3',
     officerId: 'BNK-7842',
     officerName: 'Nazmul Hasan'
@@ -336,7 +334,7 @@ export async function verifyAuditChain(chainToVerify?: AuditBlock[]): Promise<{
 export function tamperAuditBlock(blockSequence: number, alteredDetails?: string): void {
   const target = activeChain.find(b => b.sequence === blockSequence || b.blockHeight === blockSequence);
   if (target) {
-    target.details = alteredDetails || 'UNAUTHORIZED_ALTERATION: Transaction amount changed from $9,450 to $0.00 to dismiss alert.';
+    target.details = alteredDetails || 'UNAUTHORIZED_ALTERATION: Transaction amount changed from $48,500 to $0.00 to dismiss alert.';
     target.tampered = true;
   }
 }

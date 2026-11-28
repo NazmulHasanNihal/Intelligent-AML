@@ -34,6 +34,7 @@ const nextConfig: NextConfig = {
       { source: '/app/sar', destination: '/sar' },
       { source: '/app/rfi', destination: '/rfi' },
       { source: '/app/rules', destination: '/rules' },
+      { source: '/app/recourse', destination: '/recourse' },
       { source: '/app/governance', destination: '/governance' },
     ];
   },

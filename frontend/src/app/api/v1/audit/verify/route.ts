@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuditChain, getAuditChain } from '@/lib/audit/hashChain';
 import { fetchFastApiWithFallback } from '@/lib/apiAdapter';
+import { JURISDICTIONS, JurisdictionCode } from '@/lib/compliance/jurisdictions';
 
-/**
- * Audit Ledger Verification API
- * Supports GET & POST for independent external compliance verifiers.
- * Validates SHA-256 sequential Merkle hash chain, pointer continuity, and canonical payloads.
- */
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const jurParam = (searchParams.get('jurisdiction') || 'BD_BFIU') as JurisdictionCode;
+  const jur = JURISDICTIONS[jurParam] || JURISDICTIONS.BD_BFIU;
+
   const localVerify = async () => {
     const result = await verifyAuditChain();
     const chain = getAuditChain();
@@ -23,14 +23,15 @@ export async function GET(req: NextRequest) {
       verifiedAt: new Date().toISOString(),
       hashingStandard: 'SHA-256 (RFC 8785 Canonical JSON)',
       signingAlgorithm: 'Ed25519 (RFC 8032)',
+      jurisdiction: jur.id,
       legalAdmissibility: result.isValid
-        ? 'VERIFIED (Tamper-Evident): Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B & 73A (Officer Certificate) & FRE 902(11).'
-        : 'TAMPER_DETECTED: Cryptographic hash chain validation failed. Evidence is tainted and inadmissible.'
+        ? `VERIFIED (Tamper-Evident): ${jur.evidenceRule}`
+        : 'TAMPER_DETECTED: Cryptographic hash chain validation failed. Evidence is tainted and inadmissible.',
     };
   };
 
   const result = await fetchFastApiWithFallback(
-    '/api/v1/audit/verify',
+    `/api/v1/audit/verify?jurisdiction=${jur.id}`,
     { method: 'GET' },
     localVerify,
     { timeoutMs: 2500 }
@@ -40,6 +41,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const jurParam = (searchParams.get('jurisdiction') || 'BD_BFIU') as JurisdictionCode;
+  const jur = JURISDICTIONS[jurParam] || JURISDICTIONS.BD_BFIU;
+
   let customChain;
   try {
     const body = await req.json();
@@ -62,8 +67,9 @@ export async function POST(req: NextRequest) {
     verifiedAt: new Date().toISOString(),
     hashingStandard: 'SHA-256 (RFC 8785 Canonical JSON)',
     signingAlgorithm: 'Ed25519 (RFC 8032)',
+    jurisdiction: jur.id,
     legalAdmissibility: result.isValid
-      ? 'VERIFIED (Tamper-Evident): Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B & 73A (Officer Certificate) & FRE 902(11).'
-      : 'TAMPER_DETECTED: Cryptographic hash chain validation failed. Evidence is tainted and inadmissible.'
+      ? `VERIFIED (Tamper-Evident): ${jur.evidenceRule}`
+      : 'TAMPER_DETECTED: Cryptographic hash chain validation failed. Evidence is tainted and inadmissible.',
   });
 }

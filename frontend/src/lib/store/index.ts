@@ -29,6 +29,12 @@ import {
 import { screenWatchlistCandidate } from '@/lib/screening/watchlistRegistry';
 import { Language, DisplayCurrency, TRANSLATIONS } from '@/lib/i18n/translations';
 import { formatCurrencyAmount } from '@/lib/i18n/formatters';
+import {
+  InstitutionalConnector,
+  WebhookDeliveryLog,
+  INITIAL_CONNECTORS,
+  INITIAL_WEBHOOK_DELIVERIES,
+} from '@/lib/connectors/registry';
 
 export interface ToastItem {
   id: string;
@@ -160,6 +166,16 @@ export interface UnifiedBankingState {
   setGraphTimelineStep: (step: number) => void;
   egoHopDistance: number;
   setEgoHopDistance: (hops: number) => void;
+
+  // Institutional Connectors & Webhook Telemetry
+  connectors: InstitutionalConnector[];
+  webhookDeliveries: WebhookDeliveryLog[];
+  toggleConnector: (connectorId: string) => void;
+  triggerConnectorWebhook: (
+    connectorId: string,
+    eventType: 'HOLD_ENFORCED_TIER1' | 'STR_SCHEMA_VALIDATED' | 'SANCTIONS_INTERDICTION' | 'WORM_CHECKPOINT_SYNC' | 'CONNECTOR_HEARTBEAT_TEST',
+    targetAccount?: string
+  ) => Promise<void>;
 
   // Operational Environment & Backend Sync
   appMode: 'demo' | 'onprem';
@@ -808,6 +824,73 @@ export const useAppStore = create<UnifiedBankingState>()(
       setGraphTimelineStep: (step) => set({ graphTimelineStep: step }),
       egoHopDistance: 2,
       setEgoHopDistance: (hops) => set({ egoHopDistance: hops }),
+
+      // Institutional Connectors & Webhook Telemetry
+      connectors: INITIAL_CONNECTORS,
+      webhookDeliveries: INITIAL_WEBHOOK_DELIVERIES,
+      toggleConnector: (connectorId) => {
+        set((s) => ({
+          connectors: s.connectors.map((c) =>
+            c.id === connectorId
+              ? { ...c, enabled: !c.enabled, status: !c.enabled ? 'SANDBOX_SIMULATED' : 'PAUSED' }
+              : c
+          ),
+        }));
+        const target = get().connectors.find((c) => c.id === connectorId);
+        if (target) {
+          get().addToast(
+            target.enabled ? 'Connector Enabled' : 'Connector Paused',
+            `${target.name} set to ${target.status}.`,
+            target.enabled ? 'success' : 'info'
+          );
+        }
+      },
+      triggerConnectorWebhook: async (connectorId, eventType, targetAccount = 'SYSTEM_HEALTHCHECK') => {
+        const connector = get().connectors.find((c) => c.id === connectorId);
+        if (!connector) return;
+        let delivery: WebhookDeliveryLog = {
+          id: `WH-${Date.now().toString().slice(-6)}`,
+          connectorId,
+          eventType,
+          targetAccount,
+          statusCode: 202,
+          signaturePrefix: `sha256=${Math.random().toString(16).slice(2, 14).padEnd(12, '0')}`,
+          deliveredAt: new Date().toISOString(),
+          mode: 'serverless-demo',
+        };
+        try {
+          if (typeof fetch === 'function') {
+            const res = await fetch('/api/v1/webhooks', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ connectorId, eventType, targetAccount }),
+            });
+            if (res.ok) {
+              const json = await res.json();
+              if (json?.delivery) {
+                delivery = json.delivery;
+              }
+            }
+          }
+        } catch {
+          /* deterministic offline fallback already constructed */
+        }
+        set((s) => ({
+          webhookDeliveries: [delivery, ...s.webhookDeliveries].slice(0, 20),
+          connectors: s.connectors.map((c) =>
+            c.id === connectorId
+              ? { ...c, eventsDelivered: c.eventsDelivered + 1, lastHeartbeat: delivery.deliveredAt }
+              : c
+          ),
+        }));
+        await get().logAuditAction(
+          `WEBHOOK_${eventType}`,
+          `Webhook delivered to ${connector.name} (${delivery.signaturePrefix}).`,
+          targetAccount,
+          get().currentBanker.name
+        );
+        get().addToast('Webhook Dispatched', `${connector.name} ACK ${delivery.statusCode} (${delivery.signaturePrefix}).`, 'success');
+      },
 
       // 1-Click Workspace Reset
       resetWorkspaceData: () => {

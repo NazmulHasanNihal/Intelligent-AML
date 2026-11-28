@@ -65,20 +65,20 @@ export default function CustomerDirectoryPage() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-sans">
-            <Users className="w-5 h-5 text-emerald-400" />
+          <h1 className="text-xl font-bold text-fg flex items-center gap-2 font-sans">
+            <Users className="w-5 h-5 text-tier-3-text" />
             Customer 360° KYC/EDD Institutional Profiles
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-muted mt-0.5">
             EDD dossiers, Ultimate Beneficial Ownership (UBO), and expected turnover variance.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-slate-300">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-fg-secondary">
             <span>Customer Base: <strong>{customers.length} Entities</strong></span>
             <span>•</span>
-            <span className="text-rose-400">
+            <span className="text-tier-1-text">
               <strong>{customers.filter((c) => c.riskRating === 'HIGH_EDD').length} High Risk (EDD)</strong>
             </span>
           </div>
@@ -98,8 +98,8 @@ export default function CustomerDirectoryPage() {
                   onClick={() => setRiskFilter(r)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     riskFilter === r
-                      ? 'bg-surface text-slate-100 border border-line-strong'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-surface text-fg border border-line-strong'
+                      : 'text-muted hover:text-fg-secondary'
                   }`}
                 >
                   {r === 'ALL' ? 'All' : r === 'HIGH_EDD' ? 'High (EDD)' : r}
@@ -108,13 +108,13 @@ export default function CustomerDirectoryPage() {
             </div>
 
             <div className="relative w-44">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2 text-slate-500" />
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2 text-fg0" />
               <input
                 type="text"
                 placeholder="Search entities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-2.5 py-1 bg-panel border border-line-strong rounded-lg text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none"
+                className="w-full pl-8 pr-2.5 py-1 bg-panel border border-line-strong rounded-lg text-xs text-fg-secondary placeholder:text-fg0 focus:outline-none"
               />
             </div>
           </div>
@@ -140,23 +140,23 @@ export default function CustomerDirectoryPage() {
                       <span
                         className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                           cust.riskRating === 'HIGH_EDD'
-                            ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                            ? 'bg-rose-500/20 text-tier-1-text border border-rose-500/30'
                             : cust.riskRating === 'MEDIUM'
-                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                            : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                            ? 'bg-amber-500/20 text-tier-2-text border border-amber-500/30'
+                            : 'bg-emerald-500/20 text-tier-3-text border border-emerald-500/30'
                         }`}
                       >
                         {cust.riskRating.replace(/_/g, ' ')}
                       </span>
-                      <span className="text-xs font-bold text-slate-100">{cust.name}</span>
+                      <span className="text-xs font-bold text-fg">{cust.name}</span>
                     </div>
 
-                    <span className="text-xs font-mono text-slate-500">{cust.id}</span>
+                    <span className="text-xs font-mono text-fg0">{cust.id}</span>
                   </div>
 
-                  <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
+                  <div className="mt-2 flex items-center justify-between text-xs text-muted">
                     <span className="truncate">{cust.type}</span>
-                    <span className={`font-mono text-xs font-semibold ${variancePct > 50 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                    <span className={`font-mono text-xs font-semibold ${variancePct > 50 ? 'text-tier-1-text' : 'text-tier-3-text'}`}>
                       {variancePct > 0 ? `+${variancePct.toFixed(0)}%` : `${variancePct.toFixed(0)}%`} Volume Variance
                     </span>
                   </div>
@@ -176,19 +176,19 @@ export default function CustomerDirectoryPage() {
                   <div className="flex items-center gap-2">
                     <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                       selectedCustomer.riskRating === 'HIGH_EDD'
-                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                        ? 'bg-rose-500/20 text-tier-1-text border border-rose-500/40'
                         : selectedCustomer.riskRating === 'MEDIUM'
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                        : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                        ? 'bg-amber-500/20 text-tier-2-text border border-amber-500/40'
+                        : 'bg-emerald-500/20 text-tier-3-text border border-emerald-500/40'
                     }`}>
                       {selectedCustomer.riskRating.replace(/_/g, ' ')}
                     </span>
-                    <h2 className="text-lg font-bold text-slate-100 font-sans">
+                    <h2 className="text-lg font-bold text-fg font-sans">
                       {selectedCustomer.name}
                     </h2>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-x-1.5">
-                    <span>Account:</span> <PiiText value={selectedCustomer.accountNumber} type="account" className="text-slate-200 font-mono font-bold" /> <span>• Onboarded: <strong className="text-slate-200 font-mono">{selectedCustomer.onboardedDate}</strong></span> <span>• Next Review: <strong className="text-slate-200 font-mono">{selectedCustomer.nextReviewDate}</strong></span>
+                  <p className="text-xs text-muted mt-1 flex flex-wrap items-center gap-x-1.5">
+                    <span>Account:</span> <PiiText value={selectedCustomer.accountNumber} type="account" className="text-fg-secondary font-mono font-bold" /> <span>• Onboarded: <strong className="text-fg-secondary font-mono">{selectedCustomer.onboardedDate}</strong></span> <span>• Next Review: <strong className="text-fg-secondary font-mono">{selectedCustomer.nextReviewDate}</strong></span>
                   </p>
                 </div>
 
@@ -198,7 +198,7 @@ export default function CustomerDirectoryPage() {
                       setNewRating(selectedCustomer.riskRating === 'HIGH_EDD' ? 'HIGH_EDD' : selectedCustomer.riskRating === 'MEDIUM' ? 'MEDIUM' : 'LOW');
                       setRatingModalOpen(true);
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 text-xs font-semibold border border-line-strong cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-hover text-fg-secondary text-xs font-semibold border border-line-strong cursor-pointer"
                   >
                     Adjust Risk Rating
                   </button>
@@ -215,21 +215,21 @@ export default function CustomerDirectoryPage() {
 
               {/* KYC Identification Matrix */}
               <div>
-                <h3 className="text-xs font-bold text-slate-300 mb-2 font-mono">
+                <h3 className="text-xs font-bold text-fg-secondary mb-2 font-mono">
                   KYC &amp; Corporate Registration
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                   <div className="p-3 rounded-xl bg-canvas border border-line">
-                    <span className="text-slate-500 text-xs font-mono block">Trade License / Reg No</span>
-                    <span className="font-mono font-bold text-slate-200 mt-0.5 block">{selectedCustomer.registrationNo}</span>
+                    <span className="text-fg0 text-xs font-mono block">Trade License / Reg No</span>
+                    <span className="font-mono font-bold text-fg-secondary mt-0.5 block">{selectedCustomer.registrationNo}</span>
                   </div>
                   <div className="p-3 rounded-xl bg-canvas border border-line">
-                    <span className="text-slate-500 text-xs font-mono block">Masked NID / TIN</span>
-                    <PiiText value={selectedCustomer.maskedNidTin} type="account" className="font-mono font-bold text-slate-200 mt-0.5 block" />
+                    <span className="text-fg0 text-xs font-mono block">Masked NID / TIN</span>
+                    <PiiText value={selectedCustomer.maskedNidTin} type="account" className="font-mono font-bold text-fg-secondary mt-0.5 block" />
                   </div>
                   <div className="p-3 rounded-xl bg-canvas border border-line">
-                    <span className="text-slate-500 text-xs font-mono block">Account Status</span>
-                    <span className={`font-mono font-bold mt-0.5 block ${selectedCustomer.accountStatus === 'FROZEN' ? 'text-rose-400' : 'text-emerald-400'}`}>
+                    <span className="text-fg0 text-xs font-mono block">Account Status</span>
+                    <span className={`font-mono font-bold mt-0.5 block ${selectedCustomer.accountStatus === 'FROZEN' ? 'text-tier-1-text' : 'text-tier-3-text'}`}>
                       {selectedCustomer.accountStatus}
                     </span>
                   </div>
@@ -238,9 +238,9 @@ export default function CustomerDirectoryPage() {
 
               {/* Turnover Variance Analysis */}
               <div>
-                <h3 className="text-xs font-bold text-slate-300 mb-2 font-mono flex items-center justify-between">
+                <h3 className="text-xs font-bold text-fg-secondary mb-2 font-mono flex items-center justify-between">
                   <span>Declared vs Actual Monthly Turnover</span>
-                  <span className="text-xs font-mono text-amber-400">
+                  <span className="text-xs font-mono text-tier-2-text">
                     Threshold: &gt;50% Variance Triggers EDD
                   </span>
                 </h3>
@@ -248,14 +248,14 @@ export default function CustomerDirectoryPage() {
                 <div className="p-4 rounded-xl bg-canvas border border-line space-y-3">
                   <div className="flex items-center justify-between text-xs">
                     <div>
-                      <span className="text-slate-400">Declared Turnover: </span>
-                      <strong className="text-slate-200 font-mono">
+                      <span className="text-muted">Declared Turnover: </span>
+                      <strong className="text-fg-secondary font-mono">
                         ${selectedCustomer.declaredMonthlyTurnoverUsd.toLocaleString()} USD
                       </strong>
                     </div>
                     <div>
-                      <span className="text-slate-400">Actual Trailing Turnover: </span>
-                      <strong className="text-emerald-400 font-mono text-sm">
+                      <span className="text-muted">Actual Trailing Turnover: </span>
+                      <strong className="text-tier-3-text font-mono text-sm">
                         ${selectedCustomer.actualMonthlyTurnoverUsd.toLocaleString()} USD
                       </strong>
                     </div>
@@ -283,9 +283,9 @@ export default function CustomerDirectoryPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
+                  <div className="flex items-center justify-between text-xs text-muted font-mono">
                     <span>Blue: Declared Baseline</span>
-                    <span className="text-rose-400 font-bold">
+                    <span className="text-tier-1-text font-bold">
                       Variance: +
                       {(
                         ((selectedCustomer.actualMonthlyTurnoverUsd - selectedCustomer.declaredMonthlyTurnoverUsd) /
@@ -300,27 +300,27 @@ export default function CustomerDirectoryPage() {
 
               {/* Ultimate Beneficial Ownership (UBO) Registry */}
               <div>
-                <h3 className="text-xs font-bold text-slate-300 mb-2 font-mono">
+                <h3 className="text-xs font-bold text-fg-secondary mb-2 font-mono">
                   Ultimate Beneficial Ownership (UBO) Structure (&ge; 10% Ownership)
                 </h3>
                 <div className="space-y-2">
                   {selectedCustomer.uboHierarchy.map((owner, idx) => (
                     <div key={idx} className="p-3 bg-canvas border border-line rounded-xl flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-slate-400" />
+                        <User className="w-4 h-4 text-muted" />
                         <div>
-                          <div className="font-semibold text-slate-200">{owner.name}</div>
-                          <div className="text-xs text-slate-400 font-mono">
+                          <div className="font-semibold text-fg-secondary">{owner.name}</div>
+                          <div className="text-xs text-muted font-mono">
                             Jurisdiction: {owner.jurisdiction} • PEP Status: {owner.pepStatus ? 'POLITICALLY EXPOSED' : 'CLEARED'}
                           </div>
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <span className="font-mono font-bold text-emerald-400 text-sm">
+                        <span className="font-mono font-bold text-tier-3-text text-sm">
                           {owner.shareholdingPct}%
                         </span>
-                        <span className="text-xs text-slate-500 block">Direct Equity</span>
+                        <span className="text-xs text-fg0 block">Direct Equity</span>
                       </div>
                     </div>
                   ))}
@@ -346,15 +346,15 @@ export default function CustomerDirectoryPage() {
 
                 <Link
                   href="/rfi"
-                  className="px-4 py-2 rounded-xl bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
+                  className="px-4 py-2 rounded-xl bg-surface hover:bg-surface-hover text-fg-secondary font-medium text-xs transition-colors flex items-center gap-2"
                 >
-                  <MailQuestion className="w-4 h-4 text-sky-400" />
+                  <MailQuestion className="w-4 h-4 text-accent-2" />
                   <span>Dispatch KYC Inquiry (RFI)</span>
                 </Link>
               </div>
             </div>
           ) : (
-            <div className="py-20 text-center text-slate-500 text-xs">
+            <div className="py-20 text-center text-fg0 text-xs">
               Select a customer profile to view institutional KYC dossier.
             </div>
           )}
@@ -365,20 +365,20 @@ export default function CustomerDirectoryPage() {
       {ratingModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-panel border border-line-strong rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
-              <SlidersHorizontal className="w-5 h-5 text-emerald-400" />
+            <h3 className="text-base font-bold text-fg flex items-center gap-2">
+              <SlidersHorizontal className="w-5 h-5 text-tier-3-text" />
               Adjust Customer Risk Classification
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted">
               Update institutional risk band for <strong>{selectedCustomer?.name}</strong>. This modification requires compliance rationale and will be appended to the WORM audit trail.
             </p>
 
             <div>
-              <label className="text-xs font-mono text-slate-400 block mb-1">New Risk Rating</label>
+              <label className="text-xs font-mono text-muted block mb-1">New Risk Rating</label>
               <select
                 value={newRating}
                 onChange={(e) => setNewRating(e.target.value as any)}
-                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-xs text-slate-200 cursor-pointer"
+                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-xs text-fg-secondary cursor-pointer"
               >
                 <option value="HIGH_EDD">HIGH (Mandatory Quarterly EDD &amp; Live Wire Hold)</option>
                 <option value="MEDIUM">MEDIUM (Standard Annual Review)</option>
@@ -387,19 +387,19 @@ export default function CustomerDirectoryPage() {
             </div>
 
             <div>
-              <label className="text-xs font-mono text-slate-400 block mb-1">Audit Rationale Memo</label>
+              <label className="text-xs font-mono text-muted block mb-1">Audit Rationale Memo</label>
               <textarea
                 value={ratingMemo}
                 onChange={(e) => setRatingMemo(e.target.value)}
                 placeholder="e.g. Unexplained +312% export turnover variance and port diversion flagged during trade inspection."
-                className="w-full h-20 p-3 bg-canvas border border-line-strong rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none"
+                className="w-full h-20 p-3 bg-canvas border border-line-strong rounded-xl text-xs text-fg placeholder:text-slate-600 focus:outline-none"
               />
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setRatingModalOpen(false)}
-                className="px-4 py-2 text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
+                className="px-4 py-2 text-xs text-muted hover:text-fg-secondary cursor-pointer"
               >
                 Cancel
               </button>

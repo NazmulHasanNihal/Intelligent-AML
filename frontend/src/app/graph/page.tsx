@@ -9,7 +9,7 @@ import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 const ForceGraph3DCanvas = dynamic(() => import('@/components/graph/ForceGraph3DCanvas'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center text-xs font-mono text-slate-400">
+    <div className="w-full h-full flex items-center justify-center text-xs font-mono text-muted">
       Initializing WebGL 3D Engine...
     </div>
   )
@@ -309,11 +309,11 @@ function ForensicGraphStudioContent() {
       {/* Header and Scenario Selector */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-sans">
+          <h1 className="text-xl font-bold text-fg flex items-center gap-2 font-sans">
             <GitFork className="w-5 h-5 text-purple-400" />
             Forensic Cash Flow Studio — Multi-Hop Topology
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-muted mt-1">
             Real-time interbank flow topology with Pass-Through Flow Ratios, adaptive edge noise gating, and camouflage cycle pruning.
           </p>
         </div>
@@ -335,7 +335,7 @@ function ForensicGraphStudioContent() {
 
           {/* Hop Distance Expansion */}
           <div className="flex items-center bg-panel p-1 rounded-lg border border-line-strong text-xs font-mono">
-            <span className="text-slate-400 px-2 text-xs">Hops:</span>
+            <span className="text-muted px-2 text-xs">Hops:</span>
             {([1, 2, 3] as const).map((h) => (
               <button
                 key={h}
@@ -343,7 +343,7 @@ function ForensicGraphStudioContent() {
                 className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
                   egoHops === h
                     ? 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/40'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-muted hover:text-fg-secondary'
                 }`}
               >
                 {h}-Hop
@@ -353,7 +353,7 @@ function ForensicGraphStudioContent() {
 
           {/* Progressive Disclosure Node Capping */}
           <div className="flex items-center bg-panel p-1 rounded-lg border border-line-strong text-xs font-mono">
-            <span className="text-slate-400 px-2 text-xs">Node Cap:</span>
+            <span className="text-muted px-2 text-xs">Node Cap:</span>
             {([25, 50, 100, 250] as const).map((cap) => (
               <button
                 key={cap}
@@ -361,7 +361,7 @@ function ForensicGraphStudioContent() {
                 className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
                   maxNodes === cap
                     ? 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/40'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-muted hover:text-fg-secondary'
                 }`}
               >
                 {cap}
@@ -376,7 +376,7 @@ function ForensicGraphStudioContent() {
               className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
                 viewMode === '2D'
                   ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-muted hover:text-fg-secondary'
               }`}
             >
               <Eye className="w-3.5 h-3.5" />
@@ -387,7 +387,7 @@ function ForensicGraphStudioContent() {
               className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
                 viewMode === '3D'
                   ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-muted hover:text-fg-secondary'
               }`}
             >
               <Box className="w-3.5 h-3.5" />
@@ -405,7 +405,7 @@ function ForensicGraphStudioContent() {
           <div className="p-3 bg-canvas/80 border-b border-line flex flex-wrap items-center justify-between gap-3 z-10 text-xs">
             {/* Adaptive Edge Noise Filter Slider */}
             <div className="flex items-center gap-3 bg-panel px-3 py-1.5 rounded-lg border border-line-strong">
-              <span className="font-semibold text-slate-300 flex items-center gap-1.5">
+              <span className="font-semibold text-fg-secondary flex items-center gap-1.5">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
                 Adaptive Edge-Trust Gate (ĝ_ij ≥ δ_floor):
               </span>
@@ -424,20 +424,20 @@ function ForensicGraphStudioContent() {
             </div>
 
             {/* Fusion Weight Pill */}
-            <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-panel border border-line-strong text-xs font-mono text-slate-300">
+            <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-panel border border-line-strong text-xs font-mono text-fg-secondary">
               <span className="text-purple-400 font-bold">α_u = 0.65</span>
-              <span className="text-slate-500">GNN/Tabular Fusion</span>
+              <span className="text-fg0">GNN/Tabular Fusion</span>
             </div>
 
             {/* Invariant Stats & Camera Controls */}
             <div className="flex items-center gap-2 sm:gap-3 text-xs font-mono">
-              <span className="hidden sm:inline text-slate-400">
-                Pruned: <strong className="text-rose-400">{prunedCount} camouflage edges</strong>
+              <span className="hidden sm:inline text-muted">
+                Pruned: <strong className="text-tier-1-text">{prunedCount} camouflage edges</strong>
               </span>
 
               <button
                 onClick={handleResetCamera}
-                className="flex items-center gap-1 px-2.5 py-1 rounded bg-canvas hover:bg-surface text-slate-300 border border-line-strong cursor-pointer transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1 rounded bg-canvas hover:bg-surface text-fg-secondary border border-line-strong cursor-pointer transition-colors"
                 title="Reset Camera & Fit to Screen"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -446,7 +446,7 @@ function ForensicGraphStudioContent() {
 
               <button
                 onClick={toggleFullscreen}
-                className="flex items-center gap-1 px-2.5 py-1 rounded bg-canvas hover:bg-surface text-slate-300 border border-line-strong cursor-pointer transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1 rounded bg-canvas hover:bg-surface text-fg-secondary border border-line-strong cursor-pointer transition-colors"
                 title="Toggle Fullscreen Canvas"
               >
                 {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -471,7 +471,7 @@ function ForensicGraphStudioContent() {
             </ErrorBoundary>
 
             {/* Bottom-Right Minimap Badge */}
-            <div className="absolute bottom-4 right-4 p-2 rounded-lg bg-panel/85 backdrop-blur-sm border border-line-strong flex items-center gap-2 text-xs font-mono text-slate-400 pointer-events-none select-none">
+            <div className="absolute bottom-4 right-4 p-2 rounded-lg bg-panel/85 backdrop-blur-sm border border-line-strong flex items-center gap-2 text-xs font-mono text-muted pointer-events-none select-none">
               <Compass className="w-4 h-4 text-purple-400 animate-spin-slow" />
               <span>Network Topology Radar</span>
             </div>
@@ -485,7 +485,7 @@ function ForensicGraphStudioContent() {
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </button>
-            <span className="text-xs font-semibold text-slate-400 shrink-0 font-mono">
+            <span className="text-xs font-semibold text-muted shrink-0 font-mono">
               Temporal Step (Sequence Scrubbing):
             </span>
             <input
@@ -496,7 +496,7 @@ function ForensicGraphStudioContent() {
               onChange={(e) => setTemporalStep(Number(e.target.value))}
               className="w-full accent-emerald-500 cursor-pointer"
             />
-            <span className="font-mono text-xs text-emerald-400 shrink-0 tabular-nums min-w-[5ch] text-right">
+            <span className="font-mono text-xs text-tier-3-text shrink-0 tabular-nums min-w-[5ch] text-right">
               {temporalStep}%
             </span>
           </div>
@@ -509,11 +509,11 @@ function ForensicGraphStudioContent() {
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-line">
                 <div>
-                  <span className="text-xs font-mono font-semibold text-slate-400 block">
+                  <span className="text-xs font-mono font-semibold text-muted block">
                     360° Node Context
                   </span>
-                  <h3 className="font-bold text-sm text-slate-100 flex items-center gap-1.5 mt-0.5">
-                    <Building className="w-4 h-4 text-slate-400 shrink-0" />
+                  <h3 className="font-bold text-sm text-fg flex items-center gap-1.5 mt-0.5">
+                    <Building className="w-4 h-4 text-muted shrink-0" />
                     <span className="truncate">{selectedNode.entityName}</span>
                   </h3>
                 </div>
@@ -521,10 +521,10 @@ function ForensicGraphStudioContent() {
                 <span
                   className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                     selectedNode.tier === 1
-                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                      ? 'bg-rose-500/20 text-tier-1-text border border-rose-500/30'
                       : selectedNode.tier === 2
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                      : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                      ? 'bg-amber-500/20 text-tier-2-text border border-amber-500/30'
+                      : 'bg-emerald-500/20 text-tier-3-text border border-emerald-500/30'
                   }`}
                 >
                   Tier {selectedNode.tier}
@@ -539,8 +539,8 @@ function ForensicGraphStudioContent() {
                     onClick={() => setDrawerTab(tab)}
                     className={`py-1 rounded text-center transition-colors cursor-pointer ${
                       drawerTab === tab
-                        ? 'bg-surface text-sky-300 font-bold'
-                        : 'text-slate-400 hover:text-slate-200'
+                        ? 'bg-surface text-accent-2 font-bold'
+                        : 'text-muted hover:text-fg-secondary'
                     }`}
                   >
                     {tab === 'TELEMETRY' ? 'Metrics' : tab === 'ENTITY_RES' ? 'Entity' : tab === 'SANCTIONS' ? 'Watchlist' : 'UBO'}
@@ -552,28 +552,28 @@ function ForensicGraphStudioContent() {
               {drawerTab === 'TELEMETRY' && (
                 <div className="space-y-2 text-xs font-sans">
                   <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
-                    <span className="text-slate-400">Account / IBAN:</span>
-                    <PiiText value={selectedNode.id} type="account" className="font-mono text-slate-200" />
+                    <span className="text-muted">Account / IBAN:</span>
+                    <PiiText value={selectedNode.id} type="account" className="font-mono text-fg-secondary" />
                   </div>
                   <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
-                    <span className="text-slate-400">Pass-Through Flow Ratio:</span>
-                    <strong className="font-mono text-rose-400 tabular-nums">
+                    <span className="text-muted">Pass-Through Flow Ratio:</span>
+                    <strong className="font-mono text-tier-1-text tabular-nums">
                       {selectedNode.phiFlow || '0.994'} (Near 1.0 Pass-Through)
                     </strong>
                   </div>
                   <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
-                    <span className="text-slate-400">Velocity Burst Score:</span>
-                    <strong className="font-mono text-amber-400 tabular-nums">
+                    <span className="text-muted">Velocity Burst Score:</span>
+                    <strong className="font-mono text-tier-2-text tabular-nums">
                       {selectedNode.lambdaU || '4.82'} events / hr
                     </strong>
                   </div>
                   <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
-                    <span className="text-slate-400">Jurisdiction:</span>
-                    <strong className="font-mono text-slate-200">{selectedNode.jurisdiction}</strong>
+                    <span className="text-muted">Jurisdiction:</span>
+                    <strong className="font-mono text-fg-secondary">{selectedNode.jurisdiction}</strong>
                   </div>
                   <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
-                    <span className="text-slate-400">Calibrated Risk Score:</span>
-                    <strong className="font-mono text-rose-400 tabular-nums">{selectedNode.riskScore}</strong>
+                    <span className="text-muted">Calibrated Risk Score:</span>
+                    <strong className="font-mono text-tier-1-text tabular-nums">{selectedNode.riskScore}</strong>
                   </div>
                 </div>
               )}
@@ -581,17 +581,17 @@ function ForensicGraphStudioContent() {
               {drawerTab === 'ENTITY_RES' && (
                 <div className="space-y-3 text-xs">
                   <div className="p-3 bg-canvas rounded-xl border border-line space-y-1">
-                    <span className="text-slate-500 text-xs font-mono block">Resolved Corporate Entity</span>
-                    <span className="font-bold text-slate-100">{selectedNode.entityName}</span>
-                    <span className="text-xs text-slate-400 block">Registration: CTG-EXP-2018-99120</span>
+                    <span className="text-fg0 text-xs font-mono block">Resolved Corporate Entity</span>
+                    <span className="font-bold text-fg">{selectedNode.entityName}</span>
+                    <span className="text-xs text-muted block">Registration: CTG-EXP-2018-99120</span>
                   </div>
 
                   <div className="p-3 bg-canvas rounded-xl border border-line space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400 text-xs">Entity Resolution Match</span>
-                      <span className="font-mono text-emerald-400 font-bold">96.8% Confidence</span>
+                      <span className="text-muted text-xs">Entity Resolution Match</span>
+                      <span className="font-mono text-tier-3-text font-bold">96.8% Confidence</span>
                     </div>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-muted">
                       Merged 3 accounts across City Bank, EBL, and bKash corporate wallet into single synthetic node.
                     </p>
                   </div>
@@ -602,16 +602,16 @@ function ForensicGraphStudioContent() {
                 <div className="space-y-2 text-xs">
                   <div className="p-3 bg-canvas rounded-xl border border-line space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">OFAC SDN Watchlist:</span>
-                      <span className="font-mono text-emerald-400 font-bold">NO DIRECT HIT</span>
+                      <span className="text-muted">OFAC SDN Watchlist:</span>
+                      <span className="font-mono text-tier-3-text font-bold">NO DIRECT HIT</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">UN Consolidated:</span>
-                      <span className="font-mono text-emerald-400 font-bold">CLEAR</span>
+                      <span className="text-muted">UN Consolidated:</span>
+                      <span className="font-mono text-tier-3-text font-bold">CLEAR</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">BFIU Schedule 1:</span>
-                      <span className="font-mono text-amber-400 font-bold">MONITORED ENTITY</span>
+                      <span className="text-muted">BFIU Schedule 1:</span>
+                      <span className="font-mono text-tier-2-text font-bold">MONITORED ENTITY</span>
                     </div>
                   </div>
                 </div>
@@ -620,17 +620,17 @@ function ForensicGraphStudioContent() {
               {drawerTab === 'UBO' && (
                 <div className="space-y-2 text-xs">
                   <div className="p-3 bg-canvas rounded-xl border border-line space-y-1.5 font-mono">
-                    <div className="flex items-center justify-between text-slate-300">
+                    <div className="flex items-center justify-between text-fg-secondary">
                       <span>Tanvir Ahmed (Managing Director)</span>
-                      <span className="text-emerald-400 font-bold">60%</span>
+                      <span className="text-tier-3-text font-bold">60%</span>
                     </div>
-                    <div className="flex items-center justify-between text-slate-300">
+                    <div className="flex items-center justify-between text-fg-secondary">
                       <span>Gulf Star Holdings FZE (Offshore)</span>
-                      <span className="text-amber-400 font-bold">35%</span>
+                      <span className="text-tier-2-text font-bold">35%</span>
                     </div>
-                    <div className="flex items-center justify-between text-slate-300">
+                    <div className="flex items-center justify-between text-fg-secondary">
                       <span>Nominee Shareholder</span>
-                      <span className="text-slate-400 font-bold">5%</span>
+                      <span className="text-muted font-bold">5%</span>
                     </div>
                   </div>
                 </div>
@@ -655,15 +655,15 @@ function ForensicGraphStudioContent() {
 
                 <button
                   onClick={() => router.push(`/cases/CASE-2026-0881`)}
-                  className="w-full py-2 px-3 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full py-2 px-3 rounded-lg bg-surface hover:bg-surface-hover text-fg-secondary font-medium text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <FileText className="w-3.5 h-3.5 text-sky-400" />
+                  <FileText className="w-3.5 h-3.5 text-accent-2" />
                   <span>Open Related Case Dossier</span>
                 </button>
               </div>
             </div>
           ) : (
-            <div className="py-20 text-center text-slate-500 text-xs">
+            <div className="py-20 text-center text-fg0 text-xs">
               Select a node in the graph to inspect 360° compliance telemetry.
             </div>
           )}
@@ -675,7 +675,7 @@ function ForensicGraphStudioContent() {
 
 export default function ForensicGraphStudioPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading Forensic Cash Flow Studio...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-muted">Loading Forensic Cash Flow Studio...</div>}>
       <ForensicGraphStudioContent />
     </Suspense>
   );

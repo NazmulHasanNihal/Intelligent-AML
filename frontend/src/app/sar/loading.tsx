@@ -39,7 +39,7 @@ export default function SarLoading() {
         <div className="h-[450px] rounded-xl bg-panel border border-line p-4 space-y-3">
           <div className="h-4 w-32 bg-surface rounded" />
           <div className="h-full bg-canvas rounded-lg border border-line flex items-center justify-center">
-            <span className="text-xs font-mono text-slate-500">Compiling UNODC goAML v4.2 Schema...</span>
+            <span className="text-xs font-mono text-fg0">Compiling UNODC goAML v4.2 Schema...</span>
           </div>
         </div>
       </div>

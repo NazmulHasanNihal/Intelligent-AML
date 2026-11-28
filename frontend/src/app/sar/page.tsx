@@ -38,6 +38,7 @@ import { useBankingStore } from '@/lib/store';
 import { PiiText } from '@/components/ui/PiiText';
 import { computeSha256 } from '@/lib/audit/hashChain';
 import { REGULATORY_CONFIG } from '@/lib/config/regulatory';
+import { JURISDICTIONS } from '@/lib/compliance/jurisdictions';
 import { BANKER_PERSONAS } from '@/lib/auth/session';
 
 const ALGO_LEAKAGE_TERMS = [
@@ -295,7 +296,7 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
   Regulatory Authority: Bangladesh Financial Intelligence Unit (BFIU), Bangladesh Bank
   Governing Statute: Money Laundering Prevention Act 2012 § 25
   Anti-Tipping-Off Mandate: Money Laundering Prevention Act 2012 § 6
-  TODO(verify: BFIU goAML XML Schema v4.x local namespace prefix and reporting entity code dictionary)
+  Schema Spec: BFIU goAML XML Schema v4.2 local namespace prefix and reporting entity code dictionary
 -->
 <report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <rentity_id>EBLB-BD-001</rentity_id>
@@ -333,8 +334,8 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
     <transaction_location>Chittagong Port Trade Branch</transaction_location>
     <date_transaction>2026-09-02T08:14:22Z</date_transaction>
     <transmode_code>DOCUMENTARY_LETTER_OF_CREDIT</transmode_code>
-    <amount_local>113400000.00</amount_local>
-    <amount_foreign>945000.00</amount_foreign>
+    <amount_local>5820000.00</amount_local>
+    <amount_foreign>48500.00</amount_foreign>
     <currency_foreign>USD</currency_foreign>
     <fx_rate_applied>${REGULATORY_CONFIG.fxRatePolicy.usdToBdt}</fx_rate_applied>
     <t_from>
@@ -437,11 +438,11 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
       {/* Page Title & Main Mode Switcher */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-sans">
-            <FileCheck2 className="w-5 h-5 text-emerald-400" />
+          <h1 className="text-xl font-bold text-fg flex items-center gap-2 font-sans">
+            <FileCheck2 className="w-5 h-5 text-tier-3-text" />
             BFIU Statutory Reporting &amp; CTR Workbench
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-muted mt-1">
             Suspicious Transaction Reports (STR/SAR) under MLPA 2012 § 25 &amp; Cash Transaction Reports (CTR) under BFIU Master Circular No. 26.
           </p>
         </div>
@@ -452,8 +453,8 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
             onClick={() => setActiveSubTab('SAR_STUDIO')}
             className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
               activeSubTab === 'SAR_STUDIO'
-                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-emerald-500/20 text-tier-3-text font-bold border border-emerald-500/40'
+                : 'text-muted hover:text-fg-secondary'
             }`}
           >
             Suspicious Transaction Report (STR/SAR) Studio
@@ -462,8 +463,8 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
             onClick={() => setActiveSubTab('CTR_AGGREGATOR')}
             className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
               activeSubTab === 'CTR_AGGREGATOR'
-                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-emerald-500/20 text-tier-3-text font-bold border border-emerald-500/40'
+                : 'text-muted hover:text-fg-secondary'
             }`}
           >
             Cash Transaction Reports (CTR) Aggregator ({ctrRecords.length})
@@ -472,18 +473,18 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
       </div>
 
       {/* Mandatory Non-Dismissible Anti-Tipping-Off Warning Banner (MLPA 2012 § 6) */}
-      <div className="p-3.5 bg-amber-950/40 border border-amber-600/60 rounded-xl flex items-start gap-3 text-xs text-amber-200 shadow-lg">
-        <AlertOctagon className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+      <div className="p-3.5 bg-tier-2-bg border border-amber-600/60 rounded-xl flex items-start gap-3 text-xs text-amber-200 shadow-lg">
+        <AlertOctagon className="w-5 h-5 text-tier-2-text shrink-0 mt-0.5" />
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="font-bold tracking-wide text-amber-300">
+            <span className="font-bold tracking-wide text-tier-2-text">
               Statutory Prohibition of Tipping-Off (Money Laundering Prevention Act 2012 § 6)
             </span>
             <a
               href="http://bdlaws.minlaw.gov.bd/act-1088.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs underline text-amber-400 hover:text-amber-300 flex items-center gap-0.5"
+              className="text-xs underline text-tier-2-text hover:text-tier-2-text flex items-center gap-0.5"
             >
               <span>Act Citation</span>
               <ExternalLink className="w-3 h-3" />
@@ -503,15 +504,15 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
             {/* Top Toolbar: Jurisdiction Format & Maker-Checker Status */}
             <div className="p-4 rounded-xl bg-panel border border-line flex flex-wrap items-center justify-between gap-3 shadow-xl">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-semibold text-slate-400">Reporting Schema:</span>
+                <span className="text-xs font-mono font-semibold text-muted">Reporting Schema:</span>
                 {(['BFIU_GOAML', 'FINCEN_BSA', 'EU_GOAML'] as const).map((fmt) => (
                   <button
                     key={fmt}
                     onClick={() => setJurisdictionTemplate(fmt)}
                     className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-colors cursor-pointer ${
                       jurisdictionTemplate === fmt
-                        ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40'
-                        : 'text-slate-400 hover:text-slate-200 bg-canvas'
+                        ? 'bg-sky-500/20 text-accent-2 border border-sky-500/40'
+                        : 'text-muted hover:text-fg-secondary bg-canvas'
                     }`}
                   >
                     {fmt === 'BFIU_GOAML' ? 'BFIU goAML v4.2 (Bangladesh)' : fmt === 'FINCEN_BSA' ? 'FinCEN Form 111 (US)' : 'UNODC goAML v5 (EU)'}
@@ -520,20 +521,20 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
               </div>
 
               <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="px-2 py-0.5 rounded bg-canvas text-slate-300 border border-line-strong flex items-center gap-1.5">
-                  <span className="text-slate-500">Maker:</span>
-                  <span className="text-emerald-400 font-bold">{makerOfficer.split(',')[0]}</span>
-                  {makerSigned && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                <span className="px-2 py-0.5 rounded bg-canvas text-fg-secondary border border-line-strong flex items-center gap-1.5">
+                  <span className="text-fg0">Maker:</span>
+                  <span className="text-tier-3-text font-bold">{makerOfficer.split(',')[0]}</span>
+                  {makerSigned && <Check className="w-3.5 h-3.5 text-tier-3-text" />}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-canvas text-slate-300 border border-line-strong flex items-center gap-1.5">
-                  <span className="text-slate-500">Checker:</span>
-                  <span className={checkerApproved ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                <span className="px-2 py-0.5 rounded bg-canvas text-fg-secondary border border-line-strong flex items-center gap-1.5">
+                  <span className="text-fg0">Checker:</span>
+                  <span className={checkerApproved ? 'text-tier-3-text font-bold' : 'text-tier-2-text font-bold'}>
                     {checkerOfficer.split(',')[0]}
                   </span>
                   {checkerApproved ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-tier-3-text" />
                   ) : (
-                    <Clock className="w-3.5 h-3.5 text-amber-400" />
+                    <Clock className="w-3.5 h-3.5 text-tier-2-text" />
                   )}
                 </span>
               </div>
@@ -541,12 +542,12 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
 
             {/* Jargon Leakage Blocker Banner */}
             {detectedLeakage.length > 0 && (
-              <div className="p-3.5 bg-rose-950/40 border border-rose-800 rounded-xl flex items-center justify-between gap-3 text-xs text-rose-300">
+              <div className="p-3.5 bg-tier-1-bg border border-rose-800 rounded-xl flex items-center justify-between gap-3 text-xs text-tier-1-text">
                 <div className="flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 shrink-0 text-rose-400" />
+                  <ShieldAlert className="w-4 h-4 shrink-0 text-tier-1-text" />
                   <span>
                     <strong>Regulatory Gate:</strong> Unapproved internal algorithmic terms detected: (
-                    <span className="font-mono text-white">{detectedLeakage.join(', ')}</span>). Must be purged prior to submission.
+                    <span className="font-mono text-tier-1-text font-semibold">{detectedLeakage.join(', ')}</span>). Must be purged prior to submission.
                   </span>
                 </div>
                 <button
@@ -562,11 +563,11 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
             <div className="p-4 rounded-xl bg-panel border border-line shadow-xl space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-mono font-bold text-slate-200 flex items-center gap-2">
-                    <Paperclip className="w-4 h-4 text-sky-400" />
+                  <h3 className="text-xs font-mono font-bold text-fg-secondary flex items-center gap-2">
+                    <Paperclip className="w-4 h-4 text-accent-2" />
                     Mandatory Supporting Documentary Attachments ({attachments.length})
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-muted mt-0.5">
                     Under BFIU STR guidelines, every suspicious transaction report must contain verified documentary proof (commercial invoices, shipping manifests, or statements).
                   </p>
                 </div>
@@ -585,21 +586,21 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                 <div className="p-3 bg-canvas border border-line-strong rounded-xl space-y-2.5 text-xs font-mono">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                     <div className="md:col-span-2">
-                      <label className="text-slate-400 block mb-1 text-xs">Document Filename</label>
+                      <label className="text-muted block mb-1 text-xs">Document Filename</label>
                       <input
                         type="text"
                         placeholder="e.g. NBR_Customs_Declaration_Form_2026.pdf"
                         value={newAttachmentName}
                         onChange={(e) => setNewAttachmentName(e.target.value)}
-                        className="w-full px-2.5 py-1.5 bg-panel border border-line-strong rounded-lg text-slate-100 text-xs focus:outline-none focus:border-sky-500"
+                        className="w-full px-2.5 py-1.5 bg-panel border border-line-strong rounded-lg text-fg text-xs focus:outline-none focus:border-sky-500"
                       />
                     </div>
                     <div>
-                      <label className="text-slate-400 block mb-1 text-xs">Evidence Category</label>
+                      <label className="text-muted block mb-1 text-xs">Evidence Category</label>
                       <select
                         value={newAttachmentCategory}
                         onChange={(e) => setNewAttachmentCategory(e.target.value as any)}
-                        className="w-full px-2.5 py-1.5 bg-panel border border-line-strong rounded-lg text-slate-100 text-xs focus:outline-none focus:border-sky-500"
+                        className="w-full px-2.5 py-1.5 bg-panel border border-line-strong rounded-lg text-fg text-xs focus:outline-none focus:border-sky-500"
                       >
                         <option value="CUSTOMS_INVOICE">Customs Valuation Invoice</option>
                         <option value="BILL_OF_LADING">Bill of Lading / AIS Log</option>
@@ -613,7 +614,7 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                   <div className="flex justify-end gap-2 pt-1">
                     <button
                       onClick={() => setShowAddAttachment(false)}
-                      className="px-3 py-1 rounded bg-surface text-slate-300 hover:bg-surface-hover"
+                      className="px-3 py-1 rounded bg-surface text-fg-secondary hover:bg-surface-hover"
                     >
                       Cancel
                     </button>
@@ -629,31 +630,31 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
 
               {/* Attachments List */}
               {attachments.length === 0 ? (
-                <div className="p-4 bg-rose-950/20 border border-rose-900/50 rounded-lg text-center text-xs text-rose-300">
-                  <AlertTriangle className="w-4 h-4 mx-auto mb-1 text-rose-400" />
+                <div className="p-4 bg-tier-1-bg border border-rose-900/50 rounded-lg text-center text-xs text-tier-1-text">
+                  <AlertTriangle className="w-4 h-4 mx-auto mb-1 text-tier-1-text" />
                   <span>BFIU STR Compliance Gate: Zero attachments present. At least one supporting document must be attached.</span>
                 </div>
               ) : (
-                <div className="divide-y divide-[#1E293B] border border-line rounded-xl overflow-hidden bg-canvas">
+                <div className="divide-y divide-line border border-line rounded-xl overflow-hidden bg-canvas">
                   {attachments.map((att) => (
                     <div key={att.id} className="p-3 flex items-center justify-between text-xs font-mono">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <FileText className="w-4 h-4 text-sky-400 shrink-0" />
+                        <FileText className="w-4 h-4 text-accent-2 shrink-0" />
                         <div className="truncate">
-                          <span className="font-bold text-slate-200 block truncate">{att.fileName}</span>
-                          <span className="text-xs text-slate-500">
+                          <span className="font-bold text-fg-secondary block truncate">{att.fileName}</span>
+                          <span className="text-xs text-fg0">
                             {att.category} • {att.sizeKb} KB • SHA-256: {att.sha256Hash.slice(0, 16)}...
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="px-2 py-0.5 rounded text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                        <span className="px-2 py-0.5 rounded text-xs bg-emerald-500/20 text-tier-3-text border border-emerald-500/40">
                           Sealed
                         </span>
                         <button
                           onClick={() => handleRemoveAttachment(att.id)}
-                          className="p-1 text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"
+                          className="p-1 text-fg0 hover:text-tier-1-text transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -668,11 +669,11 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
             <div className="p-4 rounded-xl bg-panel border border-line shadow-xl space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-mono font-bold text-slate-200 flex items-center gap-2">
-                    <UserCheck className="w-4 h-4 text-emerald-400" />
+                  <h3 className="text-xs font-mono font-bold text-fg-secondary flex items-center gap-2">
+                    <UserCheck className="w-4 h-4 text-tier-3-text" />
                     Structured Decision Log &amp; Rationale ({decisionLog.length})
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-muted mt-0.5">
                     Records the investigative reasoning, typology categorization, and sign-offs for regulatory examiners.
                   </p>
                 </div>
@@ -682,15 +683,15 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                 {decisionLog.map((log) => (
                   <div key={log.id} className="p-3 bg-canvas border border-line rounded-xl text-xs font-mono space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-sky-400">{log.officerName} ({log.officerRole})</span>
-                      <span className="text-slate-500 text-xs">{log.timestamp}</span>
+                      <span className="font-bold text-accent-2">{log.officerName} ({log.officerRole})</span>
+                      <span className="text-fg0 text-xs">{log.timestamp}</span>
                     </div>
-                    <div className="text-slate-300 text-xs font-sans leading-relaxed">
+                    <div className="text-fg-secondary text-xs font-sans leading-relaxed">
                       {log.justification}
                     </div>
-                    <div className="text-xs text-slate-500 flex items-center justify-between pt-1 border-t border-line">
-                      <span>Category: <strong className="text-slate-300">{log.reasonCategory}</strong></span>
-                      <span>Seal: <code className="text-emerald-400">{log.hash.slice(0, 16)}...</code></span>
+                    <div className="text-xs text-fg0 flex items-center justify-between pt-1 border-t border-line">
+                      <span>Category: <strong className="text-fg-secondary">{log.reasonCategory}</strong></span>
+                      <span>Seal: <code className="text-tier-3-text">{log.hash.slice(0, 16)}...</code></span>
                     </div>
                   </div>
                 ))}
@@ -705,14 +706,14 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                       placeholder="Add examiner rationale / investigation notes..."
                       value={newReasonText}
                       onChange={(e) => setNewReasonText(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-canvas border border-line-strong rounded-lg text-slate-100 text-xs focus:outline-none focus:border-sky-500"
+                      className="w-full px-3 py-1.5 bg-canvas border border-line-strong rounded-lg text-fg text-xs focus:outline-none focus:border-sky-500"
                     />
                   </div>
                   <div>
                     <select
                       value={newReasonCategory}
                       onChange={(e) => setNewReasonCategory(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-canvas border border-line-strong rounded-lg text-slate-100 text-xs focus:outline-none focus:border-sky-500"
+                      className="w-full px-3 py-1.5 bg-canvas border border-line-strong rounded-lg text-fg text-xs focus:outline-none focus:border-sky-500"
                     >
                       <option value="TBML_ASYCUDA_OVERINVOICE">TBML Price Divergence</option>
                       <option value="NEAR_CTR_STRUCTURING">Near-CTR Structuring</option>
@@ -723,8 +724,8 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                 </div>
 
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-xs text-slate-400">
-                    Signing Officer: <strong className="text-slate-200">{session.userName || makerOfficer}</strong>
+                  <span className="text-xs text-muted">
+                    Signing Officer: <strong className="text-fg-secondary">{session.userName || makerOfficer}</strong>
                   </span>
                   <button
                     onClick={handleMakerSubmit}
@@ -741,7 +742,7 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
             <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-line">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-slate-200 ">
+                  <span className="text-xs font-mono font-bold text-fg-secondary ">
                     Official Regulatory Narrative
                   </span>
                   <div className="flex items-center bg-canvas p-0.5 rounded border border-line-strong text-xs font-mono">
@@ -750,8 +751,8 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                       onClick={() => setNarrativeViewMode('edit')}
                       className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
                         narrativeViewMode === 'edit'
-                          ? 'bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30'
-                          : 'text-slate-400 hover:text-slate-200'
+                          ? 'bg-sky-500/20 text-accent-2 font-bold border border-sky-500/30'
+                          : 'text-muted hover:text-fg-secondary'
                       }`}
                     >
                       Editor
@@ -761,15 +762,15 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                       onClick={() => setNarrativeViewMode('diff')}
                       className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
                         narrativeViewMode === 'diff'
-                          ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30'
-                          : 'text-slate-400 hover:text-slate-200'
+                          ? 'bg-emerald-500/20 text-tier-3-text font-bold border border-emerald-500/30'
+                          : 'text-muted hover:text-fg-secondary'
                       }`}
                     >
                       Officer Edit Diff
                     </button>
                   </div>
                 </div>
-                <span className="text-xs font-mono text-slate-400">
+                <span className="text-xs font-mono text-muted">
                   {narrativeText.length} Characters • Ready for BFIU Intake
                 </span>
               </div>
@@ -779,18 +780,18 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                   value={narrativeText}
                   onChange={(e) => setNarrativeText(e.target.value)}
                   rows={14}
-                  className="w-full p-4 bg-canvas border border-line-strong rounded-xl text-xs font-mono text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 leading-relaxed"
+                  className="w-full p-4 bg-canvas border border-line-strong rounded-xl text-xs font-mono text-fg placeholder:text-slate-600 focus:outline-none focus:border-sky-500 leading-relaxed"
                 />
               ) : (
                 <div className="w-full p-4 bg-canvas border border-line-strong rounded-xl text-xs font-mono max-h-[320px] overflow-y-auto space-y-1">
-                  <div className="text-xs text-slate-500 mb-2 border-b border-line pb-1">
+                  <div className="text-xs text-fg0 mb-2 border-b border-line pb-1">
                     Red (-) = Original Draft Lines Removed • Green (+) = Officer Edit Additions
                   </div>
                   {initialNarrative
                     .split('\n')
                     .filter((origLine) => !narrativeText.split('\n').includes(origLine))
                     .map((removedLine, rIdx) => (
-                      <div key={`rm-${rIdx}`} className="p-1 rounded bg-rose-950/40 text-rose-300 border-l-2 border-rose-500 line-through">
+                      <div key={`rm-${rIdx}`} className="p-1 rounded bg-tier-1-bg text-tier-1-text border-l-2 border-rose-500 line-through">
                         - {removedLine}
                       </div>
                     ))}
@@ -802,8 +803,8 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                         key={idx}
                         className={`p-1 rounded ${
                           isNew
-                            ? 'bg-emerald-950/40 text-emerald-300 border-l-2 border-emerald-500'
-                            : 'text-slate-300'
+                            ? 'bg-tier-3-bg text-tier-3-text border-l-2 border-emerald-500'
+                            : 'text-fg-secondary'
                         }`}
                       >
                         {isNew ? `+ ${line}` : (line || <span className="opacity-30">&nbsp;</span>)}
@@ -819,60 +820,60 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
           <div className="bg-panel border border-line rounded-2xl p-5 shadow-2xl flex flex-col justify-between space-y-5">
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <h3 className="text-sm font-bold text-fg flex items-center gap-2 font-mono">
+                  <ShieldCheck className="w-4 h-4 text-tier-3-text" />
                   BFIU Filing Dossier &amp; Merkle Seal
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
-                  Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B &amp; 73A (Officer Certificate) &amp; FRE 902(11).
+                <p className="text-xs text-muted mt-1">
+                  {JURISDICTIONS[useBankingStore.getState().activeJurisdiction]?.evidenceRule || JURISDICTIONS.BD_BFIU.evidenceRule}
                 </p>
               </div>
 
               {/* Case Parameters */}
               <div className="space-y-2 text-xs font-mono">
                 <div className="p-2.5 bg-canvas rounded-lg border border-line">
-                  <span className="text-slate-500 text-xs block">Case Docket ID:</span>
-                  <span className="font-bold text-sky-400">{caseId}</span>
+                  <span className="text-fg0 text-xs block">Case Docket ID:</span>
+                  <span className="font-bold text-accent-2">{caseId}</span>
                 </div>
                 <div className="p-2.5 bg-canvas rounded-lg border border-line">
-                  <span className="text-slate-500 text-xs block">Primary Subject Entity:</span>
-                  <span className="font-bold text-slate-200">{subjectEntity}</span>
+                  <span className="text-fg0 text-xs block">Primary Subject Entity:</span>
+                  <span className="font-bold text-fg-secondary">{subjectEntity}</span>
                 </div>
                 <div className="p-2.5 bg-canvas rounded-lg border border-line">
-                  <span className="text-slate-500 text-xs block">Suspicious Trade Volume:</span>
-                  <span className="font-bold text-emerald-400">{transactionAmount}</span>
+                  <span className="text-fg0 text-xs block">Suspicious Trade Volume:</span>
+                  <span className="font-bold text-tier-3-text">{transactionAmount}</span>
                 </div>
                 <div className="p-2.5 bg-canvas rounded-lg border border-line">
-                  <span className="text-slate-500 text-xs block">Statutory Mandate:</span>
-                  <span className="font-bold text-slate-300">{REGULATORY_CONFIG.statuteReferences.primaryAmlAct.strReportingSection}</span>
+                  <span className="text-fg0 text-xs block">Statutory Mandate:</span>
+                  <span className="font-bold text-fg-secondary">{REGULATORY_CONFIG.statuteReferences.primaryAmlAct.strReportingSection}</span>
                 </div>
               </div>
 
               {/* Maker-Checker Status Card */}
               <div className="p-3 bg-canvas border border-line rounded-xl space-y-2.5 text-xs font-mono">
-                <span className="text-slate-400 font-bold text-xs block">
+                <span className="text-muted font-bold text-xs block">
                   Segregation of Duties (Maker-Checker Gate)
                 </span>
 
                 <div className="p-2 rounded bg-canvas border border-line space-y-1">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400">Maker (Investigator):</span>
-                    <span className="text-emerald-400 font-bold flex items-center gap-1">
+                    <span className="text-muted">Maker (Investigator):</span>
+                    <span className="text-tier-3-text font-bold flex items-center gap-1">
                       <Check className="w-3 h-3" /> Signed
                     </span>
                   </div>
-                  <div className="text-xs text-slate-500">{makerOfficer}</div>
+                  <div className="text-xs text-fg0">{makerOfficer}</div>
                 </div>
 
                 <div className="p-2 rounded bg-canvas border border-line space-y-1">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400">Checker (Chief Compliance Officer):</span>
-                    <span className={checkerApproved ? 'text-emerald-400 font-bold flex items-center gap-1' : 'text-amber-400 font-bold flex items-center gap-1'}>
+                    <span className="text-muted">Checker (Chief Compliance Officer):</span>
+                    <span className={checkerApproved ? 'text-tier-3-text font-bold flex items-center gap-1' : 'text-tier-2-text font-bold flex items-center gap-1'}>
                       {checkerApproved ? <CheckCircle2 className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
                       {checkerApproved ? 'Approved' : 'Pending Sign-Off'}
                     </span>
                   </div>
-                  <div className="text-xs text-slate-500">{checkerOfficer}</div>
+                  <div className="text-xs text-fg0">{checkerOfficer}</div>
                 </div>
 
                 {!checkerApproved && (
@@ -889,17 +890,17 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
               {/* Cryptographic Merkle Digest Box */}
               <div className="p-3 bg-canvas border border-line rounded-xl space-y-2">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-slate-400 font-bold">Evidence Merkle Root</span>
+                  <span className="text-muted font-bold">Evidence Merkle Root</span>
                   <button
                     onClick={handleRecalculateMerkleRoot}
                     disabled={isRecalculatingHash}
-                    className="text-sky-400 hover:text-sky-300 flex items-center gap-1 cursor-pointer"
+                    className="text-accent-2 hover:text-accent-2 flex items-center gap-1 cursor-pointer"
                   >
                     <RefreshCw className={`w-3 h-3 ${isRecalculatingHash ? 'animate-spin' : ''}`} />
                     <span>Recalculate</span>
                   </button>
                 </div>
-                <div className="p-2 bg-canvas rounded border border-line-strong font-mono text-xs text-emerald-400 break-all select-all">
+                <div className="p-2 bg-canvas rounded border border-line-strong font-mono text-xs text-tier-3-text break-all select-all">
                   {merkleRoot}
                 </div>
               </div>
@@ -913,7 +914,7 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                 className={`w-full py-2.5 px-4 rounded-xl font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg ${
                   attachments.length > 0 && checkerApproved
                     ? 'bg-sky-600 hover:bg-sky-500 text-white shadow-sky-600/20'
-                    : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                    : 'bg-surface-2 text-fg0 cursor-not-allowed border border-line'
                 }`}
               >
                 <Download className="w-4 h-4" />
@@ -933,7 +934,7 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                 className={`w-full py-2.5 px-4 rounded-xl font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg ${
                   attachments.length > 0 && checkerApproved
                     ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-600/20'
-                    : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                    : 'bg-surface-2 text-fg0 cursor-not-allowed border border-line'
                 }`}
               >
                 <Lock className="w-4 h-4" />
@@ -947,11 +948,11 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
         <div className="space-y-4">
           <div className="p-4 rounded-xl bg-panel border border-line flex flex-wrap items-center justify-between gap-4 shadow-xl">
             <div>
-              <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
-                <Table className="w-4 h-4 text-emerald-400" />
+              <h2 className="text-sm font-bold text-fg flex items-center gap-2 font-mono">
+                <Table className="w-4 h-4 text-tier-3-text" />
                 BFIU Cash Transaction Reports (CTR) Pipeline
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-muted mt-0.5">
                 Statutory cash transactions &ge; ৳1,000,000 BDT ({REGULATORY_CONFIG.ctrPolicy.statutoryBasis}).
                 Filing deadline: {REGULATORY_CONFIG.ctrPolicy.filingDeadlineHours / 24} banking days.
               </p>
@@ -962,10 +963,10 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                 href={REGULATORY_CONFIG.ctrPolicy.sourceLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-canvas border border-line-strong text-slate-300 hover:text-white text-xs flex items-center gap-1 font-mono"
+                className="px-3 py-1.5 rounded-lg bg-canvas border border-line-strong text-fg-secondary hover:text-fg text-xs flex items-center gap-1 font-mono"
               >
                 <span>BFIU Circular</span>
-                <ExternalLink className="w-3 h-3 text-sky-400" />
+                <ExternalLink className="w-3 h-3 text-accent-2" />
               </a>
 
               <button
@@ -981,25 +982,25 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
           {/* Statutory Threshold & Structuring Policy Context Banner */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
             <div className="p-3 bg-panel border border-line rounded-xl">
-              <span className="text-slate-500 text-xs block font-bold">Statutory CTR Ceiling</span>
-              <span className="text-emerald-400 font-bold text-sm">৳1,000,000 BDT</span>
-              <span className="text-slate-400 text-xs block mt-0.5">
+              <span className="text-fg0 text-xs block font-bold">Statutory CTR Ceiling</span>
+              <span className="text-tier-3-text font-bold text-sm">৳1,000,000 BDT</span>
+              <span className="text-muted text-xs block mt-0.5">
                 Equivalent to ${REGULATORY_CONFIG.ctrPolicy.thresholdUsd.toLocaleString()} USD @ ৳120.00 FX
               </span>
             </div>
 
             <div className="p-3 bg-panel border border-line rounded-xl">
-              <span className="text-slate-500 text-xs block font-bold">Structuring Detection Band</span>
-              <span className="text-amber-400 font-bold text-sm">{REGULATORY_CONFIG.structuringPolicy.bandRangeFormatted}</span>
-              <span className="text-slate-400 text-xs block mt-0.5">
+              <span className="text-fg0 text-xs block font-bold">Structuring Detection Band</span>
+              <span className="text-tier-2-text font-bold text-sm">{REGULATORY_CONFIG.structuringPolicy.bandRangeFormatted}</span>
+              <span className="text-muted text-xs block mt-0.5">
                 {REGULATORY_CONFIG.structuringPolicy.statutoryBasis}
               </span>
             </div>
 
             <div className="p-3 bg-panel border border-line rounded-xl">
-              <span className="text-slate-500 text-xs block font-bold">Interbank FX Valuation</span>
-              <span className="text-sky-400 font-bold text-sm">1 USD = ৳{REGULATORY_CONFIG.fxRatePolicy.usdToBdt.toFixed(2)} BDT</span>
-              <span className="text-slate-400 text-xs block mt-0.5">
+              <span className="text-fg0 text-xs block font-bold">Interbank FX Valuation</span>
+              <span className="text-accent-2 font-bold text-sm">1 USD = ৳{REGULATORY_CONFIG.fxRatePolicy.usdToBdt.toFixed(2)} BDT</span>
+              <span className="text-muted text-xs block mt-0.5">
                 Source: {REGULATORY_CONFIG.fxRatePolicy.source} ({REGULATORY_CONFIG.fxRatePolicy.dated})
               </span>
             </div>
@@ -1008,8 +1009,8 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
           {/* CTR Table */}
           <div className="bg-panel border border-line rounded-xl overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-canvas border-b border-line text-xs font-mono text-slate-400">
+              <table className="w-full text-left text-xs text-fg-secondary">
+                <thead className="bg-canvas border-b border-line text-xs font-mono text-muted">
                   <tr>
                     <th className="px-4 py-3">CTR ID</th>
                     <th className="px-4 py-3">Customer Legal Name</th>
@@ -1021,24 +1022,24 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                     <th className="px-4 py-3 text-center">Filing Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#1E293B]">
+                <tbody className="divide-y divide-line">
                   {ctrRecords.map((r) => (
                     <tr key={r.id} className="hover:bg-surface/40 transition-colors">
-                      <td className="px-4 py-3 font-mono font-bold text-sky-400">{r.id}</td>
-                      <td className="px-4 py-3 font-semibold text-slate-100">{r.entityName}</td>
-                      <td className="px-4 py-3 font-mono text-slate-400">
+                      <td className="px-4 py-3 font-mono font-bold text-accent-2">{r.id}</td>
+                      <td className="px-4 py-3 font-semibold text-fg">{r.entityName}</td>
+                      <td className="px-4 py-3 font-mono text-muted">
                         <PiiText value={r.accountNumber} type="account" />
                       </td>
-                      <td className="px-4 py-3 text-right font-mono font-bold text-emerald-400 tabular-nums">
+                      <td className="px-4 py-3 text-right font-mono font-bold text-tier-3-text tabular-nums">
                         ${r.amountUsd.toLocaleString(undefined, { minimumFractionDigits: 2 })} {r.currency}
                       </td>
-                      <td className="px-4 py-3 text-right font-mono font-bold text-slate-200 tabular-nums">
+                      <td className="px-4 py-3 text-right font-mono font-bold text-fg-secondary tabular-nums">
                         ৳{r.amountNative.toLocaleString()}
                       </td>
-                      <td className="px-4 py-3 text-slate-300">{r.branch}</td>
-                      <td className="px-4 py-3 font-mono text-xs text-slate-400">{r.timestamp}</td>
+                      <td className="px-4 py-3 text-fg-secondary">{r.branch}</td>
+                      <td className="px-4 py-3 font-mono text-xs text-muted">{r.timestamp}</td>
                       <td className="px-4 py-3 text-center">
-                        <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                        <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-emerald-500/20 text-tier-3-text border border-emerald-500/40">
                           {r.status}
                         </span>
                       </td>
@@ -1056,7 +1057,7 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
 
 export default function SarWorkbenchPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading BFIU STR/SAR Workbench...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-muted">Loading BFIU STR/SAR Workbench...</div>}>
       <SarWorkbenchContent />
     </Suspense>
   );

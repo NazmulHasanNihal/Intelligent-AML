@@ -279,27 +279,27 @@ export default function AlertTriagePage() {
       {/* Header and Controls */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-sans">
+          <h1 className="text-xl font-bold text-fg flex items-center gap-2 font-sans">
             <ShieldAlert className="w-5 h-5 text-rose-500" />
             High-Throughput Alert Triage Queue
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-muted mt-1">
             Real-time calibrated risk prioritization for multi-rail clearing (SWIFT MT, ISO 20022 pacs, BEFTN, MFS). {alerts.length.toLocaleString()} total live alerts loaded.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Quick Shortcuts Pill */}
-          <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-panel border border-line-strong rounded-lg text-xs text-slate-400 font-mono">
-            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">J</kbd>/<kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">K</kbd> Navigate</span>
+          <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-panel border border-line-strong rounded-lg text-xs text-muted font-mono">
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-fg-secondary">J</kbd>/<kbd className="px-1.5 py-0.5 rounded bg-surface text-fg-secondary">K</kbd> Navigate</span>
             <span>•</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">Enter</kbd> Inspect Wire</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-fg-secondary">Enter</kbd> Inspect Wire</span>
             <span>•</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">G</kbd> Graph</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-fg-secondary">G</kbd> Graph</span>
             <span>•</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">F</kbd> Freeze</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-fg-secondary">F</kbd> Freeze</span>
             <span>•</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">E</kbd> Escalate</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-fg-secondary">E</kbd> Escalate</span>
           </div>
 
           {/* Export Actions */}
@@ -307,17 +307,17 @@ export default function AlertTriagePage() {
             <button
               onClick={exportCsv}
               title="Export CSV"
-              className="px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:text-white hover:bg-surface flex items-center gap-1.5 cursor-pointer"
+              className="px-2.5 py-1 rounded text-xs font-medium text-fg-secondary hover:text-white hover:bg-surface flex items-center gap-1.5 cursor-pointer"
             >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+              <FileSpreadsheet className="w-3.5 h-3.5 text-tier-3-text" />
               <span>CSV</span>
             </button>
             <button
               onClick={exportJson}
               title="Export JSON"
-              className="px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:text-white hover:bg-surface flex items-center gap-1.5 cursor-pointer"
+              className="px-2.5 py-1 rounded text-xs font-medium text-fg-secondary hover:text-white hover:bg-surface flex items-center gap-1.5 cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 text-sky-400" />
+              <Download className="w-3.5 h-3.5 text-accent-2" />
               <span>JSON</span>
             </button>
           </div>
@@ -327,8 +327,8 @@ export default function AlertTriagePage() {
             <button
               onClick={() => setDensityMode('compact')}
               className={`px-2.5 py-1 rounded transition-all cursor-pointer ${densityMode === 'compact'
-                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-emerald-500/20 text-tier-3-text font-bold border border-emerald-500/40'
+                : 'text-muted hover:text-fg-secondary'
                 }`}
             >
               Compact
@@ -336,8 +336,8 @@ export default function AlertTriagePage() {
             <button
               onClick={() => setDensityMode('comfortable')}
               className={`px-2.5 py-1 rounded transition-all cursor-pointer ${densityMode === 'comfortable'
-                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-emerald-500/20 text-tier-3-text font-bold border border-emerald-500/40'
+                : 'text-muted hover:text-fg-secondary'
                 }`}
             >
               Comfortable
@@ -353,8 +353,8 @@ export default function AlertTriagePage() {
           <button
             onClick={() => setSelectedTier('ALL')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 'ALL'
-              ? 'bg-surface text-slate-100 border border-line-strong'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-surface text-fg border border-line-strong'
+              : 'text-muted hover:text-fg-secondary'
               }`}
           >
             All Alerts ({alerts.length})
@@ -362,8 +362,8 @@ export default function AlertTriagePage() {
           <button
             onClick={() => setSelectedTier(1)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 1
-              ? 'bg-rose-950/60 text-rose-300 border border-rose-800/60'
-              : 'text-rose-400/80 hover:bg-rose-950/20'
+              ? 'bg-tier-1-bg text-tier-1-text border border-rose-800/60'
+              : 'text-tier-1-text/80 hover:bg-tier-1-bg'
               }`}
           >
             <span className="w-2 h-2 rounded-full bg-rose-500" />
@@ -372,8 +372,8 @@ export default function AlertTriagePage() {
           <button
             onClick={() => setSelectedTier(2)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 2
-              ? 'bg-amber-950/60 text-amber-300 border border-amber-800/60'
-              : 'text-amber-400/80 hover:bg-amber-950/20'
+              ? 'bg-tier-2-bg text-tier-2-text border border-amber-800/60'
+              : 'text-tier-2-text/80 hover:bg-tier-2-bg'
               }`}
           >
             <span className="w-2 h-2 rounded-full bg-amber-500" />
@@ -382,8 +382,8 @@ export default function AlertTriagePage() {
           <button
             onClick={() => setSelectedTier(3)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 3
-              ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60'
-              : 'text-emerald-400/80 hover:bg-emerald-950/20'
+              ? 'bg-tier-3-bg text-tier-3-text border border-emerald-800/60'
+              : 'text-tier-3-text/80 hover:bg-tier-3-bg'
               }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -396,7 +396,7 @@ export default function AlertTriagePage() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as any)}
-            className="px-3 py-1.5 bg-panel border border-line-strong rounded-lg text-xs text-slate-300 focus:outline-none focus:border-emerald-500 cursor-pointer"
+            className="px-3 py-1.5 bg-panel border border-line-strong rounded-lg text-xs text-fg-secondary focus:outline-none focus:border-emerald-500 cursor-pointer"
           >
             <option value="ALL">All Statuses</option>
             <option value="PENDING_TRIAGE">Pending Triage</option>
@@ -407,13 +407,13 @@ export default function AlertTriagePage() {
           </select>
 
           <div className="relative min-w-[300px]">
-            <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
+            <Search className="w-4 h-4 absolute left-3 top-2.5 text-fg0" />
             <input
               type="text"
               placeholder="Search by ID, Entity, Account, BIC, Typology..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-panel border border-line-strong rounded-lg text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
+              className="w-full pl-9 pr-3 py-1.5 bg-panel border border-line-strong rounded-lg text-xs text-fg placeholder:text-fg0 focus:outline-none focus:border-emerald-500"
             />
           </div>
         </div>
@@ -424,11 +424,11 @@ export default function AlertTriagePage() {
         <div className="overflow-x-auto">
           <div className="min-w-[1100px]" role="table" aria-label="Alert triage queue" aria-rowcount={filteredAlerts.length}>
             {/* Table Header */}
-            <div role="row" className="grid grid-cols-[118px_minmax(200px,1fr)_120px_112px_104px_64px_64px_minmax(96px,0.5fr)_84px] gap-2 px-4 py-2.5 bg-canvas border-b border-line text-xs font-medium text-slate-400 items-center select-none">
+            <div role="row" className="grid grid-cols-[118px_minmax(200px,1fr)_120px_112px_104px_64px_64px_minmax(96px,0.5fr)_84px] gap-2 px-4 py-2.5 bg-canvas border-b border-line text-xs font-medium text-muted items-center select-none">
               <div className="flex items-center gap-2">
-                <button onClick={toggleSelectAll} className="text-slate-400 hover:text-slate-200 cursor-pointer">
+                <button onClick={toggleSelectAll} className="text-muted hover:text-fg-secondary cursor-pointer">
                   {selectedRowIds.size === filteredAlerts.length && filteredAlerts.length > 0 ? (
-                    <CheckSquare className="w-4 h-4 text-emerald-400" />
+                    <CheckSquare className="w-4 h-4 text-tier-3-text" />
                   ) : (
                     <Square className="w-4 h-4" />
                   )}
@@ -448,7 +448,7 @@ export default function AlertTriagePage() {
             {/* Virtualized Body */}
             <div
               ref={parentRef}
-              className="overflow-y-auto max-h-[640px] divide-y divide-[#1E293B]/60"
+              className="overflow-y-auto max-h-[640px] divide-y divide-line/60"
             >
               <div
                 style={{
@@ -480,7 +480,7 @@ export default function AlertTriagePage() {
                         transform: `translateY(${virtualRow.start}px)`,
                       }}
                       className={`grid grid-cols-[118px_minmax(200px,1fr)_120px_112px_104px_64px_64px_minmax(96px,0.5fr)_84px] gap-2 px-4 items-center overflow-hidden text-xs transition-colors group cursor-pointer ${isSelected
-                        ? 'bg-emerald-950/20'
+                        ? 'bg-tier-3-bg'
                         : isFocused
                           ? 'bg-surface/60 ring-1 ring-inset ring-sky-500/40'
                           : 'hover:bg-surface/40'
@@ -493,22 +493,22 @@ export default function AlertTriagePage() {
                             e.stopPropagation();
                             toggleSelectRow(alert.id);
                           }}
-                          className="text-slate-400 hover:text-slate-200 cursor-pointer"
+                          className="text-muted hover:text-fg-secondary cursor-pointer"
                         >
                           {isSelected ? (
-                            <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
+                            <CheckSquare className="w-3.5 h-3.5 text-tier-3-text" />
                           ) : (
                             <Square className="w-3.5 h-3.5" />
                           )}
                         </button>
-                        <span className="font-semibold text-slate-200 text-xs tabular-nums whitespace-nowrap">
+                        <span className="font-semibold text-fg-secondary text-xs tabular-nums whitespace-nowrap">
                           {alert.id}
                         </span>
                       </div>
 
                       {/* Entity & Account */}
                       <div className="truncate">
-                        <div className="font-medium text-slate-100 truncate flex items-center gap-1.5">
+                        <div className="font-medium text-fg truncate flex items-center gap-1.5">
                           <span className="truncate min-w-0">{alert.entityName}</span>
                           {alert.status === 'UNDER_INVESTIGATION' && (
                             <span className="shrink-0 px-1.5 py-0.2 rounded text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">
@@ -516,42 +516,42 @@ export default function AlertTriagePage() {
                             </span>
                           )}
                           {alert.status === 'FALSE_POSITIVE_DISMISSED' && (
-                            <span className="shrink-0 px-1.5 py-0.2 rounded text-xs bg-slate-700 text-slate-300 font-mono">
+                            <span className="shrink-0 px-1.5 py-0.2 rounded text-xs bg-surface-hover text-fg-secondary font-mono">
                               Dismissed
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-slate-400 font-mono flex items-center gap-1.5 truncate">
-                          <PiiText value={alert.account} type="account" className="text-slate-400" />
+                        <div className="text-xs text-muted font-mono flex items-center gap-1.5 truncate">
+                          <PiiText value={alert.account} type="account" className="text-muted" />
                           <span>•</span>
-                          <span className="text-slate-500 truncate">{alert.typology}</span>
+                          <span className="text-fg0 truncate">{alert.typology}</span>
                         </div>
                       </div>
 
                       {/* Amount */}
                       <div className="text-right min-w-0">
-                        <div className="font-semibold text-slate-100 tabular-nums truncate">
+                        <div className="font-semibold text-fg tabular-nums truncate">
                           {displayCurrency === 'USD' ? `$${alert.amount.toLocaleString('en-US')}` : `৳${alert.amountBdt.toLocaleString('en-US')}`}
                         </div>
-                        <div className="text-xs text-slate-500 tabular-nums truncate">
+                        <div className="text-xs text-fg0 tabular-nums truncate">
                           {displayCurrency === 'USD' ? `৳${alert.amountBdt.toLocaleString('en-US')}` : `$${alert.amount.toLocaleString('en-US')}`}
                         </div>
                       </div>
 
                       {/* Rail & BIC */}
-                      <div className="text-xs text-slate-300 leading-tight truncate">
+                      <div className="text-xs text-fg-secondary leading-tight truncate">
                         <div className="truncate">{alert.rail}</div>
-                        <div className="text-xs text-slate-500 truncate">{alert.bic}</div>
+                        <div className="text-xs text-fg0 truncate">{alert.bic}</div>
                       </div>
 
                       {/* Risk Tier Badge */}
                       <div className="text-center">
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-xs font-mono font-bold whitespace-nowrap border-l-2 ${alert.tierCode === 1
-                            ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30 border-l-rose-500'
+                            ? 'bg-rose-500/15 text-tier-1-text border border-rose-500/30 border-l-rose-500'
                             : alert.tierCode === 2
-                              ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30 border-l-amber-500'
-                              : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 border-l-emerald-500'
+                              ? 'bg-amber-500/15 text-tier-2-text border border-amber-500/30 border-l-amber-500'
+                              : 'bg-emerald-500/15 text-tier-3-text border border-emerald-500/30 border-l-emerald-500'
                             }`}
                         >
                           Tier {alert.tierCode} · {alert.tierCode === 1 ? 'Hold' : alert.tierCode === 2 ? 'Review' : 'Clear'}
@@ -560,8 +560,8 @@ export default function AlertTriagePage() {
 
                       {/* Calibrated Risk Score & Decision Set */}
                       <div className="text-center font-mono text-xs">
-                        <div className="font-bold text-slate-200 tabular-nums">{alert.riskScore}</div>
-                        <div className={`text-xs ${alert.tierCode === 1 ? 'text-rose-400' : alert.tierCode === 2 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                        <div className="font-bold text-fg-secondary tabular-nums">{alert.riskScore}</div>
+                        <div className={`text-xs ${alert.tierCode === 1 ? 'text-tier-1-text' : alert.tierCode === 2 ? 'text-tier-2-text' : 'text-tier-3-text'}`}>
                           {alert.decisionSet}
                         </div>
                       </div>
@@ -570,10 +570,10 @@ export default function AlertTriagePage() {
                       <div className="text-center font-mono text-xs tabular-nums">
                         <span
                           className={`px-1.5 py-0.5 rounded ${alert.slaMinutesLeft < 60
-                            ? 'bg-rose-950/60 text-rose-400 font-bold border border-rose-800/40 animate-pulse'
+                            ? 'bg-tier-1-bg text-tier-1-text font-bold border border-rose-800/40 animate-pulse'
                             : alert.slaMinutesLeft < 180
-                              ? 'bg-amber-950/60 text-amber-400'
-                              : 'text-slate-400'
+                              ? 'bg-tier-2-bg text-tier-2-text'
+                              : 'text-muted'
                             }`}
                         >
                           {alert.slaMinutesLeft}m
@@ -581,7 +581,7 @@ export default function AlertTriagePage() {
                       </div>
 
                       {/* Assignee */}
-                      <div className="text-xs text-slate-300 truncate font-mono">
+                      <div className="text-xs text-fg-secondary truncate font-mono">
                         {alert.assignee}
                       </div>
 
@@ -590,22 +590,22 @@ export default function AlertTriagePage() {
                         <button
                           onClick={() => setInspectingAlert(alert)}
                           title="Inspect Raw SWIFT / ISO Message"
-                          className="p-1 rounded bg-surface hover:bg-surface-hover text-slate-300 hover:text-white transition-colors cursor-pointer"
+                          className="p-1 rounded bg-surface hover:bg-surface-hover text-fg-secondary hover:text-white transition-colors cursor-pointer"
                         >
-                          <FileText className="w-3.5 h-3.5 text-sky-400" />
+                          <FileText className="w-3.5 h-3.5 text-accent-2" />
                         </button>
                         <Link
                           href={`/graph?node=${encodeURIComponent(alert.account)}`}
                           title="Inspect Multi-Hop Flow Graph"
-                          className="p-1 rounded bg-surface hover:bg-surface-hover text-slate-300 hover:text-white transition-colors"
+                          className="p-1 rounded bg-surface hover:bg-surface-hover text-fg-secondary hover:text-white transition-colors"
                         >
-                          <GitFork className="w-3.5 h-3.5 text-emerald-400" />
+                          <GitFork className="w-3.5 h-3.5 text-tier-3-text" />
                         </Link>
                         {alert.caseId && (
                           <Link
                             href={`/cases/${alert.caseId}`}
                             title="Open Linked Case Dossier"
-                            className="p-1 rounded bg-surface hover:bg-surface-hover text-slate-300 hover:text-white transition-colors"
+                            className="p-1 rounded bg-surface hover:bg-surface-hover text-fg-secondary hover:text-white transition-colors"
                           >
                             <ExternalLink className="w-3.5 h-3.5 text-purple-400" />
                           </Link>
@@ -622,14 +622,14 @@ export default function AlertTriagePage() {
 
       {/* Sticky Floating Bulk Action Drawer */}
       {selectedRowIds.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-panel border border-line-strong shadow-2xl rounded-2xl px-5 sm:px-6 py-3 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-200 animate-in slide-in-from-bottom duration-200">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-panel border border-line-strong shadow-2xl rounded-2xl px-5 sm:px-6 py-3 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-fg-secondary animate-in slide-in-from-bottom duration-200">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold text-slate-100">
+            <span className="font-semibold text-fg">
               {selectedRowIds.size} Alerts Selected
             </span>
-            <span className="text-slate-400 hidden sm:inline">
-              (Total Exposure: <strong className="font-mono text-emerald-400 tabular-nums">${totalSelectedExposure.toLocaleString()}</strong>)
+            <span className="text-muted hidden sm:inline">
+              (Total Exposure: <strong className="font-mono text-tier-3-text tabular-nums">${totalSelectedExposure.toLocaleString()}</strong>)
             </span>
           </div>
 
@@ -640,7 +640,7 @@ export default function AlertTriagePage() {
             <select
               value={assigneeTarget}
               onChange={(e) => setAssigneeTarget(e.target.value)}
-              className="px-2.5 py-1 bg-surface border border-line-strong rounded text-slate-200 text-xs focus:outline-none"
+              className="px-2.5 py-1 bg-surface border border-line-strong rounded text-fg-secondary text-xs focus:outline-none"
             >
               <option value="Amina Rahman, CFE (Lead Investigator)">Amina Rahman, CFE (Lead Investigator)</option>
               <option value="Tanvir Ahmed (Triage Analyst)">Tanvir Ahmed (Triage Analyst)</option>
@@ -649,7 +649,7 @@ export default function AlertTriagePage() {
             </select>
             <button
               onClick={handleBatchAssign}
-              className="px-3 py-1 rounded bg-surface hover:bg-surface-hover text-slate-200 font-semibold border border-line-strong cursor-pointer"
+              className="px-3 py-1 rounded bg-surface hover:bg-surface-hover text-fg-secondary font-semibold border border-line-strong cursor-pointer"
             >
               Assign
             </button>
@@ -668,7 +668,7 @@ export default function AlertTriagePage() {
                   details: `Execute regulatory freeze on ${selectedRowIds.size} flagged accounts across payment rails. Total exposure: $${totalSelectedExposure.toLocaleString()}`
                 });
               }}
-              className="px-3 py-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-lg bg-tier-1-bg hover:bg-rose-900/80 text-tier-1-text border border-rose-800/60 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Lock className="w-3.5 h-3.5" />
               <span>Freeze (4-Eyes)</span>
@@ -684,7 +684,7 @@ export default function AlertTriagePage() {
 
             <Link
               href="/rfi"
-              className="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 font-medium transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-hover text-fg-secondary font-medium transition-colors flex items-center gap-1.5"
             >
               <MailQuestion className="w-3.5 h-3.5 text-indigo-400" />
               <span>Dispatch RFI</span>
@@ -692,14 +692,14 @@ export default function AlertTriagePage() {
 
             <button
               onClick={handleBatchDismiss}
-              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-medium cursor-pointer"
+              className="px-3 py-1.5 rounded-lg bg-surface-2 hover:bg-surface-hover text-fg-secondary border border-line font-medium cursor-pointer"
             >
               Dismiss (FP)
             </button>
 
             <button
               onClick={() => setSelectedRowIds(new Set())}
-              className="px-2.5 py-1.5 text-slate-400 hover:text-slate-200 cursor-pointer"
+              className="px-2.5 py-1.5 text-muted hover:text-fg-secondary cursor-pointer"
             >
               Clear
             </button>
@@ -715,23 +715,23 @@ export default function AlertTriagePage() {
             <div className="p-5 bg-canvas border-b border-line flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${inspectingAlert.tierCode === 1 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                  <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${inspectingAlert.tierCode === 1 ? 'bg-rose-500/20 text-tier-1-text border border-rose-500/40' : 'bg-amber-500/20 text-tier-2-text border border-amber-500/40'
                     }`}>
                     TIER {inspectingAlert.tierCode} HOLD
                   </span>
-                  <h2 className="text-base font-bold text-slate-100 font-mono">
+                  <h2 className="text-base font-bold text-fg font-mono">
                     {inspectingAlert.id} — Raw Wire Inspector
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
-                  Interbank clearing telemetry • Rail: <strong className="text-slate-200">{inspectingAlert.rail}</strong> • BIC: <strong className="text-slate-200">{inspectingAlert.bic}</strong>
+                <p className="text-xs text-muted mt-1">
+                  Interbank clearing telemetry • Rail: <strong className="text-fg-secondary">{inspectingAlert.rail}</strong> • BIC: <strong className="text-fg-secondary">{inspectingAlert.bic}</strong>
                 </p>
               </div>
 
               <button
                 onClick={() => setInspectingAlert(null)}
                 aria-label="Close inspector"
-                className="p-1.5 rounded-lg hover:bg-surface text-slate-400 hover:text-slate-100 cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-surface text-muted hover:text-fg cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -742,66 +742,66 @@ export default function AlertTriagePage() {
               {/* Highlight Ribbon */}
               <div className="p-4 rounded-xl bg-canvas border border-line space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Flagged Entity:</span>
-                  <span className="font-semibold text-slate-100">{inspectingAlert.entityName}</span>
+                  <span className="text-muted">Flagged Entity:</span>
+                  <span className="font-semibold text-fg">{inspectingAlert.entityName}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Account Number:</span>
-                  <PiiText value={inspectingAlert.account} type="account" className="font-mono text-slate-200" />
+                  <span className="text-muted">Account Number:</span>
+                  <PiiText value={inspectingAlert.account} type="account" className="font-mono text-fg-secondary" />
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Amount &amp; Currency:</span>
-                  <span className="font-mono font-bold text-emerald-400 text-sm">
+                  <span className="text-muted">Amount &amp; Currency:</span>
+                  <span className="font-mono font-bold text-tier-3-text text-sm">
                     ${inspectingAlert.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} USD
-                    <span className="text-slate-500 text-xs ml-1">(৳{inspectingAlert.amountBdt.toLocaleString()} BDT)</span>
+                    <span className="text-fg0 text-xs ml-1">(৳{inspectingAlert.amountBdt.toLocaleString()} BDT)</span>
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Typology Match:</span>
-                  <span className="font-mono text-rose-300">{inspectingAlert.typology}</span>
+                  <span className="text-muted">Typology Match:</span>
+                  <span className="font-mono text-tier-1-text">{inspectingAlert.typology}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">SLA Countdown:</span>
-                  <span className="font-mono text-amber-400 font-bold">{inspectingAlert.slaMinutesLeft} minutes remaining</span>
+                  <span className="text-muted">SLA Countdown:</span>
+                  <span className="font-mono text-tier-2-text font-bold">{inspectingAlert.slaMinutesLeft} minutes remaining</span>
                 </div>
               </div>
 
               {/* Wire Message Payload Decomposition */}
               <div>
-                <h3 className="text-xs font-bold text-slate-300 mb-2 font-mono flex items-center justify-between">
+                <h3 className="text-xs font-bold text-fg-secondary mb-2 font-mono flex items-center justify-between">
                   <span>Decomposed Clearing Payload ({inspectingAlert.wirePayload?.messageType || 'SWIFT MT700'})</span>
-                  <span className="text-xs text-emerald-400 font-normal">Validated Syntax</span>
+                  <span className="text-xs text-tier-3-text font-normal">Validated Syntax</span>
                 </h3>
 
-                <div className="bg-canvas border border-line rounded-xl p-4 font-mono text-xs space-y-2 text-slate-300">
+                <div className="bg-canvas border border-line rounded-xl p-4 font-mono text-xs space-y-2 text-fg-secondary">
                   {inspectingAlert.wirePayload ? (
                     <>
                       <div className="flex items-start gap-3 py-1 border-b border-line/40">
-                        <span className="text-sky-400 font-bold w-28 shrink-0">Message Rail:</span>
-                        <span className="text-slate-100">{inspectingAlert.wirePayload.messageType}</span>
+                        <span className="text-accent-2 font-bold w-28 shrink-0">Message Rail:</span>
+                        <span className="text-fg">{inspectingAlert.wirePayload.messageType}</span>
                       </div>
                       <div className="flex items-start gap-3 py-1 border-b border-line/40">
-                        <span className="text-sky-400 font-bold w-28 shrink-0">Ordering Party:</span>
-                        <span className="text-slate-200">{inspectingAlert.wirePayload.orderingCustomer}</span>
+                        <span className="text-accent-2 font-bold w-28 shrink-0">Ordering Party:</span>
+                        <span className="text-fg-secondary">{inspectingAlert.wirePayload.orderingCustomer}</span>
                       </div>
                       <div className="flex items-start gap-3 py-1 border-b border-line/40">
-                        <span className="text-sky-400 font-bold w-28 shrink-0">Ordering Bank:</span>
-                        <span className="text-slate-200">{inspectingAlert.wirePayload.orderingInstitution}</span>
+                        <span className="text-accent-2 font-bold w-28 shrink-0">Ordering Bank:</span>
+                        <span className="text-fg-secondary">{inspectingAlert.wirePayload.orderingInstitution}</span>
                       </div>
                       <div className="flex items-start gap-3 py-1 border-b border-line/40">
-                        <span className="text-sky-400 font-bold w-28 shrink-0">Beneficiary:</span>
-                        <span className="text-slate-200">{inspectingAlert.wirePayload.beneficiaryCustomer}</span>
+                        <span className="text-accent-2 font-bold w-28 shrink-0">Beneficiary:</span>
+                        <span className="text-fg-secondary">{inspectingAlert.wirePayload.beneficiaryCustomer}</span>
                       </div>
                       <div className="flex items-start gap-3 py-1 border-b border-line/40">
-                        <span className="text-sky-400 font-bold w-28 shrink-0">Remittance:</span>
-                        <span className="text-emerald-400">{inspectingAlert.wirePayload.remittanceInfo}</span>
+                        <span className="text-accent-2 font-bold w-28 shrink-0">Remittance:</span>
+                        <span className="text-tier-3-text">{inspectingAlert.wirePayload.remittanceInfo}</span>
                       </div>
-                      <div className="pt-1 text-xs text-rose-400">
+                      <div className="pt-1 text-xs text-tier-1-text">
                         Regulatory Indicators: {inspectingAlert.wirePayload.regulatoryFlags.join(' • ')}
                       </div>
                     </>
                   ) : (
-                    <div className="text-slate-400">Standard Clearing Payload Verified</div>
+                    <div className="text-muted">Standard Clearing Payload Verified</div>
                   )}
                 </div>
               </div>
@@ -810,14 +810,14 @@ export default function AlertTriagePage() {
               <div className="p-4 rounded-xl bg-canvas border border-line space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-cyan-400" />
-                    <span className="text-xs font-bold text-slate-100 font-mono">
+                    <Sparkles className="w-4 h-4 text-accent-2" />
+                    <span className="text-xs font-bold text-fg font-mono">
                       C-STGB Model Explainability (12 Invariants)
                     </span>
                   </div>
                   <button
                     onClick={() => setShowExplainability(!showExplainability)}
-                    className="text-xs font-mono text-cyan-400 hover:text-cyan-300 underline cursor-pointer"
+                    className="text-xs font-mono text-accent-2 hover:text-accent-2 underline cursor-pointer"
                   >
                     {showExplainability ? 'Hide Attribution Details' : 'Show SHAP Waterfall (12 Invariants)'}
                   </button>
@@ -825,56 +825,56 @@ export default function AlertTriagePage() {
 
                 {showExplainability && (
                   <div className="space-y-3 pt-2 text-xs font-mono border-t border-line">
-                    <div className="p-2.5 rounded-lg bg-sky-950/20 border border-sky-800/40 text-xs text-sky-300">
+                    <div className="p-2.5 rounded-lg bg-accent-subtle border border-sky-800/40 text-xs text-accent-2">
                       <strong>Dominant Typology:</strong> {inspectingAlert.typology} &bull; Expected Benign Baseline: E[Y] = 0.052 &bull; Calibrated Risk: {(inspectingAlert.riskScore * 100).toFixed(1)}%
                     </div>
 
                     <div className="space-y-2">
                       <div className="p-2.5 rounded-lg bg-panel border border-line flex items-center justify-between">
                         <div>
-                          <div className="font-bold text-slate-200">Pass-Through Net Flow Ratio (φ_flow)</div>
-                          <div className="text-xs text-slate-400">Observed: 0.94 • Baseline: 0.12 • BFIU MC 26 § 4.3</div>
+                          <div className="font-bold text-fg-secondary">Pass-Through Net Flow Ratio (φ_flow)</div>
+                          <div className="text-xs text-muted">Observed: 0.94 • Baseline: 0.12 • BFIU MC 26 § 4.3</div>
                         </div>
-                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold text-xs">
+                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-tier-1-text font-bold text-xs">
                           +0.285 (RISK_ELEVATING)
                         </span>
                       </div>
 
                       <div className="p-2.5 rounded-lg bg-panel border border-line flex items-center justify-between">
                         <div>
-                          <div className="font-bold text-slate-200">15-Minute Rapid Fund Dispersion (δ_disp)</div>
-                          <div className="text-xs text-slate-400">Observed: 0.93 • Baseline: 0.05 • Instantaneous Outflows</div>
+                          <div className="font-bold text-fg-secondary">15-Minute Rapid Fund Dispersion (δ_disp)</div>
+                          <div className="text-xs text-muted">Observed: 0.93 • Baseline: 0.05 • Instantaneous Outflows</div>
                         </div>
-                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold text-xs">
+                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-tier-1-text font-bold text-xs">
                           +0.241 (RISK_ELEVATING)
                         </span>
                       </div>
 
                       <div className="p-2.5 rounded-lg bg-panel border border-line flex items-center justify-between">
                         <div>
-                          <div className="font-bold text-slate-200">Structuring Proximity (s_struct)</div>
-                          <div className="text-xs text-slate-400">Observed: 0.91 • Band: ৳800k–৳999k CTR Ceiling Proximity</div>
+                          <div className="font-bold text-fg-secondary">Structuring Proximity (s_struct)</div>
+                          <div className="text-xs text-muted">Observed: 0.91 • Band: ৳800k–৳999k CTR Ceiling Proximity</div>
                         </div>
-                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold text-xs">
+                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-tier-1-text font-bold text-xs">
                           +0.201 (RISK_ELEVATING)
                         </span>
                       </div>
 
                       <div className="p-2.5 rounded-lg bg-panel border border-line flex items-center justify-between">
                         <div>
-                          <div className="font-bold text-slate-200">Velocity Burst Acceleration (λ_u)</div>
-                          <div className="text-xs text-slate-400">Observed: 0.88 • Baseline: 0.15 • Smurfing Frequency Spike</div>
+                          <div className="font-bold text-fg-secondary">Velocity Burst Acceleration (λ_u)</div>
+                          <div className="text-xs text-muted">Observed: 0.88 • Baseline: 0.15 • Smurfing Frequency Spike</div>
                         </div>
-                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold text-xs">
+                        <span className="px-2 py-0.5 rounded bg-rose-500/10 text-tier-1-text font-bold text-xs">
                           +0.163 (RISK_ELEVATING)
                         </span>
                       </div>
                     </div>
 
                     {/* Internal Sensitivity Driver (Strictly Non-Customer-Facing) */}
-                    <div className="p-3 bg-emerald-950/20 border border-emerald-800/40 rounded-lg space-y-1 text-xs">
-                      <span className="font-bold text-emerald-300 block">Internal Sensitivity Threshold Note (Non-Customer-Facing):</span>
-                      <p className="text-slate-300 font-sans">
+                    <div className="p-3 bg-tier-3-bg border border-emerald-800/40 rounded-lg space-y-1 text-xs">
+                      <span className="font-bold text-tier-3-text block">Internal Sensitivity Threshold Note (Non-Customer-Facing):</span>
+                      <p className="text-fg-secondary font-sans">
                         Sensitivity baseline: if counterparty dispersion window exceeds 48h and structuring proximity falls below ৳800,000, model score attenuates to 0.142 (-80.0%) within Tier 3 bounds.
                       </p>
                     </div>
@@ -925,17 +925,17 @@ export default function AlertTriagePage() {
 
                 <Link
                   href={`/graph?node=${encodeURIComponent(inspectingAlert.account)}`}
-                  className="px-4 py-2 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
+                  className="px-4 py-2 rounded-lg bg-surface hover:bg-surface-hover text-fg-secondary font-medium text-xs transition-colors flex items-center gap-2"
                 >
-                  <GitFork className="w-4 h-4 text-emerald-400" />
+                  <GitFork className="w-4 h-4 text-tier-3-text" />
                   <span>Inspect Flow Graph</span>
                 </Link>
 
                 <Link
                   href="/rfi"
-                  className="px-4 py-2 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
+                  className="px-4 py-2 rounded-lg bg-surface hover:bg-surface-hover text-fg-secondary font-medium text-xs transition-colors flex items-center gap-2"
                 >
-                  <MailQuestion className="w-4 h-4 text-sky-400" />
+                  <MailQuestion className="w-4 h-4 text-accent-2" />
                   <span>Dispatch RFI</span>
                 </Link>
               </div>
@@ -948,11 +948,11 @@ export default function AlertTriagePage() {
       {dismissReasonModalOpen && (
         <div role="dialog" aria-modal="true" aria-label="Dismiss alert reason" className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-panel border border-line-strong rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
-              <ShieldX className="w-5 h-5 text-amber-400" />
+            <h3 className="text-base font-bold text-fg flex items-center gap-2">
+              <ShieldX className="w-5 h-5 text-tier-2-text" />
               Audited Alert Dismissal Memo
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted">
               Provide mandatory compliance rationale for dismissing {selectedRowIds.size} selected alert(s) as False Positive. This entry will be cryptographically written to the WORM ledger.
             </p>
 
@@ -960,13 +960,13 @@ export default function AlertTriagePage() {
               value={dismissReason}
               onChange={(e) => setDismissReason(e.target.value)}
               placeholder="e.g. Verified ongoing LC trade documentation with genuine ASYCUDA customs clearance bills. Commercial rationale confirmed."
-              className="w-full h-24 p-3 bg-canvas border border-line-strong rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-amber-500"
+              className="w-full h-24 p-3 bg-canvas border border-line-strong rounded-xl text-xs text-fg placeholder:text-slate-600 focus:outline-none focus:border-amber-500"
             />
 
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setDismissReasonModalOpen(false)}
-                className="px-4 py-2 text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
+                className="px-4 py-2 text-xs text-muted hover:text-fg-secondary cursor-pointer"
               >
                 Cancel
               </button>
@@ -986,33 +986,33 @@ export default function AlertTriagePage() {
         <div role="dialog" aria-modal="true" aria-label="Supervisory override" className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-panel border border-line-strong rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between pb-2 border-b border-line">
-              <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-amber-400" />
+              <h3 className="text-base font-bold text-fg flex items-center gap-2">
+                <Sliders className="w-5 h-5 text-tier-2-text" />
                 Supervisory Model Score Override
               </h3>
               <button
                 onClick={() => setOverrideModalOpen(false)}
-                className="text-slate-400 hover:text-slate-200 cursor-pointer"
+                className="text-muted hover:text-fg-secondary cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-muted leading-relaxed">
               Enforce supervisory override on alert <strong>{inspectingAlert.id}</strong> ({inspectingAlert.entityName}).
               This modification will be cryptographically sealed into the WORM ledger with full officer accountability.
             </p>
 
             <div className="space-y-3 text-xs font-mono">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Original Model Score</label>
-                <div className="p-2.5 bg-canvas rounded-lg border border-line text-rose-400 font-bold">
+                <label className="text-xs text-muted block mb-1">Original Model Score</label>
+                <div className="p-2.5 bg-canvas rounded-lg border border-line text-tier-1-text font-bold">
                   {(inspectingAlert.riskScore * 100).toFixed(1)}% &bull; {inspectingAlert.tier}
                 </div>
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 block mb-1">
+                <label className="text-xs text-muted block mb-1">
                   Adjusted Risk Score: {(overrideScore * 100).toFixed(1)}%
                 </label>
                 <input
@@ -1027,11 +1027,11 @@ export default function AlertTriagePage() {
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 block mb-1">New Triage Tier</label>
+                <label className="text-xs text-muted block mb-1">New Triage Tier</label>
                 <select
                   value={overrideTier}
                   onChange={(e) => setOverrideTier(e.target.value as 'Tier 1 Hold' | 'Tier 2 Review' | 'Tier 3 Clear')}
-                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-fg-secondary text-xs focus:outline-none focus:border-amber-500"
                 >
                   <option value="Tier 3 Clear">Tier 3 Clear (Straight-Through)</option>
                   <option value="Tier 2 Review">Tier 2 Review (Standard SLA Queue)</option>
@@ -1040,11 +1040,11 @@ export default function AlertTriagePage() {
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Justification Code (Mandatory)</label>
+                <label className="text-xs text-muted block mb-1">Justification Code (Mandatory)</label>
                 <select
                   value={overrideJustification}
                   onChange={(e) => setOverrideJustification(e.target.value)}
-                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-fg-secondary text-xs focus:outline-none focus:border-amber-500"
                 >
                   <option value="DOCUMENTED_TRADE_INVOICE">DOCUMENTED_TRADE_INVOICE — Verified Trade LC &amp; Customs Bill</option>
                   <option value="VERIFIED_PAYROLL_SPIKE">VERIFIED_PAYROLL_SPIKE — Certified Multi-Party Corporate Payroll</option>
@@ -1055,12 +1055,12 @@ export default function AlertTriagePage() {
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Supervisory Compliance Notes</label>
+                <label className="text-xs text-muted block mb-1">Supervisory Compliance Notes</label>
                 <textarea
                   value={overrideNotes}
                   onChange={(e) => setOverrideNotes(e.target.value)}
                   rows={3}
-                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-fg-secondary text-xs focus:outline-none focus:border-amber-500"
                   placeholder="Mandatory reasoning under SR 11-7 model-risk supervisory standards..."
                 />
               </div>
@@ -1069,7 +1069,7 @@ export default function AlertTriagePage() {
             <div className="flex items-center justify-end gap-3 pt-2 border-t border-line">
               <button
                 onClick={() => setOverrideModalOpen(false)}
-                className="px-4 py-2 text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
+                className="px-4 py-2 text-xs text-muted hover:text-fg-secondary cursor-pointer"
               >
                 Cancel
               </button>

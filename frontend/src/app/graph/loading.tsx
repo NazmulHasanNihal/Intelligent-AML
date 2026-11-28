@@ -21,10 +21,10 @@ export default function GraphLoading() {
         <div className="lg:col-span-3 h-[600px] rounded-xl bg-panel border border-line flex flex-col items-center justify-center p-6 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-950/10 via-transparent to-transparent" />
           <div className="w-16 h-16 rounded-full border-2 border-emerald-500/30 border-t-emerald-400 animate-spin mb-4" />
-          <span className="text-xs font-mono font-bold text-slate-300">
+          <span className="text-xs font-mono font-bold text-fg-secondary">
             Synthesizing Spatio-Temporal Graph Subgraph...
           </span>
-          <span className="text-xs font-mono text-slate-500 mt-1">
+          <span className="text-xs font-mono text-fg0 mt-1">
             Computing 12 topological invariants &amp; WebGL nodes
           </span>
         </div>

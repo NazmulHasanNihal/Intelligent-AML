@@ -40,7 +40,7 @@ export default function AppLoading() {
         <div className="h-96 rounded-xl bg-panel border border-line p-4 space-y-4">
           <div className="h-4 w-36 bg-surface rounded" />
           <div className="h-64 w-full bg-canvas rounded-lg border border-line flex items-center justify-center">
-            <span className="text-xs font-mono text-slate-500">Connecting to Stream...</span>
+            <span className="text-xs font-mono text-fg0">Connecting to Stream...</span>
           </div>
         </div>
       </div>

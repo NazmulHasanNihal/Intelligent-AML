@@ -145,19 +145,19 @@ Daily Ingestion SLA: ${formData.dailyVolume}
       aria-labelledby="inquiry-dialog-title"
       className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
     >
-      <div className="w-full max-w-xl bg-panel border border-line-strong rounded-2xl shadow-2xl p-6 relative text-slate-100 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-xl bg-panel border border-line-strong rounded-2xl shadow-2xl p-6 relative text-fg max-h-[90vh] overflow-y-auto">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg hover:bg-surface text-slate-400 hover:text-slate-200"
+          className="absolute top-4 right-4 p-1 rounded-lg hover:bg-surface text-muted hover:text-fg-secondary"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-2 mb-1">
-          <Shield className="w-5 h-5 text-emerald-400" />
-          <h3 id="inquiry-dialog-title" className="text-lg font-bold text-slate-100">
+          <Shield className="w-5 h-5 text-tier-3-text" />
+          <h3 id="inquiry-dialog-title" className="text-lg font-bold text-fg">
             {inquiryType === 'SOVEREIGN'
               ? 'Schedule Sovereign FIU / Central Bank Briefing'
               : inquiryType === 'BANK_POC'
@@ -165,22 +165,22 @@ Daily Ingestion SLA: ${formData.dailyVolume}
               : 'Institutional Evaluation & Model Validation Sandbox'}
           </h3>
         </div>
-        <p className="text-xs text-slate-400 font-sans mb-5">
+        <p className="text-xs text-muted font-sans mb-5">
           Receive an instant, downloadable technical brief calibrated to your daily transaction volume and BFIU compliance targets.
         </p>
 
         {isSubmitted ? (
           <div className="space-y-4 animate-in zoom-in-95">
             <div className="p-5 text-center bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-              <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
-              <h4 className="text-base font-bold text-slate-100">Architecture Brief Generated</h4>
-              <p className="text-xs text-slate-300 mt-1 font-sans">
-                Specification dispatched for <span className="font-mono text-emerald-400">{formData.institutionName}</span>. You can copy or download the complete technical package immediately below.
+              <CheckCircle2 className="w-10 h-10 text-tier-3-text mx-auto mb-2" />
+              <h4 className="text-base font-bold text-fg">Architecture Brief Generated</h4>
+              <p className="text-xs text-fg-secondary mt-1 font-sans">
+                Specification dispatched for <span className="font-mono text-tier-3-text">{formData.institutionName}</span>. You can copy or download the complete technical package immediately below.
               </p>
             </div>
 
             {/* Formatted Code Block */}
-            <div className="p-3 bg-canvas rounded-xl border border-line font-mono text-xs text-slate-300 max-h-48 overflow-y-auto whitespace-pre leading-relaxed">
+            <div className="p-3 bg-canvas rounded-xl border border-line font-mono text-xs text-fg-secondary max-h-48 overflow-y-auto whitespace-pre leading-relaxed">
               {architectureBrief}
             </div>
 
@@ -189,9 +189,9 @@ Daily Ingestion SLA: ${formData.dailyVolume}
               <button
                 type="button"
                 onClick={handleCopyBrief}
-                className="w-full sm:w-1/2 py-2.5 rounded-lg text-xs font-mono font-bold bg-surface hover:bg-surface-hover text-slate-200 border border-line-strong transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full sm:w-1/2 py-2.5 rounded-lg text-xs font-mono font-bold bg-surface hover:bg-surface-hover text-fg-secondary border border-line-strong transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
+                {copied ? <Check className="w-3.5 h-3.5 text-tier-3-text" /> : <Copy className="w-3.5 h-3.5 text-muted" />}
                 <span>{copied ? 'Copied to Clipboard' : 'Copy Brief to Clipboard'}</span>
               </button>
               <button
@@ -207,7 +207,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
             <button
               type="button"
               onClick={onClose}
-              className="w-full py-2 text-center text-xs font-mono text-slate-400 hover:text-slate-200 cursor-pointer pt-2"
+              className="w-full py-2 text-center text-xs font-mono text-muted hover:text-fg-secondary cursor-pointer pt-2"
             >
               Close Window
             </button>
@@ -216,61 +216,61 @@ Daily Ingestion SLA: ${formData.dailyVolume}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-mono text-slate-400 mb-1">Officer Name *</label>
+                <label className="block text-xs font-mono text-muted mb-1">Officer Name *</label>
                 <input
                   type="text"
                   placeholder="e.g. Kazi Rafiqul Islam"
                   value={formData.officerName}
                   onChange={(e) => setFormData({ ...formData, officerName: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-fg focus:outline-none focus:border-emerald-500 font-sans"
                 />
-                {errors.officerName && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.officerName}</p>}
+                {errors.officerName && <p className="text-xs text-tier-1-text mt-0.5 font-mono">{errors.officerName}</p>}
               </div>
               <div>
-                <label className="block text-xs font-mono text-slate-400 mb-1">Institutional Email *</label>
+                <label className="block text-xs font-mono text-muted mb-1">Institutional Email *</label>
                 <input
                   type="email"
                   placeholder="officer@bank.com.bd"
                   value={formData.workEmail}
                   onChange={(e) => setFormData({ ...formData, workEmail: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-fg focus:outline-none focus:border-emerald-500 font-sans"
                 />
-                {errors.workEmail && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.workEmail}</p>}
+                {errors.workEmail && <p className="text-xs text-tier-1-text mt-0.5 font-mono">{errors.workEmail}</p>}
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-mono text-slate-400 mb-1">Institution Name *</label>
+                <label className="block text-xs font-mono text-muted mb-1">Institution Name *</label>
                 <input
                   type="text"
                   placeholder="e.g. Eastern Bank PLC"
                   value={formData.institutionName}
                   onChange={(e) => setFormData({ ...formData, institutionName: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-fg focus:outline-none focus:border-emerald-500 font-sans"
                 />
-                {errors.institutionName && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.institutionName}</p>}
+                {errors.institutionName && <p className="text-xs text-tier-1-text mt-0.5 font-mono">{errors.institutionName}</p>}
               </div>
               <div>
-                <label className="block text-xs font-mono text-slate-400 mb-1">Role / Signatory Title *</label>
+                <label className="block text-xs font-mono text-muted mb-1">Role / Signatory Title *</label>
                 <input
                   type="text"
                   placeholder="e.g. CAMLCO / Head of Compliance"
                   value={formData.roleTitle}
                   onChange={(e) => setFormData({ ...formData, roleTitle: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-fg focus:outline-none focus:border-emerald-500 font-sans"
                 />
-                {errors.roleTitle && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.roleTitle}</p>}
+                {errors.roleTitle && <p className="text-xs text-tier-1-text mt-0.5 font-mono">{errors.roleTitle}</p>}
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-mono text-slate-400 mb-1">Target Deployment Mode</label>
+                <label className="block text-xs font-mono text-muted mb-1">Target Deployment Mode</label>
                 <select
                   value={formData.deploymentMode}
                   onChange={(e) => setFormData({ ...formData, deploymentMode: e.target.value as any })}
-                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-fg focus:outline-none focus:border-emerald-500 font-sans"
                 >
                   <option>Air-Gapped Sovereign On-Premises (Kubernetes)</option>
                   <option>Virtual Private Cloud (VPC)</option>
@@ -278,11 +278,11 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-mono text-slate-400 mb-1">Daily Clearing Volume</label>
+                <label className="block text-xs font-mono text-muted mb-1">Daily Clearing Volume</label>
                 <select
                   value={formData.dailyVolume}
                   onChange={(e) => setFormData({ ...formData, dailyVolume: e.target.value as any })}
-                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-fg focus:outline-none focus:border-emerald-500 font-sans"
                 >
                   <option>&lt; 100,000 tx/day</option>
                   <option>100,000 - 1,000,000 tx/day</option>
@@ -293,13 +293,13 @@ Daily Ingestion SLA: ${formData.dailyVolume}
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-slate-400 mb-1">Notes / Core Banking Targets (Optional)</label>
+              <label className="block text-xs font-mono text-muted mb-1">Notes / Core Banking Targets (Optional)</label>
               <textarea
                 rows={2}
                 placeholder="Mention Finacle / Temenos T24 integration, ISO 20022, or specific BFIU compliance targets..."
                 value={formData.statutoryRequirements}
                 onChange={(e) => setFormData({ ...formData, statutoryRequirements: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans resize-none"
+                className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-fg focus:outline-none focus:border-emerald-500 font-sans resize-none"
               />
             </div>
 

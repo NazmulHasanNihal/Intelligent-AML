@@ -16,21 +16,21 @@ export default function AppError({
 
   return (
     <div className="p-6 sm:p-12 max-w-3xl mx-auto my-8">
-      <div className="p-8 rounded-2xl bg-panel border border-rose-500/40 shadow-2xl text-slate-100 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto mb-4 border border-rose-500/30">
+      <div className="p-8 rounded-2xl bg-panel border border-rose-500/40 shadow-2xl text-fg text-center">
+        <div className="w-14 h-14 rounded-2xl bg-rose-500/10 text-tier-1-text flex items-center justify-center mx-auto mb-4 border border-rose-500/30">
           <AlertTriangle className="w-7 h-7" />
         </div>
-        <h2 className="text-lg font-bold text-slate-100 mb-1">
+        <h2 className="text-lg font-bold text-fg mb-1">
           Surveillance Operating System Exception
         </h2>
-        <p className="text-xs text-slate-400 font-sans max-w-md mx-auto mb-4">
+        <p className="text-xs text-muted font-sans max-w-md mx-auto mb-4">
           An unhandled error occurred while rendering the executive surveillance dashboard.
         </p>
 
-        <div className="p-3 rounded-lg bg-canvas border border-line font-mono text-left text-xs text-rose-300 mb-6 max-h-36 overflow-y-auto break-all">
-          <p className="font-bold text-slate-400 mb-1">Stack Trace Receipt:</p>
+        <div className="p-3 rounded-lg bg-canvas border border-line font-mono text-left text-xs text-tier-1-text mb-6 max-h-36 overflow-y-auto break-all">
+          <p className="font-bold text-muted mb-1">Stack Trace Receipt:</p>
           <p>{error.message || 'Fatal Dashboard Rendering Exception'}</p>
-          {error.digest && <p className="text-xs text-slate-500 mt-1">Digest: {error.digest}</p>}
+          {error.digest && <p className="text-xs text-fg0 mt-1">Digest: {error.digest}</p>}
         </div>
 
         <button

@@ -204,17 +204,17 @@ export default function RfiHubPage() {
       {/* Page Title */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-sans">
+          <h1 className="text-xl font-bold text-fg flex items-center gap-2 font-sans">
             <MailQuestion className="w-5 h-5 text-indigo-400" />
             Compliance Request for Information (RFI) Hub
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-muted mt-0.5">
             Controlled counterparty outreach with live Anti-Tipping-Off Guard (31 U.S.C. § 5318(g)(2) &amp; MLPA 2012 § 6).
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-slate-300">
+          <div className="px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-fg-secondary">
             <span>Active Outbound Notices: <strong>{rfis.length} Requests</strong></span>
           </div>
         </div>
@@ -225,49 +225,49 @@ export default function RfiHubPage() {
         {/* Left Column: Author Safe RFI Notice Form */}
         <div className="lg:col-span-6 bg-panel border border-line rounded-2xl p-5 shadow-2xl space-y-4">
           <div>
-            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
+            <h2 className="text-sm font-bold text-fg flex items-center gap-2 font-mono">
               <Send className="w-4 h-4 text-indigo-400" />
               Author Statutory-Safe Customer Notice
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-muted mt-0.5">
               Strictly prohibits AML, SAR, or law enforcement language to avoid tipping off customers under penalty of law.
             </p>
           </div>
 
           <form onSubmit={handleCreateRfi} className="space-y-4 text-xs font-sans">
             <div>
-              <label className="text-slate-400 block mb-1 font-mono text-xs">Target Corporate Entity</label>
+              <label className="text-muted block mb-1 font-mono text-xs">Target Corporate Entity</label>
               <input
                 type="text"
                 required
                 value={targetEntity}
                 onChange={(e) => setTargetEntity(e.target.value)}
-                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-fg focus:outline-none focus:border-indigo-500"
               />
             </div>
 
             <div>
-              <label className="text-slate-400 block mb-1 font-mono text-xs">Account Number (Masked)</label>
+              <label className="text-muted block mb-1 font-mono text-xs">Account Number (Masked)</label>
               <input
                 type="text"
                 required
                 value={targetAccount}
                 onChange={(e) => setTargetAccount(e.target.value)}
-                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 focus:outline-none focus:border-indigo-500 font-mono"
+                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-fg focus:outline-none focus:border-indigo-500 font-mono"
               />
             </div>
 
             {/* RFI Reason with Live Anti-Tipping-Off Scanner */}
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-slate-400 font-mono text-xs">Customer-Facing Notice Reason</label>
+                <label className="text-muted font-mono text-xs">Customer-Facing Notice Reason</label>
                 {tippingOffCheck.containsTippingOff ? (
-                  <span className="text-xs font-mono font-bold text-rose-400 animate-pulse flex items-center gap-1">
+                  <span className="text-xs font-mono font-bold text-tier-1-text animate-pulse flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" />
                     TIPPING-OFF VIOLATION DETECTED
                   </span>
                 ) : (
-                  <span className="text-xs font-mono text-emerald-400 flex items-center gap-1">
+                  <span className="text-xs font-mono text-tier-3-text flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3" />
                     Statutory Language Compliant
                   </span>
@@ -278,7 +278,7 @@ export default function RfiHubPage() {
                 value={rfiReason}
                 onChange={(e) => setRfiReason(e.target.value)}
                 rows={4}
-                className={`w-full p-3 bg-canvas border rounded-xl text-xs font-mono text-slate-100 focus:outline-none transition-colors ${
+                className={`w-full p-3 bg-canvas border rounded-xl text-xs font-mono text-fg focus:outline-none transition-colors ${
                   tippingOffCheck.containsTippingOff
                     ? 'border-rose-500 focus:border-rose-400'
                     : 'border-line-strong focus:border-indigo-500'
@@ -287,7 +287,7 @@ export default function RfiHubPage() {
 
               {/* Tipping-Off Alert Banner with 1-Click Fix */}
               {tippingOffCheck.containsTippingOff && (
-                <div className="mt-2 p-3 bg-rose-950/40 border border-rose-800 rounded-xl space-y-2 text-xs text-rose-300">
+                <div className="mt-2 p-3 bg-tier-1-bg border border-rose-800 rounded-xl space-y-2 text-xs text-tier-1-text">
                   <div className="flex items-center justify-between">
                     <span>
                       Contains prohibited terms: <strong>{tippingOffCheck.matchedPhrases.join(', ')}</strong>
@@ -300,7 +300,7 @@ export default function RfiHubPage() {
                       1-Click Safe Rewrite
                     </button>
                   </div>
-                  <p className="text-xs text-rose-400">
+                  <p className="text-xs text-tier-1-text">
                     Disclosing AML investigations or SAR status constitutes an offense under MLPA 2012 § 6.
                   </p>
                 </div>
@@ -309,11 +309,11 @@ export default function RfiHubPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-slate-400 block mb-1 font-mono text-xs">Response Deadline</label>
+                <label className="text-muted block mb-1 font-mono text-xs">Response Deadline</label>
                 <select
                   value={deadlineDays}
                   onChange={(e) => setDeadlineDays(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 cursor-pointer"
+                  className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-fg cursor-pointer"
                 >
                   <option value={3}>3 Business Days (Expedited)</option>
                   <option value={7}>7 Business Days (Standard)</option>
@@ -322,8 +322,8 @@ export default function RfiHubPage() {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 font-mono text-xs">Transmission Channel</label>
-                <select className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 cursor-pointer">
+                <label className="text-muted block mb-1 font-mono text-xs">Transmission Channel</label>
+                <select className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-fg cursor-pointer">
                   <option>Secure Corporate Banking Portal</option>
                   <option>Encrypted SWIFT MT999 Notice</option>
                   <option>Certified Mail / Branch Delivery</option>
@@ -337,7 +337,7 @@ export default function RfiHubPage() {
                 disabled={tippingOffCheck.containsTippingOff || isSubmitting}
                 className={`w-full py-2.5 px-4 rounded-xl font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer ${
                   tippingOffCheck.containsTippingOff
-                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                    ? 'bg-surface-2 text-fg0 cursor-not-allowed'
                     : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20'
                 }`}
               >
@@ -353,25 +353,25 @@ export default function RfiHubPage() {
           {/* Customer Document Response Simulator */}
           <div className="p-4 rounded-xl bg-panel border border-line shadow-xl space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-slate-200 font-mono flex items-center gap-2">
-                <UploadCloud className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-xs font-bold text-fg-secondary font-mono flex items-center gap-2">
+                <UploadCloud className="w-4 h-4 text-tier-3-text" />
                 Customer Response Portal Simulation
               </h3>
-              <span className="text-xs font-mono text-emerald-400">WebCrypto SHA-256 Engine</span>
+              <span className="text-xs font-mono text-tier-3-text">WebCrypto SHA-256 Engine</span>
             </div>
 
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted">
               Simulate customer uploading requested customs clearance bills or pro-forma invoices in response to active RFI.
             </p>
 
             <label className="p-4 border-2 border-dashed border-line-strong hover:border-emerald-500 rounded-xl flex items-center justify-center gap-3 cursor-pointer bg-canvas/60 transition-colors">
-              <UploadCloud className="w-5 h-5 text-slate-400" />
-              <span className="text-xs text-slate-300 font-medium">Drop response document to verify cryptographic digest</span>
+              <UploadCloud className="w-5 h-5 text-muted" />
+              <span className="text-xs text-fg-secondary font-medium">Drop response document to verify cryptographic digest</span>
               <input type="file" onChange={handleFileUpload} className="hidden" />
             </label>
 
             {uploadStatus && (
-              <div className="p-2.5 bg-canvas rounded-lg border border-emerald-500/30 text-xs font-mono text-emerald-300">
+              <div className="p-2.5 bg-canvas rounded-lg border border-emerald-500/30 text-xs font-mono text-tier-3-text">
                 {uploadStatus}
               </div>
             )}
@@ -379,7 +379,7 @@ export default function RfiHubPage() {
 
           {/* Active Outbound Notices List */}
           <div className="bg-panel border border-line rounded-2xl p-4 shadow-xl space-y-3">
-            <h3 className="text-xs font-bold text-slate-300 font-mono">
+            <h3 className="text-xs font-bold text-fg-secondary font-mono">
               Active Outbound RFI Notices Queue
             </h3>
 
@@ -393,23 +393,23 @@ export default function RfiHubPage() {
                     <span className="font-mono font-bold text-indigo-400">{rfi.id}</span>
                     <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                       rfi.status === 'DOCUMENT_UPLOADED'
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                        : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                        ? 'bg-emerald-500/20 text-tier-3-text border border-emerald-500/40'
+                        : 'bg-amber-500/20 text-tier-2-text border border-amber-500/40'
                     }`}>
                       {rfi.status}
                     </span>
                   </div>
 
-                  <div className="font-medium text-slate-200">{rfi.targetEntity}</div>
-                  <p className="text-xs text-slate-400 font-mono leading-relaxed truncate">
+                  <div className="font-medium text-fg-secondary">{rfi.targetEntity}</div>
+                  <p className="text-xs text-muted font-mono leading-relaxed truncate">
                     {rfi.reason}
                   </p>
 
                   <div className="pt-2 border-t border-line/60 flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-mono">Deadline: {rfi.deadlineDays} Days</span>
+                    <span className="text-fg0 font-mono">Deadline: {rfi.deadlineDays} Days</span>
                     <button
                       onClick={() => handleSendReminder(rfi.id)}
-                      className="text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1 cursor-pointer"
+                      className="text-accent-2 hover:text-accent-2 font-semibold flex items-center gap-1 cursor-pointer"
                     >
                       <Bell className="w-3 h-3" />
                       <span>Send Reminder</span>

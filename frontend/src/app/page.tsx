@@ -9,12 +9,15 @@ import {
   Layers,
   Lock,
   Menu,
+  Moon,
   Scale,
   Shield,
+  Sun,
   Users,
   X,
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
+import { useTheme } from '@/lib/theme';
 import { ConformalLivePreviewWidget } from '@/components/landing/ConformalLivePreviewWidget';
 import { ProductVisualPreview } from '@/components/landing/ProductVisualPreview';
 import { InstitutionalInquiryModal } from '@/components/landing/InstitutionalInquiryModal';
@@ -29,31 +32,25 @@ const NAV = [
 ];
 
 const METRICS = [
-  { label: 'Macro F1', value: '94.5%', note: 'vs. baselines' },
+  { label: 'Macro F1', value: '94.5%', note: 'vs. GBDT/TGN baselines' },
   { label: 'Noise reduction', value: '84.2%', note: '7-day replay' },
   { label: 'Scoring latency', value: '< 200 µs', note: 'scorer only, p50' },
-  { label: 'Conformal coverage', value: '99.04%', note: 'target 99.00%' },
+  { label: 'Conformal coverage', value: '99.04%', note: 'bounded FNR <= 0.01' },
 ];
 
 const STEPS = [
-  { icon: Layers, title: 'Score every wire', body: 'A spatio-temporal graph model reads each transaction in the context of the accounts around it.' },
-  { icon: Scale, title: 'Bound the risk', body: 'Conformal prediction gives each alert a calibrated set, so uncertainty is explicit instead of hidden.' },
-  { icon: Users, title: 'Route by certainty', body: 'Sure hits are held, ambiguous ones go to an officer, confident clears flow through.' },
+  { icon: Layers, title: 'Ingest wires', body: 'Read SWIFT MT700, ISO 20022 pacs.008, and cash flows with 12 graph invariants.' },
+  { icon: Scale, title: 'Calibrate sets', body: 'Conformal prediction outputs calibrated Tier 1, Tier 2, or Tier 3 certainty bounds.' },
+  { icon: Shield, title: 'Enforce 4-eyes', body: 'Hold certain hits for dual sign-off while clearing low-risk traffic at low latency.' },
+  { icon: FileCheck2, title: 'Dispatch goAML', body: 'Export BFIU goAML XML packets sealed to a WebCrypto SHA-256 WORM ledger.' },
 ];
 
 const SECURITY = [
-  { icon: Lock, tone: 'indigo', tKey: 'security_point1', body: 'SHA-256 chain over RFC 8785 JSON with Ed25519 checkpoints; admissibility-ready under Bangladesh Evidence Act §§ 65A–65B & 73A.' },
-  { icon: Users, tone: 'emerald', tKey: 'security_point2', body: 'Maker and checker roles enforced on the server, not just in the UI.' },
-  { icon: Shield, tone: 'amber', tKey: 'security_point3', body: 'Personal data is masked by default. Reveal needs a reason, expires in 60 seconds and is logged.' },
-  { icon: FileCheck2, tone: 'cyan', tKey: 'security_point4', body: 'UNODC goAML v4.2 STR/SAR export with mandatory attachments and MLPA 2012 § 6 anti-tipping-off checks.' },
-] as const;
-
-const TONES: Record<string, string> = {
-  indigo: 'bg-indigo-500/10 text-indigo-300',
-  emerald: 'bg-emerald-500/10 text-emerald-300',
-  amber: 'bg-amber-500/10 text-amber-300',
-  cyan: 'bg-cyan-500/10 text-cyan-300',
-};
+  { icon: Lock, tone: 'bg-accent-subtle text-accent-text', tKey: 'security_point1' as const, body: 'SHA-256 hash chain over canonical records; admissibility-ready under Bangladesh Evidence Act §§ 65A–65B & 73A.' },
+  { icon: Users, tone: 'bg-tier-3-bg text-tier-3-text', tKey: 'security_point2' as const, body: 'Maker and checker roles enforced at API boundaries, preventing self-ratification.' },
+  { icon: Shield, tone: 'bg-tier-2-bg text-tier-2-text', tKey: 'security_point3' as const, body: 'Personal data is masked by default. Audited unmasking requires a justification and expires in 60s.' },
+  { icon: FileCheck2, tone: 'bg-accent-subtle text-accent-2', tKey: 'security_point4' as const, body: 'UNODC goAML v4.2 STR/CTR export guarded by MLPA 2012 § 6 anti-tipping-off scans.' },
+];
 
 const PLANS: {
   key: string;
@@ -70,8 +67,8 @@ const PLANS: {
     key: 'eval',
     tKey: 'plan_starter',
     price: '$0',
-    unit: '30-day evaluation',
-    features: ['Synthetic Bangladesh dataset', 'All 11 modules', 'One-command reproduction'],
+    unit: 'sandbox evaluation',
+    features: ['Synthetic Bangladesh dataset', 'All 11 compliance modules', 'Deterministic replay'],
     cta: 'Open the sandbox',
     href: '/app',
   },
@@ -80,7 +77,7 @@ const PLANS: {
     tKey: 'plan_bank',
     price: 'Custom',
     unit: 'annual SLA',
-    features: ['On-prem Kubernetes / Helm', 'Core banking and SWIFT connectors', 'Tamper-evident audit ledger', '24/7 support'],
+    features: ['On-prem Kubernetes / Helm', 'Core banking & SWIFT webhooks', 'SHA-256 WORM ledger', 'Dedicated onboarding'],
     cta: 'Request a bank PoC',
     featured: true,
     inquiry: 'BANK_POC',
@@ -89,8 +86,8 @@ const PLANS: {
     key: 'fiu',
     tKey: 'plan_fiu',
     price: 'Sovereign',
-    unit: 'government mandate',
-    features: ['Multi-institution flow graph', 'goAML central gateway', 'HSM-backed keys'],
+    unit: 'regulator mandate',
+    features: ['Multi-institution graph', 'goAML central gateway', 'HSM-backed signing'],
     cta: 'Schedule a briefing',
     inquiry: 'SOVEREIGN',
   },
@@ -98,6 +95,8 @@ const PLANS: {
 
 export default function EnterpriseLandingPage() {
   const { language, toggleLanguage, t } = useBankingStore();
+  const { theme, setTheme } = useTheme();
+  const dark = theme !== 'light';
 
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [inquiryType, setInquiryType] = useState<InquiryType>('BANK_POC');
@@ -110,7 +109,7 @@ export default function EnterpriseLandingPage() {
     try {
       if (!localStorage.getItem('aml_cookie_consent')) setIsCookieDismissed(false);
     } catch {
-      /* storage unavailable: leave the notice hidden */
+      /* storage unavailable */
     }
   }, []);
 
@@ -144,32 +143,32 @@ export default function EnterpriseLandingPage() {
   }, []);
 
   const btnPrimary =
-    'inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-emerald-400';
+    'inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg transition-colors hover:bg-accent-hover cursor-pointer';
   const btnGhost =
-    'inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-semibold text-slate-100 transition-colors hover:bg-slate-800';
+    'inline-flex items-center justify-center gap-2 rounded-lg border border-line px-5 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-surface-hover cursor-pointer';
 
   return (
-    <div className="flex min-h-screen flex-col bg-canvas font-sans text-slate-100 selection:bg-emerald-500/30">
+    <div className="flex min-h-screen flex-col bg-canvas font-sans text-fg selection:bg-accent/25">
       {/* Header */}
-      <header className="sticky top-0 z-40 h-16 w-full border-b border-slate-800 bg-canvas/90 backdrop-blur-md">
+      <header className="sticky top-0 z-40 h-16 w-full border-b border-line bg-panel/90 backdrop-blur-md">
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="Intelligent-AML home">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-accent/30 bg-accent-subtle">
+              <span className="h-2.5 w-2.5 rounded-full bg-accent" />
             </span>
-            <span className="text-base font-semibold">Intelligent-AML</span>
-            <span className="hidden rounded border border-slate-800 px-1.5 py-0.5 text-xs font-mono text-slate-400 sm:inline">
+            <span className="text-base font-semibold text-fg">Intelligent-AML</span>
+            <span className="hidden rounded border border-line bg-surface px-1.5 py-0.5 text-xs font-mono text-muted sm:inline">
               Platform v3.0
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-7 text-sm text-slate-300 md:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-7 text-sm text-fg-secondary md:flex" aria-label="Primary">
             {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="whitespace-nowrap transition-colors hover:text-white">
+              <a key={n.href} href={n.href} className="whitespace-nowrap transition-colors hover:text-fg">
                 {n.label}
               </a>
             ))}
-            <Link href="/governance" className="whitespace-nowrap transition-colors hover:text-white">
+            <Link href="/governance" className="whitespace-nowrap transition-colors hover:text-fg">
               Model card
             </Link>
           </nav>
@@ -177,8 +176,17 @@ export default function EnterpriseLandingPage() {
           <div className="flex items-center gap-2">
             <button
               type="button"
+              onClick={() => setTheme(dark ? 'light' : 'dark')}
+              className="rounded-lg p-2 text-muted transition-colors hover:bg-surface-hover hover:text-fg cursor-pointer"
+              aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={dark ? 'Light theme' : 'Dark theme'}
+            >
+              {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+            <button
+              type="button"
               onClick={toggleLanguage}
-              className="rounded-md px-2.5 py-1.5 text-sm text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
+              className="rounded-lg px-2.5 py-1.5 text-sm text-fg-secondary transition-colors hover:bg-surface-hover hover:text-fg cursor-pointer"
               aria-label="Switch language"
             >
               {language === 'en' ? 'বাংলা' : 'English'}
@@ -195,7 +203,7 @@ export default function EnterpriseLandingPage() {
             <button
               type="button"
               onClick={() => setIsMobileNavOpen((v) => !v)}
-              className="rounded-md p-2 text-slate-300 hover:bg-slate-800 md:hidden"
+              className="rounded-lg p-2 text-fg-secondary hover:bg-surface-hover md:hidden cursor-pointer"
               aria-label={isMobileNavOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileNavOpen}
             >
@@ -205,14 +213,14 @@ export default function EnterpriseLandingPage() {
         </div>
 
         {isMobileNavOpen && (
-          <div className="absolute inset-x-0 top-16 border-b border-slate-800 bg-canvas p-4 md:hidden">
+          <div className="absolute inset-x-0 top-16 border-b border-line bg-panel p-4 md:hidden shadow-xl">
             <nav className="flex flex-col gap-1 text-base" aria-label="Mobile">
               {[...NAV, { href: '/governance', label: 'Model card' }].map((n) => (
                 <a
                   key={n.href}
                   href={n.href}
                   onClick={() => setIsMobileNavOpen(false)}
-                  className="rounded-md px-3 py-2.5 text-slate-200 hover:bg-slate-800"
+                  className="rounded-md px-3 py-2.5 text-fg-secondary hover:bg-surface-hover hover:text-fg"
                 >
                   {n.label}
                 </a>
@@ -231,19 +239,19 @@ export default function EnterpriseLandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-slate-800/60 px-4 pb-16 pt-20 sm:px-6 sm:pt-24">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(16,185,129,0.14),transparent)]" />
+      <section className="relative overflow-hidden border-b border-line px-4 pb-14 pt-16 sm:px-6 sm:pt-20">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[24rem] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(16,185,129,0.12),transparent)]" />
         <div className="relative mx-auto max-w-4xl text-center">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-300">
-            C-STGB v3.2 · BFIU 2026 &amp; SR 11-7 aligned
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-subtle px-3 py-1 text-xs font-mono font-medium text-accent-text">
+            Platform v3.0 · C-STGB v3.2 Engine · Cloud Sandbox (Air-Gap Ready)
           </p>
-          <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="text-3xl font-bold leading-[1.12] tracking-tight text-fg sm:text-5xl">
             Eliminate 84% of False Positives with Provable Conformal Risk Guarantees.
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
+          <p className="mx-auto mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-muted">
             {t('landing_subheadline')}
           </p>
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/app" className={`${btnPrimary} w-full sm:w-auto`}>
               Open the live demo
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -254,19 +262,19 @@ export default function EnterpriseLandingPage() {
           </div>
         </div>
 
-        <div className="relative mx-auto mt-14 max-w-5xl">
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-slate-800 bg-slate-800 lg:grid-cols-4">
+        <div className="relative mx-auto mt-12 max-w-5xl">
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-4">
             {METRICS.map((m) => (
-              <div key={m.label} className="bg-canvas p-5">
-                <dt className="text-sm text-slate-400">{m.label}</dt>
-                <dd className="mt-1 text-3xl font-semibold tabular-nums text-white">{m.value}</dd>
-                <p className="mt-1 text-xs text-slate-500">{m.note}</p>
+              <div key={m.label} className="bg-panel p-5">
+                <dt className="text-xs font-medium text-muted">{m.label}</dt>
+                <dd className="mt-1 text-2xl sm:text-3xl font-semibold tabular-aml font-mono text-fg">{m.value}</dd>
+                <p className="mt-1 text-xs text-muted">{m.note}</p>
               </div>
             ))}
           </dl>
-          <p className="mt-3 text-center text-xs text-slate-500">
-            Measured on synthetic Bangladesh banking data (7-day replay; 14-dataset corpus: 68.05% Macro F1, 91.42% Elliptic-v1, 0.45 ms P50), not live customer traffic.{' '}
-            <Link href="/governance" className="text-slate-300 underline underline-offset-2 hover:text-white">
+          <p className="mt-3 text-center text-xs text-muted">
+            Evaluated on synthetic Bangladesh banking data (7-day replay; 14-dataset corpus: 68.05% Macro F1, 91.42% Elliptic-v1, 0.45 ms P50), not live customer traffic.{' '}
+            <Link href="/governance" className="text-accent-text underline underline-offset-2">
               See the model card
             </Link>
           </p>
@@ -274,31 +282,31 @@ export default function EnterpriseLandingPage() {
       </section>
 
       {/* Product preview */}
-      <section className="border-b border-slate-800/60 px-4 py-16 sm:px-6">
+      <section className="border-b border-line px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-2xl font-semibold text-white sm:text-3xl">Eleven modules, one workflow</h2>
-            <p className="mt-3 text-slate-400">From alert triage to the filed report, in a single workspace.</p>
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <h2 className="text-2xl font-semibold text-fg sm:text-3xl">Eleven modules, one workflow</h2>
+            <p className="mt-2 text-sm text-muted">From alert triage to BFIU goAML STR dispatch in a single audit-locked ledger.</p>
           </div>
           <ProductVisualPreview />
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how" className="scroll-mt-20 border-b border-slate-800/60 px-4 py-16 sm:px-6">
+      {/* 4-Step Pipeline */}
+      <section id="how" className="scroll-mt-20 border-b border-line px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <h2 className="mx-auto mb-10 max-w-2xl text-center text-2xl font-semibold text-white sm:text-3xl">How it works</h2>
-          <div className="grid gap-5 md:grid-cols-3">
+          <h2 className="mx-auto mb-8 max-w-2xl text-center text-2xl font-semibold text-fg sm:text-3xl">Four-stage surveillance pipeline</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s, i) => (
-              <div key={s.title} className="rounded-2xl border border-slate-800 bg-canvas p-6">
-                <div className="mb-4 flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-300">
-                    <s.icon className="h-5 w-5" aria-hidden="true" />
+              <div key={s.title} className="rounded-2xl border border-line bg-panel p-5">
+                <div className="mb-3 flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent-subtle text-accent-text">
+                    <s.icon className="h-4 w-4" aria-hidden="true" />
                   </span>
-                  <span className="text-sm text-slate-500">Step {i + 1}</span>
+                  <span className="text-xs font-mono text-muted">Stage 0{i + 1}</span>
                 </div>
-                <h3 className="text-lg font-semibold text-white">{s.title}</h3>
-                <p className="mt-2 leading-relaxed text-slate-400">{s.body}</p>
+                <h3 className="text-base font-semibold text-fg">{s.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{s.body}</p>
               </div>
             ))}
           </div>
@@ -306,12 +314,12 @@ export default function EnterpriseLandingPage() {
       </section>
 
       {/* Conformal tiering */}
-      <section id="tiering" className="scroll-mt-20 border-b border-slate-800/60 px-4 py-16 sm:px-6">
+      <section id="tiering" className="scroll-mt-20 border-b border-line px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-2xl font-semibold text-white sm:text-3xl">{t('conformal_title')}</h2>
-            <p className="mt-3 text-slate-400">
-              {t('conformal_desc')} Empirical missed-illicit rate (FNR): 0.76% (within α = 1.00% conformal bound).
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <h2 className="text-2xl font-semibold text-fg sm:text-3xl">{t('conformal_title')}</h2>
+            <p className="mt-2 text-sm text-muted">
+              {t('conformal_desc')} Empirical Missed-Illicit Rate (FNR): 0.76% (bounded FNR &lt;= alpha = 0.01).
             </p>
           </div>
           <ConformalLivePreviewWidget />
@@ -319,26 +327,26 @@ export default function EnterpriseLandingPage() {
       </section>
 
       {/* Security */}
-      <section id="security" className="scroll-mt-20 border-b border-slate-800/60 px-4 py-16 sm:px-6">
+      <section id="security" className="scroll-mt-20 border-b border-line px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <div className="mx-auto mb-10 max-w-2xl text-center">
-            <p className="mb-3 inline-block rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-sm text-indigo-300">
-              OWASP ASVS Level 2 aligned architecture
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <p className="mb-3 inline-block rounded-full border border-accent/30 bg-accent-subtle px-3 py-1 text-xs font-mono font-medium text-accent-text">
+              OWASP ASVS Level 2 Aligned Architecture
             </p>
-            <h2 className="text-2xl font-semibold text-white sm:text-3xl">{t('security_title')}</h2>
-            <p className="mt-3 text-sm text-slate-400">
-              BFIU Master Circular 26 &amp; Circular 24 (TBML), Circular 32 (Sept 2026), Circular Letters 02 &amp; 03 (Feb 2026), Circular Letter 05 (Aug 2026), MLPA 2012 (§§ 6, 25), ATA 2009, and MLPR 2019.
+            <h2 className="text-2xl font-semibold text-fg sm:text-3xl">{t('security_title')}</h2>
+            <p className="mt-2 text-xs text-muted">
+              Aligned with MLPA 2012 (§§ 6, 25), ATA 2009, MLPR 2019, and BFIU Circulars 24, 26, 31 &amp; 32.
             </p>
           </div>
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             {SECURITY.map((s) => (
-              <div key={s.tKey} className="flex items-start gap-4 rounded-2xl border border-slate-800 bg-canvas p-6">
-                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${TONES[s.tone]}`}>
+              <div key={s.tKey} className="flex items-start gap-4 rounded-2xl border border-line bg-panel p-5">
+                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${s.tone}`}>
                   <s.icon className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <div>
-                  <h3 className="font-semibold text-white">{t(s.tKey)}</h3>
-                  <p className="mt-1 leading-relaxed text-slate-400">{s.body}</p>
+                  <h3 className="font-semibold text-fg">{t(s.tKey)}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted">{s.body}</p>
                 </div>
               </div>
             ))}
@@ -347,46 +355,46 @@ export default function EnterpriseLandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="scroll-mt-20 border-b border-slate-800/60 px-4 py-16 sm:px-6">
+      <section id="pricing" className="scroll-mt-20 border-b border-line px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-2xl font-semibold text-white sm:text-3xl">{t('pricing_title')}</h2>
-            <p className="mt-3 text-slate-400">Run it in a sovereign cloud or fully inside your own data center.</p>
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <h2 className="text-2xl font-semibold text-fg sm:text-3xl">{t('pricing_title')}</h2>
+            <p className="mt-2 text-sm text-muted">Evaluate in this public cloud sandbox or deploy inside an air-gapped bank intranet.</p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-3">
             {PLANS.map((p) => (
               <div
                 key={p.key}
-                className={`relative flex flex-col rounded-2xl bg-canvas p-6 ${
-                  p.featured ? 'border-2 border-emerald-500/50' : 'border border-slate-800'
+                className={`relative flex flex-col rounded-2xl bg-panel p-6 ${
+                  p.featured ? 'border-2 border-accent' : 'border border-line'
                 }`}
               >
                 {p.featured && (
-                  <span className="absolute -top-3 left-6 rounded-full bg-emerald-500 px-3 py-0.5 text-xs font-semibold text-slate-950">
-                    Most popular
+                  <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-0.5 text-xs font-semibold text-accent-fg">
+                    Recommended
                   </span>
                 )}
-                <h3 className="text-lg font-semibold text-white">{t(p.tKey)}</h3>
-                <p className="mt-4 text-3xl font-semibold text-white">
-                  {p.price} <span className="text-sm font-normal text-slate-400">/ {p.unit}</span>
+                <h3 className="text-lg font-semibold text-fg">{t(p.tKey)}</h3>
+                <p className="mt-3 text-3xl font-semibold text-fg tabular-aml">
+                  {p.price} <span className="text-sm font-normal text-muted">/ {p.unit}</span>
                 </p>
-                <ul className="mt-6 flex-1 space-y-3 text-slate-300">
+                <ul className="mt-5 flex-1 space-y-2.5 text-sm text-fg-secondary">
                   {p.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden="true" />
+                    <li key={f} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent-text" aria-hidden="true" />
                       <span>{f}</span>
                     </li>
                   ))}
                 </ul>
                 {p.href ? (
-                  <Link href={p.href} className={`${btnGhost} mt-8`}>
+                  <Link href={p.href} className={`${btnGhost} mt-6`}>
                     {p.cta}
                   </Link>
                 ) : (
                   <button
                     type="button"
                     onClick={() => handleOpenInquiry(p.inquiry as InquiryType)}
-                    className={`${p.featured ? btnPrimary : btnGhost} mt-8`}
+                    className={`${p.featured ? btnPrimary : btnGhost} mt-6`}
                   >
                     {p.cta}
                   </button>
@@ -398,30 +406,33 @@ export default function EnterpriseLandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-canvas px-4 py-10 text-sm text-slate-400 sm:px-6">
+      <footer className="bg-canvas px-4 py-10 text-sm text-muted sm:px-6">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
             <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-              <span className="font-semibold text-slate-200">Intelligent-AML Platform v3.0 · C-STGB v3.2 Engine</span>
+              <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+              <span className="font-semibold text-fg">Intelligent-AML Platform v3.0 · C-STGB v3.2 Engine</span>
             </div>
-            <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2" aria-label="Footer">
-              <button type="button" onClick={() => setIsPrivacyModalOpen(true)} className="hover:text-white">
+            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2" aria-label="Footer">
+              <button type="button" onClick={() => setIsPrivacyModalOpen(true)} className="hover:text-fg cursor-pointer">
                 Privacy
               </button>
-              <button type="button" onClick={() => setIsTermsModalOpen(true)} className="hover:text-white">
+              <button type="button" onClick={() => setIsTermsModalOpen(true)} className="hover:text-fg cursor-pointer">
                 Terms
               </button>
-              <Link href="/governance" className="hover:text-white">
+              <Link href="/cookies" className="hover:text-fg">
+                Cookies
+              </Link>
+              <Link href="/governance" className="hover:text-fg">
                 Model card
               </Link>
-              <Link href="/app" className="font-medium text-emerald-400 hover:text-emerald-300">
+              <Link href="/app" className="font-medium text-accent-text hover:underline">
                 Open the app &rarr;
               </Link>
             </nav>
           </div>
-          <p className="mt-8 border-t border-slate-800 pt-6 text-center text-xs text-slate-500 md:text-left">
-            &copy; 2026 Intelligent-AML. Research prototype. Not legal advice. Not a certified regulated product.
+          <p className="mt-6 border-t border-line pt-5 text-center text-xs text-muted md:text-left">
+            &copy; 2026 Intelligent-AML. Research &amp; evaluation prototype running on synthetic data. Not legal advice or a regulator-certified product.
           </p>
         </div>
       </footer>
@@ -433,49 +444,48 @@ export default function EnterpriseLandingPage() {
       />
 
       {isPrivacyModalOpen && (
-        <div role="dialog" aria-modal="true" aria-labelledby="privacy-dialog-title" className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-panel border border-line rounded-xl shadow-2xl p-6 relative text-slate-100 max-h-[80vh] overflow-y-auto">
-            <button type="button" onClick={() => setIsPrivacyModalOpen(false)} className="absolute top-4 right-4 p-1 rounded-md hover:bg-surface-2 text-slate-400 hover:text-slate-200" aria-label="Close dialog">
+        <div role="dialog" aria-modal="true" aria-labelledby="privacy-dialog-title" className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-panel border border-line rounded-xl shadow-2xl p-6 relative text-fg max-h-[80vh] overflow-y-auto">
+            <button type="button" onClick={() => setIsPrivacyModalOpen(false)} className="absolute top-4 right-4 p-1.5 rounded-md hover:bg-surface-hover text-muted hover:text-fg cursor-pointer" aria-label="Close dialog">
               <X className="w-5 h-5" />
             </button>
-            <h3 id="privacy-dialog-title" className="text-base font-semibold text-slate-100 mb-1">Privacy Policy &amp; Sovereign Data Governance</h3>
-            <p className="text-xs font-mono text-emerald-400 mb-4">Bangladesh Bank ICT Security Guidelines v3.0 &amp; Banking Companies Act 1991 § 46</p>
-            <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
-              <p><strong>1. Sovereign Residency:</strong> In on-premises deployment mode (<code>APP_MODE=onprem</code>), transaction payloads and customer records stay strictly within the bank&apos;s private network perimeter.</p>
-              <p><strong>2. Server-Side PII Masking:</strong> NIDs, account numbers, and entity names remain masked by default. Audited unmasking requires a written justification and auto-expires in 60 seconds.</p>
-              <p><strong>3. Synthetic Evaluation Data:</strong> Public sandbox sessions contain strictly synthetic transaction data with zero real customer PII.</p>
+            <h3 id="privacy-dialog-title" className="text-base font-semibold text-fg mb-1">Privacy Policy &amp; Sovereign Data Governance</h3>
+            <p className="text-xs font-mono text-accent-text mb-4">Bangladesh Bank ICT Security Guidelines &amp; Banking Companies Act 1991 § 46</p>
+            <div className="space-y-3 text-xs text-fg-secondary leading-relaxed">
+              <p><strong>1. Sovereign Residency:</strong> In on-premises mode (<code>APP_MODE=onprem</code>), payloads and customer records stay inside the bank&apos;s private perimeter.</p>
+              <p><strong>2. Server-Side PII Masking:</strong> Identifiers stay masked by default. Audited unmasking expires automatically in 60 seconds.</p>
+              <p><strong>3. Full Draft Page:</strong> View the standalone <Link href="/privacy" className="text-accent-text underline">Privacy Notice</Link>.</p>
             </div>
           </div>
         </div>
       )}
 
       {isTermsModalOpen && (
-        <div role="dialog" aria-modal="true" aria-labelledby="terms-dialog-title" className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-panel border border-line rounded-xl shadow-2xl p-6 relative text-slate-100 max-h-[80vh] overflow-y-auto">
-            <button type="button" onClick={() => setIsTermsModalOpen(false)} className="absolute top-4 right-4 p-1 rounded-md hover:bg-surface-2 text-slate-400 hover:text-slate-200" aria-label="Close dialog">
+        <div role="dialog" aria-modal="true" aria-labelledby="terms-dialog-title" className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-panel border border-line rounded-xl shadow-2xl p-6 relative text-fg max-h-[80vh] overflow-y-auto">
+            <button type="button" onClick={() => setIsTermsModalOpen(false)} className="absolute top-4 right-4 p-1.5 rounded-md hover:bg-surface-hover text-muted hover:text-fg cursor-pointer" aria-label="Close dialog">
               <X className="w-5 h-5" />
             </button>
-            <h3 id="terms-dialog-title" className="text-base font-semibold text-slate-100 mb-1">Terms of Institutional Evaluation</h3>
-            <p className="text-xs font-mono text-emerald-400 mb-4">Commercial Evaluation &amp; Research Prototype Notice</p>
-            <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
-              <p><strong>1. Scope:</strong> Provided for institutional compliance testing, model validation, and AML/CFT workflow evaluation under MLPA 2012.</p>
-              <p><strong>2. Maker-Checker Governance:</strong> Final regulatory filings (STR/CTR) require independent verification and sign-off by an authorized Compliance Officer / MLRO.</p>
-              <p><strong>3. Statutory Disclaimer:</strong> Software outputs do not constitute legal advice or official regulatory certification.</p>
+            <h3 id="terms-dialog-title" className="text-base font-semibold text-fg mb-1">Terms of Institutional Evaluation</h3>
+            <p className="text-xs font-mono text-accent-text mb-4">Commercial Evaluation &amp; Research Prototype Notice</p>
+            <div className="space-y-3 text-xs text-fg-secondary leading-relaxed">
+              <p><strong>1. Scope:</strong> Provided for compliance evaluation and AML/CFT workflow testing under MLPA 2012.</p>
+              <p><strong>2. Maker-Checker Governance:</strong> Final regulatory filings require independent verification by an authorized Officer / MLRO.</p>
+              <p><strong>3. Full Draft Page:</strong> View the standalone <Link href="/terms" className="text-accent-text underline">Evaluation Terms</Link>.</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* 12. Cookie notice (strictly necessary cookies only) */}
       {!isCookieDismissed && (
         <div
           role="region"
           aria-label="Cookie notice"
-          className="fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm z-40 rounded-xl border border-slate-700 bg-slate-900 p-4 shadow-2xl"
+          className="fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm z-40 rounded-xl border border-line bg-panel p-4 shadow-2xl"
         >
-          <p className="text-sm text-slate-300">
-            We only use cookies needed to keep you signed in. No ads, no tracking.{' '}
-            <button type="button" onClick={() => setIsPrivacyModalOpen(true)} className="text-emerald-400 underline underline-offset-2 hover:text-emerald-300">
+          <p className="text-sm text-fg-secondary">
+            We only use strictly necessary cookies to keep your session and workspace settings intact.{' '}
+            <button type="button" onClick={() => setIsPrivacyModalOpen(true)} className="text-accent-text underline underline-offset-2 cursor-pointer">
               Details
             </button>
           </p>
@@ -483,7 +493,7 @@ export default function EnterpriseLandingPage() {
             <button
               type="button"
               onClick={handleAcknowledgeCookie}
-              className="rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-semibold text-slate-950 hover:bg-emerald-400"
+              className="rounded-lg bg-accent px-3 py-1.5 text-sm font-semibold text-accent-fg hover:bg-accent-hover cursor-pointer"
             >
               Got it
             </button>

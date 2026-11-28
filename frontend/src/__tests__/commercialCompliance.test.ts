@@ -53,12 +53,8 @@ describe('Commercial AML Compliance & Statutory Rules Suite', () => {
     expect(digest1).not.toBe(digest3);
     expect(digest1.length).toBe(64);
 
-    // Verify initial certified genesis chain
     const chain = getAuditChain();
     const chainResult = await verifyAuditChain(chain);
-    if (!chainResult.isValid) {
-      console.log('DEBUG chainResult:', chainResult);
-    }
     expect(chainResult.isValid).toBe(true);
     expect(chainResult.totalEntries).toBe(chain.length);
   });

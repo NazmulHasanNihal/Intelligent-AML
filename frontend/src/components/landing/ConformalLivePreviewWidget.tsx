@@ -88,9 +88,9 @@ export const ConformalLivePreviewWidget: React.FC = () => {
   const scenario = SCENARIOS.find((s) => s.id === activeScenarioId)!;
 
   return (
-    <div className="w-full rounded-xl bg-[#0D121A] border border-[#1E2734] overflow-hidden text-slate-100">
+    <div className="w-full rounded-xl bg-panel border border-line overflow-hidden text-slate-100">
       {/* Widget Header */}
-      <div className="px-5 py-3.5 bg-[#0F172A] border-b border-[#1E293B] flex flex-wrap items-center justify-between gap-3">
+      <div className="px-5 py-3.5 bg-panel border-b border-line flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
             <Activity className="w-3.5 h-3.5 text-cyan-400" />
@@ -106,7 +106,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
         </div>
 
         {/* 3 Scenario Switcher Tabs */}
-        <div className="flex items-center bg-[#0D121A] p-1 rounded-lg border border-[#1E2734] text-xs font-mono">
+        <div className="flex items-center bg-panel p-1 rounded-lg border border-line text-xs font-mono">
           {SCENARIOS.map((sc) => {
             const isSelected = sc.id === activeScenarioId;
             return (
@@ -144,7 +144,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
       <div className="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Calibrated Score & Conformal Set (5 Cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B]">
+          <div className="p-4 rounded-xl bg-panel border border-line">
             <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-1">
               <span>Calibrated C-STGB Risk Score</span>
               <span className="text-cyan-400 font-bold">{scenario.fastPathLatencyUs} µs Latency</span>
@@ -165,7 +165,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
             </div>
 
             {/* Score Bar */}
-            <div className="w-full h-2.5 rounded-full bg-[#0B0F17] overflow-hidden border border-[#1E293B] relative my-3">
+            <div className="w-full h-2.5 rounded-full bg-canvas overflow-hidden border border-line relative my-3">
               <div
                 className={`h-full transition-all duration-500 rounded-full ${
                   scenario.tierColor === 'rose'
@@ -187,7 +187,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
           </div>
 
           {/* Conformal Prediction Set Badge */}
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] space-y-2">
+          <div className="p-4 rounded-xl bg-panel border border-line space-y-2">
             <span className="text-xs font-mono text-slate-400 block">
               Conformal Prediction Set Output
             </span>
@@ -211,7 +211,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
           </div>
 
           {/* Statutory Action */}
-          <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-xs font-mono text-slate-300">
+          <div className="p-3.5 rounded-xl bg-canvas border border-line text-xs font-mono text-slate-300">
             <span className="text-xs text-slate-400 block mb-1 ">
               Autonomous Institutional Action:
             </span>
@@ -220,9 +220,9 @@ export const ConformalLivePreviewWidget: React.FC = () => {
         </div>
 
         {/* Right Column: Top 4 Invariant Feature Attributions (7 Cols) */}
-        <div className="lg:col-span-7 bg-[#0F172A] border border-[#1E293B] rounded-xl p-4 sm:p-5 flex flex-col justify-between">
+        <div className="lg:col-span-7 bg-panel border border-line rounded-xl p-4 sm:p-5 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-[#1E293B] mb-4">
+            <div className="flex items-center justify-between pb-3 border-b border-line mb-4">
               <div className="flex items-center gap-2">
                 <Layers className="w-4 h-4 text-emerald-400" />
                 <span className="text-xs font-mono font-bold text-slate-200">
@@ -249,7 +249,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
                       {inv.value}
                     </span>
                   </div>
-                  <div className="w-full h-1.5 rounded-full bg-[#0B0F17] overflow-hidden border border-[#1E293B]">
+                  <div className="w-full h-1.5 rounded-full bg-canvas overflow-hidden border border-line">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         scenario.tierColor === 'rose'
@@ -267,7 +267,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs font-mono text-slate-400">
+          <div className="pt-4 border-t border-line mt-4 flex items-center justify-between text-xs font-mono text-slate-400">
             <span>FastPath In-Memory Scoring</span>
             <span className="text-emerald-400 font-bold">&lt; 200 µs Target Verified</span>
           </div>

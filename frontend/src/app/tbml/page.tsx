@@ -158,7 +158,7 @@ export default function TradeFinanceTbmlPage() {
             aria-label="Select LC Shipment"
             value={selectedPresetIdx}
             onChange={(e) => handleSelectPreset(Number(e.target.value))}
-            className="px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-200 focus:outline-none focus:border-sky-500"
+            className="px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-slate-200 focus:outline-none focus:border-sky-500"
           >
             {TBML_LC_PRESETS.map((p, i) => (
               <option key={p.lcNumber} value={i}>
@@ -168,7 +168,7 @@ export default function TradeFinanceTbmlPage() {
           </select>
           <Link
             href="/cases/CASE-2026-0881"
-            className="px-3 py-1.5 rounded-lg bg-[#0F172A] hover:bg-[#1E293B] border border-[#334155] text-xs font-semibold text-slate-200 transition-colors flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg bg-panel hover:bg-surface border border-line-strong text-xs font-semibold text-slate-200 transition-colors flex items-center gap-1.5"
           >
             <span>Linked Case: CASE-2026-0881</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -181,7 +181,7 @@ export default function TradeFinanceTbmlPage() {
         {/* Left Column: Trade Packet Navigation & Price Variance */}
         <div className="lg:col-span-8 space-y-4">
           {/* Sub-Tabs */}
-          <div className="flex items-center gap-2 pb-2 border-b border-[#1E293B]">
+          <div className="flex items-center gap-2 pb-2 border-b border-line">
             <button
               onClick={() => setActiveTab('PACKET_VIEW')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
@@ -219,8 +219,8 @@ export default function TradeFinanceTbmlPage() {
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Document 1: SWIFT MT700 */}
-                <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] space-y-3">
-                  <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+                <div className="p-4 rounded-xl bg-panel border border-line space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-line">
                     <span className="font-mono text-xs font-bold text-sky-400">1. SWIFT MT700 Documentary Credit</span>
                     <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">ISSUED</span>
                   </div>
@@ -235,8 +235,8 @@ export default function TradeFinanceTbmlPage() {
                 </div>
 
                 {/* Document 2: Commercial Invoice */}
-                <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] space-y-3">
-                  <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+                <div className="p-4 rounded-xl bg-panel border border-line space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-line">
                     <span className="font-mono text-xs font-bold text-amber-400">2. Commercial Invoice #INV-8812</span>
                     <span className={`text-xs font-mono px-2 py-0.5 rounded ${Math.abs(divergencePct) >= 25 ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
                       {Math.abs(divergencePct) >= 25 ? 'PRICE DISCREPANCY' : 'WITHIN TOLERANCE'}
@@ -254,8 +254,8 @@ export default function TradeFinanceTbmlPage() {
               </div>
 
               {/* Document 3: ASYCUDA World Bill of Entry */}
-              <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] space-y-3">
-                <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+              <div className="p-4 rounded-xl bg-panel border border-line space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-line">
                   <span className="font-mono text-xs font-bold text-rose-400">
                     3. ASYCUDA World Customs Declaration (Chittagong Custom House)
                   </span>
@@ -264,15 +264,15 @@ export default function TradeFinanceTbmlPage() {
                   </span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-                  <div className="p-2.5 bg-[#0B0F17] rounded-lg">
+                  <div className="p-2.5 bg-canvas rounded-lg">
                     <span className="text-slate-500 text-xs block">Bill of Entry No</span>
                     <span className="font-bold text-white">{preset.billOfEntry}</span>
                   </div>
-                  <div className="p-2.5 bg-[#0B0F17] rounded-lg">
+                  <div className="p-2.5 bg-canvas rounded-lg">
                     <span className="text-slate-500 text-xs block">HS Tariff Code</span>
                     <span className="font-bold text-white">{preset.hsCode} ({preset.goods})</span>
                   </div>
-                  <div className="p-2.5 bg-[#0B0F17] rounded-lg">
+                  <div className="p-2.5 bg-canvas rounded-lg">
                     <span className="text-slate-500 text-xs block">Official Assessment Value</span>
                     <span className="font-bold text-amber-400">${asycudaTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                   </div>
@@ -283,7 +283,7 @@ export default function TradeFinanceTbmlPage() {
 
           {/* Price Benchmark Comparison */}
           {activeTab === 'PRICE_BENCHMARK' && (
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4">
+            <div className="p-5 rounded-2xl bg-panel border border-line space-y-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
                   <AlertTriangle className="w-4 h-4 text-rose-500" />
@@ -295,7 +295,7 @@ export default function TradeFinanceTbmlPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-                <label className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1 block">
+                <label className="p-3 rounded-xl bg-canvas border border-line space-y-1 block">
                   <span className="text-[10px] text-slate-400 uppercase block">Declared Unit Price ($/KG)</span>
                   <input
                     type="number"
@@ -303,10 +303,10 @@ export default function TradeFinanceTbmlPage() {
                     min="0.01"
                     value={declaredUnitPrice}
                     onChange={(e) => setDeclaredUnitPrice(Math.max(0.01, parseFloat(e.target.value) || 0.01))}
-                    className="w-full bg-[#0F172A] border border-[#334155] rounded-lg px-2.5 py-1.5 text-rose-300 font-bold focus:outline-none focus:border-sky-500"
+                    className="w-full bg-panel border border-line-strong rounded-lg px-2.5 py-1.5 text-rose-300 font-bold focus:outline-none focus:border-sky-500"
                   />
                 </label>
-                <label className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1 block">
+                <label className="p-3 rounded-xl bg-canvas border border-line space-y-1 block">
                   <span className="text-[10px] text-slate-400 uppercase block">ASYCUDA Benchmark ($/KG)</span>
                   <input
                     type="number"
@@ -314,10 +314,10 @@ export default function TradeFinanceTbmlPage() {
                     min="0.01"
                     value={asycudaUnitPrice}
                     onChange={(e) => setAsycudaUnitPrice(Math.max(0.01, parseFloat(e.target.value) || 0.01))}
-                    className="w-full bg-[#0F172A] border border-[#334155] rounded-lg px-2.5 py-1.5 text-emerald-300 font-bold focus:outline-none focus:border-sky-500"
+                    className="w-full bg-panel border border-line-strong rounded-lg px-2.5 py-1.5 text-emerald-300 font-bold focus:outline-none focus:border-sky-500"
                   />
                 </label>
-                <label className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1 block">
+                <label className="p-3 rounded-xl bg-canvas border border-line space-y-1 block">
                   <span className="text-[10px] text-slate-400 uppercase block">Quantity (KG)</span>
                   <input
                     type="number"
@@ -325,25 +325,25 @@ export default function TradeFinanceTbmlPage() {
                     min="100"
                     value={declaredQuantityKg}
                     onChange={(e) => setDeclaredQuantityKg(Math.max(100, parseInt(e.target.value, 10) || 100))}
-                    className="w-full bg-[#0F172A] border border-[#334155] rounded-lg px-2.5 py-1.5 text-slate-100 font-bold focus:outline-none focus:border-sky-500"
+                    className="w-full bg-panel border border-line-strong rounded-lg px-2.5 py-1.5 text-slate-100 font-bold focus:outline-none focus:border-sky-500"
                   />
                 </label>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
-                <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-center">
+                <div className="p-4 rounded-xl bg-canvas border border-line text-center">
                   <span className="text-xs font-mono uppercase text-slate-500 block">Declared LC Invoice Price</span>
                   <span className="text-2xl font-mono font-bold text-rose-400 mt-1 block">${declaredUnitPrice.toFixed(2)} / KG</span>
                   <span className="text-xs text-slate-400">Total: ${declaredTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-center">
+                <div className="p-4 rounded-xl bg-canvas border border-line text-center">
                   <span className="text-xs font-mono uppercase text-slate-500 block">ASYCUDA Market Fair Value</span>
                   <span className="text-2xl font-mono font-bold text-emerald-400 mt-1 block">${asycudaUnitPrice.toFixed(2)} / KG</span>
                   <span className="text-xs text-slate-400">Total: ${asycudaTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                 </div>
 
-                <div className={`p-4 rounded-xl bg-[#0B0F17] border text-center ${Math.abs(divergencePct) >= 25 ? 'border-rose-500/40' : 'border-emerald-500/40'}`}>
+                <div className={`p-4 rounded-xl bg-canvas border text-center ${Math.abs(divergencePct) >= 25 ? 'border-rose-500/40' : 'border-emerald-500/40'}`}>
                   <span className="text-xs font-mono uppercase text-slate-500 block">Capital Outflow Divergence</span>
                   <span className={`text-2xl font-mono font-bold mt-1 block ${Math.abs(divergencePct) >= 25 ? 'text-rose-500' : 'text-emerald-400'}`}>
                     {divergencePct >= 0 ? '+' : ''}{divergencePct.toFixed(1)}%
@@ -379,7 +379,7 @@ export default function TradeFinanceTbmlPage() {
 
           {/* AIS Vessel Tracking */}
           {activeTab === 'VESSEL_TRACKING' && (
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4">
+            <div className="p-5 rounded-2xl bg-panel border border-line space-y-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
                   <MapPin className="w-4 h-4 text-amber-400" />
@@ -391,15 +391,15 @@ export default function TradeFinanceTbmlPage() {
               </div>
 
               <div className="space-y-3 font-mono text-xs">
-                <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl border border-line flex items-center justify-between">
                   <span className="text-slate-400">Port of Loading (B/L):</span>
                   <strong className="text-slate-100">Chittagong Port (BDCGP) — Departed 2026-08-28</strong>
                 </div>
-                <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl border border-line flex items-center justify-between">
                   <span className="text-slate-400">Declared Port of Discharge (B/L):</span>
                   <strong className="text-slate-100">Port Klang, Malaysia (MYPKG)</strong>
                 </div>
-                <div className="p-3 bg-[#0B0F17] rounded-xl border border-rose-500/40 flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl border border-rose-500/40 flex items-center justify-between">
                   <span className="text-rose-400 font-bold">Actual AIS Telemetry Discharge:</span>
                   <strong className="text-rose-400 font-bold">Jebel Ali / Dubai, UAE (AEJEA) — Diverted</strong>
                 </div>
@@ -413,7 +413,7 @@ export default function TradeFinanceTbmlPage() {
         </div>
 
         {/* Right Column: Evidence Drag-and-Drop & WORM Anchor Actions */}
-        <div className="lg:col-span-4 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-2xl flex flex-col justify-between space-y-6">
+        <div className="lg:col-span-4 bg-panel border border-line rounded-2xl p-5 shadow-2xl flex flex-col justify-between space-y-6">
           <div className="space-y-5">
             <div>
               <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
@@ -426,7 +426,7 @@ export default function TradeFinanceTbmlPage() {
             </div>
 
             {/* Upload Zone */}
-            <label className="p-6 border-2 border-dashed border-[#334155] hover:border-sky-500 rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors bg-[#0B0F17]/50">
+            <label className="p-6 border-2 border-dashed border-line-strong hover:border-sky-500 rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors bg-canvas/50">
               <UploadCloud className="w-8 h-8 text-slate-500" />
               <span className="text-xs font-semibold text-slate-300">
                 {isHashing ? 'Computing SHA-256 Digest...' : 'Select or Drop Trade Document'}
@@ -443,7 +443,7 @@ export default function TradeFinanceTbmlPage() {
 
             {/* Uploaded File Hash Display */}
             {uploadedFileHash && (
-              <div className="p-3 bg-[#0B0F17] border border-emerald-500/40 rounded-xl space-y-1.5 text-xs font-mono">
+              <div className="p-3 bg-canvas border border-emerald-500/40 rounded-xl space-y-1.5 text-xs font-mono">
                 <div className="flex items-center justify-between text-emerald-400 font-bold">
                   <span>{uploadedFileName}</span>
                   <CheckCircle2 className="w-4 h-4" />
@@ -456,11 +456,11 @@ export default function TradeFinanceTbmlPage() {
 
             {/* Audit Status */}
             <div className="space-y-2 text-xs">
-              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] flex items-center justify-between">
+              <div className="p-3 bg-canvas rounded-xl border border-line flex items-center justify-between">
                 <span className="text-slate-400">Verified Evidence Count:</span>
                 <strong className="font-mono text-emerald-400">{verifiedCount} Items Anchored</strong>
               </div>
-              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] flex items-center justify-between">
+              <div className="p-3 bg-canvas rounded-xl border border-line flex items-center justify-between">
                 <span className="text-slate-400">Admissibility Standard:</span>
                 <strong className="font-mono text-emerald-400 text-right">Evidence Act §§ 65A–65B &amp; 73A / FRE 902(11)</strong>
               </div>
@@ -468,7 +468,7 @@ export default function TradeFinanceTbmlPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-4 border-t border-[#1E293B] space-y-2.5">
+          <div className="pt-4 border-t border-line space-y-2.5">
             <button
               onClick={handlePinReport}
               disabled={isPinned}
@@ -484,7 +484,7 @@ export default function TradeFinanceTbmlPage() {
 
             <Link
               href="/sar?caseId=CASE-2026-0881"
-              className="w-full py-2.5 px-4 rounded-xl bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium text-xs transition-colors flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 rounded-xl bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs transition-colors flex items-center justify-center gap-2"
             >
               <FileText className="w-4 h-4 text-purple-400" />
               <span>Proceed to Regulatory SAR Filing</span>

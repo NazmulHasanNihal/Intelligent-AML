@@ -214,7 +214,7 @@ export default function RfiHubPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300">
+          <div className="px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-slate-300">
             <span>Active Outbound Notices: <strong>{rfis.length} Requests</strong></span>
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function RfiHubPage() {
       {/* Main Split Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left Column: Author Safe RFI Notice Form */}
-        <div className="lg:col-span-6 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-2xl space-y-4">
+        <div className="lg:col-span-6 bg-panel border border-line rounded-2xl p-5 shadow-2xl space-y-4">
           <div>
             <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
               <Send className="w-4 h-4 text-indigo-400" />
@@ -242,7 +242,7 @@ export default function RfiHubPage() {
                 required
                 value={targetEntity}
                 onChange={(e) => setTargetEntity(e.target.value)}
-                className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 focus:outline-none focus:border-indigo-500"
               />
             </div>
 
@@ -253,7 +253,7 @@ export default function RfiHubPage() {
                 required
                 value={targetAccount}
                 onChange={(e) => setTargetAccount(e.target.value)}
-                className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 focus:outline-none focus:border-indigo-500 font-mono"
+                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 focus:outline-none focus:border-indigo-500 font-mono"
               />
             </div>
 
@@ -278,10 +278,10 @@ export default function RfiHubPage() {
                 value={rfiReason}
                 onChange={(e) => setRfiReason(e.target.value)}
                 rows={4}
-                className={`w-full p-3 bg-[#0B0F17] border rounded-xl text-xs font-mono text-slate-100 focus:outline-none transition-colors ${
+                className={`w-full p-3 bg-canvas border rounded-xl text-xs font-mono text-slate-100 focus:outline-none transition-colors ${
                   tippingOffCheck.containsTippingOff
                     ? 'border-rose-500 focus:border-rose-400'
-                    : 'border-[#334155] focus:border-indigo-500'
+                    : 'border-line-strong focus:border-indigo-500'
                 }`}
               />
 
@@ -313,7 +313,7 @@ export default function RfiHubPage() {
                 <select
                   value={deadlineDays}
                   onChange={(e) => setDeadlineDays(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 cursor-pointer"
+                  className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 cursor-pointer"
                 >
                   <option value={3}>3 Business Days (Expedited)</option>
                   <option value={7}>7 Business Days (Standard)</option>
@@ -323,7 +323,7 @@ export default function RfiHubPage() {
 
               <div>
                 <label className="text-slate-400 block mb-1 font-mono text-xs">Transmission Channel</label>
-                <select className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 cursor-pointer">
+                <select className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 cursor-pointer">
                   <option>Secure Corporate Banking Portal</option>
                   <option>Encrypted SWIFT MT999 Notice</option>
                   <option>Certified Mail / Branch Delivery</option>
@@ -351,7 +351,7 @@ export default function RfiHubPage() {
         {/* Right Column: Active RFI Tracking Queue & Customer Upload Simulation */}
         <div className="lg:col-span-6 space-y-4">
           {/* Customer Document Response Simulator */}
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+          <div className="p-4 rounded-xl bg-panel border border-line shadow-xl space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-slate-200 font-mono flex items-center gap-2">
                 <UploadCloud className="w-4 h-4 text-emerald-400" />
@@ -364,21 +364,21 @@ export default function RfiHubPage() {
               Simulate customer uploading requested customs clearance bills or pro-forma invoices in response to active RFI.
             </p>
 
-            <label className="p-4 border-2 border-dashed border-[#334155] hover:border-emerald-500 rounded-xl flex items-center justify-center gap-3 cursor-pointer bg-[#0B0F17]/60 transition-colors">
+            <label className="p-4 border-2 border-dashed border-line-strong hover:border-emerald-500 rounded-xl flex items-center justify-center gap-3 cursor-pointer bg-canvas/60 transition-colors">
               <UploadCloud className="w-5 h-5 text-slate-400" />
               <span className="text-xs text-slate-300 font-medium">Drop response document to verify cryptographic digest</span>
               <input type="file" onChange={handleFileUpload} className="hidden" />
             </label>
 
             {uploadStatus && (
-              <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-emerald-500/30 text-xs font-mono text-emerald-300">
+              <div className="p-2.5 bg-canvas rounded-lg border border-emerald-500/30 text-xs font-mono text-emerald-300">
                 {uploadStatus}
               </div>
             )}
           </div>
 
           {/* Active Outbound Notices List */}
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-4 shadow-xl space-y-3">
+          <div className="bg-panel border border-line rounded-2xl p-4 shadow-xl space-y-3">
             <h3 className="text-xs font-bold text-slate-300 font-mono">
               Active Outbound RFI Notices Queue
             </h3>
@@ -387,7 +387,7 @@ export default function RfiHubPage() {
               {rfis.map((rfi) => (
                 <div
                   key={rfi.id}
-                  className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl text-xs space-y-2"
+                  className="p-3 bg-canvas border border-line rounded-xl text-xs space-y-2"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-bold text-indigo-400">{rfi.id}</span>
@@ -405,7 +405,7 @@ export default function RfiHubPage() {
                     {rfi.reason}
                   </p>
 
-                  <div className="pt-2 border-t border-[#1E293B]/60 flex items-center justify-between text-xs">
+                  <div className="pt-2 border-t border-line/60 flex items-center justify-between text-xs">
                     <span className="text-slate-500 font-mono">Deadline: {rfi.deadlineDays} Days</span>
                     <button
                       onClick={() => handleSendReminder(rfi.id)}

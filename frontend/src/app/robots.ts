@@ -1,7 +1,6 @@
-import type { MetadataRoute } from 'next';
+import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://intelligent-aml.vercel.app';
   const allowAudit = process.env.ALLOW_PUBLIC_AUDIT !== 'false';
 
   return {
@@ -9,9 +8,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: allowAudit ? ['/', '/governance', '/app'] : ['/', '/governance'],
-        disallow: allowAudit ? ['/api/'] : ['/api/', '/app'],
+        disallow: allowAudit ? ['/api/', '/styleguide'] : ['/api/', '/styleguide', '/app'],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: 'https://intelligent-aml.vercel.app/sitemap.xml',
   };
 }

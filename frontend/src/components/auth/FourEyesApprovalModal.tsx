@@ -1,33 +1,35 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShieldAlert, Lock, CheckCircle2, AlertTriangle, Key, X } from 'lucide-react';
+import { Lock, AlertTriangle, Key, X } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
 import { BANKER_PERSONAS } from '@/lib/auth/session';
+import { JURISDICTIONS } from '@/lib/compliance/jurisdictions';
 
 export const FourEyesApprovalModal: React.FC = () => {
   const {
     isFourEyesModalOpen,
     fourEyesTargetAction,
     fourEyesTargetAccount,
-    fourEyesDetails,
     fourEyesOnApproved,
     closeFourEyesModal,
     currentBanker,
+    activeJurisdiction,
     logAuditAction,
-    addToast
+    addToast,
   } = useBankingStore();
 
-  const [checkerRole, setCheckerRole] = useState<'CCO_L3'>('CCO_L3');
-  const [justificationCode, setJustificationCode] = useState('FATF-TYP-04_WASH_CYCLE');
+  const [checkerRole] = useState<'CCO_L3'>('CCO_L3');
+  const [justificationCode, setJustificationCode] = useState('BFIU-SEC-15_FREEZE');
   const [statutoryJustification, setStatutoryJustification] = useState(
-    'Dual-signatory verification confirmed. High-risk invariant pattern matching Section 25 of MLPA 2012 / FinCEN 31 CFR § 1020.320.'
+    'Dual-signatory verification confirmed under maker-checker controls.'
   );
   const [stepUpPassword, setStepUpPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   if (!isFourEyesModalOpen) return null;
 
+  const jurProfile = JURISDICTIONS[activeJurisdiction] || JURISDICTIONS.BD_BFIU;
   const checkerProfile = BANKER_PERSONAS[checkerRole];
   const isSelfApprovalViolation = currentBanker.id === checkerProfile.id;
 
@@ -45,7 +47,6 @@ export const FourEyesApprovalModal: React.FC = () => {
       return;
     }
 
-    // Record verified dual action to append-only audit ledger
     await logAuditAction(
       `4EYES_APPROVED_${fourEyesTargetAction || 'HIGH_CONSEQUENCE_ACTION'}`,
       `Dual-authorized: ${statutoryJustification} (Justification Code: ${justificationCode})`,
@@ -67,115 +68,116 @@ export const FourEyesApprovalModal: React.FC = () => {
   };
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Four-eyes approval" className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 select-none">
-      <div className="w-full max-w-lg rounded-xl bg-[#0F172A] border border-[#334155] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 text-slate-100">
-        {/* Header */}
-        <div className="p-4 bg-rose-950/40 border-b border-rose-800/40 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 text-rose-400">
-            <Lock className="w-5 h-5 shrink-0" />
-            <div>
-              <h3 className="font-bold text-sm tracking-tight font-sans">Two-Officer "4-Eyes" Cryptographic Gate</h3>
-              <span className="text-xs font-mono text-rose-300/80">31 CFR § 1010.430 & FRE 902(11) Dual Sign-off</span>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Four-eyes approval"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 select-none"
+    >
+      <div className="w-full max-w-lg rounded-xl bg-panel border border-line shadow-2xl overflow-hidden text-fg">
+        <div className="p-4 bg-tier-1-bg border-b border-tier-1-border flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 text-tier-1-text min-w-0">
+            <Lock className="w-5 h-5 shrink-0" aria-hidden="true" />
+            <div className="min-w-0">
+              <h3 className="font-semibold text-sm tracking-tight text-fg">Two-Officer &ldquo;4-Eyes&rdquo; Cryptographic Gate</h3>
+              <span className="text-xs font-mono text-tier-1-text block truncate">
+                {jurProfile.evidenceRule}
+              </span>
             </div>
           </div>
           <button
+            type="button"
             onClick={closeFourEyesModal}
-            className="p-1 rounded text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+            aria-label="Close approval gate"
+            className="p-1.5 rounded-lg text-muted hover:text-fg hover:bg-surface-hover transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Body */}
         <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs font-mono">
-          {/* Target Action Banner */}
-          <div className="p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B] space-y-1">
-            <span className="text-xs text-slate-500 block">Target High-Consequence Action</span>
-            <div className="flex items-center justify-between text-slate-200 font-bold">
+          <div className="p-3 rounded-lg bg-surface border border-line space-y-1">
+            <span className="text-xs text-muted block">Target high-consequence action</span>
+            <div className="flex items-center justify-between gap-2 text-fg font-semibold">
               <span>{fourEyesTargetAction?.replace(/_/g, ' ') || 'Statutory Account Freeze'}</span>
-              <span className="text-amber-400">{fourEyesTargetAccount || 'BD22-••••-••••-8823'}</span>
+              <span className="text-tier-2-text">{fourEyesTargetAccount || 'BD22-••••-••••-8823'}</span>
             </div>
           </div>
 
-          {/* Maker / Checker Dual Representation */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B]">
-              <span className="text-xs text-slate-500 block mb-1">OFFICER 1: INITIATOR (MAKER)</span>
-              <span className="font-bold text-slate-200 block truncate">{currentBanker.name}</span>
-              <span className="text-xs text-slate-400 block truncate">{currentBanker.roleTitle}</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-3 rounded-lg bg-surface border border-line">
+              <span className="text-xs text-muted block mb-1">Officer 1 · Initiator (Maker)</span>
+              <span className="font-semibold text-fg block truncate">{currentBanker.name}</span>
+              <span className="text-xs text-muted block truncate">{currentBanker.roleTitle}</span>
             </div>
 
-            <div className="p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B]">
-              <span className="text-xs text-slate-500 block mb-1">OFFICER 2: COUNTER-SIGNER (CHECKER)</span>
-              <span className="font-bold text-emerald-400 block truncate">{checkerProfile.name}</span>
-              <span className="text-xs text-slate-400 block truncate">{checkerProfile.roleTitle}</span>
+            <div className="p-3 rounded-lg bg-surface border border-line">
+              <span className="text-xs text-muted block mb-1">Officer 2 · Checker</span>
+              <span className="font-semibold text-accent-text block truncate">{checkerProfile.name}</span>
+              <span className="text-xs text-muted block truncate">{checkerProfile.roleTitle}</span>
             </div>
           </div>
 
-          {/* Justification Code */}
           <div className="space-y-1">
-            <label className="text-xs text-slate-400 block">STATUTORY JUSTIFICATION CODE</label>
+            <label className="text-xs text-muted block">Statutory justification code</label>
             <select
               value={justificationCode}
               onChange={(e) => setJustificationCode(e.target.value)}
-              className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-mono cursor-pointer"
+              className="w-full px-3 py-2 rounded-lg bg-surface border border-line text-fg focus:outline-none focus:border-accent text-xs font-mono cursor-pointer"
             >
-              <option value="FATF-TYP-04_WASH_CYCLE">FATF Typology #4 — Multi-Hop Circular Wash Loop</option>
-              <option value="BFIU-SEC-15_FREEZE">MLPA 2012 §15 — Emergency Administrative Freeze</option>
-              <option value="FINCEN-1020_STRUCTURING">FinCEN 31 CFR § 1020.320 — Sub-CTR Smurfing</option>
+              <option value="BFIU-SEC-15_FREEZE">MLPA 2012 § 15 — Administrative Hold / Freeze</option>
+              <option value="FATF-TYP-04_WASH_CYCLE">FATF Typology #4 — Circular Pass-Through Conduit</option>
+              <option value="BFIU-TBML-24">BFIU Circular 24 — TBML Over-Invoicing Divergence</option>
               <option value="OFAC-SANCTIONS-INTERCEPT">OFAC / UN Security Council Watchlist Intercept</option>
-              <option value="EDD-OFFSHORE-CONDUIT">Enhanced Due Diligence (EDD) Secrecy Shell Conformance</option>
+              <option value="EDD-OFFSHORE-CONDUIT">Enhanced Due Diligence (EDD) Conformance</option>
             </select>
           </div>
 
-          {/* Operational Justification Memo */}
           <div className="space-y-1">
-            <label className="text-xs text-slate-400 block">SUPERVISORY MEMO & EVIDENCE SUMMARY</label>
+            <label className="text-xs text-muted block">Supervisory memo &amp; evidence summary</label>
             <textarea
               rows={2}
               value={statutoryJustification}
               onChange={(e) => setStatutoryJustification(e.target.value)}
-              className="w-full p-2.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-mono resize-none"
+              className="w-full p-2.5 rounded-lg bg-surface border border-line text-fg focus:outline-none focus:border-accent text-xs font-mono resize-none"
             />
           </div>
 
-          {/* Step-Up Password Confirmation */}
           <div className="space-y-1">
-            <label className="text-xs text-slate-400 block">STEP-UP RE-AUTHENTICATION (CHECKER PIN/PASSWORD)</label>
+            <label className="text-xs text-muted block">Step-up re-authentication (Checker credential)</label>
             <div className="relative">
-              <Key className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <Key className="w-3.5 h-3.5 text-muted absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
               <input
                 type="password"
                 placeholder="Enter authorized credential (e.g. 'cams2026')..."
                 value={stepUpPassword}
                 onChange={(e) => setStepUpPassword(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-mono"
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-surface border border-line text-fg focus:outline-none focus:border-accent text-xs font-mono"
               />
             </div>
           </div>
 
           {error && (
-            <div className="p-2 rounded bg-rose-950/40 border border-rose-800/60 text-rose-300 text-xs flex items-center gap-2">
-              <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-rose-400" />
+            <div className="p-2.5 rounded-lg bg-tier-1-bg border border-tier-1-border text-tier-1-text text-xs flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0" aria-hidden="true" />
               <span>{error}</span>
             </div>
           )}
 
-          {/* Actions */}
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#1E293B]">
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-line">
             <button
               type="button"
               onClick={closeFourEyesModal}
-              className="px-3 py-1.5 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 cursor-pointer transition-colors"
+              className="px-3 py-2 rounded-lg bg-surface hover:bg-surface-hover text-fg-secondary border border-line cursor-pointer transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded bg-rose-700 hover:bg-rose-600 text-white font-bold cursor-pointer transition-colors flex items-center gap-1.5 shadow-md"
+              className="px-4 py-2 rounded-lg bg-tier-1 hover:opacity-90 text-white font-semibold cursor-pointer transition-opacity flex items-center gap-1.5 shadow-sm"
             >
-              <Lock className="w-3.5 h-3.5" />
-              <span>Sign & Enforce Action</span>
+              <Lock className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Sign &amp; Enforce Action</span>
             </button>
           </div>
         </form>

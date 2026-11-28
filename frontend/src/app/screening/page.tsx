@@ -180,7 +180,7 @@ export default function SanctionsScreeningPage() {
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => setShowFeedsPanel(!showFeedsPanel)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300 hover:border-sky-500 cursor-pointer transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-slate-300 hover:border-sky-500 cursor-pointer transition-colors"
           >
             <Database className="w-3.5 h-3.5 text-sky-400" />
             <span>Official Feeds ({feedsList.length})</span>
@@ -189,7 +189,7 @@ export default function SanctionsScreeningPage() {
 
           <button
             onClick={() => setShowPairComparator(!showPairComparator)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300 hover:border-emerald-500 cursor-pointer transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-slate-300 hover:border-emerald-500 cursor-pointer transition-colors"
           >
             <Layers className="w-3.5 h-3.5 text-emerald-400" />
             <span>Compare Two Names</span>
@@ -197,7 +197,7 @@ export default function SanctionsScreeningPage() {
 
           <button
             onClick={() => setShowThresholdConfig(!showThresholdConfig)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300 hover:border-cyan-500 cursor-pointer transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-slate-300 hover:border-cyan-500 cursor-pointer transition-colors"
           >
             <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
             <span>Thresholds ({autoFreezeThreshold}% / {quarantineThreshold}%)</span>
@@ -207,7 +207,7 @@ export default function SanctionsScreeningPage() {
 
       {/* Pairwise Entity Resolution Comparator Drawer */}
       {showPairComparator && (
-        <div className="p-4 rounded-xl bg-[#0F172A] border border-emerald-500/30 space-y-3">
+        <div className="p-4 rounded-xl bg-panel border border-emerald-500/30 space-y-3">
           <div className="flex items-center justify-between text-xs font-mono">
             <span className="font-semibold text-emerald-300">Pairwise Multi-Algorithm Name Comparator (POST /api/v1/screening/score)</span>
             <button onClick={() => setShowPairComparator(false)} className="text-slate-400 hover:text-slate-200 cursor-pointer">Close</button>
@@ -219,7 +219,7 @@ export default function SanctionsScreeningPage() {
                 type="text"
                 value={pairQueryName}
                 onChange={(e) => setPairQueryName(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100"
+                className="w-full px-3 py-1.5 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100"
               />
             </div>
             <div className="md:col-span-5">
@@ -228,7 +228,7 @@ export default function SanctionsScreeningPage() {
                 type="text"
                 value={pairTargetName}
                 onChange={(e) => setPairTargetName(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100"
+                className="w-full px-3 py-1.5 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100"
               />
             </div>
             <div className="md:col-span-2">
@@ -242,7 +242,7 @@ export default function SanctionsScreeningPage() {
             </div>
           </form>
           {pairResult && (
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B] text-xs font-mono">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 p-3 rounded-lg bg-canvas border border-line text-xs font-mono">
               <div>
                 <span className="text-[10px] text-slate-500 block">Composite Score</span>
                 <strong className="text-emerald-400 text-sm">{pairResult.matchScore}%</strong>
@@ -270,8 +270,8 @@ export default function SanctionsScreeningPage() {
 
       {/* Official Watchlist Ingestion Feeds Registry Panel */}
       {showFeedsPanel && (
-        <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-2xl space-y-3">
-          <div className="flex items-center justify-between border-b border-[#1E293B] pb-2">
+        <div className="p-4 rounded-xl bg-panel border border-line shadow-2xl space-y-3">
+          <div className="flex items-center justify-between border-b border-line pb-2">
             <div className="flex items-center gap-2 text-xs font-bold font-mono text-slate-200 ">
               <Database className="w-4 h-4 text-emerald-400" />
               <span>Official Watchlist Feeds — Cryptographic Ingestion Registry</span>
@@ -281,7 +281,7 @@ export default function SanctionsScreeningPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             {feedsList.map((feed) => (
-              <div key={feed.listId} className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl space-y-2 text-xs">
+              <div key={feed.listId} className="p-3 bg-canvas border border-line rounded-xl space-y-2 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="font-mono font-bold text-sky-400 text-xs">{feed.listId}</span>
                   <span className="px-1.5 py-0.5 rounded text-xs font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
@@ -295,7 +295,7 @@ export default function SanctionsScreeningPage() {
                   <div>Synced: <span className="text-slate-300">{feed.fetchTimestamp.replace('T', ' ').replace('Z', ' UTC')}</span></div>
                   <div className="truncate">SHA-256: <span className="text-slate-500 font-mono text-xs">{feed.sha256Hash.substring(0, 16)}...</span></div>
                 </div>
-                <div className="pt-1 border-t border-[#1E293B]/60">
+                <div className="pt-1 border-t border-line/60">
                   <a
                     href={feed.sourceUrl}
                     target="_blank"
@@ -314,7 +314,7 @@ export default function SanctionsScreeningPage() {
 
       {/* Threshold Configuration Drawer */}
       {showThresholdConfig && (
-        <div className="p-4 rounded-xl bg-[#0F172A] border border-cyan-800/40 shadow-xl space-y-3">
+        <div className="p-4 rounded-xl bg-panel border border-cyan-800/40 shadow-xl space-y-3">
           <div className="flex items-center justify-between text-xs font-mono font-bold text-cyan-300">
             <span className="flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
@@ -354,14 +354,14 @@ export default function SanctionsScreeningPage() {
               <span className="text-xs text-slate-500 block mt-0.5">Analyst triage queue</span>
             </div>
 
-            <div className="p-2.5 rounded-lg bg-[#0B0F17] border border-[#1E293B] text-xs font-mono space-y-0.5">
+            <div className="p-2.5 rounded-lg bg-canvas border border-line text-xs font-mono space-y-0.5">
               <span className="text-slate-500 block">Multi-Algorithm Weights:</span>
               <div className="text-slate-300">Jaro-Winkler: 40%</div>
               <div className="text-slate-300">Token-Set Ratio: 40%</div>
               <div className="text-slate-300">Phonetic Soundex: 20%</div>
             </div>
 
-            <div className="p-2.5 rounded-lg bg-[#0B0F17] border border-[#1E293B] text-xs font-mono space-y-0.5">
+            <div className="p-2.5 rounded-lg bg-canvas border border-line text-xs font-mono space-y-0.5">
               <span className="text-slate-500 block">Attribute Corroboration:</span>
               <div className="text-emerald-400">DOB Match: +10% (Mismatch: -15%)</div>
               <div className="text-emerald-400">Country Match: +5%</div>
@@ -372,7 +372,7 @@ export default function SanctionsScreeningPage() {
       )}
 
       {/* Ad-Hoc Interdiction Screening Bar with Attribute Corroboration */}
-      <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-xl">
+      <div className="p-4 rounded-xl bg-panel border border-line shadow-xl">
         <form onSubmit={handleAdHocScreen} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
           <div className="md:col-span-5">
             <label className="text-xs font-mono font-semibold text-slate-400 block mb-1">
@@ -385,7 +385,7 @@ export default function SanctionsScreeningPage() {
                 placeholder="e.g. Gulf Star Commodities, PetroChemicals, Farhan Ahmed..."
                 value={queryName}
                 onChange={(e) => setQueryName(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 font-mono"
+                className="w-full pl-9 pr-3 py-2 bg-canvas border border-line-strong rounded-lg text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-500 font-mono"
               />
             </div>
           </div>
@@ -397,7 +397,7 @@ export default function SanctionsScreeningPage() {
             <select
               value={queryCountry}
               onChange={(e) => setQueryCountry(e.target.value)}
-              className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500 cursor-pointer font-mono"
+              className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500 cursor-pointer font-mono"
             >
               <option value="Bangladesh">Bangladesh</option>
               <option value="United Arab Emirates">United Arab Emirates</option>
@@ -416,7 +416,7 @@ export default function SanctionsScreeningPage() {
               type="date"
               value={queryDob}
               onChange={(e) => setQueryDob(e.target.value)}
-              className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500 font-mono"
+              className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500 font-mono"
             />
           </div>
 
@@ -429,7 +429,7 @@ export default function SanctionsScreeningPage() {
               placeholder="e.g. 8022-1984-7712..."
               value={queryId}
               onChange={(e) => setQueryId(e.target.value)}
-              className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500 font-mono text-xs"
+              className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500 font-mono text-xs"
             />
           </div>
 
@@ -450,13 +450,13 @@ export default function SanctionsScreeningPage() {
         {/* Left Column: Screening Hits Queue */}
         <div className="lg:col-span-7 space-y-3">
           {/* Filter Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-[#1E293B]">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-line">
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setActiveFilter('ALL')}
                 className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-colors ${
                   activeFilter === 'ALL'
-                    ? 'bg-[#1E293B] text-slate-100 border border-[#334155]'
+                    ? 'bg-surface text-slate-100 border border-line-strong'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -504,7 +504,7 @@ export default function SanctionsScreeningPage() {
                 placeholder="Filter hits..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-2.5 py-1 bg-[#0F172A] border border-[#334155] rounded-lg text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none"
+                className="w-full pl-8 pr-2.5 py-1 bg-panel border border-line-strong rounded-lg text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none"
               />
             </div>
           </div>
@@ -519,8 +519,8 @@ export default function SanctionsScreeningPage() {
                   onClick={() => setSelectedRecordId(record.id)}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                     isSelected
-                      ? 'bg-[#1E293B]/80 border-sky-500 shadow-lg'
-                      : 'bg-[#0F172A] border-[#1E293B] hover:border-[#334155]'
+                      ? 'bg-surface/80 border-sky-500 shadow-lg'
+                      : 'bg-panel border-line hover:border-line-strong'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-3">
@@ -566,11 +566,11 @@ export default function SanctionsScreeningPage() {
         </div>
 
         {/* Right Column: Match Forensics & Disposition Panel */}
-        <div className="lg:col-span-5 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-2xl flex flex-col justify-between space-y-6">
+        <div className="lg:col-span-5 bg-panel border border-line rounded-2xl p-5 shadow-2xl flex flex-col justify-between space-y-6">
           {selectedRecord ? (
             <div className="space-y-5">
               {/* Header */}
-              <div className="pb-4 border-b border-[#1E293B]">
+              <div className="pb-4 border-b border-line">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs text-sky-400 font-bold">{selectedRecord.id}</span>
                   <span className="text-xs text-slate-400 font-mono">{selectedRecord.screenedAt}</span>
@@ -582,12 +582,12 @@ export default function SanctionsScreeningPage() {
 
               {/* Side-by-Side Name Alignment */}
               <div className="space-y-3">
-                <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl space-y-1">
+                <div className="p-3 bg-canvas border border-line rounded-xl space-y-1">
                   <div className="text-xs font-mono text-slate-500 ">Input Payload String</div>
                   <div className="text-sm font-bold text-slate-100 font-mono">{selectedRecord.screenedName}</div>
                 </div>
 
-                <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl space-y-1">
+                <div className="p-3 bg-canvas border border-line rounded-xl space-y-1">
                   <div className="text-xs font-mono text-slate-500 ">Sanctions Official Entry</div>
                   <div className="text-sm font-bold text-rose-300 font-mono">{selectedRecord.matchedEntity}</div>
                   <div className="text-xs text-slate-400 font-mono">Watchlist: {selectedRecord.watchlistSource}</div>
@@ -602,7 +602,7 @@ export default function SanctionsScreeningPage() {
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-                  <div className="p-2.5 bg-[#0B0F17] border border-[#1E293B] rounded-lg">
+                  <div className="p-2.5 bg-canvas border border-line rounded-lg">
                     <span className="text-xs text-slate-500 block">Jaro-Winkler</span>
                     <span className="text-cyan-400 font-bold text-sm">
                       {selectedRecord.algorithmBreakdown?.jaroWinklerScore !== undefined
@@ -612,7 +612,7 @@ export default function SanctionsScreeningPage() {
                     <span className="text-xs text-slate-500 block">Weight: 40%</span>
                   </div>
 
-                  <div className="p-2.5 bg-[#0B0F17] border border-[#1E293B] rounded-lg">
+                  <div className="p-2.5 bg-canvas border border-line rounded-lg">
                     <span className="text-xs text-slate-500 block">Token-Set</span>
                     <span className="text-purple-400 font-bold text-sm">
                       {selectedRecord.algorithmBreakdown?.tokenSetScore !== undefined
@@ -622,7 +622,7 @@ export default function SanctionsScreeningPage() {
                     <span className="text-xs text-slate-500 block">Weight: 40%</span>
                   </div>
 
-                  <div className="p-2.5 bg-[#0B0F17] border border-[#1E293B] rounded-lg">
+                  <div className="p-2.5 bg-canvas border border-line rounded-lg">
                     <span className="text-xs text-slate-500 block">Phonetic Soundex</span>
                     <span className="text-amber-400 font-bold text-sm">
                       {selectedRecord.algorithmBreakdown?.phoneticScore !== undefined
@@ -635,7 +635,7 @@ export default function SanctionsScreeningPage() {
               </div>
 
               {/* Attribute Corroboration Status */}
-              <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-canvas border border-line space-y-2 text-xs font-mono">
                 <div className="flex items-center justify-between text-xs font-bold text-slate-300">
                   <span>Attribute Corroboration</span>
                   <span className="text-cyan-400">
@@ -646,19 +646,19 @@ export default function SanctionsScreeningPage() {
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-xs">
-                  <div className="p-1.5 rounded bg-[#0F172A] border border-[#1E293B]">
+                  <div className="p-1.5 rounded bg-panel border border-line">
                     <span className="text-slate-500 block">DOB Status</span>
                     <span className="text-slate-200 font-bold">
                       {selectedRecord.corroborationDetails?.dobStatus || 'NOT_PROVIDED'}
                     </span>
                   </div>
-                  <div className="p-1.5 rounded bg-[#0F172A] border border-[#1E293B]">
+                  <div className="p-1.5 rounded bg-panel border border-line">
                     <span className="text-slate-500 block">Country Domicile</span>
                     <span className="text-slate-200 font-bold">
                       {selectedRecord.corroborationDetails?.countryStatus || 'MATCH'}
                     </span>
                   </div>
-                  <div className="p-1.5 rounded bg-[#0F172A] border border-[#1E293B]">
+                  <div className="p-1.5 rounded bg-panel border border-line">
                     <span className="text-slate-500 block">Identifier / Passport</span>
                     <span className="text-slate-200 font-bold">
                       {selectedRecord.corroborationDetails?.idStatus || 'NOT_PROVIDED'}
@@ -672,7 +672,7 @@ export default function SanctionsScreeningPage() {
                 <h4 className="text-xs font-mono font-bold text-slate-400 mb-2">
                   Tokenized Linguistic Diff
                 </h4>
-                <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2 text-xs font-mono">
+                <div className="p-3 rounded-xl bg-canvas border border-line space-y-2 text-xs font-mono">
                   <div>
                     <span className="text-slate-500 text-xs block">Common Tokens:</span>
                     <span className="text-emerald-400 font-bold">
@@ -691,7 +691,7 @@ export default function SanctionsScreeningPage() {
               </div>
 
               {/* Disposition Action Buttons */}
-              <div className="pt-4 border-t border-[#1E293B] space-y-2.5">
+              <div className="pt-4 border-t border-line space-y-2.5">
                 <button
                   onClick={() => {
                     setFourEyesModalOpen(true, {
@@ -710,7 +710,7 @@ export default function SanctionsScreeningPage() {
                 <div className="grid grid-cols-2 gap-2">
                   <Link
                     href="/rfi"
-                    className="py-2 px-3 rounded-xl bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium text-xs transition-colors flex items-center justify-center gap-1.5"
+                    className="py-2 px-3 rounded-xl bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs transition-colors flex items-center justify-center gap-1.5"
                   >
                     <MailQuestion className="w-3.5 h-3.5 text-sky-400" />
                     <span>Request Customer RFI</span>

@@ -149,9 +149,9 @@ export default function EnterpriseLandingPage() {
     'inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-semibold text-slate-100 transition-colors hover:bg-slate-800';
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#070B12] font-sans text-slate-100 selection:bg-emerald-500/30">
+    <div className="flex min-h-screen flex-col bg-canvas font-sans text-slate-100 selection:bg-emerald-500/30">
       {/* Header */}
-      <header className="sticky top-0 z-40 h-16 w-full border-b border-slate-800 bg-[#070B12]/90 backdrop-blur-md">
+      <header className="sticky top-0 z-40 h-16 w-full border-b border-slate-800 bg-canvas/90 backdrop-blur-md">
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="Intelligent-AML home">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10">
@@ -205,7 +205,7 @@ export default function EnterpriseLandingPage() {
         </div>
 
         {isMobileNavOpen && (
-          <div className="absolute inset-x-0 top-16 border-b border-slate-800 bg-[#0B0F17] p-4 md:hidden">
+          <div className="absolute inset-x-0 top-16 border-b border-slate-800 bg-canvas p-4 md:hidden">
             <nav className="flex flex-col gap-1 text-base" aria-label="Mobile">
               {[...NAV, { href: '/governance', label: 'Model card' }].map((n) => (
                 <a
@@ -257,7 +257,7 @@ export default function EnterpriseLandingPage() {
         <div className="relative mx-auto mt-14 max-w-5xl">
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-slate-800 bg-slate-800 lg:grid-cols-4">
             {METRICS.map((m) => (
-              <div key={m.label} className="bg-[#0B1018] p-5">
+              <div key={m.label} className="bg-canvas p-5">
                 <dt className="text-sm text-slate-400">{m.label}</dt>
                 <dd className="mt-1 text-3xl font-semibold tabular-nums text-white">{m.value}</dd>
                 <p className="mt-1 text-xs text-slate-500">{m.note}</p>
@@ -290,7 +290,7 @@ export default function EnterpriseLandingPage() {
           <h2 className="mx-auto mb-10 max-w-2xl text-center text-2xl font-semibold text-white sm:text-3xl">How it works</h2>
           <div className="grid gap-5 md:grid-cols-3">
             {STEPS.map((s, i) => (
-              <div key={s.title} className="rounded-2xl border border-slate-800 bg-[#0B1018] p-6">
+              <div key={s.title} className="rounded-2xl border border-slate-800 bg-canvas p-6">
                 <div className="mb-4 flex items-center gap-3">
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-300">
                     <s.icon className="h-5 w-5" aria-hidden="true" />
@@ -332,7 +332,7 @@ export default function EnterpriseLandingPage() {
           </div>
           <div className="grid gap-5 md:grid-cols-2">
             {SECURITY.map((s) => (
-              <div key={s.tKey} className="flex items-start gap-4 rounded-2xl border border-slate-800 bg-[#0B1018] p-6">
+              <div key={s.tKey} className="flex items-start gap-4 rounded-2xl border border-slate-800 bg-canvas p-6">
                 <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${TONES[s.tone]}`}>
                   <s.icon className="h-5 w-5" aria-hidden="true" />
                 </span>
@@ -357,7 +357,7 @@ export default function EnterpriseLandingPage() {
             {PLANS.map((p) => (
               <div
                 key={p.key}
-                className={`relative flex flex-col rounded-2xl bg-[#0B1018] p-6 ${
+                className={`relative flex flex-col rounded-2xl bg-canvas p-6 ${
                   p.featured ? 'border-2 border-emerald-500/50' : 'border border-slate-800'
                 }`}
               >
@@ -398,7 +398,7 @@ export default function EnterpriseLandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#070B12] px-4 py-10 text-sm text-slate-400 sm:px-6">
+      <footer className="bg-canvas px-4 py-10 text-sm text-slate-400 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
             <div className="flex items-center gap-2">
@@ -434,8 +434,8 @@ export default function EnterpriseLandingPage() {
 
       {isPrivacyModalOpen && (
         <div role="dialog" aria-modal="true" aria-labelledby="privacy-dialog-title" className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-[#0D121A] border border-[#253142] rounded-xl shadow-2xl p-6 relative text-slate-100 max-h-[80vh] overflow-y-auto">
-            <button type="button" onClick={() => setIsPrivacyModalOpen(false)} className="absolute top-4 right-4 p-1 rounded-md hover:bg-[#192231] text-slate-400 hover:text-slate-200" aria-label="Close dialog">
+          <div className="w-full max-w-2xl bg-panel border border-line rounded-xl shadow-2xl p-6 relative text-slate-100 max-h-[80vh] overflow-y-auto">
+            <button type="button" onClick={() => setIsPrivacyModalOpen(false)} className="absolute top-4 right-4 p-1 rounded-md hover:bg-surface-2 text-slate-400 hover:text-slate-200" aria-label="Close dialog">
               <X className="w-5 h-5" />
             </button>
             <h3 id="privacy-dialog-title" className="text-base font-semibold text-slate-100 mb-1">Privacy Policy &amp; Sovereign Data Governance</h3>
@@ -451,8 +451,8 @@ export default function EnterpriseLandingPage() {
 
       {isTermsModalOpen && (
         <div role="dialog" aria-modal="true" aria-labelledby="terms-dialog-title" className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-[#0D121A] border border-[#253142] rounded-xl shadow-2xl p-6 relative text-slate-100 max-h-[80vh] overflow-y-auto">
-            <button type="button" onClick={() => setIsTermsModalOpen(false)} className="absolute top-4 right-4 p-1 rounded-md hover:bg-[#192231] text-slate-400 hover:text-slate-200" aria-label="Close dialog">
+          <div className="w-full max-w-2xl bg-panel border border-line rounded-xl shadow-2xl p-6 relative text-slate-100 max-h-[80vh] overflow-y-auto">
+            <button type="button" onClick={() => setIsTermsModalOpen(false)} className="absolute top-4 right-4 p-1 rounded-md hover:bg-surface-2 text-slate-400 hover:text-slate-200" aria-label="Close dialog">
               <X className="w-5 h-5" />
             </button>
             <h3 id="terms-dialog-title" className="text-base font-semibold text-slate-100 mb-1">Terms of Institutional Evaluation</h3>

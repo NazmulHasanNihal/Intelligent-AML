@@ -17,7 +17,7 @@ import {
   Scale,
   ChevronLeft,
   ChevronRight,
-  RotateCcw
+  RotateCcw,
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
 import { TRANSLATIONS } from '@/lib/i18n/translations';
@@ -44,15 +44,15 @@ export const NavigationRail: React.FC = () => {
   const navLabel = (item: NavItem) => dict[`nav_${item.key}`] ?? item.label;
   const shortLabel = (item: NavItem) => dict[`short_${item.key}`] ?? item.shortLabel;
 
-  const tier1Count = alerts.filter(a => a.tierCode === 1 && a.status !== 'FALSE_POSITIVE_DISMISSED').length;
-  const pendingScreening = screeningRecords.filter(r => r.disposition === 'PENDING_REVIEW').length;
-  const openCases = cases.filter(c => c.status === 'INVESTIGATION_OPEN').length;
+  const tier1Count = alerts.filter((a) => a.tierCode === 1 && a.status !== 'FALSE_POSITIVE_DISMISSED').length;
+  const pendingScreening = screeningRecords.filter((r) => r.disposition === 'PENDING_REVIEW').length;
+  const openCases = cases.filter((c) => c.status === 'INVESTIGATION_OPEN').length;
 
   const NAV_ITEMS: NavItem[] = [
     { href: '/app', key: 'overview', label: '1. Executive Surveillance', shortLabel: 'Overview', icon: LayoutDashboard, shortcut: '1' },
     { href: '/app/triage', key: 'triage', label: '2. Alert Triage', shortLabel: 'Triage', icon: ShieldAlert, badge: tier1Count, badgeColor: 'crimson', shortcut: '2' },
     { href: '/app/screening', key: 'screening', label: '3. Sanctions & PEP', shortLabel: 'Screening', icon: UserCheck, badge: pendingScreening, badgeColor: 'crimson', shortcut: '3' },
-    { href: '/app/customers', key: 'customers', label: '4. Customer 360° KYC', shortLabel: 'Customers', icon: Building2, shortcut: '4' },
+    { href: '/app/customers', key: 'customers', label: '4. Customer 360 KYC', shortLabel: 'Customers', icon: Building2, shortcut: '4' },
     { href: '/app/cases', key: 'cases', label: '5. Institutional Cases', shortLabel: 'Cases', icon: Briefcase, badge: openCases, badgeColor: 'amber', shortcut: '5' },
     { href: '/app/graph', key: 'graph', label: '6. Forensic Cash Flow', shortLabel: 'Graph', icon: GitBranch, shortcut: '6' },
     { href: '/app/tbml', key: 'tbml', label: '7. Trade Finance TBML', shortLabel: 'TBML', icon: FileSpreadsheet, badge: '1', badgeColor: 'amber', shortcut: '7' },
@@ -88,34 +88,35 @@ export const NavigationRail: React.FC = () => {
 
   return (
     <>
-      {/* Desktop & Laptop Collapsible Sidebar */}
       <aside
-        className={`border-r border-[#1E293B] bg-[#0F172A] hidden md:flex flex-col justify-between transition-all duration-200 select-none z-20 shrink-0 ${
+        aria-label="Workspace modules"
+        className={`border-r border-line bg-panel hidden md:flex flex-col justify-between transition-all duration-200 select-none z-20 shrink-0 ${
           isCollapsed ? 'w-16' : 'w-64'
         }`}
       >
-        {/* Top: Section Header & Collapse Toggle */}
         <div className="overflow-y-auto">
-          <div className="h-10 px-3 flex items-center justify-between border-b border-[#1E293B]">
+          <div className="h-10 px-3 flex items-center justify-between border-b border-line">
             {!isCollapsed && (
-              <span className="text-xs font-mono font-bold text-slate-400">
+              <span className="text-xs font-mono font-semibold text-muted">
                 {language === 'bn' ? '১১টি মডিউল' : '11 modules'}
               </span>
             )}
             <button
+              type="button"
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-1 rounded hover:bg-[#1E293B] text-slate-400 hover:text-slate-200 transition-colors cursor-pointer ml-auto"
-              title={isCollapsed ? "Expand Navigation Rail" : "Collapse Navigation Rail"}
+              className="p-1.5 rounded-md hover:bg-surface-hover text-muted hover:text-fg transition-colors cursor-pointer ml-auto"
+              title={isCollapsed ? 'Expand navigation rail' : 'Collapse navigation rail'}
+              aria-label={isCollapsed ? 'Expand navigation rail' : 'Collapse navigation rail'}
             >
               {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
           </div>
 
-          {/* Nav Links */}
           <nav className="p-2 space-y-0.5">
             {NAV_ITEMS.map((item) => {
               const strippedItemHref = item.href.replace('/app', '') || '/app';
-              const isActive = pathname === item.href || 
+              const isActive =
+                pathname === item.href ||
                 (strippedItemHref !== '/app' && (pathname === strippedItemHref || pathname.startsWith(strippedItemHref))) ||
                 (item.href !== '/app' && pathname.startsWith(item.href));
               const Icon = item.icon;
@@ -124,34 +125,37 @@ export const NavigationRail: React.FC = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all group ${
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-mono font-medium transition-colors group ${
                     isActive
-                      ? 'bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/30 shadow-xs'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-[#1E293B]'
+                      ? 'bg-accent-subtle text-accent-text font-semibold border border-accent/30'
+                      : 'text-fg-secondary hover:text-fg hover:bg-surface-hover border border-transparent'
                   }`}
                   title={navLabel(item)}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-400' : 'text-slate-500 group-hover:text-slate-200'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-accent-text' : 'text-muted group-hover:text-fg'}`} aria-hidden="true" />
                   {!isCollapsed && (
-                    <div className="flex-1 flex items-center justify-between overflow-hidden">
+                    <div className="flex-1 flex items-center justify-between overflow-hidden gap-1">
                       <span className="truncate">{navLabel(item)}</span>
                       <div className="flex items-center gap-1.5 shrink-0">
                         {item.badge !== undefined && item.badge !== 0 && (
                           <span
-                            className={`px-1.5 py-0.2 rounded text-xs font-bold tabular-nums ${
+                            className={`px-1.5 py-0.5 rounded text-xs font-semibold tabular-aml ${
                               item.badgeColor === 'crimson'
-                                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                                ? 'bg-tier-1-bg text-tier-1-text border border-tier-1-border'
                                 : item.badgeColor === 'amber'
-                                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                                : 'bg-slate-700/40 text-slate-300 border border-slate-600/40'
+                                ? 'bg-tier-2-bg text-tier-2-text border border-tier-2-border'
+                                : 'bg-surface text-fg-secondary border border-line'
                             }`}
                           >
                             {typeof item.badge === 'number' ? item.badge.toLocaleString() : item.badge}
                           </span>
                         )}
-                        {item.shortcut && <kbd className="hidden lg:inline-block px-1 py-0.2 text-xs font-mono text-slate-500 bg-[#0B0F17] rounded border border-[#334155]">
-                          {item.shortcut}
-                        </kbd>}
+                        {item.shortcut && (
+                          <kbd className="hidden lg:inline-block px-1 py-0.5 text-xs font-mono text-muted bg-canvas rounded border border-line">
+                            {item.shortcut}
+                          </kbd>
+                        )}
                       </div>
                     </div>
                   )}
@@ -161,22 +165,24 @@ export const NavigationRail: React.FC = () => {
           </nav>
         </div>
 
-        {/* Bottom Actions: Reset Workspace Data */}
-        <div className="p-2 border-t border-[#1E293B] bg-[#0B0F17]/80">
+        <div className="p-2 border-t border-line bg-surface/60">
           <button
             type="button"
             onClick={resetWorkspaceData}
-            className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-400 hover:text-rose-300 hover:bg-rose-950/30 border border-transparent hover:border-rose-800/40 transition-all cursor-pointer"
+            className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-mono font-medium text-muted hover:text-tier-1-text hover:bg-tier-1-bg border border-transparent hover:border-tier-1-border transition-colors cursor-pointer"
             title="Reset Workspace to Certified Clean Demo State"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <RotateCcw className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
             {!isCollapsed && <span>Reset Workspace Data</span>}
           </button>
         </div>
       </aside>
 
       {/* Mobile Bottom Fixed Nav Bar (< 768px) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-[#0F172A] border-t border-[#1E293B] flex items-center justify-around z-30 px-2 select-none">
+      <nav
+        aria-label="Mobile workspace bar"
+        className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-panel border-t border-line flex items-center justify-around z-30 px-2 select-none"
+      >
         {NAV_ITEMS.slice(0, 5).map((item) => {
           const strippedItemHref = item.href.replace('/app', '') || '/app';
           const isActive = pathname === item.href || (strippedItemHref !== '/app' && pathname === strippedItemHref);
@@ -185,16 +191,17 @@ export const NavigationRail: React.FC = () => {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center p-1 rounded transition-colors ${
-                isActive ? 'text-emerald-400 font-bold' : 'text-slate-400'
+              aria-current={isActive ? 'page' : undefined}
+              className={`flex flex-col items-center justify-center p-1.5 rounded-md transition-colors ${
+                isActive ? 'text-accent-text font-semibold' : 'text-muted'
               }`}
             >
-              <Icon className="w-4 h-4" />
+              <Icon className="w-4 h-4" aria-hidden="true" />
               <span className="text-xs font-mono mt-0.5">{shortLabel(item)}</span>
             </Link>
           );
         })}
-      </div>
+      </nav>
     </>
   );
 };

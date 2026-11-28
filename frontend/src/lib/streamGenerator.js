@@ -161,7 +161,7 @@ class TransactionStreamService {
 
     // When deployed standalone (e.g. Vercel, Netlify) without a dedicated backend WS proxy,
     // rely on high-fidelity client-side simulation engine unless VITE_WS_URL is provided.
-    const wsUrlFromEnv = import.meta.env.VITE_WS_URL;
+    const wsUrlFromEnv = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_WS_URL : undefined;
     const isCloudStandalone = !wsUrlFromEnv && typeof window !== 'undefined' && 
       window.location.hostname !== 'localhost' && 
       window.location.hostname !== '127.0.0.1';
@@ -184,8 +184,6 @@ class TransactionStreamService {
         this.isWsConnected = true;
         this.backendHealthy = true;
         this.reconnectAttempts = 0;
-        // eslint-disable-next-line no-console
-        console.log('[RealWorldEngine] Connected to backend transaction stream via WebSocket (/ws/stream)');
       };
 
       this.ws.onmessage = (event) => {
@@ -601,7 +599,7 @@ class TransactionStreamService {
 
     // Attempt backend scenario generation first
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const apiUrl = (typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_API_URL : undefined) || '';
       fetch(`${apiUrl}/api/v1/stream/scenario/${scenarioId}`, { method: 'POST' })
         .then(res => {
           if (res.ok && res.headers.get('content-type')?.includes('application/json')) return res.json();

@@ -28,28 +28,28 @@ type ModuleEntry = {
   label: string;
   icon: LucideIcon;
   tone: string;
-  /** Extra search terms so people can type what they call it, not what we named it. */
   keywords: string[];
 };
 
 const MODULES: ModuleEntry[] = [
-  { path: '/app', label: 'Executive surveillance', icon: LayoutDashboard, tone: 'text-emerald-400', keywords: ['dashboard', 'overview', 'home', 'sla'] },
-  { path: '/triage', label: 'Alert triage', icon: ShieldAlert, tone: 'text-rose-400', keywords: ['alerts', 'queue', 'tier', 'review'] },
-  { path: '/screening', label: 'Sanctions and PEP screening', icon: UserCheck, tone: 'text-rose-400', keywords: ['sanctions', 'pep', 'watchlist', 'ofac'] },
-  { path: '/customers', label: 'Customer 360 KYC', icon: Building2, tone: 'text-cyan-400', keywords: ['kyc', 'edd', 'customer', 'dossier'] },
-  { path: '/cases', label: 'Cases', icon: Briefcase, tone: 'text-amber-400', keywords: ['case', 'docket', 'investigation'] },
-  { path: '/graph', label: 'Forensic cash flow', icon: GitBranch, tone: 'text-purple-400', keywords: ['graph', 'network', 'flow', 'forensic', 'hop'] },
-  { path: '/tbml', label: 'Trade finance (TBML)', icon: FileSpreadsheet, tone: 'text-amber-400', keywords: ['tbml', 'trade', 'invoice', 'lc'] },
-  { path: '/sar', label: 'SAR and CTR workbench', icon: FileCheck2, tone: 'text-rose-400', keywords: ['sar', 'ctr', 'str', 'filing', 'report'] },
-  { path: '/rfi', label: 'Compliance RFI hub', icon: Mail, tone: 'text-blue-400', keywords: ['rfi', 'request', 'information', 'email'] },
-  { path: '/rules', label: 'Rule studio', icon: Sliders, tone: 'text-teal-400', keywords: ['rules', 'shadow', 'whitelist', 'threshold'] },
-  { path: '/governance', label: 'Model ops and audit ledger', icon: Scale, tone: 'text-cyan-400', keywords: ['governance', 'model', 'audit', 'ledger', 'worm', 'drift'] },
+  { path: '/app', label: 'Executive surveillance', icon: LayoutDashboard, tone: 'text-accent-text', keywords: ['dashboard', 'overview', 'home', 'sla'] },
+  { path: '/triage', label: 'Alert triage', icon: ShieldAlert, tone: 'text-tier-1-text', keywords: ['alerts', 'queue', 'tier', 'review'] },
+  { path: '/screening', label: 'Sanctions and PEP screening', icon: UserCheck, tone: 'text-tier-1-text', keywords: ['sanctions', 'pep', 'watchlist', 'ofac'] },
+  { path: '/customers', label: 'Customer 360 KYC', icon: Building2, tone: 'text-accent-2', keywords: ['kyc', 'edd', 'customer', 'dossier'] },
+  { path: '/cases', label: 'Cases', icon: Briefcase, tone: 'text-tier-2-text', keywords: ['case', 'docket', 'investigation'] },
+  { path: '/graph', label: 'Forensic cash flow', icon: GitBranch, tone: 'text-accent-2', keywords: ['graph', 'network', 'flow', 'forensic', 'hop'] },
+  { path: '/tbml', label: 'Trade finance (TBML)', icon: FileSpreadsheet, tone: 'text-tier-2-text', keywords: ['tbml', 'trade', 'invoice', 'lc'] },
+  { path: '/sar', label: 'SAR and CTR workbench', icon: FileCheck2, tone: 'text-tier-1-text', keywords: ['sar', 'ctr', 'str', 'filing', 'report'] },
+  { path: '/rfi', label: 'Compliance RFI hub', icon: Mail, tone: 'text-accent-2', keywords: ['rfi', 'request', 'information', 'email'] },
+  { path: '/rules', label: 'Rule studio', icon: Sliders, tone: 'text-accent-text', keywords: ['rules', 'shadow', 'whitelist', 'threshold'] },
+  { path: '/recourse', label: 'Analyst sensitivity simulator', icon: Sliders, tone: 'text-tier-2-text', keywords: ['recourse', 'sensitivity', 'counterfactual'] },
+  { path: '/governance', label: 'Model ops and audit ledger', icon: Scale, tone: 'text-accent-2', keywords: ['governance', 'model', 'audit', 'ledger', 'worm', 'drift'] },
 ];
 
 const ITEM =
-  'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-slate-200 hover:bg-[#1E293B] aria-selected:bg-[#1E293B]';
+  'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-fg-secondary hover:bg-surface-hover aria-selected:bg-surface-hover aria-selected:text-fg';
 const GROUP =
-  '[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-slate-400';
+  '[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted';
 
 export function GlobalCommandPalette() {
   const router = useRouter();
@@ -72,7 +72,6 @@ export function GlobalCommandPalette() {
           e.target instanceof HTMLTextAreaElement ||
           e.target instanceof HTMLSelectElement
         ) {
-          // Ctrl/Cmd+K still toggles from inside a field; a bare "/" must not hijack typing.
           if (e.key === '/') return;
         }
         e.preventDefault();
@@ -97,32 +96,32 @@ export function GlobalCommandPalette() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-black/70 px-4 pt-20"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/70 px-4 pt-20 backdrop-blur-xs"
       onClick={close}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Command palette"
-        className="w-full max-w-xl overflow-hidden rounded-xl border border-[#334155] bg-[#0F172A] text-slate-200 shadow-2xl"
+        className="w-full max-w-xl overflow-hidden rounded-xl border border-line bg-panel text-fg shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <Command className="w-full bg-transparent" loop>
-          <div className="flex items-center border-b border-[#1E293B] px-4">
-            <Search className="mr-3 h-5 w-5 shrink-0 text-slate-400" aria-hidden />
+          <div className="flex items-center border-b border-line px-4">
+            <Search className="mr-3 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
             <Command.Input
               autoFocus
               placeholder="Search alerts, accounts, entities, or a page"
               aria-label="Search alerts, accounts, entities, or a page"
-              className="h-12 w-full bg-transparent text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none"
+              className="h-12 w-full bg-transparent text-sm text-fg placeholder:text-muted focus:outline-none"
             />
-            <kbd className="hidden rounded border border-[#334155] bg-[#1E293B] px-1.5 py-0.5 text-xs text-slate-400 sm:inline-block">
+            <kbd className="hidden rounded border border-line bg-surface px-1.5 py-0.5 text-xs font-mono text-muted sm:inline-block">
               Esc
             </kbd>
           </div>
 
           <Command.List className="max-h-96 overflow-y-auto p-2 text-sm">
-            <Command.Empty className="py-8 text-center text-slate-400">
+            <Command.Empty className="py-8 text-center text-muted">
               Nothing matches that search.
             </Command.Empty>
 
@@ -135,9 +134,9 @@ export function GlobalCommandPalette() {
                   onSelect={() => navigateTo(m.path)}
                   className={ITEM}
                 >
-                  <m.icon className={`h-4 w-4 ${m.tone}`} aria-hidden />
+                  <m.icon className={`h-4 w-4 ${m.tone}`} aria-hidden="true" />
                   <span className="flex-1 font-medium">{m.label}</span>
-                  {i < 9 && <kbd className="text-xs text-slate-500">{i + 1}</kbd>}
+                  {i < 9 && <kbd className="text-xs font-mono text-muted">{i + 1}</kbd>}
                 </Command.Item>
               ))}
             </Command.Group>
@@ -150,9 +149,9 @@ export function GlobalCommandPalette() {
                   void revealPii();
                   close();
                 }}
-                className={`${ITEM} !text-amber-300`}
+                className={`${ITEM} text-tier-2-text`}
               >
-                <Eye className="h-4 w-4" aria-hidden />
+                <Eye className="h-4 w-4" aria-hidden="true" />
                 <span className="flex-1 font-medium">Reveal personal data for 60 seconds (audited)</span>
               </Command.Item>
 
@@ -165,7 +164,7 @@ export function GlobalCommandPalette() {
                 }}
                 className={ITEM}
               >
-                <Zap className="h-4 w-4 text-emerald-400" aria-hidden />
+                <Zap className="h-4 w-4 text-accent-text" aria-hidden="true" />
                 <span className="flex-1 font-medium">Pause or resume the simulated feed</span>
               </Command.Item>
 
@@ -176,9 +175,9 @@ export function GlobalCommandPalette() {
                   resetWorkspaceData();
                   close();
                 }}
-                className={`${ITEM} !text-rose-300`}
+                className={`${ITEM} text-tier-1-text`}
               >
-                <RotateCcw className="h-4 w-4" aria-hidden />
+                <RotateCcw className="h-4 w-4" aria-hidden="true" />
                 <span className="flex-1 font-medium">Reset demo data</span>
               </Command.Item>
             </Command.Group>
@@ -191,10 +190,10 @@ export function GlobalCommandPalette() {
                   onSelect={() => navigateTo(`/triage?alertId=${alert.id}`)}
                   className={ITEM}
                 >
-                  <ShieldAlert className="h-4 w-4 shrink-0 text-rose-400" aria-hidden />
+                  <ShieldAlert className="h-4 w-4 shrink-0 text-tier-1-text" aria-hidden="true" />
                   <div className="flex-1 truncate">
-                    <span className="font-medium text-slate-100">{alert.id}</span>
-                    <span className="ml-2 text-slate-400">{alert.entityName}</span>
+                    <span className="font-mono font-medium text-fg">{alert.id}</span>
+                    <span className="ml-2 text-muted">{alert.entityName}</span>
                   </div>
                 </Command.Item>
               ))}
@@ -208,12 +207,12 @@ export function GlobalCommandPalette() {
                   onSelect={() => navigateTo(`/customers?customerId=${cust.id}`)}
                   className={ITEM}
                 >
-                  <Building2 className="h-4 w-4 shrink-0 text-cyan-400" aria-hidden />
+                  <Building2 className="h-4 w-4 shrink-0 text-accent-2" aria-hidden="true" />
                   <div className="flex-1 truncate">
-                    <span className="font-medium text-slate-100">{cust.name}</span>
-                    <span className="ml-2 text-xs text-slate-400">{cust.accountNumber}</span>
+                    <span className="font-medium text-fg">{cust.name}</span>
+                    <span className="ml-2 text-xs font-mono text-muted">{cust.accountNumber}</span>
                   </div>
-                  <span className="rounded bg-slate-500/20 px-1.5 py-0.5 text-xs font-medium text-slate-300">
+                  <span className="rounded bg-surface px-1.5 py-0.5 text-xs font-mono font-medium text-fg-secondary border border-line">
                     {cust.riskRating}
                   </span>
                 </Command.Item>

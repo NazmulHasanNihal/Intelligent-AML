@@ -14,8 +14,8 @@ import {
 export default function CounterfactualRecourseRedirectPage() {
   return (
     <div className="p-6 max-w-[1200px] mx-auto space-y-6">
-      <div className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-2xl space-y-6">
-        <div className="flex items-center gap-3 pb-4 border-b border-[#1E293B]">
+      <div className="p-8 rounded-2xl bg-panel border border-line shadow-2xl space-y-6">
+        <div className="flex items-center gap-3 pb-4 border-b border-line">
           <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
             <Lock className="w-6 h-6" />
           </div>
@@ -45,7 +45,7 @@ export default function CounterfactualRecourseRedirectPage() {
         <div className="flex items-center justify-between pt-2">
           <Link
             href="/"
-            className="px-4 py-2 rounded-xl bg-[#1E293B] hover:bg-[#334155] text-slate-300 text-xs font-semibold transition-colors"
+            className="px-4 py-2 rounded-xl bg-surface hover:bg-surface-hover text-slate-300 text-xs font-semibold transition-colors"
           >
             Return to Executive Overview
           </Link>

@@ -69,19 +69,19 @@ export const ProductVisualPreview: React.FC = () => {
   }[selectedNode];
 
   return (
-    <div className="w-full rounded-xl bg-[#0D121A] border border-[#1E2734] overflow-hidden text-slate-200">
+    <div className="w-full rounded-xl bg-panel border border-line overflow-hidden text-slate-200">
       {/* Window Header */}
-      <div className="px-4 py-2.5 bg-[#090D14] border-b border-[#1E2734] flex flex-wrap items-center justify-between gap-3">
+      <div className="px-4 py-2.5 bg-canvas border-b border-line flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="text-[11px] font-mono text-slate-400">
             intelligent-aml.workspace
           </span>
-          <div className="flex items-center bg-[#0D121A] p-0.5 rounded-md border border-[#1E2734] text-xs font-mono">
+          <div className="flex items-center bg-panel p-0.5 rounded-md border border-line text-xs font-mono">
             <button
               type="button"
               onClick={() => setActiveTab('TRIAGE')}
               className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
-                activeTab === 'TRIAGE' ? 'bg-[#192231] text-slate-100 font-semibold' : 'text-slate-400 hover:text-slate-200'
+                activeTab === 'TRIAGE' ? 'bg-surface-2 text-slate-100 font-semibold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               Alert Queue
@@ -90,7 +90,7 @@ export const ProductVisualPreview: React.FC = () => {
               type="button"
               onClick={() => setActiveTab('GRAPH')}
               className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
-                activeTab === 'GRAPH' ? 'bg-[#192231] text-slate-100 font-semibold' : 'text-slate-400 hover:text-slate-200'
+                activeTab === 'GRAPH' ? 'bg-surface-2 text-slate-100 font-semibold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               Flow Topology
@@ -109,13 +109,13 @@ export const ProductVisualPreview: React.FC = () => {
 
       {activeTab === 'TRIAGE' ? (
         <div className="p-4 sm:p-5 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pb-2 border-b border-[#1E2734]">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pb-2 border-b border-line">
             <span>24h Sample Feed · Split Conformal Threshold α = 0.01</span>
             <span className="text-emerald-400">84.2% benign volume cleared automatically</span>
           </div>
 
-          <div className="divide-y divide-[#1E2734] border border-[#1E2734] rounded-lg overflow-hidden bg-[#090D14]">
-            <div className="grid grid-cols-12 gap-2 px-3 py-2 text-xs font-mono text-slate-500 bg-[#0D121A]">
+          <div className="divide-y divide-[#1E2734] border border-line rounded-lg overflow-hidden bg-canvas">
+            <div className="grid grid-cols-12 gap-2 px-3 py-2 text-xs font-mono text-slate-500 bg-panel">
               <span className="col-span-2">Alert</span>
               <span className="col-span-4">Entity &amp; Rail</span>
               <span className="col-span-2 text-right">Exposure</span>
@@ -127,7 +127,7 @@ export const ProductVisualPreview: React.FC = () => {
               <Link
                 key={row.id}
                 href={row.href}
-                className="grid grid-cols-12 gap-2 items-center px-3 py-2.5 text-xs hover:bg-[#111824] transition-colors group"
+                className="grid grid-cols-12 gap-2 items-center px-3 py-2.5 text-xs hover:bg-panel transition-colors group"
               >
                 <span className="col-span-2 font-mono font-semibold text-slate-200 group-hover:text-emerald-400 transition-colors">
                   {row.id}
@@ -160,7 +160,7 @@ export const ProductVisualPreview: React.FC = () => {
             <span>Click a node to inspect telemetry</span>
           </div>
 
-          <div className="rounded-lg border border-[#1E2734] bg-[#090D14] p-4">
+          <div className="rounded-lg border border-line bg-canvas p-4">
             <svg viewBox="0 0 680 180" className="w-full h-44" role="img" aria-label="Directional TBML transaction flow graph">
               <defs>
                 <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -245,7 +245,7 @@ export const ProductVisualPreview: React.FC = () => {
               </g>
             </svg>
 
-            <div className="mt-3 pt-3 border-t border-[#1E2734] flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div className="mt-3 pt-3 border-t border-line flex flex-wrap items-center justify-between gap-2 text-xs">
               <div>
                 <div className="font-semibold text-slate-100">{nodeDetails.title}</div>
                 <div className="text-slate-400 text-xs mt-0.5">{nodeDetails.summary}</div>

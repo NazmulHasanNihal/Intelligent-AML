@@ -1,79 +1,155 @@
 @import "tailwindcss";
-@import "../styles/light-theme.css";
 
 @theme {
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  /* Interface numerals and IDs use the sans family with tabular figures; real code uses --font-code */
-  --font-mono: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-code: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: var(--font-geist), var(--font-noto-bengali), -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: var(--font-geist), var(--font-noto-bengali), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, 'SFMono-Regular', monospace;
+  --font-code: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-bengali: var(--font-noto-bengali), var(--font-geist), sans-serif;
 
-  /* Institutional Dark Terminal (Obsidian Void / Deep Slate) */
-  --color-canvas: #0B0F17;
-  --color-panel: #131B2B;
-  --color-panel-raised: #1A2438;
-  --color-panel-border: #1E293B;
-  --color-panel-border-subtle: #162032;
+  /* Semantic Surface Palette — Night Ledger Institutional (Dark Default) */
+  --color-canvas: #070A12;
+  --color-panel: #0F1523;
+  --color-panel-raised: #131B2B;
+  --color-surface: #131B2B;
+  --color-surface-2: #182235;
+  --color-surface-hover: #1D2940;
+  --color-surface-card: #0F1523;
+  --color-surface-elevated: #131B2B;
+  --color-glass: rgba(19, 27, 43, 0.72);
+  --color-glass-solid: #111827;
 
-  /* Typography Colors */
-  --color-text-primary: #F8FAFC;
+  /* Borders & Hairlines */
+  --color-line: rgba(255, 255, 255, 0.10);
+  --color-line-subtle: rgba(255, 255, 255, 0.06);
+  --color-line-strong: rgba(255, 255, 255, 0.18);
+  --color-panel-border: rgba(255, 255, 255, 0.10);
+
+  /* Text Ink Hierarchy */
+  --color-fg: #F1F5F9;
+  --color-fg-secondary: #CBD5E1;
+  --color-muted: #94A3B8;
+  --color-text-primary: #F1F5F9;
   --color-text-secondary: #CBD5E1;
-  --color-text-muted: #94A3B8;
-  --color-text-dim: #64748B;
+  --color-text-dim: #94A3B8;
 
-  /* Semantic Banking Risk Tiers */
-  --color-tier1-crimson: #EF4444;
-  --color-tier1-crimson-bg: rgba(239, 68, 68, 0.12);
-  --color-tier1-crimson-border: rgba(239, 68, 68, 0.35);
+  /* Brand & Data Accents */
+  --color-accent: #10B981;
+  --color-accent-hover: #059669;
+  --color-accent-text: #34D399;
+  --color-accent-fg: #031D15;
+  --color-accent-subtle: rgba(16, 185, 129, 0.14);
+  --color-accent-2: #38BDF8;
+  --color-brand-accent: #10B981;
+  --color-data-teal: #38BDF8;
 
-  --color-tier2-amber: #F59E0B;
-  --color-tier2-amber-bg: rgba(245, 158, 11, 0.12);
-  --color-tier2-amber-border: rgba(245, 158, 11, 0.35);
+  /* Conformal Risk Tiers */
+  --color-tier-1: #EF4444;
+  --color-tier-1-bg: rgba(239, 68, 68, 0.14);
+  --color-tier-1-border: rgba(239, 68, 68, 0.35);
+  --color-tier-1-text: #FCA5A5;
 
-  --color-tier3-emerald: #10B981;
-  --color-tier3-emerald-bg: rgba(16, 185, 129, 0.12);
-  --color-tier3-emerald-border: rgba(16, 185, 129, 0.35);
+  --color-tier-2: #F59E0B;
+  --color-tier-2-bg: rgba(245, 158, 11, 0.14);
+  --color-tier-2-border: rgba(245, 158, 11, 0.35);
+  --color-tier-2-text: #FCD34D;
 
-  /* Primary Accents */
-  --color-brand-accent: #3B82F6;
-  --color-brand-cyan: #38BDF8;
-  --color-brand-indigo: #818CF8;
+  --color-tier-3: #10B981;
+  --color-tier-3-bg: rgba(16, 185, 129, 0.14);
+  --color-tier-3-border: rgba(16, 185, 129, 0.35);
+  --color-tier-3-text: #6EE7B7;
+
+  /* Backward-compat aliases */
+  --color-tier1-hold: #EF4444;
+  --color-tier2-review: #F59E0B;
+  --color-tier3-clear: #10B981;
 }
 
-/* Light Mode Overrides (Federal Banknote) */
+/* Light Theme — Federal Paper Palette */
 [data-theme='light'],
 .light {
-  --color-canvas: #E9EFEA;
-  --color-panel: #EEF3EE;
-  --color-panel-raised: #E2EAE5;
-  --color-panel-border: #C8D6CD;
-  --color-panel-border-subtle: #D6E2DA;
+  color-scheme: light;
+  --color-canvas: #F4F7F5;
+  --color-panel: #FFFFFF;
+  --color-panel-raised: #EDF2EF;
+  --color-surface: #EDF2EF;
+  --color-surface-2: #E2E9E5;
+  --color-surface-hover: #DAE3DE;
+  --color-surface-card: #FFFFFF;
+  --color-surface-elevated: #EDF2EF;
+  --color-glass: rgba(255, 255, 255, 0.84);
+  --color-glass-solid: #FFFFFF;
 
-  --color-text-primary: #0F172A;
+  --color-line: rgba(15, 23, 42, 0.12);
+  --color-line-subtle: rgba(15, 23, 42, 0.07);
+  --color-line-strong: rgba(15, 23, 42, 0.22);
+  --color-panel-border: rgba(15, 23, 42, 0.12);
+
+  --color-fg: #0B1220;
+  --color-fg-secondary: #1E293B;
+  --color-muted: #475569;
+  --color-text-primary: #0B1220;
   --color-text-secondary: #1E293B;
-  --color-text-muted: #475569;
-  --color-text-dim: #64748B;
+  --color-text-dim: #475569;
 
-  --color-tier1-crimson-bg: #FEE2E2;
-  --color-tier1-crimson-border: #F87171;
+  --color-accent: #1B4D3E;
+  --color-accent-hover: #143D31;
+  --color-accent-text: #1B4D3E;
+  --color-accent-fg: #FFFFFF;
+  --color-accent-subtle: rgba(27, 77, 62, 0.10);
+  --color-accent-2: #0284C7;
+  --color-brand-accent: #1B4D3E;
+  --color-data-teal: #0284C7;
 
-  --color-tier2-amber-bg: #FEF3C7;
-  --color-tier2-amber-border: #FBBF24;
+  --color-tier-1: #DC2626;
+  --color-tier-1-bg: rgba(220, 38, 38, 0.10);
+  --color-tier-1-border: rgba(220, 38, 38, 0.30);
+  --color-tier-1-text: #B91C1C;
 
-  --color-tier3-emerald-bg: #DCFCE7;
-  --color-tier3-emerald-border: #86EFAC;
+  --color-tier-2: #B45309;
+  --color-tier-2-bg: rgba(180, 83, 9, 0.10);
+  --color-tier-2-border: rgba(180, 83, 9, 0.30);
+  --color-tier-2-text: #92400E;
+
+  --color-tier-3: #047857;
+  --color-tier-3-bg: rgba(4, 120, 87, 0.10);
+  --color-tier-3-border: rgba(4, 120, 87, 0.30);
+  --color-tier-3-text: #065F46;
+
+  --color-tier1-hold: #DC2626;
+  --color-tier2-review: #B45309;
+  --color-tier3-clear: #047857;
+}
+
+:root {
+  color-scheme: dark;
 }
 
 html,
 body {
   background-color: var(--color-canvas);
-  color: var(--color-text-primary);
+  color: var(--color-fg);
   font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+html[lang='bn'] body,
+[lang='bn'] {
+  font-family: var(--font-bengali);
+  line-height: 1.65;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
 /* Strict Financial Numerical Alignment */
+.tabular-aml,
 .tabular-nums,
 .font-mono {
   font-variant-numeric: tabular-nums;
@@ -86,19 +162,42 @@ kbd,
 samp,
 .font-code {
   font-family: var(--font-code);
-  font-variant-numeric: normal;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Readable base rhythm */
-body {
-  font-size: 14px;
-  line-height: 1.55;
+/* Tactile Glass Surface — WCAG 2.2 AA & Fallbacks */
+.glass,
+.glass-panel {
+  background-color: var(--color-glass);
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(14px) saturate(135%);
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
 }
-h1, h2, h3 {
-  letter-spacing: -0.015em;
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass,
+  .glass-panel {
+    background-color: var(--color-glass-solid);
+  }
 }
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-panel {
+    background-color: var(--color-panel);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Light-mode legibility safeguard for subtle tinted utility classes */
+[data-theme='light'] .bg-black\/70,
+[data-theme='light'] .bg-black\/60 {
+  background-color: rgba(11, 18, 32, 0.55);
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-brand-accent);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -111,11 +210,11 @@ h1, h2, h3 {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-panel-border);
+  background: var(--color-line-strong);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-dim);
+  background: var(--color-muted);
 }
 
 /* Reduced Motion Support (WCAG 2.2 AA) */
@@ -143,7 +242,6 @@ h1, h2, h3 {
     font-size: 11pt !important;
   }
 
-  /* Hide app navigation chrome, header rails, and interactive triggers */
   header,
   aside,
   nav,
@@ -154,7 +252,6 @@ h1, h2, h3 {
     display: none !important;
   }
 
-  /* Expand print containers */
   main {
     padding: 0 !important;
     margin: 0 !important;
@@ -178,4 +275,3 @@ h1, h2, h3 {
     border-color: #374151 !important;
   }
 }
-

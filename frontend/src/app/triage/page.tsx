@@ -290,24 +290,24 @@ export default function AlertTriagePage() {
 
         <div className="flex items-center gap-3">
           {/* Quick Shortcuts Pill */}
-          <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-[#0F172A] border border-[#334155] rounded-lg text-xs text-slate-400 font-mono">
-            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">J</kbd>/<kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">K</kbd> Navigate</span>
+          <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-panel border border-line-strong rounded-lg text-xs text-slate-400 font-mono">
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">J</kbd>/<kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">K</kbd> Navigate</span>
             <span>•</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">Enter</kbd> Inspect Wire</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">Enter</kbd> Inspect Wire</span>
             <span>•</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">G</kbd> Graph</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">G</kbd> Graph</span>
             <span>•</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">F</kbd> Freeze</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">F</kbd> Freeze</span>
             <span>•</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-[#1E293B] text-slate-200">E</kbd> Escalate</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-surface text-slate-200">E</kbd> Escalate</span>
           </div>
 
           {/* Export Actions */}
-          <div className="flex items-center gap-1.5 bg-[#0F172A] p-1 rounded-lg border border-[#334155]">
+          <div className="flex items-center gap-1.5 bg-panel p-1 rounded-lg border border-line-strong">
             <button
               onClick={exportCsv}
               title="Export CSV"
-              className="px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:text-white hover:bg-[#1E293B] flex items-center gap-1.5 cursor-pointer"
+              className="px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:text-white hover:bg-surface flex items-center gap-1.5 cursor-pointer"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
               <span>CSV</span>
@@ -315,7 +315,7 @@ export default function AlertTriagePage() {
             <button
               onClick={exportJson}
               title="Export JSON"
-              className="px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:text-white hover:bg-[#1E293B] flex items-center gap-1.5 cursor-pointer"
+              className="px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:text-white hover:bg-surface flex items-center gap-1.5 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-sky-400" />
               <span>JSON</span>
@@ -323,7 +323,7 @@ export default function AlertTriagePage() {
           </div>
 
           {/* Density Mode Sync */}
-          <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
+          <div className="flex items-center bg-panel p-1 rounded-lg border border-line-strong text-xs font-mono">
             <button
               onClick={() => setDensityMode('compact')}
               className={`px-2.5 py-1 rounded transition-all cursor-pointer ${densityMode === 'compact'
@@ -347,13 +347,13 @@ export default function AlertTriagePage() {
       </div>
 
       {/* Filter Tabs and Search Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-1 border-b border-[#1E293B]">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-1 border-b border-line">
         {/* Tier Filter Tabs */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSelectedTier('ALL')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${selectedTier === 'ALL'
-              ? 'bg-[#1E293B] text-slate-100 border border-[#334155]'
+              ? 'bg-surface text-slate-100 border border-line-strong'
               : 'text-slate-400 hover:text-slate-200'
               }`}
           >
@@ -396,7 +396,7 @@ export default function AlertTriagePage() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as any)}
-            className="px-3 py-1.5 bg-[#0F172A] border border-[#334155] rounded-lg text-xs text-slate-300 focus:outline-none focus:border-emerald-500 cursor-pointer"
+            className="px-3 py-1.5 bg-panel border border-line-strong rounded-lg text-xs text-slate-300 focus:outline-none focus:border-emerald-500 cursor-pointer"
           >
             <option value="ALL">All Statuses</option>
             <option value="PENDING_TRIAGE">Pending Triage</option>
@@ -413,18 +413,18 @@ export default function AlertTriagePage() {
               placeholder="Search by ID, Entity, Account, BIC, Typology..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-[#0F172A] border border-[#334155] rounded-lg text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
+              className="w-full pl-9 pr-3 py-1.5 bg-panel border border-line-strong rounded-lg text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
             />
           </div>
         </div>
       </div>
 
       {/* TanStack Virtualized High-Density Table */}
-      <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
+      <div className="bg-panel border border-line rounded-xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <div className="min-w-[1100px]" role="table" aria-label="Alert triage queue" aria-rowcount={filteredAlerts.length}>
             {/* Table Header */}
-            <div role="row" className="grid grid-cols-[118px_minmax(200px,1fr)_120px_112px_104px_64px_64px_minmax(96px,0.5fr)_84px] gap-2 px-4 py-2.5 bg-[#0B0F17] border-b border-[#1E293B] text-xs font-medium text-slate-400 items-center select-none">
+            <div role="row" className="grid grid-cols-[118px_minmax(200px,1fr)_120px_112px_104px_64px_64px_minmax(96px,0.5fr)_84px] gap-2 px-4 py-2.5 bg-canvas border-b border-line text-xs font-medium text-slate-400 items-center select-none">
               <div className="flex items-center gap-2">
                 <button onClick={toggleSelectAll} className="text-slate-400 hover:text-slate-200 cursor-pointer">
                   {selectedRowIds.size === filteredAlerts.length && filteredAlerts.length > 0 ? (
@@ -482,8 +482,8 @@ export default function AlertTriagePage() {
                       className={`grid grid-cols-[118px_minmax(200px,1fr)_120px_112px_104px_64px_64px_minmax(96px,0.5fr)_84px] gap-2 px-4 items-center overflow-hidden text-xs transition-colors group cursor-pointer ${isSelected
                         ? 'bg-emerald-950/20'
                         : isFocused
-                          ? 'bg-[#1E293B]/60 ring-1 ring-inset ring-sky-500/40'
-                          : 'hover:bg-[#1E293B]/40'
+                          ? 'bg-surface/60 ring-1 ring-inset ring-sky-500/40'
+                          : 'hover:bg-surface/40'
                         }`}
                     >
                       {/* Select + Alert ID */}
@@ -590,14 +590,14 @@ export default function AlertTriagePage() {
                         <button
                           onClick={() => setInspectingAlert(alert)}
                           title="Inspect Raw SWIFT / ISO Message"
-                          className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                          className="p-1 rounded bg-surface hover:bg-surface-hover text-slate-300 hover:text-white transition-colors cursor-pointer"
                         >
                           <FileText className="w-3.5 h-3.5 text-sky-400" />
                         </button>
                         <Link
                           href={`/graph?node=${encodeURIComponent(alert.account)}`}
                           title="Inspect Multi-Hop Flow Graph"
-                          className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 hover:text-white transition-colors"
+                          className="p-1 rounded bg-surface hover:bg-surface-hover text-slate-300 hover:text-white transition-colors"
                         >
                           <GitFork className="w-3.5 h-3.5 text-emerald-400" />
                         </Link>
@@ -605,7 +605,7 @@ export default function AlertTriagePage() {
                           <Link
                             href={`/cases/${alert.caseId}`}
                             title="Open Linked Case Dossier"
-                            className="p-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-300 hover:text-white transition-colors"
+                            className="p-1 rounded bg-surface hover:bg-surface-hover text-slate-300 hover:text-white transition-colors"
                           >
                             <ExternalLink className="w-3.5 h-3.5 text-purple-400" />
                           </Link>
@@ -622,7 +622,7 @@ export default function AlertTriagePage() {
 
       {/* Sticky Floating Bulk Action Drawer */}
       {selectedRowIds.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#0F172A] border border-[#334155] shadow-2xl rounded-2xl px-5 sm:px-6 py-3 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-200 animate-in slide-in-from-bottom duration-200">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-panel border border-line-strong shadow-2xl rounded-2xl px-5 sm:px-6 py-3 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-200 animate-in slide-in-from-bottom duration-200">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-semibold text-slate-100">
@@ -633,14 +633,14 @@ export default function AlertTriagePage() {
             </span>
           </div>
 
-          <div className="h-4 w-px bg-[#334155] hidden sm:block" />
+          <div className="h-4 w-px bg-surface-hover hidden sm:block" />
 
           {/* Assignee Selector */}
           <div className="flex items-center gap-2">
             <select
               value={assigneeTarget}
               onChange={(e) => setAssigneeTarget(e.target.value)}
-              className="px-2.5 py-1 bg-[#1E293B] border border-[#334155] rounded text-slate-200 text-xs focus:outline-none"
+              className="px-2.5 py-1 bg-surface border border-line-strong rounded text-slate-200 text-xs focus:outline-none"
             >
               <option value="Amina Rahman, CFE (Lead Investigator)">Amina Rahman, CFE (Lead Investigator)</option>
               <option value="Tanvir Ahmed (Triage Analyst)">Tanvir Ahmed (Triage Analyst)</option>
@@ -649,13 +649,13 @@ export default function AlertTriagePage() {
             </select>
             <button
               onClick={handleBatchAssign}
-              className="px-3 py-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-semibold border border-[#334155] cursor-pointer"
+              className="px-3 py-1 rounded bg-surface hover:bg-surface-hover text-slate-200 font-semibold border border-line-strong cursor-pointer"
             >
               Assign
             </button>
           </div>
 
-          <div className="h-4 w-px bg-[#334155] hidden sm:block" />
+          <div className="h-4 w-px bg-surface-hover hidden sm:block" />
 
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
@@ -684,7 +684,7 @@ export default function AlertTriagePage() {
 
             <Link
               href="/rfi"
-              className="px-3 py-1.5 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 font-medium transition-colors flex items-center gap-1.5"
             >
               <MailQuestion className="w-3.5 h-3.5 text-indigo-400" />
               <span>Dispatch RFI</span>
@@ -710,9 +710,9 @@ export default function AlertTriagePage() {
       {/* Raw SWIFT MT700 / ISO 20022 Wire Inspector Slide-Over */}
       {inspectingAlert && (
         <div role="dialog" aria-modal="true" aria-label="Raw wire inspector" className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl bg-[#0F172A] border-l border-[#1E293B] h-full flex flex-col shadow-2xl overflow-hidden">
+          <div className="w-full max-w-2xl bg-panel border-l border-line h-full flex flex-col shadow-2xl overflow-hidden">
             {/* Slide-Over Header */}
-            <div className="p-5 bg-[#0B0F17] border-b border-[#1E293B] flex items-center justify-between">
+            <div className="p-5 bg-canvas border-b border-line flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${inspectingAlert.tierCode === 1 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
@@ -731,7 +731,7 @@ export default function AlertTriagePage() {
               <button
                 onClick={() => setInspectingAlert(null)}
                 aria-label="Close inspector"
-                className="p-1.5 rounded-lg hover:bg-[#1E293B] text-slate-400 hover:text-slate-100 cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-surface text-slate-400 hover:text-slate-100 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -740,7 +740,7 @@ export default function AlertTriagePage() {
             {/* Slide-Over Body */}
             <div className="p-5 space-y-6 flex-1 overflow-y-auto font-sans">
               {/* Highlight Ribbon */}
-              <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
+              <div className="p-4 rounded-xl bg-canvas border border-line space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400">Flagged Entity:</span>
                   <span className="font-semibold text-slate-100">{inspectingAlert.entityName}</span>
@@ -773,26 +773,26 @@ export default function AlertTriagePage() {
                   <span className="text-xs text-emerald-400 font-normal">Validated Syntax</span>
                 </h3>
 
-                <div className="bg-[#0B0F17] border border-[#1E293B] rounded-xl p-4 font-mono text-xs space-y-2 text-slate-300">
+                <div className="bg-canvas border border-line rounded-xl p-4 font-mono text-xs space-y-2 text-slate-300">
                   {inspectingAlert.wirePayload ? (
                     <>
-                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                      <div className="flex items-start gap-3 py-1 border-b border-line/40">
                         <span className="text-sky-400 font-bold w-28 shrink-0">Message Rail:</span>
                         <span className="text-slate-100">{inspectingAlert.wirePayload.messageType}</span>
                       </div>
-                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                      <div className="flex items-start gap-3 py-1 border-b border-line/40">
                         <span className="text-sky-400 font-bold w-28 shrink-0">Ordering Party:</span>
                         <span className="text-slate-200">{inspectingAlert.wirePayload.orderingCustomer}</span>
                       </div>
-                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                      <div className="flex items-start gap-3 py-1 border-b border-line/40">
                         <span className="text-sky-400 font-bold w-28 shrink-0">Ordering Bank:</span>
                         <span className="text-slate-200">{inspectingAlert.wirePayload.orderingInstitution}</span>
                       </div>
-                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                      <div className="flex items-start gap-3 py-1 border-b border-line/40">
                         <span className="text-sky-400 font-bold w-28 shrink-0">Beneficiary:</span>
                         <span className="text-slate-200">{inspectingAlert.wirePayload.beneficiaryCustomer}</span>
                       </div>
-                      <div className="flex items-start gap-3 py-1 border-b border-[#1E293B]/40">
+                      <div className="flex items-start gap-3 py-1 border-b border-line/40">
                         <span className="text-sky-400 font-bold w-28 shrink-0">Remittance:</span>
                         <span className="text-emerald-400">{inspectingAlert.wirePayload.remittanceInfo}</span>
                       </div>
@@ -807,7 +807,7 @@ export default function AlertTriagePage() {
               </div>
 
               {/* Feature Attribution & Explainability (12 Topological Invariants / SHAP) */}
-              <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-3">
+              <div className="p-4 rounded-xl bg-canvas border border-line space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-cyan-400" />
@@ -824,13 +824,13 @@ export default function AlertTriagePage() {
                 </div>
 
                 {showExplainability && (
-                  <div className="space-y-3 pt-2 text-xs font-mono border-t border-[#1E293B]">
+                  <div className="space-y-3 pt-2 text-xs font-mono border-t border-line">
                     <div className="p-2.5 rounded-lg bg-sky-950/20 border border-sky-800/40 text-xs text-sky-300">
                       <strong>Dominant Typology:</strong> {inspectingAlert.typology} &bull; Expected Benign Baseline: E[Y] = 0.052 &bull; Calibrated Risk: {(inspectingAlert.riskScore * 100).toFixed(1)}%
                     </div>
 
                     <div className="space-y-2">
-                      <div className="p-2.5 rounded-lg bg-[#0F172A] border border-[#1E293B] flex items-center justify-between">
+                      <div className="p-2.5 rounded-lg bg-panel border border-line flex items-center justify-between">
                         <div>
                           <div className="font-bold text-slate-200">Pass-Through Net Flow Ratio (φ_flow)</div>
                           <div className="text-xs text-slate-400">Observed: 0.94 • Baseline: 0.12 • BFIU MC 26 § 4.3</div>
@@ -840,7 +840,7 @@ export default function AlertTriagePage() {
                         </span>
                       </div>
 
-                      <div className="p-2.5 rounded-lg bg-[#0F172A] border border-[#1E293B] flex items-center justify-between">
+                      <div className="p-2.5 rounded-lg bg-panel border border-line flex items-center justify-between">
                         <div>
                           <div className="font-bold text-slate-200">15-Minute Rapid Fund Dispersion (δ_disp)</div>
                           <div className="text-xs text-slate-400">Observed: 0.93 • Baseline: 0.05 • Instantaneous Outflows</div>
@@ -850,7 +850,7 @@ export default function AlertTriagePage() {
                         </span>
                       </div>
 
-                      <div className="p-2.5 rounded-lg bg-[#0F172A] border border-[#1E293B] flex items-center justify-between">
+                      <div className="p-2.5 rounded-lg bg-panel border border-line flex items-center justify-between">
                         <div>
                           <div className="font-bold text-slate-200">Structuring Proximity (s_struct)</div>
                           <div className="text-xs text-slate-400">Observed: 0.91 • Band: ৳800k–৳999k CTR Ceiling Proximity</div>
@@ -860,7 +860,7 @@ export default function AlertTriagePage() {
                         </span>
                       </div>
 
-                      <div className="p-2.5 rounded-lg bg-[#0F172A] border border-[#1E293B] flex items-center justify-between">
+                      <div className="p-2.5 rounded-lg bg-panel border border-line flex items-center justify-between">
                         <div>
                           <div className="font-bold text-slate-200">Velocity Burst Acceleration (λ_u)</div>
                           <div className="text-xs text-slate-400">Observed: 0.88 • Baseline: 0.15 • Smurfing Frequency Spike</div>
@@ -925,7 +925,7 @@ export default function AlertTriagePage() {
 
                 <Link
                   href={`/graph?node=${encodeURIComponent(inspectingAlert.account)}`}
-                  className="px-4 py-2 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
+                  className="px-4 py-2 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
                 >
                   <GitFork className="w-4 h-4 text-emerald-400" />
                   <span>Inspect Flow Graph</span>
@@ -933,7 +933,7 @@ export default function AlertTriagePage() {
 
                 <Link
                   href="/rfi"
-                  className="px-4 py-2 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
+                  className="px-4 py-2 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
                 >
                   <MailQuestion className="w-4 h-4 text-sky-400" />
                   <span>Dispatch RFI</span>
@@ -947,7 +947,7 @@ export default function AlertTriagePage() {
       {/* Dismiss Reason Modal */}
       {dismissReasonModalOpen && (
         <div role="dialog" aria-modal="true" aria-label="Dismiss alert reason" className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0F172A] border border-[#334155] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+          <div className="bg-panel border border-line-strong rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
               <ShieldX className="w-5 h-5 text-amber-400" />
               Audited Alert Dismissal Memo
@@ -960,7 +960,7 @@ export default function AlertTriagePage() {
               value={dismissReason}
               onChange={(e) => setDismissReason(e.target.value)}
               placeholder="e.g. Verified ongoing LC trade documentation with genuine ASYCUDA customs clearance bills. Commercial rationale confirmed."
-              className="w-full h-24 p-3 bg-[#0B0F17] border border-[#334155] rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-amber-500"
+              className="w-full h-24 p-3 bg-canvas border border-line-strong rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-amber-500"
             />
 
             <div className="flex items-center justify-end gap-3 pt-2">
@@ -984,8 +984,8 @@ export default function AlertTriagePage() {
       {/* Supervisory Override Modal */}
       {overrideModalOpen && inspectingAlert && (
         <div role="dialog" aria-modal="true" aria-label="Supervisory override" className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0F172A] border border-[#334155] rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+          <div className="bg-panel border border-line-strong rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between pb-2 border-b border-line">
               <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
                 <Sliders className="w-5 h-5 text-amber-400" />
                 Supervisory Model Score Override
@@ -1006,7 +1006,7 @@ export default function AlertTriagePage() {
             <div className="space-y-3 text-xs font-mono">
               <div>
                 <label className="text-xs text-slate-400 block mb-1">Original Model Score</label>
-                <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-rose-400 font-bold">
+                <div className="p-2.5 bg-canvas rounded-lg border border-line text-rose-400 font-bold">
                   {(inspectingAlert.riskScore * 100).toFixed(1)}% &bull; {inspectingAlert.tier}
                 </div>
               </div>
@@ -1031,7 +1031,7 @@ export default function AlertTriagePage() {
                 <select
                   value={overrideTier}
                   onChange={(e) => setOverrideTier(e.target.value as 'Tier 1 Hold' | 'Tier 2 Review' | 'Tier 3 Clear')}
-                  className="w-full p-2.5 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
                 >
                   <option value="Tier 3 Clear">Tier 3 Clear (Straight-Through)</option>
                   <option value="Tier 2 Review">Tier 2 Review (Standard SLA Queue)</option>
@@ -1044,7 +1044,7 @@ export default function AlertTriagePage() {
                 <select
                   value={overrideJustification}
                   onChange={(e) => setOverrideJustification(e.target.value)}
-                  className="w-full p-2.5 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
                 >
                   <option value="DOCUMENTED_TRADE_INVOICE">DOCUMENTED_TRADE_INVOICE — Verified Trade LC &amp; Customs Bill</option>
                   <option value="VERIFIED_PAYROLL_SPIKE">VERIFIED_PAYROLL_SPIKE — Certified Multi-Party Corporate Payroll</option>
@@ -1060,13 +1060,13 @@ export default function AlertTriagePage() {
                   value={overrideNotes}
                   onChange={(e) => setOverrideNotes(e.target.value)}
                   rows={3}
-                  className="w-full p-2.5 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
+                  className="w-full p-2.5 bg-canvas border border-line-strong rounded-lg text-slate-200 text-xs focus:outline-none focus:border-amber-500"
                   placeholder="Mandatory reasoning under SR 11-7 model-risk supervisory standards..."
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#1E293B]">
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-line">
               <button
                 onClick={() => setOverrideModalOpen(false)}
                 className="px-4 py-2 text-xs text-slate-400 hover:text-slate-200 cursor-pointer"

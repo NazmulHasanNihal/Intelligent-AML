@@ -324,7 +324,7 @@ function ForensicGraphStudioContent() {
           <select
             value={activeScenario}
             onChange={(e) => handleSelectScenario(e.target.value)}
-            className="px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs text-purple-300 font-semibold cursor-pointer"
+            className="px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs text-purple-300 font-semibold cursor-pointer"
           >
             {SCENARIOS.map((s) => (
               <option key={s.id} value={s.id}>
@@ -334,7 +334,7 @@ function ForensicGraphStudioContent() {
           </select>
 
           {/* Hop Distance Expansion */}
-          <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
+          <div className="flex items-center bg-panel p-1 rounded-lg border border-line-strong text-xs font-mono">
             <span className="text-slate-400 px-2 text-xs">Hops:</span>
             {([1, 2, 3] as const).map((h) => (
               <button
@@ -352,7 +352,7 @@ function ForensicGraphStudioContent() {
           </div>
 
           {/* Progressive Disclosure Node Capping */}
-          <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
+          <div className="flex items-center bg-panel p-1 rounded-lg border border-line-strong text-xs font-mono">
             <span className="text-slate-400 px-2 text-xs">Node Cap:</span>
             {([25, 50, 100, 250] as const).map((cap) => (
               <button
@@ -370,7 +370,7 @@ function ForensicGraphStudioContent() {
           </div>
 
           {/* View Switcher: 2D Planar vs 3D Force */}
-          <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155]">
+          <div className="flex items-center bg-panel p-1 rounded-lg border border-line-strong">
             <button
               onClick={() => setViewMode('2D')}
               className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
@@ -400,11 +400,11 @@ function ForensicGraphStudioContent() {
       {/* Main Studio Viewport */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 min-h-[540px] h-[calc(100vh-230px)]">
         {/* Graph Canvas Container (8 Cols) */}
-        <div className="lg:col-span-8 bg-[#0F172A] border border-[#1E293B] rounded-xl relative overflow-hidden flex flex-col shadow-2xl">
+        <div className="lg:col-span-8 bg-panel border border-line rounded-xl relative overflow-hidden flex flex-col shadow-2xl">
           {/* Top Canvas Bar: Noise Filter & Camera Controls */}
-          <div className="p-3 bg-[#0B0F17]/80 border-b border-[#1E293B] flex flex-wrap items-center justify-between gap-3 z-10 text-xs">
+          <div className="p-3 bg-canvas/80 border-b border-line flex flex-wrap items-center justify-between gap-3 z-10 text-xs">
             {/* Adaptive Edge Noise Filter Slider */}
-            <div className="flex items-center gap-3 bg-[#0F172A] px-3 py-1.5 rounded-lg border border-[#334155]">
+            <div className="flex items-center gap-3 bg-panel px-3 py-1.5 rounded-lg border border-line-strong">
               <span className="font-semibold text-slate-300 flex items-center gap-1.5">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
                 Adaptive Edge-Trust Gate (ĝ_ij ≥ δ_floor):
@@ -424,7 +424,7 @@ function ForensicGraphStudioContent() {
             </div>
 
             {/* Fusion Weight Pill */}
-            <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300">
+            <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-panel border border-line-strong text-xs font-mono text-slate-300">
               <span className="text-purple-400 font-bold">α_u = 0.65</span>
               <span className="text-slate-500">GNN/Tabular Fusion</span>
             </div>
@@ -437,7 +437,7 @@ function ForensicGraphStudioContent() {
 
               <button
                 onClick={handleResetCamera}
-                className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#0B0F17] hover:bg-[#1E293B] text-slate-300 border border-[#334155] cursor-pointer transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1 rounded bg-canvas hover:bg-surface text-slate-300 border border-line-strong cursor-pointer transition-colors"
                 title="Reset Camera & Fit to Screen"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -446,7 +446,7 @@ function ForensicGraphStudioContent() {
 
               <button
                 onClick={toggleFullscreen}
-                className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#0B0F17] hover:bg-[#1E293B] text-slate-300 border border-[#334155] cursor-pointer transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1 rounded bg-canvas hover:bg-surface text-slate-300 border border-line-strong cursor-pointer transition-colors"
                 title="Toggle Fullscreen Canvas"
               >
                 {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -456,7 +456,7 @@ function ForensicGraphStudioContent() {
           </div>
 
           {/* Graph Viewport */}
-          <div className="flex-1 relative bg-[#090D14] overflow-hidden">
+          <div className="flex-1 relative bg-canvas overflow-hidden">
             <ErrorBoundary viewName="Forensic Graph Studio Viewport">
               {viewMode === '2D' ? (
                 <div ref={cyContainerRef} className="w-full h-full" />
@@ -471,14 +471,14 @@ function ForensicGraphStudioContent() {
             </ErrorBoundary>
 
             {/* Bottom-Right Minimap Badge */}
-            <div className="absolute bottom-4 right-4 p-2 rounded-lg bg-[#0F172A]/85 backdrop-blur-sm border border-[#334155] flex items-center gap-2 text-xs font-mono text-slate-400 pointer-events-none select-none">
+            <div className="absolute bottom-4 right-4 p-2 rounded-lg bg-panel/85 backdrop-blur-sm border border-line-strong flex items-center gap-2 text-xs font-mono text-slate-400 pointer-events-none select-none">
               <Compass className="w-4 h-4 text-purple-400 animate-spin-slow" />
               <span>Network Topology Radar</span>
             </div>
           </div>
 
           {/* Bottom Temporal Playback Scrubber */}
-          <div className="p-3 bg-[#0B0F17]/95 border-t border-[#1E293B] flex items-center gap-3 sm:gap-4 text-xs z-10">
+          <div className="p-3 bg-canvas/95 border-t border-line flex items-center gap-3 sm:gap-4 text-xs z-10">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
               className="p-1.5 rounded-lg bg-purple-950/40 hover:bg-purple-900/60 text-purple-300 border border-purple-800/40 transition-colors cursor-pointer shrink-0"
@@ -503,11 +503,11 @@ function ForensicGraphStudioContent() {
         </div>
 
         {/* 4-Tab 360° Entity Context Drawer (4 Cols) */}
-        <div className="lg:col-span-4 bg-[#0F172A] border border-[#1E293B] rounded-xl p-5 flex flex-col justify-between overflow-y-auto shadow-2xl">
+        <div className="lg:col-span-4 bg-panel border border-line rounded-xl p-5 flex flex-col justify-between overflow-y-auto shadow-2xl">
           {selectedNode ? (
             <div className="space-y-4">
               {/* Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+              <div className="flex items-center justify-between pb-3 border-b border-line">
                 <div>
                   <span className="text-xs font-mono font-semibold text-slate-400 block">
                     360° Node Context
@@ -532,14 +532,14 @@ function ForensicGraphStudioContent() {
               </div>
 
               {/* 4 Tabs */}
-              <div className="grid grid-cols-4 gap-1 p-1 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-xs font-mono">
+              <div className="grid grid-cols-4 gap-1 p-1 bg-canvas rounded-lg border border-line text-xs font-mono">
                 {(['TELEMETRY', 'ENTITY_RES', 'SANCTIONS', 'UBO'] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setDrawerTab(tab)}
                     className={`py-1 rounded text-center transition-colors cursor-pointer ${
                       drawerTab === tab
-                        ? 'bg-[#1E293B] text-sky-300 font-bold'
+                        ? 'bg-surface text-sky-300 font-bold'
                         : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
@@ -551,27 +551,27 @@ function ForensicGraphStudioContent() {
               {/* Tab Contents */}
               {drawerTab === 'TELEMETRY' && (
                 <div className="space-y-2 text-xs font-sans">
-                  <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] flex items-center justify-between">
+                  <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
                     <span className="text-slate-400">Account / IBAN:</span>
                     <PiiText value={selectedNode.id} type="account" className="font-mono text-slate-200" />
                   </div>
-                  <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] flex items-center justify-between">
+                  <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
                     <span className="text-slate-400">Pass-Through Flow Ratio:</span>
                     <strong className="font-mono text-rose-400 tabular-nums">
                       {selectedNode.phiFlow || '0.994'} (Near 1.0 Pass-Through)
                     </strong>
                   </div>
-                  <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] flex items-center justify-between">
+                  <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
                     <span className="text-slate-400">Velocity Burst Score:</span>
                     <strong className="font-mono text-amber-400 tabular-nums">
                       {selectedNode.lambdaU || '4.82'} events / hr
                     </strong>
                   </div>
-                  <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] flex items-center justify-between">
+                  <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
                     <span className="text-slate-400">Jurisdiction:</span>
                     <strong className="font-mono text-slate-200">{selectedNode.jurisdiction}</strong>
                   </div>
-                  <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] flex items-center justify-between">
+                  <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between">
                     <span className="text-slate-400">Calibrated Risk Score:</span>
                     <strong className="font-mono text-rose-400 tabular-nums">{selectedNode.riskScore}</strong>
                   </div>
@@ -580,13 +580,13 @@ function ForensicGraphStudioContent() {
 
               {drawerTab === 'ENTITY_RES' && (
                 <div className="space-y-3 text-xs">
-                  <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1">
+                  <div className="p-3 bg-canvas rounded-xl border border-line space-y-1">
                     <span className="text-slate-500 text-xs font-mono block">Resolved Corporate Entity</span>
                     <span className="font-bold text-slate-100">{selectedNode.entityName}</span>
                     <span className="text-xs text-slate-400 block">Registration: CTG-EXP-2018-99120</span>
                   </div>
 
-                  <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-2">
+                  <div className="p-3 bg-canvas rounded-xl border border-line space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-400 text-xs">Entity Resolution Match</span>
                       <span className="font-mono text-emerald-400 font-bold">96.8% Confidence</span>
@@ -600,7 +600,7 @@ function ForensicGraphStudioContent() {
 
               {drawerTab === 'SANCTIONS' && (
                 <div className="space-y-2 text-xs">
-                  <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-2">
+                  <div className="p-3 bg-canvas rounded-xl border border-line space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-400">OFAC SDN Watchlist:</span>
                       <span className="font-mono text-emerald-400 font-bold">NO DIRECT HIT</span>
@@ -619,7 +619,7 @@ function ForensicGraphStudioContent() {
 
               {drawerTab === 'UBO' && (
                 <div className="space-y-2 text-xs">
-                  <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 font-mono">
+                  <div className="p-3 bg-canvas rounded-xl border border-line space-y-1.5 font-mono">
                     <div className="flex items-center justify-between text-slate-300">
                       <span>Tanvir Ahmed (Managing Director)</span>
                       <span className="text-emerald-400 font-bold">60%</span>
@@ -637,7 +637,7 @@ function ForensicGraphStudioContent() {
               )}
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-[#1E293B] space-y-2">
+              <div className="pt-3 border-t border-line space-y-2">
                 <button
                   onClick={() => {
                     setFourEyesModalOpen(true, {
@@ -655,7 +655,7 @@ function ForensicGraphStudioContent() {
 
                 <button
                   onClick={() => router.push(`/cases/CASE-2026-0881`)}
-                  className="w-full py-2 px-3 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full py-2 px-3 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <FileText className="w-3.5 h-3.5 text-sky-400" />
                   <span>Open Related Case Dossier</span>

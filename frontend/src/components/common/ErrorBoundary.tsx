@@ -41,21 +41,21 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
 
       return (
-        <div className="w-full p-6 my-4 rounded-xl border border-rose-500/30 bg-rose-950/20 backdrop-blur-md text-slate-100">
+        <div className="w-full p-6 my-4 rounded-xl border border-tier-1-border bg-tier-1-bg text-fg">
           <div className="flex items-start gap-4">
-            <div className="p-3 rounded-lg bg-rose-500/20 text-rose-400 shrink-0">
-              <AlertTriangle className="w-6 h-6" />
+            <div className="p-3 rounded-lg bg-panel text-tier-1-text shrink-0 border border-tier-1-border">
+              <AlertTriangle className="w-6 h-6" aria-hidden="true" />
             </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-rose-300">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold text-tier-1-text">
                 View Rendering Interrupted
               </h3>
-              <p className="text-sm text-slate-400 mt-1">
-                An isolated client-side fault occurred while rendering {this.props.viewName || 'this module'}. Other application services and regulatory functions remain operational.
+              <p className="text-sm text-fg-secondary mt-1">
+                An isolated client-side fault occurred while rendering {this.props.viewName || 'this module'}. Other application services remain operational.
               </p>
 
               {this.state.error && (
-                <div className="mt-3 p-3 rounded-lg bg-[#0F172A] border border-[#1E293B] text-xs font-mono text-rose-300 overflow-x-auto">
+                <div className="mt-3 p-3 rounded-lg bg-panel border border-line text-xs font-mono text-tier-1-text overflow-x-auto">
                   {this.state.error.message || String(this.state.error)}
                 </div>
               )}
@@ -64,10 +64,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 <button
                   type="button"
                   onClick={this.handleReset}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-600 hover:bg-rose-500 text-white transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-tier-1 text-white hover:opacity-90 transition-opacity cursor-pointer"
                 >
-                  <RefreshCw className="w-3.5 h-3.5" />
-                  Retry View
+                  <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
+                  Retry view
                 </button>
                 <button
                   type="button"
@@ -77,10 +77,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                       window.location.href = '/';
                     }
                   }}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#1E293B] hover:bg-[#334155] text-slate-200 border border-[#334155] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-surface hover:bg-surface-hover text-fg border border-line transition-colors cursor-pointer"
                 >
-                  <Home className="w-3.5 h-3.5" />
-                  Return to Dashboard
+                  <Home className="w-3.5 h-3.5" aria-hidden="true" />
+                  Return to dashboard
                 </button>
               </div>
             </div>

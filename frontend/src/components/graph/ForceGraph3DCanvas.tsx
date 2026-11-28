@@ -150,7 +150,7 @@ export default function ForceGraph3DCanvas({
         <button
           type="button"
           onClick={onFallbackTo2D}
-          className="px-3.5 py-2 rounded-lg bg-[#192231] hover:bg-[#243044] border border-[#334155] text-xs font-mono text-slate-100 cursor-pointer"
+          className="px-3.5 py-2 rounded-lg bg-surface-2 hover:bg-surface-2 border border-line-strong text-xs font-mono text-slate-100 cursor-pointer"
         >
           Switch to 2D Planar Canvas
         </button>

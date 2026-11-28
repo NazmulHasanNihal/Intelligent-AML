@@ -304,7 +304,7 @@ export default function ModelGovernancePage() {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155] text-xs font-semibold overflow-x-auto">
+        <div className="flex items-center bg-panel p-1 rounded-xl border border-line-strong text-xs font-semibold overflow-x-auto">
           <button
             onClick={() => setActiveTab('MODEL_HEALTH')}
             className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${activeTab === 'MODEL_HEALTH'
@@ -357,14 +357,14 @@ export default function ModelGovernancePage() {
       {activeTab === 'MODEL_HEALTH' && (
         <div className="space-y-5">
           {/* Top Actions & Volatility Spike Toggle */}
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-4 shadow-xl">
+          <div className="p-4 rounded-xl bg-panel border border-line flex flex-wrap items-center justify-between gap-4 shadow-xl">
             <div className="flex items-center gap-3">
               <span className="text-xs font-mono font-semibold text-slate-300">Stress Test Scenario:</span>
               <button
                 onClick={() => setIsSimulatingSpike(!isSimulatingSpike)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-2 ${isSimulatingSpike
                   ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                  : 'bg-[#0B0F17] text-slate-400 border border-[#334155] hover:text-slate-200'
+                  : 'bg-canvas text-slate-400 border border-line-strong hover:text-slate-200'
                   }`}
               >
                 <Activity className="w-3.5 h-3.5" />
@@ -390,8 +390,8 @@ export default function ModelGovernancePage() {
           </div>
 
           {/* Dual Y-Axis Production Drift Chart */}
-          <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+          <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-line">
               <div>
                 <h3 className="text-sm font-bold text-slate-100 font-mono">
                   Production Distribution Drift &amp; Scorer Latency Telemetry
@@ -432,13 +432,13 @@ export default function ModelGovernancePage() {
           </div>
 
           {/* Payment Rails Scorecard */}
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-xl space-y-4">
+          <div className="bg-panel border border-line rounded-2xl p-5 shadow-xl space-y-4">
             <h3 className="text-sm font-bold text-slate-100 font-mono">
               Live Payment Rail Surveillance Scorecard
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-mono">
-              <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
+              <div className="p-4 rounded-xl bg-canvas border border-line space-y-2">
                 <span className="text-xs text-slate-500 block font-bold">SWIFT MT / Documentary Credits</span>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Macro F1:</span>
@@ -454,7 +454,7 @@ export default function ModelGovernancePage() {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
+              <div className="p-4 rounded-xl bg-canvas border border-line space-y-2">
                 <span className="text-xs text-slate-500 block font-bold">ISO 20022 pacs.008 RTGS</span>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Macro F1:</span>
@@ -470,7 +470,7 @@ export default function ModelGovernancePage() {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
+              <div className="p-4 rounded-xl bg-canvas border border-line space-y-2">
                 <span className="text-xs text-slate-500 block font-bold">BEFTN Electronic Clearing</span>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Macro F1:</span>
@@ -486,7 +486,7 @@ export default function ModelGovernancePage() {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
+              <div className="p-4 rounded-xl bg-canvas border border-line space-y-2">
                 <span className="text-xs text-slate-500 block font-bold">MFS (bKash, Nagad, Rocket)</span>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Macro F1:</span>
@@ -505,8 +505,8 @@ export default function ModelGovernancePage() {
           </div>
 
           {/* Conformal Calibration & Finite-Sample Coverage Telemetry */}
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-xl space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-[#1E293B]">
+          <div className="bg-panel border border-line rounded-2xl p-5 shadow-xl space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-line">
               <div>
                 <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
                   <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -530,25 +530,25 @@ export default function ModelGovernancePage() {
 
             {/* 4 Telemetry Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
-              <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1">
+              <div className="p-3.5 rounded-xl bg-canvas border border-line space-y-1">
                 <span className="text-xs text-slate-500 block font-bold">Calibration Set Size</span>
                 <div className="text-base font-bold text-slate-100">n = 10,000</div>
                 <div className="text-xs text-slate-400">Held-out empirical run ID: MASTER_14_DATASET_EVAL_20260904</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1">
+              <div className="p-3.5 rounded-xl bg-canvas border border-line space-y-1">
                 <span className="text-xs text-slate-500 block font-bold">Empirical Coverage</span>
                 <div className="text-base font-bold text-emerald-400">99.04%</div>
                 <div className="text-xs text-emerald-400/80">Exceeds 99.00% nominal floor (+0.04%)</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1">
+              <div className="p-3.5 rounded-xl bg-canvas border border-line space-y-1">
                 <span className="text-xs text-slate-500 block font-bold">Nonconformity Quantile</span>
                 <div className="text-base font-bold text-cyan-300">&qcirc; = 0.8542</div>
                 <div className="text-xs text-slate-400">Finite-sample quantile at &lceil;(n+1)(1-&alpha;)&rceil;/n</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1">
+              <div className="p-3.5 rounded-xl bg-canvas border border-line space-y-1">
                 <span className="text-xs text-slate-500 block font-bold">Active Champion Model</span>
                 <div className="text-base font-bold text-amber-300 truncate">cstgb-champion-v3.2</div>
                 <div className="text-xs text-slate-400 font-mono truncate" title="SHA-256: 8f3b21c4708eb19a4b3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b">
@@ -567,15 +567,15 @@ export default function ModelGovernancePage() {
                 Under strict exchangeability ((Z_1, ..., Z_(n+1)) ~ D), split-conformal prediction provides an exact non-asymptotic finite-sample guarantee: P(Y_(n+1) &isin; C(X_(n+1))) &ge; 1 - &alpha;.
                 In dynamic financial crime surveillance networks, temporal drift, emerging typology evasions (e.g. cross-border trade smurfing), and sudden macro-volatility surges can introduce covariate and concept shift, violating strict exchangeability.
               </p>
-              <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] flex items-center justify-between text-xs font-mono">
+              <div className="p-2.5 bg-canvas rounded-lg border border-line flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400">Drift Safeguard: Kolmogorov-Smirnov Sentinel</span>
                 <span className="text-emerald-400 font-semibold">KS &le; 0.038 (Clean Baseline) &bull; Threshold: 0.050</span>
               </div>
             </div>
 
             {/* Champion vs. Challenger Continuous Shadow Replay */}
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1E293B]">
+            <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-line">
                 <div>
                   <h3 className="text-sm font-bold text-slate-100 font-mono flex items-center gap-2">
                     <GitCompare className="w-4 h-4 text-cyan-400" />
@@ -595,7 +595,7 @@ export default function ModelGovernancePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
                 {/* Champion */}
-                <div className="p-4 rounded-xl bg-[#0B0F17] border border-cyan-500/30 space-y-3">
+                <div className="p-4 rounded-xl bg-canvas border border-cyan-500/30 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-cyan-400">Production Champion</span>
                     <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 text-xs">v3.2.0-Production</span>
@@ -622,7 +622,7 @@ export default function ModelGovernancePage() {
                 </div>
 
                 {/* Challenger */}
-                <div className="p-4 rounded-xl bg-[#0B0F17] border border-slate-800 space-y-3">
+                <div className="p-4 rounded-xl bg-canvas border border-slate-800 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-400">Shadow Challenger</span>
                     <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-xs">v2.1.0-Evaluation</span>
@@ -650,7 +650,7 @@ export default function ModelGovernancePage() {
               </div>
 
               {/* Shadow Impact Summary */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] text-xs font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-canvas rounded-xl border border-line text-xs font-mono">
                 <div>
                   <span className="text-xs text-slate-500 block">Triage Disagreements</span>
                   <span className="font-bold text-slate-200">142 / 2,500 (5.68%)</span>
@@ -669,8 +669,8 @@ export default function ModelGovernancePage() {
             </div>
 
             {/* Algorithmic Fairness & Demographic Parity (EEOC 4/5ths Rule) */}
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+            <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-line">
                 <div>
                   <h3 className="text-sm font-bold text-slate-100 font-mono flex items-center gap-2">
                     <Users className="w-4 h-4 text-cyan-400" />
@@ -687,7 +687,7 @@ export default function ModelGovernancePage() {
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono text-slate-300">
-                  <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs text-slate-400">
+                  <thead className="bg-canvas border-b border-line text-xs text-slate-400">
                     <tr>
                       <th className="px-4 py-2.5">Entity Segment</th>
                       <th className="px-4 py-2.5">Sample Size</th>
@@ -741,7 +741,7 @@ export default function ModelGovernancePage() {
       {/* Tab 2: BFIU Guidance Mapping Table */}
       {activeTab === 'BFIU_MAPPING' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-4 shadow-xl">
+          <div className="p-4 rounded-xl bg-panel border border-line flex flex-wrap items-center justify-between gap-4 shadow-xl">
             <div>
               <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
                 <BookOpen className="w-4 h-4 text-cyan-400" />
@@ -758,15 +758,15 @@ export default function ModelGovernancePage() {
                 placeholder="Search statutes or modules..."
                 value={mappingSearch}
                 onChange={(e) => setMappingSearch(e.target.value)}
-                className="px-3 py-1.5 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 text-xs font-mono focus:outline-none focus:border-cyan-500 w-64"
+                className="px-3 py-1.5 bg-canvas border border-line-strong rounded-lg text-slate-100 text-xs font-mono focus:outline-none focus:border-cyan-500 w-64"
               />
             </div>
           </div>
 
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
+          <div className="bg-panel border border-line rounded-xl overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs font-mono text-slate-400">
+                <thead className="bg-canvas border-b border-line text-xs font-mono text-slate-400">
                   <tr>
                     <th className="px-4 py-3">ID</th>
                     <th className="px-4 py-3">Statutory Framework &amp; Section</th>
@@ -778,7 +778,7 @@ export default function ModelGovernancePage() {
                 </thead>
                 <tbody className="divide-y divide-[#1E293B]">
                   {filteredMappings.map((m) => (
-                    <tr key={m.id} className="hover:bg-[#1E293B]/40 transition-colors">
+                    <tr key={m.id} className="hover:bg-surface/40 transition-colors">
                       <td className="px-4 py-3 font-mono font-bold text-cyan-400">{m.id}</td>
                       <td className="px-4 py-3 font-semibold text-slate-100">
                         <div className="flex items-center gap-1.5">
@@ -825,7 +825,7 @@ export default function ModelGovernancePage() {
       {/* Tab 3: Retention, Data Residency & GDPR Research Policies */}
       {activeTab === 'POLICIES' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-xl">
+          <div className="p-4 rounded-xl bg-panel border border-line shadow-xl">
             <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
               <Building2 className="w-4 h-4 text-cyan-400" />
               Statutory Record Retention, In-Country Data Residency &amp; GDPR Evaluation
@@ -837,7 +837,7 @@ export default function ModelGovernancePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Policy Card 1: Statutory Record Retention */}
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+            <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-slate-200 flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-emerald-400" />
@@ -848,7 +848,7 @@ export default function ModelGovernancePage() {
                 </span>
               </div>
 
-              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
+              <div className="p-3 bg-canvas rounded-xl border border-line space-y-1.5 text-xs font-mono">
                 <div>
                   <span className="text-slate-500 text-xs block">Statutory Mandate:</span>
                   <span className="text-slate-200">{REGULATORY_CONFIG.retentionPolicy.statutoryBasis}</span>
@@ -866,7 +866,7 @@ export default function ModelGovernancePage() {
             </div>
 
             {/* Policy Card 2: Sovereign Data Residency */}
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+            <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-slate-200 flex items-center gap-1.5">
                   <Database className="w-4 h-4 text-cyan-400" />
@@ -877,7 +877,7 @@ export default function ModelGovernancePage() {
                 </span>
               </div>
 
-              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
+              <div className="p-3 bg-canvas rounded-xl border border-line space-y-1.5 text-xs font-mono">
                 <div>
                   <span className="text-slate-500 text-xs block">Central Bank Standard:</span>
                   <span className="text-slate-200">{REGULATORY_CONFIG.dataResidencyPolicy.primaryMandate}</span>
@@ -895,7 +895,7 @@ export default function ModelGovernancePage() {
             </div>
 
             {/* Policy Card 3: Domestic PII Secrecy */}
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+            <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-slate-200 flex items-center gap-1.5">
                   <FileKey className="w-4 h-4 text-sky-400" />
@@ -906,7 +906,7 @@ export default function ModelGovernancePage() {
                 </span>
               </div>
 
-              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
+              <div className="p-3 bg-canvas rounded-xl border border-line space-y-1.5 text-xs font-mono">
                 <div>
                   <span className="text-slate-500 text-xs block">Governing Standard:</span>
                   <span className="text-slate-200">{REGULATORY_CONFIG.piiPrivacyPolicy.bangladeshStandard}</span>
@@ -926,7 +926,7 @@ export default function ModelGovernancePage() {
             </div>
 
             {/* Policy Card 4: EU GDPR Research Prototype Notes (ETH Zurich Context) */}
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
+            <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-slate-200 flex items-center gap-1.5">
                   <Globe2 className="w-4 h-4 text-purple-400" />
@@ -937,7 +937,7 @@ export default function ModelGovernancePage() {
                 </span>
               </div>
 
-              <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
+              <div className="p-3 bg-canvas rounded-xl border border-line space-y-1.5 text-xs font-mono">
                 <div>
                   <span className="text-slate-500 text-xs block">Statutory Processing Basis:</span>
                   <span className="text-slate-200">{REGULATORY_CONFIG.piiPrivacyPolicy.gdprResearchNotes.complianceBasis}</span>
@@ -965,7 +965,7 @@ export default function ModelGovernancePage() {
       {activeTab === 'WEBHOOK_HUB' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Dispatch Config */}
-          <div className="lg:col-span-5 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-xl space-y-4">
+          <div className="lg:col-span-5 bg-panel border border-line rounded-2xl p-5 shadow-xl space-y-4">
             <h3 className="text-sm font-bold text-slate-100 font-mono flex items-center gap-2">
               <Radio className="w-4 h-4 text-cyan-400" />
               Core Banking Settlement Interception Webhooks
@@ -982,7 +982,7 @@ export default function ModelGovernancePage() {
                     onClick={() => setSelectedWebhook('DEBIT_HOLD')}
                     className={`p-2.5 rounded-lg border text-left cursor-pointer transition-colors ${selectedWebhook === 'DEBIT_HOLD'
                       ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300 font-bold'
-                      : 'bg-[#0B0F17] border-[#334155] text-slate-300'
+                      : 'bg-canvas border-line-strong text-slate-300'
                       }`}
                   >
                     <div>/debit-hold</div>
@@ -993,7 +993,7 @@ export default function ModelGovernancePage() {
                     onClick={() => setSelectedWebhook('ACCOUNT_FREEZE')}
                     className={`p-2.5 rounded-lg border text-left cursor-pointer transition-colors ${selectedWebhook === 'ACCOUNT_FREEZE'
                       ? 'bg-rose-500/20 border-rose-500 text-rose-300 font-bold'
-                      : 'bg-[#0B0F17] border-[#334155] text-slate-300'
+                      : 'bg-canvas border-line-strong text-slate-300'
                       }`}
                   >
                     <div>/account-freeze</div>
@@ -1008,7 +1008,7 @@ export default function ModelGovernancePage() {
                   type="text"
                   value={targetAccount}
                   onChange={(e) => setTargetAccount(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 font-mono text-xs focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 font-mono text-xs focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -1026,9 +1026,9 @@ export default function ModelGovernancePage() {
           </div>
 
           {/* Webhook Response Log Viewer */}
-          <div className="lg:col-span-7 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-7 bg-panel border border-line rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-4">
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+              <div className="flex items-center justify-between pb-3 border-b border-line">
                 <h3 className="text-xs font-bold text-slate-200 font-mono flex items-center gap-2">
                   <Terminal className="w-4 h-4 text-emerald-400" />
                   Core Banking API Telemetry Log
@@ -1036,7 +1036,7 @@ export default function ModelGovernancePage() {
                 <span className="text-xs font-mono text-slate-400">HMAC-SHA256 Signed</span>
               </div>
 
-              <div className="mt-3 p-4 bg-[#090D14] border border-[#1E293B] rounded-xl font-mono text-xs text-emerald-400 h-80 overflow-y-auto">
+              <div className="mt-3 p-4 bg-canvas border border-line rounded-xl font-mono text-xs text-emerald-400 h-80 overflow-y-auto">
                 {webhookResponse ? (
                   <pre>{webhookResponse}</pre>
                 ) : (
@@ -1054,7 +1054,7 @@ export default function ModelGovernancePage() {
       {activeTab === 'WORM_LEDGER' && (
         <div className="space-y-4">
           {/* Controls Bar */}
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-4 shadow-xl">
+          <div className="p-4 rounded-xl bg-panel border border-line flex flex-wrap items-center justify-between gap-4 shadow-xl">
             <div className="flex items-center gap-3">
               <button
                 onClick={handleRunAuditVerification}
@@ -1078,7 +1078,7 @@ export default function ModelGovernancePage() {
 
               <button
                 onClick={handleExportEvidenceCertificate}
-                className="px-4 py-2 rounded-xl bg-[#0B0F17] hover:bg-[#1E293B] border border-[#334155] text-slate-200 font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-canvas hover:bg-surface border border-line-strong text-slate-200 font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <Download className="w-4 h-4 text-emerald-400" />
                 <span>Export § 65B Certificate</span>
@@ -1103,7 +1103,7 @@ export default function ModelGovernancePage() {
           </div>
 
           {/* Legal Standards & Storage WORM Banner */}
-          <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-slate-400">
+          <div className="p-3 bg-canvas border border-line rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-slate-400">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>
@@ -1111,20 +1111,20 @@ export default function ModelGovernancePage() {
               </span>
             </div>
             <div className="flex items-center gap-3 text-slate-400 text-xs">
-              <span className="px-2 py-0.5 rounded bg-[#1E293B] text-cyan-300 font-bold">
+              <span className="px-2 py-0.5 rounded bg-surface text-cyan-300 font-bold">
                 Ed25519 Checkpoints (RFC 8032)
               </span>
-              <span className="px-2 py-0.5 rounded bg-[#1E293B] text-emerald-300 font-bold">
+              <span className="px-2 py-0.5 rounded bg-surface text-emerald-300 font-bold">
                 S3 Object Lock: Compliance Mode
               </span>
             </div>
           </div>
 
           {/* Ledger Table */}
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
+          <div className="bg-panel border border-line rounded-xl overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs font-mono text-slate-400">
+                <thead className="bg-canvas border-b border-line text-xs font-mono text-slate-400">
                   <tr>
                     <th className="px-4 py-3">Block #</th>
                     <th className="px-4 py-3">Action</th>
@@ -1140,12 +1140,12 @@ export default function ModelGovernancePage() {
                       key={block.sequence || block.blockHeight}
                       className={`transition-colors ${isTampered && (block.sequence === 1 || block.blockHeight === 1)
                         ? 'bg-rose-950/30 text-rose-300 border-l-4 border-l-rose-500'
-                        : 'hover:bg-[#1E293B]/40'
+                        : 'hover:bg-surface/40'
                         }`}
                     >
                       <td className="px-4 py-3 font-mono font-bold text-cyan-400">#{block.sequence || block.blockHeight}</td>
                       <td className="px-4 py-3">
-                        <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#1E293B] text-slate-200">
+                        <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-surface text-slate-200">
                           {block.action}
                         </span>
                       </td>

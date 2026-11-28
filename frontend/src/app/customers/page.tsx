@@ -75,7 +75,7 @@ export default function CustomerDirectoryPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-panel border border-line-strong text-xs font-mono text-slate-300">
             <span>Customer Base: <strong>{customers.length} Entities</strong></span>
             <span>•</span>
             <span className="text-rose-400">
@@ -90,7 +90,7 @@ export default function CustomerDirectoryPage() {
         {/* Left Side: Customer Directory List */}
         <div className="lg:col-span-5 space-y-3">
           {/* Search and Risk Tabs */}
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#1E293B]">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-line">
             <div className="flex items-center gap-1">
               {(['ALL', 'HIGH_EDD', 'MEDIUM', 'LOW'] as const).map((r) => (
                 <button
@@ -98,7 +98,7 @@ export default function CustomerDirectoryPage() {
                   onClick={() => setRiskFilter(r)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     riskFilter === r
-                      ? 'bg-[#1E293B] text-slate-100 border border-[#334155]'
+                      ? 'bg-surface text-slate-100 border border-line-strong'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -114,7 +114,7 @@ export default function CustomerDirectoryPage() {
                 placeholder="Search entities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-2.5 py-1 bg-[#0F172A] border border-[#334155] rounded-lg text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none"
+                className="w-full pl-8 pr-2.5 py-1 bg-panel border border-line-strong rounded-lg text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none"
               />
             </div>
           </div>
@@ -131,8 +131,8 @@ export default function CustomerDirectoryPage() {
                   onClick={() => setSelectedCustomerId(cust.id)}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                     isSelected
-                      ? 'bg-[#1E293B]/80 border-emerald-500 shadow-lg'
-                      : 'bg-[#0F172A] border-[#1E293B] hover:border-[#334155]'
+                      ? 'bg-surface/80 border-emerald-500 shadow-lg'
+                      : 'bg-panel border-line hover:border-line-strong'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -167,11 +167,11 @@ export default function CustomerDirectoryPage() {
         </div>
 
         {/* Right Side: Customer Dossier View */}
-        <div className="lg:col-span-7 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-6 shadow-2xl space-y-6">
+        <div className="lg:col-span-7 bg-panel border border-line rounded-2xl p-6 shadow-2xl space-y-6">
           {selectedCustomer ? (
             <div className="space-y-6">
               {/* Header Profile Bar */}
-              <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-[#1E293B]">
+              <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-line">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
@@ -198,7 +198,7 @@ export default function CustomerDirectoryPage() {
                       setNewRating(selectedCustomer.riskRating === 'HIGH_EDD' ? 'HIGH_EDD' : selectedCustomer.riskRating === 'MEDIUM' ? 'MEDIUM' : 'LOW');
                       setRatingModalOpen(true);
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-[#1E293B] hover:bg-[#334155] text-slate-200 text-xs font-semibold border border-[#334155] cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-hover text-slate-200 text-xs font-semibold border border-line-strong cursor-pointer"
                   >
                     Adjust Risk Rating
                   </button>
@@ -219,15 +219,15 @@ export default function CustomerDirectoryPage() {
                   KYC &amp; Corporate Registration
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-                  <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B]">
+                  <div className="p-3 rounded-xl bg-canvas border border-line">
                     <span className="text-slate-500 text-xs font-mono block">Trade License / Reg No</span>
                     <span className="font-mono font-bold text-slate-200 mt-0.5 block">{selectedCustomer.registrationNo}</span>
                   </div>
-                  <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B]">
+                  <div className="p-3 rounded-xl bg-canvas border border-line">
                     <span className="text-slate-500 text-xs font-mono block">Masked NID / TIN</span>
                     <PiiText value={selectedCustomer.maskedNidTin} type="account" className="font-mono font-bold text-slate-200 mt-0.5 block" />
                   </div>
-                  <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B]">
+                  <div className="p-3 rounded-xl bg-canvas border border-line">
                     <span className="text-slate-500 text-xs font-mono block">Account Status</span>
                     <span className={`font-mono font-bold mt-0.5 block ${selectedCustomer.accountStatus === 'FROZEN' ? 'text-rose-400' : 'text-emerald-400'}`}>
                       {selectedCustomer.accountStatus}
@@ -245,7 +245,7 @@ export default function CustomerDirectoryPage() {
                   </span>
                 </h3>
 
-                <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-3">
+                <div className="p-4 rounded-xl bg-canvas border border-line space-y-3">
                   <div className="flex items-center justify-between text-xs">
                     <div>
                       <span className="text-slate-400">Declared Turnover: </span>
@@ -262,7 +262,7 @@ export default function CustomerDirectoryPage() {
                   </div>
 
                   {/* Visual Progress Bar */}
-                  <div className="w-full h-3 bg-[#1E293B] rounded-full overflow-hidden flex">
+                  <div className="w-full h-3 bg-surface rounded-full overflow-hidden flex">
                     <div
                       style={{
                         width: `${Math.min(
@@ -305,7 +305,7 @@ export default function CustomerDirectoryPage() {
                 </h3>
                 <div className="space-y-2">
                   {selectedCustomer.uboHierarchy.map((owner, idx) => (
-                    <div key={idx} className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl flex items-center justify-between text-xs">
+                    <div key={idx} className="p-3 bg-canvas border border-line rounded-xl flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4 text-slate-400" />
                         <div>
@@ -346,7 +346,7 @@ export default function CustomerDirectoryPage() {
 
                 <Link
                   href="/rfi"
-                  className="px-4 py-2 rounded-xl bg-[#1E293B] hover:bg-[#334155] text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
+                  className="px-4 py-2 rounded-xl bg-surface hover:bg-surface-hover text-slate-200 font-medium text-xs transition-colors flex items-center gap-2"
                 >
                   <MailQuestion className="w-4 h-4 text-sky-400" />
                   <span>Dispatch KYC Inquiry (RFI)</span>
@@ -364,7 +364,7 @@ export default function CustomerDirectoryPage() {
       {/* Adjust Risk Rating Modal */}
       {ratingModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0F172A] border border-[#334155] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+          <div className="bg-panel border border-line-strong rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
               <SlidersHorizontal className="w-5 h-5 text-emerald-400" />
               Adjust Customer Risk Classification
@@ -378,7 +378,7 @@ export default function CustomerDirectoryPage() {
               <select
                 value={newRating}
                 onChange={(e) => setNewRating(e.target.value as any)}
-                className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-xs text-slate-200 cursor-pointer"
+                className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-xs text-slate-200 cursor-pointer"
               >
                 <option value="HIGH_EDD">HIGH (Mandatory Quarterly EDD &amp; Live Wire Hold)</option>
                 <option value="MEDIUM">MEDIUM (Standard Annual Review)</option>
@@ -392,7 +392,7 @@ export default function CustomerDirectoryPage() {
                 value={ratingMemo}
                 onChange={(e) => setRatingMemo(e.target.value)}
                 placeholder="e.g. Unexplained +312% export turnover variance and port diversion flagged during trade inspection."
-                className="w-full h-20 p-3 bg-[#0B0F17] border border-[#334155] rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none"
+                className="w-full h-20 p-3 bg-canvas border border-line-strong rounded-xl text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none"
               />
             </div>
 

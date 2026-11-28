@@ -16,7 +16,7 @@ export default function SarError({
 
   return (
     <div className="p-6 sm:p-12 max-w-3xl mx-auto my-8">
-      <div className="p-8 rounded-2xl bg-[#0F172A] border border-rose-500/40 shadow-2xl text-slate-100 text-center">
+      <div className="p-8 rounded-2xl bg-panel border border-rose-500/40 shadow-2xl text-slate-100 text-center">
         <div className="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto mb-4 border border-rose-500/30">
           <FileText className="w-7 h-7" />
         </div>
@@ -27,7 +27,7 @@ export default function SarError({
           An error occurred while compiling XML nodes, verifying supporting attachments, or calculating SHA-256 seals.
         </p>
 
-        <div className="p-3 rounded-lg bg-[#070B12] border border-[#1E293B] font-mono text-left text-xs text-rose-300 mb-6 max-h-36 overflow-y-auto break-all">
+        <div className="p-3 rounded-lg bg-canvas border border-line font-mono text-left text-xs text-rose-300 mb-6 max-h-36 overflow-y-auto break-all">
           <p className="font-bold text-slate-400 mb-1">Error Diagnostic:</p>
           <p>{error.message || 'UNODC Schema Serialization Exception'}</p>
           {error.digest && <p className="text-xs text-slate-500 mt-1">Digest: {error.digest}</p>}

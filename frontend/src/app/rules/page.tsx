@@ -141,7 +141,7 @@ export default function RuleStudioPage() {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#334155] text-xs font-semibold">
+        <div className="flex items-center bg-panel p-1 rounded-xl border border-line-strong text-xs font-semibold">
           <button
             onClick={() => setActiveTab('CHAMPION_CHALLENGER')}
             className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
@@ -180,8 +180,8 @@ export default function RuleStudioPage() {
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Champion Card */}
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+            <div className="p-5 rounded-2xl bg-panel border border-line shadow-xl space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-line">
                 <div>
                   <span className="text-xs font-mono text-slate-500 font-bold">Active In-Flight Rule</span>
                   <h3 className="text-sm font-bold text-slate-100 font-mono">Champion: Legacy Threshold Engine v2.4</h3>
@@ -192,15 +192,15 @@ export default function RuleStudioPage() {
               </div>
 
               <div className="space-y-2 text-xs">
-                <div className="p-3 bg-[#0B0F17] rounded-xl flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl flex items-center justify-between">
                   <span className="text-slate-400">Monthly Alert Volume:</span>
                   <strong className="font-mono text-slate-200">14,820 alerts / mo</strong>
                 </div>
-                <div className="p-3 bg-[#0B0F17] rounded-xl flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl flex items-center justify-between">
                   <span className="text-slate-400">False Positive Rate:</span>
                   <strong className="font-mono text-rose-400">88.4% (Heavy Analyst Fatigue)</strong>
                 </div>
-                <div className="p-3 bg-[#0B0F17] rounded-xl flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl flex items-center justify-between">
                   <span className="text-slate-400">Mean Triage Duration:</span>
                   <strong className="font-mono text-slate-200">14.2 minutes / alert</strong>
                 </div>
@@ -208,8 +208,8 @@ export default function RuleStudioPage() {
             </div>
 
             {/* Challenger Card */}
-            <div className="p-5 rounded-2xl bg-[#0F172A] border border-emerald-500/40 shadow-xl space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+            <div className="p-5 rounded-2xl bg-panel border border-emerald-500/40 shadow-xl space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-line">
                 <div>
                   <span className="text-xs font-mono text-emerald-400 font-bold">Shadow Mode Evaluation</span>
                   <h3 className="text-sm font-bold text-slate-100 font-mono">Challenger: Calibrated Topology Gate v3.0</h3>
@@ -220,15 +220,15 @@ export default function RuleStudioPage() {
               </div>
 
               <div className="space-y-2 text-xs">
-                <div className="p-3 bg-[#0B0F17] rounded-xl flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl flex items-center justify-between">
                   <span className="text-slate-400">Monthly Alert Volume:</span>
                   <strong className="font-mono text-emerald-400">4,120 alerts / mo (-72.2%)</strong>
                 </div>
-                <div className="p-3 bg-[#0B0F17] rounded-xl flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl flex items-center justify-between">
                   <span className="text-slate-400">False Positive Reduction:</span>
                   <strong className="font-mono text-emerald-400">-42.8% False Positive Drop</strong>
                 </div>
-                <div className="p-3 bg-[#0B0F17] rounded-xl flex items-center justify-between">
+                <div className="p-3 bg-canvas rounded-xl flex items-center justify-between">
                   <span className="text-slate-400">True Positive Capture:</span>
                   <strong className="font-mono text-emerald-400">+18.4% Greater Complex Laundering Capture</strong>
                 </div>
@@ -236,7 +236,7 @@ export default function RuleStudioPage() {
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-3">
+          <div className="p-4 rounded-xl bg-panel border border-line flex flex-wrap items-center justify-between gap-3">
             <p className="text-xs text-slate-400">
               {replayData
                 ? `${replayData.replay_period} (${replayData.total_transactions_replayed.toLocaleString()} txs, synthetic replay): Champion F1 ${(replayData.champion_f1 * 100).toFixed(1)}% vs Challenger F1 ${(replayData.challenger_f1 * 100).toFixed(1)}%, ${replayData.operational_noise_reduction_pct}% noise reduction, ${(replayData.conformal_coverage_empirical * 100).toFixed(2)}% conformal coverage.`
@@ -262,7 +262,7 @@ export default function RuleStudioPage() {
 
       {/* Tab 2: Internal Sensitivity Calibration */}
       {activeTab === 'SENSITIVITY_SIM' && (
-        <div className="p-6 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-2xl space-y-5">
+        <div className="p-6 rounded-2xl bg-panel border border-line shadow-2xl space-y-5">
           <div className="p-3 bg-amber-950/30 border border-amber-800/60 rounded-xl flex items-center gap-2.5 text-xs text-amber-300">
             <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400" />
             <span>
@@ -271,7 +271,7 @@ export default function RuleStudioPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-4 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-3">
+            <div className="p-4 bg-canvas rounded-xl border border-line space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-slate-300">Pass-Through Flow Threshold</span>
                 <span className="font-mono font-bold text-emerald-400">{flowThreshold.toFixed(2)}</span>
@@ -290,7 +290,7 @@ export default function RuleStudioPage() {
               </p>
             </div>
 
-            <div className="p-4 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-3">
+            <div className="p-4 bg-canvas rounded-xl border border-line space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-slate-300">Velocity Burst Multiplier</span>
                 <span className="font-mono font-bold text-amber-400">{burstMultiplier.toFixed(1)}x</span>
@@ -309,7 +309,7 @@ export default function RuleStudioPage() {
               </p>
             </div>
 
-            <div className="p-4 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-3">
+            <div className="p-4 bg-canvas rounded-xl border border-line space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-slate-300">Structuring Time Window</span>
                 <span className="font-mono font-bold text-sky-400">{windowHours}h</span>
@@ -330,7 +330,7 @@ export default function RuleStudioPage() {
           </div>
 
           {/* Live Simulation Readout + Apply Action */}
-          <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] flex flex-wrap items-center justify-between gap-4">
+          <div className="p-4 rounded-xl bg-canvas border border-line flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-6 text-xs font-mono">
               <div>
                 <span className="text-[10px] text-slate-500 uppercase block">Projected Volume</span>
@@ -373,7 +373,7 @@ export default function RuleStudioPage() {
       {/* Tab 3: Time-Bound Whitelisting */}
       {activeTab === 'WHITELIST' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex items-center justify-between shadow-xl">
+          <div className="p-4 rounded-xl bg-panel border border-line flex items-center justify-between shadow-xl">
             <div>
               <h2 className="text-sm font-bold text-slate-100 font-mono">Institutional Exemption Docket</h2>
               <p className="text-xs text-slate-400 mt-0.5">
@@ -390,9 +390,9 @@ export default function RuleStudioPage() {
             </button>
           </div>
 
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
+          <div className="bg-panel border border-line rounded-xl overflow-hidden shadow-2xl">
             <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs font-mono text-slate-400">
+              <thead className="bg-canvas border-b border-line text-xs font-mono text-slate-400">
                 <tr>
                   <th className="px-4 py-3">Exemption ID</th>
                   <th className="px-4 py-3">Corporate Entity</th>
@@ -404,7 +404,7 @@ export default function RuleStudioPage() {
               </thead>
               <tbody className="divide-y divide-[#1E293B]">
                 {whitelist.map((item) => (
-                  <tr key={item.id} className="hover:bg-[#1E293B]/40 transition-colors">
+                  <tr key={item.id} className="hover:bg-surface/40 transition-colors">
                     <td className="px-4 py-3 font-mono font-bold text-sky-400">{item.id}</td>
                     <td className="px-4 py-3">
                       <div className="font-semibold text-slate-100">{item.entityName}</div>
@@ -433,8 +433,8 @@ export default function RuleStudioPage() {
       {/* Add Exemption Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0F172A] border border-[#334155] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+          <div className="bg-panel border border-line-strong rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-line">
               <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
                 <FileCheck2 className="w-5 h-5 text-emerald-400" />
                 New Whitelist Exemption Request
@@ -453,7 +453,7 @@ export default function RuleStudioPage() {
                   placeholder="e.g. Beximco Pharmaceuticals Ltd"
                   value={newEntity}
                   onChange={(e) => setNewEntity(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -465,7 +465,7 @@ export default function RuleStudioPage() {
                   placeholder="e.g. BD55-BEX-9921-0021-4410"
                   value={newAccount}
                   onChange={(e) => setNewAccount(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
                 />
               </div>
 
@@ -477,7 +477,7 @@ export default function RuleStudioPage() {
                   placeholder="e.g. Bulk Active Raw Material Import LCs"
                   value={newRule}
                   onChange={(e) => setNewRule(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -488,11 +488,11 @@ export default function RuleStudioPage() {
                   required
                   value={newExpiry}
                   onChange={(e) => setNewExpiry(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full px-3 py-2 bg-canvas border border-line-strong rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#1E293B]">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-line">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}

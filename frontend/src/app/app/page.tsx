@@ -152,7 +152,7 @@ export default function SurveillanceOverviewPage() {
         <div className="flex items-center gap-2 text-xs font-mono">
           <Link
             href="/triage"
-            className="px-3 py-1.5 rounded-md bg-[#0D121A] hover:bg-[#141C27] border border-[#1E2734] text-slate-200 transition-colors"
+            className="px-3 py-1.5 rounded-md bg-panel hover:bg-panel-raised border border-line text-slate-200 transition-colors"
           >
             Open Triage Queue
           </Link>
@@ -166,7 +166,7 @@ export default function SurveillanceOverviewPage() {
       </div>
 
       {/* Status strip */}
-      <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-[#0F172A] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-panel px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 items-center gap-3">
           <span className="relative flex h-2.5 w-2.5 shrink-0">
             {isLiveStreamActive && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />}
@@ -219,7 +219,7 @@ export default function SurveillanceOverviewPage() {
         {/* Card 1: 24h Monitored Volume */}
         <Link
           href="/triage?tier=all"
-          className="p-5 bg-[#0F172A] border border-[#1E293B] hover:border-emerald-500/40 rounded-xl transition-all h-full flex flex-col justify-between group cursor-pointer block"
+          className="p-5 bg-panel border border-line hover:border-emerald-500/40 rounded-xl transition-all h-full flex flex-col justify-between group cursor-pointer block"
         >
           <div>
             <div className="flex items-center justify-between text-slate-400 mb-2">
@@ -234,7 +234,7 @@ export default function SurveillanceOverviewPage() {
               <span>straight-through clear</span>
             </div>
           </div>
-          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs text-slate-400">
+          <div className="pt-3 border-t border-line mt-4 flex items-center justify-between text-xs text-slate-400">
             <span>Filter All Transactions</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400 transition-colors" />
           </div>
@@ -243,7 +243,7 @@ export default function SurveillanceOverviewPage() {
         {/* Card 2: Tier 1 Quarantined Holds */}
         <Link
           href="/triage?tier=tier1"
-          className="p-5 bg-[#0F172A] border border-[#1E293B] hover:border-rose-500/40 rounded-xl transition-all h-full flex flex-col justify-between group cursor-pointer block"
+          className="p-5 bg-panel border border-line hover:border-rose-500/40 rounded-xl transition-all h-full flex flex-col justify-between group cursor-pointer block"
         >
           <div>
             <div className="flex items-center justify-between text-slate-400 mb-2">
@@ -258,7 +258,7 @@ export default function SurveillanceOverviewPage() {
               <span>Auto-Quarantined</span>
             </div>
           </div>
-          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs text-slate-400">
+          <div className="pt-3 border-t border-line mt-4 flex items-center justify-between text-xs text-slate-400">
             <span className="text-rose-300">View Tier 1 Queue</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-rose-400 transition-colors" />
           </div>
@@ -267,7 +267,7 @@ export default function SurveillanceOverviewPage() {
         {/* Card 3: Tier 2 Officer Review */}
         <Link
           href="/triage?tier=tier2"
-          className="p-5 bg-[#0F172A] border border-[#1E293B] hover:border-amber-500/40 rounded-xl transition-all h-full flex flex-col justify-between group cursor-pointer block"
+          className="p-5 bg-panel border border-line hover:border-amber-500/40 rounded-xl transition-all h-full flex flex-col justify-between group cursor-pointer block"
         >
           <div>
             <div className="flex items-center justify-between text-slate-400 mb-2">
@@ -282,14 +282,14 @@ export default function SurveillanceOverviewPage() {
               <span>Manual triage</span>
             </div>
           </div>
-          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs text-slate-400">
+          <div className="pt-3 border-t border-line mt-4 flex items-center justify-between text-xs text-slate-400">
             <span className="text-amber-300">View Tier 2 Queue</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-400 transition-colors" />
           </div>
         </Link>
 
         {/* Card 4: Clearing Latency SLA */}
-        <div className="p-5 bg-[#0F172A] border border-[#1E293B] rounded-xl h-full flex flex-col justify-between">
+        <div className="p-5 bg-panel border border-line rounded-xl h-full flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between text-slate-400 mb-2">
               <span className="text-xs font-semibold tracking-wide font-sans">Clearing Decision SLA</span>
@@ -303,7 +303,7 @@ export default function SurveillanceOverviewPage() {
               <span>Ultra-low sub-millisecond</span>
             </div>
           </div>
-          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs text-slate-400 font-mono">
+          <div className="pt-3 border-t border-line mt-4 flex items-center justify-between text-xs text-slate-400 font-mono">
             <span>Peak: 500 tx/sec</span>
             <span className="text-emerald-400 font-bold">100% IN BOUNDS</span>
           </div>
@@ -313,8 +313,8 @@ export default function SurveillanceOverviewPage() {
       {/* Main Grid: Urgent Action Queue & Team SLA Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Urgent Action Queue (7 Cols) */}
-        <div className="lg:col-span-7 bg-[#0F172A] border border-[#1E293B] rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+        <div className="lg:col-span-7 bg-panel border border-line rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-line">
             <div>
               <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2 font-sans">
                 <ShieldAlert className="w-4 h-4 text-rose-500" />
@@ -337,7 +337,7 @@ export default function SurveillanceOverviewPage() {
             {urgentBreaches.map((alert) => (
               <div
                 key={alert.id}
-                className="p-3.5 bg-[#0B0F17] rounded-xl border border-[#1E293B] hover:border-[#334155] transition-all space-y-2.5"
+                className="p-3.5 bg-canvas rounded-xl border border-line hover:border-line-strong transition-all space-y-2.5"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
@@ -365,7 +365,7 @@ export default function SurveillanceOverviewPage() {
                 </p>
 
                 {/* Inline Action Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#1E293B] text-xs font-mono">
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-line text-xs font-mono">
                   <div className="flex items-center gap-2">
                     <span className="text-slate-400">Account:</span>
                     <PiiText value={alert.account} type="account" className="text-slate-300 font-bold" />
@@ -375,7 +375,7 @@ export default function SurveillanceOverviewPage() {
                     <button
                       type="button"
                       onClick={() => router.push(`/triage?alertId=${alert.id}&inspect=true`)}
-                      className="px-2.5 py-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-200 transition-colors cursor-pointer text-xs"
+                      className="px-2.5 py-1 rounded bg-surface hover:bg-surface-hover text-slate-200 transition-colors cursor-pointer text-xs"
                     >
                       Inspect Wire
                     </button>
@@ -418,9 +418,9 @@ export default function SurveillanceOverviewPage() {
         </div>
 
         {/* Right: Team Workload & SLA Operations Panel (5 Cols) */}
-        <div className="lg:col-span-5 bg-[#0F172A] border border-[#1E293B] rounded-xl p-5 space-y-4 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-panel border border-line rounded-xl p-5 space-y-4 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+            <div className="flex items-center justify-between pb-3 border-b border-line">
               <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2 font-sans">
                 <UserCheck className="w-4 h-4 text-emerald-400" />
                 SIU Team Workload & Operational SLA
@@ -437,7 +437,7 @@ export default function SurveillanceOverviewPage() {
                 { name: 'Nadia Hossain', role: 'Trade Compliance Specialist', activeCases: 1, openAlerts: 42, ahtMin: 9.4, status: 'NORMAL' },
                 { name: 'Unassigned Escalation Pool', role: 'System Queue', activeCases: 2, openAlerts: 112, ahtMin: 0, status: 'PENDING_DISPATCH' }
               ].map((member, idx) => (
-                <div key={idx} className="p-3 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-xs">
+                <div key={idx} className="p-3 bg-canvas rounded-lg border border-line text-xs">
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="font-semibold text-slate-200">{member.name}</span>
                     <span className="text-xs font-mono text-slate-400">{member.role}</span>
@@ -452,7 +452,7 @@ export default function SurveillanceOverviewPage() {
             </div>
           </div>
 
-          <div className="pt-3 border-t border-[#1E293B] text-xs text-slate-400 space-y-1 font-mono">
+          <div className="pt-3 border-t border-line text-xs text-slate-400 space-y-1 font-mono">
             <div className="flex justify-between">
               <span>Alert-to-Case Conversion Rate:</span>
               <strong className="text-slate-200">1.84%</strong>
@@ -466,8 +466,8 @@ export default function SurveillanceOverviewPage() {
       </div>
 
       {/* Real-Time Risk Scoring Sandbox (Active Production Simulator) */}
-      <div className="p-5 bg-[#0F172A] border border-[#1E293B] rounded-xl space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1E293B]">
+      <div className="p-5 bg-panel border border-line rounded-xl space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-line">
           <div>
             <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2 font-sans">
               <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
@@ -507,7 +507,7 @@ export default function SurveillanceOverviewPage() {
               type="number"
               value={testAmount}
               onChange={(e) => setTestAmount(Number(e.target.value))}
-              className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-100 font-bold"
+              className="w-full px-3 py-1.5 rounded bg-canvas border border-line-strong text-slate-100 font-bold"
             />
             <span className="text-xs text-slate-500 mt-1 block">
               ≈ ৳{(testAmount * jur.usdFxRate).toLocaleString()} BDT
@@ -519,7 +519,7 @@ export default function SurveillanceOverviewPage() {
             <select
               value={testRail}
               onChange={(e) => setTestRail(e.target.value)}
-              className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-100 cursor-pointer"
+              className="w-full px-3 py-1.5 rounded bg-canvas border border-line-strong text-slate-100 cursor-pointer"
             >
               <option value="SWIFT MT700 (LC)">SWIFT MT700 (Trade LC)</option>
               <option value="SWIFT MT103">SWIFT MT103 (Cross-Border Wire)</option>
@@ -535,7 +535,7 @@ export default function SurveillanceOverviewPage() {
               type="number"
               value={testPriceDev}
               onChange={(e) => setTestPriceDev(Number(e.target.value))}
-              className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-100 font-bold"
+              className="w-full px-3 py-1.5 rounded bg-canvas border border-line-strong text-slate-100 font-bold"
             />
             <span className="text-xs text-slate-500 mt-1 block">
               Benchmark vs Declared Unit Price
@@ -547,7 +547,7 @@ export default function SurveillanceOverviewPage() {
             <select
               value={testBurst ? 'true' : 'false'}
               onChange={(e) => setTestBurst(e.target.value === 'true')}
-              className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-100 cursor-pointer"
+              className="w-full px-3 py-1.5 rounded bg-canvas border border-line-strong text-slate-100 cursor-pointer"
             >
               <option value="true">Active (&gt;5 events / 10m)</option>
               <option value="false">Normal (&le; 1 event / hr)</option>
@@ -559,7 +559,7 @@ export default function SurveillanceOverviewPage() {
             <select
               value={testCountry}
               onChange={(e) => setTestCountry(e.target.value)}
-              className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-100 cursor-pointer"
+              className="w-full px-3 py-1.5 rounded bg-canvas border border-line-strong text-slate-100 cursor-pointer"
             >
               <option value="United Arab Emirates (JAFZA)">UAE (JAFZA Free Zone)</option>
               <option value="Singapore">Singapore (Port Transit)</option>
@@ -571,7 +571,7 @@ export default function SurveillanceOverviewPage() {
 
         {/* Live Scoring Result Banner */}
         {scoringResult && (
-          <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
+          <div className="p-4 rounded-xl bg-canvas border border-line grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
             <div>
               <span className="text-slate-400 block mb-1">CALIBRATED DECISION TIER</span>
               <span className={`text-sm font-bold block ${scoringResult.tierCode === 1 ? 'text-rose-400' : scoringResult.tierCode === 2 ? 'text-amber-400' : 'text-emerald-400'}`}>

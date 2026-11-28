@@ -145,11 +145,11 @@ Daily Ingestion SLA: ${formData.dailyVolume}
       aria-labelledby="inquiry-dialog-title"
       className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
     >
-      <div className="w-full max-w-xl bg-[#0F172A] border border-[#334155] rounded-2xl shadow-2xl p-6 relative text-slate-100 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-xl bg-panel border border-line-strong rounded-2xl shadow-2xl p-6 relative text-slate-100 max-h-[90vh] overflow-y-auto">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg hover:bg-[#1E293B] text-slate-400 hover:text-slate-200"
+          className="absolute top-4 right-4 p-1 rounded-lg hover:bg-surface text-slate-400 hover:text-slate-200"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
@@ -180,7 +180,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
             </div>
 
             {/* Formatted Code Block */}
-            <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] font-mono text-xs text-slate-300 max-h-48 overflow-y-auto whitespace-pre leading-relaxed">
+            <div className="p-3 bg-canvas rounded-xl border border-line font-mono text-xs text-slate-300 max-h-48 overflow-y-auto whitespace-pre leading-relaxed">
               {architectureBrief}
             </div>
 
@@ -189,7 +189,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
               <button
                 type="button"
                 onClick={handleCopyBrief}
-                className="w-full sm:w-1/2 py-2.5 rounded-lg text-xs font-mono font-bold bg-[#1E293B] hover:bg-[#334155] text-slate-200 border border-[#475569] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full sm:w-1/2 py-2.5 rounded-lg text-xs font-mono font-bold bg-surface hover:bg-surface-hover text-slate-200 border border-line-strong transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
                 <span>{copied ? 'Copied to Clipboard' : 'Copy Brief to Clipboard'}</span>
@@ -222,7 +222,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                   placeholder="e.g. Kazi Rafiqul Islam"
                   value={formData.officerName}
                   onChange={(e) => setFormData({ ...formData, officerName: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 />
                 {errors.officerName && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.officerName}</p>}
               </div>
@@ -233,7 +233,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                   placeholder="officer@bank.com.bd"
                   value={formData.workEmail}
                   onChange={(e) => setFormData({ ...formData, workEmail: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 />
                 {errors.workEmail && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.workEmail}</p>}
               </div>
@@ -247,7 +247,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                   placeholder="e.g. Eastern Bank PLC"
                   value={formData.institutionName}
                   onChange={(e) => setFormData({ ...formData, institutionName: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 />
                 {errors.institutionName && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.institutionName}</p>}
               </div>
@@ -258,7 +258,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                   placeholder="e.g. CAMLCO / Head of Compliance"
                   value={formData.roleTitle}
                   onChange={(e) => setFormData({ ...formData, roleTitle: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 />
                 {errors.roleTitle && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.roleTitle}</p>}
               </div>
@@ -270,7 +270,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                 <select
                   value={formData.deploymentMode}
                   onChange={(e) => setFormData({ ...formData, deploymentMode: e.target.value as any })}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 >
                   <option>Air-Gapped Sovereign On-Premises (Kubernetes)</option>
                   <option>Virtual Private Cloud (VPC)</option>
@@ -282,7 +282,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                 <select
                   value={formData.dailyVolume}
                   onChange={(e) => setFormData({ ...formData, dailyVolume: e.target.value as any })}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
+                  className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 >
                   <option>&lt; 100,000 tx/day</option>
                   <option>100,000 - 1,000,000 tx/day</option>
@@ -299,7 +299,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                 placeholder="Mention Finacle / Temenos T24 integration, ISO 20022, or specific BFIU compliance targets..."
                 value={formData.statutoryRequirements}
                 onChange={(e) => setFormData({ ...formData, statutoryRequirements: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans resize-none"
+                className="w-full px-3 py-2 rounded-lg bg-canvas border border-line-strong text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans resize-none"
               />
             </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { CommandHeader } from '@/components/shell/CommandHeader';
 import { DemoDisclaimerBanner } from '@/components/shell/DemoDisclaimerBanner';
@@ -9,9 +9,17 @@ import { GlobalCommandPalette } from '@/components/shell/GlobalCommandPalette';
 import { NotificationDrawer } from '@/components/shell/NotificationDrawer';
 import { FourEyesApprovalModal } from '@/components/auth/FourEyesApprovalModal';
 import { RoleSwitchModal } from '@/components/auth/RoleSwitchModal';
+import { rehydrateWorkspace } from '@/lib/store';
+import { applyStoredTheme } from '@/lib/theme';
 
 export function AppShellWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
+  useEffect(() => {
+    void rehydrateWorkspace();
+    applyStoredTheme();
+  }, []);
+
   const isMarketing = pathname === '/' || pathname.startsWith('/terms') || pathname.startsWith('/privacy');
 
   if (isMarketing) {
@@ -19,7 +27,7 @@ export function AppShellWrapper({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <div className="app-surface">
       {/* Fixed Top Container: Disclaimer Banner & Command Header */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-[#0F172A]/95 backdrop-blur-md">
         <DemoDisclaimerBanner />
@@ -41,6 +49,6 @@ export function AppShellWrapper({ children }: { children: React.ReactNode }) {
       <NotificationDrawer />
       <FourEyesApprovalModal />
       <RoleSwitchModal />
-    </>
+    </div>
   );
 }

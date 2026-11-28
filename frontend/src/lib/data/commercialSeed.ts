@@ -4,6 +4,9 @@
  * Strictly 0 academic/research dataset references.
  */
 
+/** Synthetic workspace is always 'as of' this moment, so demo data never drifts or mismatches. */
+export const DEMO_ANCHOR_ISO = '2026-11-23T12:00:00Z';
+
 export interface CommercialAlert {
   id: string;
   caseId?: string;
@@ -165,7 +168,8 @@ export interface CashThresholdReport {
 
 export function getRelativeTimestamp(hoursAgo: number, minutesAgo: number = 0): string {
   // Uses deterministic anchor or current runtime date to prevent stale hardcoded dates
-  const now = typeof window !== 'undefined' ? new Date() : new Date('2026-11-23T12:00:00Z');
+  // One fixed anchor for server and browser so prerendered HTML and hydrated HTML agree.
+  const now = new Date(DEMO_ANCHOR_ISO);
   const d = new Date(now.getTime() - (hoursAgo * 3600000 + minutesAgo * 60000));
   return d.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
 }

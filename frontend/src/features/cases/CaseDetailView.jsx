@@ -146,7 +146,7 @@ export const CaseDetailView = () => {
               </Badge>
 
               {/* Active Countdown Urgency Badge */}
-              <span className={`px-2 py-0.5 rounded font-mono text-[11px] font-bold flex items-center gap-1 border ${
+              <span className={`px-2 py-0.5 rounded font-mono text-xs font-bold flex items-center gap-1 border ${
                 isApproved
                   ? 'bg-cleared-bg text-cleared border-cleared'
                   : isUrgentSla
@@ -212,15 +212,15 @@ export const CaseDetailView = () => {
       <Card className="bg-surfaceRaised border-border p-3.5">
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs font-semibold text-text uppercase tracking-wider">
+            <span className="font-mono text-xs font-semibold text-text ">
               Statutory Investigation Milestones:
             </span>
-            <span className="text-[10px] font-mono text-text-muted">
+            <span className="text-xs font-mono text-text-muted">
               {milestones.filter(m => m.status === 'completed').length} of {milestones.length} Completed
             </span>
           </div>
 
-          <div className="grid grid-cols-5 gap-2 pt-1 font-mono text-[11px]">
+          <div className="grid grid-cols-5 gap-2 pt-1 font-mono text-xs">
             {milestones.map((m, idx) => {
               const isDone = m.status === 'completed';
               const isInProg = m.status === 'in_progress';
@@ -237,11 +237,11 @@ export const CaseDetailView = () => {
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] uppercase tracking-wider font-semibold">Step 0{idx + 1}</span>
+                    <span className="text-xs font-semibold">Step 0{idx + 1}</span>
                     {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-cleared" />}
                   </div>
                   <span className="block font-sans font-medium text-xs truncate text-text">{m.label}</span>
-                  <span className="text-[10px] text-text-muted block mt-0.5">{m.time || 'Pending'}</span>
+                  <span className="text-xs text-text-muted block mt-0.5">{m.time || 'Pending'}</span>
                 </div>
               );
             })}
@@ -261,7 +261,7 @@ export const CaseDetailView = () => {
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-xs text-text">Two-Officer Sign-Off Rule (Four-Eyes Dual Control)</span>
-                <span className="font-mono text-[10px] text-text-muted">(Anti-Bribery & Error Prevention)</span>
+                <span className="font-mono text-xs text-text-muted">(Anti-Bribery & Error Prevention)</span>
               </div>
               <p className="text-xs text-text-2 mt-0.5">
                 Investigator (Maker): <strong className="text-text">{activeCase.fourEyesInitiator}</strong>
@@ -312,33 +312,33 @@ export const CaseDetailView = () => {
             />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 font-mono text-xs">
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">Total Exposure (USD / BDT)</span>
+                <span className="text-xs text-text-muted block">Total Exposure (USD / BDT)</span>
                 <span className="font-bold text-text tabular-nums text-sm block">
                   ${activeCase.totalExposure.toLocaleString()}
                 </span>
-                <span className="text-[10px] text-text-muted font-medium block">
+                <span className="text-xs text-text-muted font-medium block">
                   ৳{(activeCase.totalExposure * 120).toLocaleString()} BDT
                 </span>
               </div>
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">Fraud Risk Probability</span>
+                <span className="text-xs text-text-muted block">Fraud Risk Probability</span>
                 <span className="font-bold text-critical tabular-nums text-sm">
                   {(activeCase.riskScore * 100).toFixed(1)}%
                 </span>
-                <span className="text-[10px] text-text-muted block mt-0.5">Confidence: 99.96%</span>
+                <span className="text-xs text-text-muted block mt-0.5">Confidence: 99.96%</span>
               </div>
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">Linked Alerts</span>
+                <span className="text-xs text-text-muted block">Linked Alerts</span>
                 <span className="font-bold text-text text-sm">
                   {activeCase.linkedAlertIds.length} Flagged Wires
                 </span>
               </div>
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">Jurisdiction SLA</span>
+                <span className="text-xs text-text-muted block">Jurisdiction SLA</span>
                 <span className="font-bold text-text text-sm">
                   {activeCase.statutoryJurisdiction.split(' ')[0]}
                 </span>
-                <span className="text-[10px] text-review block mt-0.5">{activeCase.statutorySlaHours}h window</span>
+                <span className="text-xs text-review block mt-0.5">{activeCase.statutorySlaHours}h window</span>
               </div>
             </div>
           </Card>
@@ -353,23 +353,23 @@ export const CaseDetailView = () => {
               />
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-3 font-mono text-xs">
                 <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">LC Reference</span>
+                  <span className="text-xs text-text-muted block">LC Reference</span>
                   <span className="font-semibold text-text">{activeCase.tbmlDetails.lcNumber}</span>
                 </div>
                 <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">Commodity HS Code</span>
+                  <span className="text-xs text-text-muted block">Commodity HS Code</span>
                   <span className="text-text">{activeCase.tbmlDetails.hsCode}</span>
                 </div>
                 <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">Customs Price Divergence</span>
+                  <span className="text-xs text-text-muted block">Customs Price Divergence</span>
                   <span className="font-bold text-critical">{activeCase.tbmlDetails.priceDeviation}</span>
                 </div>
                 <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">Stated vs ASYCUDA Tariff</span>
+                  <span className="text-xs text-text-muted block">Stated vs ASYCUDA Tariff</span>
                   <span className="text-text">{activeCase.tbmlDetails.declaredPrice} vs {activeCase.tbmlDetails.benchmarkPrice}</span>
                 </div>
               </div>
-              <div className="mt-2.5 pt-2 border-t border-borderSubtle flex items-center justify-between text-[11px] font-mono text-text-2">
+              <div className="mt-2.5 pt-2 border-t border-borderSubtle flex items-center justify-between text-xs font-mono text-text-2">
                 <span>Corridor: {activeCase.tbmlDetails.ports}</span>
                 <span>Carrier: {activeCase.tbmlDetails.vessel}</span>
               </div>
@@ -386,7 +386,7 @@ export const CaseDetailView = () => {
               </div>
 
               {/* Quick Pin Buttons */}
-              <div className="flex items-center gap-1.5 font-mono text-[10px]">
+              <div className="flex items-center gap-1.5 font-mono text-xs">
                 <button
                   onClick={() => handleQuickPin('Forensic Subgraph Topology Snapshot', 'subgraph')}
                   className="px-2 py-1 rounded bg-surface hover:bg-surfaceHover border border-border text-text cursor-pointer transition-colors"
@@ -412,7 +412,7 @@ export const CaseDetailView = () => {
                       <Pin className="w-3.5 h-3.5 text-accent shrink-0" />
                       <div>
                         <span className="font-semibold text-text font-sans block">{pin.title}</span>
-                        <span className="text-[10px] text-text-muted">Type: {pin.type} • Pinned at {pin.timestamp || pin.pinnedAt} by {pin.pinnedBy}</span>
+                        <span className="text-xs text-text-muted">Type: {pin.type} • Pinned at {pin.timestamp || pin.pinnedAt} by {pin.pinnedBy}</span>
                       </div>
                     </div>
                     <button
@@ -439,7 +439,7 @@ export const CaseDetailView = () => {
                 <div key={item.id} className="flex items-start gap-3 text-xs">
                   <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-1.5" />
                   <div className="min-w-0 flex-1">
-                    <span className="font-mono text-[11px] text-text-muted">{item.time}</span>
+                    <span className="font-mono text-xs text-text-muted">{item.time}</span>
                     <p className="text-text mt-0.5 leading-snug">{item.event}</p>
                   </div>
                 </div>
@@ -461,7 +461,7 @@ export const CaseDetailView = () => {
               <div className="space-y-2.5 mt-3 max-h-[300px] overflow-y-auto pr-1">
                 {(activeCase.notes || []).map((note) => (
                   <div key={note.id} className="p-2.5 rounded bg-bg border border-borderSubtle text-xs space-y-1">
-                    <div className="flex items-center justify-between text-[10px] font-mono text-text-muted">
+                    <div className="flex items-center justify-between text-xs font-mono text-text-muted">
                       <span className="font-semibold text-text">{note.author}</span>
                       <span>{note.time}</span>
                     </div>
@@ -517,7 +517,7 @@ export const CaseDetailView = () => {
                 <span className="text-xs font-medium text-text">
                   {isUploading ? 'Hashing file...' : 'Attach Subpoena / Evidence'}
                 </span>
-                <span className="text-[10px] text-text-muted">PDF, TIFF, CSV (SHA-256 sealed)</span>
+                <span className="text-xs text-text-muted">PDF, TIFF, CSV (SHA-256 sealed)</span>
               </label>
             </div>
 
@@ -529,8 +529,8 @@ export const CaseDetailView = () => {
                     <div className="flex items-center gap-1.5 min-w-0">
                       <Paperclip className="w-3.5 h-3.5 text-accent shrink-0" />
                       <div className="min-w-0">
-                        <p className="font-mono text-[11px] text-text font-medium truncate">{att.name}</p>
-                        <p className="text-[10px] text-text-muted">{att.size} • {att.uploadedAt}</p>
+                        <p className="font-mono text-xs text-text font-medium truncate">{att.name}</p>
+                        <p className="text-xs text-text-muted">{att.size} • {att.uploadedAt}</p>
                       </div>
                     </div>
                     <Badge variant="cleared" size="sm">Sealed</Badge>

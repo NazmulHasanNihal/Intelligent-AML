@@ -183,10 +183,10 @@ export default function RuleStudioPage() {
             <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
                 <div>
-                  <span className="text-[10px] font-mono text-slate-500 uppercase font-bold">Active In-Flight Rule</span>
+                  <span className="text-xs font-mono text-slate-500 font-bold">Active In-Flight Rule</span>
                   <h3 className="text-sm font-bold text-slate-100 font-mono">Champion: Legacy Threshold Engine v2.4</h3>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
                   PRODUCTION LIVE
                 </span>
               </div>
@@ -211,10 +211,10 @@ export default function RuleStudioPage() {
             <div className="p-5 rounded-2xl bg-[#0F172A] border border-emerald-500/40 shadow-xl space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
                 <div>
-                  <span className="text-[10px] font-mono text-emerald-400 uppercase font-bold">Shadow Mode Evaluation</span>
+                  <span className="text-xs font-mono text-emerald-400 font-bold">Shadow Mode Evaluation</span>
                   <h3 className="text-sm font-bold text-slate-100 font-mono">Challenger: Calibrated Topology Gate v3.0</h3>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                   READY FOR PROMOTION
                 </span>
               </div>
@@ -239,8 +239,8 @@ export default function RuleStudioPage() {
           <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] flex flex-wrap items-center justify-between gap-3">
             <p className="text-xs text-slate-400">
               {replayData
-                ? `${replayData.replay_period} (${replayData.total_transactions_replayed.toLocaleString()} txs): Champion F1 ${(replayData.champion_f1 * 100).toFixed(1)}% vs Challenger F1 ${(replayData.challenger_f1 * 100).toFixed(1)}%, ${replayData.operational_noise_reduction_pct}% noise reduction, ${(replayData.conformal_coverage_empirical * 100).toFixed(2)}% conformal coverage.`
-                : '7-Day Continuous Replay Benchmark verified across 2,500 transactions with 99.04% empirical conformal coverage.'}
+                ? `${replayData.replay_period} (${replayData.total_transactions_replayed.toLocaleString()} txs, synthetic replay): Champion F1 ${(replayData.champion_f1 * 100).toFixed(1)}% vs Challenger F1 ${(replayData.challenger_f1 * 100).toFixed(1)}%, ${replayData.operational_noise_reduction_pct}% noise reduction, ${(replayData.conformal_coverage_empirical * 100).toFixed(2)}% conformal coverage.`
+                : 'Illustrative replay result: the challenger ran in shadow mode over a synthetic 30-day window with 99.04% empirical conformal coverage.'}
             </p>
             <button
               onClick={() => {
@@ -285,8 +285,9 @@ export default function RuleStudioPage() {
                 onChange={(e) => setFlowThreshold(parseFloat(e.target.value))}
                 className="w-full accent-emerald-500 cursor-pointer"
               />
-              <p className="text-[11px] text-slate-500">
-                Flags conduit accounts where inflow ≈ outflow within this ratio.
+              <p className="text-xs text-slate-500">
+                Accounts with inflow ≈ outflow within this ratio are flagged as transit conduits.
+              </p>
               </p>
             </div>
 
@@ -304,8 +305,9 @@ export default function RuleStudioPage() {
                 onChange={(e) => setBurstMultiplier(parseFloat(e.target.value))}
                 className="w-full accent-amber-500 cursor-pointer"
               />
-              <p className="text-[11px] text-slate-500">
-                Escalates surges above 90-day customer volume baseline.
+              <p className="text-xs text-slate-500">
+                Surges above customer 90-day moving average volume escalate to Tier 2 review.
+              </p>
               </p>
             </div>
 
@@ -323,8 +325,9 @@ export default function RuleStudioPage() {
                 onChange={(e) => setWindowHours(parseInt(e.target.value))}
                 className="w-full accent-sky-500 cursor-pointer"
               />
-              <p className="text-[11px] text-slate-500">
-                Rolling window below ৳1,000,000 BDT CTR ceiling (MLPA 2012 § 2(z)).
+              <p className="text-xs text-slate-500">
+                Rolling aggregation window for multi-agent deposits below ৳1,000,000 BDT statutory ceiling (MLPA 2012 § 2(z) &amp; BFIU Circular 26).
+              </p>
               </p>
             </div>
           </div>
@@ -392,7 +395,7 @@ export default function RuleStudioPage() {
 
           <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
             <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-mono uppercase text-slate-400">
+              <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs font-mono text-slate-400">
                 <tr>
                   <th className="px-4 py-3">Exemption ID</th>
                   <th className="px-4 py-3">Corporate Entity</th>
@@ -408,13 +411,13 @@ export default function RuleStudioPage() {
                     <td className="px-4 py-3 font-mono font-bold text-sky-400">{item.id}</td>
                     <td className="px-4 py-3">
                       <div className="font-semibold text-slate-100">{item.entityName}</div>
-                      <div className="text-[11px] font-mono text-slate-400">{item.account}</div>
+                      <div className="text-xs font-mono text-slate-400">{item.account}</div>
                     </td>
                     <td className="px-4 py-3 text-slate-300">{item.ruleExempted}</td>
                     <td className="px-4 py-3 font-mono text-slate-400">{item.validUntil}</td>
                     <td className="px-4 py-3 font-mono text-slate-400">{item.authorizedBy}</td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                      <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                         item.status === 'ACTIVE'
                           ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                           : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
@@ -446,7 +449,7 @@ export default function RuleStudioPage() {
 
             <form onSubmit={handleAddExemption} className="space-y-4 text-xs font-sans">
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Corporate Entity Name</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Corporate Entity Name</label>
                 <input
                   type="text"
                   required
@@ -458,7 +461,7 @@ export default function RuleStudioPage() {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Account Number</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Account Number</label>
                 <input
                   type="text"
                   required
@@ -470,7 +473,7 @@ export default function RuleStudioPage() {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Rule Exemption Scope</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Rule Exemption Scope</label>
                 <input
                   type="text"
                   required
@@ -482,7 +485,7 @@ export default function RuleStudioPage() {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Expiry Date</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Expiry Date</label>
                 <input
                   type="date"
                   required

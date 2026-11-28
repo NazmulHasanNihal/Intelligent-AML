@@ -139,7 +139,7 @@ export const SettingsView = () => {
           <Badge
             variant={cbsConfig.operating_mode === 'INLINE_INTERCEPTOR' ? 'critical' : 'cleared'}
             size="sm"
-            className="font-mono text-[11px]"
+            className="font-mono text-xs"
           >
             {cbsConfig.operating_mode === 'INLINE_INTERCEPTOR' ? '● INLINE SETTLEMENT GATE' : '● SHADOW-MODE MIRROR'}
           </Badge>
@@ -162,7 +162,7 @@ export const SettingsView = () => {
                   <span className="font-bold text-text text-xs">Shadow-Mode Surveillance</span>
                   <Badge variant="cleared" size="sm">Recommended for Pilots</Badge>
                 </div>
-                <p className="text-[11px] text-text-muted leading-relaxed">
+                <p className="text-xs text-text-muted leading-relaxed">
                   Processes real-time mirrored SWIFT/RTGS transaction streams with 0.0ms delay on live customer clearing. Evaluates false-positive reduction without blocking customer funds.
                 </p>
               </div>
@@ -179,7 +179,7 @@ export const SettingsView = () => {
                   <span className="font-bold text-critical text-xs">Inline Pre-Clearing Interceptor</span>
                   <Badge variant="critical" size="sm">Active Enforcement</Badge>
                 </div>
-                <p className="text-[11px] text-text-muted leading-relaxed">
+                <p className="text-xs text-text-muted leading-relaxed">
                   Active pre-settlement authorization hook. Tier 1 Hold violations automatically trigger synchronous administrative debit freezes and generate ISO 20022 pacs.002 rejection notices under MLPA §15.
                 </p>
               </div>
@@ -189,7 +189,7 @@ export const SettingsView = () => {
           {/* CBS Provider Selection */}
           <div className="pt-2 border-t border-borderSubtle">
             <label className="text-xs font-semibold text-text block mb-1.5">Target Core Banking Ledger</label>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono text-[11px]">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono text-xs">
               {[
                 { id: 'TEMENOS_T24', label: 'Temenos T24' },
                 { id: 'INFOSYS_FINACLE', label: 'Infosys Finacle' },
@@ -215,7 +215,7 @@ export const SettingsView = () => {
           {/* Live CBS Intercept Test Sandbox */}
           <div className="p-3 rounded-lg bg-bg border border-borderSubtle flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono">
             <div>
-              <span className="text-[10px] text-text-muted uppercase font-bold block">Live Pre-Settlement Callback Verification</span>
+              <span className="text-xs text-text-muted font-bold block">Live Pre-Settlement Callback Verification</span>
               <span className="text-xs text-text font-semibold block">
                 Simulate $47,600 RTGS transfer against {cbsConfig.provider} gateway
               </span>
@@ -235,7 +235,7 @@ export const SettingsView = () => {
 
           {/* Intercept Result Telemetry */}
           {interceptResult && (
-            <div className="p-3 rounded-lg bg-surfaceRaised border border-border text-[11px] font-mono space-y-1.5 animate-in fade-in">
+            <div className="p-3 rounded-lg bg-surfaceRaised border border-border text-xs font-mono space-y-1.5 animate-in fade-in">
               <div className="flex items-center justify-between">
                 <span className="text-text-muted">Transaction Reference:</span>
                 <span className="font-bold text-text">{interceptResult.transaction_reference}</span>
@@ -256,7 +256,7 @@ export const SettingsView = () => {
                 <span className="text-text-muted">CBS Hook Latency:</span>
                 <span className="text-cleared font-bold">{interceptResult.execution_latency_ms} ms</span>
               </div>
-              <div className="flex items-center justify-between pt-1 border-t border-border/50 text-[10px]">
+              <div className="flex items-center justify-between pt-1 border-t border-border/50 text-xs">
                 <span className="text-text-muted">FRE 902(11) Merkle Proof:</span>
                 <span className="text-text font-mono truncate max-w-xs">{interceptResult.merkle_proof}</span>
               </div>
@@ -369,7 +369,7 @@ export const SettingsView = () => {
                       <span>{t.icon}</span>
                       <span className="text-xs font-semibold text-text">{t.name}</span>
                     </div>
-                    <p className="text-[10px] text-text-muted leading-tight">{t.description}</p>
+                    <p className="text-xs text-text-muted leading-tight">{t.description}</p>
                   </button>
                 );
               })}
@@ -389,7 +389,7 @@ export const SettingsView = () => {
                 }`}
               >
                 <span className="font-semibold text-xs text-text block">Comfortable (Default)</span>
-                <span className="text-[10px] text-text-muted">Standard padding for 1080p and touchscreens.</span>
+                <span className="text-xs text-text-muted">Standard padding for 1080p and touchscreens.</span>
               </button>
 
               <button
@@ -401,7 +401,7 @@ export const SettingsView = () => {
                 }`}
               >
                 <span className="font-semibold text-xs text-text block">Compact</span>
-                <span className="text-[10px] text-text-muted">High-density rows for multi-monitor analyst desks.</span>
+                <span className="text-xs text-text-muted">High-density rows for multi-monitor analyst desks.</span>
               </button>
             </div>
           </div>
@@ -429,8 +429,8 @@ export const SettingsView = () => {
                 >
                   <div>
                     <span className="font-semibold text-text block">{b.name}</span>
-                    <span className="text-text-muted text-[11px] block">{b.roleTitle}</span>
-                    <span className="font-mono text-[10px] text-accent block mt-0.5">{b.id} • {b.role}</span>
+                    <span className="text-text-muted text-xs block">{b.roleTitle}</span>
+                    <span className="font-mono text-xs text-accent block mt-0.5">{b.id} • {b.role}</span>
                   </div>
                   {isSelected && <Badge variant="accent" size="sm">Active</Badge>}
                 </div>

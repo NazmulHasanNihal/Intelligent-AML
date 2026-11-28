@@ -90,14 +90,19 @@ export const ConformalLivePreviewWidget: React.FC = () => {
   return (
     <div className="w-full rounded-xl bg-[#0D121A] border border-[#1E2734] overflow-hidden text-slate-100">
       {/* Widget Header */}
-      <div className="px-5 py-3.5 bg-[#090D14] border-b border-[#1E2734] flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-200 block">
-            Conformal Risk Classifier
-          </span>
-          <p className="text-[11px] font-mono text-slate-400">
-            Nominal 1 - α = 99.00% coverage · Select a transaction profile
-          </p>
+      <div className="px-5 py-3.5 bg-[#0F172A] border-b border-[#1E293B] flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+            <Activity className="w-3.5 h-3.5 text-cyan-400" />
+          </div>
+          <div>
+            <span className="text-xs font-mono font-bold text-slate-200">
+              C-STGB v3.2 Conformal Classifier (Synthetic Scenarios)
+            </span>
+            <p className="text-xs font-mono text-slate-400">
+              Split Conformal Calibration under Nominal 1 - α = 99.00% Coverage Guarantee
+            </p>
+          </div>
         </div>
 
         {/* 3 Scenario Switcher Tabs */}
@@ -173,7 +178,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
               />
             </div>
 
-            <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
+            <div className="flex items-center justify-between text-xs font-mono text-slate-500">
               <span>0.000 (Safe)</span>
               <span>q̂^(0)=0.185</span>
               <span>q̂^(1)=0.812</span>
@@ -183,7 +188,7 @@ export const ConformalLivePreviewWidget: React.FC = () => {
 
           {/* Conformal Prediction Set Badge */}
           <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] space-y-2">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">
+            <span className="text-xs font-mono text-slate-400 block">
               Conformal Prediction Set Output
             </span>
             <div className="flex items-center gap-2">
@@ -200,14 +205,14 @@ export const ConformalLivePreviewWidget: React.FC = () => {
               </span>
               <span className="text-xs font-mono text-slate-300">{scenario.conformalSet}</span>
             </div>
-            <p className="text-[11px] font-mono text-slate-400 pt-1">
+            <p className="text-xs font-mono text-slate-400 pt-1">
               Cutoff Rule: <strong className="text-slate-200">{scenario.quantileCutoff}</strong>
             </p>
           </div>
 
           {/* Statutory Action */}
           <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-xs font-mono text-slate-300">
-            <span className="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">
+            <span className="text-xs text-slate-400 block mb-1 ">
               Autonomous Institutional Action:
             </span>
             <span className="text-slate-100 font-semibold">{scenario.statutoryAction}</span>
@@ -220,11 +225,11 @@ export const ConformalLivePreviewWidget: React.FC = () => {
             <div className="flex items-center justify-between pb-3 border-b border-[#1E293B] mb-4">
               <div className="flex items-center gap-2">
                 <Layers className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+                <span className="text-xs font-mono font-bold text-slate-200">
                   Top 4 Shapley Invariant Attributions
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">12-D Canonical Space</span>
+              <span className="text-xs font-mono text-slate-400">12-D Canonical Space</span>
             </div>
 
             <div className="space-y-3.5">
@@ -256,13 +261,13 @@ export const ConformalLivePreviewWidget: React.FC = () => {
                       style={{ width: `${inv.weight}%` }}
                     />
                   </div>
-                  <p className="text-[10px] font-sans text-slate-400">{inv.description}</p>
+                  <p className="text-xs font-sans text-slate-400">{inv.description}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E293B] mt-4 flex items-center justify-between text-[11px] font-mono text-slate-400">
+          <div className="pt-4 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs font-mono text-slate-400">
             <span>FastPath In-Memory Scoring</span>
             <span className="text-emerald-400 font-bold">&lt; 200 µs Target Verified</span>
           </div>

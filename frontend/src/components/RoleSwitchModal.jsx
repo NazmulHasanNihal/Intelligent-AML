@@ -51,7 +51,7 @@ export const RoleSwitchModal = () => {
                 <h3 className="font-semibold text-text text-sm">Authorized Signatory Delegation</h3>
                 <Badge variant="accent" size="sm">Four-Eyes Dual Control</Badge>
               </div>
-              <p className="text-[11px] text-text-muted mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Switch between Maker (Investigator) and Checker (Chief Compliance Officer) roles.
               </p>
             </div>
@@ -67,9 +67,9 @@ export const RoleSwitchModal = () => {
         {/* Current Active Persona Banner */}
         <div className="px-5 py-3 bg-bg border-b border-borderSubtle flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase text-text-muted block">Active Signed-In Signatory</span>
+            <span className="text-xs font-mono text-text-muted block">Active Signed-In Signatory</span>
             <span className="font-semibold text-text text-sm">{currentBanker?.name || 'Authorized Officer'}</span>
-            <span className="text-[11px] text-accent block font-mono">{currentBanker?.roleTitle || 'Compliance Officer'}</span>
+            <span className="text-xs text-accent block font-mono">{currentBanker?.roleTitle || 'Compliance Officer'}</span>
           </div>
           <Badge variant="cleared" size="sm">Active Session</Badge>
         </div>
@@ -108,13 +108,13 @@ export const RoleSwitchModal = () => {
                           {isMaker ? 'Maker (Level 1)' : 'Checker (Four-Eyes)'}
                         </Badge>
                       </div>
-                      <p className="text-[11px] text-text-muted truncate mt-0.5">{b.roleTitle}</p>
+                      <p className="text-xs text-text-muted truncate mt-0.5">{b.roleTitle}</p>
                     </div>
                   </div>
 
                   <div className="shrink-0">
                     {isCurrent ? (
-                      <span className="flex items-center gap-1 font-mono text-[11px] font-bold text-accent">
+                      <span className="flex items-center gap-1 font-mono text-xs font-bold text-accent">
                         <Check className="w-3.5 h-3.5" />
                         <span>Active</span>
                       </span>
@@ -130,7 +130,7 @@ export const RoleSwitchModal = () => {
           </div>
 
           {/* Statutory Separation of Duties Notice */}
-          <div className="p-3 rounded-lg bg-bg border border-border flex items-start gap-2 text-[11px] text-text-muted font-mono leading-relaxed mt-4">
+          <div className="p-3 rounded-lg bg-bg border border-border flex items-start gap-2 text-xs text-text-muted font-mono leading-relaxed mt-4">
             <Lock className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5" />
             <div>
               <strong>Segregation of Duties (SOX § 404 / BFIU Circular 26):</strong> An investigator who initiates an alert or drafts a SAR cannot ratify their own filing. Dual-control requires a distinct Checker identity.

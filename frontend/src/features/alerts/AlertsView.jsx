@@ -282,7 +282,7 @@ export const AlertsView = () => {
         <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-borderSubtle">
           {/* Decision Tier Chips */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-text-muted font-mono text-[10px] uppercase">Decision Tier:</span>
+            <span className="text-text-muted font-mono text-xs ">Decision Tier:</span>
             {[
               { id: 'ALL', label: 'All Tiers' },
               { id: 'TIER_1', label: 'Tier 1 (Immediate Hold)' },
@@ -292,7 +292,7 @@ export const AlertsView = () => {
               <button
                 key={chip.id}
                 onClick={() => { setSelectedDecisionSet(chip.id); setPage(0); }}
-                className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer ${
+                className={`px-2 py-0.5 rounded text-xs font-mono transition-colors cursor-pointer ${
                   selectedDecisionSet === chip.id
                     ? 'bg-accent/15 border border-accent/40 font-bold text-accent'
                     : 'bg-bg text-text-muted border border-border hover:text-text'
@@ -305,7 +305,7 @@ export const AlertsView = () => {
 
           {/* Typology Chips */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-text-muted font-mono text-[10px] uppercase">Typology:</span>
+            <span className="text-text-muted font-mono text-xs ">Typology:</span>
             {[
               { id: 'ALL', label: 'All Typologies' },
               { id: 'structuring', label: 'Structuring' },
@@ -316,7 +316,7 @@ export const AlertsView = () => {
               <button
                 key={typ.id}
                 onClick={() => { setSelectedTypology(typ.id); setPage(0); }}
-                className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer ${
+                className={`px-2 py-0.5 rounded text-xs font-mono transition-colors cursor-pointer ${
                   selectedTypology === typ.id
                     ? 'bg-surfaceRaised border border-border font-bold text-text shadow-xs'
                     : 'bg-bg text-text-muted border border-border hover:text-text'
@@ -333,7 +333,7 @@ export const AlertsView = () => {
       <Card padding={false} className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-[11px] uppercase tracking-wider select-none">
+            <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-xs select-none">
               <tr>
                 <th className="py-2.5 px-3 w-8">
                   <button
@@ -411,14 +411,14 @@ export const AlertsView = () => {
                         <div className="font-semibold text-text truncate max-w-[170px]">
                           {alert.entityName}
                         </div>
-                        <div className="font-mono text-[10px] text-text-muted truncate max-w-[170px]">
+                        <div className="font-mono text-xs text-text-muted truncate max-w-[170px]">
                           {alert.account}
                         </div>
                       </td>
 
                       {/* Visual Typology Indicator Badge */}
                       <td className="py-2.5 px-3">
-                        <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border ${
+                        <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-mono font-semibold border ${
                           isTier1 
                             ? 'bg-critical/10 text-critical border-critical/30' 
                             : isTier2 
@@ -435,13 +435,13 @@ export const AlertsView = () => {
                         <span className="font-semibold text-text block">
                           ${alert.amount.toLocaleString()} USD
                         </span>
-                        <span className="text-[10px] text-text-muted block">
+                        <span className="text-xs text-text-muted block">
                           ৳{(alert.amount * 120).toLocaleString()} BDT
                         </span>
                       </td>
 
                       {/* Rail */}
-                      <td className="py-2.5 px-3 font-mono text-[11px] text-text-2">
+                      <td className="py-2.5 px-3 font-mono text-xs text-text-2">
                         {alert.rail}
                       </td>
 
@@ -453,7 +453,7 @@ export const AlertsView = () => {
                       </td>
 
                       {/* Decision Tier */}
-                      <td className="py-2.5 px-3 font-mono text-[11px]">
+                      <td className="py-2.5 px-3 font-mono text-xs">
                         <span className={`px-2 py-0.5 rounded border font-semibold inline-block ${
                           isTier1 
                             ? 'bg-critical/10 text-critical border-critical/30' 
@@ -466,7 +466,7 @@ export const AlertsView = () => {
                       </td>
 
                       {/* Status */}
-                      <td className="py-2.5 px-3 font-mono text-[10px]">
+                      <td className="py-2.5 px-3 font-mono text-xs">
                         <Badge 
                           variant={isTier1 ? 'critical' : isTier2 ? 'review' : 'cleared'}
                           size="sm"
@@ -599,7 +599,7 @@ export const AlertsView = () => {
 
             <button
               onClick={() => selectAllAlerts(false)}
-              className="p-1 rounded hover:bg-surface text-text-muted hover:text-text text-[11px] font-mono cursor-pointer ml-1"
+              className="p-1 rounded hover:bg-surface text-text-muted hover:text-text text-xs font-mono cursor-pointer ml-1"
             >
               Deselect All
             </button>

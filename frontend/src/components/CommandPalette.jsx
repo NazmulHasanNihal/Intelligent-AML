@@ -138,7 +138,7 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenR
             className="w-full bg-transparent text-xs sm:text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none"
           />
           <div className="flex items-center gap-1.5 ml-2">
-            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-md bg-[var(--bg-base)] text-[var(--text-secondary)] border border-[var(--border-subtle)] shadow-inner">ESC</span>
+            <span className="text-xs font-mono px-1.5 py-0.5 rounded-md bg-[var(--bg-base)] text-[var(--text-secondary)] border border-[var(--border-subtle)] shadow-inner">ESC</span>
           </div>
         </div>
 
@@ -172,13 +172,13 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenR
                     <div className="min-w-0">
                       <div className="text-xs font-semibold flex items-center gap-1.5">
                         <span className={isSelected ? 'text-white' : 'text-[var(--text-primary)]'}>{cmd.title}</span>
-                        <span className={`text-[8px] font-mono px-1.5 py-0.2 rounded uppercase ${
+                        <span className={`text-xs font-mono px-1.5 py-0.2 rounded ${
                           isSelected ? 'bg-white/20 text-white' : 'bg-[var(--bg-base)] text-[var(--text-muted)]'
                         }`}>
                           {cmd.category}
                         </span>
                       </div>
-                      <p className={`text-[10px] sm:text-[11px] truncate ${isSelected ? 'text-emerald-100' : 'text-[var(--text-muted)]'}`}>{cmd.desc}</p>
+                      <p className={`text-xs sm:text-xs truncate ${isSelected ? 'text-emerald-100' : 'text-[var(--text-muted)]'}`}>{cmd.desc}</p>
                     </div>
                   </div>
                   {isSelected && <ArrowRight className="w-3.5 h-3.5 text-white shrink-0 ml-2" />}
@@ -189,13 +189,13 @@ export const CommandPalette = ({ isOpen, onClose, onNavigate, onOpenSAR, onOpenR
         </div>
 
         {/* Footer Navigation Hints */}
-        <div className="px-3.5 py-1.5 sm:py-2 bg-[var(--bg-base)] border-t border-[var(--border-subtle)] flex items-center justify-between text-[10px] sm:text-[11px] text-[var(--text-secondary)] font-mono">
+        <div className="px-3.5 py-1.5 sm:py-2 bg-[var(--bg-base)] border-t border-[var(--border-subtle)] flex items-center justify-between text-xs sm:text-xs text-[var(--text-secondary)] font-mono">
           <div className="flex items-center gap-2.5">
             <span><strong className="text-[var(--text-primary)]">↑ ↓</strong> Navigate</span>
             <span><strong className="text-[var(--text-primary)]">↵</strong> Select</span>
             <span><strong className="text-[var(--text-primary)]">ESC</strong> Close</span>
           </div>
-          <div className="text-[var(--accent-primary)] flex items-center gap-1 font-sans text-[10px]">
+          <div className="text-[var(--accent-primary)] flex items-center gap-1 font-sans text-xs">
             <Sparkles className="w-3 h-3" />
             <span>Active: <strong>{currentTheme.name}</strong></span>
           </div>

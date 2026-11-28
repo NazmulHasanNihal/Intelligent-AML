@@ -21,7 +21,7 @@ export const RoleSwitchModal: React.FC = () => {
               <h3 className="font-bold text-sm tracking-tight text-text-primary">
                 Authorized Signatory Role Delegation (RBAC)
               </h3>
-              <span className="text-[10px] font-mono text-text-muted">
+              <span className="text-xs font-mono text-text-muted">
                 Keycloak OIDC / FIPS 140-2 Level 3 Persona Session
               </span>
             </div>
@@ -59,13 +59,13 @@ export const RoleSwitchModal: React.FC = () => {
                       <span className="font-bold text-text-primary text-xs block">
                         {persona.name}
                       </span>
-                      <span className="text-[10px] text-text-muted block">
+                      <span className="text-xs text-text-muted block">
                         {persona.institution}
                       </span>
                     </div>
                   </div>
                   <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    className={`px-2 py-0.5 rounded text-xs font-bold ${
                       isCurrent
                         ? 'bg-brand-accent text-white'
                         : 'bg-panel-raised text-text-dim border border-panel-border'
@@ -75,7 +75,7 @@ export const RoleSwitchModal: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="mt-2 text-[11px] text-text-secondary leading-tight">
+                <div className="mt-2 text-xs text-text-secondary leading-tight">
                   <strong className="text-text-primary">{persona.roleTitle}</strong>
                 </div>
 
@@ -83,7 +83,7 @@ export const RoleSwitchModal: React.FC = () => {
                   {persona.permissions.map((p) => (
                     <span
                       key={p}
-                      className="px-1.5 py-0.2 rounded text-[9px] bg-panel-raised text-text-dim border border-panel-border"
+                      className="px-1.5 py-0.2 rounded text-xs bg-panel-raised text-text-dim border border-panel-border"
                     >
                       {p}
                     </span>

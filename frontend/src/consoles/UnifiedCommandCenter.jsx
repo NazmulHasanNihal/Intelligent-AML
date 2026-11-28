@@ -291,9 +291,9 @@ export const UnifiedCommandCenter = ({
           title="Click to view all monitored transactions"
         >
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">24H MONITORED VOLUME</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] block">24H MONITORED VOLUME</span>
             <div className="text-xl font-bold font-mono text-[var(--text-primary)] mt-0.5">148,312 <span className="text-xs font-normal text-[var(--text-muted)]">tx</span></div>
-            <span className="text-[10px] text-emerald-500 font-mono mt-0.5 flex items-center gap-1">
+            <span className="text-xs text-emerald-500 font-mono mt-0.5 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               $148.2M Streamed (Avg: 1.7 tx/s)
             </span>
@@ -310,9 +310,9 @@ export const UnifiedCommandCenter = ({
           title="Click to filter Tier 1 Quarantined Alerts"
         >
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">TIER 1 QUARANTINED</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] block">TIER 1 QUARANTINED</span>
             <div className="text-xl font-bold font-mono text-rose-500 mt-0.5">1,280 <span className="text-xs font-normal text-[var(--text-muted)]">tx (0.86%)</span></div>
-            <span className="text-[10px] text-rose-400 font-mono mt-0.5">
+            <span className="text-xs text-rose-400 font-mono mt-0.5">
               Immediate Quarantine Hold
             </span>
           </div>
@@ -328,9 +328,9 @@ export const UnifiedCommandCenter = ({
           title="Click to filter Tier 2 Four-Eyes Review Queue"
         >
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">TIER 2 REVIEW QUEUE</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] block">TIER 2 REVIEW QUEUE</span>
             <div className="text-xl font-bold font-mono text-amber-500 mt-0.5">748 <span className="text-xs font-normal text-[var(--text-muted)]">tx (0.50%)</span></div>
-            <span className="text-[10px] text-amber-400 font-mono mt-0.5">
+            <span className="text-xs text-amber-400 font-mono mt-0.5">
               Four-Eyes Dual Sign-Off
             </span>
           </div>
@@ -346,9 +346,9 @@ export const UnifiedCommandCenter = ({
           title="Click to view Straight-Through Cleared Transactions"
         >
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block">STRAIGHT-THROUGH RATE</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] block">STRAIGHT-THROUGH RATE</span>
             <div className="text-xl font-bold font-mono text-[var(--accent-primary)] mt-0.5">98.6%</div>
-            <span className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">
+            <span className="text-xs text-[var(--text-muted)] font-mono mt-0.5">
               146,284 Safe Cleared (99.0% Confidence)
             </span>
           </div>
@@ -360,7 +360,7 @@ export const UnifiedCommandCenter = ({
       </div>
 
       {/* Model Health Strip & Telemetry Hardware Specs */}
-      <div className="minimal-card p-2 sm:p-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono border-emerald-500/20 bg-emerald-500/[0.03]">
+      <div className="minimal-card p-2 sm:p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono border-emerald-500/20 bg-emerald-500/[0.03]">
         <div className="flex flex-wrap items-center gap-2">
           <Cpu className="w-3.5 h-3.5 text-emerald-500" />
           <span className="text-[var(--text-muted)]">INFERENCE HARDWARE:</span>
@@ -415,7 +415,7 @@ export const UnifiedCommandCenter = ({
         {/* Time-Range & Payment Rail Filters */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Time Range */}
-          <div className="flex items-center gap-1 bg-[var(--bg-card)] p-0.5 rounded-lg border border-[var(--border-subtle)] text-[10px] font-mono">
+          <div className="flex items-center gap-1 bg-[var(--bg-card)] p-0.5 rounded-lg border border-[var(--border-subtle)] text-xs font-mono">
             {['1H', '24H', '7D', '30D'].map((tr) => (
               <button
                 key={tr}
@@ -430,7 +430,7 @@ export const UnifiedCommandCenter = ({
           </div>
 
           {/* Payment Rails Filter */}
-          <div className="flex items-center gap-1 bg-[var(--bg-card)] p-0.5 rounded-lg border border-[var(--border-subtle)] text-[10px] font-mono">
+          <div className="flex items-center gap-1 bg-[var(--bg-card)] p-0.5 rounded-lg border border-[var(--border-subtle)] text-xs font-mono">
             {['ALL', 'SWIFT', 'ACH', 'CRYPTO'].map((r) => (
               <button
                 key={r}
@@ -452,12 +452,12 @@ export const UnifiedCommandCenter = ({
           {/* Activity Line Chart */}
           <div className="lg:col-span-7 minimal-card p-3.5 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold font-mono uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-1.5">
+              <span className="text-xs font-bold font-mono text-[var(--text-primary)] flex items-center gap-1.5">
                 <Activity className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Streaming Throughput & Alert Telemetry</span>
               </span>
               <span 
-                className="text-[10px] font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20"
+                className="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20"
                 title="Peak Burst: 500 tx/s | 24h Volume: 148,312 tx (Avg: 1.7 tx/s) | Active Ingestion Engine"
               >
                 Peak Burst: 500 tx/s | 24h Avg: 1.7 tx/s
@@ -472,10 +472,10 @@ export const UnifiedCommandCenter = ({
           <div className="lg:col-span-5 minimal-card p-3.5 space-y-2.5 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
-                <span className="text-xs font-bold font-mono uppercase tracking-wider text-[var(--text-primary)]">
+                <span className="text-xs font-bold font-mono text-[var(--text-primary)]">
                   Recent High-Priority Events
                 </span>
-                <span className="text-[10px] text-[var(--text-muted)] font-mono">Live Ingestion</span>
+                <span className="text-xs text-[var(--text-muted)] font-mono">Live Ingestion</span>
               </div>
               <div className="space-y-2 mt-2">
                 {recentAlerts.map((alt) => (
@@ -487,10 +487,10 @@ export const UnifiedCommandCenter = ({
                     <div>
                       <div className="font-mono font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                         <span>{alt.id}</span>
-                        <span className="text-[9px] text-[var(--text-muted)] font-normal">{alt.time}</span>
+                        <span className="text-xs text-[var(--text-muted)] font-normal">{alt.time}</span>
                       </div>
-                      <div className="text-[11px] text-[var(--text-secondary)] font-mono">{alt.account} • ${alt.amount.toLocaleString()}</div>
-                      <span className="text-[10px] text-[var(--text-muted)]">{alt.pattern}</span>
+                      <div className="text-xs text-[var(--text-secondary)] font-mono">{alt.account} • ${alt.amount.toLocaleString()}</div>
+                      <span className="text-xs text-[var(--text-muted)]">{alt.pattern}</span>
                     </div>
                     <div className="text-right">
                       <span className={alt.tier.includes('QUARANTINE') ? 'badge-tier1' : alt.tier.includes('REVIEW') ? 'badge-tier2' : 'badge-tier3'}>
@@ -517,7 +517,7 @@ export const UnifiedCommandCenter = ({
         <div className="space-y-3 animate-fadeIn">
           {/* 1-Click Scenario Quick Presets */}
           <div className="minimal-card p-2.5 flex items-center justify-between gap-2 overflow-x-auto">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] shrink-0">1-Click Presets:</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] shrink-0">1-Click Presets:</span>
             <div className="flex items-center gap-1.5 overflow-x-auto">
               {SCENARIO_PRESETS.map((preset) => (
                 <button
@@ -527,7 +527,7 @@ export const UnifiedCommandCenter = ({
                 >
                   <span>{preset.icon}</span>
                   <span>{preset.label}</span>
-                  <span className="text-[10px] font-mono text-[var(--text-muted)]">(${preset.amount.toLocaleString()})</span>
+                  <span className="text-xs font-mono text-[var(--text-muted)]">(${preset.amount.toLocaleString()})</span>
                 </button>
               ))}
             </div>
@@ -537,16 +537,16 @@ export const UnifiedCommandCenter = ({
             {/* Left Form (5 Columns) */}
             <div className="lg:col-span-5 minimal-card p-4 space-y-3">
               <div className="border-b border-[var(--border-subtle)] pb-2">
-                <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-1.5">
+                <h3 className="text-xs font-bold font-mono text-[var(--text-primary)] flex items-center gap-1.5">
                   <Sliders className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                   <span>Transaction Parameters</span>
                 </h3>
-              <p className="text-[11px] text-[var(--text-muted)] mt-0.5">Input transaction attributes to simulate real-time C-STGB classification.</p>
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">Input transaction attributes to simulate real-time C-STGB classification.</p>
             </div>
 
             <div className="space-y-2 text-xs">
               <div>
-                <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase block mb-1">Source Account / Entity</label>
+                <label className="text-xs font-mono text-[var(--text-muted)] block mb-1">Source Account / Entity</label>
                 <input 
                   type="text"
                   value={sandboxParams.srcId}
@@ -556,7 +556,7 @@ export const UnifiedCommandCenter = ({
               </div>
 
               <div>
-                <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase block mb-1">Destination Account / Entity</label>
+                <label className="text-xs font-mono text-[var(--text-muted)] block mb-1">Destination Account / Entity</label>
                 <input 
                   type="text"
                   value={sandboxParams.dstId}
@@ -567,7 +567,7 @@ export const UnifiedCommandCenter = ({
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase block mb-1">Transfer Amount ($ USD)</label>
+                  <label className="text-xs font-mono text-[var(--text-muted)] block mb-1">Transfer Amount ($ USD)</label>
                   <input 
                     type="number"
                     value={sandboxParams.amount}
@@ -576,7 +576,7 @@ export const UnifiedCommandCenter = ({
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase block mb-1">Payment Rail</label>
+                  <label className="text-xs font-mono text-[var(--text-muted)] block mb-1">Payment Rail</label>
                   <select 
                     value={sandboxParams.rail}
                     onChange={(e) => setSandboxParams(prev => ({ ...prev, rail: e.target.value }))}
@@ -627,7 +627,7 @@ export const UnifiedCommandCenter = ({
           <div className="lg:col-span-7 minimal-card p-4 space-y-3.5">
             <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-2">
               <div>
-                <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">INFERENCE RESULT</span>
+                <span className="text-xs font-mono text-[var(--text-muted)] block">INFERENCE RESULT</span>
                 <span className="font-bold text-xs font-mono text-[var(--text-primary)]">{sandboxResult.tx_id}</span>
               </div>
               <span className={sandboxResult.decision_tier.includes('QUARANTINE') ? 'badge-tier1' : sandboxResult.decision_tier.includes('CLEAR') ? 'badge-tier3' : 'badge-tier2'}>
@@ -638,19 +638,19 @@ export const UnifiedCommandCenter = ({
             {/* Metric Bars */}
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)]">
-                <span className="text-[9px] font-mono text-[var(--text-muted)] block uppercase">FRAUD RISK SCORE</span>
+                <span className="text-xs font-mono text-[var(--text-muted)] block ">FRAUD RISK SCORE</span>
                 <span className="text-base font-bold font-mono text-[var(--text-primary)]">
                   {(sandboxResult.ensemble_posterior_prob * 100).toFixed(1)}%
                 </span>
               </div>
               <div className="p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)]">
-                <span className="text-[9px] font-mono text-[var(--text-muted)] block uppercase">DECISION TIER</span>
+                <span className="text-xs font-mono text-[var(--text-muted)] block ">DECISION TIER</span>
                 <span className="text-base font-bold font-mono text-[var(--accent-primary)]">
                   {sandboxResult.conformal_prediction_set.join(', ')}
                 </span>
               </div>
               <div className="p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)]">
-                <span className="text-[9px] font-mono text-[var(--text-muted)] block uppercase">FAST-PATH SLA</span>
+                <span className="text-xs font-mono text-[var(--text-muted)] block ">FAST-PATH SLA</span>
                 <span className="text-base font-bold font-mono text-emerald-500">
                   {sandboxResult.total_latency_ms} ms
                 </span>
@@ -691,33 +691,33 @@ export const UnifiedCommandCenter = ({
       {activeSegment === 'INVARIANTS' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 animate-fadeIn">
           <div className="minimal-card p-3.5 space-y-1">
-            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">PASS-THROUGH FLOW RATIO</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] block">PASS-THROUGH FLOW RATIO</span>
             <div className="text-xl font-bold font-mono text-[var(--text-primary)]">99.8% Zero Retention</div>
-            <p className="text-[11px] text-[var(--text-secondary)] pt-1">
+            <p className="text-xs text-[var(--text-secondary)] pt-1">
               Inflows match outflows within 0.2% across transit nodes, verifying pass-through wash loops without legitimate commercial absorption.
             </p>
           </div>
 
           <div className="minimal-card p-3.5 space-y-1">
-            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">TRANSFER VELOCITY RATE</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] block">TRANSFER VELOCITY RATE</span>
             <div className="text-xl font-bold font-mono text-[var(--text-primary)]">18.4 tx / min (Spike)</div>
-            <p className="text-[11px] text-[var(--text-secondary)] pt-1">
+            <p className="text-xs text-[var(--text-secondary)] pt-1">
               Real-time velocity acceleration captures rapid burst smurfing and structuring across sub-second interbank intervals.
             </p>
           </div>
 
           <div className="minimal-card p-3.5 space-y-1">
-            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">NOISE SUPPRESSION</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] block">NOISE SUPPRESSION</span>
             <div className="text-xl font-bold font-mono text-emerald-500">65.9% Filtered</div>
-            <p className="text-[11px] text-[var(--text-secondary)] pt-1">
+            <p className="text-xs text-[var(--text-secondary)] pt-1">
               Adaptive relational edge filter suppresses low-value retail noise (&lt; $150) to isolate underlying laundering rings.
             </p>
           </div>
 
           <div className="minimal-card p-3.5 space-y-1">
-            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase block">SAFETY GUARANTEE</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] block">SAFETY GUARANTEE</span>
             <div className="text-xl font-bold font-mono text-[var(--accent-primary)]">&ge; 99.0% Coverage</div>
-            <p className="text-[11px] text-[var(--text-secondary)] pt-1">
+            <p className="text-xs text-[var(--text-secondary)] pt-1">
               Statutory safety guarantee ensures finite-sample reliability while automating 98.6% of routine commercial clearances.
             </p>
           </div>

@@ -30,7 +30,7 @@ export default function GraphError({
         <div className="p-3 rounded-lg bg-[#070B12] border border-[#1E293B] font-mono text-left text-xs text-rose-300 mb-6 max-h-36 overflow-y-auto break-all">
           <p className="font-bold text-slate-400 mb-1">Exception Receipt:</p>
           <p>{error.message || 'WebGL Context Lost or Shading Pipeline Interrupted'}</p>
-          {error.digest && <p className="text-[10px] text-slate-500 mt-1">Digest: {error.digest}</p>}
+          {error.digest && <p className="text-xs text-slate-500 mt-1">Digest: {error.digest}</p>}
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

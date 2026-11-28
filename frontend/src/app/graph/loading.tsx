@@ -24,7 +24,7 @@ export default function GraphLoading() {
           <span className="text-xs font-mono font-bold text-slate-300">
             Synthesizing Spatio-Temporal Graph Subgraph...
           </span>
-          <span className="text-[11px] font-mono text-slate-500 mt-1">
+          <span className="text-xs font-mono text-slate-500 mt-1">
             Computing 12 topological invariants &amp; WebGL nodes
           </span>
         </div>

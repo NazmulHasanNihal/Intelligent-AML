@@ -407,7 +407,7 @@ export const Neo4j3DGraph = ({
         <div className="flex items-center gap-1 p-1 rounded-lg skeuo-card bg-[var(--bg-surface)]/95 border border-[var(--border-card)] pointer-events-auto shadow-sm">
           <button
             onClick={() => setActiveFilter('ALL')}
-            className={`px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+            className={`px-2 py-0.5 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
               activeFilter === 'ALL' ? 'skeuo-btn skeuo-btn-primary' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
@@ -415,7 +415,7 @@ export const Neo4j3DGraph = ({
           </button>
           <button
             onClick={() => setActiveFilter('WASH_CYCLE')}
-            className={`px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+            className={`px-2 py-0.5 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
               activeFilter === 'WASH_CYCLE' ? 'bg-rose-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
@@ -423,7 +423,7 @@ export const Neo4j3DGraph = ({
           </button>
           <button
             onClick={() => setActiveFilter('TIER_1_ONLY')}
-            className={`px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+            className={`px-2 py-0.5 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
               activeFilter === 'TIER_1_ONLY' ? 'bg-amber-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
@@ -435,7 +435,7 @@ export const Neo4j3DGraph = ({
         <div className="flex items-center gap-1 p-1 rounded-lg skeuo-card bg-[var(--bg-surface)]/95 border border-[var(--border-card)] pointer-events-auto shadow-sm">
           <button
             onClick={() => setIsRotating(prev => !prev)}
-            className={`p-1 rounded-md text-[11px] transition-colors cursor-pointer ${
+            className={`p-1 rounded-md text-xs transition-colors cursor-pointer ${
               isRotating ? 'text-[var(--accent-primary)] bg-[var(--accent-primary)]/15' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
             title={isRotating ? 'Pause Camera Orbit' : 'Resume Auto-Orbit'}
@@ -472,8 +472,8 @@ export const Neo4j3DGraph = ({
           <div className="flex items-center gap-2">
             <Sliders className="w-4 h-4 text-[var(--accent-primary)] shrink-0" />
             <div>
-              <span className="font-bold text-[var(--text-primary)] text-[11px] block font-mono">Module 2: Camouflage Retail Noise Suppression</span>
-              <span className="text-[10px] text-[var(--text-muted)]">Prunes spurious retail noise to suppress graph over-smoothing</span>
+              <span className="font-bold text-[var(--text-primary)] text-xs block font-mono">Module 2: Camouflage Retail Noise Suppression</span>
+              <span className="text-xs text-[var(--text-muted)]">Prunes spurious retail noise to suppress graph over-smoothing</span>
             </div>
           </div>
 
@@ -487,10 +487,10 @@ export const Neo4j3DGraph = ({
               onChange={(e) => setCamouflageGateFloor(Number(e.target.value))}
               className="w-full md:w-36 accent-[#1B4D3E] cursor-pointer"
             />
-            <span className="text-[11px] font-mono text-[var(--accent-primary)] font-bold shrink-0 min-w-[70px]">
+            <span className="text-xs font-mono text-[var(--accent-primary)] font-bold shrink-0 min-w-[70px]">
               Floor: {camouflageGateFloor.toFixed(2)}
             </span>
-            <span className="text-[10px] font-mono text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 px-2 py-0.5 rounded border border-[var(--accent-primary)]/20 shrink-0">
+            <span className="text-xs font-mono text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 px-2 py-0.5 rounded border border-[var(--accent-primary)]/20 shrink-0">
               {camouflageGateFloor > 0.05 ? '65.9% Pruned' : 'Raw Topology'}
             </span>
           </div>

@@ -101,10 +101,10 @@ export const TopNavbar = ({
             </div>
             <div className="hidden md:block">
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-xs font-mono text-[var(--text-primary)] uppercase tracking-wider block">Intelligent-AML</span>
-                <span className="text-[8px] font-mono px-1 py-0.2 rounded bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] font-bold border border-[var(--accent-primary)]/30">C-STGB</span>
+                <span className="font-bold text-xs font-mono text-[var(--text-primary)] block">Intelligent-AML</span>
+                <span className="text-xs font-mono px-1 py-0.2 rounded bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] font-bold border border-[var(--accent-primary)]/30">C-STGB</span>
               </div>
-              <span className="text-[9px] text-[var(--text-muted)] font-mono block">Enterprise Surveillance Desk</span>
+              <span className="text-xs text-[var(--text-muted)] font-mono block">Enterprise Surveillance Desk</span>
             </div>
           </div>
 
@@ -115,16 +115,16 @@ export const TopNavbar = ({
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl skeuo-well text-xs font-mono text-[var(--text-primary)] transition-all cursor-pointer group hover:border-[var(--accent-primary)]"
             >
               <Database className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />
-              <span className="hidden sm:inline text-[var(--text-muted)] font-sans text-[11px]">Scenario:</span>
+              <span className="hidden sm:inline text-[var(--text-muted)] font-sans text-xs">Scenario:</span>
               <span className="font-bold text-[var(--accent-primary)] truncate max-w-[110px] sm:max-w-[180px] xl:max-w-none">{selectedDataset.name}</span>
               <ChevronDown className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform ${isDatasetOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isDatasetOpen && (
               <div className="absolute left-0 mt-2 w-80 sm:w-96 p-2 rounded-2xl bg-[var(--bg-card-elevated)] border border-[var(--border-card)] shadow-[var(--skeuo-card-elevated)] z-50 animate-fadeIn backdrop-blur-2xl">
-                <div className="px-2.5 py-1.5 text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider border-b border-[var(--border-subtle)] mb-1.5 flex items-center justify-between">
+                <div className="px-2.5 py-1.5 text-xs font-mono text-[var(--text-muted)] border-b border-[var(--border-subtle)] mb-1.5 flex items-center justify-between">
                   <span>Select Surveillance Scenario</span>
-                  <span className="text-[9px] text-[var(--accent-primary)] font-bold">5 Active Rails</span>
+                  <span className="text-xs text-[var(--accent-primary)] font-bold">5 Active Rails</span>
                 </div>
                 <div className="space-y-1">
                   {DATASET_OPTIONS.map((ds) => {
@@ -148,10 +148,10 @@ export const TopNavbar = ({
                             <span className="truncate">{ds.name}</span>
                             {isSelected && <Check className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />}
                           </div>
-                          <p className="text-[10px] text-[var(--accent-primary)] font-mono truncate">{ds.scenario}</p>
-                          <span className="text-[9px] text-[var(--text-muted)] font-mono">{ds.scale}</span>
+                          <p className="text-xs text-[var(--accent-primary)] font-mono truncate">{ds.scenario}</p>
+                          <span className="text-xs text-[var(--text-muted)] font-mono">{ds.scale}</span>
                         </div>
-                        <span className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08] text-[var(--text-secondary)] uppercase shrink-0">
+                        <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08] text-[var(--text-secondary)] shrink-0">
                           {ds.domain}
                         </span>
                       </button>
@@ -163,7 +163,7 @@ export const TopNavbar = ({
           </div>
 
           {/* Interactive Live Engine Status Pill & Diagnostics Trigger */}
-          <div className="hidden md:flex items-center gap-1.5 lg:gap-2 text-[10px] font-mono shrink-0">
+          <div className="hidden md:flex items-center gap-1.5 lg:gap-2 text-xs font-mono shrink-0">
             <button
               onClick={() => setIsDiagnosticsOpen(true)}
               className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all cursor-pointer shadow-sm active:translate-y-0.5 ${
@@ -177,7 +177,7 @@ export const TopNavbar = ({
               <span className="font-bold">
                 {isLiveServer ? 'Live Cloud API' : 'Standalone Engine'}
               </span>
-              <span className="text-[9px] opacity-75 hidden xl:inline">
+              <span className="text-xs opacity-75 hidden xl:inline">
                 ({health?.tests_passed || '175/175 Tests'})
               </span>
             </button>
@@ -198,9 +198,9 @@ export const TopNavbar = ({
           >
             <div className="flex items-center gap-2 min-w-0">
               <Search className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />
-              <span className="text-[11px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] truncate">Search entities, BICs...</span>
+              <span className="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] truncate">Search entities, BICs...</span>
             </div>
-            <div className="flex items-center gap-0.5 font-mono text-[9px] text-[var(--text-muted)] bg-[var(--bg-surface)] px-1.5 py-0.5 rounded border border-[var(--border-subtle)] shadow-inner shrink-0">
+            <div className="flex items-center gap-0.5 font-mono text-xs text-[var(--text-muted)] bg-[var(--bg-surface)] px-1.5 py-0.5 rounded border border-[var(--border-subtle)] shadow-inner shrink-0">
               <Command className="w-2.5 h-2.5" />
               <span>K</span>
             </div>
@@ -223,17 +223,17 @@ export const TopNavbar = ({
           <div className="relative" ref={themeDropdownRef}>
             <button
               onClick={() => setIsThemeDropdownOpen(prev => !prev)}
-              className="flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg bg-[var(--bg-card)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-card)] hover:border-[var(--accent-primary)] text-[11px] text-[var(--text-primary)] transition-all cursor-pointer shadow-[var(--skeuo-btn)] active:translate-y-0.5"
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg bg-[var(--bg-card)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-card)] hover:border-[var(--accent-primary)] text-xs text-[var(--text-primary)] transition-all cursor-pointer shadow-[var(--skeuo-btn)] active:translate-y-0.5"
               title="Switch Aesthetic Theme"
             >
               <span className="text-xs">{currentTheme.icon}</span>
-              <span className="hidden lg:inline-block font-semibold text-[10px] text-[var(--text-primary)]">{currentTheme.name}</span>
+              <span className="hidden lg:inline-block font-semibold text-xs text-[var(--text-primary)]">{currentTheme.name}</span>
               <ChevronDown className={`w-3 h-3 text-[var(--text-muted)] transition-transform ${isThemeDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isThemeDropdownOpen && (
               <div className="absolute right-0 mt-1.5 w-72 sm:w-80 p-2 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-card)] shadow-[var(--skeuo-card-elevated)] z-50 animate-fadeIn backdrop-blur-2xl">
-                <div className="px-2 py-1 text-[9px] font-mono text-[var(--text-muted)] uppercase tracking-wider border-b border-[var(--border-subtle)] mb-1 flex items-center justify-between">
+                <div className="px-2 py-1 text-xs font-mono text-[var(--text-muted)] border-b border-[var(--border-subtle)] mb-1 flex items-center justify-between">
                   <span>Select Financial Theme</span>
                   <Sparkles className="w-3 h-3 text-[var(--accent-primary)]" />
                 </div>
@@ -256,10 +256,10 @@ export const TopNavbar = ({
                         <span className="text-base mt-0.5">{theme.icon}</span>
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-bold text-[var(--text-primary)]">{theme.name}</span>
+                            <span className="text-xs font-bold text-[var(--text-primary)]">{theme.name}</span>
                             {isSelected && <Check className="w-3 h-3 text-[var(--accent-primary)]" />}
                           </div>
-                          <p className="text-[9px] text-[var(--text-muted)] mt-0.2">{theme.tagline}</p>
+                          <p className="text-xs text-[var(--text-muted)] mt-0.2">{theme.tagline}</p>
                         </div>
                       </button>
                     );
@@ -276,13 +276,13 @@ export const TopNavbar = ({
               className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-card)] hover:border-[var(--accent-primary)] text-xs text-[var(--text-primary)] transition-all cursor-pointer shadow-[var(--skeuo-btn)] active:translate-y-0.5 group"
               title="Switch Officer Persona (Analyst L1, Investigator L2, CCO L3, Model Auditor)"
             >
-              <div className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${currentBanker?.badgeClass || 'bg-indigo-500/20 text-indigo-300'}`}>
+              <div className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold ${currentBanker?.badgeClass || 'bg-indigo-500/20 text-indigo-300'}`}>
                 {currentBanker?.avatar || 'NH'}
               </div>
               <div className="text-left font-sans hidden sm:block">
-                <div className="text-[11px] font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] flex items-center gap-1.5">
+                <div className="text-xs font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] flex items-center gap-1.5">
                   <span className="truncate max-w-[120px]">{currentBanker?.name || 'Officer'}</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold bg-black/[0.05] dark:bg-white/[0.08] text-[var(--text-secondary)] uppercase">
+                  <span className="text-xs px-1.5 py-0.5 rounded font-mono font-bold bg-black/[0.05] dark:bg-white/[0.08] text-[var(--text-secondary)] ">
                     {currentBanker?.role || 'admin'}
                   </span>
                 </div>
@@ -292,7 +292,7 @@ export const TopNavbar = ({
 
             {isPersonaOpen && (
               <div className="absolute right-0 mt-2 w-72 sm:w-80 p-2 rounded-2xl bg-[var(--bg-card-elevated)] border border-[var(--border-card)] shadow-[var(--skeuo-card-elevated)] z-50 animate-fadeIn backdrop-blur-2xl">
-                <div className="px-2.5 py-1.5 text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider border-b border-[var(--border-subtle)] mb-1.5 flex items-center justify-between">
+                <div className="px-2.5 py-1.5 text-xs font-mono text-[var(--text-muted)] border-b border-[var(--border-subtle)] mb-1.5 flex items-center justify-between">
                   <span>Switch Banker Persona</span>
                   <UserCheck className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 </div>
@@ -313,12 +313,12 @@ export const TopNavbar = ({
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
-                          <div className={`w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold shrink-0 ${banker.badgeClass}`}>
+                          <div className={`w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold shrink-0 ${banker.badgeClass}`}>
                             {banker.avatar}
                           </div>
                           <div className="min-w-0">
                             <div className="text-xs font-bold text-[var(--text-primary)] truncate">{banker.name}</div>
-                            <div className="text-[10px] text-[var(--text-muted)] truncate">{banker.roleTitle}</div>
+                            <div className="text-xs text-[var(--text-muted)] truncate">{banker.roleTitle}</div>
                           </div>
                         </div>
                         {isSelected && <Check className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0 ml-1.5" />}
@@ -344,11 +344,11 @@ export const TopNavbar = ({
           {/* Knowledge Guide Button */}
           <button
             onClick={onOpenHelp}
-            className="skeuo-btn skeuo-btn-primary px-2 sm:px-2.5 py-1 text-[11px] font-semibold shadow-sm cursor-pointer"
+            className="skeuo-btn skeuo-btn-primary px-2 sm:px-2.5 py-1 text-xs font-semibold shadow-sm cursor-pointer"
             title="Banker Knowledge Center & Reference Manual"
           >
             <BookOpen className="w-3 h-3 text-white" />
-            <span className="hidden md:inline-block text-[10px]">Manual</span>
+            <span className="hidden md:inline-block text-xs">Manual</span>
           </button>
         </div>
       </header>
@@ -360,7 +360,7 @@ export const TopNavbar = ({
             <div className="p-3.5 sm:p-4 border-b border-[var(--border-subtle)] flex items-center justify-between bg-[var(--bg-card)]">
               <div className="flex items-center gap-2">
                 <Server className="w-4 h-4 text-[var(--accent-primary)]" />
-                <span className="font-bold text-xs font-mono uppercase tracking-wider text-[var(--text-primary)]">
+                <span className="font-bold text-xs font-mono text-[var(--text-primary)]">
                   C-STGB Production Engine Diagnostics
                 </span>
               </div>
@@ -374,39 +374,39 @@ export const TopNavbar = ({
 
             <div className="p-4 space-y-3 font-sans text-xs">
               <div className="p-3 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] skeuo-well space-y-1.5">
-                <div className="flex items-center justify-between text-[11px] font-mono">
+                <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-[var(--text-muted)]">BACKEND SERVICE:</span>
                   <span className="font-bold text-[var(--accent-primary)]">
                     {health?.service || 'Intelligent-AML C-STGB Engine'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-mono">
+                <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-[var(--text-muted)]">API GATEWAY:</span>
                   <span className="font-bold text-[var(--text-primary)]">
                     {isLiveServer ? (typeof window !== 'undefined' && window.location.origin ? `${window.location.origin} (Active)` : 'Cloud API Gateway (Active)') : 'Standalone In-Memory Simulation Engine'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-mono">
+                <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-[var(--text-muted)]">DUCKDB SUBGRAPH CACHE:</span>
                   <span className="font-bold text-[var(--text-primary)]">50,000 entities (LRU capacity)</span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-mono">
+                <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-[var(--text-muted)]">CONFORMAL CALIBRATION:</span>
                   <span className="font-bold text-emerald-600 dark:text-emerald-400">Risk Tolerance 1.0% (Safety &ge; 99.0%)</span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-mono">
+                <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-[var(--text-muted)]">TEST VERIFICATION SUITE:</span>
                   <span className="font-bold text-emerald-600 dark:text-emerald-400">
                     {health?.tests_passed || '175 / 175 Tests Passed (100%)'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-mono">
+                <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-[var(--text-muted)]">MODEL GOVERNANCE:</span>
                   <span className="font-bold text-[var(--accent-primary)]">Federal Reserve SR 11-7 / OCC 2011-12 WORM Ledger</span>
                 </div>
               </div>
 
-              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                 The platform operates under a high-throughput fast-path mode. Subgraphs are extracted from in-memory DuckDB Arrow tables in &lt;0.18ms, fused with Tri-Band Temporal Attention in &lt;0.12ms, and calibrated with finite-sample exchangeability guarantees.
               </p>
             </div>

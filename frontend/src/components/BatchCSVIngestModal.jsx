@@ -193,13 +193,13 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
               <UploadCloud className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold font-mono text-[var(--text-primary)] uppercase tracking-wider flex items-center gap-2">
+              <h2 className="text-sm font-bold font-mono text-[var(--text-primary)] flex items-center gap-2">
                 <span>Batch CSV Ingestion & Conformal Triage</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30">
+                <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30">
                   C-STGB Streaming
                 </span>
               </h2>
-              <p className="text-[11px] text-[var(--text-secondary)]">
+              <p className="text-xs text-[var(--text-secondary)]">
                 Stream enterprise transaction records into in-memory causal graph for instant finite-sample triage.
               </p>
             </div>
@@ -217,7 +217,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
           
           {/* Preset Buttons */}
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block mb-1.5">
+            <span className="text-xs font-mono text-[var(--text-muted)] block mb-1.5">
               1. Choose a Standard Benchmark Dataset Preset:
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -235,14 +235,14 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
                     }`}
                   >
                     <div>
-                      <div className="font-bold text-[11px] text-[var(--text-primary)] flex items-center justify-between">
+                      <div className="font-bold text-xs text-[var(--text-primary)] flex items-center justify-between">
                         <span className="truncate">{preset.title}</span>
                         {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />}
                       </div>
-                      <span className="text-[9px] font-mono text-[var(--accent-primary)] block mt-0.5">{preset.domain}</span>
-                      <p className="text-[10px] text-[var(--text-muted)] mt-1 line-clamp-2">{preset.desc}</p>
+                      <span className="text-xs font-mono text-[var(--accent-primary)] block mt-0.5">{preset.domain}</span>
+                      <p className="text-xs text-[var(--text-muted)] mt-1 line-clamp-2">{preset.desc}</p>
                     </div>
-                    <span className="text-[9px] font-mono text-[var(--text-secondary)] font-semibold mt-2 pt-1 border-t border-[var(--border-subtle)]/50">
+                    <span className="text-xs font-mono text-[var(--text-secondary)] font-semibold mt-2 pt-1 border-t border-[var(--border-subtle)]/50">
                       {preset.scale}
                     </span>
                   </button>
@@ -253,7 +253,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
 
           {/* Drag & Drop Upload Zone */}
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] block mb-1.5">
+            <span className="text-xs font-mono text-[var(--text-muted)] block mb-1.5">
               2. Or Upload Custom Banking / Crypto CSV:
             </span>
             <div 
@@ -271,7 +271,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
               <div className="text-xs font-semibold text-[var(--text-primary)]">
                 {selectedFile ? selectedFile.name : 'Click to select CSV (tx_id, src, dst, amount, timestamp)'}
               </div>
-              <p className="text-[10px] text-[var(--text-muted)]">
+              <p className="text-xs text-[var(--text-muted)]">
                 Auto-maps Elliptic, SAML-D, IBM-AMLSim, and SWIFT MT103 schemas into 12-D invariant vectors.
               </p>
             </div>
@@ -280,7 +280,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
           {/* Progress Bar (When Processing) */}
           {isProcessing && (
             <div className="p-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] space-y-1.5 animate-fadeIn">
-              <div className="flex items-center justify-between text-[11px] font-mono">
+              <div className="flex items-center justify-between text-xs font-mono">
                 <span className="flex items-center gap-1.5 text-[var(--accent-primary)] font-bold">
                   <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-ping" />
                   Streaming C-STGB Ingestion & Conformal Classification...
@@ -306,7 +306,7 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
                     Batch Triage Complete: {results.totalCount} Transactions
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-[var(--accent-primary)] font-bold">
+                <span className="text-xs font-mono text-[var(--accent-primary)] font-bold">
                   P99 Latency: {results.p99LatencyMs}ms
                 </span>
               </div>
@@ -314,38 +314,38 @@ export const BatchCSVIngestModal = ({ isOpen, onClose, onImportToQueue }) => {
               {/* 3 Tiers Distribution Breakdown */}
               <div className="grid grid-cols-3 gap-2">
                 <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-center">
-                  <span className="text-[9px] font-mono text-rose-700 dark:text-rose-400 uppercase font-bold block">
+                  <span className="text-xs font-mono text-rose-700 dark:text-rose-400 font-bold block">
                     Tier 1 Quarantine
                   </span>
                   <div className="text-base font-bold font-mono text-rose-600 dark:text-rose-400">
                     {results.tier1Quarantine}
                   </div>
-                  <span className="text-[9px] text-[var(--text-muted)]">Immediate Quarantine Hold</span>
+                  <span className="text-xs text-[var(--text-muted)]">Immediate Quarantine Hold</span>
                 </div>
 
                 <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-center">
-                  <span className="text-[9px] font-mono text-amber-700 dark:text-amber-400 uppercase font-bold block">
+                  <span className="text-xs font-mono text-amber-700 dark:text-amber-400 font-bold block">
                     Tier 2 Review Queue
                   </span>
                   <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">
                     {results.tier2Review}
                   </div>
-                  <span className="text-[9px] text-[var(--text-muted)]">Manual Compliance Review</span>
+                  <span className="text-xs text-[var(--text-muted)]">Manual Compliance Review</span>
                 </div>
 
                 <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-center">
-                  <span className="text-[9px] font-mono text-emerald-700 dark:text-emerald-400 uppercase font-bold block">
+                  <span className="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-bold block">
                     Tier 3 Auto-Clear
                   </span>
                   <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">
                     {results.tier3AutoClear}
                   </div>
-                  <span className="text-[9px] text-[var(--text-muted)]">Automated Straight-Through</span>
+                  <span className="text-xs text-[var(--text-muted)]">Automated Straight-Through</span>
                 </div>
               </div>
 
               {/* Workload Reduction Metric */}
-              <div className="p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)] flex items-center justify-between text-[11px] font-mono skeuo-well">
+              <div className="p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono skeuo-well">
                 <span className="text-[var(--text-secondary)]">Operational Workload Reduction:</span>
                 <span className="font-bold text-[var(--accent-primary)] text-xs">
                   {results.workloadReductionPct}% of volume auto-cleared without officer disruption

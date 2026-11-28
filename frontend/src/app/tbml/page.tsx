@@ -222,7 +222,7 @@ export default function TradeFinanceTbmlPage() {
                 <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] space-y-3">
                   <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
                     <span className="font-mono text-xs font-bold text-sky-400">1. SWIFT MT700 Documentary Credit</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">ISSUED</span>
+                    <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">ISSUED</span>
                   </div>
                   <div className="space-y-1.5 text-xs font-mono text-slate-300">
                     <div>:20: Doc Credit Number: <strong className="text-white">{preset.lcNumber}</strong></div>
@@ -238,7 +238,7 @@ export default function TradeFinanceTbmlPage() {
                 <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] space-y-3">
                   <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
                     <span className="font-mono text-xs font-bold text-amber-400">2. Commercial Invoice #INV-8812</span>
-                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${Math.abs(divergencePct) >= 25 ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
+                    <span className={`text-xs font-mono px-2 py-0.5 rounded ${Math.abs(divergencePct) >= 25 ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
                       {Math.abs(divergencePct) >= 25 ? 'PRICE DISCREPANCY' : 'WITHIN TOLERANCE'}
                     </span>
                   </div>
@@ -259,21 +259,20 @@ export default function TradeFinanceTbmlPage() {
                   <span className="font-mono text-xs font-bold text-rose-400">
                     3. ASYCUDA World Customs Declaration (Chittagong Custom House)
                   </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
                     {Math.abs(divergencePct) >= 25 ? 'FLAGGED BY CUSTOMS INTELLIGENCE' : 'CUSTOMS BASELINE MATCHED'}
                   </span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
                   <div className="p-2.5 bg-[#0B0F17] rounded-lg">
-                    <span className="text-slate-500 text-[10px] block">Bill of Entry No</span>
+                    <span className="text-slate-500 text-xs block">Bill of Entry No</span>
                     <span className="font-bold text-white">{preset.billOfEntry}</span>
                   </div>
                   <div className="p-2.5 bg-[#0B0F17] rounded-lg">
-                    <span className="text-slate-500 text-[10px] block">HS Tariff Code</span>
+                    <span className="text-slate-500 text-xs block">HS Tariff Code</span>
                     <span className="font-bold text-white">{preset.hsCode} ({preset.goods})</span>
                   </div>
                   <div className="p-2.5 bg-[#0B0F17] rounded-lg">
-                    <span className="text-slate-500 text-[10px] block">Official Assessment Value</span>
+                    <span className="text-slate-500 text-xs block">Official Assessment Value</span>
                     <span className="font-bold text-amber-400">${asycudaTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                   </div>
                 </div>
@@ -332,19 +331,19 @@ export default function TradeFinanceTbmlPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
                 <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-center">
-                  <span className="text-[10px] font-mono uppercase text-slate-500 block">Declared LC Invoice Price</span>
+                  <span className="text-xs font-mono uppercase text-slate-500 block">Declared LC Invoice Price</span>
                   <span className="text-2xl font-mono font-bold text-rose-400 mt-1 block">${declaredUnitPrice.toFixed(2)} / KG</span>
                   <span className="text-xs text-slate-400">Total: ${declaredTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                 </div>
 
                 <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-center">
-                  <span className="text-[10px] font-mono uppercase text-slate-500 block">ASYCUDA Market Fair Value</span>
+                  <span className="text-xs font-mono uppercase text-slate-500 block">ASYCUDA Market Fair Value</span>
                   <span className="text-2xl font-mono font-bold text-emerald-400 mt-1 block">${asycudaUnitPrice.toFixed(2)} / KG</span>
                   <span className="text-xs text-slate-400">Total: ${asycudaTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                 </div>
 
                 <div className={`p-4 rounded-xl bg-[#0B0F17] border text-center ${Math.abs(divergencePct) >= 25 ? 'border-rose-500/40' : 'border-emerald-500/40'}`}>
-                  <span className="text-[10px] font-mono uppercase text-slate-500 block">Capital Outflow Divergence</span>
+                  <span className="text-xs font-mono uppercase text-slate-500 block">Capital Outflow Divergence</span>
                   <span className={`text-2xl font-mono font-bold mt-1 block ${Math.abs(divergencePct) >= 25 ? 'text-rose-500' : 'text-emerald-400'}`}>
                     {divergencePct >= 0 ? '+' : ''}{divergencePct.toFixed(1)}%
                   </span>
@@ -360,7 +359,7 @@ export default function TradeFinanceTbmlPage() {
                   <span>
                     <strong>BFIU TBML Guidelines &amp; MLPA 2012 § 25 Alert:</strong> Over-invoicing exceeds trade surveillance variance ceiling (&gt; 50%). Capital siphoning to JAFZA offshore entity indicated. Automated STR filing to Bangladesh Bank BFIU mandatory within 24 hours.
                   </span>
-                  <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-0.5">
+                  <div className="text-xs text-slate-400 flex items-center gap-1.5 pt-0.5">
                     <span>Statutory Reference: BFIU Guidelines for Prevention of Trade Based Money Laundering (2019)</span>
                     <a
                       href="https://www.bb.org.bd/en/index.php/bfiu/publication"
@@ -431,7 +430,7 @@ export default function TradeFinanceTbmlPage() {
               <span className="text-xs font-semibold text-slate-300">
                 {isHashing ? 'Computing SHA-256 Digest...' : 'Select or Drop Trade Document'}
               </span>
-              <span className="text-[10px] text-slate-500">PDF, XML, or TIFF up to 25MB</span>
+              <span className="text-xs text-slate-500">PDF, XML, or TIFF up to 25MB</span>
               <input
                 type="file"
                 onChange={handleFileUpload}
@@ -448,7 +447,7 @@ export default function TradeFinanceTbmlPage() {
                   <span>{uploadedFileName}</span>
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
-                <div className="text-[10px] text-slate-400 break-all">
+                <div className="text-xs text-slate-400 break-all">
                   SHA-256: <span className="text-slate-200">{uploadedFileHash}</span>
                 </div>
               </div>

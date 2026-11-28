@@ -162,7 +162,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
             <Zap className="w-4 h-4 text-indigo-400" />
             <h2 className="text-sm font-semibold text-white">Transaction Parameter Stream</h2>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-medium border border-indigo-500/20">
+          <span className="text-xs font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-medium border border-indigo-500/20">
             {fastPath ? 'FAST-PATH (0.45 ms)' : 'DEEP SPATIOTEMPORAL GNN'}
           </span>
         </div>
@@ -170,7 +170,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
         <div className="space-y-3.5">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-medium text-slate-400 block mb-1">Source Account</label>
+              <label className="text-xs font-medium text-slate-400 block mb-1">Source Account</label>
               <input
                 type="text"
                 value={srcId}
@@ -179,7 +179,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
               />
             </div>
             <div>
-              <label className="text-[11px] font-medium text-slate-400 block mb-1">Beneficiary Account</label>
+              <label className="text-xs font-medium text-slate-400 block mb-1">Beneficiary Account</label>
               <input
                 type="text"
                 value={dstId}
@@ -191,7 +191,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
 
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <label className="text-[11px] font-medium text-slate-400">Transfer Amount ($ USD)</label>
+              <label className="text-xs font-medium text-slate-400">Transfer Amount ($ USD)</label>
               <span className="text-xs font-mono font-semibold text-indigo-300">${amount.toLocaleString()}</span>
             </div>
             <input
@@ -207,7 +207,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-medium text-slate-400 block mb-1">Payment Rail</label>
+              <label className="text-xs font-medium text-slate-400 block mb-1">Payment Rail</label>
               <select
                 value={paymentRail}
                 onChange={(e) => setPaymentRail(e.target.value)}
@@ -222,7 +222,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
             </div>
 
             <div>
-              <label className="text-[11px] font-medium text-slate-400 block mb-1">Jurisdiction Risk</label>
+              <label className="text-xs font-medium text-slate-400 block mb-1">Jurisdiction Risk</label>
               <select
                 value={jurisdiction}
                 onChange={(e) => setJurisdiction(e.target.value)}
@@ -244,7 +244,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
                 onChange={(e) => setBurstVelocity(e.target.checked)}
                 className="accent-indigo-500"
               />
-              <span className="text-[11px] text-slate-300">Rapid Burst (&lt;60s)</span>
+              <span className="text-xs text-slate-300">Rapid Burst (&lt;60s)</span>
             </label>
 
             <label className="flex items-center gap-2 p-2 rounded-lg bg-[#0B0E17] border border-white/[0.08] cursor-pointer hover:border-white/[0.15] transition-colors">
@@ -254,7 +254,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
                 onChange={(e) => setFastPath(e.target.checked)}
                 className="accent-indigo-500"
               />
-              <span className="text-[11px] text-slate-300">Fast-Path (&lt;1 ms)</span>
+              <span className="text-xs text-slate-300">Fast-Path (&lt;1 ms)</span>
             </label>
           </div>
 
@@ -276,9 +276,9 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
           <div className="flex items-center justify-between mb-2 pb-2.5 border-b border-white/[0.08]">
             <div>
               <h2 className="text-sm font-semibold text-white">Neural Anomaly Posterior Risk</h2>
-              <p className="text-[11px] text-slate-400 font-mono">Dual-stream Spatio-Temporal GraphBoost</p>
+              <p className="text-xs text-slate-400 font-mono">Dual-stream Spatio-Temporal GraphBoost</p>
             </div>
-            <span className="text-[11px] font-mono px-2.5 py-1 rounded bg-[#0B0E17] text-slate-300 border border-white/[0.08]">
+            <span className="text-xs font-mono px-2.5 py-1 rounded bg-[#0B0E17] text-slate-300 border border-white/[0.08]">
               {result?.tx_id || 'N/A'}
             </span>
           </div>
@@ -290,7 +290,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
 
             <div className="md:col-span-6 space-y-3 font-mono text-xs">
               <div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase block mb-1">Operational Routing Tier:</span>
+                <span className="text-xs text-slate-400 font-medium block mb-1">Operational Routing Tier:</span>
                 {result.decision_tier === 'TIER_1_QUARANTINE_AUTO_SAR' && (
                   <div className="p-2.5 rounded-lg badge-flagged font-semibold text-xs flex items-center gap-2">
                     <XCircle className="w-4 h-4 shrink-0" />
@@ -311,13 +311,13 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-[11px]">
+              <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="p-2 rounded bg-[#0B0E17] border border-white/[0.06]">
-                  <span className="text-slate-500 text-[9px] block">DECISION TIER</span>
+                  <span className="text-slate-500 text-xs block">DECISION TIER</span>
                   <span className="text-indigo-300 font-semibold">{`{ ${result.conformal_prediction_set.join(', ')} }`}</span>
                 </div>
                 <div className="p-2 rounded bg-[#0B0E17] border border-white/[0.06]">
-                  <span className="text-slate-500 text-[9px] block">MEASURED LATENCY</span>
+                  <span className="text-slate-500 text-xs block">MEASURED LATENCY</span>
                   <span className="text-emerald-400 font-semibold">{result.total_latency_ms} ms</span>
                 </div>
               </div>
@@ -327,7 +327,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
                 {result.decision_tier === 'TIER_1_QUARANTINE_AUTO_SAR' && onNavigateToSAR && (
                   <button
                     onClick={onNavigateToSAR}
-                    className="flex-1 py-2 px-2.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-medium text-[11px] flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                    className="flex-1 py-2 px-2.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-medium text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                   >
                     <span>Auto-Draft FinCEN SAR</span>
                     <ArrowRight className="w-3 h-3" />
@@ -336,7 +336,7 @@ export const LiveScoringConsole = ({ presetScenario, onNavigateToGraph, onNaviga
                 {onNavigateToGraph && (
                   <button
                     onClick={onNavigateToGraph}
-                    className="flex-1 py-2 px-2.5 rounded-lg bg-[#182030] hover:bg-[#1E283C] text-slate-200 border border-white/[0.1] font-medium text-[11px] flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 py-2 px-2.5 rounded-lg bg-[#182030] hover:bg-[#1E283C] text-slate-200 border border-white/[0.1] font-medium text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Inspect 2-Hop Graph</span>
                     <ArrowRight className="w-3 h-3 text-slate-400" />

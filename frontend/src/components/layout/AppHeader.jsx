@@ -31,8 +31,8 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
       {/* Left: Dynamic Breadcrumbs & Live Status */}
       <div className="flex items-center gap-3 min-w-0">
         <Breadcrumbs />
-        <span className="text-[10px] text-muted hidden 2xl:inline">•</span>
-        <span className="text-[11px] text-muted hidden 2xl:flex items-center gap-1.5 font-mono">
+        <span className="text-xs text-muted hidden 2xl:inline">•</span>
+        <span className="text-xs text-muted hidden 2xl:flex items-center gap-1.5 font-mono">
           <span className="w-1.5 h-1.5 rounded-full bg-cleared inline-block animate-pulse" />
           <span>Fast-Path: <strong className="text-cleared font-semibold">0.45 ms</strong> (p99 &lt; 0.82 ms)</span>
         </span>
@@ -48,7 +48,7 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
             <Search className="w-3.5 h-3.5 text-muted" />
             <span className="truncate">Search cases, accounts, BICs...</span>
           </div>
-          <kbd className="font-mono text-[10px] bg-surfaceRaised px-1.5 py-0.5 rounded border border-border text-muted flex items-center gap-1">
+          <kbd className="font-mono text-xs bg-surfaceRaised px-1.5 py-0.5 rounded border border-border text-muted flex items-center gap-1">
             {isMac && <Command className="w-2.5 h-2.5" />}
             <span>{shortcutHint}</span>
           </kbd>
@@ -114,12 +114,12 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
               className="flex items-center gap-2 pl-2 pr-2.5 py-1 rounded hover:bg-surfaceHover border border-border text-xs transition-colors cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-accent"
               title="Switch Authorized Signatory"
             >
-              <div className="w-5 h-5 rounded bg-surfaceRaised text-foreground font-mono font-bold flex items-center justify-center text-[10px] border border-border">
+              <div className="w-5 h-5 rounded bg-surfaceRaised text-foreground font-mono font-bold flex items-center justify-center text-xs border border-border">
                 {currentBanker?.avatar || 'O'}
               </div>
               <div className="text-left hidden lg:block leading-tight">
                 <span className="font-semibold text-foreground text-xs block truncate max-w-[120px]">{currentBanker?.name || 'Authorized Officer'}</span>
-                <span className="text-[10px] text-muted block font-mono">{currentBanker?.role || 'admin'}</span>
+                <span className="text-xs text-muted block font-mono">{currentBanker?.role || 'admin'}</span>
               </div>
               <ChevronDown className="w-3 h-3 text-muted" />
             </button>
@@ -132,9 +132,9 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
               className="z-50 min-w-[270px] rounded-lg border border-border bg-popover p-1.5 text-foreground shadow-2xl animate-fadeIn focus:outline-none"
             >
               {/* Authorized Signatory Header */}
-              <div className="px-2 py-1 text-[10px] font-mono text-muted uppercase tracking-wider border-b border-border mb-1 flex items-center justify-between">
+              <div className="px-2 py-1 text-xs font-mono text-muted border-b border-border mb-1 flex items-center justify-between">
                 <span>Active Signatory Delegation</span>
-                <span className="text-[9px] px-1 py-0.2 rounded bg-accent/10 text-accent font-semibold">Four-Eyes Control</span>
+                <span className="text-xs px-1 py-0.2 rounded bg-accent/10 text-accent font-semibold">Four-Eyes Control</span>
               </div>
 
               {/* Signatory Options */}
@@ -153,7 +153,7 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
                     >
                       <div className="min-w-0">
                         <div className="font-medium text-foreground truncate">{b.name}</div>
-                        <div className="text-[10px] text-muted truncate">{b.roleTitle}</div>
+                        <div className="text-xs text-muted truncate">{b.roleTitle}</div>
                       </div>
                       {isSelected && <Check className="w-3.5 h-3.5 text-accent shrink-0 ml-2" />}
                     </DropdownMenu.Item>
@@ -164,7 +164,7 @@ export const AppHeader = ({ onOpenCommandPalette }) => {
               <div className="pt-1.5 mt-1 border-t border-border">
                 <button
                   onClick={() => setRoleModalOpen(true)}
-                  className="w-full flex items-center justify-center gap-1.5 py-1 px-2 rounded bg-surfaceRaised hover:bg-surface text-text font-mono text-[10px] border border-border cursor-pointer transition-colors"
+                  className="w-full flex items-center justify-center gap-1.5 py-1 px-2 rounded bg-surfaceRaised hover:bg-surface text-text font-mono text-xs border border-border cursor-pointer transition-colors"
                 >
                   <UserCheck className="w-3 h-3 text-accent" />
                   <span>Delegation & Role-Switch Modal</span>

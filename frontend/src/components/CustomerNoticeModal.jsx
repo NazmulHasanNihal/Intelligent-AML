@@ -144,7 +144,7 @@ ${institution}`
             </div>
             <div className="min-w-0">
               <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">Client Due Diligence & Request for Information (RFI)</h3>
-              <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">
+              <p className="text-xs text-[var(--text-muted)] font-sans truncate">
                 Compliant institutional notice issued by {bankerName}
               </p>
             </div>
@@ -159,10 +159,10 @@ ${institution}`
         </div>
 
         {/* Anti-Tipping-Off Statutory Safeguard Banner */}
-        <div className="mx-3.5 sm:mx-4 mt-3 p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-start gap-2 text-[10px] font-sans">
+        <div className="mx-3.5 sm:mx-4 mt-3 p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-start gap-2 text-xs font-sans">
           <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
           <div className="text-rose-700 dark:text-rose-300">
-            <strong className="font-mono uppercase font-bold">Anti-Tipping-Off Mandatory Rule (31 U.S.C. § 5318(g)(2)):</strong>
+            <strong className="font-mono font-bold">Anti-Tipping-Off Mandatory Rule (31 U.S.C. § 5318(g)(2)):</strong>
             <span className="block mt-0.5 text-[9.5px] leading-tight text-rose-800/90 dark:text-rose-300/90">
               Do not disclose AML detection algorithms, suspicious activity indicators, or internal tripwires to the customer. All communications must follow standard verification and document request (RFI) procedures.
             </span>
@@ -173,10 +173,10 @@ ${institution}`
         <div className="p-3.5 sm:p-4 space-y-2.5 sm:space-y-3 font-sans text-xs">
           {/* Notice Type Selector */}
           <div>
-            <label className="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)] block mb-1 font-mono uppercase">
+            <label className="text-xs sm:text-xs font-semibold text-[var(--text-muted)] block mb-1 font-mono ">
               Select Official RFI / Notice Template:
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 font-mono text-[10px]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 font-mono text-xs">
               <button
                 onClick={() => setNoticeType('VERIFICATION_REQUIRED')}
                 className={`p-1.5 rounded-lg text-left cursor-pointer transition-all ${
@@ -225,27 +225,27 @@ ${institution}`
 
           {/* Subject Field */}
           <div className="p-2 rounded-lg skeuo-well space-y-0.5">
-            <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase">SUBJECT LINE:</span>
-            <div className="font-semibold text-[var(--accent-primary)] text-[11px] truncate">{activeNotice.subject}</div>
+            <span className="text-xs font-mono text-[var(--text-muted)] ">SUBJECT LINE:</span>
+            <div className="font-semibold text-[var(--accent-primary)] text-xs truncate">{activeNotice.subject}</div>
           </div>
 
           {/* Letter Body Preview */}
           <div className="space-y-0.5">
-            <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase">OFFICIAL LETTER TEXT:</span>
+            <span className="text-xs font-mono text-[var(--text-muted)] ">OFFICIAL LETTER TEXT:</span>
             <textarea
               readOnly
               rows={6}
               value={activeNotice.body}
-              className="w-full p-2.5 rounded-xl skeuo-well text-[var(--text-primary)] font-mono text-[10px] sm:text-[11px] leading-relaxed resize-none focus:outline-none"
+              className="w-full p-2.5 rounded-xl skeuo-well text-[var(--text-primary)] font-mono text-xs sm:text-xs leading-relaxed resize-none focus:outline-none"
             />
           </div>
 
-          <div className="p-2 sm:p-2.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] flex items-center justify-between text-[10px] sm:text-[11px] text-[var(--text-secondary)] font-sans">
+          <div className="p-2 sm:p-2.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] flex items-center justify-between text-xs sm:text-xs text-[var(--text-secondary)] font-sans">
             <div className="flex items-center gap-1.5 truncate">
               <ShieldCheck className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />
               <span className="truncate">Stamped: <b>{bankerId}</b> • Audit Logged</span>
             </div>
-            <span className="text-[var(--text-muted)] font-mono text-[9px] shrink-0">ISO 20022 Std</span>
+            <span className="text-[var(--text-muted)] font-mono text-xs shrink-0">ISO 20022 Std</span>
           </div>
         </div>
 
@@ -253,7 +253,7 @@ ${institution}`
         <div className="p-3 sm:p-3.5 bg-[var(--bg-card-elevated)] border-t border-[var(--border-subtle)] flex items-center justify-between gap-2">
           <button
             onClick={handleCopy}
-            className="px-2.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-mono flex items-center gap-1.5 cursor-pointer"
+            className="px-2.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-secondary text-xs sm:text-xs font-mono flex items-center gap-1.5 cursor-pointer"
           >
             {copied ? <Check className="w-3 h-3 text-[var(--accent-primary)]" /> : <Copy className="w-3 h-3" />}
             <span>{copied ? 'Copied' : 'Copy Text'}</span>

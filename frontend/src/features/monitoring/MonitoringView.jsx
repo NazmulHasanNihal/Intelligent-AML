@@ -186,7 +186,7 @@ export const MonitoringView = () => {
               {activeRulesCount} <span className="text-xs text-text-muted font-normal">/ {fraudRules.length} Active</span>
             </div>
           </div>
-          <div className="mt-2 text-[11px] text-cleared flex items-center gap-1 font-mono">
+          <div className="mt-2 text-xs text-cleared flex items-center gap-1 font-mono">
             <CheckCircle2 className="w-3 h-3" />
             <span>Real-time rule engine healthy</span>
           </div>
@@ -199,7 +199,7 @@ export const MonitoringView = () => {
               &lt; 0.45 ms
             </div>
           </div>
-          <div className="mt-2 text-[11px] text-text-muted font-mono">
+          <div className="mt-2 text-xs text-text-muted font-mono">
             <span>Pre-clearing settlement gateway</span>
           </div>
         </Card>
@@ -211,7 +211,7 @@ export const MonitoringView = () => {
               {blockedTransactions.filter(b => b.status === 'BLOCKED').length} Intercepted
             </div>
           </div>
-          <div className="mt-2 text-[11px] text-critical flex items-center gap-1 font-mono">
+          <div className="mt-2 text-xs text-critical flex items-center gap-1 font-mono">
             <Lock className="w-3 h-3" />
             <span>Administrative holds active</span>
           </div>
@@ -224,7 +224,7 @@ export const MonitoringView = () => {
               ${totalBlockedExposure.toLocaleString()} USD
             </div>
           </div>
-          <div className="mt-2 text-[11px] text-text-muted font-mono">
+          <div className="mt-2 text-xs text-text-muted font-mono">
             <span>৳{(totalBlockedExposure * 120).toLocaleString()} BDT safeguarded</span>
           </div>
         </Card>
@@ -241,7 +241,7 @@ export const MonitoringView = () => {
         >
           <Activity className="w-3.5 h-3.5" />
           <span>Real-Time Stream Monitoring</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-surfaceRaised text-text border border-border">
+          <span className="px-1.5 py-0.2 rounded-full text-xs bg-surfaceRaised text-text border border-border">
             {liveTransactions.length}
           </span>
         </button>
@@ -255,7 +255,7 @@ export const MonitoringView = () => {
         >
           <Lock className="w-3.5 h-3.5" />
           <span>Blocked Transactions Ledger</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-critical/15 text-critical border border-critical/30 font-bold">
+          <span className="px-1.5 py-0.2 rounded-full text-xs bg-critical/15 text-critical border border-critical/30 font-bold">
             {blockedTransactions.filter(b => b.status === 'BLOCKED').length}
           </span>
         </button>
@@ -307,7 +307,7 @@ export const MonitoringView = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-surfaceRaised border-b border-border text-[11px] font-mono text-text-muted uppercase">
+                  <tr className="bg-surfaceRaised border-b border-border text-xs font-mono text-text-muted ">
                     <th className="py-2.5 px-3">Timestamp & Ref</th>
                     <th className="py-2.5 px-3">Originator Account</th>
                     <th className="py-2.5 px-3">Beneficiary Account</th>
@@ -318,12 +318,12 @@ export const MonitoringView = () => {
                     <th className="py-2.5 px-3 text-right">Intervention</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-borderSubtle font-mono text-[11px]">
+                <tbody className="divide-y divide-borderSubtle font-mono text-xs">
                   {filteredLiveTxs.length === 0 ? (
                     <tr>
                       <td colSpan={8} className="py-12 text-center text-xs text-text-muted">
                         <p className="font-semibold text-text">No transactions match your search</p>
-                        <p className="text-[11px] mt-1 text-text-muted">Try clearing the search query to view incoming live stream transactions.</p>
+                        <p className="text-xs mt-1 text-text-muted">Try clearing the search query to view incoming live stream transactions.</p>
                         <button
                           onClick={() => setSearchQuery('')}
                           className="mt-3 px-3 py-1 rounded bg-surface hover:bg-surfaceHover border border-border text-xs text-accent cursor-pointer transition-colors"
@@ -345,17 +345,17 @@ export const MonitoringView = () => {
                         >
                           <td className="py-2.5 px-3 whitespace-nowrap">
                             <span className="font-semibold text-text block">{tx.timestamp || '08:24 UTC'}</span>
-                            <span className="text-[10px] text-accent block">{tx.swiftReference || tx.id}</span>
+                            <span className="text-xs text-accent block">{tx.swiftReference || tx.id}</span>
                           </td>
 
                           <td className="py-2.5 px-3 max-w-[180px]">
                             <span className="font-semibold text-text truncate block">{tx.sourceEntity}</span>
-                            <span className="text-[10px] text-text-muted truncate block">{tx.sourceAccount}</span>
+                            <span className="text-xs text-text-muted truncate block">{tx.sourceAccount}</span>
                           </td>
 
                           <td className="py-2.5 px-3 max-w-[180px]">
                             <span className="font-semibold text-text truncate block">{tx.targetEntity}</span>
-                            <span className="text-[10px] text-text-muted truncate block">{tx.targetAccount}</span>
+                            <span className="text-xs text-text-muted truncate block">{tx.targetAccount}</span>
                           </td>
 
                           <td className="py-2.5 px-3 whitespace-nowrap">
@@ -368,7 +368,7 @@ export const MonitoringView = () => {
                             <span className="font-bold text-text tabular-nums block">
                               ${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                             </span>
-                            <span className="text-[10px] text-text-muted block">
+                            <span className="text-xs text-text-muted block">
                               ৳{Number(tx.amountBdt || tx.amount * 120).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </span>
                           </td>
@@ -378,24 +378,24 @@ export const MonitoringView = () => {
                               }`}>
                               {(tx.riskScore * 100).toFixed(1)}%
                             </span>
-                            <span className="text-[9px] text-text-muted block">
+                            <span className="text-xs text-text-muted block">
                               {tx.tierCode === 1 ? 'High Risk' : tx.tierCode === 2 ? 'Borderline' : 'Standard'}
                             </span>
                           </td>
 
                           <td className="py-2.5 px-3 text-center whitespace-nowrap">
                             {isAlreadyBlocked ? (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-critical/15 text-critical border border-critical/30 animate-pulse">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-critical/15 text-critical border border-critical/30 animate-pulse">
                                 <Lock className="w-2.5 h-2.5" />
                                 BLOCKED
                               </span>
                             ) : tx.tierCode === 1 ? (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-500 border border-amber-500/30">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-amber-500/15 text-amber-500 border border-amber-500/30">
                                 <AlertTriangle className="w-2.5 h-2.5" />
                                 HOLD PENDING
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-cleared/10 text-cleared border border-cleared/20">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-cleared/10 text-cleared border border-cleared/20">
                                 <CheckCircle2 className="w-2.5 h-2.5" />
                                 CLEARED
                               </span>
@@ -427,7 +427,7 @@ export const MonitoringView = () => {
                                     setSelectedBlockToRelease(block);
                                     setIsUnblockModalOpen(true);
                                   }}
-                                  className="px-2 py-1 rounded bg-cleared/10 text-cleared hover:bg-cleared/20 border border-cleared/30 font-semibold text-[10px] cursor-pointer flex items-center gap-1 transition-colors"
+                                  className="px-2 py-1 rounded bg-cleared/10 text-cleared hover:bg-cleared/20 border border-cleared/30 font-semibold text-xs cursor-pointer flex items-center gap-1 transition-colors"
                                   title="Release Administrative Hold"
                                 >
                                   <Unlock className="w-3 h-3" />
@@ -439,7 +439,7 @@ export const MonitoringView = () => {
                                     setSelectedTxToBlock(tx);
                                     setIsBlockModalOpen(true);
                                   }}
-                                  className={`px-2 py-1 rounded font-semibold text-[10px] cursor-pointer flex items-center gap-1 transition-colors ${isHighRisk
+                                  className={`px-2 py-1 rounded font-semibold text-xs cursor-pointer flex items-center gap-1 transition-colors ${isHighRisk
                                       ? 'bg-critical text-white hover:bg-critical/90 shadow-xs'
                                       : 'bg-surface hover:bg-critical/10 text-text hover:text-critical border border-border hover:border-critical/30'
                                     }`}
@@ -480,7 +480,7 @@ export const MonitoringView = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-surfaceRaised border-b border-border text-[11px] font-mono text-text-muted uppercase">
+                  <tr className="bg-surfaceRaised border-b border-border text-xs font-mono text-text-muted ">
                     <th className="py-2.5 px-3">Block Record ID</th>
                     <th className="py-2.5 px-3">Transaction Ref</th>
                     <th className="py-2.5 px-3">Entity / Account</th>
@@ -492,29 +492,29 @@ export const MonitoringView = () => {
                     <th className="py-2.5 px-3 text-right">Release Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-borderSubtle font-mono text-[11px]">
+                <tbody className="divide-y divide-borderSubtle font-mono text-xs">
                   {blockedTransactions.map((item) => (
                     <tr key={item.id} className="hover:bg-surfaceHover transition-colors">
                       <td className="py-2.5 px-3 whitespace-nowrap">
                         <span className="font-bold text-critical block">{item.id}</span>
-                        <span className="text-[10px] text-text-muted block">SHA-256 Anchored</span>
+                        <span className="text-xs text-text-muted block">SHA-256 Anchored</span>
                       </td>
 
                       <td className="py-2.5 px-3 whitespace-nowrap">
                         <span className="font-semibold text-text block">{item.txId}</span>
-                        <span className="text-[10px] text-accent block">{item.ruleTriggered}</span>
+                        <span className="text-xs text-accent block">{item.ruleTriggered}</span>
                       </td>
 
                       <td className="py-2.5 px-3 max-w-[200px]">
                         <span className="font-semibold text-text truncate block">{item.entityName}</span>
-                        <span className="text-[10px] text-text-muted truncate block">{item.account}</span>
+                        <span className="text-xs text-text-muted truncate block">{item.account}</span>
                       </td>
 
                       <td className="py-2.5 px-3 text-right whitespace-nowrap">
                         <span className="font-bold text-critical tabular-nums block">
                           ${Number(item.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })} {item.currency}
                         </span>
-                        <span className="text-[10px] text-text-muted block">
+                        <span className="text-xs text-text-muted block">
                           ৳{(Number(item.amount) * 120).toLocaleString()} BDT
                         </span>
                       </td>
@@ -526,24 +526,24 @@ export const MonitoringView = () => {
                       </td>
 
                       <td className="py-2.5 px-3 max-w-[240px]">
-                        <p className="text-[11px] text-text-2 line-clamp-2 leading-tight">
+                        <p className="text-xs text-text-2 line-clamp-2 leading-tight">
                           {item.reason}
                         </p>
                       </td>
 
-                      <td className="py-2.5 px-3 whitespace-nowrap text-text-muted text-[10px]">
+                      <td className="py-2.5 px-3 whitespace-nowrap text-text-muted text-xs">
                         <div>{item.blockedAt}</div>
                         <div className="text-text-2">{item.blockedBy}</div>
                       </td>
 
                       <td className="py-2.5 px-3 text-center whitespace-nowrap">
                         {item.status === 'BLOCKED' ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-critical/15 text-critical border border-critical/30">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-critical/15 text-critical border border-critical/30">
                             <Lock className="w-2.5 h-2.5" />
                             BLOCKED
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-cleared/15 text-cleared border border-cleared/30">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-cleared/15 text-cleared border border-cleared/30">
                             <Unlock className="w-2.5 h-2.5" />
                             RELEASED
                           </span>
@@ -557,13 +557,13 @@ export const MonitoringView = () => {
                               setSelectedBlockToRelease(item);
                               setIsUnblockModalOpen(true);
                             }}
-                            className="px-2.5 py-1 rounded bg-cleared/15 text-cleared hover:bg-cleared/25 border border-cleared/40 font-semibold text-[11px] cursor-pointer flex items-center gap-1 transition-colors ml-auto"
+                            className="px-2.5 py-1 rounded bg-cleared/15 text-cleared hover:bg-cleared/25 border border-cleared/40 font-semibold text-xs cursor-pointer flex items-center gap-1 transition-colors ml-auto"
                           >
                             <Unlock className="w-3.5 h-3.5" />
                             <span>Unblock / Release</span>
                           </button>
                         ) : (
-                          <span className="text-[10px] text-text-muted">
+                          <span className="text-xs text-text-muted">
                             Released by {item.unblockedBy?.split(' ')[0] || 'CCO'}
                           </span>
                         )}
@@ -582,7 +582,7 @@ export const MonitoringView = () => {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 rounded-lg bg-surfaceRaised border border-border">
             <div>
-              <h3 className="text-xs font-bold text-text uppercase tracking-wider font-mono">
+              <h3 className="text-xs font-bold text-text font-mono">
                 Active Fraud Detection Rules ({activeRulesCount} of {fraudRules.length} Active)
               </h3>
               <p className="text-xs text-text-muted mt-0.5">
@@ -610,7 +610,7 @@ export const MonitoringView = () => {
                       </div>
                       <div>
                         <h4 className="text-xs font-bold text-text">{rule.name}</h4>
-                        <span className="text-[10px] text-text-muted font-mono">{rule.category}</span>
+                        <span className="text-xs text-text-muted font-mono">{rule.category}</span>
                       </div>
                     </div>
 
@@ -631,21 +631,21 @@ export const MonitoringView = () => {
 
                   <div className="mt-3 pt-2.5 border-t border-borderSubtle grid grid-cols-3 gap-2 text-xs font-mono">
                     <div>
-                      <span className="text-[10px] text-text-muted uppercase block">Sensitivity</span>
-                      <span className="font-semibold text-text text-[11px]">{rule.thresholdValue}</span>
+                      <span className="text-xs text-text-muted block">Sensitivity</span>
+                      <span className="font-semibold text-text text-xs">{rule.thresholdValue}</span>
                     </div>
 
                     <div>
-                      <span className="text-[10px] text-text-muted uppercase block">Enforcement</span>
-                      <span className={`font-bold text-[11px] ${rule.action === 'AUTOMATIC_BLOCK' ? 'text-critical' : 'text-amber-500'
+                      <span className="text-xs text-text-muted block">Enforcement</span>
+                      <span className={`font-bold text-xs ${rule.action === 'AUTOMATIC_BLOCK' ? 'text-critical' : 'text-amber-500'
                         }`}>
                         {rule.action.replace('_', ' ')}
                       </span>
                     </div>
 
                     <div className="text-right">
-                      <span className="text-[10px] text-text-muted uppercase block">Triggers (24h)</span>
-                      <span className="font-bold text-text text-[11px]">{rule.triggers24h} Events</span>
+                      <span className="text-xs text-text-muted block">Triggers (24h)</span>
+                      <span className="font-bold text-text text-xs">{rule.triggers24h} Events</span>
                     </div>
                   </div>
                 </Card>
@@ -667,7 +667,7 @@ export const MonitoringView = () => {
 
             <form onSubmit={handleRunSimulation} className="space-y-3 font-mono text-xs">
               <div>
-                <label className="text-[11px] text-text-muted block mb-1">Originating Account Number</label>
+                <label className="text-xs text-text-muted block mb-1">Originating Account Number</label>
                 <input
                   type="text"
                   value={simAccount}
@@ -680,7 +680,7 @@ export const MonitoringView = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] text-text-muted block mb-1">Transfer Amount (USD)</label>
+                  <label className="text-xs text-text-muted block mb-1">Transfer Amount (USD)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -693,7 +693,7 @@ export const MonitoringView = () => {
                 </div>
 
                 <div>
-                  <label className="text-[11px] text-text-muted block mb-1">Clearing Payment Rail</label>
+                  <label className="text-xs text-text-muted block mb-1">Clearing Payment Rail</label>
                   <select
                     value={simRail}
                     onChange={(e) => setSimRail(e.target.value)}
@@ -734,7 +734,7 @@ export const MonitoringView = () => {
                 <div className="space-y-3 mt-3 font-mono text-xs">
                   <div className="p-3 rounded-lg border bg-bg flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-text-muted uppercase block">DECISION VERDICT</span>
+                      <span className="text-xs text-text-muted block">DECISION VERDICT</span>
                       <span className={`text-base font-bold ${simResult.status === 'BLOCKED' ? 'text-critical' : simResult.status === 'REVIEW' ? 'text-review' : 'text-cleared'
                         }`}>
                         {simResult.decision}
@@ -742,7 +742,7 @@ export const MonitoringView = () => {
                     </div>
 
                     <div className="text-right">
-                      <span className="text-[10px] text-text-muted uppercase block">RISK SCORE</span>
+                      <span className="text-xs text-text-muted block">RISK SCORE</span>
                       <span className="text-lg font-bold text-text">
                         {(simResult.riskScore * 100).toFixed(1)}%
                       </span>
@@ -750,7 +750,7 @@ export const MonitoringView = () => {
                   </div>
 
                   <div>
-                    <span className="text-[11px] font-semibold text-text block mb-1.5">
+                    <span className="text-xs font-semibold text-text block mb-1.5">
                       Matched Fraud Detection Rules ({simResult.matchedRules.length}):
                     </span>
                     {simResult.matchedRules.length === 0 ? (
@@ -762,7 +762,7 @@ export const MonitoringView = () => {
                         {simResult.matchedRules.map((m, i) => (
                           <div key={i} className="p-2.5 rounded bg-critical/10 border border-critical/30 text-critical text-xs space-y-1">
                             <div className="font-bold">{m.rule}</div>
-                            <div className="text-text-2 text-[11px]">{m.text}</div>
+                            <div className="text-text-2 text-xs">{m.text}</div>
                           </div>
                         ))}
                       </div>
@@ -776,8 +776,8 @@ export const MonitoringView = () => {
               )}
             </div>
 
-            <p className="text-[11px] text-text-muted mt-4 pt-3 border-t border-borderSubtle font-mono">
-              * Compliant with Federal Reserve SR 11-7 and BFIU Circular 26 & 32 (2026) pre-clearing obligations.
+            <p className="text-xs text-text-muted mt-4 pt-3 border-t border-borderSubtle font-mono">
+              * Compliant with Federal Reserve SR 11-7 and BFIU Circular 26 &amp; 32 (2026) pre-clearing obligations.
             </p>
           </Card>
         </div>
@@ -805,12 +805,12 @@ export const MonitoringView = () => {
             <div className="p-4 space-y-3">
               <div className="p-3 rounded bg-critical/10 border border-critical/30 text-critical space-y-1">
                 <div className="font-bold">Immediate Administrative Hold (§15 BFIU / OFAC Stop)</div>
-                <div className="text-[11px] text-text-2">
+                <div className="text-xs text-text-2">
                   This action intercepts the payment before final settlement. A cryptographic WORM audit hash will be permanently anchored.
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-2.5 rounded bg-bg border border-borderSubtle text-[11px]">
+              <div className="space-y-1.5 p-2.5 rounded bg-bg border border-borderSubtle text-xs">
                 <div className="flex justify-between">
                   <span className="text-text-muted">Transaction ID:</span>
                   <span className="font-bold text-text">{selectedTxToBlock.id}</span>
@@ -830,7 +830,7 @@ export const MonitoringView = () => {
               </div>
 
               <div>
-                <label className="text-[11px] text-text-muted block mb-1">Regulatory Reason for Blocking</label>
+                <label className="text-xs text-text-muted block mb-1">Regulatory Reason for Blocking</label>
                 <select
                   value={blockReason}
                   onChange={(e) => setBlockReason(e.target.value)}
@@ -898,12 +898,12 @@ export const MonitoringView = () => {
             <div className="p-4 space-y-3">
               <div className="p-3 rounded bg-amber-500/10 border border-amber-500/30 text-amber-500 space-y-1">
                 <div className="font-bold">Dual Signatory Verification Required</div>
-                <div className="text-[11px] text-text-2">
+                <div className="text-xs text-text-2">
                   Under statutory Four-Eyes controls, releasing an administrative hold requires Chief Compliance Officer sign-off and permanent cryptographic audit logging.
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-2.5 rounded bg-bg border border-borderSubtle text-[11px]">
+              <div className="space-y-1.5 p-2.5 rounded bg-bg border border-borderSubtle text-xs">
                 <div className="flex justify-between">
                   <span className="text-text-muted">Block ID:</span>
                   <span className="font-bold text-text">{selectedBlockToRelease.id}</span>
@@ -923,7 +923,7 @@ export const MonitoringView = () => {
               </div>
 
               <div>
-                <label className="text-[11px] text-text-muted block mb-1">
+                <label className="text-xs text-text-muted block mb-1">
                   Compliance Justification for Release <span className="text-critical">*</span>
                 </label>
                 <textarea

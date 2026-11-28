@@ -1,57 +1,137 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
   CheckCircle2,
-  Lock,
-  Layers,
-  Zap,
   FileCheck2,
-  Globe,
-  Building2,
-  Shield,
-  X,
+  Layers,
+  Lock,
   Menu,
-  ExternalLink
+  Scale,
+  Shield,
+  Users,
+  X,
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
 import { ConformalLivePreviewWidget } from '@/components/landing/ConformalLivePreviewWidget';
 import { ProductVisualPreview } from '@/components/landing/ProductVisualPreview';
 import { InstitutionalInquiryModal } from '@/components/landing/InstitutionalInquiryModal';
 
+type InquiryType = 'EVALUATION' | 'BANK_POC' | 'SOVEREIGN';
+
+const NAV = [
+  { href: '#how', label: 'How it works' },
+  { href: '#tiering', label: 'Tiering' },
+  { href: '#security', label: 'Security' },
+  { href: '#pricing', label: 'Pricing' },
+];
+
+const METRICS = [
+  { label: 'Macro F1', value: '94.5%', note: 'vs. baselines' },
+  { label: 'Noise reduction', value: '84.2%', note: '7-day replay' },
+  { label: 'Scoring latency', value: '< 200 µs', note: 'scorer only, p50' },
+  { label: 'Conformal coverage', value: '99.04%', note: 'target 99.00%' },
+];
+
+const STEPS = [
+  { icon: Layers, title: 'Score every wire', body: 'A spatio-temporal graph model reads each transaction in the context of the accounts around it.' },
+  { icon: Scale, title: 'Bound the risk', body: 'Conformal prediction gives each alert a calibrated set, so uncertainty is explicit instead of hidden.' },
+  { icon: Users, title: 'Route by certainty', body: 'Sure hits are held, ambiguous ones go to an officer, confident clears flow through.' },
+];
+
+const SECURITY = [
+  { icon: Lock, tone: 'indigo', tKey: 'security_point1', body: 'SHA-256 chain over RFC 8785 JSON with Ed25519 checkpoints; admissibility-ready under Bangladesh Evidence Act §§ 65A–65B & 73A.' },
+  { icon: Users, tone: 'emerald', tKey: 'security_point2', body: 'Maker and checker roles enforced on the server, not just in the UI.' },
+  { icon: Shield, tone: 'amber', tKey: 'security_point3', body: 'Personal data is masked by default. Reveal needs a reason, expires in 60 seconds and is logged.' },
+  { icon: FileCheck2, tone: 'cyan', tKey: 'security_point4', body: 'UNODC goAML v4.2 STR/SAR export with mandatory attachments and MLPA 2012 § 6 anti-tipping-off checks.' },
+] as const;
+
+const TONES: Record<string, string> = {
+  indigo: 'bg-indigo-500/10 text-indigo-300',
+  emerald: 'bg-emerald-500/10 text-emerald-300',
+  amber: 'bg-amber-500/10 text-amber-300',
+  cyan: 'bg-cyan-500/10 text-cyan-300',
+};
+
+const PLANS: {
+  key: string;
+  tKey: 'plan_starter' | 'plan_bank' | 'plan_fiu';
+  price: string;
+  unit: string;
+  features: string[];
+  cta: string;
+  featured?: boolean;
+  href?: string;
+  inquiry?: InquiryType;
+}[] = [
+  {
+    key: 'eval',
+    tKey: 'plan_starter',
+    price: '$0',
+    unit: '30-day evaluation',
+    features: ['Synthetic Bangladesh dataset', 'All 11 modules', 'One-command reproduction'],
+    cta: 'Open the sandbox',
+    href: '/app',
+  },
+  {
+    key: 'bank',
+    tKey: 'plan_bank',
+    price: 'Custom',
+    unit: 'annual SLA',
+    features: ['On-prem Kubernetes / Helm', 'Core banking and SWIFT connectors', 'Tamper-evident audit ledger', '24/7 support'],
+    cta: 'Request a bank PoC',
+    featured: true,
+    inquiry: 'BANK_POC',
+  },
+  {
+    key: 'fiu',
+    tKey: 'plan_fiu',
+    price: 'Sovereign',
+    unit: 'government mandate',
+    features: ['Multi-institution flow graph', 'goAML central gateway', 'HSM-backed keys'],
+    cta: 'Schedule a briefing',
+    inquiry: 'SOVEREIGN',
+  },
+];
+
 export default function EnterpriseLandingPage() {
   const { language, toggleLanguage, t } = useBankingStore();
 
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
-  const [inquiryType, setInquiryType] = useState<'EVALUATION' | 'BANK_POC' | 'SOVEREIGN'>('BANK_POC');
+  const [inquiryType, setInquiryType] = useState<InquiryType>('BANK_POC');
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isCookieDismissed, setIsCookieDismissed] = useState(true);
 
   useEffect(() => {
-    const consent = localStorage.getItem('aml_cookie_consent');
-    if (!consent) {
-      setIsCookieDismissed(false);
+    try {
+      if (!localStorage.getItem('aml_cookie_consent')) setIsCookieDismissed(false);
+    } catch {
+      /* storage unavailable: leave the notice hidden */
     }
   }, []);
 
   const handleAcknowledgeCookie = () => {
-    localStorage.setItem('aml_cookie_consent', 'acknowledged');
+    try {
+      localStorage.setItem('aml_cookie_consent', 'acknowledged');
+    } catch {
+      /* ignore */
+    }
     document.cookie = 'aml_consent=1; path=/; max-age=31536000; SameSite=Strict; Secure';
     setIsCookieDismissed(true);
   };
 
-  const handleOpenInquiry = (type: 'EVALUATION' | 'BANK_POC' | 'SOVEREIGN') => {
+  const handleOpenInquiry = (type: InquiryType) => {
     setInquiryType(type);
     setInquiryModalOpen(true);
     setIsMobileNavOpen(false);
   };
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsMobileNavOpen(false);
         setInquiryModalOpen(false);
@@ -59,581 +139,290 @@ export default function EnterpriseLandingPage() {
         setIsTermsModalOpen(false);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  const btnPrimary =
+    'inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-emerald-400';
+  const btnGhost =
+    'inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-semibold text-slate-100 transition-colors hover:bg-slate-800';
+
   return (
-    <div className="min-h-screen bg-[#080C12] text-slate-100 flex flex-col font-sans selection:bg-emerald-500/25 selection:text-emerald-200">
-      {/* 1. Navigation Header */}
-      <header className="sticky top-0 z-40 w-full h-14 border-b border-[#1E2734] bg-[#080C12]/95 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <div className="w-7 h-7 rounded-md bg-[#111926] border border-[#253142] flex items-center justify-center">
-              <Shield className="w-3.5 h-3.5 text-emerald-400" />
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="font-semibold text-sm tracking-tight text-slate-100">
-                Intelligent-AML
-              </span>
-              <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
-                Platform v3.0
-              </span>
-            </div>
+    <div className="flex min-h-screen flex-col bg-[#070B12] font-sans text-slate-100 selection:bg-emerald-500/30">
+      {/* Header */}
+      <header className="sticky top-0 z-40 h-16 w-full border-b border-slate-800 bg-[#070B12]/90 backdrop-blur-md">
+        <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+          <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="Intelligent-AML home">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+            </span>
+            <span className="text-base font-semibold">Intelligent-AML</span>
+            <span className="hidden rounded border border-slate-800 px-1.5 py-0.5 text-xs font-mono text-slate-400 sm:inline">
+              Platform v3.0
+            </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-6 text-xs text-slate-400">
-            <a href="#problem" className="hover:text-slate-100 transition-colors">
-              Problem
-            </a>
-            <a href="#differentiators" className="hover:text-slate-100 transition-colors">
-              Architecture
-            </a>
-            <a href="#tiering" className="hover:text-slate-100 transition-colors">
-              Conformal Calibration
-            </a>
-            <Link href="/governance" className="text-slate-200 hover:text-emerald-400 font-medium transition-colors">
-              Model Card (SR 11-7)
+          <nav className="hidden items-center gap-7 text-sm text-slate-300 md:flex" aria-label="Primary">
+            {NAV.map((n) => (
+              <a key={n.href} href={n.href} className="whitespace-nowrap transition-colors hover:text-white">
+                {n.label}
+              </a>
+            ))}
+            <Link href="/governance" className="whitespace-nowrap transition-colors hover:text-white">
+              Model card
             </Link>
-            <a href="#security" className="hover:text-slate-100 transition-colors">
-              Security &amp; BFIU
-            </a>
-            <a href="#pricing" className="hover:text-slate-100 transition-colors">
-              Deployment
-            </a>
           </nav>
 
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={toggleLanguage}
-              className="px-2.5 py-1.5 rounded-md text-xs font-mono text-slate-300 hover:text-slate-100 bg-[#0D121A] hover:bg-[#141C27] border border-[#1E2734] transition-colors cursor-pointer flex items-center gap-1.5"
-              title="Toggle English / বাংলা"
+              className="rounded-md px-2.5 py-1.5 text-sm text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
+              aria-label="Switch language"
             >
-              <Globe className="w-3.5 h-3.5 text-slate-400" />
-              <span>{language === 'en' ? 'EN' : 'বাং'}</span>
+              {language === 'en' ? 'বাংলা' : 'English'}
             </button>
-
+            <div className="hidden items-center gap-2 sm:flex">
+              <button type="button" onClick={() => handleOpenInquiry('BANK_POC')} className={`${btnGhost} !py-2`}>
+                Request demo
+              </button>
+              <Link href="/app" className={`${btnPrimary} !py-2`}>
+                Launch app
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
             <button
               type="button"
-              onClick={() => handleOpenInquiry('EVALUATION')}
-              className="hidden sm:inline-flex px-3 py-1.5 rounded-md text-xs font-medium bg-[#0D121A] hover:bg-[#141C27] text-slate-200 border border-[#253142] transition-colors cursor-pointer"
-            >
-              Request Briefing
-            </button>
-
-            <Link
-              href="/app"
-              className="px-3.5 py-1.5 rounded-md text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-colors flex items-center gap-1.5"
-            >
-              <span>{language === 'en' ? 'Open Workspace' : 'ওএস চালু করুন'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-              className="p-1.5 rounded-md bg-[#0D121A] border border-[#1E2734] text-slate-400 hover:text-slate-200 lg:hidden cursor-pointer"
-              aria-label="Toggle navigation menu"
+              onClick={() => setIsMobileNavOpen((v) => !v)}
+              className="rounded-md p-2 text-slate-300 hover:bg-slate-800 md:hidden"
+              aria-label={isMobileNavOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileNavOpen}
             >
-              {isMobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
         {isMobileNavOpen && (
-          <div className="lg:hidden fixed inset-x-0 top-14 bg-[#0D121A] border-b border-[#1E2734] p-5 shadow-2xl space-y-4 z-50">
-            <nav className="flex flex-col space-y-3 text-sm">
-              <a href="#problem" onClick={() => setIsMobileNavOpen(false)} className="text-slate-300 hover:text-emerald-400 py-1">
-                Legacy AML Problem
-              </a>
-              <a href="#differentiators" onClick={() => setIsMobileNavOpen(false)} className="text-slate-300 hover:text-emerald-400 py-1">
-                Architecture (12 Invariants)
-              </a>
-              <a href="#tiering" onClick={() => setIsMobileNavOpen(false)} className="text-slate-300 hover:text-emerald-400 py-1">
-                Conformal Risk Tiering
-              </a>
-              <Link href="/governance" onClick={() => setIsMobileNavOpen(false)} className="text-emerald-400 font-medium py-1">
-                Model Card (SR 11-7 / BFIU)
-              </Link>
-              <a href="#security" onClick={() => setIsMobileNavOpen(false)} className="text-slate-300 hover:text-emerald-400 py-1">
-                Security &amp; Bangladesh BFIU
-              </a>
-              <a href="#pricing" onClick={() => setIsMobileNavOpen(false)} className="text-slate-300 hover:text-emerald-400 py-1">
-                Deployment Options
-              </a>
+          <div className="absolute inset-x-0 top-16 border-b border-slate-800 bg-[#0B0F17] p-4 md:hidden">
+            <nav className="flex flex-col gap-1 text-base" aria-label="Mobile">
+              {[...NAV, { href: '/governance', label: 'Model card' }].map((n) => (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setIsMobileNavOpen(false)}
+                  className="rounded-md px-3 py-2.5 text-slate-200 hover:bg-slate-800"
+                >
+                  {n.label}
+                </a>
+              ))}
             </nav>
-
-            <div className="pt-3 border-t border-[#1E2734] flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => handleOpenInquiry('BANK_POC')}
-                className="w-full py-2.5 rounded-md text-xs font-medium bg-[#141C27] text-slate-200 border border-[#253142] text-center"
-              >
-                Request Bank PoC Brief
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <button type="button" onClick={() => handleOpenInquiry('BANK_POC')} className={btnGhost}>
+                Request demo
               </button>
-              <Link
-                href="/app"
-                onClick={() => setIsMobileNavOpen(false)}
-                className="w-full py-2.5 rounded-md text-xs font-semibold bg-emerald-500 text-slate-950 text-center"
-              >
-                Open Compliance Workspace (/app)
+              <Link href="/app" className={btnPrimary}>
+                Launch app
               </Link>
             </div>
           </div>
         )}
       </header>
 
-      {/* 2. Asymmetric Split Hero with Live Interactive Workspace Preview */}
-      <section className="py-12 lg:py-16 border-b border-[#1E2734]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Left Copy */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-300 bg-[#0D121A] border border-[#1E2734]">
-                <span className="text-emerald-400 font-semibold">C-STGB v3.2</span>
-                <span className="text-slate-600">·</span>
-                <span>BFIU 2026 &amp; SR 11-7 Aligned</span>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-50 leading-[1.12]">
-                {t('landing_headline')}
-              </h1>
-
-              <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-xl">
-                {t('landing_subheadline')}
-              </p>
-
-              <div className="flex flex-wrap items-center gap-3 pt-1">
-                <Link
-                  href="/app"
-                  className="px-5 py-2.5 rounded-md text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-colors inline-flex items-center gap-2"
-                >
-                  <span>Open Banking Workspace</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => handleOpenInquiry('BANK_POC')}
-                  className="px-4 py-2.5 rounded-md text-xs font-medium bg-[#0D121A] hover:bg-[#141C27] text-slate-200 border border-[#253142] transition-colors inline-flex items-center gap-2 cursor-pointer"
-                >
-                  <span>Request Bank PoC Brief</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-                </button>
-              </div>
-
-              {/* Clean Hairline Metrics Bar */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#1E2734]">
-                <div>
-                  <div className="text-xl font-mono font-semibold text-slate-50 tabular-nums">94.5%</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">Replay Macro F1</div>
-                </div>
-                <div>
-                  <div className="text-xl font-mono font-semibold text-emerald-400 tabular-nums">84.2%</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">Noise Reduction</div>
-                </div>
-                <div>
-                  <div className="text-xl font-mono font-semibold text-slate-50 tabular-nums">&lt; 200 µs</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">FastPath P50</div>
-                </div>
-                <div>
-                  <div className="text-xl font-mono font-semibold text-slate-50 tabular-nums">99.04%</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">Coverage (1 - α)</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Interactive Preview */}
-            <div className="lg:col-span-6">
-              <ProductVisualPreview />
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 px-1">
-                <span>
-                  Replay: 94.5% F1 (7d BD synthetic) · 14-dataset corpus: 68.05% Macro F1 (91.42% Elliptic-v1), 0.45 ms P50
-                </span>
-                <Link href="/governance" className="text-emerald-400 hover:text-emerald-300">
-                  Full SR 11-7 Model Card &rarr;
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Problem Ledger Grid */}
-      <section id="problem" className="py-16 border-b border-[#1E2734]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl mb-10">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
-              Compliance Bottlenecks
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-100 tracking-tight">
-              Why threshold-only AML systems overwhelm investigators
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-[#1E2734] border border-[#1E2734] rounded-xl bg-[#0D121A]">
-            <div className="p-6 space-y-2">
-              <span className="text-[11px] font-mono text-rose-400">01 · ALERT FATIGUE</span>
-              <h3 className="text-sm font-semibold text-slate-100">95%+ False Alarm Volume</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Static rule limits bury analysts in routine payroll and supplier settlements, masking genuine layering rings.
-              </p>
-            </div>
-            <div className="p-6 space-y-2">
-              <span className="text-[11px] font-mono text-amber-400">02 · AUDITABILITY</span>
-              <h3 className="text-sm font-semibold text-slate-100">Unexplained ML Scores</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Unattributed black-box models fail Federal Reserve SR 11-7 and Bangladesh Bank model risk inspections.
-              </p>
-            </div>
-            <div className="p-6 space-y-2">
-              <span className="text-[11px] font-mono text-slate-300">03 · TRADE FINANCE</span>
-              <h3 className="text-sm font-semibold text-slate-100">TBML Over-Invoicing</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                SWIFT MT700 documentary credits move without cross-checking ASYCUDA customs tariff benchmarks.
-              </p>
-            </div>
-            <div className="p-6 space-y-2">
-              <span className="text-[11px] font-mono text-emerald-400">04 · REGULATORY FILING</span>
-              <h3 className="text-sm font-semibold text-slate-100">goAML Schema Rejections</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Manual STR drafting breaks schema integrity, drops evidence hashes, and risks anti-tipping-off errors.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Core Technical Architecture */}
-      <section id="differentiators" className="py-16 border-b border-[#1E2734] bg-[#0B0F17]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl mb-10">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400 block mb-2">
-              Architecture
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-100 tracking-tight">
-              Built for sub-millisecond interdiction and regulatory defensibility
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] space-y-4">
-              <div className="flex items-center gap-2.5 text-slate-100">
-                <Layers className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-sm font-semibold">12 Spatio-Temporal Invariants</h3>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Measures physical cash-flow conservation, cycle motifs, fan-in burst intensity, and structuring proximity relative to CTR ceilings.
-              </p>
-              <ul className="space-y-1.5 text-[11px] font-mono text-slate-300 pt-2 border-t border-[#1E2734]">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Edge-gated against camouflage</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>12-D Shapley per-alert attribution</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] space-y-4">
-              <div className="flex items-center gap-2.5 text-slate-100">
-                <Zap className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-sm font-semibold">Inductive Conformal Calibration</h3>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Partitions alerts into rigorous prediction sets rather than arbitrary thresholds under nominal coverage error α.
-              </p>
-              <ul className="space-y-1.5 text-[11px] font-mono text-slate-300 pt-2 border-t border-[#1E2734]">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>99.04% empirical coverage (1 - α = 0.99)</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Missed-illicit risk bounded (FNR ≤ α = 1.00%)</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] space-y-4">
-              <div className="flex items-center gap-2.5 text-slate-100">
-                <Lock className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-sm font-semibold">Tamper-Evident Audit Chain</h3>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Every triage override, freeze, and PII unmasking is SHA-256 chained over RFC 8785 JSON and signed via Ed25519 checkpoints.
-              </p>
-              <ul className="space-y-1.5 text-[11px] font-mono text-slate-300 pt-2 border-t border-[#1E2734]">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Admissibility-ready (Evidence Act §§ 65A–65B &amp; 73A)</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>S3 Object Lock Compliance Mode</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Conformal Tiering & Interactive Calibration Widget */}
-      <section id="tiering" className="py-16 border-b border-[#1E2734]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
-          <div className="max-w-2xl">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
-              Conformal Triage
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-100 tracking-tight">
-              {t('conformal_title')}
-            </h2>
-            <p className="text-sm text-slate-400 mt-2">
-              {t('conformal_desc')}
-            </p>
-          </div>
-
-          <ConformalLivePreviewWidget />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-rose-500/10 text-rose-300 border border-rose-500/30">
-                  Tier 1 Hold
-                </span>
-                <span className="text-[11px] font-mono text-slate-500">&lt; 200 µs</span>
-              </div>
-              <h3 className="text-sm font-semibold text-slate-100">Automated Settlement Freeze</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">{t('tier1_desc')}</p>
-              <div className="text-[11px] font-mono text-slate-400 pt-2 border-t border-[#1E2734] space-y-1">
-                <div>· Watchlist match &ge; 85% / structuring near ৳1M</div>
-                <div>· High-velocity cyclic laundering topology</div>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                  Tier 2 Review
-                </span>
-                <span className="text-[11px] font-mono text-slate-500">Queue</span>
-              </div>
-              <h3 className="text-sm font-semibold text-slate-100">Prioritized Analyst Triage</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">{t('tier2_desc')}</p>
-              <div className="text-[11px] font-mono text-slate-400 pt-2 border-t border-[#1E2734] space-y-1">
-                <div>· 12-Invariant SHAP Waterfall breakdown</div>
-                <div>· Internal non-customer sensitivity calibration</div>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                  Tier 3 Clear
-                </span>
-                <span className="text-[11px] font-mono text-slate-500">Zero Delay</span>
-              </div>
-              <h3 className="text-sm font-semibold text-slate-100">Autonomous Micro-Clearance</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">{t('tier3_desc')}</p>
-              <div className="text-[11px] font-mono text-slate-400 pt-2 border-t border-[#1E2734] space-y-1">
-                <div>· Empirical FNR: 0.76% (within α = 1.00% bound)</div>
-                <div>· 84.2% false alarm volume bypassed cleanly</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Security Posture & BFIU Regulatory Mandate Coverage */}
-      <section id="security" className="py-16 border-b border-[#1E2734] bg-[#0B0F17]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-            <div className="max-w-3xl">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
-                OWASP ASVS Level 2 Aligned Architecture
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-slate-100 tracking-tight">
-                {t('security_title')}
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-400 mt-2">
-                BFIU Master Circular 26 &amp; Circular 24 (TBML), Circular 32 (Sept 2026), Circular Letters 02 &amp; 03 (Feb 2026), Circular Letter 05 (Aug 2026), MLPA 2012 (§§ 6, 25), ATA 2009, and MLPR 2019.
-              </p>
-            </div>
-            <Link href="/governance" className="text-xs font-mono text-emerald-400 hover:text-emerald-300">
-              Inspect BFIU Mapping Matrix &rarr;
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-slate-800/60 px-4 pb-16 pt-20 sm:px-6 sm:pt-24">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(16,185,129,0.14),transparent)]" />
+        <div className="relative mx-auto max-w-4xl text-center">
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-300">
+            C-STGB v3.2 · BFIU 2026 &amp; SR 11-7 aligned
+          </p>
+          <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Eliminate 84% of False Positives with Provable Conformal Risk Guarantees.
+          </h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
+            {t('landing_subheadline')}
+          </p>
+          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link href="/app" className={`${btnPrimary} w-full sm:w-auto`}>
+              Open the live demo
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
+            <button type="button" onClick={() => handleOpenInquiry('BANK_POC')} className={`${btnGhost} w-full sm:w-auto`}>
+              Request a bank PoC
+            </button>
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] flex items-start gap-4">
-              <Lock className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-sm font-semibold text-slate-100 mb-1">{t('security_point1')}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Blocks chain via SHA-256 over RFC 8785 canonical JSON with Ed25519 signatures. Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B &amp; 73A (Officer Certificate).
-                </p>
+        <div className="relative mx-auto mt-14 max-w-5xl">
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-slate-800 bg-slate-800 lg:grid-cols-4">
+            {METRICS.map((m) => (
+              <div key={m.label} className="bg-[#0B1018] p-5">
+                <dt className="text-sm text-slate-400">{m.label}</dt>
+                <dd className="mt-1 text-3xl font-semibold tabular-nums text-white">{m.value}</dd>
+                <p className="mt-1 text-xs text-slate-500">{m.note}</p>
               </div>
-            </div>
+            ))}
+          </dl>
+          <p className="mt-3 text-center text-xs text-slate-500">
+            Measured on synthetic Bangladesh banking data (7-day replay; 14-dataset corpus: 68.05% Macro F1, 91.42% Elliptic-v1, 0.45 ms P50), not live customer traffic.{' '}
+            <Link href="/governance" className="text-slate-300 underline underline-offset-2 hover:text-white">
+              See the model card
+            </Link>
+          </p>
+        </div>
+      </section>
 
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] flex items-start gap-4">
-              <Building2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-sm font-semibold text-slate-100 mb-1">{t('security_point2')}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Enforced server-side via JWT/OIDC RBAC: Analysts act as Makers; Supervisors and MLROs act as independent Checkers for freezes, whitelists, and SAR release.
-                </p>
-              </div>
-            </div>
+      {/* Product preview */}
+      <section className="border-b border-slate-800/60 px-4 py-16 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto mb-10 max-w-2xl text-center">
+            <h2 className="text-2xl font-semibold text-white sm:text-3xl">Eleven modules, one workflow</h2>
+            <p className="mt-3 text-slate-400">From alert triage to the filed report, in a single workspace.</p>
+          </div>
+          <ProductVisualPreview />
+        </div>
+      </section>
 
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] flex items-start gap-4">
-              <Shield className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-sm font-semibold text-slate-100 mb-1">{t('security_point3')}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Account numbers, NIDs, and entity names remain masked server-side until an officer logs a substantiated justification (rate-limited, 60s expiry).
-                </p>
+      {/* How it works */}
+      <section id="how" className="scroll-mt-20 border-b border-slate-800/60 px-4 py-16 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="mx-auto mb-10 max-w-2xl text-center text-2xl font-semibold text-white sm:text-3xl">How it works</h2>
+          <div className="grid gap-5 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <div key={s.title} className="rounded-2xl border border-slate-800 bg-[#0B1018] p-6">
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-300">
+                    <s.icon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span className="text-sm text-slate-500">Step {i + 1}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-white">{s.title}</h3>
+                <p className="mt-2 leading-relaxed text-slate-400">{s.body}</p>
               </div>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] flex items-start gap-4">
-              <FileCheck2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-sm font-semibold text-slate-100 mb-1">{t('security_point4')}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Generates UNODC goAML v4.2 XML with mandatory attachment checksums and active anti-tipping-off phrase blocking under MLPA 2012 § 6.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 7. Institutional Deployment Options */}
-      <section id="pricing" className="py-16 border-b border-[#1E2734]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl mb-10">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
-              Deployment Topology
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-100 tracking-tight">
-              {t('pricing_title')}
-            </h2>
-            <p className="text-sm text-slate-400 mt-2">
-              Run in an isolated evaluation sandbox, private bank VPC, or air-gapped national sovereign cloud.
+      {/* Conformal tiering */}
+      <section id="tiering" className="scroll-mt-20 border-b border-slate-800/60 px-4 py-16 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto mb-10 max-w-2xl text-center">
+            <h2 className="text-2xl font-semibold text-white sm:text-3xl">{t('conformal_title')}</h2>
+            <p className="mt-3 text-slate-400">
+              {t('conformal_desc')} Empirical missed-illicit rate (FNR): 0.76% (within α = 1.00% conformal bound).
             </p>
           </div>
+          <ConformalLivePreviewWidget />
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] flex flex-col justify-between space-y-6">
-              <div>
-                <span className="text-[11px] font-mono text-slate-400 uppercase">Sandbox</span>
-                <h3 className="text-lg font-semibold text-slate-100 mt-1 mb-2">{t('plan_starter')}</h3>
-                <p className="text-xs text-slate-400 mb-5">
-                  For bank model risk validation, algorithmic auditing, and compliance engineering proofs of concept.
-                </p>
-                <div className="text-2xl font-mono font-semibold text-slate-100 mb-5">
-                  $0 <span className="text-xs font-normal text-slate-400">/ Evaluation</span>
+      {/* Security */}
+      <section id="security" className="scroll-mt-20 border-b border-slate-800/60 px-4 py-16 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto mb-10 max-w-2xl text-center">
+            <p className="mb-3 inline-block rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-sm text-indigo-300">
+              OWASP ASVS Level 2 aligned architecture
+            </p>
+            <h2 className="text-2xl font-semibold text-white sm:text-3xl">{t('security_title')}</h2>
+            <p className="mt-3 text-sm text-slate-400">
+              BFIU Master Circular 26 &amp; Circular 24 (TBML), Circular 32 (Sept 2026), Circular Letters 02 &amp; 03 (Feb 2026), Circular Letter 05 (Aug 2026), MLPA 2012 (§§ 6, 25), ATA 2009, and MLPR 2019.
+            </p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2">
+            {SECURITY.map((s) => (
+              <div key={s.tKey} className="flex items-start gap-4 rounded-2xl border border-slate-800 bg-[#0B1018] p-6">
+                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${TONES[s.tone]}`}>
+                  <s.icon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 className="font-semibold text-white">{t(s.tKey)}</h3>
+                  <p className="mt-1 leading-relaxed text-slate-400">{s.body}</p>
                 </div>
-                <ul className="space-y-2 text-xs text-slate-300 font-mono">
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Synthetic Bangladesh banking corpus</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Full 11-module compliance desk</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Single-command benchmark evals</li>
-                </ul>
               </div>
-              <Link
-                href="/app"
-                className="w-full py-2.5 rounded-md text-xs font-medium bg-[#141C27] hover:bg-[#1C2736] text-slate-200 text-center border border-[#253142] transition-colors block"
-              >
-                Open Sandbox Workspace
-              </Link>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-emerald-500/40 flex flex-col justify-between space-y-6">
-              <div>
-                <span className="text-[11px] font-mono text-emerald-400 uppercase">Production Bank</span>
-                <h3 className="text-lg font-semibold text-slate-100 mt-1 mb-2">{t('plan_bank')}</h3>
-                <p className="text-xs text-slate-400 mb-5">
-                  On-premises deployment for scheduled commercial banks, NBFIs, and mobile financial service operators.
-                </p>
-                <div className="text-2xl font-mono font-semibold text-emerald-400 mb-5">
-                  Enterprise <span className="text-xs font-normal text-slate-400">/ Annual SLA</span>
-                </div>
-                <ul className="space-y-2 text-xs text-slate-300 font-mono">
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Air-gapped Kubernetes &amp; Helm charts</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />SWIFT MT700, ISO 20022 &amp; RTGS feeds</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Ed25519 checkpoints &amp; S3 Object Lock</li>
-                </ul>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleOpenInquiry('BANK_POC')}
-                className="w-full py-2.5 rounded-md text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-center transition-colors cursor-pointer"
-              >
-                Request Bank PoC &amp; Architecture Brief
-              </button>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0D121A] border border-[#1E2734] flex flex-col justify-between space-y-6">
-              <div>
-                <span className="text-[11px] font-mono text-slate-400 uppercase">Regulator / FIU</span>
-                <h3 className="text-lg font-semibold text-slate-100 mt-1 mb-2">{t('plan_fiu')}</h3>
-                <p className="text-xs text-slate-400 mb-5">
-                  Cross-institution macro-prudential graph intelligence for Central Banks and Financial Intelligence Units.
-                </p>
-                <div className="text-2xl font-mono font-semibold text-slate-100 mb-5">
-                  Sovereign <span className="text-xs font-normal text-slate-400">/ Mandate</span>
-                </div>
-                <ul className="space-y-2 text-xs text-slate-300 font-mono">
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Multi-bank federated entity resolution</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Direct UNODC goAML v4.2 gateway</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Hardware Security Module (HSM) keys</li>
-                </ul>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleOpenInquiry('SOVEREIGN')}
-                className="w-full py-2.5 rounded-md text-xs font-medium bg-[#141C27] hover:bg-[#1C2736] text-slate-200 text-center border border-[#253142] transition-colors cursor-pointer"
-              >
-                Schedule Sovereign Briefing
-              </button>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 8. Footer */}
-      <footer className="py-10 bg-[#080C12] text-xs font-mono text-slate-400">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5">
-              <Shield className="w-4 h-4 text-emerald-400" />
-              <span className="font-semibold text-slate-200">Intelligent-AML Platform v3.0</span>
-              <span className="text-slate-600">|</span>
-              <span className="text-slate-500">C-STGB v3.2 Engine</span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-6 text-[11px]">
-              <button type="button" onClick={() => setIsPrivacyModalOpen(true)} className="hover:text-slate-200 cursor-pointer">
-                Privacy Policy
-              </button>
-              <button type="button" onClick={() => setIsTermsModalOpen(true)} className="hover:text-slate-200 cursor-pointer">
-                Terms of Service
-              </button>
-              <Link href="/governance" className="hover:text-slate-200">
-                Model Card (SR 11-7)
-              </Link>
-              <Link href="/app" className="text-emerald-400 hover:text-emerald-300 font-semibold">
-                Open Workspace &rarr;
-              </Link>
-            </div>
+      {/* Pricing */}
+      <section id="pricing" className="scroll-mt-20 border-b border-slate-800/60 px-4 py-16 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto mb-10 max-w-2xl text-center">
+            <h2 className="text-2xl font-semibold text-white sm:text-3xl">{t('pricing_title')}</h2>
+            <p className="mt-3 text-slate-400">Run it in a sovereign cloud or fully inside your own data center.</p>
           </div>
-
-          <div className="pt-5 border-t border-[#1E2734] text-[11px] text-slate-500 leading-relaxed">
-            Research prototype. Not legal advice. Not a certified regulated product. Developed for institutional AML/CFT evaluation and academic verification under BFIU Master Circular 26 and Federal Reserve SR 11-7 governance practices.
+          <div className="grid gap-6 md:grid-cols-3">
+            {PLANS.map((p) => (
+              <div
+                key={p.key}
+                className={`relative flex flex-col rounded-2xl bg-[#0B1018] p-6 ${
+                  p.featured ? 'border-2 border-emerald-500/50' : 'border border-slate-800'
+                }`}
+              >
+                {p.featured && (
+                  <span className="absolute -top-3 left-6 rounded-full bg-emerald-500 px-3 py-0.5 text-xs font-semibold text-slate-950">
+                    Most popular
+                  </span>
+                )}
+                <h3 className="text-lg font-semibold text-white">{t(p.tKey)}</h3>
+                <p className="mt-4 text-3xl font-semibold text-white">
+                  {p.price} <span className="text-sm font-normal text-slate-400">/ {p.unit}</span>
+                </p>
+                <ul className="mt-6 flex-1 space-y-3 text-slate-300">
+                  {p.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden="true" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                {p.href ? (
+                  <Link href={p.href} className={`${btnGhost} mt-8`}>
+                    {p.cta}
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleOpenInquiry(p.inquiry as InquiryType)}
+                    className={`${p.featured ? btnPrimary : btnGhost} mt-8`}
+                  >
+                    {p.cta}
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-[#070B12] px-4 py-10 text-sm text-slate-400 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              <span className="font-semibold text-slate-200">Intelligent-AML Platform v3.0 · C-STGB v3.2 Engine</span>
+            </div>
+            <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2" aria-label="Footer">
+              <button type="button" onClick={() => setIsPrivacyModalOpen(true)} className="hover:text-white">
+                Privacy
+              </button>
+              <button type="button" onClick={() => setIsTermsModalOpen(true)} className="hover:text-white">
+                Terms
+              </button>
+              <Link href="/governance" className="hover:text-white">
+                Model card
+              </Link>
+              <Link href="/app" className="font-medium text-emerald-400 hover:text-emerald-300">
+                Open the app &rarr;
+              </Link>
+            </nav>
+          </div>
+          <p className="mt-8 border-t border-slate-800 pt-6 text-center text-xs text-slate-500 md:text-left">
+            &copy; 2026 Intelligent-AML. Research prototype. Not legal advice. Not a certified regulated product.
+          </p>
         </div>
       </footer>
 
@@ -677,26 +466,26 @@ export default function EnterpriseLandingPage() {
         </div>
       )}
 
+      {/* 12. Cookie notice (strictly necessary cookies only) */}
       {!isCookieDismissed && (
-        <div role="region" aria-label="Cookie consent banner" className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-40 p-4 rounded-xl bg-[#0D121A] border border-[#253142] shadow-2xl text-slate-200">
-          <div className="flex items-start justify-between gap-3 mb-2">
-            <span className="text-xs font-mono font-semibold text-slate-100 flex items-center gap-2">
-              <Lock className="w-3.5 h-3.5 text-emerald-400" />
-              Essential Session Cookies
-            </span>
-            <button type="button" onClick={handleAcknowledgeCookie} className="text-slate-400 hover:text-slate-200" aria-label="Dismiss cookie notice">
-              <X className="w-4 h-4" />
+        <div
+          role="region"
+          aria-label="Cookie notice"
+          className="fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm z-40 rounded-xl border border-slate-700 bg-slate-900 p-4 shadow-2xl"
+        >
+          <p className="text-sm text-slate-300">
+            We only use cookies needed to keep you signed in. No ads, no tracking.{' '}
+            <button type="button" onClick={() => setIsPrivacyModalOpen(true)} className="text-emerald-400 underline underline-offset-2 hover:text-emerald-300">
+              Details
             </button>
-          </div>
-          <p className="text-[11px] text-slate-400 leading-relaxed mb-3">
-            Uses strictly necessary local session storage for role state and verification settings. No third-party tracking.
           </p>
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#1E2734]">
-            <button type="button" onClick={() => setIsPrivacyModalOpen(true)} className="px-2.5 py-1 rounded text-xs font-mono text-slate-300 hover:text-slate-100 cursor-pointer">
-              Privacy Policy
-            </button>
-            <button type="button" onClick={handleAcknowledgeCookie} className="px-3 py-1 rounded text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 cursor-pointer">
-              Acknowledge
+          <div className="mt-3 flex justify-end">
+            <button
+              type="button"
+              onClick={handleAcknowledgeCookie}
+              className="rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-semibold text-slate-950 hover:bg-emerald-400"
+            >
+              Got it
             </button>
           </div>
         </div>

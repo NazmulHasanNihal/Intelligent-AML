@@ -333,7 +333,7 @@ export const AlertTriageQueue = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-2.5">
         <div className="skeuo-card p-2.5 sm:p-3 flex items-center justify-between">
           <div className="min-w-0 pr-1">
-            <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block uppercase truncate">TOTAL PROCESSED VOLUME</span>
+            <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block truncate">TOTAL PROCESSED VOLUME</span>
             <span className="text-base sm:text-lg xl:text-xl font-bold text-[var(--text-primary)] font-mono block truncate">{sharedStats?.processed?.toLocaleString() || '148,312'} tx</span>
           </div>
           <div className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-lg bg-gradient-to-b from-[#257843] to-[#144726] border border-[#113C21] flex items-center justify-center text-white shadow-[var(--skeuo-btn)]">
@@ -343,7 +343,7 @@ export const AlertTriageQueue = ({
 
         <div className="skeuo-card p-2.5 sm:p-3 flex items-center justify-between border-rose-900/30">
           <div className="min-w-0 pr-1">
-            <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block uppercase truncate">TIER 1 QUARANTINED</span>
+            <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block truncate">TIER 1 QUARANTINED</span>
             <span className="text-base sm:text-lg xl:text-xl font-bold text-rose-600 dark:text-rose-400 font-mono block truncate">{sharedStats?.quarantined?.toLocaleString() || '1,280'} tx</span>
           </div>
           <div className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-lg bg-rose-500/10 dark:bg-rose-950/40 border border-rose-500/30 flex items-center justify-center text-rose-600 dark:text-rose-400 shadow-[var(--skeuo-btn)]">
@@ -353,7 +353,7 @@ export const AlertTriageQueue = ({
 
         <div className="skeuo-card p-2.5 sm:p-3 flex items-center justify-between border-amber-500/40">
           <div className="min-w-0 pr-1">
-            <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block uppercase truncate">TIER 2 REVIEW QUEUE</span>
+            <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block truncate">TIER 2 REVIEW QUEUE</span>
             <span className="text-base sm:text-lg xl:text-xl font-bold text-amber-700 dark:text-amber-300 font-mono block truncate">{sharedStats?.reviewQueue?.toLocaleString() || '748'} tx</span>
           </div>
           <div className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-lg bg-amber-500/10 dark:bg-amber-950/40 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-300 shadow-[var(--skeuo-btn)]">
@@ -363,7 +363,7 @@ export const AlertTriageQueue = ({
 
         <div className="skeuo-card p-2.5 sm:p-3 flex items-center justify-between">
           <div className="min-w-0 pr-1">
-            <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block uppercase truncate">TIER 3 AUTO-CLEARED (&gt;98.6%)</span>
+            <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block truncate">TIER 3 AUTO-CLEARED (&gt;98.6%)</span>
             <span className="text-base sm:text-lg xl:text-xl font-bold text-[var(--accent-primary)] font-mono block truncate">{sharedStats?.cleared?.toLocaleString() || '146,284'} tx</span>
           </div>
           <div className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-lg bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center text-[var(--accent-primary)] shadow-[var(--skeuo-btn)]">
@@ -383,7 +383,7 @@ export const AlertTriageQueue = ({
             <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)] overflow-x-auto w-full sm:w-auto shadow-inner">
               <button
                 onClick={() => setActiveTierFilter('ALL')}
-                className={`px-2 sm:px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
                   activeTierFilter === 'ALL' ? 'bg-gradient-to-b from-[#257843] to-[#174E2B] text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -391,7 +391,7 @@ export const AlertTriageQueue = ({
               </button>
               <button
                 onClick={() => setActiveTierFilter('TIER_1_QUARANTINE')}
-                className={`px-2 sm:px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
                   activeTierFilter === 'TIER_1_QUARANTINE' ? 'bg-gradient-to-b from-rose-600 to-rose-800 text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -399,7 +399,7 @@ export const AlertTriageQueue = ({
               </button>
               <button
                 onClick={() => setActiveTierFilter('TIER_2_REVIEW_QUEUE')}
-                className={`px-2 sm:px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
                   activeTierFilter === 'TIER_2_REVIEW_QUEUE' ? 'bg-gradient-to-b from-amber-600 to-amber-800 text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -434,7 +434,7 @@ export const AlertTriageQueue = ({
                   link.click();
                   document.body.removeChild(link);
                 }}
-                className="skeuo-btn skeuo-btn-secondary px-2.5 py-1 text-[11px] font-bold flex items-center gap-1.5 shrink-0 cursor-pointer"
+                className="skeuo-btn skeuo-btn-secondary px-2.5 py-1 text-xs font-bold flex items-center gap-1.5 shrink-0 cursor-pointer"
                 title="Export current filtered queue to CSV"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -443,7 +443,7 @@ export const AlertTriageQueue = ({
 
               <button
                 onClick={() => setIsBatchModalOpen(true)}
-                className="skeuo-btn skeuo-btn-primary px-2.5 py-1 text-[11px] font-bold flex items-center gap-1.5 shrink-0 cursor-pointer"
+                className="skeuo-btn skeuo-btn-primary px-2.5 py-1 text-xs font-bold flex items-center gap-1.5 shrink-0 cursor-pointer"
                 title="Upload CSV or test pre-bundled batch datasets"
               >
                 <UploadCloud className="w-3.5 h-3.5" />
@@ -457,7 +457,7 @@ export const AlertTriageQueue = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Filter transactions..."
-                  className="w-full pl-8 pr-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-card)] focus:border-[var(--accent-primary)] text-[11px] text-[var(--text-primary)] placeholder-[var(--text-muted)] shadow-inner outline-none"
+                  className="w-full pl-8 pr-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-card)] focus:border-[var(--accent-primary)] text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] shadow-inner outline-none"
                 />
               </div>
             </div>
@@ -465,7 +465,7 @@ export const AlertTriageQueue = ({
 
           {/* Batch Feedback Notification */}
           {batchFeedback && (
-            <div className="p-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-[11px] font-mono flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-mono flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
               <span>{batchFeedback}</span>
             </div>
@@ -473,7 +473,7 @@ export const AlertTriageQueue = ({
 
           {/* Batch Operations Bar (Floats/renders when items selected) */}
           {selectedTxIds.size > 0 && (
-            <div className="p-2 sm:p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--accent-primary)]/40 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono shadow-md animate-fadeIn">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--accent-primary)]/40 flex flex-wrap items-center justify-between gap-2 text-xs font-mono shadow-md animate-fadeIn">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-ping" />
                 <span className="font-bold text-[var(--text-primary)]">
@@ -483,28 +483,28 @@ export const AlertTriageQueue = ({
               <div className="flex flex-wrap items-center gap-1.5">
                 <button
                   onClick={handleBatchQuarantine}
-                  className="skeuo-btn skeuo-btn-danger px-2.5 py-1 text-[10px] font-bold flex items-center gap-1"
+                  className="skeuo-btn skeuo-btn-danger px-2.5 py-1 text-xs font-bold flex items-center gap-1"
                 >
                   <Lock className="w-3 h-3" />
                   <span>Batch Quarantine</span>
                 </button>
                 <button
                   onClick={handleBatchRFI}
-                  className="skeuo-btn skeuo-btn-primary px-2.5 py-1 text-[10px] font-bold flex items-center gap-1"
+                  className="skeuo-btn skeuo-btn-primary px-2.5 py-1 text-xs font-bold flex items-center gap-1"
                 >
                   <Mail className="w-3 h-3" />
                   <span>Dispatch RFI</span>
                 </button>
                 <button
                   onClick={handleBatchDismiss}
-                  className="skeuo-btn skeuo-btn-secondary px-2.5 py-1 text-[10px] font-bold flex items-center gap-1"
+                  className="skeuo-btn skeuo-btn-secondary px-2.5 py-1 text-xs font-bold flex items-center gap-1"
                 >
                   <CheckCircle2 className="w-3 h-3 text-[var(--accent-primary)]" />
                   <span>Dismiss Selected</span>
                 </button>
                 <button
                   onClick={() => setSelectedTxIds(new Set())}
-                  className="skeuo-btn px-2 py-1 text-[10px] text-[var(--text-muted)]"
+                  className="skeuo-btn px-2 py-1 text-xs text-[var(--text-muted)]"
                 >
                   Clear
                 </button>
@@ -514,8 +514,8 @@ export const AlertTriageQueue = ({
 
           {/* Table Container in Recessed Well */}
           <div className="overflow-x-auto max-h-[380px] sm:max-h-[440px] overflow-y-auto rounded-xl skeuo-well">
-            <table className="w-full text-left text-[11px] font-sans">
-              <thead className="text-[9px] sm:text-[10px] font-mono text-[var(--text-muted)] uppercase bg-[var(--bg-card-elevated)] sticky top-0 z-10 border-b border-[var(--border-subtle)]">
+            <table className="w-full text-left text-xs font-sans">
+              <thead className="text-xs sm:text-xs font-mono text-[var(--text-muted)] bg-[var(--bg-card-elevated)] sticky top-0 z-10 border-b border-[var(--border-subtle)]">
                 <tr>
                   <th className="py-2 px-2.5 w-7 text-center">
                     <input 
@@ -561,25 +561,25 @@ export const AlertTriageQueue = ({
                       </td>
                       <td className="py-1.5 px-2.5 font-mono font-bold text-[var(--text-primary)]">
                         <div>{tx.id}</div>
-                        <div className="text-[9px] text-[var(--text-muted)] font-normal">{tx.timestamp}</div>
+                        <div className="text-xs text-[var(--text-muted)] font-normal">{tx.timestamp}</div>
                       </td>
                       <td className="py-1.5 px-2.5">
                         <div className="font-semibold text-[var(--text-primary)] truncate max-w-[130px]">{tx.holderName}</div>
-                        <div className="text-[9px] text-[var(--text-secondary)] font-mono truncate max-w-[120px]">{tx.accountNumber}</div>
+                        <div className="text-xs text-[var(--text-secondary)] font-mono truncate max-w-[120px]">{tx.accountNumber}</div>
                       </td>
                       <td className="py-1.5 px-2.5 font-mono font-bold text-[var(--text-primary)]">
                         ${tx.amount.toLocaleString()}
                       </td>
-                      <td className="py-1.5 px-2.5 text-[10px] text-[var(--text-secondary)]">
+                      <td className="py-1.5 px-2.5 text-xs text-[var(--text-secondary)]">
                         <div>{tx.rail.split(' ')[0]}</div>
-                        <div className="text-[9px] text-[var(--text-muted)]">{tx.jurisdiction.split(' ')[0]}</div>
+                        <div className="text-xs text-[var(--text-muted)]">{tx.jurisdiction.split(' ')[0]}</div>
                       </td>
-                      <td className="py-1.5 px-2.5 font-mono text-[10px]">
+                      <td className="py-1.5 px-2.5 font-mono text-xs">
                         <span className="text-[var(--text-secondary)] font-semibold truncate block max-w-[100px]">
                           {tx.assignee || 'Unassigned'}
                         </span>
                       </td>
-                      <td className="py-1.5 px-2.5 font-mono text-[9px]">
+                      <td className="py-1.5 px-2.5 font-mono text-xs">
                         <span className={`px-1.5 py-0.5 rounded font-bold ${
                           tx.status === 'QUARANTINED' ? 'bg-rose-500/20 text-rose-500 border border-rose-500/30' :
                           tx.status === 'UNDER_REVIEW' ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30' :
@@ -589,7 +589,7 @@ export const AlertTriageQueue = ({
                           {tx.status}
                         </span>
                       </td>
-                      <td className="py-1.5 px-2.5 font-mono text-[9px]">
+                      <td className="py-1.5 px-2.5 font-mono text-xs">
                         <span className={`px-1.5 py-0.5 rounded font-semibold inline-flex items-center gap-1 ${
                           tx.slaUrgent ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 animate-pulse' :
                           tx.slaDeadline?.includes('Auto-Cleared') ? 'text-[var(--text-muted)]' :
@@ -600,7 +600,7 @@ export const AlertTriageQueue = ({
                         </span>
                       </td>
                       <td className="py-1.5 px-2.5 font-mono">
-                        <span className={`text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                        <span className={`text-xs sm:text-xs px-2 py-0.5 rounded-full font-bold ${
                           isQuarantine ? 'badge-tier1' : isReview ? 'badge-tier2' : 'badge-tier3'
                         }`}>
                           {(tx.risk * 100).toFixed(0)}% • {tx.gammaSet}
@@ -617,7 +617,7 @@ export const AlertTriageQueue = ({
           </div>
 
           {/* Institutional Pagination & 24h Sample Disclosure */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] text-[10px] font-mono text-[var(--text-muted)]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-muted)]">
             <div className="flex items-center gap-1.5">
               <span>Showing <strong>1–{filteredTxs.length}</strong> of <strong>2,028</strong> flagged alerts</span>
               <span className="text-[var(--border-subtle)]">•</span>
@@ -649,11 +649,11 @@ export const AlertTriageQueue = ({
         <div className="xl:col-span-4 skeuo-card p-2.5 sm:p-3 space-y-2.5 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
-              <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                 <Eye className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Forensic Inspector</span>
               </span>
-              <span className={`text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded-full font-bold border ${
+              <span className={`text-xs sm:text-xs font-mono px-2 py-0.5 rounded-full font-bold border ${
                 selectedTx?.tier === 'TIER_1_QUARANTINE' ? 'badge-tier1' : 'badge-tier2'
               }`}>
                 {selectedTx?.gammaLabel}
@@ -662,52 +662,52 @@ export const AlertTriageQueue = ({
 
             {/* Plain-English Why Flagged Card */}
             <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold flex items-center gap-1">
+              <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-bold flex items-center gap-1">
                 <AlertTriangle className="w-3 h-3" />
                 <span>Plain-English Triage Rationale</span>
               </span>
-              <p className="text-[11px] text-[var(--text-primary)] leading-relaxed">
+              <p className="text-xs text-[var(--text-primary)] leading-relaxed">
                 {selectedTx?.whyFlagged || 'Account exhibited abnormal transaction velocity and cyclical routing differing from customer baseline.'}
               </p>
             </div>
 
             {/* Account Card Details */}
-            <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1.5 text-[11px] shadow-inner">
+            <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1.5 text-xs shadow-inner">
               <div>
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">SUBJECT ACCOUNT</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block">SUBJECT ACCOUNT</span>
                 <span className="font-mono text-[var(--accent-primary)] font-bold text-xs truncate block">{selectedTx?.accountNumber}</span>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
                 <div>
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">NAME</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block">NAME</span>
                   <span className="text-[var(--text-primary)] font-semibold truncate block">{selectedTx?.holderName}</span>
                 </div>
                 <div>
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">AMOUNT</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block">AMOUNT</span>
                   <span className="text-[var(--text-primary)] font-bold font-mono text-xs">${selectedTx?.amount?.toLocaleString()}</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
                 <div>
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">INSTITUTION</span>
-                  <span className="text-[var(--text-secondary)] text-[10px] truncate block">{selectedTx?.institution}</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block">INSTITUTION</span>
+                  <span className="text-[var(--text-secondary)] text-xs truncate block">{selectedTx?.institution}</span>
                 </div>
                 <div>
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">SLA DEADLINE</span>
-                  <span className="text-amber-700 dark:text-amber-300 font-mono text-[10px] truncate block font-bold">{selectedTx?.slaDeadline}</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block">SLA DEADLINE</span>
+                  <span className="text-amber-700 dark:text-amber-300 font-mono text-xs truncate block font-bold">{selectedTx?.slaDeadline}</span>
                 </div>
               </div>
               <div>
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">TYPOLOGY PATTERN</span>
-                <span className="text-amber-700 dark:text-amber-300 font-semibold text-[10px] block">{selectedTx?.pattern}</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block">TYPOLOGY PATTERN</span>
+                <span className="text-amber-700 dark:text-amber-300 font-semibold text-xs block">{selectedTx?.pattern}</span>
               </div>
             </div>
 
             {/* SHAP Explainable Feature Drivers */}
-            <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1.5 text-[11px] shadow-inner">
+            <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1.5 text-xs shadow-inner">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase font-bold">TOP RISK DRIVERS (SHAP)</span>
-                <span className="text-[9px] font-mono text-[var(--accent-primary)] font-semibold">Local Attribution</span>
+                <span className="text-xs font-mono text-[var(--text-muted)] font-bold">TOP RISK DRIVERS (SHAP)</span>
+                <span className="text-xs font-mono text-[var(--accent-primary)] font-semibold">Local Attribution</span>
               </div>
               <div className="space-y-1">
                 {(selectedTx?.featureDrivers || [
@@ -716,7 +716,7 @@ export const AlertTriageQueue = ({
                   { name: 'Cross-Border Hop', impact: 18 }
                 ]).map((fd, idx) => (
                   <div key={idx} className="space-y-0.5">
-                    <div className="flex justify-between text-[10px] font-mono">
+                    <div className="flex justify-between text-xs font-mono">
                       <span className="text-[var(--text-secondary)]">{fd.name}</span>
                       <span className="text-rose-500 font-bold">+{fd.impact}%</span>
                     </div>
@@ -732,13 +732,13 @@ export const AlertTriageQueue = ({
             </div>
 
             {/* Conformal Prediction Set Analysis */}
-            <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-[11px] shadow-inner">
-              <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-mono block">RISK DECISION TIER</span>
+            <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-xs shadow-inner">
+              <span className="text-xs sm:text-xs text-[var(--text-muted)] font-mono block">RISK DECISION TIER</span>
               <div className="flex items-center justify-between">
                 <span className="text-[var(--text-primary)] font-mono font-bold text-xs">{selectedTx?.gammaSet} ({selectedTx?.gammaLabel})</span>
-                <span className="text-[9px] sm:text-[10px] font-mono text-[var(--accent-primary)] font-semibold">Coverage &ge; 99.0%</span>
+                <span className="text-xs sm:text-xs font-mono text-[var(--accent-primary)] font-semibold">Coverage &ge; 99.0%</span>
               </div>
-              <p className="text-[10px] text-[var(--text-secondary)] pt-0.5">
+              <p className="text-xs text-[var(--text-secondary)] pt-0.5">
                 Distribution-free finite validity guaranteed under SR 11-7 model calibration standards.
               </p>
             </div>
@@ -756,7 +756,7 @@ export const AlertTriageQueue = ({
                   tier: selectedTx?.tier,
                   balance: `$${(selectedTx?.amount * 12.4).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
                 })}
-                className="flex items-center justify-center gap-1 py-1.5 rounded-lg skeuo-btn text-[10px] font-semibold"
+                className="flex items-center justify-center gap-1 py-1.5 rounded-lg skeuo-btn text-xs font-semibold"
               >
                 <UserCheck className="w-3 h-3 text-[var(--accent-primary)]" />
                 <span>KYC Profile</span>
@@ -764,7 +764,7 @@ export const AlertTriageQueue = ({
 
               <button
                 onClick={() => onOpenNoticeModal && onOpenNoticeModal(selectedTx)}
-                className="flex items-center justify-center gap-1 py-1.5 rounded-lg skeuo-btn text-[10px] font-semibold"
+                className="flex items-center justify-center gap-1 py-1.5 rounded-lg skeuo-btn text-xs font-semibold"
                 title="Dispatch Compliant Source of Funds / Invoicing RFI (Anti-Tipping-Off Safeguard Active)"
               >
                 <Mail className="w-3 h-3 text-amber-600 dark:text-amber-400" />
@@ -774,7 +774,7 @@ export const AlertTriageQueue = ({
 
             <button
               onClick={() => onOpenActionModal && onOpenActionModal(selectedTx)}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-danger text-[11px] font-bold"
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-danger text-xs font-bold"
             >
               <Shield className="w-3 h-3" />
               <span>⚡ Human Governance Authorization</span>
@@ -782,7 +782,7 @@ export const AlertTriageQueue = ({
 
             <button
               onClick={() => onNavigateToGraph && onNavigateToGraph(selectedTx)}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-secondary text-[11px] font-semibold cursor-pointer"
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-secondary text-xs font-semibold cursor-pointer"
             >
               <Share2 className="w-3 h-3 text-[var(--accent-primary)]" />
               <span>Inspect in 3D Forensic Studio</span>
@@ -790,7 +790,7 @@ export const AlertTriageQueue = ({
 
             <button
               onClick={() => onNavigateToSAR && onNavigateToSAR(selectedTx)}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-[11px] font-semibold cursor-pointer"
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-xs font-semibold cursor-pointer"
             >
               <FileText className="w-3 h-3" />
               <span>Draft Official SAR Dossier</span>

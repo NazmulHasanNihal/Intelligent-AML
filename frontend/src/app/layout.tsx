@@ -73,7 +73,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable} overflow-x-hidden w-full max-w-full`}>
+    <html lang="en" data-theme="dark" className={`dark ${inter.variable} ${jetbrainsMono.variable} overflow-x-hidden w-full max-w-full`}>
       <head>
         <script
           type="application/ld+json"

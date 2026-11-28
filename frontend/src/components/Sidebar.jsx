@@ -142,11 +142,11 @@ export const Sidebar = ({
               <div className="min-w-0">
                 <div className="flex items-center gap-1">
                   <span className="font-bold text-xs text-[var(--text-primary)] tracking-tight font-sans truncate">INTELLIGENT-AML</span>
-                  <span className="text-[8px] font-mono px-1.5 py-0.5 rounded font-bold bg-[#1B5E34]/15 text-[#1B5E34] dark:text-[#82C793] border border-[#1B5E34]/30 shadow-sm shrink-0">
+                  <span className="text-xs font-mono px-1.5 py-0.5 rounded font-bold bg-[#1B5E34]/15 text-[#1B5E34] dark:text-[#82C793] border border-[#1B5E34]/30 shadow-sm shrink-0">
                     C-STGB
                   </span>
                 </div>
-                <span className="text-[9px] text-[var(--text-muted)] font-mono block">Enterprise Surveillance Desk</span>
+                <span className="text-xs text-[var(--text-muted)] font-mono block">Enterprise Surveillance Desk</span>
               </div>
             </div>
           ) : (
@@ -171,7 +171,7 @@ export const Sidebar = ({
           {NAV_SECTIONS.map((section) => (
             <div key={section.category} className="space-y-1">
               {!isCollapsed && (
-                <div className="px-2 pt-1 text-[9px] font-mono text-[var(--text-muted)] uppercase tracking-wider">
+                <div className="px-2 pt-1 text-xs font-mono text-[var(--text-muted)] ">
                   {section.category}
                 </div>
               )}
@@ -203,7 +203,7 @@ export const Sidebar = ({
                       {!isCollapsed && (
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
-                            <span className={`text-[11px] font-semibold truncate flex items-center gap-1.5 ${isActive ? 'text-white font-bold' : 'text-[var(--text-primary)]'}`}>
+                            <span className={`text-xs font-semibold truncate flex items-center gap-1.5 ${isActive ? 'text-white font-bold' : 'text-[var(--text-primary)]'}`}>
                               <span>{item.label}</span>
                               {isActive && (
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 shadow-sm animate-pulse" />
@@ -211,18 +211,18 @@ export const Sidebar = ({
                             </span>
                             <div className="flex items-center gap-1 shrink-0">
                               {item.hotkey && (
-                                <span className={`text-[8px] font-mono px-1 py-0.2 rounded border ${isActive ? 'bg-white/10 border-white/20 text-white/90' : 'bg-black/[0.05] dark:bg-white/[0.05] text-[var(--text-muted)] border-[var(--border-subtle)]'}`}>
+                                <span className={`text-xs font-mono px-1 py-0.2 rounded border ${isActive ? 'bg-white/10 border-white/20 text-white/90' : 'bg-black/[0.05] dark:bg-white/[0.05] text-[var(--text-muted)] border-[var(--border-subtle)]'}`}>
                                   {item.hotkey}
                                 </span>
                               )}
                               {item.badge && (
-                                <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded border shrink-0 ${item.badgeClass}`}>
+                                <span className={`text-xs font-mono font-bold px-1.5 py-0.5 rounded border shrink-0 ${item.badgeClass}`}>
                                   {item.badge}
                                 </span>
                               )}
                             </div>
                           </div>
-                          <p className={`text-[9px] truncate ${isActive ? 'text-white/80' : 'text-[var(--text-muted)]'}`}>{item.desc}</p>
+                          <p className={`text-xs truncate ${isActive ? 'text-white/80' : 'text-[var(--text-muted)]'}`}>{item.desc}</p>
                         </div>
                       )}
                     </button>
@@ -237,18 +237,18 @@ export const Sidebar = ({
       {/* Bottom Officer Status & System Telemetry */}
       <div className="p-2 border-t border-[var(--border-subtle)] bg-[var(--bg-card)]/50 space-y-1.5">
         {!isCollapsed && (
-          <div className="p-1.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] flex items-center justify-between shadow-[var(--skeuo-card-shadow)] text-[10px]">
+          <div className="p-1.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] flex items-center justify-between shadow-[var(--skeuo-card-shadow)] text-xs">
             <div className="flex items-center gap-1.5 truncate">
               <div className="w-1.5 h-1.5 rounded-full bg-[#1B5E34] dark:bg-[#82C793] animate-pulse shadow-sm shrink-0" />
               <span className="font-mono text-[var(--accent-primary)] font-semibold truncate">C-STGB Kernel Active</span>
             </div>
-            <span className="font-mono text-[var(--text-secondary)] text-[9px] shrink-0">0.45ms</span>
+            <span className="font-mono text-[var(--text-secondary)] text-xs shrink-0">0.45ms</span>
           </div>
         )}
 
         <button
           onClick={onToggleTour}
-          className={`w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+          className={`w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
             isTourActive
               ? 'bg-amber-500/20 text-amber-800 dark:text-amber-200 border border-amber-500/50 shadow-sm'
               : 'skeuo-btn skeuo-btn-secondary'

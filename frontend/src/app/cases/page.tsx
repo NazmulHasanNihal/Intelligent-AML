@@ -141,7 +141,7 @@ export default function CasesPage() {
 
           <button
             onClick={() => setIsNewCaseModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wide transition-all shadow-lg shadow-emerald-600/20 cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wide transition-all shadow-lg shadow-emerald-600/20 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Open New Case</span>
@@ -204,7 +204,7 @@ export default function CasesPage() {
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-mono text-xs font-bold text-sky-400">{c.id}</span>
                   <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                    className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                       c.slaHours <= 12
                         ? 'bg-rose-950/80 text-rose-400 border border-rose-600/50 animate-pulse'
                         : c.slaHours <= 24
@@ -230,7 +230,7 @@ export default function CasesPage() {
               <div className="space-y-2 pt-2 border-t border-[#1E293B]">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-500">Status:</span>
-                  <span className="font-mono font-semibold text-slate-200 text-[11px]">
+                  <span className="font-mono font-semibold text-slate-200 text-xs">
                     {c.status.replace(/_/g, ' ')}
                   </span>
                 </div>
@@ -244,13 +244,13 @@ export default function CasesPage() {
 
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-500">Assigned To:</span>
-                  <span className="text-slate-300 text-[11px] font-mono">{c.leadInvestigator}</span>
+                  <span className="text-slate-300 text-xs font-mono">{c.leadInvestigator}</span>
                 </div>
               </div>
 
               {/* Footer Links */}
               <div className="pt-2 flex items-center justify-between">
-                <span className="text-[10px] font-mono text-slate-500">{c.createdAt}</span>
+                <span className="text-xs font-mono text-slate-500">{c.createdAt}</span>
                 <div className="flex items-center gap-1.5">
                   <button
                     type="button"
@@ -277,7 +277,7 @@ export default function CasesPage() {
         <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-slate-300" role="table" aria-label="Institutional investigation cases">
-              <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-mono uppercase text-slate-400">
+              <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs font-mono text-slate-400">
                 <tr>
                   <th scope="col" className="px-4 py-3">Case ID</th>
                   <th scope="col" className="px-4 py-3">Title &amp; Target Entity</th>
@@ -294,10 +294,10 @@ export default function CasesPage() {
                     <td className="px-4 py-3 font-mono font-bold text-sky-400">{c.id}</td>
                     <td className="px-4 py-3">
                       <div className="font-semibold text-slate-100">{c.title}</div>
-                      <div className="text-[11px] text-slate-400">{c.entityName}</div>
+                      <div className="text-xs text-slate-400">{c.entityName}</div>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                      <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                         c.slaHours <= 12
                           ? 'bg-rose-950/80 text-rose-400 border border-rose-600/50 animate-pulse'
                           : c.slaHours <= 24
@@ -307,7 +307,7 @@ export default function CasesPage() {
                         {c.slaHours}H SLA
                       </span>
                     </td>
-                    <td className="px-4 py-3 font-mono text-[11px]">{c.status.replace(/_/g, ' ')}</td>
+                    <td className="px-4 py-3 font-mono text-xs">{c.status.replace(/_/g, ' ')}</td>
                     <td className="px-4 py-3 text-right font-mono font-bold text-emerald-400 tabular-nums">
                       {formatMoney(c.riskExposureUsd * 120)}
                     </td>
@@ -358,7 +358,7 @@ export default function CasesPage() {
 
             <form onSubmit={handleCreateCase} className="space-y-4 text-xs font-sans">
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Case Title</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Case Title</label>
                 <input
                   type="text"
                   required
@@ -370,7 +370,7 @@ export default function CasesPage() {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Subject Corporate Entity / Individual</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Subject Corporate Entity / Individual</label>
                 <input
                   type="text"
                   required
@@ -383,7 +383,7 @@ export default function CasesPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Estimated Exposure (USD)</label>
+                  <label className="text-slate-400 block mb-1 font-mono text-xs">Estimated Exposure (USD)</label>
                   <input
                     type="number"
                     required
@@ -394,7 +394,7 @@ export default function CasesPage() {
                 </div>
 
                 <div>
-                  <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Priority Band</label>
+                  <label className="text-slate-400 block mb-1 font-mono text-xs">Priority Band</label>
                   <select
                     value={newPriority}
                     onChange={(e) => setNewPriority(e.target.value as any)}
@@ -408,7 +408,7 @@ export default function CasesPage() {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Assigned Senior Compliance Officer</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Assigned Senior Compliance Officer</label>
                 <select
                   value={newAssignee}
                   onChange={(e) => setNewAssignee(e.target.value)}
@@ -478,16 +478,16 @@ export default function CasesPage() {
 
             {/* Formal BFIU Letterhead */}
             <div className="text-center pb-6 border-b-2 border-slate-800 mb-6">
-              <div className="font-mono text-xs font-bold uppercase tracking-widest text-slate-600 mb-1">
+              <div className="font-mono text-xs font-bold text-slate-600 mb-1">
                 CONFIDENTIAL // REGULATORY &amp; LAW ENFORCEMENT SUBMISSION
               </div>
-              <h2 id="print-dossier-title" className="text-xl font-extrabold uppercase text-slate-900">
+              <h2 id="print-dossier-title" className="text-xl font-extrabold text-slate-900">
                 BANGLADESH FINANCIAL INTELLIGENCE UNIT (BFIU)
               </h2>
               <p className="text-xs font-serif text-slate-700 mt-1">
                 STATUTORY INVESTIGATION DOSSIER — MONEY LAUNDERING PREVENTION ACT, 2012 (ACT NO. V OF 2012)
               </p>
-              <p className="text-[10px] font-mono text-slate-500 mt-1">
+              <p className="text-xs font-mono text-slate-500 mt-1">
                 Report Reference ID: BFIU-STR-2026-{selectedCaseForPrint.id} • Extract Timestamp: {new Date().toISOString()}
               </p>
             </div>
@@ -495,19 +495,19 @@ export default function CasesPage() {
             {/* Case Key Metadata Matrix */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-lg bg-slate-50 border border-slate-300 mb-6 text-xs">
               <div>
-                <span className="font-mono font-bold text-slate-500 text-[10px] uppercase block">Dossier ID</span>
+                <span className="font-mono font-bold text-slate-500 text-xs block">Dossier ID</span>
                 <span className="font-mono font-bold text-slate-900">{selectedCaseForPrint.id}</span>
               </div>
               <div>
-                <span className="font-mono font-bold text-slate-500 text-[10px] uppercase block">Priority Band</span>
+                <span className="font-mono font-bold text-slate-500 text-xs block">Priority Band</span>
                 <span className="font-mono font-bold text-rose-700">{selectedCaseForPrint.slaHours}H SLA ({selectedCaseForPrint.status})</span>
               </div>
               <div>
-                <span className="font-mono font-bold text-slate-500 text-[10px] uppercase block">Assigned Lead Maker</span>
+                <span className="font-mono font-bold text-slate-500 text-xs block">Assigned Lead Maker</span>
                 <span className="font-semibold text-slate-900">{selectedCaseForPrint.leadInvestigator}</span>
               </div>
               <div>
-                <span className="font-mono font-bold text-slate-500 text-[10px] uppercase block">Total Exposure (BDT &amp; USD)</span>
+                <span className="font-mono font-bold text-slate-500 text-xs block">Total Exposure (BDT &amp; USD)</span>
                 <span className="font-mono font-bold text-emerald-800">
                   {formatMoney(selectedCaseForPrint.riskExposureUsd * 120)}
                 </span>
@@ -517,7 +517,7 @@ export default function CasesPage() {
             {/* Case Synopsis & Subject Entity */}
             <div className="space-y-4 mb-6 text-xs text-slate-800 leading-relaxed">
               <div>
-                <h4 className="font-bold text-sm text-slate-900 uppercase font-mono mb-1">
+                <h4 className="font-bold text-sm text-slate-900 font-mono mb-1">
                   1. Subject Entity &amp; Investigation Title
                 </h4>
                 <p className="p-3 bg-slate-50 rounded border border-slate-200 font-sans">
@@ -528,10 +528,10 @@ export default function CasesPage() {
               </div>
 
               <div>
-                <h4 className="font-bold text-sm text-slate-900 uppercase font-mono mb-1">
+                <h4 className="font-bold text-sm text-slate-900 font-mono mb-1">
                   2. Statutory Basis &amp; Typology Triggers
                 </h4>
-                <div className="p-3 bg-slate-50 rounded border border-slate-200 font-mono text-[11px] space-y-1">
+                <div className="p-3 bg-slate-50 rounded border border-slate-200 font-mono text-xs space-y-1">
                   <p>• Money Laundering Prevention Act, 2012 § 2(z) (Structuring &amp; Layering Prohibition)</p>
                   <p>• BFIU Master Circular No. 26 § 4.2 (Mandatory CTR Ceiling: ৳1,000,000 BDT)</p>
                   <p>• BFIU Guidelines for Prevention of Trade Based Money Laundering (2019)</p>
@@ -540,11 +540,11 @@ export default function CasesPage() {
               </div>
 
               <div>
-                <h4 className="font-bold text-sm text-slate-900 uppercase font-mono mb-1">
+                <h4 className="font-bold text-sm text-slate-900 font-mono mb-1">
                   3. Investigation Milestones &amp; Evidence Log
                 </h4>
                 <table className="w-full border border-slate-300 text-left text-xs mb-2">
-                  <thead className="bg-slate-100 border-b border-slate-300 font-mono text-[10px] uppercase text-slate-700">
+                  <thead className="bg-slate-100 border-b border-slate-300 font-mono text-xs text-slate-700">
                     <tr>
                       <th className="p-2">Stage</th>
                       <th className="p-2">Milestone Description</th>
@@ -557,8 +557,8 @@ export default function CasesPage() {
                       <tr key={idx}>
                         <td className="p-2 font-mono font-bold text-slate-700">0{idx + 1}</td>
                         <td className="p-2">{m.title}</td>
-                        <td className="p-2 font-mono text-[10px] font-bold text-emerald-800">{m.status}</td>
-                        <td className="p-2 font-mono text-[10px] text-slate-500">SHA-256-WORM-OK</td>
+                        <td className="p-2 font-mono text-xs font-bold text-emerald-800">{m.status}</td>
+                        <td className="p-2 font-mono text-xs text-slate-500">SHA-256-WORM-OK</td>
                       </tr>
                     ))}
                   </tbody>
@@ -568,7 +568,7 @@ export default function CasesPage() {
 
             {/* Maker-Checker Formal Signature Block */}
             <div className="pt-6 border-t-2 border-slate-800 mb-6">
-              <h4 className="font-bold text-xs text-slate-900 uppercase font-mono mb-6">
+              <h4 className="font-bold text-xs text-slate-900 font-mono mb-6">
                 4. Dual Maker-Checker Institutional Attestation
               </h4>
               <div className="grid grid-cols-2 gap-8 text-xs">
@@ -577,7 +577,7 @@ export default function CasesPage() {
                     <span className="font-serif italic text-slate-600">Amina Rahman, CFE</span>
                   </div>
                   <span className="font-bold font-mono text-slate-800 block">Lead Compliance Officer (Maker)</span>
-                  <span className="text-[11px] text-slate-500 font-mono">Date: {new Date().toISOString().slice(0, 10)}</span>
+                  <span className="text-xs text-slate-500 font-mono">Date: {new Date().toISOString().slice(0, 10)}</span>
                 </div>
 
                 <div className="p-4 border border-dashed border-slate-400 rounded-lg">
@@ -585,13 +585,13 @@ export default function CasesPage() {
                     <span className="font-serif italic text-slate-600">Kazi Rafiqul Islam, CAMS</span>
                   </div>
                   <span className="font-bold font-mono text-slate-800 block">Chief Compliance Officer / CAMLCO (Checker)</span>
-                  <span className="text-[11px] text-slate-500 font-mono">Date: {new Date().toISOString().slice(0, 10)}</span>
+                  <span className="text-xs text-slate-500 font-mono">Date: {new Date().toISOString().slice(0, 10)}</span>
                 </div>
               </div>
             </div>
 
             {/* Section 65B Statutory Evidentiary Certificate */}
-            <div className="p-4 bg-slate-100 rounded border border-slate-300 text-[10px] text-slate-600 font-serif leading-relaxed">
+            <div className="p-4 bg-slate-100 rounded border border-slate-300 text-xs text-slate-600 font-serif leading-relaxed">
               <strong>STATUTORY EVIDENTIARY CERTIFICATE:</strong> Certified that this document is an authentic printout of electronic record generated automatically from the immutable, tamper-evident append-only ledger maintained in the ordinary course of banking operations, complying with the requirements of Section 65B of the Evidence Act, 1872 (as amended 2022).
             </div>
           </div>

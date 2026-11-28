@@ -31,6 +31,7 @@ import {
   SlidersHorizontal
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
+import { IS_ONPREM_MODE } from '@/lib/config/env';
 import { JURISDICTIONS, formatCurrencyByJurisdiction } from '@/lib/compliance/jurisdictions';
 import { PiiText } from '@/components/ui/PiiText';
 import { CommercialAlert } from '@/lib/data/commercialSeed';
@@ -44,7 +45,11 @@ export default function SurveillanceOverviewPage() {
     cases,
     injectAlert,
     freezeAccount,
-    addToast
+    addToast,
+    isLiveStreamActive,
+    toggleLiveStream,
+    streamSpeed,
+    setStreamSpeed
   } = useBankingStore();
 
   const jur = JURISDICTIONS[activeJurisdiction];
@@ -137,15 +142,13 @@ export default function SurveillanceOverviewPage() {
 
   return (
     <div className="p-4 sm:p-5 lg:p-6 max-w-[1700px] mx-auto space-y-5 sm:space-y-6">
-      {/* Concise Operations Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-lg font-semibold text-slate-100">Surveillance Overview</h1>
-          <p className="text-xs font-mono text-slate-400">
-            {jur.name} · {jur.statutoryAct} · Cash CTR {jur.currencySymbol}{jur.ctrThresholdNative.toLocaleString()} {jur.currency}
+          <h1 className="text-xl font-semibold text-slate-100">Executive surveillance</h1>
+          <p className="mt-1 text-sm text-slate-400">
+            Today&apos;s alert volume, risk tiers, and {jur.shortCode} team workload at a glance ({jur.statutoryAct}).
           </p>
         </div>
-
         <div className="flex items-center gap-2 text-xs font-mono">
           <Link
             href="/triage"
@@ -162,6 +165,55 @@ export default function SurveillanceOverviewPage() {
         </div>
       </div>
 
+      {/* Status strip */}
+      <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-[#0F172A] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="relative flex h-2.5 w-2.5 shrink-0">
+            {isLiveStreamActive && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />}
+            <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${isLiveStreamActive ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+          </span>
+          <p className="min-w-0 text-sm text-slate-300">
+            <span className="font-medium text-slate-100">{IS_ONPREM_MODE ? 'On-prem node' : 'Evaluation workspace'}</span>
+            <span className="text-slate-500"> · </span>
+            {IS_ONPREM_MODE ? 'live backend' : 'synthetic data'}
+            <span className="text-slate-500"> · </span>
+            <span title={`${jur.name} (${jur.statutoryAct})`}>{jur.shortCode}</span>
+            <span className="text-slate-500"> · </span>
+            Cash report limit <strong className="font-semibold text-emerald-400">{jur.currencySymbol}{jur.ctrThresholdNative.toLocaleString()}</strong>
+          </p>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleLiveStream}
+            className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
+              isLiveStreamActive
+                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20'
+                : 'border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20'
+            }`}
+          >
+            {isLiveStreamActive ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+            {isLiveStreamActive ? 'Pause feed' : 'Resume feed'}
+          </button>
+          <div role="group" aria-label="Feed speed" className="inline-flex rounded-md border border-slate-700 p-0.5">
+            {([1, 2, 5] as const).map((spd) => (
+              <button
+                key={spd}
+                type="button"
+                aria-pressed={streamSpeed === spd}
+                onClick={() => setStreamSpeed(spd)}
+                className={`rounded px-2.5 py-1 text-sm transition-colors ${
+                  streamSpeed === spd ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-slate-100'
+                }`}
+              >
+                {spd}×
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* 4-Card Tactical KPI Ribbon — All Cards Clickable to Filtered Triage */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: 24h Monitored Volume */}
@@ -171,7 +223,7 @@ export default function SurveillanceOverviewPage() {
         >
           <div>
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold tracking-wide uppercase font-sans">24h Monitored Volume</span>
+              <span className="text-xs font-semibold tracking-wide font-sans">24h Monitored Volume</span>
               <TrendingUp className="w-4 h-4 text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
             </div>
             <div className="text-2xl font-bold font-mono text-slate-100 tabular-nums">
@@ -182,7 +234,7 @@ export default function SurveillanceOverviewPage() {
               <span>straight-through clear</span>
             </div>
           </div>
-          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-[11px] text-slate-400">
+          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs text-slate-400">
             <span>Filter All Transactions</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400 transition-colors" />
           </div>
@@ -195,7 +247,7 @@ export default function SurveillanceOverviewPage() {
         >
           <div>
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold tracking-wide uppercase font-sans">Tier 1 Administrative Hold</span>
+              <span className="text-xs font-semibold tracking-wide font-sans">Tier 1 Administrative Hold</span>
               <ShieldAlert className="w-4 h-4 text-rose-500 group-hover:scale-110 transition-transform" />
             </div>
             <div className="text-2xl font-bold font-mono text-rose-400 tabular-nums">
@@ -206,7 +258,7 @@ export default function SurveillanceOverviewPage() {
               <span>Auto-Quarantined</span>
             </div>
           </div>
-          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-[11px] text-slate-400">
+          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs text-slate-400">
             <span className="text-rose-300">View Tier 1 Queue</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-rose-400 transition-colors" />
           </div>
@@ -219,7 +271,7 @@ export default function SurveillanceOverviewPage() {
         >
           <div>
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold tracking-wide uppercase font-sans">Tier 2 Officer Review</span>
+              <span className="text-xs font-semibold tracking-wide font-sans">Tier 2 Officer Review</span>
               <AlertTriangle className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
             </div>
             <div className="text-2xl font-bold font-mono text-amber-400 tabular-nums">
@@ -230,7 +282,7 @@ export default function SurveillanceOverviewPage() {
               <span>Manual triage</span>
             </div>
           </div>
-          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-[11px] text-slate-400">
+          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs text-slate-400">
             <span className="text-amber-300">View Tier 2 Queue</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-400 transition-colors" />
           </div>
@@ -240,7 +292,7 @@ export default function SurveillanceOverviewPage() {
         <div className="p-5 bg-[#0F172A] border border-[#1E293B] rounded-xl h-full flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold tracking-wide uppercase font-sans">Clearing Decision SLA</span>
+              <span className="text-xs font-semibold tracking-wide font-sans">Clearing Decision SLA</span>
               <Clock className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-2xl font-bold font-mono text-slate-100 tabular-nums">
@@ -251,7 +303,7 @@ export default function SurveillanceOverviewPage() {
               <span>Ultra-low sub-millisecond</span>
             </div>
           </div>
-          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+          <div className="pt-3 border-t border-[#1E293B] mt-4 flex items-center justify-between text-xs text-slate-400 font-mono">
             <span>Peak: 500 tx/sec</span>
             <span className="text-emerald-400 font-bold">100% IN BOUNDS</span>
           </div>
@@ -289,7 +341,7 @@ export default function SurveillanceOverviewPage() {
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                    <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
                       {alert.tier}
                     </span>
                     <span className="font-mono text-xs font-bold text-slate-200">{alert.id}</span>
@@ -302,7 +354,7 @@ export default function SurveillanceOverviewPage() {
                     <span className="font-mono text-xs font-bold text-rose-400 block tabular-nums">
                       ${alert.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD
                     </span>
-                    <span className="text-[10px] font-mono text-slate-500 block">
+                    <span className="text-xs font-mono text-slate-500 block">
                       ৳{alert.amountBdt.toLocaleString()} BDT
                     </span>
                   </div>
@@ -323,14 +375,14 @@ export default function SurveillanceOverviewPage() {
                     <button
                       type="button"
                       onClick={() => router.push(`/triage?alertId=${alert.id}&inspect=true`)}
-                      className="px-2.5 py-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-200 transition-colors cursor-pointer text-[11px]"
+                      className="px-2.5 py-1 rounded bg-[#1E293B] hover:bg-[#334155] text-slate-200 transition-colors cursor-pointer text-xs"
                     >
                       Inspect Wire
                     </button>
                     <button
                       type="button"
                       onClick={() => router.push(`/graph?node=${encodeURIComponent(alert.account)}`)}
-                      className="px-2.5 py-1 rounded bg-purple-950/40 hover:bg-purple-900/60 text-purple-300 border border-purple-800/40 transition-colors cursor-pointer text-[11px] flex items-center gap-1"
+                      className="px-2.5 py-1 rounded bg-purple-950/40 hover:bg-purple-900/60 text-purple-300 border border-purple-800/40 transition-colors cursor-pointer text-xs flex items-center gap-1"
                     >
                       <GitBranch className="w-3 h-3" />
                       <span>Graph</span>
@@ -338,7 +390,7 @@ export default function SurveillanceOverviewPage() {
                     <button
                       type="button"
                       onClick={() => router.push(`/sar?caseId=${alert.caseId || 'CASE-2026-0881'}`)}
-                      className="px-2.5 py-1 rounded bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-800/40 transition-colors cursor-pointer text-[11px] flex items-center gap-1"
+                      className="px-2.5 py-1 rounded bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-800/40 transition-colors cursor-pointer text-xs flex items-center gap-1"
                     >
                       <FileText className="w-3 h-3" />
                       <span>Draft SAR</span>
@@ -353,7 +405,7 @@ export default function SurveillanceOverviewPage() {
                           details: `Statutory hold requested under ${jur.statutoryAct}. Entity: ${alert.entityName}. Amount: $${alert.amount.toLocaleString()}.`
                         });
                       }}
-                      className="px-2.5 py-1 rounded bg-rose-950/50 hover:bg-rose-900/70 text-rose-300 border border-rose-800/50 transition-colors cursor-pointer text-[11px] flex items-center gap-1"
+                      className="px-2.5 py-1 rounded bg-rose-950/50 hover:bg-rose-900/70 text-rose-300 border border-rose-800/50 transition-colors cursor-pointer text-xs flex items-center gap-1"
                     >
                       <Lock className="w-3 h-3" />
                       <span>Freeze (4-Eyes)</span>
@@ -373,7 +425,7 @@ export default function SurveillanceOverviewPage() {
                 <UserCheck className="w-4 h-4 text-emerald-400" />
                 SIU Team Workload & Operational SLA
               </h2>
-              <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 ACTIVE SHIFT
               </span>
             </div>
@@ -388,9 +440,9 @@ export default function SurveillanceOverviewPage() {
                 <div key={idx} className="p-3 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-xs">
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="font-semibold text-slate-200">{member.name}</span>
-                    <span className="text-[10px] font-mono text-slate-400">{member.role}</span>
+                    <span className="text-xs font-mono text-slate-400">{member.role}</span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-[11px] font-mono pt-1 text-slate-400">
+                  <div className="grid grid-cols-3 gap-2 text-xs font-mono pt-1 text-slate-400">
                     <div>Alerts: <strong className="text-slate-200 tabular-nums">{member.openAlerts}</strong></div>
                     <div>Cases: <strong className="text-amber-400 tabular-nums">{member.activeCases}</strong></div>
                     <div>AHT: <strong className="text-emerald-400 tabular-nums">{member.ahtMin ? `${member.ahtMin}m` : 'Queue'}</strong></div>
@@ -431,7 +483,7 @@ export default function SurveillanceOverviewPage() {
               type="button"
               onClick={handleRunSandboxScore}
               disabled={isScoring}
-              className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 font-bold text-xs uppercase tracking-wide rounded-lg transition-all cursor-pointer font-mono"
+              className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 font-bold text-xs tracking-wide rounded-lg transition-all cursor-pointer font-mono"
             >
               {isScoring ? 'Computing Risk...' : 'Run Scoring Engine'}
             </button>
@@ -439,7 +491,7 @@ export default function SurveillanceOverviewPage() {
               type="button"
               onClick={handleInjectSandboxAlert}
               disabled={!scoringResult}
-              className="px-3.5 py-1.5 bg-purple-900/60 hover:bg-purple-800 disabled:opacity-40 text-purple-200 font-bold text-xs uppercase tracking-wide rounded-lg border border-purple-700/50 transition-all cursor-pointer font-mono flex items-center gap-1.5"
+              className="px-3.5 py-1.5 bg-purple-900/60 hover:bg-purple-800 disabled:opacity-40 text-purple-200 font-bold text-xs tracking-wide rounded-lg border border-purple-700/50 transition-all cursor-pointer font-mono flex items-center gap-1.5"
             >
               <PlusCircle className="w-3.5 h-3.5" />
               <span>+ Inject Alert Into Live Queue</span>
@@ -457,7 +509,7 @@ export default function SurveillanceOverviewPage() {
               onChange={(e) => setTestAmount(Number(e.target.value))}
               className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-100 font-bold"
             />
-            <span className="text-[10px] text-slate-500 mt-1 block">
+            <span className="text-xs text-slate-500 mt-1 block">
               ≈ ৳{(testAmount * jur.usdFxRate).toLocaleString()} BDT
             </span>
           </div>
@@ -485,7 +537,7 @@ export default function SurveillanceOverviewPage() {
               onChange={(e) => setTestPriceDev(Number(e.target.value))}
               className="w-full px-3 py-1.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-100 font-bold"
             />
-            <span className="text-[10px] text-slate-500 mt-1 block">
+            <span className="text-xs text-slate-500 mt-1 block">
               Benchmark vs Declared Unit Price
             </span>
           </div>

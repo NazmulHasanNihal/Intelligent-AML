@@ -317,11 +317,11 @@ export const BenchmarkGovernanceHub = () => {
               <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm block truncate">
                 Model Risk Governance & WORM Cryptographic Audit Vault
               </span>
-              <span className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 shadow-inner">
+              <span className="text-xs sm:text-xs font-mono px-2 py-0.5 rounded font-bold bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 shadow-inner">
                 SR 11-7 / FRE 902(11)
               </span>
             </div>
-            <p className="text-[var(--text-secondary)] text-[10px] sm:text-[11px] truncate mt-0.5">
+            <p className="text-[var(--text-secondary)] text-xs sm:text-xs truncate mt-0.5">
               Tamper-evident officer action ledger sealed with SHA-256 Merkle proofs and SEC 17a-4 compliant WORM retention.
             </p>
           </div>
@@ -331,7 +331,7 @@ export const BenchmarkGovernanceHub = () => {
         <div className="flex items-center gap-1.5 flex-wrap shrink-0">
           <button
             onClick={handleDownloadModelCard}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-xs sm:text-xs font-semibold cursor-pointer"
           >
             <Download className="w-3 h-3 text-[var(--accent-primary)]" />
             <span>Download SR 11-7 Card</span>
@@ -340,7 +340,7 @@ export const BenchmarkGovernanceHub = () => {
           <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)] shadow-inner">
             <button
               onClick={() => setActiveView('AUDIT_LOGS')}
-              className={`px-2 sm:px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
                 activeView === 'AUDIT_LOGS' ? 'bg-gradient-to-b from-[#257843] to-[#174E2B] text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
@@ -348,7 +348,7 @@ export const BenchmarkGovernanceHub = () => {
             </button>
             <button
               onClick={() => setActiveView('ACI_DRIFT')}
-              className={`px-2 sm:px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
                 activeView === 'ACI_DRIFT' ? 'bg-gradient-to-b from-[#257843] to-[#174E2B] text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
@@ -356,7 +356,7 @@ export const BenchmarkGovernanceHub = () => {
             </button>
             <button
               onClick={() => setActiveView('BENCHMARKS')}
-              className={`px-2 sm:px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
                 activeView === 'BENCHMARKS' ? 'bg-gradient-to-b from-[#257843] to-[#174E2B] text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
@@ -364,7 +364,7 @@ export const BenchmarkGovernanceHub = () => {
             </button>
             <button
               onClick={() => setActiveView('MODEL_CARD')}
-              className={`px-2 sm:px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold transition-all cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-xs font-semibold transition-all cursor-pointer ${
                 activeView === 'MODEL_CARD' ? 'bg-gradient-to-b from-[#257843] to-[#174E2B] text-white font-bold shadow-[var(--skeuo-btn)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
@@ -383,7 +383,7 @@ export const BenchmarkGovernanceHub = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-[var(--border-subtle)]">
               <div className="flex items-center gap-1.5">
                 <FileCheck className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider">
+                <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono ">
                   Officer Action Ledger ({filteredLogs.length})
                 </span>
               </div>
@@ -396,12 +396,12 @@ export const BenchmarkGovernanceHub = () => {
                     value={searchLog}
                     onChange={(e) => setSearchLog(e.target.value)}
                     placeholder="Filter ledger..."
-                    className="w-full pl-6 pr-2 py-0.5 text-[10px] rounded-lg skeuo-well text-[var(--text-primary)] focus:outline-none"
+                    className="w-full pl-6 pr-2 py-0.5 text-xs rounded-lg skeuo-well text-[var(--text-primary)] focus:outline-none"
                   />
                 </div>
                 <button
                   onClick={handleVerifyIntegrity}
-                  className="px-2 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] font-mono flex items-center gap-1 shrink-0 cursor-pointer"
+                  className="px-2 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-xs font-mono flex items-center gap-1 shrink-0 cursor-pointer"
                 >
                   <Lock className="w-3 h-3 text-[var(--accent-primary)]" />
                   <span>{integrityVerified ? 'Tree Verified (0 Errors)' : 'Verify Merkle Root'}</span>
@@ -413,19 +413,19 @@ export const BenchmarkGovernanceHub = () => {
               {filteredLogs.map((log) => (
                 <div key={log.id} className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-xs shadow-sm">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[var(--accent-primary)] font-bold text-[11px]">{log.action}</span>
-                    <span className="text-[9px] sm:text-[10px] font-mono text-[var(--text-muted)]">{log.timestamp}</span>
+                    <span className="font-mono text-[var(--accent-primary)] font-bold text-xs">{log.action}</span>
+                    <span className="text-xs sm:text-xs font-mono text-[var(--text-muted)]">{log.timestamp}</span>
                   </div>
-                  <p className="text-[var(--text-primary)] text-[10px] sm:text-[11px] leading-relaxed">
+                  <p className="text-[var(--text-primary)] text-xs sm:text-xs leading-relaxed">
                     {log.reason || log.details || 'Compliance verification certified.'}
                   </p>
                   {log.targetAccount && (
-                    <div className="text-[9px] text-[var(--text-muted)] font-mono truncate">
+                    <div className="text-xs text-[var(--text-muted)] font-mono truncate">
                       Target: <span className="text-[var(--text-secondary)]">{log.targetAccount}</span>
                     </div>
                   )}
-                  <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1.5 border-t border-[var(--border-subtle)] text-[9px] sm:text-[10px] font-mono text-[var(--text-secondary)]">
-                    <span>Officer: <strong className="text-[var(--text-primary)]">{log.bankerName}</strong> {log.role && <span className="uppercase text-[8px] font-mono px-1 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08] text-[var(--text-secondary)] font-bold">({log.role})</span>}</span>
+                  <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1.5 border-t border-[var(--border-subtle)] text-xs sm:text-xs font-mono text-[var(--text-secondary)]">
+                    <span>Officer: <strong className="text-[var(--text-primary)]">{log.bankerName}</strong> {log.role && <span className="text-xs font-mono px-1 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08] text-[var(--text-secondary)] font-bold">({log.role})</span>}</span>
                     <button
                       onClick={() => setSelectedHash(log.merkleHash || log.hash || '9f8e4b7a12c85d6e3f019a8b7c6d5e4f')}
                       className="text-[var(--accent-primary)] hover:underline flex items-center gap-1 cursor-pointer"
@@ -442,7 +442,7 @@ export const BenchmarkGovernanceHub = () => {
           {/* Right: Radar Chart Comparison */}
           <div className="xl:col-span-4 skeuo-card p-2.5 sm:p-3 flex flex-col justify-between">
             <div>
-              <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-[var(--border-subtle)]">
+              <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5 pb-1.5 border-b border-[var(--border-subtle)]">
                 <Target className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Multidimensional SOTA Radar</span>
               </span>
@@ -451,7 +451,7 @@ export const BenchmarkGovernanceHub = () => {
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl skeuo-well text-[10px] sm:text-[11px] text-[var(--text-secondary)] font-mono space-y-1">
+            <div className="p-2.5 rounded-xl skeuo-well text-xs sm:text-xs text-[var(--text-secondary)] font-mono space-y-1">
               <div className="flex justify-between"><span>Wilcoxon Signed-Rank:</span> <strong className="text-[var(--accent-primary)]">p = 2.44e-4</strong></div>
               <div className="flex justify-between"><span>Friedman Rank Chi2:</span> <strong className="text-[var(--text-primary)]">χ² = 36.4 (p &lt; 0.001)</strong></div>
             </div>
@@ -464,11 +464,11 @@ export const BenchmarkGovernanceHub = () => {
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-2.5 sm:gap-3">
           <div className="xl:col-span-8 skeuo-card p-2.5 sm:p-3 space-y-2">
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
-              <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                 <Activity className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Adaptive Risk Tolerance, KS Drift (D_KS) & Total Variation (d_TV) Tracker</span>
               </span>
-              <span className="text-[9px] sm:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-semibold">
+              <span className="text-xs sm:text-xs font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-semibold">
                 Coverage Guaranteed &ge; 99.0%
               </span>
             </div>
@@ -480,34 +480,34 @@ export const BenchmarkGovernanceHub = () => {
 
           <div className="xl:col-span-4 skeuo-card p-2.5 sm:p-3 flex flex-col justify-between space-y-2 text-xs font-sans">
             <div className="space-y-2">
-              <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-[var(--border-subtle)]">
+              <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5 pb-1.5 border-b border-[var(--border-subtle)]">
                 <Shield className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Regulatory Guarantee (Plain-English)</span>
               </span>
               
-              <div className="p-2.5 rounded-xl skeuo-well font-mono text-[10px] space-y-1.5">
+              <div className="p-2.5 rounded-xl skeuo-well font-mono text-xs space-y-1.5">
                 <div>
-                  <span className="text-[8px] text-[var(--text-muted)] block">STATISTICAL COVERAGE GUARANTEE:</span>
+                  <span className="text-xs text-[var(--text-muted)] block">STATISTICAL COVERAGE GUARANTEE:</span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-bold block">
                     Under exchangeability, at most 1.0% of true laundering cases are missed on average.
                   </span>
                 </div>
                 <div>
-                  <span className="text-[8px] text-[var(--text-muted)] block">ONLINE UPDATE RECURSION:</span>
+                  <span className="text-xs text-[var(--text-muted)] block">ONLINE UPDATE RECURSION:</span>
                   <span className="text-[var(--text-primary)] font-bold block">Dynamic Recalibration: Automatic Error Feedback Control</span>
                 </div>
                 <div>
-                  <span className="text-[8px] text-[var(--text-muted)] block">EMPIRICAL BENCHMARK RESULT:</span>
+                  <span className="text-xs text-[var(--text-muted)] block">EMPIRICAL BENCHMARK RESULT:</span>
                   <span className="text-[var(--accent-primary)] font-bold block">0 Miscoveries in 100,000 Tier-1 Calls</span>
                 </div>
               </div>
 
-              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                 When sudden macroeconomic velocity spikes or cross-border payment waves occur, static neural networks suffer silent confidence degradation. C-STGB's online ACI engine dynamically recalibrates the error threshold, preventing both false quarantines and evasion breaches.
               </p>
             </div>
 
-            <div className="p-2 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] font-mono text-[9px] text-[var(--text-muted)]">
+            <div className="p-2 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] font-mono text-xs text-[var(--text-muted)]">
               Verified under SR 11-7 Non-Stationary Process Auditing Guidelines.
             </div>
           </div>
@@ -517,11 +517,11 @@ export const BenchmarkGovernanceHub = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 pb-2 border-b border-[var(--border-subtle)]">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <Target className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider">
+                <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono ">
                   OCC 2011-12 Population Stability Index (PSI) & Feature Drift Matrix
                 </span>
                 {driftReport && (
-                  <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold border ${
+                  <span className={`text-xs font-mono px-2 py-0.5 rounded font-bold border ${
                     driftReport.overall_status === 'STABLE' 
                       ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
                       : driftReport.overall_status === 'MONITORING_REQUIRED'
@@ -535,7 +535,7 @@ export const BenchmarkGovernanceHub = () => {
               <button
                 onClick={fetchLiveDrift}
                 disabled={loadingDrift}
-                className="flex items-center gap-1 px-2 py-1 rounded-md skeuo-btn skeuo-btn-secondary text-[10px] font-mono cursor-pointer"
+                className="flex items-center gap-1 px-2 py-1 rounded-md skeuo-btn skeuo-btn-secondary text-xs font-mono cursor-pointer"
               >
                 <Activity className={`w-3 h-3 text-[var(--accent-primary)] ${loadingDrift ? 'animate-spin' : ''}`} />
                 <span>{loadingDrift ? 'Evaluating...' : 'Re-calculate PSI'}</span>
@@ -543,8 +543,8 @@ export const BenchmarkGovernanceHub = () => {
             </div>
 
             <div className="overflow-x-auto rounded-xl skeuo-well">
-              <table className="w-full text-left text-[11px] font-sans">
-                <thead className="text-[9px] font-mono text-[var(--text-muted)] uppercase bg-[var(--bg-card-elevated)] border-b border-[var(--border-subtle)]">
+              <table className="w-full text-left text-xs font-sans">
+                <thead className="text-xs font-mono text-[var(--text-muted)] bg-[var(--bg-card-elevated)] border-b border-[var(--border-subtle)]">
                   <tr>
                     <th className="py-1.5 px-2.5">Feature Name</th>
                     <th className="py-1.5 px-2.5">Stability Status</th>
@@ -554,12 +554,12 @@ export const BenchmarkGovernanceHub = () => {
                     <th className="py-1.5 px-2.5 text-right">Wasserstein Distance</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[var(--border-subtle)] font-mono text-[10px]">
+                <tbody className="divide-y divide-[var(--border-subtle)] font-mono text-xs">
                   {driftReport?.features?.map((f, idx) => (
                     <tr key={idx} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.04]">
                       <td className="py-1.5 px-2.5 font-bold text-[var(--text-primary)]">{f.feature}</td>
                       <td className="py-1.5 px-2.5">
-                        <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                        <span className={`px-1.5 py-0.5 rounded text-xs font-bold ${
                           f.status === 'STABLE' ? 'text-emerald-500 bg-emerald-500/10' :
                           f.status === 'MODERATE_SHIFT' ? 'text-amber-500 bg-amber-500/10' :
                           'text-rose-500 bg-rose-500/10'
@@ -590,18 +590,18 @@ export const BenchmarkGovernanceHub = () => {
       {activeView === 'BENCHMARKS' && (
         <div className="skeuo-card p-2.5 sm:p-3 space-y-2">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 pb-2 border-b border-[var(--border-subtle)]">
-            <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
+            <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
               <Award className="w-3.5 h-3.5 text-amber-600 dark:text-amber-300" />
               <span>15 Benchmark Networks Across 13 Models (13.5M Entities / 25.2M Transactions)</span>
             </span>
-            <span className="text-[9px] sm:text-[10px] font-mono text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 px-2 py-0.5 rounded border border-[var(--accent-primary)]/20 shadow-inner font-semibold">
+            <span className="text-xs sm:text-xs font-mono text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 px-2 py-0.5 rounded border border-[var(--accent-primary)]/20 shadow-inner font-semibold">
               5 Locked Random Seeds (Full Reproducibility)
             </span>
           </div>
 
           <div className="overflow-x-auto max-h-[380px] sm:max-h-[440px] overflow-y-auto rounded-xl skeuo-well">
-            <table className="w-full text-left text-[11px] font-sans">
-              <thead className="text-[9px] sm:text-[10px] font-mono text-[var(--text-muted)] uppercase bg-[var(--bg-card-elevated)] sticky top-0 z-10 border-b border-[var(--border-subtle)]">
+            <table className="w-full text-left text-xs font-sans">
+              <thead className="text-xs sm:text-xs font-mono text-[var(--text-muted)] bg-[var(--bg-card-elevated)] sticky top-0 z-10 border-b border-[var(--border-subtle)]">
                 <tr>
                   <th className="py-2 px-2.5">Domain</th>
                   <th className="py-2 px-2.5">Dataset ID</th>
@@ -634,8 +634,8 @@ export const BenchmarkGovernanceHub = () => {
                     <td className="py-1.5 px-2.5 font-mono text-[var(--text-secondary)]">{bm.txs}</td>
                     <td className="py-1.5 px-2.5 font-mono font-bold text-[var(--accent-primary)]">{bm.f1}</td>
                     <td className="py-1.5 px-2.5 font-mono text-[var(--text-primary)] font-semibold">{bm.prauc}</td>
-                    <td className="py-1.5 px-2.5 font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">{bm.gnnModel}</td>
-                    <td className="py-1.5 px-2.5 text-right font-mono text-[10px] text-[var(--text-muted)]">
+                    <td className="py-1.5 px-2.5 font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">{bm.gnnModel}</td>
+                    <td className="py-1.5 px-2.5 text-right font-mono text-xs text-[var(--text-muted)]">
                       {bm.baseline}
                     </td>
                   </tr>
@@ -652,11 +652,11 @@ export const BenchmarkGovernanceHub = () => {
           {/* Left: Champion vs Challenger */}
           <div className="xl:col-span-7 skeuo-card p-2.5 sm:p-3 space-y-2.5 font-sans">
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
-              <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                 <Scale className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Champion vs Challenger Registry (SR 11-7)</span>
               </span>
-              <span className="badge-tier3 text-[9px] sm:text-[10px] px-2 py-0.5">
+              <span className="badge-tier3 text-xs sm:text-xs px-2 py-0.5">
                 Active Production Gate
               </span>
             </div>
@@ -664,11 +664,11 @@ export const BenchmarkGovernanceHub = () => {
             <div className="grid grid-cols-2 gap-2">
               <div className="p-2.5 rounded-xl skeuo-well space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-bold">CHAMPION (PRODUCTION)</span>
-                  <span className="badge-tier3 text-[8px] px-1.5 py-0.2">v2.4.0-PROD</span>
+                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold">CHAMPION (PRODUCTION)</span>
+                  <span className="badge-tier3 text-xs px-1.5 py-0.2">v2.4.0-PROD</span>
                 </div>
                 <div className="font-bold text-xs text-[var(--text-primary)]">C-STGB Dual-Engine Graph Booster</div>
-                <div className="space-y-1 text-[10px] font-mono text-[var(--text-secondary)] pt-1 border-t border-[var(--border-subtle)]">
+                <div className="space-y-1 text-xs font-mono text-[var(--text-secondary)] pt-1 border-t border-[var(--border-subtle)]">
                   <div className="flex justify-between"><span>Macro F1:</span> <strong className="text-[var(--accent-primary)]">94.2%</strong></div>
                   <div className="flex justify-between"><span>PR-AUC:</span> <strong className="text-[var(--accent-primary)]">0.982</strong></div>
                   <div className="flex justify-between"><span>Inference Latency:</span> <strong className="text-[var(--accent-primary)]">0.45 ms</strong></div>
@@ -679,11 +679,11 @@ export const BenchmarkGovernanceHub = () => {
 
               <div className="p-2.5 rounded-xl skeuo-well space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono uppercase text-amber-600 dark:text-amber-400 font-bold">CHALLENGER (BENCH)</span>
-                  <span className="badge-tier2 text-[8px] px-1.5 py-0.2">v2.3.1-CHALL</span>
+                  <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-bold">CHALLENGER (BENCH)</span>
+                  <span className="badge-tier2 text-xs px-1.5 py-0.2">v2.3.1-CHALL</span>
                 </div>
                 <div className="font-bold text-xs text-[var(--text-primary)]">XGBoost + GraphSAGE Hybrid</div>
-                <div className="space-y-1 text-[10px] font-mono text-[var(--text-secondary)] pt-1 border-t border-[var(--border-subtle)]">
+                <div className="space-y-1 text-xs font-mono text-[var(--text-secondary)] pt-1 border-t border-[var(--border-subtle)]">
                   <div className="flex justify-between"><span>Macro F1:</span> <strong>86.8%</strong></div>
                   <div className="flex justify-between"><span>PR-AUC:</span> <strong>0.891</strong></div>
                   <div className="flex justify-between"><span>Inference Latency:</span> <strong>2.80 ms</strong></div>
@@ -693,7 +693,7 @@ export const BenchmarkGovernanceHub = () => {
               </div>
             </div>
 
-            <div className="p-2 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-[10px]">
+            <div className="p-2 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-xs">
               <span className="font-bold text-[var(--text-primary)] font-mono block">Champion Gate Qualification:</span>
               <p className="text-[var(--text-secondary)] leading-relaxed">
                 C-STGB demonstrates statistically significant superiority across 15 suites (Wilcoxon p = 2.44e-4) while cutting false positive rates by 34.2% relative to the Challenger architecture.
@@ -704,48 +704,48 @@ export const BenchmarkGovernanceHub = () => {
           {/* Right: Latency & Hardware Validation */}
           <div className="xl:col-span-5 skeuo-card p-2.5 sm:p-3 space-y-2.5 font-sans flex flex-col justify-between">
             <div className="space-y-2">
-              <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5 pb-2 border-b border-[var(--border-subtle)]">
+              <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5 pb-2 border-b border-[var(--border-subtle)]">
                 <Cpu className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 <span>Audited Latency & Hardware Profile</span>
               </span>
 
               <div className="p-2.5 rounded-xl skeuo-well space-y-1.5 text-xs">
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">Single-Query Latency:</span>
                   <span className="font-mono font-bold text-[var(--accent-primary)]">&lt; 0.45 ms</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">2-Hop Subgraph Expansion:</span>
                   <span className="font-mono font-bold text-[var(--accent-primary)]">&lt; 0.82 ms</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">Batch Size:</span>
                   <span className="font-mono font-bold text-[var(--text-primary)]">batch = 1 (Real-Time Rail)</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">Neighborhood Depth:</span>
                   <span className="font-mono font-bold text-[var(--text-primary)]">k = 15 edges</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">Production Host:</span>
                   <span className="font-mono font-semibold text-[var(--text-secondary)]">Dual Xeon® 8480+ @ 2.0GHz</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">Inference Accelerator:</span>
                   <span className="font-mono font-semibold text-[var(--text-secondary)]">Nvidia Tensor Core T4 (16GB)</span>
                 </div>
               </div>
 
-              <p className="text-[10px] text-[var(--text-muted)] italic leading-tight">
+              <p className="text-xs text-[var(--text-muted)] italic leading-tight">
                 * Real-time settlement SLA requires sub-50ms clearance. Subgraph inference at 0.45ms operates 110x faster than ISO 20022 clearing limits.
               </p>
             </div>
 
             <div className="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between">
-              <span className="text-[9px] font-mono text-[var(--text-muted)]">Model Registry v2.4.0-PROD</span>
+              <span className="text-xs font-mono text-[var(--text-muted)]">Model Registry v2.4.0-PROD</span>
               <button
                 onClick={handleDownloadModelCard}
-                className="px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-primary text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                className="px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-primary text-xs font-bold flex items-center gap-1 cursor-pointer"
               >
                 <Download className="w-3 h-3" />
                 <span>Export Model Card</span>
@@ -772,12 +772,12 @@ export const BenchmarkGovernanceHub = () => {
               </button>
             </div>
 
-            <div className="p-3 rounded-xl skeuo-well space-y-1 font-mono text-[11px] break-all">
-              <span className="text-[9px] text-[var(--text-muted)] uppercase block">Cryptographic Hash:</span>
+            <div className="p-3 rounded-xl skeuo-well space-y-1 font-mono text-xs break-all">
+              <span className="text-xs text-[var(--text-muted)] block">Cryptographic Hash:</span>
               <span className="text-[var(--accent-primary)] font-bold">{selectedHash}</span>
             </div>
 
-            <p className="text-[10px] text-[var(--text-secondary)]">
+            <p className="text-xs text-[var(--text-secondary)]">
               This cryptographic hash uniquely binds the officer signature, action metadata, and UTC timestamp into the Federal Reserve SR 11-7 immutable WORM chain.
             </p>
 

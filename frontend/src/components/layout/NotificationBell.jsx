@@ -110,7 +110,7 @@ export const NotificationBell = () => {
         >
           <Bell className="w-4 h-4" />
           {unreadCount > 0 && (
-            <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-critical text-[9px] font-bold text-white shadow-xs animate-pulse">
+            <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-critical text-xs font-bold text-white shadow-xs animate-pulse">
               {unreadCount}
             </span>
           )}
@@ -126,7 +126,7 @@ export const NotificationBell = () => {
           {/* Header */}
           <div className="p-3 bg-surfaceRaised border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-text">Compliance Feed</span>
+              <span className="text-xs font-bold text-text">Compliance Feed</span>
               {unreadCount > 0 ? (
                 <Badge variant="critical" size="sm">{unreadCount} New</Badge>
               ) : (
@@ -137,7 +137,7 @@ export const NotificationBell = () => {
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="text-[11px] text-accent hover:underline flex items-center gap-1 cursor-pointer font-medium"
+                className="text-xs text-accent hover:underline flex items-center gap-1 cursor-pointer font-medium"
               >
                 <CheckCheck className="w-3 h-3" />
                 <span>Mark read</span>
@@ -166,12 +166,12 @@ export const NotificationBell = () => {
                       <span className={`text-xs font-semibold truncate ${!item.read ? 'text-text' : 'text-text-2'}`}>
                         {item.title}
                       </span>
-                      <span className="text-[10px] text-text-muted shrink-0 font-mono flex items-center gap-1">
+                      <span className="text-xs text-text-muted shrink-0 font-mono flex items-center gap-1">
                         <Clock className="w-2.5 h-2.5" />
                         {item.time}
                       </span>
                     </div>
-                    <p className="text-[11px] text-text-muted mt-0.5 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-text-muted mt-0.5 line-clamp-2 leading-relaxed">
                       {item.message}
                     </p>
                   </div>
@@ -188,7 +188,7 @@ export const NotificationBell = () => {
           </div>
 
           {/* Footer */}
-          <div className="p-2 bg-surfaceRaised border-t border-border flex items-center justify-between text-[11px] font-mono text-text-muted">
+          <div className="p-2 bg-surfaceRaised border-t border-border flex items-center justify-between text-xs font-mono text-text-muted">
             <span>Enterprise FIU Ingestion Engine</span>
             <span className="text-cleared flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-cleared inline-block animate-ping" />

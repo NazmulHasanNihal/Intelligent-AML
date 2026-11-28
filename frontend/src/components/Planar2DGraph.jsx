@@ -473,7 +473,7 @@ export const Planar2DGraph = ({
       {/* Node Hover Tooltip Card */}
       {hoveredNode && (
         <div 
-          className="absolute pointer-events-none z-30 p-2.5 rounded-xl bg-[#090D1C]/95 backdrop-blur-md border border-cyan-500/40 text-[10px] font-mono text-white shadow-xl space-y-1 w-56"
+          className="absolute pointer-events-none z-30 p-2.5 rounded-xl bg-[#090D1C]/95 backdrop-blur-md border border-cyan-500/40 text-xs font-mono text-white shadow-xl space-y-1 w-56"
           style={{ top: 12, left: 12 }}
         >
           <div className="flex items-center justify-between pb-1 border-b border-cyan-500/20">

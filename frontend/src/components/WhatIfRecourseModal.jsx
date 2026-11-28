@@ -87,7 +87,7 @@ export const WhatIfRecourseModal = () => {
                 <h3 className="font-semibold text-text text-sm">Internal Analyst Sensitivity &amp; False-Positive Simulator</h3>
                 <Badge variant="accent" size="sm">Internal What-If Engine</Badge>
               </div>
-              <p className="text-[11px] text-text-muted mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Internal bank compliance simulation to analyze model sensitivity parameters. Non-customer-facing (MLPA 2012 § 6 anti-tipping-off).
               </p>
             </div>
@@ -101,7 +101,7 @@ export const WhatIfRecourseModal = () => {
         </div>
 
         {/* Target Entity Banner */}
-        <div className="px-5 py-2.5 bg-bg border-b border-borderSubtle flex items-center justify-between font-mono text-[11px]">
+        <div className="px-5 py-2.5 bg-bg border-b border-borderSubtle flex items-center justify-between font-mono text-xs">
           <div className="truncate">
             <span className="text-text-muted">Subject: </span>
             <span className="text-text font-semibold">{subject.entityName}</span>
@@ -118,33 +118,33 @@ export const WhatIfRecourseModal = () => {
           {/* Real-time Recourse Outcome Cards */}
           <div className="grid grid-cols-3 gap-3">
             <div className="p-3 rounded-lg bg-surfaceRaised border border-border">
-              <span className="text-[10px] uppercase font-mono text-text-muted block">Simulated Risk</span>
+              <span className="text-xs font-mono text-text-muted block">Simulated Risk</span>
               <span className={`text-xl font-bold font-mono mt-0.5 block ${
                 simulatedRisk >= 0.85 ? 'text-critical' : simulatedRisk >= 0.30 ? 'text-review' : 'text-cleared'
               }`}>
                 {(simulatedRisk * 100).toFixed(1)}%
               </span>
-              <span className="text-[10px] text-text-muted mt-0.5 block">
+              <span className="text-xs text-text-muted mt-0.5 block">
                 {simulatedRisk < 0.30 ? '✓ Clears Model Hold' : 'Needs further easing'}
               </span>
             </div>
 
             <div className="p-3 rounded-lg bg-surfaceRaised border border-border">
-              <span className="text-[10px] uppercase font-mono text-text-muted block">Decision Tier</span>
+              <span className="text-xs font-mono text-text-muted block">Decision Tier</span>
               <span className="text-xs font-bold font-mono mt-1 block text-text">
                 {simulatedTier}
               </span>
-              <span className="text-[10px] text-text-muted mt-0.5 block">
+              <span className="text-xs text-text-muted mt-0.5 block">
                 Calibrated Risk Tier
               </span>
             </div>
 
             <div className="p-3 rounded-lg bg-surfaceRaised border border-border">
-              <span className="text-[10px] uppercase font-mono text-text-muted block">Velocity Index</span>
+              <span className="text-xs font-mono text-text-muted block">Velocity Index</span>
               <span className="text-xl font-bold font-mono mt-0.5 block text-accent">
                 {burstIntensity}
               </span>
-              <span className="text-[10px] text-text-muted mt-0.5 block">
+              <span className="text-xs text-text-muted mt-0.5 block">
                 Transaction frequency rate
               </span>
             </div>
@@ -152,7 +152,7 @@ export const WhatIfRecourseModal = () => {
 
           {/* Interactive Sensitivity Sliders */}
           <div className="space-y-4 bg-bg p-4 rounded-lg border border-border">
-            <h4 className="font-semibold text-text text-xs uppercase font-mono tracking-wider">
+            <h4 className="font-semibold text-text text-xs font-mono ">
               Recourse Adjustment Knobs
             </h4>
 
@@ -176,7 +176,7 @@ export const WhatIfRecourseModal = () => {
                 onChange={(e) => setTxAmount(Number(e.target.value))}
                 className="w-full h-1.5 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
               />
-              <div className="flex justify-between text-[10px] text-text-muted font-mono">
+              <div className="flex justify-between text-xs text-text-muted font-mono">
                 <span>$2,000 (Low Velocity)</span>
                 <span>$10,000 (CTR Boundary)</span>
                 <span>$60,000 (High Exposure)</span>
@@ -203,7 +203,7 @@ export const WhatIfRecourseModal = () => {
                 onChange={(e) => setTxFrequencyPerHour(Number(e.target.value))}
                 className="w-full h-1.5 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
               />
-              <div className="flex justify-between text-[10px] text-text-muted font-mono">
+              <div className="flex justify-between text-xs text-text-muted font-mono">
                 <span>1 tx/hr (Routine)</span>
                 <span>4 tx/hr (Burst)</span>
                 <span>12 tx/hr (Smurfing Fan-out)</span>
@@ -230,7 +230,7 @@ export const WhatIfRecourseModal = () => {
                 onChange={(e) => setDwellTimeHours(Number(e.target.value))}
                 className="w-full h-1.5 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
               />
-              <div className="flex justify-between text-[10px] text-text-muted font-mono">
+              <div className="flex justify-between text-xs text-text-muted font-mono">
                 <span>0.1h (Passthrough Layering)</span>
                 <span>12h (Commercial)</span>
                 <span>48h (Capital Retention)</span>
@@ -257,7 +257,7 @@ export const WhatIfRecourseModal = () => {
                 onChange={(e) => setDocumentCompleteness(Number(e.target.value))}
                 className="w-full h-1.5 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
               />
-              <div className="flex justify-between text-[10px] text-text-muted font-mono">
+              <div className="flex justify-between text-xs text-text-muted font-mono">
                 <span>10% (Unverified Wire)</span>
                 <span>50% (Standard Invoice)</span>
                 <span>100% (ASYCUDA Customs Sealed)</span>
@@ -270,7 +270,7 @@ export const WhatIfRecourseModal = () => {
             <CheckCircle2 className="w-4 h-4 text-cleared shrink-0 mt-0.5" />
             <div className="space-y-1">
               <span className="font-semibold text-text text-xs">Internal Sensitivity Driver (MLPA 2012 § 6 Confidential):</span>
-              <p className="text-[11px] text-text-2 leading-relaxed">
+              <p className="text-xs text-text-2 leading-relaxed">
                 Non-customer-facing threshold audit: verified ASYCUDA documentation and dwell times &gt;24h pull calibrated exposure down into Tier 3 bounds. Never share threshold cutoffs externally.
               </p>
             </div>

@@ -202,19 +202,19 @@ export const ModelsView = () => {
 
               <div className="grid grid-cols-2 gap-2 p-2.5 rounded bg-bg border border-borderSubtle font-mono text-xs">
                 <div>
-                  <span className="text-[10px] text-text-muted uppercase block">Elliptic-v1 F1 Score</span>
+                  <span className="text-xs text-text-muted block">Elliptic-v1 F1 Score</span>
                   <span className="font-bold text-accent text-sm">91.42%</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-text-muted uppercase block">Macro Mean F1 (14 Sets)</span>
+                  <span className="text-xs text-text-muted block">Macro Mean F1 (14 Sets)</span>
                   <span className="font-bold text-accent text-sm">68.05%</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-text-muted uppercase block">Fast-Path Latency</span>
+                  <span className="text-xs text-text-muted block">Fast-Path Latency</span>
                   <span className="font-bold text-cleared text-sm">&lt; 0.45 ms</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-text-muted uppercase block">Safety Guarantee</span>
+                  <span className="text-xs text-text-muted block">Safety Guarantee</span>
                   <span className="font-bold text-cleared text-sm">&ge; 99.0% Coverage</span>
                 </div>
               </div>
@@ -238,21 +238,21 @@ export const ModelsView = () => {
           <div className="space-y-1.5 font-mono text-xs">
             <div className="flex items-center justify-between p-2 rounded bg-bg border border-borderSubtle">
               <span className="text-text font-medium">SWIFT Alliance (MT103 / MT700 LC)</span>
-              <span className="text-cleared font-semibold text-[11px] flex items-center gap-1">
+              <span className="text-cleared font-semibold text-xs flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-cleared" />
                 ONLINE (0 dropped)
               </span>
             </div>
             <div className="flex items-center justify-between p-2 rounded bg-bg border border-borderSubtle">
               <span className="text-text font-medium">Bangladesh Bank RTGS Gateway</span>
-              <span className="text-cleared font-semibold text-[11px] flex items-center gap-1">
+              <span className="text-cleared font-semibold text-xs flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-cleared" />
                 ONLINE (12ms ACK)
               </span>
             </div>
             <div className="flex items-center justify-between p-2 rounded bg-bg border border-borderSubtle">
               <span className="text-text font-medium">bKash & Nagad MFS Webhook</span>
-              <span className="text-cleared font-semibold text-[11px] flex items-center gap-1">
+              <span className="text-cleared font-semibold text-xs flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-cleared" />
                 ACTIVE (Listening)
               </span>
@@ -312,7 +312,7 @@ export const ModelsView = () => {
             </div>
           </div>
 
-          <p className="text-[11px] text-text-muted leading-tight mt-3 pt-3 border-t border-borderSubtle">
+          <p className="text-xs text-text-muted leading-tight mt-3 pt-3 border-t border-borderSubtle">
             * Fully certified for pre-clearing transactional intervention across commercial banking rails.
           </p>
         </Card>

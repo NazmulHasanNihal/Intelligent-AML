@@ -272,35 +272,35 @@ export default function SanctionsScreeningPage() {
       {showFeedsPanel && (
         <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-2xl space-y-3">
           <div className="flex items-center justify-between border-b border-[#1E293B] pb-2">
-            <div className="flex items-center gap-2 text-xs font-bold font-mono text-slate-200 uppercase">
+            <div className="flex items-center gap-2 text-xs font-bold font-mono text-slate-200 ">
               <Database className="w-4 h-4 text-emerald-400" />
               <span>Official Watchlist Feeds — Cryptographic Ingestion Registry</span>
             </div>
-            <span className="text-[11px] font-mono text-slate-400">All Hashes Verified • Real-Time Synchronization</span>
+            <span className="text-xs font-mono text-slate-400">All Hashes Verified • Real-Time Synchronization</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             {feedsList.map((feed) => (
               <div key={feed.listId} className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-sky-400 text-[11px]">{feed.listId}</span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                  <span className="font-mono font-bold text-sky-400 text-xs">{feed.listId}</span>
+                  <span className="px-1.5 py-0.5 rounded text-xs font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
                     {feed.status}
                   </span>
                 </div>
-                <div className="text-[11px] font-semibold text-slate-200 line-clamp-1">{feed.name}</div>
-                <div className="space-y-1 text-[10px] font-mono text-slate-400">
+                <div className="text-xs font-semibold text-slate-200 line-clamp-1">{feed.name}</div>
+                <div className="space-y-1 text-xs font-mono text-slate-400">
                   <div>Version: <span className="text-slate-200">{feed.version}</span></div>
                   <div>Records: <span className="text-cyan-300 font-bold">{feed.totalRecords.toLocaleString()}</span></div>
                   <div>Synced: <span className="text-slate-300">{feed.fetchTimestamp.replace('T', ' ').replace('Z', ' UTC')}</span></div>
-                  <div className="truncate">SHA-256: <span className="text-slate-500 font-mono text-[9px]">{feed.sha256Hash.substring(0, 16)}...</span></div>
+                  <div className="truncate">SHA-256: <span className="text-slate-500 font-mono text-xs">{feed.sha256Hash.substring(0, 16)}...</span></div>
                 </div>
                 <div className="pt-1 border-t border-[#1E293B]/60">
                   <a
                     href={feed.sourceUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-[10px] font-mono text-sky-400 hover:underline flex items-center gap-1"
+                    className="text-xs font-mono text-sky-400 hover:underline flex items-center gap-1"
                   >
                     <span>Official Source</span>
                     <ExternalLink className="w-2.5 h-2.5" />
@@ -320,12 +320,12 @@ export default function SanctionsScreeningPage() {
               <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
               Configurable Scoring Weights &amp; Statutory Interdiction Thresholds
             </span>
-            <span className="text-slate-400 text-[10px]">OCC 2011-12 / BFIU Circular 26 &amp; 32 (2026) Aligned</span>
+            <span className="text-slate-400 text-xs">OCC 2011-12 / BFIU Circular 26 &amp; 32 (2026) Aligned</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-sans">
             <div>
-              <label className="text-[11px] font-mono text-slate-400 block mb-1">
+              <label className="text-xs font-mono text-slate-400 block mb-1">
                 Auto-Freeze Threshold: <strong className="text-rose-400 font-mono">{autoFreezeThreshold}%</strong>
               </label>
               <input
@@ -336,11 +336,11 @@ export default function SanctionsScreeningPage() {
                 onChange={(e) => setAutoFreezeThreshold(Number(e.target.value))}
                 className="w-full accent-rose-500 cursor-pointer"
               />
-              <span className="text-[10px] text-slate-500 block mt-0.5">Automated settlement hold</span>
+              <span className="text-xs text-slate-500 block mt-0.5">Automated settlement hold</span>
             </div>
 
             <div>
-              <label className="text-[11px] font-mono text-slate-400 block mb-1">
+              <label className="text-xs font-mono text-slate-400 block mb-1">
                 Quarantine Threshold: <strong className="text-amber-400 font-mono">{quarantineThreshold}%</strong>
               </label>
               <input
@@ -351,17 +351,17 @@ export default function SanctionsScreeningPage() {
                 onChange={(e) => setQuarantineThreshold(Number(e.target.value))}
                 className="w-full accent-amber-500 cursor-pointer"
               />
-              <span className="text-[10px] text-slate-500 block mt-0.5">Analyst triage queue</span>
+              <span className="text-xs text-slate-500 block mt-0.5">Analyst triage queue</span>
             </div>
 
-            <div className="p-2.5 rounded-lg bg-[#0B0F17] border border-[#1E293B] text-[11px] font-mono space-y-0.5">
+            <div className="p-2.5 rounded-lg bg-[#0B0F17] border border-[#1E293B] text-xs font-mono space-y-0.5">
               <span className="text-slate-500 block">Multi-Algorithm Weights:</span>
               <div className="text-slate-300">Jaro-Winkler: 40%</div>
               <div className="text-slate-300">Token-Set Ratio: 40%</div>
               <div className="text-slate-300">Phonetic Soundex: 20%</div>
             </div>
 
-            <div className="p-2.5 rounded-lg bg-[#0B0F17] border border-[#1E293B] text-[11px] font-mono space-y-0.5">
+            <div className="p-2.5 rounded-lg bg-[#0B0F17] border border-[#1E293B] text-xs font-mono space-y-0.5">
               <span className="text-slate-500 block">Attribute Corroboration:</span>
               <div className="text-emerald-400">DOB Match: +10% (Mismatch: -15%)</div>
               <div className="text-emerald-400">Country Match: +5%</div>
@@ -375,7 +375,7 @@ export default function SanctionsScreeningPage() {
       <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-xl">
         <form onSubmit={handleAdHocScreen} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
           <div className="md:col-span-5">
-            <label className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+            <label className="text-xs font-mono font-semibold text-slate-400 block mb-1">
               Entity or Individual Name (SWIFT / Beneficiary) *
             </label>
             <div className="relative">
@@ -391,7 +391,7 @@ export default function SanctionsScreeningPage() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+            <label className="text-xs font-mono font-semibold text-slate-400 block mb-1">
               Jurisdiction / Domicile
             </label>
             <select
@@ -409,7 +409,7 @@ export default function SanctionsScreeningPage() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+            <label className="text-xs font-mono font-semibold text-slate-400 block mb-1">
               Date of Birth (Corroboration)
             </label>
             <input
@@ -421,7 +421,7 @@ export default function SanctionsScreeningPage() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+            <label className="text-xs font-mono font-semibold text-slate-400 block mb-1">
               National ID / Passport / TIN
             </label>
             <input
@@ -429,7 +429,7 @@ export default function SanctionsScreeningPage() {
               placeholder="e.g. 8022-1984-7712..."
               value={queryId}
               onChange={(e) => setQueryId(e.target.value)}
-              className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500 font-mono text-[11px]"
+              className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500 font-mono text-xs"
             />
           </div>
 
@@ -526,7 +526,7 @@ export default function SanctionsScreeningPage() {
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                        className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                           record.matchScore >= autoFreezeThreshold
                             ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                             : record.matchScore >= quarantineThreshold
@@ -540,7 +540,7 @@ export default function SanctionsScreeningPage() {
                     </div>
 
                     <span
-                      className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded ${
+                      className={`text-xs font-mono font-semibold px-2 py-0.5 rounded ${
                         record.disposition === 'CONFIRMED_TRUE_HIT'
                           ? 'bg-rose-950 text-rose-300 border border-rose-800'
                           : record.disposition === 'PENDING_REVIEW'
@@ -557,7 +557,7 @@ export default function SanctionsScreeningPage() {
                       <span className="text-slate-500">Target Match:</span>
                       <span className="font-medium text-slate-200 truncate">{record.matchedEntity}</span>
                     </div>
-                    <span className="font-mono text-[10px] text-sky-400 shrink-0">{record.watchlistSource}</span>
+                    <span className="font-mono text-xs text-sky-400 shrink-0">{record.watchlistSource}</span>
                   </div>
                 </div>
               );
@@ -583,60 +583,60 @@ export default function SanctionsScreeningPage() {
               {/* Side-by-Side Name Alignment */}
               <div className="space-y-3">
                 <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl space-y-1">
-                  <div className="text-[10px] font-mono text-slate-500 uppercase">Input Payload String</div>
+                  <div className="text-xs font-mono text-slate-500 ">Input Payload String</div>
                   <div className="text-sm font-bold text-slate-100 font-mono">{selectedRecord.screenedName}</div>
                 </div>
 
                 <div className="p-3 bg-[#0B0F17] border border-[#1E293B] rounded-xl space-y-1">
-                  <div className="text-[10px] font-mono text-slate-500 uppercase">Sanctions Official Entry</div>
+                  <div className="text-xs font-mono text-slate-500 ">Sanctions Official Entry</div>
                   <div className="text-sm font-bold text-rose-300 font-mono">{selectedRecord.matchedEntity}</div>
-                  <div className="text-[11px] text-slate-400 font-mono">Watchlist: {selectedRecord.watchlistSource}</div>
+                  <div className="text-xs text-slate-400 font-mono">Watchlist: {selectedRecord.watchlistSource}</div>
                 </div>
               </div>
 
               {/* Match Forensics Metrics: Real Algorithm Breakdown */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-mono font-bold text-slate-300">
+                <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-300">
                   <span>Engine Score Decomposition</span>
                   <span className="text-emerald-400 text-sm font-bold">{selectedRecord.matchScore.toFixed(1)}% Composite</span>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-xs font-mono">
                   <div className="p-2.5 bg-[#0B0F17] border border-[#1E293B] rounded-lg">
-                    <span className="text-[10px] text-slate-500 block">Jaro-Winkler</span>
+                    <span className="text-xs text-slate-500 block">Jaro-Winkler</span>
                     <span className="text-cyan-400 font-bold text-sm">
                       {selectedRecord.algorithmBreakdown?.jaroWinklerScore !== undefined
                         ? `${selectedRecord.algorithmBreakdown.jaroWinklerScore.toFixed(1)}%`
                         : `${selectedRecord.matchScore.toFixed(1)}%`}
                     </span>
-                    <span className="text-[9px] text-slate-500 block">Weight: 40%</span>
+                    <span className="text-xs text-slate-500 block">Weight: 40%</span>
                   </div>
 
                   <div className="p-2.5 bg-[#0B0F17] border border-[#1E293B] rounded-lg">
-                    <span className="text-[10px] text-slate-500 block">Token-Set</span>
+                    <span className="text-xs text-slate-500 block">Token-Set</span>
                     <span className="text-purple-400 font-bold text-sm">
                       {selectedRecord.algorithmBreakdown?.tokenSetScore !== undefined
                         ? `${selectedRecord.algorithmBreakdown.tokenSetScore.toFixed(1)}%`
                         : `${selectedRecord.matchScore.toFixed(1)}%`}
                     </span>
-                    <span className="text-[9px] text-slate-500 block">Weight: 40%</span>
+                    <span className="text-xs text-slate-500 block">Weight: 40%</span>
                   </div>
 
                   <div className="p-2.5 bg-[#0B0F17] border border-[#1E293B] rounded-lg">
-                    <span className="text-[10px] text-slate-500 block">Phonetic Soundex</span>
+                    <span className="text-xs text-slate-500 block">Phonetic Soundex</span>
                     <span className="text-amber-400 font-bold text-sm">
                       {selectedRecord.algorithmBreakdown?.phoneticScore !== undefined
                         ? `${selectedRecord.algorithmBreakdown.phoneticScore.toFixed(1)}%`
                         : '85.0%'}
                     </span>
-                    <span className="text-[9px] text-slate-500 block">Weight: 20%</span>
+                    <span className="text-xs text-slate-500 block">Weight: 20%</span>
                   </div>
                 </div>
               </div>
 
               {/* Attribute Corroboration Status */}
               <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2 text-xs font-mono">
-                <div className="flex items-center justify-between text-[11px] font-bold text-slate-300">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-300">
                   <span>Attribute Corroboration</span>
                   <span className="text-cyan-400">
                     Adjustment: {selectedRecord.algorithmBreakdown?.corroborationAdjustment
@@ -645,7 +645,7 @@ export default function SanctionsScreeningPage() {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 text-[10px]">
+                <div className="grid grid-cols-3 gap-2 text-xs">
                   <div className="p-1.5 rounded bg-[#0F172A] border border-[#1E293B]">
                     <span className="text-slate-500 block">DOB Status</span>
                     <span className="text-slate-200 font-bold">
@@ -669,22 +669,22 @@ export default function SanctionsScreeningPage() {
 
               {/* Token Diffs */}
               <div>
-                <h4 className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">
+                <h4 className="text-xs font-mono font-bold text-slate-400 mb-2">
                   Tokenized Linguistic Diff
                 </h4>
                 <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2 text-xs font-mono">
                   <div>
-                    <span className="text-slate-500 text-[10px] block">Common Tokens:</span>
+                    <span className="text-slate-500 text-xs block">Common Tokens:</span>
                     <span className="text-emerald-400 font-bold">
                       {selectedRecord.tokenDiffs.commonTokens.join(', ') || 'None'}
                     </span>
                   </div>
                   <div>
-                    <span className="text-slate-500 text-[10px] block">Query Tokens:</span>
+                    <span className="text-slate-500 text-xs block">Query Tokens:</span>
                     <span className="text-slate-300">{selectedRecord.tokenDiffs.screenedTokens.join(', ')}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 text-[10px] block">Watchlist Tokens:</span>
+                    <span className="text-slate-500 text-xs block">Watchlist Tokens:</span>
                     <span className="text-slate-300">{selectedRecord.tokenDiffs.matchedTokens.join(', ')}</span>
                   </div>
                 </div>

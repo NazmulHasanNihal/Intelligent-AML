@@ -158,7 +158,7 @@ export const CasesView = () => {
         <Card padding={false} className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-[11px] uppercase tracking-wider select-none">
+              <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-xs select-none">
                 <tr>
                   <th className="py-2.5 px-3">Docket ID</th>
                   <th className="py-2.5 px-3">Case Title & Target Entity</th>
@@ -202,18 +202,18 @@ export const CasesView = () => {
                       </td>
                       <td className="py-2.5 px-3">
                         <div className="font-semibold text-text truncate max-w-[200px]">{c.title}</div>
-                        <div className="font-mono text-[10px] text-text-muted truncate max-w-[200px]">{c.subjectEntity}</div>
+                        <div className="font-mono text-xs text-text-muted truncate max-w-[200px]">{c.subjectEntity}</div>
                       </td>
                       <td className="py-2.5 px-3 font-mono">
                         <span className="font-semibold text-text">${(c.totalExposure || 48500).toLocaleString()}</span>
-                        <span className="text-[10px] text-text-muted block">৳{((c.totalExposure || 48500) * 120).toLocaleString()}</span>
+                        <span className="text-xs text-text-muted block">৳{((c.totalExposure || 48500) * 120).toLocaleString()}</span>
                       </td>
                       <td className="py-2.5 px-3 font-mono">
                         <span className="font-bold text-critical">{((c.riskScore || 0.98) * 100).toFixed(1)}%</span>
                       </td>
                       {/* Milestone Progress Bar */}
                       <td className="py-2.5 px-3">
-                        <div className="flex items-center gap-1.5 font-mono text-[10px]">
+                        <div className="flex items-center gap-1.5 font-mono text-xs">
                           <div className="w-16 h-1.5 bg-bg rounded-full overflow-hidden flex border border-border">
                             <div 
                               className={`h-full ${isApproved ? 'bg-cleared' : 'bg-accent'}`}
@@ -223,7 +223,7 @@ export const CasesView = () => {
                           <span className="text-text-muted">{completedMilestones}/{totalMilestones}</span>
                         </div>
                       </td>
-                      <td className="py-2.5 px-3 font-mono text-[10px]">
+                      <td className="py-2.5 px-3 font-mono text-xs">
                         <Badge 
                           variant={isApproved ? 'cleared' : isPending ? 'critical' : 'review'} 
                           size="sm"
@@ -233,7 +233,7 @@ export const CasesView = () => {
                         </Badge>
                       </td>
                       {/* Urgency SLA Badge */}
-                      <td className="py-2.5 px-3 font-mono text-[10px]">
+                      <td className="py-2.5 px-3 font-mono text-xs">
                         <span className={`px-1.5 py-0.5 rounded border font-semibold flex items-center gap-1 w-fit ${
                           isApproved ? 'bg-cleared/10 text-cleared border-cleared/30' :
                           (c.statutorySlaHours || 72) <= 12 ? 'bg-critical/15 text-critical border-critical animate-pulse font-bold' :
@@ -244,7 +244,7 @@ export const CasesView = () => {
                         </span>
                       </td>
                       {/* Pinned Evidence Dossier Pill */}
-                      <td className="py-2.5 px-3 font-mono text-[10px]">
+                      <td className="py-2.5 px-3 font-mono text-xs">
                         <span className="flex items-center gap-1 text-text-muted">
                           <Pin className="w-3 h-3 text-accent" />
                           <span>{(c.pinnedEvidence || []).length} items</span>
@@ -295,8 +295,8 @@ export const CasesView = () => {
                   <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-borderSubtle">
                     <div className="flex items-center gap-1.5">
                       <span className="font-mono text-xs font-bold text-accent">{c.id}</span>
-                      <span className="text-text-muted text-[10px]">•</span>
-                      <span className="text-[10px] font-mono text-text-muted">{c.statutoryJurisdiction?.split('/')[0] || 'BFIU STR-1'}</span>
+                      <span className="text-text-muted text-xs">•</span>
+                      <span className="text-xs font-mono text-text-muted">{c.statutoryJurisdiction?.split('/')[0] || 'BFIU STR-1'}</span>
                     </div>
                     <Badge 
                       variant={isApproved ? 'cleared' : isPendingApproval ? 'critical' : 'review'} 
@@ -310,24 +310,24 @@ export const CasesView = () => {
                   <div className="mt-2.5">
                     <h3 className="text-sm font-semibold text-text truncate">{c.title}</h3>
                     <p className="text-xs text-text-muted mt-0.5 truncate">{c.subjectEntity}</p>
-                    <p className="font-mono text-[10px] text-text-muted mt-0.5 truncate">{c.subjectAccount}</p>
+                    <p className="font-mono text-xs text-text-muted mt-0.5 truncate">{c.subjectAccount}</p>
                   </div>
 
                   {/* Exposure & Risk Metrics */}
-                  <div className="grid grid-cols-2 gap-2 mt-3 p-2 rounded bg-bg border border-borderSubtle text-[11px] font-mono">
+                  <div className="grid grid-cols-2 gap-2 mt-3 p-2 rounded bg-bg border border-borderSubtle text-xs font-mono">
                     <div>
-                      <span className="text-text-muted text-[10px] block">TOTAL EXPOSURE:</span>
+                      <span className="text-text-muted text-xs block">TOTAL EXPOSURE:</span>
                       <span className="font-bold text-text">${(c.totalExposure || 48500).toLocaleString()} USD</span>
                     </div>
                     <div>
-                      <span className="text-text-muted text-[10px] block">RISK POSTERIOR:</span>
+                      <span className="text-text-muted text-xs block">RISK POSTERIOR:</span>
                       <span className="font-bold text-critical">{((c.riskScore || 0.98) * 100).toFixed(1)}%</span>
                     </div>
                   </div>
 
                   {/* Visual Milestone Audit Tracker */}
                   <div className="mt-3 space-y-1.5">
-                    <div className="flex justify-between items-center text-[10px] font-mono text-text-muted">
+                    <div className="flex justify-between items-center text-xs font-mono text-text-muted">
                       <span>Milestones:</span>
                       <span className="font-bold text-text">{completedMilestones} of {totalMilestones} Steps</span>
                     </div>
@@ -351,7 +351,7 @@ export const CasesView = () => {
                 </div>
 
                 {/* Footer: SLA Urgency Clock & Pinned Dossier Count */}
-                <div className="pt-2.5 border-t border-borderSubtle flex items-center justify-between text-[11px] font-mono">
+                <div className="pt-2.5 border-t border-borderSubtle flex items-center justify-between text-xs font-mono">
                   <div className="flex items-center gap-1.5">
                     <Clock className={`w-3.5 h-3.5 ${
                       isApproved ? 'text-cleared' : (c.statutorySlaHours || 72) <= 12 ? 'text-critical animate-pulse' : 'text-review'

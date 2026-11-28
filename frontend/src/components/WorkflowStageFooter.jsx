@@ -25,19 +25,19 @@ export const WorkflowStageFooter = ({ activeTab, setActiveTab }) => {
         {prevStage ? (
           <button
             onClick={() => setActiveTab(prevStage.id)}
-            className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl skeuo-btn skeuo-btn-secondary text-[11px] font-mono font-medium flex items-center gap-1.5 cursor-pointer"
+            className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl skeuo-btn skeuo-btn-secondary text-xs font-mono font-medium flex items-center gap-1.5 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
             <span className="hidden sm:inline">Back:</span> <span>{prevStage.name}</span>
           </button>
         ) : (
-          <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-[var(--text-muted)] px-2">
+          <div className="flex items-center gap-1.5 text-xs sm:text-xs font-mono text-[var(--text-muted)] px-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Pipeline: Real-Time Active</span>
           </div>
         )}
 
-        <div className="md:hidden text-[10px] font-mono text-[var(--text-muted)]">
+        <div className="md:hidden text-xs font-mono text-[var(--text-muted)]">
           Stage {activeStep} of {PIPELINE_STAGES.length}
         </div>
       </div>
@@ -53,7 +53,7 @@ export const WorkflowStageFooter = ({ activeTab, setActiveTab }) => {
               <button
                 onClick={() => setActiveTab(st.id)}
                 title={st.fullName}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer ${
                   isCurrent
                     ? 'bg-gradient-to-b from-[#257843] to-[#174E2B] text-white font-bold shadow-sm'
                     : isPassed
@@ -81,13 +81,13 @@ export const WorkflowStageFooter = ({ activeTab, setActiveTab }) => {
         {nextStage ? (
           <button
             onClick={() => setActiveTab(nextStage.id)}
-            className="px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl skeuo-btn skeuo-btn-primary text-[11px] font-mono font-semibold flex items-center gap-1.5 cursor-pointer shadow-sm w-full md:w-auto justify-center"
+            className="px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl skeuo-btn skeuo-btn-primary text-xs font-mono font-semibold flex items-center gap-1.5 cursor-pointer shadow-sm w-full md:w-auto justify-center"
           >
             <span className="hidden sm:inline">Next Stage:</span> <span>{nextStage.name}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         ) : (
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg skeuo-well text-[10px] sm:text-[11px] font-mono text-[var(--accent-primary)] font-semibold">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg skeuo-well text-xs sm:text-xs font-mono text-[var(--accent-primary)] font-semibold">
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Audit-Sealed Compliance</span>
           </div>

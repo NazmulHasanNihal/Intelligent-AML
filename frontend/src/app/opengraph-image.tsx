@@ -47,7 +47,7 @@ export default async function Image() {
               fontWeight: 'bold',
               letterSpacing: '2px',
               color: '#F8FAFC',
-              textTransform: 'uppercase',
+              textTransform: '',
             }}
           >
             INTELLIGENT-AML

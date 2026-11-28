@@ -138,7 +138,7 @@ export default function CustomerDirectoryPage() {
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                        className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                           cust.riskRating === 'HIGH_EDD'
                             ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                             : cust.riskRating === 'MEDIUM'
@@ -151,12 +151,12 @@ export default function CustomerDirectoryPage() {
                       <span className="text-xs font-bold text-slate-100">{cust.name}</span>
                     </div>
 
-                    <span className="text-[10px] font-mono text-slate-500">{cust.id}</span>
+                    <span className="text-xs font-mono text-slate-500">{cust.id}</span>
                   </div>
 
                   <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
                     <span className="truncate">{cust.type}</span>
-                    <span className={`font-mono text-[11px] font-semibold ${variancePct > 50 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                    <span className={`font-mono text-xs font-semibold ${variancePct > 50 ? 'text-rose-400' : 'text-emerald-400'}`}>
                       {variancePct > 0 ? `+${variancePct.toFixed(0)}%` : `${variancePct.toFixed(0)}%`} Volume Variance
                     </span>
                   </div>
@@ -174,7 +174,7 @@ export default function CustomerDirectoryPage() {
               <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-[#1E293B]">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                    <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                       selectedCustomer.riskRating === 'HIGH_EDD'
                         ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                         : selectedCustomer.riskRating === 'MEDIUM'
@@ -215,20 +215,20 @@ export default function CustomerDirectoryPage() {
 
               {/* KYC Identification Matrix */}
               <div>
-                <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 font-mono">
+                <h3 className="text-xs font-bold text-slate-300 mb-2 font-mono">
                   KYC &amp; Corporate Registration
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                   <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B]">
-                    <span className="text-slate-500 text-[10px] font-mono block">Trade License / Reg No</span>
+                    <span className="text-slate-500 text-xs font-mono block">Trade License / Reg No</span>
                     <span className="font-mono font-bold text-slate-200 mt-0.5 block">{selectedCustomer.registrationNo}</span>
                   </div>
                   <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B]">
-                    <span className="text-slate-500 text-[10px] font-mono block">Masked NID / TIN</span>
+                    <span className="text-slate-500 text-xs font-mono block">Masked NID / TIN</span>
                     <PiiText value={selectedCustomer.maskedNidTin} type="account" className="font-mono font-bold text-slate-200 mt-0.5 block" />
                   </div>
                   <div className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B]">
-                    <span className="text-slate-500 text-[10px] font-mono block">Account Status</span>
+                    <span className="text-slate-500 text-xs font-mono block">Account Status</span>
                     <span className={`font-mono font-bold mt-0.5 block ${selectedCustomer.accountStatus === 'FROZEN' ? 'text-rose-400' : 'text-emerald-400'}`}>
                       {selectedCustomer.accountStatus}
                     </span>
@@ -238,9 +238,9 @@ export default function CustomerDirectoryPage() {
 
               {/* Turnover Variance Analysis */}
               <div>
-                <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 font-mono flex items-center justify-between">
+                <h3 className="text-xs font-bold text-slate-300 mb-2 font-mono flex items-center justify-between">
                   <span>Declared vs Actual Monthly Turnover</span>
-                  <span className="text-[10px] font-mono text-amber-400">
+                  <span className="text-xs font-mono text-amber-400">
                     Threshold: &gt;50% Variance Triggers EDD
                   </span>
                 </h3>
@@ -283,7 +283,7 @@ export default function CustomerDirectoryPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                  <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
                     <span>Blue: Declared Baseline</span>
                     <span className="text-rose-400 font-bold">
                       Variance: +
@@ -300,7 +300,7 @@ export default function CustomerDirectoryPage() {
 
               {/* Ultimate Beneficial Ownership (UBO) Registry */}
               <div>
-                <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 font-mono">
+                <h3 className="text-xs font-bold text-slate-300 mb-2 font-mono">
                   Ultimate Beneficial Ownership (UBO) Structure (&ge; 10% Ownership)
                 </h3>
                 <div className="space-y-2">
@@ -310,7 +310,7 @@ export default function CustomerDirectoryPage() {
                         <User className="w-4 h-4 text-slate-400" />
                         <div>
                           <div className="font-semibold text-slate-200">{owner.name}</div>
-                          <div className="text-[10px] text-slate-400 font-mono">
+                          <div className="text-xs text-slate-400 font-mono">
                             Jurisdiction: {owner.jurisdiction} • PEP Status: {owner.pepStatus ? 'POLITICALLY EXPOSED' : 'CLEARED'}
                           </div>
                         </div>
@@ -320,7 +320,7 @@ export default function CustomerDirectoryPage() {
                         <span className="font-mono font-bold text-emerald-400 text-sm">
                           {owner.shareholdingPct}%
                         </span>
-                        <span className="text-[10px] text-slate-500 block">Direct Equity</span>
+                        <span className="text-xs text-slate-500 block">Direct Equity</span>
                       </div>
                     </div>
                   ))}
@@ -374,7 +374,7 @@ export default function CustomerDirectoryPage() {
             </p>
 
             <div>
-              <label className="text-[10px] font-mono text-slate-400 block mb-1">New Risk Rating</label>
+              <label className="text-xs font-mono text-slate-400 block mb-1">New Risk Rating</label>
               <select
                 value={newRating}
                 onChange={(e) => setNewRating(e.target.value as any)}
@@ -387,7 +387,7 @@ export default function CustomerDirectoryPage() {
             </div>
 
             <div>
-              <label className="text-[10px] font-mono text-slate-400 block mb-1">Audit Rationale Memo</label>
+              <label className="text-xs font-mono text-slate-400 block mb-1">Audit Rationale Memo</label>
               <textarea
                 value={ratingMemo}
                 onChange={(e) => setRatingMemo(e.target.value)}

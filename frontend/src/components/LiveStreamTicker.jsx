@@ -67,7 +67,7 @@ export const LiveStreamTicker = ({ isActive, onSelectTx, sharedStats, onStatsUpd
             {isPlaying && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>}
             <span className={`relative inline-flex rounded-full h-2 w-2 ${isPlaying ? 'bg-white' : 'bg-slate-400'}`}></span>
           </div>
-          <span className="font-bold text-white text-[10px] font-mono tracking-wider">LIVE STREAM</span>
+          <span className="font-bold text-white text-xs font-mono ">LIVE STREAM</span>
         </div>
 
         {/* Play / Pause Toggle */}
@@ -80,7 +80,7 @@ export const LiveStreamTicker = ({ isActive, onSelectTx, sharedStats, onStatsUpd
         </button>
 
         {/* Speed Controls */}
-        <div className="flex items-center gap-0.5 skeuo-well p-0.5 rounded-lg font-mono text-[10px]">
+        <div className="flex items-center gap-0.5 skeuo-well p-0.5 rounded-lg font-mono text-xs">
           {[1, 2, 5].map((s) => (
             <button
               key={s}
@@ -113,10 +113,10 @@ export const LiveStreamTicker = ({ isActive, onSelectTx, sharedStats, onStatsUpd
               }`}
               title={`Click to inspect ${tx.id}`}
             >
-              <span className="font-mono font-bold text-[10px] text-[var(--accent-primary)]">{tx.id}</span>
-              <span className="text-[10px] text-[var(--text-secondary)] truncate max-w-[100px]">{tx.src.split(' ')[0]}</span>
-              <span className="font-mono text-[10px] font-bold text-[var(--text-primary)]">{tx.amount}</span>
-              <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded-full font-bold shadow-inner ${
+              <span className="font-mono font-bold text-xs text-[var(--accent-primary)]">{tx.id}</span>
+              <span className="text-xs text-[var(--text-secondary)] truncate max-w-[100px]">{tx.src.split(' ')[0]}</span>
+              <span className="font-mono text-xs font-bold text-[var(--text-primary)]">{tx.amount}</span>
+              <span className={`text-xs font-mono px-1.5 py-0.2 rounded-full font-bold shadow-inner ${
                 isQuarantine ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300' : isReview ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300' : 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300'
               }`}>
                 {(tx.risk * 100).toFixed(0)}%
@@ -127,13 +127,13 @@ export const LiveStreamTicker = ({ isActive, onSelectTx, sharedStats, onStatsUpd
       </div>
 
       {/* Right: Micro Telemetry Summary */}
-      <div className="hidden xl:flex items-center gap-2.5 shrink-0 font-mono text-[10px] text-[var(--text-secondary)] border-l border-[var(--border-subtle)] pl-2.5">
+      <div className="hidden xl:flex items-center gap-2.5 shrink-0 font-mono text-xs text-[var(--text-secondary)] border-l border-[var(--border-subtle)] pl-2.5">
         <div>
-          <span className="text-[8px] text-[var(--text-muted)] block uppercase">THROUGHPUT</span>
+          <span className="text-xs text-[var(--text-muted)] block ">THROUGHPUT</span>
           <span className="text-[var(--text-primary)] font-bold">31.2k tx/s</span>
         </div>
         <div>
-          <span className="text-[8px] text-[var(--text-muted)] block uppercase">STREAM LATENCY</span>
+          <span className="text-xs text-[var(--text-muted)] block ">STREAM LATENCY</span>
           <span className="text-[var(--accent-primary)] font-bold">0.45ms</span>
         </div>
       </div>

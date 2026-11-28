@@ -25,7 +25,7 @@ const BANKER_STEPS = [
         <p>
           This is your primary morning workstation. Over <b>99.45% of safe customer transfers</b> (corporate payroll, shopping, vendor payments) are automatically cleared in <b>0.45 milliseconds</b>.
         </p>
-        <div className="p-2.5 rounded-lg bg-[#0B0E17] border border-white/[0.06] space-y-1 font-mono text-[11px]">
+        <div className="p-2.5 rounded-lg bg-[#0B0E17] border border-white/[0.06] space-y-1 font-mono text-xs">
           <div><b className="text-emerald-400">🟢 GREEN:</b> Auto-cleared instantly (Safe).</div>
           <div><b className="text-amber-400">🟡 YELLOW:</b> Placed in your review queue (Takes 10s to check).</div>
           <div><b className="text-rose-400">🔴 RED:</b> Critical flag, funds held, and ready for SAR filing.</div>
@@ -64,7 +64,7 @@ const BANKER_STEPS = [
         <p>
           The <b>Graph Studio</b> draws a live interactive map:
         </p>
-        <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px]">
+        <ul className="list-disc list-inside space-y-1 text-slate-300 text-xs">
           <li><b>Red Nodes:</b> The original suspicious money source.</li>
           <li><b>Yellow Nodes:</b> Pass-through intermediary "money mules".</li>
           <li><b>Filter Slider:</b> Easily hide everyday grocery and retail purchases so only the criminal network remains visible.</li>
@@ -148,7 +148,7 @@ export const InteractiveBankerTour = ({
             <Icon className="w-3.5 h-3.5 text-white" />
           </div>
           <div className="min-w-0">
-            <span className="text-[9px] font-mono text-[var(--accent-primary)] font-semibold uppercase tracking-wider block truncate">
+            <span className="text-xs font-mono text-[var(--accent-primary)] font-semibold block truncate">
               Guided Tour • Step {step.stepNumber} of {BANKER_STEPS.length}
             </span>
             <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] tracking-tight truncate">{step.title}</h3>
@@ -166,8 +166,8 @@ export const InteractiveBankerTour = ({
 
       {/* Body */}
       <div>
-        <p className="text-[11px] text-[var(--text-muted)] font-medium mb-1.5">{step.subtitle}</p>
-        <div className="text-[11px] text-[var(--text-secondary)]">{step.content}</div>
+        <p className="text-xs text-[var(--text-muted)] font-medium mb-1.5">{step.subtitle}</p>
+        <div className="text-xs text-[var(--text-secondary)]">{step.content}</div>
       </div>
 
       {/* Progress Dots & Buttons */}
@@ -192,7 +192,7 @@ export const InteractiveBankerTour = ({
           {currentStep > 0 && (
             <button
               onClick={onPrev}
-              className="px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-[11px] font-medium cursor-pointer flex items-center gap-1"
+              className="px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-secondary text-xs font-medium cursor-pointer flex items-center gap-1"
             >
               <ChevronLeft className="w-3 h-3" />
               <span>Back</span>

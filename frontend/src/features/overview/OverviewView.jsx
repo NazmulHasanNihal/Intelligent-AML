@@ -196,8 +196,8 @@ export const OverviewView = () => {
               <div className="text-xl sm:text-2xl font-bold text-text mt-1 tabular-nums font-mono">
                 {telemetry.totalProcessed24h.toLocaleString()}
               </div>
-              <span className="text-[10px] text-text-muted block mt-0.5">Cleared in &lt;1ms without human delays</span>
-              <span className="text-[10px] text-text-muted block mt-0.5">Sub-millisecond auto-clearance</span>
+              <span className="text-xs text-text-muted block mt-0.5">Cleared in &lt;1ms without human delays</span>
+              <span className="text-xs text-text-muted block mt-0.5">Sub-millisecond auto-clearance</span>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-cleared font-mono mt-3">
               <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
@@ -211,8 +211,8 @@ export const OverviewView = () => {
               <div className="text-xl sm:text-2xl font-bold text-critical mt-1 tabular-nums font-mono">
                 {telemetry.tier1Quarantined.toLocaleString()}
               </div>
-              <span className="text-[10px] text-text-muted block mt-0.5">High danger / Sanctioned crime match</span>
-              <span className="text-[10px] text-text-muted block mt-0.5">FATF & sanctioned crime alerts</span>
+              <span className="text-xs text-text-muted block mt-0.5">High danger / Sanctioned crime match</span>
+              <span className="text-xs text-text-muted block mt-0.5">FATF & sanctioned crime alerts</span>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-text-2 font-mono mt-3">
               <span className="w-1.5 h-1.5 rounded-full bg-critical" />
@@ -227,8 +227,8 @@ export const OverviewView = () => {
               <div className="text-xl sm:text-2xl font-bold text-review mt-1 tabular-nums font-mono">
                 {telemetry.tier2ReviewQueue.toLocaleString()}
               </div>
-              <span className="text-[10px] text-text-muted block mt-0.5">Unusual pattern sent to human officer</span>
-              <span className="text-[10px] text-text-muted block mt-0.5">Anomalous pattern queue</span>
+              <span className="text-xs text-text-muted block mt-0.5">Unusual pattern sent to human officer</span>
+              <span className="text-xs text-text-muted block mt-0.5">Anomalous pattern queue</span>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-text-2 font-mono mt-3">
               <span className="w-1.5 h-1.5 rounded-full bg-review" />
@@ -243,8 +243,8 @@ export const OverviewView = () => {
               <div className="text-xl sm:text-2xl font-bold text-critical mt-1 tabular-nums font-mono">
                 $1,482,900
               </div>
-              <span className="text-[10px] text-text-muted block mt-0.5">৳177,948,000 BDT locked in escrow</span>
-              <span className="text-[10px] text-text-muted block mt-0.5">৳177.9M BDT held in escrow</span>
+              <span className="text-xs text-text-muted block mt-0.5">৳177,948,000 BDT locked in escrow</span>
+              <span className="text-xs text-text-muted block mt-0.5">৳177.9M BDT held in escrow</span>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-cleared font-mono mt-3">
               <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-cleared" />
@@ -310,7 +310,7 @@ export const OverviewView = () => {
                             {item.tierCode === 1 ? 'Tier 1' : 'Tier 2'}
                           </Badge>
                         </div>
-                        <p className="font-mono text-[11px] text-text-muted mt-0.5 truncate">
+                        <p className="font-mono text-xs text-text-muted mt-0.5 truncate">
                           ${item.amount.toLocaleString()} (৳{(item.amount * 120).toLocaleString()}) • {item.rail}
                         </p>
                       </div>
@@ -319,7 +319,7 @@ export const OverviewView = () => {
                         <span className="font-mono text-xs font-semibold text-text tabular-nums block">
                           {(item.riskScore * 100).toFixed(1)}%
                         </span>
-                        <span className="text-[10px] text-review font-mono block">
+                        <span className="text-xs text-review font-mono block">
                           {item.slaMinutesLeft}m left
                         </span>
                       </div>
@@ -332,7 +332,7 @@ export const OverviewView = () => {
                     >
                       <button
                         onClick={() => navigate('network')}
-                        className="px-2 py-0.5 rounded bg-surface hover:bg-surfaceHover border border-border text-[10px] font-mono text-text cursor-pointer transition-colors flex items-center gap-1"
+                        className="px-2 py-0.5 rounded bg-surface hover:bg-surfaceHover border border-border text-xs font-mono text-text cursor-pointer transition-colors flex items-center gap-1"
                       >
                         <Share2 className="w-3 h-3 text-accent" />
                         <span>Open Subgraph</span>
@@ -340,7 +340,7 @@ export const OverviewView = () => {
 
                       <button
                         onClick={() => quickQuarantine(item.id)}
-                        className="px-2 py-0.5 rounded bg-critical/10 hover:bg-critical/20 border border-critical/30 text-[10px] font-mono text-critical font-bold cursor-pointer transition-colors flex items-center gap-1"
+                        className="px-2 py-0.5 rounded bg-critical/10 hover:bg-critical/20 border border-critical/30 text-xs font-mono text-critical font-bold cursor-pointer transition-colors flex items-center gap-1"
                       >
                         <ShieldAlert className="w-3 h-3 text-critical" />
                         <span>Hold (T1)</span>
@@ -398,7 +398,7 @@ export const OverviewView = () => {
           </div>
 
           {/* Rail and Tier Filter Pills */}
-          <div className="flex flex-wrap items-center justify-between gap-2 py-2.5 border-b border-borderSubtle text-[11px] font-mono">
+          <div className="flex flex-wrap items-center justify-between gap-2 py-2.5 border-b border-borderSubtle text-xs font-mono">
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="text-text-muted mr-1">Clearing Rail:</span>
               {[
@@ -451,7 +451,7 @@ export const OverviewView = () => {
           <div className="overflow-x-auto mt-2">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-borderSubtle text-[11px] font-mono text-text-muted">
+                <tr className="border-b border-borderSubtle text-xs font-mono text-text-muted">
                   <th className="py-2 px-2 font-medium">Time & Reference</th>
                   <th className="py-2 px-2 font-medium">Payment Rail</th>
                   <th className="py-2 px-2 font-medium">Originator &rarr; Beneficiary</th>
@@ -461,12 +461,12 @@ export const OverviewView = () => {
                   <th className="py-2 px-2 font-medium text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-borderSubtle font-mono text-[11px]">
+              <tbody className="divide-y divide-borderSubtle font-mono text-xs">
                 {filteredLiveTxs.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-12 text-center text-xs text-text-muted">
                       <p className="font-semibold text-text">No transactions match current filters</p>
-                      <p className="text-[11px] mt-1 text-text-muted">Try selecting "All Rails", "All Tiers", or clearing the search query.</p>
+                      <p className="text-xs mt-1 text-text-muted">Try selecting "All Rails", "All Tiers", or clearing the search query.</p>
                       <button
                         onClick={() => { setRailFilter('ALL'); setTierFilter('ALL'); setTxSearch(''); }}
                         className="mt-3 px-3 py-1 rounded bg-surface hover:bg-surfaceHover border border-border text-xs text-accent cursor-pointer transition-colors"
@@ -504,12 +504,12 @@ export const OverviewView = () => {
                         {/* Time & Reference */}
                         <td className="py-2.5 px-2 whitespace-nowrap">
                           <span className="text-text block font-semibold">{tx.timestamp || 'Just now'}</span>
-                          <span className="text-[10px] text-accent block truncate max-w-[130px]">{tx.swiftReference || tx.id}</span>
+                          <span className="text-xs text-accent block truncate max-w-[130px]">{tx.swiftReference || tx.id}</span>
                         </td>
 
                         {/* Payment Rail Badge */}
                         <td className="py-2.5 px-2 whitespace-nowrap">
-                          <span className={`px-2 py-0.5 rounded border text-[10px] font-semibold ${railColor}`}>
+                          <span className={`px-2 py-0.5 rounded border text-xs font-semibold ${railColor}`}>
                             {tx.rail}
                           </span>
                         </td>
@@ -519,7 +519,7 @@ export const OverviewView = () => {
                           <div className="truncate">
                             <span className="font-semibold text-text">{tx.sourceEntity}</span>
                           </div>
-                          <div className="text-[10px] text-text-muted truncate flex items-center gap-1">
+                          <div className="text-xs text-text-muted truncate flex items-center gap-1">
                             <span>&rarr;</span>
                             <span>{tx.targetEntity}</span>
                           </div>
@@ -534,7 +534,7 @@ export const OverviewView = () => {
                                   `৳${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                           </span>
                           {tx.currency !== 'BDT' && (
-                            <span className="text-[10px] text-text-muted tabular-nums block">
+                            <span className="text-xs text-text-muted tabular-nums block">
                               ৳{Number(tx.amountBdt || tx.amount * 120).toLocaleString(undefined, { maximumFractionDigits: 0 })} BDT
                             </span>
                           )}
@@ -542,7 +542,7 @@ export const OverviewView = () => {
 
                         {/* Remittance Narrative */}
                         <td className="py-2.5 px-2 max-w-[260px]">
-                          <p className="text-[11px] text-text-2 line-clamp-2 leading-tight">
+                          <p className="text-xs text-text-2 line-clamp-2 leading-tight">
                             {tx.remittanceInfo || 'Commercial settlement under statutory monitoring'}
                           </p>
                         </td>
@@ -556,7 +556,7 @@ export const OverviewView = () => {
                           >
                             {tx.tierCode === 1 ? 'Tier 1 Hold' : tx.tierCode === 2 ? 'Tier 2 Review' : 'Tier 3 Clear'}
                           </Badge>
-                          <span className="text-[9px] text-text-muted block mt-0.5">
+                          <span className="text-xs text-text-muted block mt-0.5">
                             {tx.tierCode === 1 ? 'Immediate Hold' : tx.tierCode === 2 ? 'Manual Review' : 'Auto-Cleared'}
                           </span>
                         </td>

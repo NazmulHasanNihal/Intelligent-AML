@@ -155,7 +155,7 @@ export const ProfilesView = () => {
         <div className="lg:col-span-4 space-y-3">
           <Card padding={false} className="overflow-hidden">
             <div className="p-3 border-b border-border bg-surfaceRaised">
-              <span className="text-xs font-bold text-text uppercase tracking-wider font-mono block mb-2">
+              <span className="text-xs font-bold text-text font-mono block mb-2">
                 Customer Directory ({entityList.length})
               </span>
               <div className="relative">
@@ -197,18 +197,18 @@ export const ProfilesView = () => {
 
                       <div className="min-w-0">
                         <h4 className="text-xs font-bold text-text truncate">{cust.name}</h4>
-                        <p className="text-[10px] text-text-muted font-mono truncate">{cust.account}</p>
-                        <p className="text-[10px] text-text-2 truncate">{cust.jurisdiction?.split(',')[0]}</p>
+                        <p className="text-xs text-text-muted font-mono truncate">{cust.account}</p>
+                        <p className="text-xs text-text-2 truncate">{cust.jurisdiction?.split(',')[0]}</p>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0">
-                      <span className={`text-[10px] font-mono font-bold block ${
+                      <span className={`text-xs font-mono font-bold block ${
                         isHighRisk ? 'text-critical' : isMedRisk ? 'text-review' : 'text-cleared'
                       }`}>
                         {(cust.riskScore * 100).toFixed(0)}%
                       </span>
-                      <span className="text-[9px] text-text-muted font-mono block">
+                      <span className="text-xs text-text-muted font-mono block">
                         {isHighRisk ? 'Hold' : isMedRisk ? 'Review' : 'Clear'}
                       </span>
                     </div>
@@ -265,26 +265,26 @@ export const ProfilesView = () => {
             {/* Quick Metrics Bar */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">Current Balance</span>
+                <span className="text-xs text-text-muted block">Current Balance</span>
                 <span className="font-bold text-text text-sm truncate block mt-0.5">{selectedEntity.balance || '$1,240,000 USD'}</span>
               </div>
 
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">Account Age</span>
+                <span className="text-xs text-text-muted block">Account Age</span>
                 <span className="font-semibold text-text truncate block mt-0.5">{selectedEntity.accountAge || '4 Years'}</span>
-                <span className="text-[9px] text-text-muted block">Since {selectedEntity.openDate || '2022'}</span>
+                <span className="text-xs text-text-muted block">Since {selectedEntity.openDate || '2022'}</span>
               </div>
 
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">Tax Identification</span>
+                <span className="text-xs text-text-muted block">Tax Identification</span>
                 <span className="font-semibold text-text truncate block mt-0.5">{selectedEntity.tin || 'TIN-Verified'}</span>
-                <span className="text-[9px] text-cleared block">Verified TIN</span>
+                <span className="text-xs text-cleared block">Verified TIN</span>
               </div>
 
               <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                <span className="text-[10px] text-text-muted uppercase block">KYC Tier</span>
+                <span className="text-xs text-text-muted block">KYC Tier</span>
                 <span className="font-semibold text-accent truncate block mt-0.5">{selectedEntity.kycTier?.split(' ')[0] || 'Tier-3'}</span>
-                <span className="text-[9px] text-text-muted block">EDD Verified</span>
+                <span className="text-xs text-text-muted block">EDD Verified</span>
               </div>
             </div>
           </Card>
@@ -345,7 +345,7 @@ export const ProfilesView = () => {
             <Card padding={false} className="overflow-hidden">
               <div className="p-3 border-b border-border bg-surfaceRaised flex flex-wrap items-center justify-between gap-2.5 text-xs font-mono">
                 <div className="flex items-center gap-1">
-                  <span className="text-text-muted text-[11px] mr-1">Filter Direction:</span>
+                  <span className="text-text-muted text-xs mr-1">Filter Direction:</span>
                   {[
                     { id: 'ALL', label: 'All Transfers' },
                     { id: 'IN', label: 'Inbound Only' },
@@ -354,7 +354,7 @@ export const ProfilesView = () => {
                     <button
                       key={f.id}
                       onClick={() => setLedgerFilter(f.id)}
-                      className={`px-2 py-0.5 rounded text-[11px] transition-colors cursor-pointer ${
+                      className={`px-2 py-0.5 rounded text-xs transition-colors cursor-pointer ${
                         ledgerFilter === f.id
                           ? 'bg-accent text-white font-bold'
                           : 'bg-surface text-text-muted border border-border hover:text-text'
@@ -378,7 +378,7 @@ export const ProfilesView = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-surfaceRaised border-b border-border text-[11px] font-mono text-text-muted uppercase">
+                    <tr className="bg-surfaceRaised border-b border-border text-xs font-mono text-text-muted ">
                       <th className="py-2.5 px-3">Date & Time</th>
                       <th className="py-2.5 px-3">Dir</th>
                       <th className="py-2.5 px-3">Transaction ID</th>
@@ -389,7 +389,7 @@ export const ProfilesView = () => {
                       <th className="py-2.5 px-3">Memo / Narrative</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-borderSubtle font-mono text-[11px]">
+                  <tbody className="divide-y divide-borderSubtle font-mono text-xs">
                     {filteredLedger.map((tx) => (
                       <tr key={tx.id} className="hover:bg-surfaceHover transition-colors">
                         <td className="py-2.5 px-3 whitespace-nowrap text-text-muted">
@@ -398,12 +398,12 @@ export const ProfilesView = () => {
 
                         <td className="py-2.5 px-3 whitespace-nowrap">
                           {tx.type === 'IN' ? (
-                            <span className="inline-flex items-center gap-0.5 text-cleared font-bold text-[10px]">
+                            <span className="inline-flex items-center gap-0.5 text-cleared font-bold text-xs">
                               <ArrowDownLeft className="w-3 h-3" />
                               IN
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-0.5 text-amber-500 font-bold text-[10px]">
+                            <span className="inline-flex items-center gap-0.5 text-amber-500 font-bold text-xs">
                               <ArrowUpRight className="w-3 h-3" />
                               OUT
                             </span>
@@ -416,14 +416,14 @@ export const ProfilesView = () => {
 
                         <td className="py-2.5 px-3 max-w-[200px]">
                           <span className="font-semibold text-text truncate block">{tx.counterparty}</span>
-                          <span className="text-[10px] text-text-muted truncate block">{tx.counterpartyAccount}</span>
+                          <span className="text-xs text-text-muted truncate block">{tx.counterpartyAccount}</span>
                         </td>
 
                         <td className="py-2.5 px-3 text-right whitespace-nowrap">
                           <span className="font-bold text-text tabular-nums block">
                             ${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                           </span>
-                          <span className="text-[10px] text-text-muted block">
+                          <span className="text-xs text-text-muted block">
                             ৳{Number(tx.amountBdt || tx.amount * 120).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                           </span>
                         </td>
@@ -445,7 +445,7 @@ export const ProfilesView = () => {
                         </td>
 
                         <td className="py-2.5 px-3 max-w-[220px]">
-                          <span className="text-[11px] text-text-2 truncate block" title={tx.memo}>
+                          <span className="text-xs text-text-2 truncate block" title={tx.memo}>
                             {tx.memo || 'Commercial settlement'}
                           </span>
                         </td>
@@ -468,22 +468,22 @@ export const ProfilesView = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
                   <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                    <span className="text-[10px] text-text-muted uppercase block">Legal Entity Type</span>
+                    <span className="text-xs text-text-muted block">Legal Entity Type</span>
                     <span className="font-semibold text-text">{selectedEntity.legalType}</span>
                   </div>
 
                   <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                    <span className="text-[10px] text-text-muted uppercase block">Registration / Trade License</span>
+                    <span className="text-xs text-text-muted block">Registration / Trade License</span>
                     <span className="font-semibold text-text">{selectedEntity.incorporation}</span>
                   </div>
 
                   <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                    <span className="text-[10px] text-text-muted uppercase block">Registered Corporate Address</span>
+                    <span className="text-xs text-text-muted block">Registered Corporate Address</span>
                     <span className="font-semibold text-text">{selectedEntity.address || selectedEntity.jurisdiction}</span>
                   </div>
 
                   <div className="p-2.5 rounded bg-bg border border-borderSubtle">
-                    <span className="text-[10px] text-text-muted uppercase block">Official Contact Desk</span>
+                    <span className="text-xs text-text-muted block">Official Contact Desk</span>
                     <span className="font-semibold text-text">{selectedEntity.phone} • {selectedEntity.email}</span>
                   </div>
                 </div>
@@ -497,24 +497,24 @@ export const ProfilesView = () => {
 
                 <div className="p-3 rounded bg-bg border border-borderSubtle font-mono text-xs space-y-2">
                   <div>
-                    <span className="text-[10px] text-text-muted uppercase block">Ultimate Beneficial Owners (UBO)</span>
+                    <span className="text-xs text-text-muted block">Ultimate Beneficial Owners (UBO)</span>
                     <span className="font-bold text-text text-sm">{selectedEntity.ubo}</span>
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 border-t border-borderSubtle">
                     <div>
-                      <span className="text-[9px] text-text-muted uppercase block">OFAC SDN List</span>
-                      <span className="font-semibold text-cleared text-[11px]">{selectedEntity.pepSanctions?.ofacSdn}</span>
+                      <span className="text-xs text-text-muted block">OFAC SDN List</span>
+                      <span className="font-semibold text-cleared text-xs">{selectedEntity.pepSanctions?.ofacSdn}</span>
                     </div>
 
                     <div>
-                      <span className="text-[9px] text-text-muted uppercase block">UN Sanctions</span>
-                      <span className="font-semibold text-cleared text-[11px]">{selectedEntity.pepSanctions?.unSanctions}</span>
+                      <span className="text-xs text-text-muted block">UN Sanctions</span>
+                      <span className="font-semibold text-cleared text-xs">{selectedEntity.pepSanctions?.unSanctions}</span>
                     </div>
 
                     <div>
-                      <span className="text-[9px] text-text-muted uppercase block">BFIU Watchlist</span>
-                      <span className={`font-semibold text-[11px] ${
+                      <span className="text-xs text-text-muted block">BFIU Watchlist</span>
+                      <span className={`font-semibold text-xs ${
                         selectedEntity.pepSanctions?.bfiuWatchlist?.includes('CLEAN') || selectedEntity.pepSanctions?.bfiuWatchlist?.includes('NEGATIVE')
                           ? 'text-cleared'
                           : 'text-critical'
@@ -524,8 +524,8 @@ export const ProfilesView = () => {
                     </div>
 
                     <div>
-                      <span className="text-[9px] text-text-muted uppercase block">PEP Classification</span>
-                      <span className="font-semibold text-text text-[11px]">{selectedEntity.pepSanctions?.pepDirect}</span>
+                      <span className="text-xs text-text-muted block">PEP Classification</span>
+                      <span className="font-semibold text-text text-xs">{selectedEntity.pepSanctions?.pepDirect}</span>
                     </div>
                   </div>
                 </div>
@@ -537,7 +537,7 @@ export const ProfilesView = () => {
           {activeProfileTab === 'activity' && (
             <Card padding={false} className="overflow-hidden">
               <div className="p-3 border-b border-border bg-surfaceRaised flex items-center justify-between text-xs font-mono">
-                <span className="font-bold text-text uppercase tracking-wider">
+                <span className="font-bold text-text ">
                   Customer Compliance Event Ledger
                 </span>
                 <span className="text-text-muted">Immutable Merkle-Chained Events</span>
@@ -546,19 +546,19 @@ export const ProfilesView = () => {
               <div className="divide-y divide-borderSubtle">
                 {(selectedEntity.activityLogs || []).map((log) => (
                   <div key={log.id} className="p-3.5 hover:bg-surfaceHover transition-colors flex items-start gap-3 text-xs">
-                    <div className="w-7 h-7 rounded-lg bg-surfaceRaised border border-border flex items-center justify-center shrink-0 font-bold text-text font-mono text-[10px]">
+                    <div className="w-7 h-7 rounded-lg bg-surfaceRaised border border-border flex items-center justify-center shrink-0 font-bold text-text font-mono text-xs">
                       {log.id.slice(-3)}
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-bold text-text font-mono text-xs">{log.action.replace(/_/g, ' ')}</span>
-                        <span className="text-[10px] text-text-muted font-mono">{log.timestamp}</span>
+                        <span className="text-xs text-text-muted font-mono">{log.timestamp}</span>
                       </div>
                       <p className="text-xs text-text-2 mt-1 leading-relaxed">
                         {log.details}
                       </p>
-                      <span className="text-[10px] text-text-muted font-mono mt-1 block">
+                      <span className="text-xs text-text-muted font-mono mt-1 block">
                         Logged by: <strong className="text-text">{log.officer}</strong>
                       </span>
                     </div>
@@ -578,22 +578,22 @@ export const ProfilesView = () => {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
                 <div className="p-3 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">30-Day Inbound Turnover</span>
+                  <span className="text-xs text-text-muted block">30-Day Inbound Turnover</span>
                   <span className="font-bold text-cleared text-sm block mt-1">{selectedEntity.flowConservation?.inboundTurnover}</span>
                 </div>
 
                 <div className="p-3 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">30-Day Outbound Turnover</span>
+                  <span className="text-xs text-text-muted block">30-Day Outbound Turnover</span>
                   <span className="font-bold text-amber-500 text-sm block mt-1">{selectedEntity.flowConservation?.outboundTurnover}</span>
                 </div>
 
                 <div className="p-3 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">Pass-Through Retention Ratio</span>
+                  <span className="text-xs text-text-muted block">Pass-Through Retention Ratio</span>
                   <span className="font-bold text-text text-sm block mt-1">{selectedEntity.flowConservation?.massBalanceRatio}</span>
                 </div>
 
                 <div className="p-3 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">Average Dwell Time</span>
+                  <span className="text-xs text-text-muted block">Average Dwell Time</span>
                   <span className="font-bold text-critical text-sm block mt-1">{selectedEntity.flowConservation?.dwellTimeHours} Hours</span>
                 </div>
               </div>

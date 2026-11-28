@@ -226,7 +226,7 @@ export const SanctionsScreeningModal = () => {
               </div>
 
               {/* Quick Preset Buttons */}
-              <div className="flex items-center gap-2 pt-1 flex-wrap text-[11px] font-mono">
+              <div className="flex items-center gap-2 pt-1 flex-wrap text-xs font-mono">
                 <span className="text-text-muted">Test Corridors:</span>
                 {[
                   'Gulf Star Commodities FZE',
@@ -264,7 +264,7 @@ export const SanctionsScreeningModal = () => {
                   onChange={(e) => setThreshold(parseFloat(e.target.value))}
                   className="w-full accent-accent cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-text-muted mt-0.5">
+                <div className="flex justify-between text-xs text-text-muted mt-0.5">
                   <span>65% (Permissive)</span>
                   <span>80% (Recommended)</span>
                   <span>99% (Exact)</span>
@@ -278,7 +278,7 @@ export const SanctionsScreeningModal = () => {
                     <button
                       key={w.id}
                       onClick={() => toggleWatchlist(w.id)}
-                      className={`px-2 py-0.5 rounded text-[10px] border transition-colors cursor-pointer ${
+                      className={`px-2 py-0.5 rounded text-xs border transition-colors cursor-pointer ${
                         selectedWatchlists.includes(w.id)
                           ? 'bg-accent/10 border-accent/40 text-accent font-semibold'
                           : 'bg-surface border-border text-text-muted'
@@ -334,7 +334,7 @@ export const SanctionsScreeningModal = () => {
                                 </Badge>
                               )}
                             </div>
-                            <div className="text-[11px] text-text-2 mt-1">
+                            <div className="text-xs text-text-2 mt-1">
                               <span>Jurisdiction: <strong className="text-text">{match.jurisdiction}</strong></span>
                               <span className="mx-2">•</span>
                               <span>Category: <strong className="text-text">{match.category}</strong></span>
@@ -345,21 +345,21 @@ export const SanctionsScreeningModal = () => {
                             <span className="text-sm font-bold text-critical block">
                               {(match.similarity_score * 100).toFixed(1)}% Match
                             </span>
-                            <span className="text-[10px] text-text-muted block">
+                            <span className="text-xs text-text-muted block">
                               {match.confidence_tier}
                             </span>
                           </div>
                         </div>
 
                         {/* Adverse Summary */}
-                        <div className="p-2 rounded bg-surface border border-border text-[11px] text-text-2">
+                        <div className="p-2 rounded bg-surface border border-border text-xs text-text-2">
                           <strong className="text-text">Regulatory Ground: </strong>
                           {match.adverse_media_summary}
                         </div>
 
                         {/* Identification Tags */}
                         {match.identification_numbers && (
-                          <div className="flex items-center gap-2 text-[10px] text-text-muted">
+                          <div className="flex items-center gap-2 text-xs text-text-muted">
                             <span>Identifiers:</span>
                             {match.identification_numbers.map((idVal, i) => (
                               <span key={i} className="px-1.5 py-0.5 rounded bg-surfaceRaised border border-border text-text">
@@ -410,7 +410,7 @@ export const SanctionsScreeningModal = () => {
                     <p className="text-xs font-semibold text-text">
                       No Adverse or Sanctions Matches Found
                     </p>
-                    <p className="text-[11px] text-text-muted max-w-md mx-auto">
+                    <p className="text-xs text-text-muted max-w-md mx-auto">
                       Query "{query}" was evaluated against {selectedWatchlists.length} statutory watchlists with a minimum Jaro-Winkler confidence threshold of {(threshold * 100).toFixed(0)}%.
                     </p>
                   </div>
@@ -421,7 +421,7 @@ export const SanctionsScreeningModal = () => {
 
           {/* Footer */}
           <div className="px-5 py-3 border-t border-border bg-surfaceRaised flex items-center justify-between text-xs font-mono">
-            <span className="text-text-muted text-[11px]">
+            <span className="text-text-muted text-xs">
               Compliance Standard: UN Res 1373 &bull; OFAC SDN &bull; BFIU MLPA 2012
             </span>
             <Button

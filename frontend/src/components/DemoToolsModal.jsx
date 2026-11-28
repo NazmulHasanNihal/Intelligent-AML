@@ -167,8 +167,8 @@ export const DemoToolsModal = () => {
                         {sc.description}
                       </p>
 
-                      <div className="mt-2 p-2 rounded bg-bg border border-borderSubtle text-[11px] font-mono text-text-muted">
-                        <span className="text-accent font-semibold block text-[10px] uppercase tracking-wider mb-0.5">
+                      <div className="mt-2 p-2 rounded bg-bg border border-borderSubtle text-xs font-mono text-text-muted">
+                        <span className="text-accent font-semibold block text-xs mb-0.5">
                           Forensic Detection Profile (BFIU / Regulatory Criteria)
                         </span>
                         {sc.forensicProfile}
@@ -176,7 +176,7 @@ export const DemoToolsModal = () => {
                     </div>
 
                     <div className="flex items-center justify-between pt-1 border-t border-borderSubtle">
-                      <span className="text-[11px] font-mono text-text-muted">
+                      <span className="text-xs font-mono text-text-muted">
                         {sc.txCount} transactions • Real-Time Engine Triage
                       </span>
                       <Button
@@ -245,31 +245,31 @@ export const DemoToolsModal = () => {
                         <span className="font-bold text-text">${Number(tx.amount).toLocaleString()}</span>
                       </div>
 
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-borderSubtle text-[11px]">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-borderSubtle text-xs">
                         <div>
-                          <span className="text-text-muted block text-[10px]">DISPOSITION</span>
+                          <span className="text-text-muted block text-xs">DISPOSITION</span>
                           <span className="font-bold text-text">
                             {tx.conformalSet.includes('Illicit') ? 'Tier 1 Quarantine' : 'Tier 3 Clear'}
                           </span>
                         </div>
                         <div>
-                          <span className="text-text-muted block text-[10px]">RISK SCORE</span>
+                          <span className="text-text-muted block text-xs">RISK SCORE</span>
                           <span className="font-bold text-critical">
                             {(tx.riskScore * 100).toFixed(1)}%
                           </span>
                         </div>
                         <div>
-                          <span className="text-text-muted block text-[10px]">TRIAGE ACTION</span>
+                          <span className="text-text-muted block text-xs">TRIAGE ACTION</span>
                           <span className="font-bold text-text truncate block">{tx.queueAction}</span>
                         </div>
                         <div>
-                          <span className="text-text-muted block text-[10px]">DECISION SPEED</span>
+                          <span className="text-text-muted block text-xs">DECISION SPEED</span>
                           <span className="font-bold text-cleared">{tx.latencyMs} ms</span>
                         </div>
                       </div>
 
                       {tx.reasons && tx.reasons.length > 0 && (
-                        <div className="text-[10px] text-text-2 bg-bg p-1.5 rounded">
+                        <div className="text-xs text-text-2 bg-bg p-1.5 rounded">
                           <span className="font-semibold text-text">Typology Triggers: </span>
                           {tx.reasons.join(' | ')}
                         </div>

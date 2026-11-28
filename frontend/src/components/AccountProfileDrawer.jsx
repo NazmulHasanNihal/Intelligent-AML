@@ -76,12 +76,12 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <h2 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">{profile.holderName}</h2>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full font-mono font-bold bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 shadow-inner">
+                    <span className="text-xs px-1.5 py-0.5 rounded-full font-mono font-bold bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 shadow-inner">
                       {isCorp ? 'CORP' : 'RETAIL'}
                     </span>
                   </div>
-                  <p className="text-[10px] sm:text-[11px] font-mono text-[var(--accent-primary)] truncate mt-0.5">{profile.accountNumber}</p>
-                  <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">{profile.institution}</p>
+                  <p className="text-xs sm:text-xs font-mono text-[var(--accent-primary)] truncate mt-0.5">{profile.accountNumber}</p>
+                  <p className="text-xs text-[var(--text-muted)] font-sans truncate">{profile.institution}</p>
                 </div>
               </div>
 
@@ -96,18 +96,18 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
             {/* Quick Status Bar in Recessed Wells */}
             <div className="grid grid-cols-3 gap-2 p-2.5 sm:p-3 bg-[var(--bg-base)] border-b border-[var(--border-subtle)] text-xs font-mono">
               <div className="p-2 rounded-xl skeuo-well text-center">
-                <span className="text-[9px] text-[var(--text-muted)] block uppercase">RISK</span>
+                <span className="text-xs text-[var(--text-muted)] block ">RISK</span>
                 <span className={`text-xs sm:text-sm font-extrabold ${profile.riskScore >= 0.70 ? 'text-rose-500' : profile.riskScore >= 0.30 ? 'text-amber-500' : 'text-[var(--accent-primary)]'}`}>
                   {(profile.riskScore * 100).toFixed(1)}%
                 </span>
               </div>
               <div className="p-2 rounded-xl skeuo-well text-center">
-                <span className="text-[9px] text-[var(--text-muted)] block uppercase">BALANCE</span>
+                <span className="text-xs text-[var(--text-muted)] block ">BALANCE</span>
                 <span className="text-xs sm:text-sm font-bold text-[var(--text-primary)] truncate block">{profile.balance.split(' ')[0]}</span>
               </div>
               <div className="p-2 rounded-xl skeuo-well text-center">
-                <span className="text-[9px] text-[var(--text-muted)] block uppercase">KYC</span>
-                <span className="text-[10px] sm:text-[11px] font-semibold text-[var(--accent-primary)] truncate block">L3 Verified</span>
+                <span className="text-xs text-[var(--text-muted)] block ">KYC</span>
+                <span className="text-xs sm:text-xs font-semibold text-[var(--accent-primary)] truncate block">L3 Verified</span>
               </div>
             </div>
 
@@ -115,35 +115,35 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
             <div className="p-3 sm:p-4 space-y-3 sm:space-y-3.5">
               {/* Profile Meta Cards */}
               <div className="space-y-2">
-                <h3 className="text-[11px] font-bold text-[var(--text-primary)] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                <h3 className="text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                   <span>Verification Profile & PEP Sanctions Screening</span>
                 </h3>
 
-                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2 rounded-lg skeuo-well space-y-0.5">
-                    <span className="text-[9px] text-[var(--text-muted)] block font-mono">TAX ID / EIN:</span>
+                    <span className="text-xs text-[var(--text-muted)] block font-mono">TAX ID / EIN:</span>
                     <span className="text-[var(--text-primary)] font-mono font-medium truncate block">{profile.taxId}</span>
                   </div>
                   <div className="p-2 rounded-lg skeuo-well space-y-0.5">
-                    <span className="text-[9px] text-[var(--text-muted)] block font-mono">TENURE:</span>
+                    <span className="text-xs text-[var(--text-muted)] block font-mono">TENURE:</span>
                     <span className="text-[var(--text-primary)] font-medium truncate block">{profile.accountAge}</span>
                   </div>
                   <div className="p-2 rounded-lg skeuo-well space-y-0.5 col-span-2">
-                    <span className="text-[9px] text-[var(--text-muted)] block font-mono">REGISTERED LEGAL ADDRESS:</span>
-                    <span className="text-[var(--text-secondary)] font-sans text-[10px] leading-tight block truncate">{profile.address}</span>
+                    <span className="text-xs text-[var(--text-muted)] block font-mono">REGISTERED LEGAL ADDRESS:</span>
+                    <span className="text-[var(--text-secondary)] font-sans text-xs leading-tight block truncate">{profile.address}</span>
                   </div>
                 </div>
 
                 {/* PEP & Sanctions Screening Verification Box */}
-                <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-[11px] shadow-sm">
+                <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1 text-xs shadow-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase">WATCHLISTS: OFAC SDN, EU, UN, UK HMT</span>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                    <span className="text-xs font-mono text-[var(--text-muted)] ">WATCHLISTS: OFAC SDN, EU, UN, UK HMT</span>
+                    <span className="text-xs font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
                       CLEARED (0 DIRECT MATCHES)
                     </span>
                   </div>
-                  <p className="text-[10px] text-[var(--text-secondary)]">
+                  <p className="text-xs text-[var(--text-secondary)]">
                     Identity cross-checked against 24 international regulatory sanction and Politically Exposed Persons (PEP) watchlists. No direct asset freezes currently active.
                   </p>
                 </div>
@@ -152,38 +152,38 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
               {/* 12-D Flow Invariants Card (C-STGB Deep Topology) */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-[11px] font-bold text-[var(--text-primary)] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <h3 className="text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                     <Globe className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                     <span>12-D Flow Invariants (Physics-Informed)</span>
                   </h3>
-                  <span className="text-[9px] font-mono text-[var(--accent-primary)] font-semibold">C-STGB Calibrated</span>
+                  <span className="text-xs font-mono text-[var(--accent-primary)] font-semibold">C-STGB Calibrated</span>
                 </div>
 
-                <div className="p-2.5 rounded-xl skeuo-well space-y-2 font-mono text-[10px]">
+                <div className="p-2.5 rounded-xl skeuo-well space-y-2 font-mono text-xs">
                   <div className="grid grid-cols-2 gap-2">
                     <div className="p-1.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">PASS-THROUGH FLOW RATIO</span>
+                      <span className="text-xs text-[var(--text-muted)] block">PASS-THROUGH FLOW RATIO</span>
                       <span className="text-xs font-bold text-rose-600 dark:text-rose-400">99.8% (In ≈ Out)</span>
-                      <span className="text-[8px] text-[var(--text-muted)] block">Zero Dwell Retention</span>
+                      <span className="text-xs text-[var(--text-muted)] block">Zero Dwell Retention</span>
                     </div>
                     <div className="p-1.5 rounded-lg bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">TRANSFER VELOCITY RATE</span>
+                      <span className="text-xs text-[var(--text-muted)] block">TRANSFER VELOCITY RATE</span>
                       <span className="text-xs font-bold text-amber-600 dark:text-amber-400">18.4 tx / min</span>
-                      <span className="text-[8px] text-[var(--text-muted)] block">High Burst Clustering</span>
+                      <span className="text-xs text-[var(--text-muted)] block">High Burst Clustering</span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-1.5 text-center text-[9px]">
+                  <div className="grid grid-cols-3 gap-1.5 text-center text-xs">
                     <div className="p-1 rounded bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">CIRCULAR WASH LOOP</span>
+                      <span className="text-xs text-[var(--text-muted)] block">CIRCULAR WASH LOOP</span>
                       <span className="font-bold text-[var(--text-primary)]">4.2 / hr</span>
                     </div>
                     <div className="p-1 rounded bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">CYCLE-4 MOTIF</span>
+                      <span className="text-xs text-[var(--text-muted)] block">CYCLE-4 MOTIF</span>
                       <span className="font-bold text-[var(--text-primary)]">1.8 / hr</span>
                     </div>
                     <div className="p-1 rounded bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)]">
-                      <span className="text-[8px] text-[var(--text-muted)] block">NETWORK RISK WEIGHT</span>
+                      <span className="text-xs text-[var(--text-muted)] block">NETWORK RISK WEIGHT</span>
                       <span className="font-bold text-[var(--accent-primary)]">0.88 GNN</span>
                     </div>
                   </div>
@@ -192,21 +192,21 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
 
               {/* Monthly Flow Volumes */}
               <div className="space-y-1.5">
-                <h3 className="text-[11px] font-bold text-[var(--text-primary)] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                <h3 className="text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                   <DollarSign className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                   <span>Monthly Activity</span>
                 </h3>
                 <div className="grid grid-cols-2 gap-2 font-mono text-xs">
                   <div className="p-2 rounded-lg skeuo-well flex items-center justify-between">
                     <div>
-                      <span className="text-[9px] text-[var(--text-muted)] block">Inflow (30d)</span>
+                      <span className="text-xs text-[var(--text-muted)] block">Inflow (30d)</span>
                       <span className="text-xs sm:text-sm font-bold text-[var(--accent-primary)] truncate block">{profile.monthlyInflow}</span>
                     </div>
                     <ArrowDownLeft className="w-4 h-4 text-[var(--accent-primary)] shrink-0" />
                   </div>
                   <div className="p-2 rounded-lg skeuo-well flex items-center justify-between">
                     <div>
-                      <span className="text-[9px] text-[var(--text-muted)] block">Outflow (30d)</span>
+                      <span className="text-xs text-[var(--text-muted)] block">Outflow (30d)</span>
                       <span className="text-xs sm:text-sm font-bold text-rose-500 truncate block">{profile.monthlyOutflow}</span>
                     </div>
                     <ArrowUpRight className="w-4 h-4 text-rose-500 shrink-0" />
@@ -217,16 +217,16 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
               {/* Transaction History */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-[11px] font-bold text-[var(--text-primary)] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <h3 className="text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                     <span>Transaction History</span>
                   </h3>
-                  <span className="text-[9px] text-[var(--text-muted)] font-mono">Recent 5 records</span>
+                  <span className="text-xs text-[var(--text-muted)] font-mono">Recent 5 records</span>
                 </div>
 
                 <div className="rounded-xl overflow-hidden skeuo-well max-h-[180px] overflow-y-auto">
-                  <table className="w-full text-left text-[11px] font-sans">
-                    <thead className="bg-[var(--bg-card-elevated)] text-[var(--text-muted)] font-mono text-[9px] border-b border-[var(--border-subtle)] sticky top-0">
+                  <table className="w-full text-left text-xs font-sans">
+                    <thead className="bg-[var(--bg-card-elevated)] text-[var(--text-muted)] font-mono text-xs border-b border-[var(--border-subtle)] sticky top-0">
                       <tr>
                         <th className="py-1.5 px-2">Date / ID</th>
                         <th className="py-1.5 px-2">Counterparty</th>
@@ -234,19 +234,19 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
                         <th className="py-1.5 px-2 text-right">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[var(--border-subtle)] font-mono text-[10px]">
+                    <tbody className="divide-y divide-[var(--border-subtle)] font-mono text-xs">
                       {profile.recentLedger.map((tx, idx) => (
                         <tr key={idx} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.03] transition-colors">
                           <td className="py-1.5 px-2">
                             <span className="font-bold text-[var(--text-primary)] block truncate">{tx.id}</span>
-                            <span className="text-[8px] text-[var(--text-muted)]">{tx.date.split(' ')[1]}</span>
+                            <span className="text-xs text-[var(--text-muted)]">{tx.date.split(' ')[1]}</span>
                           </td>
-                          <td className="py-1.5 px-2 text-[var(--accent-primary)] text-[10px] truncate max-w-[120px]">
+                          <td className="py-1.5 px-2 text-[var(--accent-primary)] text-xs truncate max-w-[120px]">
                             {tx.type === 'IN' ? `From: ${tx.from}` : `To: ${tx.to}`}
                           </td>
                           <td className="py-1.5 px-2 text-right font-bold text-[var(--text-primary)]">{tx.amount}</td>
                           <td className="py-1.5 px-2 text-right">
-                            <span className={`text-[8px] px-1.5 py-0.5 rounded-full font-bold shadow-inner ${
+                            <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold shadow-inner ${
                               tx.status === 'FLAGGED' ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30' :
                               'bg-emerald-500/20 text-[var(--accent-primary)] border border-emerald-500/30'
                             }`}>
@@ -269,7 +269,7 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
                 onClose();
                 if (onOpenGraph) onOpenGraph(profile);
               }}
-              className="py-1.5 px-2 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold"
+              className="py-1.5 px-2 rounded-lg skeuo-btn skeuo-btn-secondary text-xs sm:text-xs font-semibold"
             >
               <Share2 className="w-3 h-3 text-[var(--accent-primary)]" />
               <span>3D Graph</span>
@@ -279,7 +279,7 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
               onClick={() => {
                 if (onOpenNotice) onOpenNotice(profile);
               }}
-              className="py-1.5 px-2 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] sm:text-[11px] font-semibold"
+              className="py-1.5 px-2 rounded-lg skeuo-btn skeuo-btn-secondary text-xs sm:text-xs font-semibold"
             >
               <Mail className="w-3 h-3 text-amber-500" />
               <span>Notice</span>
@@ -289,7 +289,7 @@ export const AccountProfileDrawer = ({ account, isOpen, onClose, onOpenGraph, on
               onClick={() => {
                 if (onOpenActionModal) onOpenActionModal({ type: 'FREEZE_ACCOUNT', target: profile });
               }}
-              className="py-1.5 px-2 rounded-lg skeuo-btn skeuo-btn-danger text-[10px] sm:text-[11px] font-bold"
+              className="py-1.5 px-2 rounded-lg skeuo-btn skeuo-btn-danger text-xs sm:text-xs font-bold"
             >
               <Lock className="w-3 h-3" />
               <span>Freeze</span>

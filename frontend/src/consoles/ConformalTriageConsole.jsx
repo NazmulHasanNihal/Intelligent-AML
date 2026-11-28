@@ -66,7 +66,7 @@ export const ConformalTriageConsole = () => {
               onChange={(e) => setAlpha(Number(e.target.value))}
               className="w-full accent-indigo-500 cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
+            <div className="flex justify-between text-xs text-slate-500 font-mono mt-1">
               <span>Tight Risk (0.001)</span>
               <span>Default (0.010)</span>
               <span>Relaxed (0.050)</span>
@@ -76,24 +76,24 @@ export const ConformalTriageConsole = () => {
             {/* Quantiles & ACI Telemetry Panel */}
             <div className="md:col-span-7 flex justify-around border-t md:border-t-0 md:border-l border-white/[0.08] md:pl-4 font-mono text-center">
               <div>
-                <span className="text-[10px] text-slate-500 block">BENIGN QUANTILE</span>
+                <span className="text-xs text-slate-500 block">BENIGN QUANTILE</span>
                 <span className="text-xs font-semibold text-emerald-400">q̂⁽⁰⁾ = {q0_hat}</span>
-                <span className="text-[9px] text-slate-500 block">Tier 3 Clear Cutoff</span>
+                <span className="text-xs text-slate-500 block">Tier 3 Clear Cutoff</span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-500 block">ILLICIT QUANTILE</span>
+                <span className="text-xs text-slate-500 block">ILLICIT QUANTILE</span>
                 <span className="text-xs font-semibold text-rose-400">q̂⁽¹⁾ = {q1_hat}</span>
-                <span className="text-[9px] text-slate-500 block">Tier 1 Hold Cutoff</span>
+                <span className="text-xs text-slate-500 block">Tier 1 Hold Cutoff</span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-500 block">ACI TRACKING (αₜ)</span>
+                <span className="text-xs text-slate-500 block">ACI TRACKING (αₜ)</span>
                 <span className="text-xs font-semibold text-cyan-300">αₜ = {aci_alpha_t}</span>
-                <span className="text-[9px] text-slate-500 block">γ = 0.005 Step-Size</span>
+                <span className="text-xs text-slate-500 block">γ = 0.005 Step-Size</span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-500 block">DECISIVE VOLUME</span>
+                <span className="text-xs text-slate-500 block">DECISIVE VOLUME</span>
                 <span className="text-xs font-semibold text-indigo-300">{autoClearPct}%</span>
-                <span className="text-[9px] text-slate-500 block">|Γ(u)| = 1 Singletons</span>
+                <span className="text-xs text-slate-500 block">|Γ(u)| = 1 Singletons</span>
               </div>
             </div>
           </div>
@@ -108,25 +108,25 @@ export const ConformalTriageConsole = () => {
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                         <span>Deterministic 3-Tier Conformal Triage</span>
                       </h3>
-                      <span className="text-[10px] font-mono text-emerald-400">Coverage ≥ 99.0%</span>
+                      <span className="text-xs font-mono text-emerald-400">Coverage ≥ 99.0%</span>
                     </div>
 
                     {/* Explicit Set Mathematical Notation Legend */}
                     <div className="grid grid-cols-3 gap-2 mb-3 text-center font-mono">
                       <div className="p-2 rounded bg-rose-950/20 border border-rose-500/20">
-                        <span className="text-[9px] text-rose-400 font-bold block">TIER 1 (HOLD)</span>
+                        <span className="text-xs text-rose-400 font-bold block">TIER 1 (HOLD)</span>
                         <span className="text-xs text-white font-bold block">Γ(u) = &#123;1&#125;</span>
-                        <span className="text-[8px] text-slate-400">0.05% Volume</span>
+                        <span className="text-xs text-slate-400">0.05% Volume</span>
                       </div>
                       <div className="p-2 rounded bg-amber-950/20 border border-amber-500/20">
-                        <span className="text-[9px] text-amber-400 font-bold block">TIER 2 (REVIEW)</span>
+                        <span className="text-xs text-amber-400 font-bold block">TIER 2 (REVIEW)</span>
                         <span className="text-xs text-white font-bold block">Γ(u) = &#123;0, 1&#125;</span>
-                        <span className="text-[8px] text-slate-400">{queuePct}% Volume</span>
+                        <span className="text-xs text-slate-400">{queuePct}% Volume</span>
                       </div>
                       <div className="p-2 rounded bg-emerald-950/20 border border-emerald-500/20">
-                        <span className="text-[9px] text-emerald-400 font-bold block">TIER 3 (CLEAR)</span>
+                        <span className="text-xs text-emerald-400 font-bold block">TIER 3 (CLEAR)</span>
                         <span className="text-xs text-white font-bold block">Γ(u) = &#123;0&#125;</span>
-                        <span className="text-[8px] text-slate-400">{autoClearPct}% Volume</span>
+                        <span className="text-xs text-slate-400">{autoClearPct}% Volume</span>
                       </div>
                     </div>
 
@@ -135,7 +135,7 @@ export const ConformalTriageConsole = () => {
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-white/[0.08] text-[10px] text-slate-400 font-mono flex items-center justify-between">
+                  <div className="pt-2 border-t border-white/[0.08] text-xs text-slate-400 font-mono flex items-center justify-between">
                     <span>Guaranteed Marginal Loss: E[L] ≤ α</span>
                     <span className="text-emerald-400 font-semibold">Zero Empty Sets P(Γ = ∅) = 0</span>
                   </div>
@@ -149,7 +149,7 @@ export const ConformalTriageConsole = () => {
                         <Users className="w-3.5 h-3.5 text-amber-400" />
                         <span>Tier 2 Ambiguous Review Queue: Γ(u) = &#123;0, 1&#125; ({inbox.length})</span>
                       </h3>
-                      <span className="text-[10px] font-mono text-slate-400">Mandatory 4-Eyes Compliance Review</span>
+                      <span className="text-xs font-mono text-slate-400">Mandatory 4-Eyes Compliance Review</span>
                     </div>
 
                     <div className="space-y-2">
@@ -169,11 +169,11 @@ export const ConformalTriageConsole = () => {
                         <span className="text-amber-400 font-semibold">{alert.id}</span>
                         <span className="text-slate-300 font-semibold">{alert.entity}</span>
                         <span className="text-white font-bold">{alert.amount}</span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+                        <span className="text-xs px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
                           Γ(u) = {alert.setNotation}
                         </span>
                       </div>
-                      <div className="text-[11px] text-slate-400 mt-1 flex items-center gap-3">
+                      <div className="text-xs text-slate-400 mt-1 flex items-center gap-3">
                         <span>Posterior p̂: <b className="text-indigo-300">{(alert.pIllicit * 100).toFixed(0)}%</b></span>
                         <span>Evidence Fusion αᵤ: <b className="text-cyan-300">{alert.alphaU}</b> (Cold-Start Shift)</span>
                         <span className="text-slate-400">Motif: <span className="text-slate-300">{alert.ambiguity}</span></span>
@@ -183,7 +183,7 @@ export const ConformalTriageConsole = () => {
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => handleAction(alert.id)}
-                        className="px-2.5 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-[11px] font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                        className="px-2.5 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors"
                         title="Authorize transaction into Tier 3 (Straight-Through Clear)"
                       >
                         <Check className="w-3 h-3" />
@@ -191,7 +191,7 @@ export const ConformalTriageConsole = () => {
                       </button>
                       <button
                         onClick={() => handleAction(alert.id)}
-                        className="px-2.5 py-1 rounded bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 text-[11px] font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                        className="px-2.5 py-1 rounded bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors"
                         title="Quarantine transaction into Tier 1 (FinCEN SAR Escalation)"
                       >
                         <X className="w-3 h-3" />
@@ -204,7 +204,7 @@ export const ConformalTriageConsole = () => {
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/[0.08] text-[11px] text-slate-400 font-mono flex items-center justify-between">
+          <div className="pt-3 border-t border-white/[0.08] text-xs text-slate-400 font-mono flex items-center justify-between">
             <span>Algorithm: Class-Conditional Split CRC + Adaptive ACI (Martingale Validated)</span>
             <span className="text-emerald-400 font-semibold">Decisive Singletons: 99.45%</span>
           </div>

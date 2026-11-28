@@ -87,63 +87,63 @@ export const CommandDialog = ({ isOpen, onClose, open, setOpen }) => {
                     <LayoutDashboard className="w-4 h-4 text-muted shrink-0" />
                     <span>Overview</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">1</span>
+                  <span className="text-xs font-mono text-muted">1</span>
                 </Command.Item>
                 <Command.Item onSelect={() => go('alerts')}>
                   <div className="flex items-center gap-2.5">
                     <AlertCircle className="w-4 h-4 text-muted shrink-0" />
                     <span>Alerts</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">2</span>
+                  <span className="text-xs font-mono text-muted">2</span>
                 </Command.Item>
                 <Command.Item onSelect={() => go('cases')}>
                   <div className="flex items-center gap-2.5">
                     <Briefcase className="w-4 h-4 text-muted shrink-0" />
                     <span>Cases</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">3</span>
+                  <span className="text-xs font-mono text-muted">3</span>
                 </Command.Item>
                 <Command.Item onSelect={() => go('network')}>
                   <div className="flex items-center gap-2.5">
                     <Share2 className="w-4 h-4 text-muted shrink-0" />
                     <span>Network Graph</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">4</span>
+                  <span className="text-xs font-mono text-muted">4</span>
                 </Command.Item>
                 <Command.Item onSelect={() => go('filings')}>
                   <div className="flex items-center gap-2.5">
                     <FileText className="w-4 h-4 text-muted shrink-0" />
                     <span>SAR Filings</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">5</span>
+                  <span className="text-xs font-mono text-muted">5</span>
                 </Command.Item>
                 <Command.Item onSelect={() => go('requests')}>
                   <div className="flex items-center gap-2.5">
                     <Mail className="w-4 h-4 text-muted shrink-0" />
                     <span>RFI Requests</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">6</span>
+                  <span className="text-xs font-mono text-muted">6</span>
                 </Command.Item>
                 <Command.Item onSelect={() => go('audit')}>
                   <div className="flex items-center gap-2.5">
                     <ShieldCheck className="w-4 h-4 text-muted shrink-0" />
                     <span>Audit Vault</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">7</span>
+                  <span className="text-xs font-mono text-muted">7</span>
                 </Command.Item>
                 <Command.Item onSelect={() => go('models')}>
                   <div className="flex items-center gap-2.5">
                     <Cpu className="w-4 h-4 text-muted shrink-0" />
                     <span>Engine Health & Rail Status</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">8</span>
+                  <span className="text-xs font-mono text-muted">8</span>
                 </Command.Item>
                 <Command.Item onSelect={() => go('settings')}>
                   <div className="flex items-center gap-2.5">
                     <Settings className="w-4 h-4 text-muted shrink-0" />
                     <span>Settings</span>
                   </div>
-                  <span className="text-[10px] font-mono text-muted">9</span>
+                  <span className="text-xs font-mono text-muted">9</span>
                 </Command.Item>
               </Command.Group>
 
@@ -159,7 +159,7 @@ export const CommandDialog = ({ isOpen, onClose, open, setOpen }) => {
                         <Briefcase className="w-4 h-4 text-muted shrink-0" />
                         <span className="truncate">{c.id}: {c.title}</span>
                       </div>
-                      <span className="text-[10px] font-mono text-muted uppercase shrink-0">
+                      <span className="text-xs font-mono text-muted shrink-0">
                         {c.tier || 'Tier 1'}
                       </span>
                     </Command.Item>
@@ -179,7 +179,7 @@ export const CommandDialog = ({ isOpen, onClose, open, setOpen }) => {
                         <AlertCircle className="w-4 h-4 text-muted shrink-0" />
                         <span className="truncate">{a.id} — {a.entityName} (${a.amount?.toLocaleString()})</span>
                       </div>
-                      <span className="text-[10px] font-mono text-muted uppercase shrink-0">
+                      <span className="text-xs font-mono text-muted shrink-0">
                         Tier {a.tierCode || 1}
                       </span>
                     </Command.Item>
@@ -206,7 +206,7 @@ export const CommandDialog = ({ isOpen, onClose, open, setOpen }) => {
             {/* Minimalist Footer with Navigation Hints */}
             <div className="border-t border-border bg-surfaceRaised px-4 py-2 text-xs text-muted flex items-center justify-between font-mono">
               <span>↑↓ navigate · ↵ select · esc close</span>
-              <span className="text-[10px] bg-surface px-1.5 py-0.5 rounded border border-border">{shortcutHint}</span>
+              <span className="text-xs bg-surface px-1.5 py-0.5 rounded border border-border">{shortcutHint}</span>
             </div>
           </Command>
         </Dialog.Content>

@@ -236,7 +236,7 @@ export default function RfiHubPage() {
 
           <form onSubmit={handleCreateRfi} className="space-y-4 text-xs font-sans">
             <div>
-              <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Target Corporate Entity</label>
+              <label className="text-slate-400 block mb-1 font-mono text-xs">Target Corporate Entity</label>
               <input
                 type="text"
                 required
@@ -247,7 +247,7 @@ export default function RfiHubPage() {
             </div>
 
             <div>
-              <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Account Number (Masked)</label>
+              <label className="text-slate-400 block mb-1 font-mono text-xs">Account Number (Masked)</label>
               <input
                 type="text"
                 required
@@ -260,14 +260,14 @@ export default function RfiHubPage() {
             {/* RFI Reason with Live Anti-Tipping-Off Scanner */}
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-slate-400 font-mono uppercase text-[10px]">Customer-Facing Notice Reason</label>
+                <label className="text-slate-400 font-mono text-xs">Customer-Facing Notice Reason</label>
                 {tippingOffCheck.containsTippingOff ? (
-                  <span className="text-[10px] font-mono font-bold text-rose-400 animate-pulse flex items-center gap-1">
+                  <span className="text-xs font-mono font-bold text-rose-400 animate-pulse flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" />
                     TIPPING-OFF VIOLATION DETECTED
                   </span>
                 ) : (
-                  <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                  <span className="text-xs font-mono text-emerald-400 flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3" />
                     Statutory Language Compliant
                   </span>
@@ -295,12 +295,12 @@ export default function RfiHubPage() {
                     <button
                       type="button"
                       onClick={handleRewriteCompliant}
-                      className="px-2.5 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-semibold text-[11px] cursor-pointer"
+                      className="px-2.5 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs cursor-pointer"
                     >
                       1-Click Safe Rewrite
                     </button>
                   </div>
-                  <p className="text-[10px] text-rose-400">
+                  <p className="text-xs text-rose-400">
                     Disclosing AML investigations or SAR status constitutes an offense under MLPA 2012 § 6.
                   </p>
                 </div>
@@ -309,7 +309,7 @@ export default function RfiHubPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Response Deadline</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Response Deadline</label>
                 <select
                   value={deadlineDays}
                   onChange={(e) => setDeadlineDays(Number(e.target.value))}
@@ -322,7 +322,7 @@ export default function RfiHubPage() {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Transmission Channel</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Transmission Channel</label>
                 <select className="w-full px-3 py-2 bg-[#0B0F17] border border-[#334155] rounded-lg text-slate-100 cursor-pointer">
                   <option>Secure Corporate Banking Portal</option>
                   <option>Encrypted SWIFT MT999 Notice</option>
@@ -353,11 +353,11 @@ export default function RfiHubPage() {
           {/* Customer Document Response Simulator */}
           <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono flex items-center gap-2">
+              <h3 className="text-xs font-bold text-slate-200 font-mono flex items-center gap-2">
                 <UploadCloud className="w-4 h-4 text-emerald-400" />
                 Customer Response Portal Simulation
               </h3>
-              <span className="text-[10px] font-mono text-emerald-400">WebCrypto SHA-256 Engine</span>
+              <span className="text-xs font-mono text-emerald-400">WebCrypto SHA-256 Engine</span>
             </div>
 
             <p className="text-xs text-slate-400">
@@ -379,7 +379,7 @@ export default function RfiHubPage() {
 
           {/* Active Outbound Notices List */}
           <div className="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-4 shadow-xl space-y-3">
-            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider font-mono">
+            <h3 className="text-xs font-bold text-slate-300 font-mono">
               Active Outbound RFI Notices Queue
             </h3>
 
@@ -391,7 +391,7 @@ export default function RfiHubPage() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-bold text-indigo-400">{rfi.id}</span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                    <span className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                       rfi.status === 'DOCUMENT_UPLOADED'
                         ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                         : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
@@ -401,11 +401,11 @@ export default function RfiHubPage() {
                   </div>
 
                   <div className="font-medium text-slate-200">{rfi.targetEntity}</div>
-                  <p className="text-[11px] text-slate-400 font-mono leading-relaxed truncate">
+                  <p className="text-xs text-slate-400 font-mono leading-relaxed truncate">
                     {rfi.reason}
                   </p>
 
-                  <div className="pt-2 border-t border-[#1E293B]/60 flex items-center justify-between text-[11px]">
+                  <div className="pt-2 border-t border-[#1E293B]/60 flex items-center justify-between text-xs">
                     <span className="text-slate-500 font-mono">Deadline: {rfi.deadlineDays} Days</span>
                     <button
                       onClick={() => handleSendReminder(rfi.id)}

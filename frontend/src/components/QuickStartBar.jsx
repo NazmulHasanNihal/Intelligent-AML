@@ -110,7 +110,7 @@ export const QuickStartBar = ({
         
         {/* Left: 1-Click Scenario Preset Buttons */}
         <div className="flex flex-wrap items-center gap-1.5 min-w-0">
-          <span className="text-[10px] font-bold text-[var(--text-muted)] font-mono uppercase tracking-wider flex items-center gap-1 mr-0.5 shrink-0">
+          <span className="text-xs font-bold text-[var(--text-muted)] font-mono flex items-center gap-1 mr-0.5 shrink-0">
             <Sparkles className="w-3 h-3 text-[var(--accent-primary)]" />
             <span>1-Click Scenarios:</span>
           </span>
@@ -119,11 +119,11 @@ export const QuickStartBar = ({
             <button
               key={sc.id}
               onClick={() => onSelectScenario && onSelectScenario(sc.data)}
-              className="px-2.5 py-1 rounded-lg skeuo-btn text-[11px] font-semibold text-[var(--text-primary)] transition-all flex items-center gap-1.5 cursor-pointer active:translate-y-0.5 hover:border-[var(--accent-primary)] group shrink-0"
+              className="px-2.5 py-1 rounded-lg skeuo-btn text-xs font-semibold text-[var(--text-primary)] transition-all flex items-center gap-1.5 cursor-pointer active:translate-y-0.5 hover:border-[var(--accent-primary)] group shrink-0"
               title={sc.description}
             >
               <span>{sc.title}</span>
-              <span className={`text-[8px] font-mono font-bold px-1.5 py-0.2 rounded-full ${sc.badgeClass}`}>
+              <span className={`text-xs font-mono font-bold px-1.5 py-0.2 rounded-full ${sc.badgeClass}`}>
                 {sc.type.split(' ')[0]}
               </span>
             </button>
@@ -132,7 +132,7 @@ export const QuickStartBar = ({
           {/* Quick Batch CSV Ingest Modal Trigger */}
           <button
             onClick={onOpenBatchModal}
-            className="px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-primary text-[11px] font-bold flex items-center gap-1.5 cursor-pointer active:translate-y-0.5 shrink-0"
+            className="px-2.5 py-1 rounded-lg skeuo-btn skeuo-btn-primary text-xs font-bold flex items-center gap-1.5 cursor-pointer active:translate-y-0.5 shrink-0"
             title="Upload CSV or select pre-bundled benchmark batch"
           >
             <UploadCloud className="w-3.5 h-3.5" />
@@ -141,7 +141,7 @@ export const QuickStartBar = ({
         </div>
 
         {/* Right: Stream & Tour Controls */}
-        <div className="flex items-center gap-1.5 shrink-0 font-mono text-[10px] self-end lg:self-auto">
+        <div className="flex items-center gap-1.5 shrink-0 font-mono text-xs self-end lg:self-auto">
           <button
             onClick={onToggleLiveStream}
             className={`px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer ${

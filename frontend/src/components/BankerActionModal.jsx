@@ -130,7 +130,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
             </div>
             <div className="min-w-0">
               <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">{config.title}</h3>
-              <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">{config.statute}</p>
+              <p className="text-xs text-[var(--text-muted)] font-sans truncate">{config.statute}</p>
             </div>
           </div>
 
@@ -146,37 +146,37 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
         <div className="p-3.5 sm:p-4 space-y-3 font-sans text-xs">
           {/* Subject Identification */}
           <div className="p-2.5 rounded-xl skeuo-well space-y-0.5 font-mono">
-            <div className="text-[9px] text-[var(--text-muted)] uppercase">SUBJECT ENTITY:</div>
+            <div className="text-xs text-[var(--text-muted)] ">SUBJECT ENTITY:</div>
             <div className="font-bold text-[var(--text-primary)] text-xs truncate">{targetLabel}</div>
-            <div className="text-[10px] sm:text-[11px] text-[var(--accent-primary)] truncate">{targetId}</div>
+            <div className="text-xs sm:text-xs text-[var(--accent-primary)] truncate">{targetId}</div>
           </div>
 
           {/* Maker-Checker Governance Protocol */}
-          <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-2 font-mono text-[10px]">
+          <div className="p-2.5 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-2 font-mono text-xs">
             <div className="flex items-center justify-between font-bold text-[var(--text-primary)]">
               <span className="flex items-center gap-1.5">
                 <Shield className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 MAKER-CHECKER DUAL AUTHORIZATION (FOUR-EYES)
               </span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border border-[var(--accent-primary)]/20">
+              <span className="text-xs px-1.5 py-0.2 rounded bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border border-[var(--accent-primary)]/20">
                 EU AI Act Mandated
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-[10px]">
+            <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="p-2 rounded-lg skeuo-well">
-                <span className="text-[8px] text-[var(--text-muted)] block">1. INITIATING MAKER:</span>
+                <span className="text-xs text-[var(--text-muted)] block">1. INITIATING MAKER:</span>
                 <span className="font-bold text-[var(--text-primary)] block truncate">{currentBanker.name}</span>
-                <span className="text-[8px] text-[var(--accent-primary)]">{currentBanker.id} • {currentBanker.roleTitle.split(' ')[0]}</span>
+                <span className="text-xs text-[var(--accent-primary)]">{currentBanker.id} • {currentBanker.roleTitle.split(' ')[0]}</span>
               </div>
 
               <div className="p-2 rounded-lg skeuo-well">
-                <span className="text-[8px] text-[var(--text-muted)] block">2. MANAGERIAL CHECKER:</span>
+                <span className="text-xs text-[var(--text-muted)] block">2. MANAGERIAL CHECKER:</span>
                 {isMakerOnly ? (
                   <select 
                     value={selectedChecker}
                     onChange={(e) => setSelectedChecker(e.target.value)}
-                    className="w-full bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded text-[9px] text-[var(--text-primary)] font-mono p-1 mt-0.5 outline-none"
+                    className="w-full bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded text-xs text-[var(--text-primary)] font-mono p-1 mt-0.5 outline-none"
                   >
                     <option value="BNK-4029">Marcus Vance (CCO L3)</option>
                     <option value="BNK-1044">Sarah Jenkins (Senior L2)</option>
@@ -185,7 +185,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
                 ) : (
                   <div>
                     <span className="font-bold text-emerald-600 dark:text-emerald-400 block truncate">✓ Manager Co-Sign Ready</span>
-                    <span className="text-[8px] text-[var(--text-muted)]">Authorized L2/L3 Clearance</span>
+                    <span className="text-xs text-[var(--text-muted)]">Authorized L2/L3 Clearance</span>
                   </div>
                 )}
               </div>
@@ -193,14 +193,14 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
           </div>
 
           {/* Standard Audit Reason Codes */}
-          <div className="space-y-1 font-mono text-[10px]">
-            <label className="text-[9px] text-[var(--text-secondary)] font-bold block uppercase">
+          <div className="space-y-1 font-mono text-xs">
+            <label className="text-xs text-[var(--text-secondary)] font-bold block ">
               Standard Regulatory Reason Code:
             </label>
             <select
               value={reasonCode}
               onChange={(e) => setReasonCode(e.target.value)}
-              className="w-full p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-card)] text-[var(--text-primary)] text-[10px] font-mono focus:border-[var(--accent-primary)] outline-none shadow-inner"
+              className="w-full p-2 rounded-lg bg-[var(--bg-base)] border border-[var(--border-card)] text-[var(--text-primary)] text-xs font-mono focus:border-[var(--accent-primary)] outline-none shadow-inner"
             >
               {REASON_CODES.map((rc) => (
                 <option key={rc.code} value={rc.code}>{rc.label}</option>
@@ -210,7 +210,7 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
 
           {/* Compliance Justification Memo */}
           <div className="space-y-1">
-            <label className="text-[10px] sm:text-[11px] font-semibold text-[var(--text-secondary)] block font-mono">
+            <label className="text-xs sm:text-xs font-semibold text-[var(--text-secondary)] block font-mono">
               Officer Rationale & Evidence Memo:
             </label>
             <textarea
@@ -223,18 +223,18 @@ export const BankerActionModal = ({ isOpen, onClose, actionData, onActionConfirm
           </div>
 
           {/* Core Banking Webhook Action Trigger */}
-          <div className="p-2 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1.5 font-mono text-[10px]">
+          <div className="p-2 rounded-xl bg-[var(--bg-card-elevated)] border border-[var(--border-subtle)] space-y-1.5 font-mono text-xs">
             <div className="flex items-center justify-between">
-              <span className="text-[9px] font-bold text-[var(--text-secondary)] uppercase">CORE BANKING API WEBHOOK:</span>
+              <span className="text-xs font-bold text-[var(--text-secondary)] ">CORE BANKING API WEBHOOK:</span>
               <button
                 type="button"
                 onClick={handleDispatchRFI}
-                className="text-[9px] text-[var(--accent-primary)] hover:underline font-bold"
+                className="text-xs text-[var(--accent-primary)] hover:underline font-bold"
               >
                 {rfiDispatched ? '✓ RFI Upload Link Sent!' : 'Dispatch Customer RFI Link'}
               </button>
             </div>
-            <div className="grid grid-cols-3 gap-1.5 text-[9px]">
+            <div className="grid grid-cols-3 gap-1.5 text-xs">
               <label className={`p-1.5 rounded-lg border text-center cursor-pointer transition-all ${
                 coreWebhookAction === 'WEBHOOK_DEBIT_HOLD' ? 'bg-rose-500/15 border-rose-500/40 text-rose-600 dark:text-rose-400 font-bold' : 'border-[var(--border-subtle)] text-[var(--text-muted)]'
               }`}>

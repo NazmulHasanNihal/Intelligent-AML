@@ -150,14 +150,14 @@ export const AuditView = () => {
               <span className="font-semibold text-cleared-text block">
                 Cryptographic Chain Verified Valid (FRE 902(11) Certified)
               </span>
-              <p className="text-cleared-text/80 text-[11px] mt-0.5 font-mono">
+              <p className="text-cleared-text/80 text-xs mt-0.5 font-mono">
                 {verificationResult.totalVerified} entries validated • 0 broken links • Head: {verificationResult.rootHash.slice(0, 24)}...
               </p>
             </div>
           </div>
           <button 
             onClick={() => setVerificationResult(null)} 
-            className="text-cleared-text hover:underline text-[11px] font-mono"
+            className="text-cleared-text hover:underline text-xs font-mono"
           >
             Dismiss
           </button>
@@ -228,7 +228,7 @@ export const AuditView = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-[11px] uppercase tracking-wider select-none">
+            <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-xs select-none">
               <tr>
                 <th className="py-2.5 px-3">Entry ID</th>
                 <th className="py-2.5 px-3">Action Description</th>
@@ -259,22 +259,22 @@ export const AuditView = () => {
                   </td>
                   <td className="py-2.5 px-3">
                     <span className="font-semibold text-text block">{log.action}</span>
-                    <span className="text-text-muted text-[11px] block mt-0.5">{log.details}</span>
+                    <span className="text-text-muted text-xs block mt-0.5">{log.details}</span>
                   </td>
-                  <td className="py-2.5 px-3 font-mono text-text-2 text-[11px]">
+                  <td className="py-2.5 px-3 font-mono text-text-2 text-xs">
                     {log.targetAccount}
                   </td>
                   <td className="py-2.5 px-3">
                     <span className="text-text font-medium block">{log.bankerName}</span>
-                    <span className="text-text-muted text-[10px] font-mono">{log.role}</span>
+                    <span className="text-text-muted text-xs font-mono">{log.role}</span>
                   </td>
-                  <td className="py-2.5 px-3 font-mono text-text-muted text-[11px]">
+                  <td className="py-2.5 px-3 font-mono text-text-muted text-xs">
                     {log.timestamp}
                   </td>
                   <td className="py-2.5 px-3 text-right">
                     <button
                       onClick={() => setSelectedHash(log.merkleHash)}
-                      className="font-mono text-accent hover:underline text-[11px] inline-flex items-center gap-1 cursor-pointer"
+                      className="font-mono text-accent hover:underline text-xs inline-flex items-center gap-1 cursor-pointer"
                     >
                       <span>{log.merkleHash.slice(0, 12)}...</span>
                       <ExternalLink className="w-3 h-3" />
@@ -300,7 +300,7 @@ export const AuditView = () => {
               {selectedHash}
             </div>
 
-            <p className="text-text-muted text-[11px]">
+            <p className="text-text-muted text-xs">
               This cryptographic signature uniquely anchors the initiating officer identity, approved supervisor dual control, and transaction metadata under SEC Rule 17a-4 recordkeeping requirements.
             </p>
 

@@ -29,7 +29,7 @@ export const ToastContainer = () => {
             <div className="min-w-0 flex-1">
               <h4 className="text-xs font-semibold text-text">{t.title}</h4>
               {t.description && (
-                <p className="text-[11px] text-text-2 mt-0.5 leading-snug">{t.description}</p>
+                <p className="text-xs text-text-2 mt-0.5 leading-snug">{t.description}</p>
               )}
             </div>
 

@@ -48,7 +48,7 @@ export const DemoBanner = () => {
       {/* Left: Stream Status & Ticker Controls */}
       <div className="flex items-center gap-2.5 flex-wrap">
         {/* Status Pill */}
-        <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[11px] font-mono font-medium ${
+        <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-xs font-mono font-medium ${
           isStreamRunning 
             ? 'bg-cleared-bg border-cleared text-cleared' 
             : 'bg-review-bg border-review text-review'
@@ -67,7 +67,7 @@ export const DemoBanner = () => {
         </button>
 
         {/* Speed Controls (1x, 2x, 5x, 10x) */}
-        <div className="flex items-center gap-0.5 p-0.5 bg-bg rounded border border-border font-mono text-[10px]">
+        <div className="flex items-center gap-0.5 p-0.5 bg-bg rounded border border-border font-mono text-xs">
           {[
             { val: 1, label: '1x', tip: '1.7 tx/s - Real-world Bank Pace (~150k tx/day)' },
             { val: 2, label: '2x', tip: '4.0 tx/s - Interbank Rush Hour Flow' },
@@ -90,7 +90,7 @@ export const DemoBanner = () => {
         </div>
 
         {/* Real-world Velocity Badge */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded bg-bg border border-border text-[10px] font-mono text-text-muted">
+        <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded bg-bg border border-border text-xs font-mono text-text-muted">
           <Activity className="w-3 h-3 text-accent animate-pulse" />
           <span className="text-text font-medium">
             {streamSpeed === 1 ? '1.7 tx/s (Bank Pace)' : 
@@ -101,14 +101,14 @@ export const DemoBanner = () => {
         </div>
 
         {/* Real-Time Ingestion Watermark & Consumer Lag Indicator */}
-        <div className="hidden 2xl:flex items-center gap-1.5 px-2 py-0.5 rounded bg-bg border border-border text-[10px] font-mono text-text-muted">
+        <div className="hidden 2xl:flex items-center gap-1.5 px-2 py-0.5 rounded bg-bg border border-border text-xs font-mono text-text-muted">
           <span className="w-1.5 h-1.5 rounded-full bg-cleared animate-ping" />
           <span>Lag: <strong className="text-cleared">0 msgs</strong> (0.12 ms)</span>
           <span>• Watermark: <strong className="text-text">Head Synchronized</strong></span>
         </div>
 
         {/* Live Mathematical Telemetry Snapshot */}
-        <div className="hidden md:flex items-center gap-2 text-text-2 font-mono text-[11px] pl-2 border-l border-border">
+        <div className="hidden md:flex items-center gap-2 text-text-2 font-mono text-xs pl-2 border-l border-border">
           <span className="text-text font-bold tabular-nums">
             {telemetry.totalProcessed24h.toLocaleString()} txs
           </span>
@@ -134,7 +134,7 @@ export const DemoBanner = () => {
             whyFlagged: latestTx.reasons?.join('; ') || 'Live stream scored transaction'
           })}
           title="Click to inspect this incoming transaction in Drawer"
-          className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded bg-bg border border-border text-[11px] font-mono hover:border-accent cursor-pointer transition-colors max-w-md truncate"
+          className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded bg-bg border border-border text-xs font-mono hover:border-accent cursor-pointer transition-colors max-w-md truncate"
         >
           <span className="text-accent font-semibold">{latestTx.id}</span>
           <span className="text-text truncate max-w-[140px]">{latestTx.sourceEntity}</span>

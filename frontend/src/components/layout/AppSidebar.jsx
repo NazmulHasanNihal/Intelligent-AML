@@ -85,10 +85,10 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
                 <Shield className="w-4 h-4 text-white" />
               </div>
               <div className="min-w-0">
-                <h1 className="text-xs font-bold text-text truncate uppercase tracking-wider">
+                <h1 className="text-xs font-bold text-text truncate ">
                   Intelligent-AML
                 </h1>
-                <p className="text-[10px] text-text-muted truncate">Enterprise Surveillance</p>
+                <p className="text-xs text-text-muted truncate">Enterprise Surveillance</p>
               </div>
             </div>
           ) : (
@@ -110,7 +110,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
         {/* Primary Navigation */}
         <div className="p-2 space-y-0.5">
           {!isCollapsed && (
-            <div className="px-2 py-1 text-[10px] font-mono text-text-muted uppercase tracking-wider">
+            <div className="px-2 py-1 text-xs font-mono text-text-muted ">
               Surveillance & Triage
             </div>
           )}
@@ -142,7 +142,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
                         {item.badge}
                       </Badge>
                     )}
-                    <kbd className="hidden group-hover:inline-block text-[9px] font-mono px-1 py-0.2 rounded bg-surfaceRaised text-text-muted border border-borderSubtle">
+                    <kbd className="hidden group-hover:inline-block text-xs font-mono px-1 py-0.2 rounded bg-surfaceRaised text-text-muted border border-borderSubtle">
                       {item.shortcut}
                     </kbd>
                   </div>
@@ -156,7 +156,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
       {/* Bottom: Secondary / System Nav & Institutional Compliance Footer */}
       <div className="p-2 border-t border-border space-y-0.5">
         {!isCollapsed && (
-          <div className="px-2 py-1 text-[10px] font-mono text-text-muted uppercase tracking-wider">
+          <div className="px-2 py-1 text-xs font-mono text-text-muted ">
             Governance & Controls
           </div>
         )}
@@ -182,7 +182,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
               </div>
 
               {!isCollapsed && (
-                <kbd className="hidden group-hover:inline-block text-[9px] font-mono px-1 py-0.2 rounded bg-surfaceRaised text-text-muted border border-borderSubtle">
+                <kbd className="hidden group-hover:inline-block text-xs font-mono px-1 py-0.2 rounded bg-surfaceRaised text-text-muted border border-borderSubtle">
                   {item.shortcut}
                 </kbd>
               )}
@@ -191,7 +191,7 @@ export const AppSidebar = ({ isCollapsed, onToggleCollapse }) => {
         })}
 
         {!isCollapsed && (
-          <div className="mt-2 p-2 rounded bg-surfaceRaised border border-borderSubtle text-[10px] text-text-muted font-mono leading-tight">
+          <div className="mt-2 p-2 rounded bg-surfaceRaised border border-borderSubtle text-xs text-text-muted font-mono leading-tight">
             <span>SR 11-7 / FRE 902(11)</span>
             <span className="block text-text-2 mt-0.5">Dual-Signatory Verified</span>
           </div>

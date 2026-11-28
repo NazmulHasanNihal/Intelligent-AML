@@ -180,7 +180,7 @@ export const InspectorDrawer = () => {
         <div className="p-4 sm:p-5 border-b border-border bg-surfaceRaised flex items-start justify-between gap-3 sticky top-0 z-10">
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className="font-mono text-xs text-text-muted uppercase tracking-wider">360° Entity Intelligence</span>
+              <span className="font-mono text-xs text-text-muted ">360° Entity Intelligence</span>
               <Badge 
                 variant={isTier1 ? 'critical' : isTier2 ? 'review' : 'cleared'}
                 dot
@@ -206,7 +206,7 @@ export const InspectorDrawer = () => {
         </div>
 
         {/* 360 Navigation Tabs */}
-        <div className="px-4 py-2 border-b border-border bg-surface flex items-center gap-1 overflow-x-auto text-[11px] font-mono shrink-0">
+        <div className="px-4 py-2 border-b border-border bg-surface flex items-center gap-1 overflow-x-auto text-xs font-mono shrink-0">
           {[
             { id: 'overview', label: 'Risk Drivers' },
             { id: 'kyc', label: 'KYC & Registry' },
@@ -237,26 +237,26 @@ export const InspectorDrawer = () => {
               {/* Risk Metric Grid */}
               <div className="grid grid-cols-2 gap-2 font-mono">
                 <div className="p-3 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">Fraud Risk Probability</span>
+                  <span className="text-xs text-text-muted block">Fraud Risk Probability</span>
                   <span className={`text-xl font-bold ${isTier1 ? 'text-critical' : isTier2 ? 'text-review' : 'text-cleared'}`}>
                     {drawerItem.riskScore ? `${(drawerItem.riskScore * 100).toFixed(1)}%` : '98.4%'}
                   </span>
-                  <span className="text-[10px] text-text-muted block mt-0.5">
+                  <span className="text-xs text-text-muted block mt-0.5">
                     Confidence Level: 99.96%
                   </span>
                 </div>
 
                 <div className="p-3 rounded bg-bg border border-borderSubtle">
-                  <span className="text-[10px] text-text-muted uppercase block">Stated Exposure</span>
+                  <span className="text-xs text-text-muted block">Stated Exposure</span>
                   <div className="flex items-baseline gap-1.5 flex-wrap">
                     <span className="text-xl font-bold text-text tabular-nums">
                       ${(drawerItem.amount || drawerItem.caseTotalExposure || 48500).toLocaleString()}
                     </span>
-                    <span className="text-[11px] text-text-muted font-medium">
+                    <span className="text-xs text-text-muted font-medium">
                       (৳{((drawerItem.amount || drawerItem.caseTotalExposure || 48500) * 120).toLocaleString()} BDT)
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] text-text-muted mt-0.5">
+                  <div className="flex items-center justify-between text-xs text-text-muted mt-0.5">
                     <span>Rail: {drawerItem.rail || 'SWIFT MT103'}</span>
                   </div>
                 </div>
@@ -283,7 +283,7 @@ export const InspectorDrawer = () => {
                     { name: 'Verified Authorized Dealer (AD) License', weight: -0.07, direction: 'mitigant' }
                   ]).map((driver, idx) => (
                     <div key={idx} className="space-y-1">
-                      <div className="flex justify-between text-[11px]">
+                      <div className="flex justify-between text-xs">
                         <span className="text-text-2 truncate pr-2">{driver.name}</span>
                         <span className={`font-mono font-semibold ${driver.direction === 'risk' ? 'text-critical' : 'text-cleared'}`}>
                           {driver.weight > 0 ? `+${(driver.weight * 100).toFixed(0)}%` : `${(driver.weight * 100).toFixed(0)}%`}
@@ -304,37 +304,37 @@ export const InspectorDrawer = () => {
 
           {/* TAB 2: KYC & CORPORATE REGISTRY */}
           {activeTab === 'kyc' && (
-            <div className="space-y-3 font-mono text-[11px]">
+            <div className="space-y-3 font-mono text-xs">
               <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle space-y-2">
-                <span className="font-semibold text-text text-xs uppercase block font-sans">
+                <span className="font-semibold text-text text-xs block font-sans">
                   Corporate Registration Profile
                 </span>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <span className="text-text-muted text-[10px] block">LEGAL ENTITY TYPE:</span>
+                    <span className="text-text-muted text-xs block">LEGAL ENTITY TYPE:</span>
                     <span className="text-text font-bold">{entityProfile.legalType}</span>
                   </div>
                   <div>
-                    <span className="text-text-muted text-[10px] block">INCORPORATION / RJSC:</span>
+                    <span className="text-text-muted text-xs block">INCORPORATION / RJSC:</span>
                     <span className="text-accent font-bold">{entityProfile.incorporation}</span>
                   </div>
                   <div>
-                    <span className="text-text-muted text-[10px] block">TAX IDENTIFICATION (TIN):</span>
+                    <span className="text-text-muted text-xs block">TAX IDENTIFICATION (TIN):</span>
                     <span className="text-text">{entityProfile.tin}</span>
                   </div>
                   <div>
-                    <span className="text-text-muted text-[10px] block">KYC COMPLIANCE TIER:</span>
+                    <span className="text-text-muted text-xs block">KYC COMPLIANCE TIER:</span>
                     <span className="text-critical font-bold">{entityProfile.kycStatus}</span>
                   </div>
                   <div className="col-span-2">
-                    <span className="text-text-muted text-[10px] block">REGISTERED COMMERCIAL JURISDICTION:</span>
+                    <span className="text-text-muted text-xs block">REGISTERED COMMERCIAL JURISDICTION:</span>
                     <span className="text-text">{entityProfile.jurisdiction}</span>
                   </div>
                 </div>
               </div>
 
               <div className="p-3 bg-surfaceRaised rounded border border-border text-text-2 space-y-1">
-                <span className="font-semibold text-text text-[11px] block font-sans">Corporate Trade Licensing</span>
+                <span className="font-semibold text-text text-xs block font-sans">Corporate Trade Licensing</span>
                 <p>Authorized Dealer (AD) Category-1 Interbank settlement clearance granted by Bangladesh Bank Banking Operations Department (BOD).</p>
               </div>
             </div>
@@ -345,7 +345,7 @@ export const InspectorDrawer = () => {
             <div className="space-y-3">
               <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-text text-xs uppercase font-mono">
+                  <span className="font-semibold text-text text-xs font-mono">
                     Beneficial Equity Distribution
                   </span>
                   <Badge variant="accent" size="sm">FATF Recommendation 24</Badge>
@@ -358,7 +358,7 @@ export const InspectorDrawer = () => {
                 </div>
 
                 {/* Equity Breakdown Table */}
-                <div className="space-y-2 font-mono text-[11px] pt-1">
+                <div className="space-y-2 font-mono text-xs pt-1">
                   <div className="flex items-center justify-between p-2 rounded bg-surfaceRaised border border-border">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-accent" />
@@ -378,7 +378,7 @@ export const InspectorDrawer = () => {
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded bg-bg border border-border text-[11px] text-text-muted font-mono">
+                <div className="p-2.5 rounded bg-bg border border-border text-xs text-text-muted font-mono">
                   <strong>UBO Transparency Status:</strong> Controlled by single individual meeting primary statutory trigger (&gt;25% equity interest under BFIU Circular 26).
                 </div>
               </div>
@@ -387,9 +387,9 @@ export const InspectorDrawer = () => {
 
           {/* TAB 4: PEP & SANCTIONS SCREENING */}
           {activeTab === 'sanctions' && (
-            <div className="space-y-3 font-mono text-[11px]">
+            <div className="space-y-3 font-mono text-xs">
               <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle space-y-2">
-                <span className="font-semibold text-text text-xs uppercase font-sans block">
+                <span className="font-semibold text-text text-xs font-sans block">
                   Sanctions & Watchlist Multi-Bureau Matches
                 </span>
 
@@ -445,10 +445,10 @@ export const InspectorDrawer = () => {
 
           {/* TAB 5: 12-D FLOW CONSERVATION */}
           {activeTab === 'flow' && (
-            <div className="space-y-3 font-mono text-[11px]">
+            <div className="space-y-3 font-mono text-xs">
               <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-text text-xs uppercase font-sans">
+                  <span className="font-semibold text-text text-xs font-sans">
                     Flow Conservation Metrics (Φ_flow)
                   </span>
                   <Badge variant="critical" size="sm">Kirchhoff Law Passthrough</Badge>
@@ -456,19 +456,19 @@ export const InspectorDrawer = () => {
 
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <div className="p-2 rounded bg-surfaceRaised border border-border">
-                    <span className="text-text-muted text-[10px] block">CONSERVATION COEFFICIENT:</span>
+                    <span className="text-text-muted text-xs block">CONSERVATION COEFFICIENT:</span>
                     <span className="text-critical font-bold text-sm">Φ = {entityProfile.flowConservation?.phiFlow || '0.992'}</span>
                   </div>
                   <div className="p-2 rounded bg-surfaceRaised border border-border">
-                    <span className="text-text-muted text-[10px] block">TRANSIT DWELL TIME:</span>
+                    <span className="text-text-muted text-xs block">TRANSIT DWELL TIME:</span>
                     <span className="text-critical font-bold text-sm">{entityProfile.flowConservation?.dwellTimeHours || '0.35'} Hours (~21 min)</span>
                   </div>
                   <div className="p-2 rounded bg-surfaceRaised border border-border">
-                    <span className="text-text-muted text-[10px] block">INBOUND TURNOVER (24H):</span>
+                    <span className="text-text-muted text-xs block">INBOUND TURNOVER (24H):</span>
                     <span className="text-text font-bold">{entityProfile.flowConservation?.inboundTurnover || '$48,500.00'}</span>
                   </div>
                   <div className="p-2 rounded bg-surfaceRaised border border-border">
-                    <span className="text-text-muted text-[10px] block">OUTBOUND TURNOVER (24H):</span>
+                    <span className="text-text-muted text-xs block">OUTBOUND TURNOVER (24H):</span>
                     <span className="text-text font-bold">{entityProfile.flowConservation?.outboundTurnover || '$47,600.00'}</span>
                   </div>
                 </div>
@@ -483,10 +483,10 @@ export const InspectorDrawer = () => {
 
           {/* TAB 6: GRAPH TOPOLOGY & ARCHETYPES */}
           {activeTab === 'topology' && (
-            <div className="space-y-3 font-mono text-[11px]">
+            <div className="space-y-3 font-mono text-xs">
               <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-text text-xs uppercase font-sans">
+                  <span className="font-semibold text-text text-xs font-sans">
                     Topological Centrality & Archetypes
                   </span>
                   <Badge variant={isTier1 ? 'critical' : 'cleared'} size="sm">
@@ -496,25 +496,25 @@ export const InspectorDrawer = () => {
 
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <div className="p-2 rounded bg-surfaceRaised border border-border">
-                    <span className="text-text-muted text-[10px] block">PAGERANK CENTRALITY:</span>
+                    <span className="text-text-muted text-xs block">PAGERANK CENTRALITY:</span>
                     <span className="text-accent font-bold text-sm">
                       {topologyData?.pagerank_score ? (topologyData.pagerank_score * 100).toFixed(2) + '%' : '8.42%'}
                     </span>
                   </div>
                   <div className="p-2 rounded bg-surfaceRaised border border-border">
-                    <span className="text-text-muted text-[10px] block">BETWEENNESS CONDUIT:</span>
+                    <span className="text-text-muted text-xs block">BETWEENNESS CONDUIT:</span>
                     <span className={`font-bold text-sm ${isTier1 ? 'text-critical' : 'text-text'}`}>
                       {topologyData?.betweenness_centrality ? (topologyData.betweenness_centrality * 100).toFixed(1) + '%' : '42.1%'}
                     </span>
                   </div>
                   <div className="p-2 rounded bg-surfaceRaised border border-border">
-                    <span className="text-text-muted text-[10px] block">DEGREE (IN / OUT):</span>
+                    <span className="text-text-muted text-xs block">DEGREE (IN / OUT):</span>
                     <span className="text-text font-bold text-sm">
                       {topologyData?.degree_in ?? 4} in / {topologyData?.degree_out ?? 8} out
                     </span>
                   </div>
                   <div className="p-2 rounded bg-surfaceRaised border border-border">
-                    <span className="text-text-muted text-[10px] block">CLUSTERING COEFFICIENT:</span>
+                    <span className="text-text-muted text-xs block">CLUSTERING COEFFICIENT:</span>
                     <span className="text-text font-bold text-sm">
                       {topologyData?.clustering_coefficient?.toFixed(3) ?? '0.045'}
                     </span>
@@ -529,7 +529,7 @@ export const InspectorDrawer = () => {
                       {topologyData?.nearest_archetype || (isTier1 ? 'CYCLE_WASH_TRADER' : 'PRIME_COMMERCIAL_CORP')}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] text-text-muted">
+                  <div className="flex items-center justify-between text-xs text-text-muted">
                     <span>Embedding Vector Similarity:</span>
                     <span className="font-bold text-text">
                       {topologyData?.archetype_similarity_pct?.toFixed(1) ?? '97.4'}%
@@ -541,7 +541,7 @@ export const InspectorDrawer = () => {
                       style={{ width: `${topologyData?.archetype_similarity_pct ?? 97.4}%` }} 
                     />
                   </div>
-                  <span className="text-[10px] text-text-muted block pt-0.5">
+                  <span className="text-xs text-text-muted block pt-0.5">
                     Recommended learnable edge trust gate: g_hat &gt;= {topologyData?.recommended_gating_threshold ?? 0.85}
                   </span>
                 </div>
@@ -553,13 +553,13 @@ export const InspectorDrawer = () => {
         {/* Footer Actions (Executive Quick Actions) */}
         <div className="p-3 sm:p-4 border-t border-border bg-surfaceRaised space-y-2 sticky bottom-0">
           {/* Top row action buttons: Recourse, Adverse Action, Core Hold */}
-          <div className="grid grid-cols-3 gap-1.5 font-mono text-[10px]">
+          <div className="grid grid-cols-3 gap-1.5 font-mono text-xs">
             <Button
               variant="outline"
               size="sm"
               onClick={() => openRecourseModal(entityProfile)}
               icon={Sliders}
-              className="h-7 text-[10px]"
+              className="h-7 text-xs"
             >
               What-If Recourse
             </Button>
@@ -569,7 +569,7 @@ export const InspectorDrawer = () => {
               size="sm"
               onClick={() => openAdverseActionModal(entityProfile)}
               icon={FileText}
-              className="h-7 text-[10px]"
+              className="h-7 text-xs"
             >
               Adverse Notice
             </Button>
@@ -579,7 +579,7 @@ export const InspectorDrawer = () => {
               size="sm"
               onClick={() => setCoreBankingModalOpen(true)}
               icon={Server}
-              className="h-7 text-[10px]"
+              className="h-7 text-xs"
             >
               Core Ledger Hold
             </Button>

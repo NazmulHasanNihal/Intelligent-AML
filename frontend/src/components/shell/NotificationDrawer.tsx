@@ -39,7 +39,7 @@ export const NotificationDrawer: React.FC = () => {
             <h2 className="text-sm font-bold text-slate-100 font-sans">
               Operational Notification Center
             </h2>
-            <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+            <span className="px-1.5 py-0.2 rounded text-xs font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
               {notifications.filter(n => !n.read).length} Unread
             </span>
           </div>
@@ -47,7 +47,7 @@ export const NotificationDrawer: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={clearAllNotifications}
-              className="text-[11px] text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+              className="text-xs text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
             >
               Clear All
             </button>
@@ -105,13 +105,13 @@ export const NotificationDrawer: React.FC = () => {
                         <span className="font-semibold text-slate-200">
                           {notif.title}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-500 flex items-center gap-1">
+                        <span className="text-xs font-mono text-slate-500 flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           {notif.timestamp}
                         </span>
                       </div>
 
-                      <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">
+                      <p className="text-slate-400 text-xs mt-1 leading-relaxed">
                         {notif.description}
                       </p>
 
@@ -119,7 +119,7 @@ export const NotificationDrawer: React.FC = () => {
                         <Link
                           href={notif.linkedHref}
                           onClick={() => setNotificationDrawerOpen(false)}
-                          className="inline-flex items-center gap-1 mt-2 text-[10px] font-mono font-bold text-emerald-400 hover:text-emerald-300"
+                          className="inline-flex items-center gap-1 mt-2 text-xs font-mono font-bold text-emerald-400 hover:text-emerald-300"
                         >
                           <span>Open Investigation</span>
                           <ArrowRight className="w-3 h-3" />
@@ -134,7 +134,7 @@ export const NotificationDrawer: React.FC = () => {
         </div>
 
         {/* Footer */}
-        <div className="p-3 border-t border-[#1E293B] bg-[#0B0F17] flex items-center justify-between text-[11px] text-slate-400 font-mono">
+        <div className="p-3 border-t border-[#1E293B] bg-[#0B0F17] flex items-center justify-between text-xs text-slate-400 font-mono">
           <span>Real-time Event Broker: Connected</span>
           <span className="text-emerald-400 font-bold">P99 &lt; 0.82ms</span>
         </div>

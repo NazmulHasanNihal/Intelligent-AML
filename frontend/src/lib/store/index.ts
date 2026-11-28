@@ -171,6 +171,8 @@ export interface UnifiedBankingState {
   resetWorkspaceData: () => void;
 }
 
+let persistReady = false;
+
 export const useAppStore = create<UnifiedBankingState>()(
   persist(
     (set, get) => ({
@@ -824,7 +826,15 @@ export const useAppStore = create<UnifiedBankingState>()(
     }),
     {
       name: 'intelligent-aml-workspace-v3',
-      storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
+      // Restore saved data in an effect after React hydrates (see StoreHydrator), so the first
+      // client render matches the server HTML. Writes are held back until that restore finishes,
+      // otherwise an early default-state write could overwrite what the user saved.
+      skipHydration: true,
+      storage: createJSONStorage(() => (typeof window !== 'undefined' ? {
+        getItem: (key: string) => localStorage.getItem(key),
+        setItem: (key: string, value: string) => { if (persistReady) localStorage.setItem(key, value); },
+        removeItem: (key: string) => localStorage.removeItem(key)
+      } : {
         getItem: () => null,
         setItem: () => { },
         removeItem: () => { }
@@ -841,5 +851,15 @@ export const useAppStore = create<UnifiedBankingState>()(
     }
   )
 );
+
+
+/** Restore the saved workspace once, after hydration, then allow persistence writes. */
+export async function rehydrateWorkspace(): Promise<void> {
+  try {
+    await useAppStore.persist.rehydrate();
+  } finally {
+    persistReady = true;
+  }
+}
 
 export const useBankingStore = useAppStore;

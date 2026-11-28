@@ -36,7 +36,7 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
             </div>
             <div className="min-w-0">
               <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] font-sans truncate">Banker Auth & Role Switcher</h3>
-              <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">
+              <p className="text-xs text-[var(--text-muted)] font-sans truncate">
                 Role-Based Access Control (RBAC) & Compliance Attribution
               </p>
             </div>
@@ -54,7 +54,7 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
         <div className="p-3.5 sm:p-4 space-y-3 font-sans text-xs">
           {/* Institution Selector */}
           <div>
-            <label className="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)] block mb-1 font-mono uppercase">
+            <label className="text-xs sm:text-xs font-semibold text-[var(--text-muted)] block mb-1 font-mono ">
               Financial Institution / Branch:
             </label>
             <select
@@ -70,7 +70,7 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
 
           {/* User Persona Profiles */}
           <div className="space-y-1.5">
-            <label className="text-[10px] sm:text-[11px] font-semibold text-[var(--text-muted)] block font-mono uppercase">
+            <label className="text-xs sm:text-xs font-semibold text-[var(--text-muted)] block font-mono ">
               Select Active Officer Persona:
             </label>
 
@@ -96,10 +96,10 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
                           <span className="font-bold text-[var(--text-primary)] text-xs truncate">{profile.name}</span>
-                          <span className="text-[9px] font-mono text-[var(--text-muted)]">({profile.id})</span>
+                          <span className="text-xs font-mono text-[var(--text-muted)]">({profile.id})</span>
                         </div>
-                        <p className="text-[10px] sm:text-[11px] text-[var(--accent-primary)] font-sans truncate">{profile.roleTitle}</p>
-                        <p className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-sans truncate">{profile.department}</p>
+                        <p className="text-xs sm:text-xs text-[var(--accent-primary)] font-sans truncate">{profile.roleTitle}</p>
+                        <p className="text-xs sm:text-xs text-[var(--text-muted)] font-sans truncate">{profile.department}</p>
                       </div>
                     </div>
 
@@ -118,7 +118,7 @@ export const BankerAuthModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <div className="p-2.5 rounded-xl skeuo-well flex items-center gap-2 text-[10px] sm:text-[11px] text-[var(--text-secondary)]">
+          <div className="p-2.5 rounded-xl skeuo-well flex items-center gap-2 text-xs sm:text-xs text-[var(--text-secondary)]">
             <Lock className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0" />
             <span>
               All actions signed and attributed to <b>{currentBanker?.name || 'Authorized Officer'}</b> in the audit trail.

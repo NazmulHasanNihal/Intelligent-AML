@@ -351,10 +351,10 @@ ${institution}
           <div className="mt-3 p-2.5 rounded bg-surfaceRaised border border-border flex items-start gap-2.5 text-xs">
             <Lock className="w-4 h-4 text-critical shrink-0 mt-0.5" />
             <div className="text-text-2 leading-relaxed">
-              <strong className="text-text font-mono uppercase text-[11px]">
+              <strong className="text-text font-mono text-xs">
                 Statutory Anti-Tipping-Off Safeguard (31 U.S.C. § 5318(g)(2)):
               </strong>
-              <span className="block mt-0.5 text-[11px]">
+              <span className="block mt-0.5 text-xs">
                 This formal customer notice informs the account holder of transaction suspension and establishes an actionable remediation pathway without disclosing internal ML invariants or regulatory SAR filings.
               </span>
             </div>
@@ -363,19 +363,19 @@ ${institution}
           {/* Configuration Grid */}
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono">
             <div className="p-2 rounded bg-surface border border-border">
-              <span className="text-[10px] text-text-muted uppercase block">TARGET ENTITY</span>
+              <span className="text-xs text-text-muted block">TARGET ENTITY</span>
               <span className="font-bold text-text truncate block">{holderName}</span>
-              <span className="text-[10px] text-text-muted truncate block">{accountNum}</span>
+              <span className="text-xs text-text-muted truncate block">{accountNum}</span>
             </div>
 
             <div className="p-2 rounded bg-surface border border-border">
-              <span className="text-[10px] text-text-muted uppercase block">RESTRICTED EXPOSURE</span>
+              <span className="text-xs text-text-muted block">RESTRICTED EXPOSURE</span>
               <span className="font-bold text-critical text-sm block">{amountFormatted}</span>
-              <span className="text-[10px] text-text-muted block">Rail: {target.rail || 'SWIFT MT103'}</span>
+              <span className="text-xs text-text-muted block">Rail: {target.rail || 'SWIFT MT103'}</span>
             </div>
 
             <div className="p-2 rounded bg-surface border border-border">
-              <label htmlFor="freeze-notice-email" className="text-[10px] text-text-muted uppercase block cursor-pointer">RECIPIENT EMAIL</label>
+              <label htmlFor="freeze-notice-email" className="text-xs text-text-muted block cursor-pointer">RECIPIENT EMAIL</label>
               <input
                 id="freeze-notice-email"
                 name="freeze-notice-email"
@@ -390,7 +390,7 @@ ${institution}
 
           {/* Statutory Order Framework Selector */}
           <div className="mt-3 flex items-center gap-2 flex-wrap text-xs">
-            <span className="text-text-muted font-mono text-[11px]">Statutory Framework:</span>
+            <span className="text-text-muted font-mono text-xs">Statutory Framework:</span>
             {[
               { id: 'BFIU_STATUTORY_FREEZE', label: 'BFIU Order (MLPA 2012 §15)', badge: 'Bangladesh Bank' },
               { id: 'STATUTORY_ADMIN_FREEZE', label: 'FinCEN / BSA (31 CFR §1020.320)', badge: 'US Correspondent' },
@@ -406,7 +406,7 @@ ${institution}
                 }`}
               >
                 <span>{type.label}</span>
-                <span className="text-[10px] opacity-70">({type.badge})</span>
+                <span className="text-xs opacity-70">({type.badge})</span>
               </button>
             ))}
           </div>
@@ -443,25 +443,25 @@ ${institution}
                 <div className="p-4 rounded-lg bg-surface border border-border space-y-3 font-sans text-xs">
                   <div className="flex justify-between items-start border-b border-borderSubtle pb-2">
                     <div>
-                      <div className="font-bold text-xs uppercase tracking-wider text-text">
+                      <div className="font-bold text-xs text-text">
                         {institution}
                       </div>
-                      <div className="text-[10px] text-text-muted">
+                      <div className="text-xs text-text-muted">
                         Statutory Mandate: {currentNotice.statutoryCode}
                       </div>
                     </div>
-                    <div className="text-right font-mono text-[10px] text-text-muted">
+                    <div className="text-right font-mono text-xs text-text-muted">
                       <div>Ref: {noticeRef}</div>
                       <div>Date: {new Date().toISOString().substring(0, 10)}</div>
                     </div>
                   </div>
 
-                  <div className="text-xs font-bold text-critical uppercase">
+                  <div className="text-xs font-bold text-critical ">
                     {currentNotice.title}
                   </div>
 
-                  <div className="p-2.5 rounded bg-bg border border-borderSubtle font-mono text-[11px] space-y-1">
-                    <span className="font-semibold text-text uppercase text-[10px] block text-accent">
+                  <div className="p-2.5 rounded bg-bg border border-borderSubtle font-mono text-xs space-y-1">
+                    <span className="font-semibold text-text text-xs block text-accent">
                       Section 1: Statutory Reason for Restriction (Why)
                     </span>
                     <p className="text-text-2 leading-relaxed">
@@ -478,7 +478,7 @@ ${institution}
                     </p>
                   </div>
 
-                  <div className="pt-2 border-t border-borderSubtle flex items-center justify-between text-[11px] text-text-muted font-mono">
+                  <div className="pt-2 border-t border-borderSubtle flex items-center justify-between text-xs text-text-muted font-mono">
                     <span>Officer: {officerName}</span>
                     <span className="text-cleared font-semibold">ISO 20022 Notice Certified</span>
                   </div>

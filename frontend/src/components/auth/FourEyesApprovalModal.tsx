@@ -67,7 +67,7 @@ export const FourEyesApprovalModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 select-none">
+    <div role="dialog" aria-modal="true" aria-label="Four-eyes approval" className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 select-none">
       <div className="w-full max-w-lg rounded-xl bg-[#0F172A] border border-[#334155] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 text-slate-100">
         {/* Header */}
         <div className="p-4 bg-rose-950/40 border-b border-rose-800/40 flex items-center justify-between">
@@ -75,7 +75,7 @@ export const FourEyesApprovalModal: React.FC = () => {
             <Lock className="w-5 h-5 shrink-0" />
             <div>
               <h3 className="font-bold text-sm tracking-tight font-sans">Two-Officer "4-Eyes" Cryptographic Gate</h3>
-              <span className="text-[10px] font-mono text-rose-300/80">31 CFR § 1010.430 & FRE 902(11) Dual Sign-off</span>
+              <span className="text-xs font-mono text-rose-300/80">31 CFR § 1010.430 & FRE 902(11) Dual Sign-off</span>
             </div>
           </div>
           <button
@@ -90,7 +90,7 @@ export const FourEyesApprovalModal: React.FC = () => {
         <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs font-mono">
           {/* Target Action Banner */}
           <div className="p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B] space-y-1">
-            <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Target High-Consequence Action</span>
+            <span className="text-xs text-slate-500 block">Target High-Consequence Action</span>
             <div className="flex items-center justify-between text-slate-200 font-bold">
               <span>{fourEyesTargetAction?.replace(/_/g, ' ') || 'Statutory Account Freeze'}</span>
               <span className="text-amber-400">{fourEyesTargetAccount || 'BD22-••••-••••-8823'}</span>
@@ -100,21 +100,21 @@ export const FourEyesApprovalModal: React.FC = () => {
           {/* Maker / Checker Dual Representation */}
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B]">
-              <span className="text-[10px] text-slate-500 block mb-1">OFFICER 1: INITIATOR (MAKER)</span>
+              <span className="text-xs text-slate-500 block mb-1">OFFICER 1: INITIATOR (MAKER)</span>
               <span className="font-bold text-slate-200 block truncate">{currentBanker.name}</span>
-              <span className="text-[10px] text-slate-400 block truncate">{currentBanker.roleTitle}</span>
+              <span className="text-xs text-slate-400 block truncate">{currentBanker.roleTitle}</span>
             </div>
 
             <div className="p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B]">
-              <span className="text-[10px] text-slate-500 block mb-1">OFFICER 2: COUNTER-SIGNER (CHECKER)</span>
+              <span className="text-xs text-slate-500 block mb-1">OFFICER 2: COUNTER-SIGNER (CHECKER)</span>
               <span className="font-bold text-emerald-400 block truncate">{checkerProfile.name}</span>
-              <span className="text-[10px] text-slate-400 block truncate">{checkerProfile.roleTitle}</span>
+              <span className="text-xs text-slate-400 block truncate">{checkerProfile.roleTitle}</span>
             </div>
           </div>
 
           {/* Justification Code */}
           <div className="space-y-1">
-            <label className="text-[10px] text-slate-400 block">STATUTORY JUSTIFICATION CODE</label>
+            <label className="text-xs text-slate-400 block">STATUTORY JUSTIFICATION CODE</label>
             <select
               value={justificationCode}
               onChange={(e) => setJustificationCode(e.target.value)}
@@ -130,18 +130,18 @@ export const FourEyesApprovalModal: React.FC = () => {
 
           {/* Operational Justification Memo */}
           <div className="space-y-1">
-            <label className="text-[10px] text-slate-400 block">SUPERVISORY MEMO & EVIDENCE SUMMARY</label>
+            <label className="text-xs text-slate-400 block">SUPERVISORY MEMO & EVIDENCE SUMMARY</label>
             <textarea
               rows={2}
               value={statutoryJustification}
               onChange={(e) => setStatutoryJustification(e.target.value)}
-              className="w-full p-2.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-200 focus:outline-none focus:border-emerald-500 text-[11px] font-mono resize-none"
+              className="w-full p-2.5 rounded bg-[#0B0F17] border border-[#334155] text-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-mono resize-none"
             />
           </div>
 
           {/* Step-Up Password Confirmation */}
           <div className="space-y-1">
-            <label className="text-[10px] text-slate-400 block">STEP-UP RE-AUTHENTICATION (CHECKER PIN/PASSWORD)</label>
+            <label className="text-xs text-slate-400 block">STEP-UP RE-AUTHENTICATION (CHECKER PIN/PASSWORD)</label>
             <div className="relative">
               <Key className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
               <input
@@ -155,7 +155,7 @@ export const FourEyesApprovalModal: React.FC = () => {
           </div>
 
           {error && (
-            <div className="p-2 rounded bg-rose-950/40 border border-rose-800/60 text-rose-300 text-[11px] flex items-center gap-2">
+            <div className="p-2 rounded bg-rose-950/40 border border-rose-800/60 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-rose-400" />
               <span>{error}</span>
             </div>

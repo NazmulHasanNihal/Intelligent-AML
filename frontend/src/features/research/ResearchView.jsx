@@ -110,21 +110,21 @@ export const ResearchView = () => {
 
             <div className="space-y-3 mt-3 text-xs font-mono">
               <div className="p-3 rounded bg-bg border border-borderSubtle space-y-1">
-                <span className="text-[10px] text-text-muted uppercase block">Wilcoxon Signed-Rank Test</span>
+                <span className="text-xs text-text-muted block">Wilcoxon Signed-Rank Test</span>
                 <span className="font-bold text-accent text-sm block">p = 2.44e-4</span>
-                <span className="text-[10px] text-text-muted">Statistically significant lead over all 12 baselines</span>
+                <span className="text-xs text-text-muted">Statistically significant lead over all 12 baselines</span>
               </div>
 
               <div className="p-3 rounded bg-bg border border-borderSubtle space-y-1">
-                <span className="text-[10px] text-text-muted uppercase block">Friedman Rank Test</span>
+                <span className="text-xs text-text-muted block">Friedman Rank Test</span>
                 <span className="font-bold text-text text-sm block">χ² = 36.4 (p &lt; 0.001)</span>
-                <span className="text-[10px] text-text-muted">Consistently ranked #1 across all 15 graph topologies</span>
+                <span className="text-xs text-text-muted">Consistently ranked #1 across all 15 graph topologies</span>
               </div>
 
               <div className="p-3 rounded bg-bg border border-borderSubtle space-y-1">
-                <span className="text-[10px] text-text-muted uppercase block">Empirical Finite Coverage</span>
+                <span className="text-xs text-text-muted block">Empirical Finite Coverage</span>
                 <span className="font-bold text-cleared text-sm block">99.04% Empirical Bound</span>
-                <span className="text-[10px] text-text-muted">0 miscoveries in 100,000 Tier-1 calls</span>
+                <span className="text-xs text-text-muted">0 miscoveries in 100,000 Tier-1 calls</span>
               </div>
             </div>
           </div>
@@ -135,12 +135,12 @@ export const ResearchView = () => {
       <Card padding={false} className="overflow-hidden">
         <div className="p-3 border-b border-border bg-surfaceRaised flex items-center justify-between">
           <span className="text-xs font-semibold text-text">15 Benchmark Networks Across 13 Models (13.5M Entities / 25.2M Txs)</span>
-          <span className="text-[10px] font-mono text-text-muted">Reproducible Seed Set [42, 1337, 2024, 7, 99]</span>
+          <span className="text-xs font-mono text-text-muted">Reproducible Seed Set [42, 1337, 2024, 7, 99]</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-[10px] uppercase tracking-wider select-none">
+            <thead className="bg-surfaceRaised border-b border-border text-text-muted font-mono text-xs select-none">
               <tr>
                 <th className="py-2.5 px-3">Domain</th>
                 <th className="py-2.5 px-3">Dataset ID</th>
@@ -158,7 +158,7 @@ export const ResearchView = () => {
                   <td className="py-2 px-3 font-semibold text-text">{bm.domain}</td>
                   <td className="py-2 px-3 font-mono text-accent font-bold">{bm.dataset}</td>
                   <td className="py-2 px-3">
-                    <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-bold border ${
+                    <span className={`text-xs font-mono px-1.5 py-0.5 rounded font-bold border ${
                       bm.nature.includes('Empirical')
                         ? 'bg-accent-subtle text-accent-text border-accent/20'
                         : bm.nature.includes('Semi-Synthetic')
@@ -172,7 +172,7 @@ export const ResearchView = () => {
                   <td className="py-2 px-3 font-mono text-text-2">{bm.txs}</td>
                   <td className="py-2 px-3 font-mono font-bold text-accent">{bm.f1}</td>
                   <td className="py-2 px-3 font-mono text-text font-semibold">{bm.prauc}</td>
-                  <td className="py-2 px-3 text-right font-mono text-[11px] text-text-muted">
+                  <td className="py-2 px-3 text-right font-mono text-xs text-text-muted">
                     {bm.baseline}
                   </td>
                 </tr>

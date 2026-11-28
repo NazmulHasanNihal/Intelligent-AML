@@ -335,7 +335,7 @@ function ForensicGraphStudioContent() {
 
           {/* Hop Distance Expansion */}
           <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
-            <span className="text-slate-400 px-2 text-[11px]">Hops:</span>
+            <span className="text-slate-400 px-2 text-xs">Hops:</span>
             {([1, 2, 3] as const).map((h) => (
               <button
                 key={h}
@@ -353,7 +353,7 @@ function ForensicGraphStudioContent() {
 
           {/* Progressive Disclosure Node Capping */}
           <div className="flex items-center bg-[#0F172A] p-1 rounded-lg border border-[#334155] text-xs font-mono">
-            <span className="text-slate-400 px-2 text-[11px]">Node Cap:</span>
+            <span className="text-slate-400 px-2 text-xs">Node Cap:</span>
             {([25, 50, 100, 250] as const).map((cap) => (
               <button
                 key={cap}
@@ -424,13 +424,13 @@ function ForensicGraphStudioContent() {
             </div>
 
             {/* Fusion Weight Pill */}
-            <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0F172A] border border-[#334155] text-[11px] font-mono text-slate-300">
+            <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300">
               <span className="text-purple-400 font-bold">α_u = 0.65</span>
               <span className="text-slate-500">GNN/Tabular Fusion</span>
             </div>
 
             {/* Invariant Stats & Camera Controls */}
-            <div className="flex items-center gap-2 sm:gap-3 text-[11px] font-mono">
+            <div className="flex items-center gap-2 sm:gap-3 text-xs font-mono">
               <span className="hidden sm:inline text-slate-400">
                 Pruned: <strong className="text-rose-400">{prunedCount} camouflage edges</strong>
               </span>
@@ -471,7 +471,7 @@ function ForensicGraphStudioContent() {
             </ErrorBoundary>
 
             {/* Bottom-Right Minimap Badge */}
-            <div className="absolute bottom-4 right-4 p-2 rounded-lg bg-[#0F172A]/85 backdrop-blur-sm border border-[#334155] flex items-center gap-2 text-[10px] font-mono text-slate-400 pointer-events-none select-none">
+            <div className="absolute bottom-4 right-4 p-2 rounded-lg bg-[#0F172A]/85 backdrop-blur-sm border border-[#334155] flex items-center gap-2 text-xs font-mono text-slate-400 pointer-events-none select-none">
               <Compass className="w-4 h-4 text-purple-400 animate-spin-slow" />
               <span>Network Topology Radar</span>
             </div>
@@ -485,7 +485,7 @@ function ForensicGraphStudioContent() {
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </button>
-            <span className="text-[11px] font-semibold text-slate-400 shrink-0 font-mono">
+            <span className="text-xs font-semibold text-slate-400 shrink-0 font-mono">
               Temporal Step (Sequence Scrubbing):
             </span>
             <input
@@ -509,7 +509,7 @@ function ForensicGraphStudioContent() {
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
                 <div>
-                  <span className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-xs font-mono font-semibold text-slate-400 block">
                     360° Node Context
                   </span>
                   <h3 className="font-bold text-sm text-slate-100 flex items-center gap-1.5 mt-0.5">
@@ -519,7 +519,7 @@ function ForensicGraphStudioContent() {
                 </div>
 
                 <span
-                  className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                  className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
                     selectedNode.tier === 1
                       ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                       : selectedNode.tier === 2
@@ -532,7 +532,7 @@ function ForensicGraphStudioContent() {
               </div>
 
               {/* 4 Tabs */}
-              <div className="grid grid-cols-4 gap-1 p-1 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-[10px] font-mono">
+              <div className="grid grid-cols-4 gap-1 p-1 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-xs font-mono">
                 {(['TELEMETRY', 'ENTITY_RES', 'SANCTIONS', 'UBO'] as const).map((tab) => (
                   <button
                     key={tab}
@@ -581,17 +581,17 @@ function ForensicGraphStudioContent() {
               {drawerTab === 'ENTITY_RES' && (
                 <div className="space-y-3 text-xs">
                   <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1">
-                    <span className="text-slate-500 text-[10px] font-mono uppercase block">Resolved Corporate Entity</span>
+                    <span className="text-slate-500 text-xs font-mono block">Resolved Corporate Entity</span>
                     <span className="font-bold text-slate-100">{selectedNode.entityName}</span>
-                    <span className="text-[11px] text-slate-400 block">Registration: CTG-EXP-2018-99120</span>
+                    <span className="text-xs text-slate-400 block">Registration: CTG-EXP-2018-99120</span>
                   </div>
 
                   <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400 text-[11px]">Entity Resolution Match</span>
+                      <span className="text-slate-400 text-xs">Entity Resolution Match</span>
                       <span className="font-mono text-emerald-400 font-bold">96.8% Confidence</span>
                     </div>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-xs text-slate-400">
                       Merged 3 accounts across City Bank, EBL, and bKash corporate wallet into single synthetic node.
                     </p>
                   </div>

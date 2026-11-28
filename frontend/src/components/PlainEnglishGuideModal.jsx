@@ -121,7 +121,7 @@ export const PlainEnglishGuideModal = () => {
             <div>
               <h2 className="text-base font-bold text-foreground flex items-center gap-2">
                 Plain-English Guide & Jargon Buster
-                <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-accent/15 text-accent border border-accent/20">
+                <span className="text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-accent/15 text-accent border border-accent/20">
                   Beginner Friendly
                 </span>
               </h2>
@@ -192,11 +192,11 @@ export const PlainEnglishGuideModal = () => {
                       98.6%
                     </div>
                     <h4 className="text-xs font-bold text-foreground">Auto-Approved Payments</h4>
-                    <p className="text-[11px] text-muted mt-1 leading-relaxed">
+                    <p className="text-xs text-muted mt-1 leading-relaxed">
                       Honest salaries, groceries, and invoices clear in <strong>0.12 milliseconds</strong> without human waiting.
                     </p>
                   </div>
-                  <span className="text-[10px] font-mono text-cleared mt-3 block font-semibold">
+                  <span className="text-xs font-mono text-cleared mt-3 block font-semibold">
                     ✓ Zero Customer Delays
                   </span>
                 </div>
@@ -207,11 +207,11 @@ export const PlainEnglishGuideModal = () => {
                       0.45ms
                     </div>
                     <h4 className="text-xs font-bold text-foreground">Instant Crime Freeze</h4>
-                    <p className="text-[11px] text-muted mt-1 leading-relaxed">
+                    <p className="text-xs text-muted mt-1 leading-relaxed">
                       Confirmed sanctions and illegal cartels are frozen on the spot before dirty money leaves the bank.
                     </p>
                   </div>
-                  <span className="text-[10px] font-mono text-critical mt-3 block font-semibold">
+                  <span className="text-xs font-mono text-critical mt-3 block font-semibold">
                     ✓ 100% Capital Contained
                   </span>
                 </div>
@@ -222,11 +222,11 @@ export const PlainEnglishGuideModal = () => {
                       4 AI
                     </div>
                     <h4 className="text-xs font-bold text-foreground">AI Detective Team</h4>
-                    <p className="text-[11px] text-muted mt-1 leading-relaxed">
+                    <p className="text-xs text-muted mt-1 leading-relaxed">
                       Automated AI agents map complex shell company networks and write official police reports in seconds.
                     </p>
                   </div>
-                  <span className="text-[10px] font-mono text-accent mt-3 block font-semibold">
+                  <span className="text-xs font-mono text-accent mt-3 block font-semibold">
                     ✓ Courtroom-Ready Reports
                   </span>
                 </div>
@@ -267,7 +267,7 @@ export const PlainEnglishGuideModal = () => {
                 <p className="text-xs text-foreground/90 leading-relaxed">
                   <strong>What it means:</strong> The payment is clean, normal, and verified. The customer gets their money in milliseconds without any human officer needing to look at it.
                 </p>
-                <div className="text-[11px] text-muted bg-surface/60 p-2 rounded border border-border">
+                <div className="text-xs text-muted bg-surface/60 p-2 rounded border border-border">
                   💡 <em>Real-World Example:</em> A monthly corporate salary of $4,500, utility bills, or paying for groceries at a supermarket.
                 </div>
               </div>
@@ -285,7 +285,7 @@ export const PlainEnglishGuideModal = () => {
                 <p className="text-xs text-foreground/90 leading-relaxed">
                   <strong>What it means:</strong> The payment has an unusual pattern that requires a human compliance officer to inspect. It is placed into the analyst review queue with an investigation timer (SLA).
                 </p>
-                <div className="text-[11px] text-muted bg-surface/60 p-2 rounded border border-border">
+                <div className="text-xs text-muted bg-surface/60 p-2 rounded border border-border">
                   💡 <em>Real-World Example:</em> A retail bakery account that normally receives $200 suddenly gets three separate foreign transfers of $9,800 within 30 minutes.
                 </div>
               </div>
@@ -303,7 +303,7 @@ export const PlainEnglishGuideModal = () => {
                 <p className="text-xs text-foreground/90 leading-relaxed">
                   <strong>What it means:</strong> Definite match with international sanctions (UN, US OFAC, EU, BFIU), terror financing, or massive customs trade fraud. The transaction is halted instantly, the money is locked in an escrow vault, and an official legal case is opened.
                 </p>
-                <div className="text-[11px] text-muted bg-surface/60 p-2 rounded border border-border">
+                <div className="text-xs text-muted bg-surface/60 p-2 rounded border border-border">
                   💡 <em>Real-World Example:</em> An import invoice claiming $42.50 per kg of cotton when standard government customs rate is only $9.80, with funds routed directly to a sanctioned offshore shell company in Dubai.
                 </div>
               </div>
@@ -341,7 +341,7 @@ export const PlainEnglishGuideModal = () => {
                     <p className="text-xs text-foreground/90 leading-relaxed">
                       {item.explanation}
                     </p>
-                    <div className="text-[11px] text-muted font-mono bg-surface p-1.5 rounded border border-borderSubtle">
+                    <div className="text-xs text-muted font-mono bg-surface p-1.5 rounded border border-borderSubtle">
                       <strong>Example:</strong> {item.example}
                     </div>
                   </div>
@@ -371,7 +371,7 @@ export const PlainEnglishGuideModal = () => {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-foreground">1. The Forensic Investigator Agent</h4>
-                      <span className="text-[10px] font-mono text-muted">"Follows the Money"</span>
+                      <span className="text-xs font-mono text-muted">"Follows the Money"</span>
                     </div>
                   </div>
                   <p className="text-xs text-muted leading-relaxed">
@@ -386,7 +386,7 @@ export const PlainEnglishGuideModal = () => {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-foreground">2. The Legal Auditor Agent</h4>
-                      <span className="text-[10px] font-mono text-muted">"Knows the Law"</span>
+                      <span className="text-xs font-mono text-muted">"Knows the Law"</span>
                     </div>
                   </div>
                   <p className="text-xs text-muted leading-relaxed">
@@ -401,7 +401,7 @@ export const PlainEnglishGuideModal = () => {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-foreground">3. The SAR Narrative Drafter Agent</h4>
-                      <span className="text-[10px] font-mono text-muted">"Writes the Police Report"</span>
+                      <span className="text-xs font-mono text-muted">"Writes the Police Report"</span>
                     </div>
                   </div>
                   <p className="text-xs text-muted leading-relaxed">
@@ -416,7 +416,7 @@ export const PlainEnglishGuideModal = () => {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-foreground">4. The Chief Verification Agent</h4>
-                      <span className="text-[10px] font-mono text-muted">"Guarantees 0% Hallucination"</span>
+                      <span className="text-xs font-mono text-muted">"Guarantees 0% Hallucination"</span>
                     </div>
                   </div>
                   <p className="text-xs text-muted leading-relaxed">

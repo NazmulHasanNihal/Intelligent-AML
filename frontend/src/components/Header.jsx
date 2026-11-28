@@ -13,22 +13,22 @@ export const Header = ({ healthStatus }) => {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-lg font-bold text-white tracking-tight">Intelligent-AML</h1>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 font-mono font-bold">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 font-mono font-bold">
                 C-STGB v1.0
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium">Enterprise FIU Intelligence Suite</p>
+            <p className="text-xs text-slate-400 font-medium">Enterprise FIU Intelligence Suite</p>
           </div>
         </div>
 
         {/* Status Badges */}
         <div className="flex items-center gap-2.5 text-xs font-mono">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold text-[11px]">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold text-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>SYSTEM ACTIVE</span>
           </div>
 
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/30 text-[11px]">
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/30 text-xs">
             <Lock className="w-3.5 h-3.5" />
             <span>SR 11-7 & FinCEN Form 111</span>
           </div>

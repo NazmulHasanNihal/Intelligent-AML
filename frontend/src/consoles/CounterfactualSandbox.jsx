@@ -122,18 +122,18 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
               <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm block truncate">
                 Remediation & Policy Simulation Hub
               </span>
-              <span className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+              <span className="text-xs sm:text-xs font-mono px-2 py-0.5 rounded font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                 Internal Analyst Console
               </span>
             </div>
-            <p className="text-[var(--text-secondary)] text-[10px] sm:text-[11px] truncate mt-0.5">
+            <p className="text-[var(--text-secondary)] text-xs sm:text-xs truncate mt-0.5">
               Simulate feature perturbations, evaluate RFI clearing conditions, and stress-test threshold policies under 31 U.S.C. § 5318(g)(2) confidentiality.
             </p>
           </div>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-1 p-1 bg-[var(--bg-well)] rounded-lg border border-[var(--border-subtle)] shrink-0 font-mono text-[10px]">
+        <div className="flex items-center gap-1 p-1 bg-[var(--bg-well)] rounded-lg border border-[var(--border-subtle)] shrink-0 font-mono text-xs">
           <button
             onClick={() => setActiveTab('ANALYST_PERTURBATION')}
             className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
@@ -162,8 +162,8 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
       {/* Strict Anti-Tipping-Off Safeguard Banner */}
       <div className="p-2 sm:p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-2.5 text-xs">
         <Lock className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-        <div className="text-[10px] sm:text-[11px] text-rose-800 dark:text-rose-200 leading-tight">
-          <strong className="font-mono uppercase font-bold">Confidential Internal Investigation Tool (31 U.S.C. § 5318(g)(2)):</strong>
+        <div className="text-xs sm:text-xs text-rose-800 dark:text-rose-200 leading-tight">
+          <strong className="font-mono font-bold">Confidential Internal Investigation Tool (31 U.S.C. § 5318(g)(2)):</strong>
           <span className="block mt-0.5 text-rose-900/80 dark:text-rose-300/80">
             Perturbation hypotheses and threshold triggers must NEVER be shared with customers or outside parties. Customer contact must solely use verified Request for Information (RFI) document workflows.
           </span>
@@ -177,9 +177,9 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
               <div className="flex items-center gap-1.5">
                 <Sliders className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <h2 className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider">Internal Hypothesis Testing</h2>
+                <h2 className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono ">Internal Hypothesis Testing</h2>
               </div>
-              <span className="badge-tier2 text-[9px] sm:text-[10px] px-2 py-0.5">
+              <span className="badge-tier2 text-xs sm:text-xs px-2 py-0.5">
                 Target: US-JPMC-4829 (Apex Global)
               </span>
             </div>
@@ -187,7 +187,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
             <div className="space-y-2 text-xs">
               {/* 1. Transaction Amount Slider */}
               <div className="space-y-1.5 p-2 sm:p-2.5 rounded-xl skeuo-well">
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">1. Aggregate Transfer Exposure</span>
                   <span className="font-mono text-[var(--accent-primary)] font-bold text-xs sm:text-sm">${transferAmount.toLocaleString()}</span>
                 </div>
@@ -200,12 +200,12 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   onChange={(e) => setTransferAmount(Number(e.target.value))}
                   className="w-full accent-[#1B5E34] cursor-pointer h-1.5"
                 />
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block">Amounts between $7,500 and $9,999 trip federal structuring tripwires. Baseline wash: $48,500.</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] block">Amounts between $7,500 and $9,999 trip federal structuring tripwires. Baseline wash: $48,500.</span>
               </div>
 
               {/* 2. Fund Holding Dwell Duration */}
               <div className="space-y-1.5 p-2 sm:p-2.5 rounded-xl skeuo-well">
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">2. Fund Holding Dwell Duration</span>
                   <span className="font-mono text-amber-700 dark:text-amber-300 font-bold text-xs sm:text-sm">{holdingHours} Hours</span>
                 </div>
@@ -218,12 +218,12 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   onChange={(e) => setHoldingHours(Number(e.target.value))}
                   className="w-full accent-amber-500 cursor-pointer h-1.5"
                 />
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block">Dwell times &lt;2 hours exhibit rapid conduit pass-through behavior (Φ ≈ 1.0).</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] block">Dwell times &lt;2 hours exhibit rapid conduit pass-through behavior (Φ ≈ 1.0).</span>
               </div>
 
               {/* 3. Transaction Arrival Rate (Hawkes Intensity) */}
               <div className="space-y-1.5 p-2 sm:p-2.5 rounded-xl skeuo-well">
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">3. Transfer Velocity Frequency</span>
                   <span className="font-mono text-rose-600 dark:text-rose-400 font-bold text-xs sm:text-sm">{burstRate} tx/hr</span>
                 </div>
@@ -236,12 +236,12 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   onChange={(e) => setBurstRate(Number(e.target.value))}
                   className="w-full accent-rose-500 cursor-pointer h-1.5"
                 />
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block">Cluster velocities &gt;3 tx/hr trigger temporal Hawkes anomaly filters.</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] block">Cluster velocities &gt;3 tx/hr trigger temporal Hawkes anomaly filters.</span>
               </div>
 
               {/* 4. Fan-In Degree */}
               <div className="space-y-1.5 p-2 sm:p-2.5 rounded-xl skeuo-well">
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">4. Inbound Source Fan-In Degree</span>
                   <span className="font-mono text-[var(--accent-primary)] font-bold text-xs sm:text-sm">{fanInDegree} Source Nodes</span>
                 </div>
@@ -254,7 +254,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   onChange={(e) => setFanInDegree(Number(e.target.value))}
                   className="w-full accent-[#1B5E34] cursor-pointer h-1.5"
                 />
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block">Multiple unlinked remitters routing into a single hub indicate mule gathering.</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] block">Multiple unlinked remitters routing into a single hub indicate mule gathering.</span>
               </div>
             </div>
           </div>
@@ -263,11 +263,11 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
           <div className="xl:col-span-6 skeuo-card p-2.5 sm:p-3 space-y-2.5 flex flex-col justify-between font-sans">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
-                <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                   <Activity className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                   <span>Simulated Policy Disposition</span>
                 </span>
-                <span className={`text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded-full font-bold border ${tierBadgeClass}`}>
+                <span className={`text-xs sm:text-xs font-mono px-2 py-0.5 rounded-full font-bold border ${tierBadgeClass}`}>
                   {tierStatus}
                 </span>
               </div>
@@ -275,12 +275,12 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
               {/* Corrected Recalculated Risk Comparison Card */}
               <div className="p-2.5 sm:p-3 rounded-xl skeuo-well grid grid-cols-2 gap-2 font-mono text-center">
                 <div>
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block uppercase">ORIGINAL BASE RISK</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-muted)] block ">ORIGINAL BASE RISK</span>
                   <span className="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400">94.0%</span>
-                  <span className="text-[9px] sm:text-[10px] text-rose-600/80 dark:text-rose-300 block mt-0.5">Tier 1 Hold</span>
+                  <span className="text-xs sm:text-xs text-rose-600/80 dark:text-rose-300 block mt-0.5">Tier 1 Hold</span>
                 </div>
                 <div className="border-l border-[var(--border-subtle)] pl-2">
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block uppercase">SIMULATED RISK</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-muted)] block ">SIMULATED RISK</span>
                   <span className={`text-xl sm:text-2xl font-black ${
                     dynamicRisk >= 0.85
                       ? 'text-rose-600 dark:text-rose-400'
@@ -290,7 +290,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   }`}>
                     {(dynamicRisk * 100).toFixed(1)}%
                   </span>
-                  <span className={`text-[9px] sm:text-[10px] block mt-0.5 font-bold ${
+                  <span className={`text-xs sm:text-xs block mt-0.5 font-bold ${
                     dynamicRisk >= 0.85
                       ? 'text-rose-600 dark:text-rose-400'
                       : dynamicRisk >= 0.30
@@ -304,10 +304,10 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
 
               {/* Compliant RFI Verification Package Checklist */}
               <div className="space-y-1.5 text-xs">
-                <span className="font-bold text-[var(--text-primary)] font-mono text-[11px] block">
+                <span className="font-bold text-[var(--text-primary)] font-mono text-xs block">
                   Mandatory Clearing Evidence Checklist (RFI Form 1092):
                 </span>
-                <ul className="space-y-1.5 text-[var(--text-secondary)] text-[10px] sm:text-[11px]">
+                <ul className="space-y-1.5 text-[var(--text-secondary)] text-xs sm:text-xs">
                   <li className="flex items-start gap-1.5">
                     <FileCheck className="w-3.5 h-3.5 text-[var(--accent-primary)] shrink-0 mt-0.5" />
                     <span>Commercial invoice matching $48,500 total exposure with matching buyer Purchase Order.</span>
@@ -330,13 +330,13 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
 
             {/* Compliant Action Buttons */}
             <div className="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between gap-2">
-              <span className="text-[10px] sm:text-[11px] font-mono text-[var(--text-muted)] truncate">
+              <span className="text-xs sm:text-xs font-mono text-[var(--text-muted)] truncate">
                 Case Officer: <strong className="text-[var(--text-primary)]">{currentBanker?.name || 'Compliance Officer'}</strong>
               </span>
 
               <button
                 onClick={handleGenerateRFIPackage}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-[10px] sm:text-[11px] font-bold shrink-0 cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-xs sm:text-xs font-bold shrink-0 cursor-pointer"
               >
                 {rfiGenerated ? <CheckCircle2 className="w-3.5 h-3.5 text-white" /> : <Mail className="w-3.5 h-3.5" />}
                 <span>{rfiGenerated ? 'RFI Dispatched to Case' : 'Generate Compliant RFI Package'}</span>
@@ -352,21 +352,21 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
               <div className="flex items-center gap-1.5">
                 <Sliders className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                <h2 className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider">Policy Threshold Simulator</h2>
+                <h2 className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono ">Policy Threshold Simulator</h2>
               </div>
-              <span className="badge-tier3 text-[9px] sm:text-[10px] px-2 py-0.5">
+              <span className="badge-tier3 text-xs sm:text-xs px-2 py-0.5">
                 MLRO Management Mode
               </span>
             </div>
 
-            <p className="text-[10px] text-[var(--text-secondary)]">
+            <p className="text-xs text-[var(--text-secondary)]">
               Simulate enterprise-wide threshold changes against historical 24h baseline (148,312 transactions) to calibrate alert volume to analyst capacity.
             </p>
 
             <div className="space-y-2 text-xs">
               {/* Alpha Threshold */}
               <div className="space-y-1.5 p-2 sm:p-2.5 rounded-xl skeuo-well">
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">Conformal Significance Level (&alpha;)</span>
                   <span className="font-mono text-[var(--accent-primary)] font-bold text-xs sm:text-sm">&alpha; = {alphaThreshold} ({(alphaThreshold * 100).toFixed(1)}%)</span>
                 </div>
@@ -379,12 +379,12 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   onChange={(e) => setAlphaThreshold(Number(e.target.value))}
                   className="w-full accent-[#1B5E34] cursor-pointer h-1.5"
                 />
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block">Mathematical coverage guarantee: At most {(alphaThreshold * 100).toFixed(1)}% of true positives are missed on average.</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] block">Mathematical coverage guarantee: At most {(alphaThreshold * 100).toFixed(1)}% of true positives are missed on average.</span>
               </div>
 
               {/* Conduit Dwell Time Threshold */}
               <div className="space-y-1.5 p-2 sm:p-2.5 rounded-xl skeuo-well">
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">Conduit Dwell Time Floor</span>
                   <span className="font-mono text-amber-700 dark:text-amber-300 font-bold text-xs sm:text-sm">{dwellThreshold} Hours</span>
                 </div>
@@ -397,12 +397,12 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   onChange={(e) => setDwellThreshold(Number(e.target.value))}
                   className="w-full accent-amber-500 cursor-pointer h-1.5"
                 />
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block">Transfers holding funds less than this floor trip rapid pass-through heuristic flags.</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] block">Transfers holding funds less than this floor trip rapid pass-through heuristic flags.</span>
               </div>
 
               {/* Structuring Proximity Threshold */}
               <div className="space-y-1.5 p-2 sm:p-2.5 rounded-xl skeuo-well">
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">Structuring Detection Window</span>
                   <span className="font-mono text-rose-600 dark:text-rose-400 font-bold text-xs sm:text-sm">${structuringFloor.toLocaleString()} &ndash; $9,999</span>
                 </div>
@@ -415,7 +415,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   onChange={(e) => setStructuringFloor(Number(e.target.value))}
                   className="w-full accent-rose-500 cursor-pointer h-1.5"
                 />
-                <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block">Sub-$10k transfers in this range are flagged for CTR evasion pattern analysis.</span>
+                <span className="text-xs sm:text-xs text-[var(--text-muted)] block">Sub-$10k transfers in this range are flagged for CTR evasion pattern analysis.</span>
               </div>
             </div>
           </div>
@@ -424,11 +424,11 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
           <div className="xl:col-span-6 skeuo-card p-2.5 sm:p-3 space-y-2.5 flex flex-col justify-between font-sans">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
-                <span className="text-[11px] sm:text-xs font-bold text-[var(--text-primary)] font-mono uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs sm:text-xs font-bold text-[var(--text-primary)] font-mono flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                   <span>Analyst Capacity & Workload Impact</span>
                 </span>
-                <span className={`text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded-full font-bold border ${
+                <span className={`text-xs sm:text-xs font-mono px-2 py-0.5 rounded-full font-bold border ${
                   parseFloat(capacityUtilization) > 100 ? 'badge-tier1' : 'badge-tier3'
                 }`}>
                   {parseFloat(capacityUtilization) > 100 ? 'CAPACITY OVERLOAD' : 'WORKLOAD SUSTAINABLE'}
@@ -438,36 +438,36 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
               {/* Capacity Metrics Grid */}
               <div className="grid grid-cols-2 gap-2 font-mono text-center">
                 <div className="p-2 rounded-xl skeuo-well">
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block uppercase">SIMULATED QUARANTINE RATE</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-muted)] block ">SIMULATED QUARANTINE RATE</span>
                   <span className="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400">{simulatedQuarantineRate}%</span>
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-secondary)] block mt-0.5">{projectedAlertVolume.toLocaleString()} alerts / 24h</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-secondary)] block mt-0.5">{projectedAlertVolume.toLocaleString()} alerts / 24h</span>
                 </div>
                 <div className="p-2 rounded-xl skeuo-well">
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-muted)] block uppercase">CAPACITY UTILIZATION</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-muted)] block ">CAPACITY UTILIZATION</span>
                   <span className={`text-xl sm:text-2xl font-black ${parseFloat(capacityUtilization) > 100 ? 'text-rose-600 dark:text-rose-400' : 'text-[var(--accent-primary)]'}`}>
                     {capacityUtilization}%
                   </span>
-                  <span className="text-[9px] sm:text-[10px] text-[var(--text-secondary)] block mt-0.5">Cap: {bankAnalystCapacity} reviews/day</span>
+                  <span className="text-xs sm:text-xs text-[var(--text-secondary)] block mt-0.5">Cap: {bankAnalystCapacity} reviews/day</span>
                 </div>
               </div>
 
               {/* Statistical Performance Tradeoff */}
               <div className="p-2 rounded-xl skeuo-well space-y-1 text-xs">
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">Projected True Detection Recall:</span>
                   <span className="font-mono font-bold text-[var(--accent-primary)]">{projectedRecall}%</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">Projected Alert Precision:</span>
                   <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{projectedPrecision}%</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px]">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-[var(--text-secondary)]">Straight-Through Processing (STP) Rate:</span>
                   <span className="font-mono font-bold text-[var(--accent-primary)]">{(100 - parseFloat(simulatedQuarantineRate)).toFixed(2)}%</span>
                 </div>
               </div>
 
-              <p className="text-[9px] text-[var(--text-muted)] italic">
+              <p className="text-xs text-[var(--text-muted)] italic">
                 * Tuning alpha allows compliance teams to trade marginal false positives against analyst review capacity while preserving strict regulatory coverage under SR 11-7 model risk governance.
               </p>
             </div>
@@ -480,7 +480,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
                   setDwellThreshold(2.0);
                   setStructuringFloor(9000);
                 }}
-                className="px-2.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-secondary text-[10px] font-mono flex items-center gap-1 cursor-pointer"
+                className="px-2.5 py-1.5 rounded-lg skeuo-btn skeuo-btn-secondary text-xs font-mono flex items-center gap-1 cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Reset to Baseline</span>
@@ -488,7 +488,7 @@ export const CounterfactualSandbox = ({ onOpenNoticeModal }) => {
 
               <button
                 onClick={handleStagePolicyUpdate}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-[10px] sm:text-[11px] font-bold shrink-0 cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg skeuo-btn skeuo-btn-primary text-xs sm:text-xs font-bold shrink-0 cursor-pointer"
               >
                 {policyStaged ? <Check className="w-3.5 h-3.5" /> : <ShieldCheck className="w-3.5 h-3.5" />}
                 <span>{policyStaged ? 'Policy Staged for Four-Eyes Sign-Off' : 'Stage Policy (Dual-Approval Required)'}</span>

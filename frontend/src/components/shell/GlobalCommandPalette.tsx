@@ -17,12 +17,39 @@ import {
   Sliders,
   Scale,
   Zap,
-  Lock,
   Eye,
   RotateCcw,
-  Globe
+  type LucideIcon,
 } from 'lucide-react';
 import { useBankingStore } from '@/lib/store';
+
+type ModuleEntry = {
+  path: string;
+  label: string;
+  icon: LucideIcon;
+  tone: string;
+  /** Extra search terms so people can type what they call it, not what we named it. */
+  keywords: string[];
+};
+
+const MODULES: ModuleEntry[] = [
+  { path: '/app', label: 'Executive surveillance', icon: LayoutDashboard, tone: 'text-emerald-400', keywords: ['dashboard', 'overview', 'home', 'sla'] },
+  { path: '/triage', label: 'Alert triage', icon: ShieldAlert, tone: 'text-rose-400', keywords: ['alerts', 'queue', 'tier', 'review'] },
+  { path: '/screening', label: 'Sanctions and PEP screening', icon: UserCheck, tone: 'text-rose-400', keywords: ['sanctions', 'pep', 'watchlist', 'ofac'] },
+  { path: '/customers', label: 'Customer 360 KYC', icon: Building2, tone: 'text-cyan-400', keywords: ['kyc', 'edd', 'customer', 'dossier'] },
+  { path: '/cases', label: 'Cases', icon: Briefcase, tone: 'text-amber-400', keywords: ['case', 'docket', 'investigation'] },
+  { path: '/graph', label: 'Forensic cash flow', icon: GitBranch, tone: 'text-purple-400', keywords: ['graph', 'network', 'flow', 'forensic', 'hop'] },
+  { path: '/tbml', label: 'Trade finance (TBML)', icon: FileSpreadsheet, tone: 'text-amber-400', keywords: ['tbml', 'trade', 'invoice', 'lc'] },
+  { path: '/sar', label: 'SAR and CTR workbench', icon: FileCheck2, tone: 'text-rose-400', keywords: ['sar', 'ctr', 'str', 'filing', 'report'] },
+  { path: '/rfi', label: 'Compliance RFI hub', icon: Mail, tone: 'text-blue-400', keywords: ['rfi', 'request', 'information', 'email'] },
+  { path: '/rules', label: 'Rule studio', icon: Sliders, tone: 'text-teal-400', keywords: ['rules', 'shadow', 'whitelist', 'threshold'] },
+  { path: '/governance', label: 'Model ops and audit ledger', icon: Scale, tone: 'text-cyan-400', keywords: ['governance', 'model', 'audit', 'ledger', 'worm', 'drift'] },
+];
+
+const ITEM =
+  'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-slate-200 hover:bg-[#1E293B] aria-selected:bg-[#1E293B]';
+const GROUP =
+  '[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-slate-400';
 
 export function GlobalCommandPalette() {
   const router = useRouter();
@@ -30,12 +57,10 @@ export function GlobalCommandPalette() {
     isCommandPaletteOpen,
     setCommandPaletteOpen,
     alerts,
-    cases,
     customers,
     toggleStreamRunning,
     revealPii,
     resetWorkspaceData,
-    setActiveJurisdiction
   } = useBankingStore();
 
   useEffect(() => {
@@ -47,7 +72,8 @@ export function GlobalCommandPalette() {
           e.target instanceof HTMLTextAreaElement ||
           e.target instanceof HTMLSelectElement
         ) {
-          return;
+          // Ctrl/Cmd+K still toggles from inside a field; a bare "/" must not hijack typing.
+          if (e.key === '/') return;
         }
         e.preventDefault();
         setCommandPaletteOpen(!isCommandPaletteOpen);
@@ -61,8 +87,9 @@ export function GlobalCommandPalette() {
     return () => document.removeEventListener('keydown', down);
   }, [isCommandPaletteOpen, setCommandPaletteOpen]);
 
+  const close = () => setCommandPaletteOpen(false);
   const navigateTo = (path: string) => {
-    setCommandPaletteOpen(false);
+    close();
     router.push(path);
   };
 
@@ -70,203 +97,123 @@ export function GlobalCommandPalette() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-start justify-center pt-20 px-4 animate-in fade-in duration-150"
-      onClick={() => setCommandPaletteOpen(false)}
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/70 px-4 pt-20"
+      onClick={close}
     >
-      <div 
-        className="w-full max-w-2xl bg-[#0F172A] border border-[#334155] rounded-xl shadow-2xl overflow-hidden text-slate-200"
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
+        className="w-full max-w-xl overflow-hidden rounded-xl border border-[#334155] bg-[#0F172A] text-slate-200 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <Command className="w-full bg-transparent">
-          <div className="flex items-center px-4 border-b border-[#1E293B]">
-            <Search className="w-5 h-5 text-slate-400 mr-3 shrink-0" />
+        <Command className="w-full bg-transparent" loop>
+          <div className="flex items-center border-b border-[#1E293B] px-4">
+            <Search className="mr-3 h-5 w-5 shrink-0 text-slate-400" aria-hidden />
             <Command.Input
               autoFocus
-              placeholder="Search alerts (ALT-994821), cases, accounts (BD22...), or type module..."
-              className="w-full h-12 bg-transparent text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none font-sans"
+              placeholder="Search alerts, accounts, entities, or a page"
+              aria-label="Search alerts, accounts, entities, or a page"
+              className="h-12 w-full bg-transparent text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none"
             />
-            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-[#1E293B] border border-[#334155] rounded">
-              ESC
+            <kbd className="hidden rounded border border-[#334155] bg-[#1E293B] px-1.5 py-0.5 text-xs text-slate-400 sm:inline-block">
+              Esc
             </kbd>
           </div>
 
-          <Command.List className="max-h-96 overflow-y-auto p-2 space-y-2 text-xs">
-            <Command.Empty className="py-8 text-center text-slate-400 font-mono">
-              No matching institutional commands or customer records found.
+          <Command.List className="max-h-96 overflow-y-auto p-2 text-sm">
+            <Command.Empty className="py-8 text-center text-slate-400">
+              Nothing matches that search.
             </Command.Empty>
 
-            {/* Global Jump Navigation */}
-            <Command.Group heading="11 Compliance Modules (Jump)" className="px-2 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-mono">
-              <Command.Item
-                onSelect={() => navigateTo('/app')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <LayoutDashboard className="w-4 h-4 text-emerald-400" />
-                <span className="flex-1 font-medium font-sans">1. Executive Surveillance & SLA Overview</span>
-                <kbd className="font-mono text-[10px] text-slate-500">1</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/triage')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <ShieldAlert className="w-4 h-4 text-rose-400" />
-                <span className="flex-1 font-medium font-sans">2. Alert Triage Queue (2,028 Rows)</span>
-                <kbd className="font-mono text-[10px] text-slate-500">2</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/screening')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <UserCheck className="w-4 h-4 text-rose-400" />
-                <span className="flex-1 font-medium font-sans">3. Sanctions, PEP & Pre-Settlement Screening</span>
-                <kbd className="font-mono text-[10px] text-slate-500">3</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/customers')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <Building2 className="w-4 h-4 text-cyan-400" />
-                <span className="flex-1 font-medium font-sans">4. Customer 360° KYC/EDD Dossier</span>
-                <kbd className="font-mono text-[10px] text-slate-500">4</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/cases')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <Briefcase className="w-4 h-4 text-amber-400" />
-                <span className="flex-1 font-medium font-sans">5. Institutional Cases Docket</span>
-                <kbd className="font-mono text-[10px] text-slate-500">5</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/graph')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <GitBranch className="w-4 h-4 text-purple-400" />
-                <span className="flex-1 font-medium font-sans">6. Forensic Cash Flow Studio (2D/3D)</span>
-                <kbd className="font-mono text-[10px] text-slate-500">6</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/tbml')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <FileSpreadsheet className="w-4 h-4 text-amber-400" />
-                <span className="flex-1 font-medium font-sans">7. Trade Finance TBML Workspace</span>
-                <kbd className="font-mono text-[10px] text-slate-500">7</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/sar')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <FileCheck2 className="w-4 h-4 text-rose-400" />
-                <span className="flex-1 font-medium font-sans">8. SAR Filings Studio & CTR Aggregator</span>
-                <kbd className="font-mono text-[10px] text-slate-500">8</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/rfi')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <Mail className="w-4 h-4 text-blue-400" />
-                <span className="flex-1 font-medium font-sans">9. Compliance RFI Hub (Anti-Tipping Guard)</span>
-                <kbd className="font-mono text-[10px] text-slate-500">9</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/rules')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <Sliders className="w-4 h-4 text-teal-400" />
-                <span className="flex-1 font-medium font-sans">10. Rule Studio Shadow Mode & Whitelisting</span>
-                <kbd className="font-mono text-[10px] text-slate-500">0</kbd>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => navigateTo('/governance')}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <Scale className="w-4 h-4 text-cyan-400" />
-                <span className="flex-1 font-medium font-sans">11. Model Ops & WORM Audit Ledger</span>
-                <kbd className="font-mono text-[10px] text-slate-500">G</kbd>
-              </Command.Item>
-            </Command.Group>
-
-            {/* Quick Actions */}
-            <Command.Group heading="Executive Quick Actions" className="px-2 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-mono">
-              <Command.Item
-                onSelect={() => {
-                  revealPii();
-                  setCommandPaletteOpen(false);
-                }}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-amber-300 aria-selected:bg-[#1E293B]"
-              >
-                <Eye className="w-4 h-4" />
-                <span className="flex-1 font-medium font-sans">Reveal PII Globally for 60 Seconds (Audited)</span>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => {
-                  toggleStreamRunning();
-                  setCommandPaletteOpen(false);
-                }}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
-              >
-                <Zap className="w-4 h-4 text-emerald-400" />
-                <span className="flex-1 font-medium font-sans">Toggle Real-Time Ingestion Stream (Live/Paused)</span>
-              </Command.Item>
-
-              <Command.Item
-                onSelect={() => {
-                  resetWorkspaceData();
-                  setCommandPaletteOpen(false);
-                }}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-rose-300 aria-selected:bg-[#1E293B]"
-              >
-                <RotateCcw className="w-4 h-4" />
-                <span className="flex-1 font-medium font-sans">Reset Workspace Data to Pristine Certified State</span>
-              </Command.Item>
-            </Command.Group>
-
-            {/* Active Alerts Match */}
-            <Command.Group heading="Priority Alerts" className="px-2 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-mono">
-              {alerts.slice(0, 4).map(alert => (
+            <Command.Group heading="Go to" className={GROUP}>
+              {MODULES.map((m, i) => (
                 <Command.Item
-                  key={alert.id}
-                  onSelect={() => navigateTo(`/triage?alertId=${alert.id}`)}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
+                  key={m.path}
+                  value={`${m.label} ${m.path}`}
+                  keywords={m.keywords}
+                  onSelect={() => navigateTo(m.path)}
+                  className={ITEM}
                 >
-                  <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0" />
-                  <div className="flex-1 truncate">
-                    <span className="font-mono font-bold text-slate-100">{alert.id}</span>
-                    <span className="text-slate-400 ml-2 truncate">{alert.entityName}</span>
-                  </div>
-                  <span className="font-mono font-bold text-rose-400 shrink-0">
-                    ${alert.amount.toLocaleString()}
-                  </span>
+                  <m.icon className={`h-4 w-4 ${m.tone}`} aria-hidden />
+                  <span className="flex-1 font-medium">{m.label}</span>
+                  {i < 9 && <kbd className="text-xs text-slate-500">{i + 1}</kbd>}
                 </Command.Item>
               ))}
             </Command.Group>
 
-            {/* Active Customers */}
-            <Command.Group heading="Customer Directory" className="px-2 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-mono">
-              {customers.map(cust => (
+            <Command.Group heading="Actions" className={GROUP}>
+              <Command.Item
+                value="Reveal personal data"
+                keywords={['pii', 'unmask', 'show']}
+                onSelect={() => {
+                  void revealPii();
+                  close();
+                }}
+                className={`${ITEM} !text-amber-300`}
+              >
+                <Eye className="h-4 w-4" aria-hidden />
+                <span className="flex-1 font-medium">Reveal personal data for 60 seconds (audited)</span>
+              </Command.Item>
+
+              <Command.Item
+                value="Pause or resume simulated feed"
+                keywords={['stream', 'live', 'ingestion', 'toggle']}
+                onSelect={() => {
+                  toggleStreamRunning();
+                  close();
+                }}
+                className={ITEM}
+              >
+                <Zap className="h-4 w-4 text-emerald-400" aria-hidden />
+                <span className="flex-1 font-medium">Pause or resume the simulated feed</span>
+              </Command.Item>
+
+              <Command.Item
+                value="Reset demo data"
+                keywords={['reset', 'restore', 'clear', 'workspace']}
+                onSelect={() => {
+                  resetWorkspaceData();
+                  close();
+                }}
+                className={`${ITEM} !text-rose-300`}
+              >
+                <RotateCcw className="h-4 w-4" aria-hidden />
+                <span className="flex-1 font-medium">Reset demo data</span>
+              </Command.Item>
+            </Command.Group>
+
+            <Command.Group heading="Alerts" className={GROUP}>
+              {alerts.slice(0, 8).map((alert) => (
+                <Command.Item
+                  key={alert.id}
+                  value={`${alert.id} ${alert.entityName}`}
+                  onSelect={() => navigateTo(`/triage?alertId=${alert.id}`)}
+                  className={ITEM}
+                >
+                  <ShieldAlert className="h-4 w-4 shrink-0 text-rose-400" aria-hidden />
+                  <div className="flex-1 truncate">
+                    <span className="font-medium text-slate-100">{alert.id}</span>
+                    <span className="ml-2 text-slate-400">{alert.entityName}</span>
+                  </div>
+                </Command.Item>
+              ))}
+            </Command.Group>
+
+            <Command.Group heading="Customers" className={GROUP}>
+              {customers.map((cust) => (
                 <Command.Item
                   key={cust.id}
+                  value={`${cust.name} ${cust.accountNumber}`}
                   onSelect={() => navigateTo(`/customers?customerId=${cust.id}`)}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#1E293B] text-slate-200 aria-selected:bg-[#1E293B]"
+                  className={ITEM}
                 >
-                  <Building2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <Building2 className="h-4 w-4 shrink-0 text-cyan-400" aria-hidden />
                   <div className="flex-1 truncate">
-                    <span className="font-bold text-slate-100">{cust.name}</span>
-                    <span className="text-slate-400 font-mono text-[10px] ml-2">{cust.accountNumber}</span>
+                    <span className="font-medium text-slate-100">{cust.name}</span>
+                    <span className="ml-2 text-xs text-slate-400">{cust.accountNumber}</span>
                   </div>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-bold font-mono bg-rose-500/20 text-rose-300">
+                  <span className="rounded bg-slate-500/20 px-1.5 py-0.5 text-xs font-medium text-slate-300">
                     {cust.riskRating}
                   </span>
                 </Command.Item>

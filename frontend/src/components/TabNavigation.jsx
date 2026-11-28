@@ -32,7 +32,7 @@ export const TabNavigation = ({ activeTab, setActiveTab }) => {
               <span>{tab.label}</span>
               {tab.badge && (
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold ${
+                  className={`text-xs px-1.5 py-0.5 rounded font-mono font-semibold ${
                     isActive
                       ? 'bg-sky-500/30 text-sky-200 border border-sky-400/40'
                       : 'bg-slate-800 text-slate-400'

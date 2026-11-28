@@ -29,9 +29,9 @@ export const MetricCard = ({ title, value, subtitle, icon: Icon, color = 'cyan' 
   return (
     <div className={`card-panel p-3.5 flex items-center justify-between ${theme.border}`}>
       <div>
-        <p className="text-[11px] font-semibold text-slate-400 tracking-wide">{title}</p>
+        <p className="text-xs font-semibold text-slate-400 tracking-wide">{title}</p>
         <h3 className="text-xl font-bold text-white font-mono mt-0.5">{value}</h3>
-        <p className={`text-[10px] font-medium font-mono mt-0.5 ${theme.badge}`}>{subtitle}</p>
+        <p className={`text-xs font-medium font-mono mt-0.5 ${theme.badge}`}>{subtitle}</p>
       </div>
       {Icon && (
         <div className={`w-9 h-9 rounded-lg ${theme.iconBg} flex items-center justify-center`}>

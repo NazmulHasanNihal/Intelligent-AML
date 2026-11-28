@@ -150,7 +150,7 @@ export const RequestsView = () => {
       <div className="p-3.5 rounded-lg bg-surfaceRaised border border-border flex items-start gap-3 text-xs">
         <Lock className="w-4 h-4 text-critical shrink-0 mt-0.5" />
         <div className="text-text-2 leading-relaxed">
-          <strong className="text-text font-mono uppercase">
+          <strong className="text-text font-mono ">
             Strict Compliance Notice (31 U.S.C. § 5318(g)(2) / MLPA 2012 §27):
           </strong>
           <span className="block mt-0.5">
@@ -225,7 +225,7 @@ export const RequestsView = () => {
 
                 <div className="flex items-center gap-2 flex-wrap">
                   {/* Manual Status Transition Dropdown */}
-                  <div className="flex items-center gap-1 font-mono text-[11px]">
+                  <div className="flex items-center gap-1 font-mono text-xs">
                     <label htmlFor={`rfi-status-${rfi.id}`} className="text-text-muted cursor-pointer">Workflow Status:</label>
                     <select
                       id={`rfi-status-${rfi.id}`}
@@ -233,7 +233,7 @@ export const RequestsView = () => {
                       aria-label={`Update workflow status for RFI ${rfi.id}`}
                       value={rfi.status}
                       onChange={(e) => updateRFIStatus(rfi.id, e.target.value)}
-                      className={`ui-input py-0.5 text-[11px] font-mono h-7 font-bold ${
+                      className={`ui-input py-0.5 text-xs font-mono h-7 font-bold ${
                         isSatisfied ? 'text-cleared' : isEscalated ? 'text-critical' : isReview ? 'text-accent' : 'text-review'
                       }`}
                     >
@@ -249,11 +249,11 @@ export const RequestsView = () => {
               {/* Subject & Details */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
                 <div className="md:col-span-2">
-                  <span className="text-text-muted text-[10px] block">COMMUNICATION SUBJECT:</span>
-                  <span className="font-semibold text-text text-[11px] font-sans block mt-0.5">{rfi.subject}</span>
+                  <span className="text-text-muted text-xs block">COMMUNICATION SUBJECT:</span>
+                  <span className="font-semibold text-text text-xs font-sans block mt-0.5">{rfi.subject}</span>
                 </div>
                 <div>
-                  <span className="text-text-muted text-[10px] block">TRANSACTION EXPOSURE:</span>
+                  <span className="text-text-muted text-xs block">TRANSACTION EXPOSURE:</span>
                   <span className="font-bold text-text block mt-0.5">{rfi.amount}</span>
                 </div>
               </div>
@@ -263,7 +263,7 @@ export const RequestsView = () => {
                 <span className="text-xs font-semibold text-text block">Required Supporting Documentation:</span>
                 <div className="space-y-1">
                   {(rfi.requiredDocs || []).map((doc, dIdx) => (
-                    <div key={dIdx} className="flex items-center gap-2 text-[11px] text-text-2">
+                    <div key={dIdx} className="flex items-center gap-2 text-xs text-text-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-accent" />
                       <span>{doc}</span>
                     </div>
@@ -289,7 +289,7 @@ export const RequestsView = () => {
                     <label htmlFor={`doc-upload-${rfi.id}`} className="cursor-pointer flex flex-col items-center gap-1.5 py-1">
                       <UploadCloud className="w-5 h-5 text-accent" />
                       <span className="text-xs font-semibold text-text">Customer Document Ingestion Pipeline</span>
-                      <span className="text-[10px] text-text-muted">Drag & drop or click to ingest EXP Form, B/L, or Commercial Contract</span>
+                      <span className="text-xs text-text-muted">Drag & drop or click to ingest EXP Form, B/L, or Commercial Contract</span>
                     </label>
                   </div>
 
@@ -308,12 +308,12 @@ export const RequestsView = () => {
                 </div>
 
                 {/* Ingested Documents List */}
-                <div className="md:col-span-6 space-y-1.5 font-mono text-[11px]">
-                  <span className="text-[10px] text-text-muted uppercase block font-sans font-semibold">
+                <div className="md:col-span-6 space-y-1.5 font-mono text-xs">
+                  <span className="text-xs text-text-muted block font-sans font-semibold">
                     Ingested Document Artifacts ({(rfi.uploadedDocs || []).length}):
                   </span>
                   {(rfi.uploadedDocs || []).length === 0 ? (
-                    <div className="p-2.5 rounded bg-bg border border-borderSubtle text-text-muted text-[10px]">
+                    <div className="p-2.5 rounded bg-bg border border-borderSubtle text-text-muted text-xs">
                       Awaiting incoming customer transmission. Click "Run Automated OCR" to simulate receipt.
                     </div>
                   ) : (
@@ -342,9 +342,9 @@ export const RequestsView = () => {
                     <Badge variant="cleared" size="sm">FRE 902(11) Cryptographically Sealed</Badge>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                     <div className="space-y-1.5 p-2 rounded bg-surfaceRaised border border-borderSubtle">
-                      <span className="text-[10px] text-text-muted uppercase font-bold block">Documentary LC Extraction:</span>
+                      <span className="text-xs text-text-muted font-bold block">Documentary LC Extraction:</span>
                       <div>LC Number: <strong className="text-text">{ocrData[rfi.id].extracted_fields.lc_number}</strong></div>
                       <div>Commodity: <strong className="text-text">{ocrData[rfi.id].extracted_fields.commodity}</strong></div>
                       <div>HS Tariff Code: <strong className="text-accent">{ocrData[rfi.id].extracted_fields.hs_code}</strong></div>
@@ -352,7 +352,7 @@ export const RequestsView = () => {
                     </div>
 
                     <div className="space-y-1.5 p-2 rounded bg-critical/5 border border-critical/20">
-                      <span className="text-[10px] text-critical uppercase font-bold block">ASYCUDA Customs Audit:</span>
+                      <span className="text-xs text-critical font-bold block">ASYCUDA Customs Audit:</span>
                       <div>Declared Valuation: <strong className="text-critical text-sm">${ocrData[rfi.id].extracted_fields.declared_unit_price} / kg</strong></div>
                       <div>NBR Customs Benchmark: <strong className="text-text">${ocrData[rfi.id].customs_audit.benchmark_unit_price} / kg</strong></div>
                       <div className="text-critical font-bold">
@@ -361,7 +361,7 @@ export const RequestsView = () => {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-borderSubtle text-[10px]">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-borderSubtle text-xs">
                     <div className="flex items-center gap-1.5 text-text-muted">
                       <Anchor className="w-3.5 h-3.5 text-accent" />
                       <span>Carrier: <strong className="text-text">{ocrData[rfi.id].vessel_tracking.carrier_imo ? `${ocrData[rfi.id].extracted_fields.vessel_name}` : 'MV Meghna Trader'}</strong></span>
@@ -436,7 +436,7 @@ export const RequestsView = () => {
                   className={`ui-input w-full h-8 text-xs font-mono ${formErrors.targetAccount ? 'border-critical' : ''}`}
                 />
                 {formErrors.targetAccount && (
-                  <span className="text-[10px] text-critical font-sans mt-0.5 block">{formErrors.targetAccount}</span>
+                  <span className="text-xs text-critical font-sans mt-0.5 block">{formErrors.targetAccount}</span>
                 )}
               </div>
 
@@ -454,7 +454,7 @@ export const RequestsView = () => {
                   className={`ui-input w-full h-8 text-xs font-sans ${formErrors.targetEntity ? 'border-critical' : ''}`}
                 />
                 {formErrors.targetEntity && (
-                  <span className="text-[10px] text-critical font-sans mt-0.5 block">{formErrors.targetEntity}</span>
+                  <span className="text-xs text-critical font-sans mt-0.5 block">{formErrors.targetEntity}</span>
                 )}
               </div>
 
@@ -472,7 +472,7 @@ export const RequestsView = () => {
                   className={`ui-input w-full h-8 text-xs ${formErrors.amount ? 'border-critical' : ''}`}
                 />
                 {formErrors.amount && (
-                  <span className="text-[10px] text-critical font-sans mt-0.5 block">{formErrors.amount}</span>
+                  <span className="text-xs text-critical font-sans mt-0.5 block">{formErrors.amount}</span>
                 )}
               </div>
 

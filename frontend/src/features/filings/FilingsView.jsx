@@ -420,7 +420,7 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
                 ✓ Unmodified AI Baseline Draft (Exact Grounding)
               </span>
             )}
-            <span className="text-text-muted text-[10px]">
+            <span className="text-text-muted text-xs">
               Rule FRE 902(11) Certified
             </span>
           </div>
@@ -430,7 +430,7 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
           {diffMetrics.isModified && (
             <button
               onClick={handleResetToBaseline}
-              className="text-text-muted hover:text-text flex items-center gap-1 cursor-pointer transition-colors text-[11px]"
+              className="text-text-muted hover:text-text flex items-center gap-1 cursor-pointer transition-colors text-xs"
               title="Discard edits and revert to AI generated draft"
             >
               <RefreshCw className="w-3 h-3" />
@@ -480,7 +480,7 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
               <FileText className="w-3.5 h-3.5 text-accent" />
               <span className="font-semibold text-text">Editable Statutory Narrative Canvas</span>
             </div>
-            <span className="text-text-muted text-[11px]">{diffMetrics.totalWords} words</span>
+            <span className="text-text-muted text-xs">{diffMetrics.totalWords} words</span>
           </div>
 
           <textarea
@@ -489,7 +489,7 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
             aria-label="Editable Statutory Narrative Canvas"
             value={editableNarrative}
             onChange={(e) => setEditableNarrative(e.target.value)}
-            className="ui-input w-full flex-1 min-h-[500px] font-mono text-[11px] leading-relaxed p-4 bg-surface select-text resize-none focus:ring-1 focus:ring-accent"
+            className="ui-input w-full flex-1 min-h-[500px] font-mono text-xs leading-relaxed p-4 bg-surface select-text resize-none focus:ring-1 focus:ring-accent"
             placeholder="Statutory draft text..."
             spellCheck={false}
           />
@@ -509,13 +509,13 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
           {hsmReceipt ? (
             <Card className="space-y-2.5 bg-cleared/5 border-cleared/40">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-bold text-xs text-cleared uppercase flex items-center gap-1.5">
+                <span className="font-mono font-bold text-xs text-cleared flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-cleared" />
                   FIPS 140-2 Level 3 HSM Sealed
                 </span>
                 <Badge variant="cleared" size="sm">4096-bit RSA-PSS</Badge>
               </div>
-              <div className="space-y-1.5 font-mono text-[10px] bg-bg p-2.5 rounded border border-cleared/20">
+              <div className="space-y-1.5 font-mono text-xs bg-bg p-2.5 rounded border border-cleared/20">
                 <div>
                   <span className="text-text-muted block">CERTIFICATE SUBJECT:</span>
                   <span className="text-text truncate block">{hsmReceipt.certificate_subject_dn}</span>
@@ -536,12 +536,12 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
                 </div>
                 <div>
                   <span className="text-text-muted block">DIGITAL SIGNATURE HEX (SHA-256 PSS):</span>
-                  <span className="text-text-2 font-mono text-[9px] break-all block bg-surfaceRaised p-1.5 rounded border border-borderSubtle max-h-16 overflow-y-auto">
+                  <span className="text-text-2 font-mono text-xs break-all block bg-surfaceRaised p-1.5 rounded border border-borderSubtle max-h-16 overflow-y-auto">
                     {hsmReceipt.signature_hex}
                   </span>
                 </div>
                 <div className="pt-1.5 flex items-center justify-between border-t border-borderSubtle">
-                  <span className="text-cleared font-bold flex items-center gap-1 text-[11px]">
+                  <span className="text-cleared font-bold flex items-center gap-1 text-xs">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     {hsmReceipt.verification_status}
                   </span>
@@ -550,7 +550,7 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
                     size="xs"
                     onClick={handleDownloadSignedPackage}
                     icon={Download}
-                    className="h-6 text-[10px]"
+                    className="h-6 text-xs"
                   >
                     Signed Package (.json)
                   </Button>
@@ -560,13 +560,13 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
           ) : (
             <Card className="space-y-2.5 bg-surfaceRaised border-border">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-bold text-xs text-text uppercase flex items-center gap-1.5">
+                <span className="font-mono font-bold text-xs text-text flex items-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-accent" />
                   FIPS 140-2 Level 3 HSM Token
                 </span>
                 <Badge variant="outline" size="sm">Awaiting Signature</Badge>
               </div>
-              <p className="text-[11px] text-text-2 leading-relaxed">
+              <p className="text-xs text-text-2 leading-relaxed">
                 BFIU Master Circular 26 and Federal Reserve SR 11-7 require regulatory filings to be cryptographically sealed via hardware security token before submission.
               </p>
               <Button
@@ -585,29 +585,29 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
           {/* Trade LC Pricing Verification */}
           <Card className="space-y-2.5 bg-surfaceRaised border-border">
             <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-xs text-text uppercase">Customs & LC Verification</span>
+              <span className="font-mono font-bold text-xs text-text ">Customs & LC Verification</span>
               <Badge variant="critical" size="sm">Price Divergence</Badge>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-[11px] font-mono bg-bg p-2.5 rounded border border-borderSubtle">
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono bg-bg p-2.5 rounded border border-borderSubtle">
               <div>
-                <span className="text-text-muted text-[10px] block">LC DOCKET NO:</span>
+                <span className="text-text-muted text-xs block">LC DOCKET NO:</span>
                 <span className="font-bold text-text">{activeCase.tbmlDetails?.lcNumber || 'LC-2026-CTG-88912'}</span>
               </div>
               <div>
-                <span className="text-text-muted text-[10px] block">TARIFF HS CODE:</span>
+                <span className="text-text-muted text-xs block">TARIFF HS CODE:</span>
                 <span className="text-text">{activeCase.tbmlDetails?.hsCode || 'HS 5201.00'}</span>
               </div>
               <div>
-                <span className="text-text-muted text-[10px] block">NBR BENCHMARK:</span>
+                <span className="text-text-muted text-xs block">NBR BENCHMARK:</span>
                 <span className="text-text">{activeCase.tbmlDetails?.benchmarkPrice || '$9.80/kg'}</span>
               </div>
               <div>
-                <span className="text-text-muted text-[10px] block">DECLARED VALUE:</span>
+                <span className="text-text-muted text-xs block">DECLARED VALUE:</span>
                 <span className="text-critical font-bold">{activeCase.tbmlDetails?.declaredPrice || '$42.50/kg'}</span>
               </div>
               <div className="col-span-2">
-                <span className="text-text-muted text-[10px] block">DEVIATION ANOMALY:</span>
+                <span className="text-text-muted text-xs block">DEVIATION ANOMALY:</span>
                 <span className="text-critical font-bold">{activeCase.tbmlDetails?.priceDeviation || '+333.7% Over-Invoiced'}</span>
               </div>
             </div>
@@ -616,11 +616,11 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
           {/* Merkle Proof & Cryptographic Chain */}
           <Card className="space-y-2.5 bg-surfaceRaised border-border">
             <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-xs text-text uppercase">Cryptographic Audit Chain</span>
+              <span className="font-mono font-bold text-xs text-text ">Cryptographic Audit Chain</span>
               <Lock className="w-3.5 h-3.5 text-accent" />
             </div>
 
-            <div className="space-y-1.5 font-mono text-[10px] bg-bg p-2.5 rounded border border-borderSubtle">
+            <div className="space-y-1.5 font-mono text-xs bg-bg p-2.5 rounded border border-borderSubtle">
               <div>
                 <span className="text-text-muted block">MERKLE ROOT RECEIPT:</span>
                 <span className="text-accent font-bold truncate block">
@@ -642,8 +642,8 @@ DETERMINISTIC TRANSACTION GROUNDING PROOF:
 
           {/* Statutory Signatory Ratification Status */}
           <Card className="space-y-2 bg-surfaceRaised border-border font-mono text-xs">
-            <span className="font-bold text-text uppercase block">Signatory Ratification</span>
-            <div className="space-y-1 text-[11px] text-text-2">
+            <span className="font-bold text-text block">Signatory Ratification</span>
+            <div className="space-y-1 text-xs text-text-2">
               <div className="flex justify-between">
                 <span>Investigator (Maker):</span>
                 <span className="font-bold text-text">{activeCase.fourEyesInitiator || 'Sarah Jenkins'}</span>

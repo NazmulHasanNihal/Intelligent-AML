@@ -89,28 +89,28 @@ const HELP_TOPICS = [
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
           <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.08]">
             <span className="font-bold text-indigo-300 block">1. Smurfing / Structuring</span>
-            <p className="text-slate-300 mt-1 text-[11px]">
+            <p className="text-slate-300 mt-1 text-xs">
               Law requires banks to report cash deposits over $10,000. Criminals try to evade this by breaking $50,000 into multiple smaller transfers (e.g., $9,450, $9,800). The AI flags these structured bursts instantly.
             </p>
           </div>
 
           <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.08]">
             <span className="font-bold text-indigo-300 block">2. Pass-Through Money Mules</span>
-            <p className="text-slate-300 mt-1 text-[11px]">
+            <p className="text-slate-300 mt-1 text-xs">
               An account receives $48,500 and immediately sends out $48,100 within 15 minutes to an offshore account. The account never keeps money; it is used only as a transit pipeline.
             </p>
           </div>
 
           <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.08]">
             <span className="font-bold text-indigo-300 block">3. Circular Wash-Trading</span>
-            <p className="text-slate-300 mt-1 text-[11px]">
+            <p className="text-slate-300 mt-1 text-xs">
               Funds travel in a circle (Account A → B → C → A) to create fake transaction history and disguise the original source of illegal money.
             </p>
           </div>
 
           <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.08]">
             <span className="font-bold text-indigo-300 block">4. Dormant Account Hijacking</span>
-            <p className="text-slate-300 mt-1 text-[11px]">
+            <p className="text-slate-300 mt-1 text-xs">
               An account sits empty and inactive for 100+ days, and then suddenly receives and withdraws large sums of cash before going quiet again.
             </p>
           </div>
@@ -130,7 +130,7 @@ const HELP_TOPICS = [
             <span className="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">1</span>
             <div>
               <b className="text-white">Workspace 1 — Check the Alert Triage Queue:</b>
-              <p className="text-slate-300 text-[11px] mt-0.5">
+              <p className="text-slate-300 text-xs mt-0.5">
                 Look at the Yellow and Red alerts. Click any transaction to open the side inspector and see who sent what to whom.
               </p>
             </div>
@@ -140,7 +140,7 @@ const HELP_TOPICS = [
             <span className="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">2</span>
             <div>
               <b className="text-white">Workspace 2 — Inspect Network Connections in Graph Studio:</b>
-              <p className="text-slate-300 text-[11px] mt-0.5">
+              <p className="text-slate-300 text-xs mt-0.5">
                 See the visual network map. Red nodes are suspicious originators, Yellow nodes are intermediary mules, and Green nodes are normal merchants.
               </p>
             </div>
@@ -150,7 +150,7 @@ const HELP_TOPICS = [
             <span className="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">3</span>
             <div>
               <b className="text-white">Workspace 3 — File Government SAR Report or Clear:</b>
-              <p className="text-slate-300 text-[11px] mt-0.5">
+              <p className="text-slate-300 text-xs mt-0.5">
                 If clean, click <b>"Clear Alert"</b>. If illicit, click <b>"Auto-Draft SAR"</b> to let the AI write the complete FinCEN legal report, and click <b>"Download Official PDF"</b> for your bank archives.
               </p>
             </div>
@@ -166,21 +166,21 @@ const HELP_TOPICS = [
       <div className="space-y-2.5 text-xs leading-relaxed text-slate-300">
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.06]">
           <span className="font-bold text-white block">Q: Does the AI block normal customer transactions by accident?</span>
-          <p className="text-slate-300 text-[11px] mt-1">
+          <p className="text-slate-300 text-xs mt-1">
             <b>No.</b> The system uses mathematical Conformal Safety Guarantees that ensure over 98.6% of safe transactions are cleared straight-through in 0.45 milliseconds. Only genuine anomalies are flagged for your review.
           </p>
         </div>
 
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.06]">
           <span className="font-bold text-white block">Q: What should I tell a customer if their transaction is held?</span>
-          <p className="text-slate-300 text-[11px] mt-1">
+          <p className="text-slate-300 text-xs mt-1">
             Open <b>Console 5 (Remediation & RFI Hub)</b>. It generates a compliant <b>Request for Information (RFI)</b> document notice (commercial invoice, Bill of Lading, UBO verification). Under 31 U.S.C. § 5318(g)(2), tipping off internal AML thresholds or algorithmic flags is strictly prohibited.
           </p>
         </div>
 
         <div className="p-3 rounded-lg bg-[#141A26] border border-white/[0.06]">
           <span className="font-bold text-white block">Q: Is this system compliant with banking regulators (Federal Reserve & FinCEN)?</span>
-          <p className="text-slate-300 text-[11px] mt-1">
+          <p className="text-slate-300 text-xs mt-1">
             <b>Yes.</b> It fully complies with the Bank Secrecy Act (31 U.S.C. 5318(g)), FinCEN Form 111 standards, and Federal Reserve SR 11-7 / OCC 2011-12 model risk governance principles with tamper-evident WORM audit seals under Federal Rules of Evidence 902(11).
           </p>
         </div>
@@ -207,7 +207,7 @@ export const BankerHelpModal = ({ isOpen, onClose }) => {
             </div>
             <div className="min-w-0">
               <h2 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] truncate">Banker's Compliance Guide & Knowledge Center</h2>
-              <p className="text-[10px] text-[var(--text-muted)] font-sans truncate">Guide for compliance officers, examiners, and investigators</p>
+              <p className="text-xs text-[var(--text-muted)] font-sans truncate">Guide for compliance officers, examiners, and investigators</p>
             </div>
           </div>
           <button
@@ -228,7 +228,7 @@ export const BankerHelpModal = ({ isOpen, onClose }) => {
                 <button
                   key={topic.id}
                   onClick={() => setSelectedTopic(topic.id)}
-                  className={`w-full p-2 rounded-lg text-left text-[11px] transition-all cursor-pointer flex items-center justify-between ${
+                  className={`w-full p-2 rounded-lg text-left text-xs transition-all cursor-pointer flex items-center justify-between ${
                     isSelected
                       ? 'bg-gradient-to-b from-[#257843] to-[#144726] text-white font-bold border border-[#113C21] shadow-[var(--skeuo-btn)]'
                       : 'skeuo-card text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
@@ -246,12 +246,12 @@ export const BankerHelpModal = ({ isOpen, onClose }) => {
             <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] border-b border-[var(--border-subtle)] pb-1.5 font-mono">
               {currentTopic.title}
             </h3>
-            <div className="text-[11px] text-[var(--text-secondary)]">{currentTopic.content}</div>
+            <div className="text-xs text-[var(--text-secondary)]">{currentTopic.content}</div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-2.5 border-t border-[var(--border-subtle)] bg-[var(--bg-card-elevated)] flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-[var(--text-muted)]">
+        <div className="px-4 py-2.5 border-t border-[var(--border-subtle)] bg-[var(--bg-card-elevated)] flex items-center justify-between text-xs sm:text-xs font-mono text-[var(--text-muted)]">
           <span className="hidden sm:inline">Intelligent-AML Banker Knowledge Base v1.0</span>
           <button
             onClick={onClose}

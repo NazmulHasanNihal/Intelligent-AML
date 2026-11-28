@@ -1072,7 +1072,7 @@ export const Cytoscape2DGraph = ({
           {/* Left: Ego Hop, Radial Expansion & Layout Switcher */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-text">Ego:</span>
-            <div className="flex items-center gap-1 font-mono text-[11px] p-0.5 bg-bg rounded border border-border">
+            <div className="flex items-center gap-1 font-mono text-xs p-0.5 bg-bg rounded border border-border">
               {[1, 2, 3].map(h => (
                 <button
                   key={h}
@@ -1089,7 +1089,7 @@ export const Cytoscape2DGraph = ({
 
             {/* Layout Mode Selector */}
             <div className="w-px h-3.5 bg-border mx-1" />
-            <div className="flex items-center gap-0.5 font-mono text-[10px] p-0.5 bg-bg rounded border border-border">
+            <div className="flex items-center gap-0.5 font-mono text-xs p-0.5 bg-bg rounded border border-border">
               {[
                 { id: 'sugiyama', label: 'Sugiyama' },
                 { id: 'orbital', label: 'Orbital' },
@@ -1113,7 +1113,7 @@ export const Cytoscape2DGraph = ({
             <div className="w-px h-3.5 bg-border mx-1" />
 
             {/* Max Visible Entities Slider Cap (WebGL/DOM Protection) */}
-            <div className="flex items-center gap-1.5 font-mono text-[11px]">
+            <div className="flex items-center gap-1.5 font-mono text-xs">
               <label htmlFor="graph-entity-cap-slider" className="text-text-muted cursor-pointer">Entity Cap:</label>
               <input
                 id="graph-entity-cap-slider"
@@ -1134,7 +1134,7 @@ export const Cytoscape2DGraph = ({
             <div className="w-px h-3.5 bg-border mx-1" />
             <button
               onClick={() => setCamouflageGatingEnabled(!camouflageGatingEnabled)}
-              className={`flex items-center gap-1.5 px-2 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${camouflageGatingEnabled
+              className={`flex items-center gap-1.5 px-2 py-0.5 rounded border text-xs font-mono transition-colors cursor-pointer ${camouflageGatingEnabled
                   ? 'bg-cleared-bg text-cleared border-cleared font-semibold'
                   : 'bg-bg text-text-muted border-border hover:text-text'
                 }`}
@@ -1147,7 +1147,7 @@ export const Cytoscape2DGraph = ({
 
           {/* Right: Path Finding Controls */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <label htmlFor="graph-path-source-select" className="text-text-muted text-[11px] font-mono flex items-center gap-1 cursor-pointer">
+            <label htmlFor="graph-path-source-select" className="text-text-muted text-xs font-mono flex items-center gap-1 cursor-pointer">
               <Route className="w-3.5 h-3.5 text-accent" />
               <span>Trace:</span>
             </label>
@@ -1156,7 +1156,7 @@ export const Cytoscape2DGraph = ({
               name="graph-path-source-select"
               value={pathSource}
               onChange={(e) => setPathSource(e.target.value)}
-              className="ui-input py-0.5 text-[11px] font-mono h-7 max-w-[130px] truncate"
+              className="ui-input py-0.5 text-xs font-mono h-7 max-w-[130px] truncate"
             >
               <option value="BD22-EBLB-4829-1092-8823">Meghna Industrial</option>
               <option value="BD04-BRAC-1109-8421-4402">Tanvir Rahman</option>
@@ -1168,7 +1168,7 @@ export const Cytoscape2DGraph = ({
               name="graph-path-target-select"
               value={pathTarget}
               onChange={(e) => setPathTarget(e.target.value)}
-              className="ui-input py-0.5 text-[11px] font-mono h-7 max-w-[130px] truncate"
+              className="ui-input py-0.5 text-xs font-mono h-7 max-w-[130px] truncate"
             >
               <option value="BD04-BRAC-1109-8421-4402">Tanvir Rahman</option>
               <option value="AE-EBIL-4412-8819-3301">Gulf Star (Dubai)</option>
@@ -1205,17 +1205,17 @@ export const Cytoscape2DGraph = ({
                     <span className="w-2.5 h-2.5 rounded-full bg-cleared animate-pulse" />
                     <div>
                       <span className="text-text font-semibold block">Baseline Topology (08:00 UTC)</span>
-                      <span className="text-[10px] text-text-muted">Interbank settlement corridors quiescent</span>
+                      <span className="text-xs text-text-muted">Interbank settlement corridors quiescent</span>
                     </div>
                     <div className="px-3 py-1.5 rounded-full bg-surface/90 backdrop-blur-md border border-border shadow-xs flex items-center gap-3 text-xs font-mono">
                       <div className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-cleared animate-pulse" />
-                        <span className="text-text font-medium text-[11px]">Baseline Corridors (08:00 UTC)</span>
+                        <span className="text-text font-medium text-xs">Baseline Corridors (08:00 UTC)</span>
                       </div>
                       <button
                         onClick={() => { timelineStepRef.current = 1; setTimelineStep(1); setIsPlaying(true); }}
-                        className="px-2.5 py-1 rounded bg-accent text-white text-[11px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
-                        className="px-2.5 py-0.5 rounded-full bg-accent text-white text-[10px] font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
+                        className="px-2.5 py-1 rounded bg-accent text-white text-xs font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
+                        className="px-2.5 py-0.5 rounded-full bg-accent text-white text-xs font-semibold hover:bg-accent/90 cursor-pointer flex items-center gap-1 shadow-xs transition-colors"
                       >
                         <Play className="w-3 h-3" />
                         <Play className="w-2.5 h-2.5" />
@@ -1231,7 +1231,7 @@ export const Cytoscape2DGraph = ({
                             className="w-2.5 h-2.5 rounded-full animate-ping"
                             style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }}
                           />
-                          <span className="font-bold text-text uppercase tracking-wider text-[11px]">
+                          <span className="font-bold text-text text-xs">
                             {currentStepMeta.title}
                           </span>
                         </div>
@@ -1242,8 +1242,8 @@ export const Cytoscape2DGraph = ({
                               className="w-2 h-2 rounded-full animate-ping shrink-0"
                               style={{ backgroundColor: currentStepMeta.activeTx?.color || '#EF4444' }}
                             />
-                            <div className="flex items-center gap-2 text-[11px] flex-wrap sm:flex-nowrap">
-                              <span className="font-bold text-text uppercase tracking-wider text-[10.5px]">
+                            <div className="flex items-center gap-2 text-xs flex-wrap sm:flex-nowrap">
+                              <span className="font-bold text-text text-[10.5px]">
                                 {currentStepMeta.title.replace('Phase ', 'P')}
                               </span>
                               <span className="text-text-muted">•</span>
@@ -1254,11 +1254,11 @@ export const Cytoscape2DGraph = ({
                               <span className="font-bold text-critical">
                                 {currentStepMeta.activeTx?.amount}
                               </span>
-                              <Badge variant="neutral" size="sm" className="font-mono text-[9px] py-0 px-1.5">
+                              <Badge variant="neutral" size="sm" className="font-mono text-xs py-0 px-1.5">
                                 {currentStepMeta.activeTx?.rail}
                               </Badge>
                               <span className="text-text-muted hidden md:inline">•</span>
-                              <span className="font-semibold text-critical text-[10px] hidden md:inline">
+                              <span className="font-semibold text-critical text-xs hidden md:inline">
                                 {currentStepMeta.activeTx?.typology}
                               </span>
                             </div>
@@ -1266,14 +1266,14 @@ export const Cytoscape2DGraph = ({
                             {/* Active Transfer Pair */}
                             {currentStepMeta.activeTx && (
                               <div className="space-y-1.5">
-                                <div className="flex items-center justify-between text-[11px] gap-2">
+                                <div className="flex items-center justify-between text-xs gap-2">
                                   <div className="min-w-0">
-                                    <span className="text-text-muted block text-[10px]">ORIGINATOR (SENDER)</span>
+                                    <span className="text-text-muted block text-xs">ORIGINATOR (SENDER)</span>
                                     <span className="font-semibold text-text truncate block">{currentStepMeta.activeTx.sourceName}</span>
                                   </div>
                                   <ArrowRight className="w-4 h-4 text-accent shrink-0 animate-pulse" />
                                   <div className="min-w-0 text-right">
-                                    <span className="text-text-muted block text-[10px]">BENEFICIARY (RECEIVER)</span>
+                                    <span className="text-text-muted block text-xs">BENEFICIARY (RECEIVER)</span>
                                     <span className="font-semibold text-text truncate block">{currentStepMeta.activeTx.targetName}</span>
                                   </div>
                                 </div>
@@ -1281,14 +1281,14 @@ export const Cytoscape2DGraph = ({
                                 {/* Amount & Rail */}
                                 <div className="p-2 rounded bg-bg border border-border flex items-center justify-between">
                                   <div>
-                                    <span className="text-[10px] text-text-muted block">TRANSACTION VOLUME</span>
+                                    <span className="text-xs text-text-muted block">TRANSACTION VOLUME</span>
                                     <div className="flex items-baseline gap-1.5">
                                       <span className="text-sm font-bold text-text">{currentStepMeta.activeTx.amount}</span>
-                                      <span className="text-[10px] text-text-muted font-normal">({currentStepMeta.activeTx.amountBdt})</span>
+                                      <span className="text-xs text-text-muted font-normal">({currentStepMeta.activeTx.amountBdt})</span>
                                     </div>
                                   </div>
                                   <div className="text-right">
-                                    <span className="text-[10px] text-text-muted block">PAYMENT RAIL</span>
+                                    <span className="text-xs text-text-muted block">PAYMENT RAIL</span>
                                     <Badge variant="neutral" size="sm" className="font-bold">
                                       {currentStepMeta.activeTx.rail}
                                     </Badge>
@@ -1296,7 +1296,7 @@ export const Cytoscape2DGraph = ({
                                 </div>
 
                                 {/* Metrics Row: Hawkes Intensity & Typology */}
-                                <div className="grid grid-cols-2 gap-2 text-[10px]">
+                                <div className="grid grid-cols-2 gap-2 text-xs">
                                   <div className="p-1.5 rounded bg-bg/50 border border-border/50">
                                     <span className="text-text-muted block">TYPOLOGY</span>
                                     <span className="font-semibold text-critical truncate block">
@@ -1375,7 +1375,7 @@ export const Cytoscape2DGraph = ({
                               <div className="w-px h-4 bg-border mx-0.5" />
 
                               {/* Speed Selector (0.5x, 1x, 2x) */}
-                              <div className="flex items-center gap-0.5 p-0.5 bg-bg rounded border border-border font-mono text-[10px]">
+                              <div className="flex items-center gap-0.5 p-0.5 bg-bg rounded border border-border font-mono text-xs">
                                 {[
                                   { speed: 0.5, label: '0.5x' },
                                   { speed: 1, label: '1x' },
@@ -1398,7 +1398,7 @@ export const Cytoscape2DGraph = ({
                               {/* Playback Mode: Cumulative vs Step Focus */}
                               <button
                                 onClick={() => setPlaybackMode(prev => prev === 'cumulative' ? 'single' : 'cumulative')}
-                                className={`px-2 py-1 rounded border text-[10px] font-mono transition-colors cursor-pointer flex items-center gap-1 ${playbackMode === 'cumulative'
+                                className={`px-2 py-1 rounded border text-xs font-mono transition-colors cursor-pointer flex items-center gap-1 ${playbackMode === 'cumulative'
                                     ? 'bg-accent/10 border-accent/40 text-accent font-semibold'
                                     : 'bg-bg border-border text-text-muted hover:text-text'
                                   }`}
@@ -1411,7 +1411,7 @@ export const Cytoscape2DGraph = ({
                               {/* Auto-Loop Toggle */}
                               <button
                                 onClick={() => setAutoLoop(!autoLoop)}
-                                className={`p-1.5 rounded border text-[10px] font-mono transition-colors cursor-pointer ${autoLoop
+                                className={`p-1.5 rounded border text-xs font-mono transition-colors cursor-pointer ${autoLoop
                                     ? 'bg-accent/10 border-accent/40 text-accent'
                                     : 'bg-bg border-border text-text-muted hover:text-text'
                                   }`}
@@ -1448,7 +1448,7 @@ export const Cytoscape2DGraph = ({
                                       }`}>
                                       {st.step === 0 ? 't₀' : `t${st.step}`}
                                     </span>
-                                    <span className="text-[8px] text-text-muted font-mono truncate max-w-[55px] hidden sm:inline">
+                                    <span className="text-xs text-text-muted font-mono truncate max-w-[55px] hidden sm:inline">
                                       {st.step === 0 ? 'Baseline' : st.step === 1 ? 'Smurf' : st.step === 2 ? 'Layer' : st.step === 3 ? 'Wire' : 'Wash'}
                                     </span>
                                   </button>
@@ -1497,11 +1497,11 @@ export const Cytoscape2DGraph = ({
                                     </div>
 
                                     {/* Floating Minimal Legend */}
-                                    <div className="absolute bottom-20 left-3 bg-surface/95 backdrop-blur-xs border border-border shadow-sm rounded p-2 z-20 text-[10px] space-y-1 font-mono">
-                                      <span className="font-semibold text-text text-[9px] uppercase tracking-wider block">Topology Tiers</span>
+                                    <div className="absolute bottom-20 left-3 bg-surface/95 backdrop-blur-xs border border-border shadow-sm rounded p-2 z-20 text-xs space-y-1 font-mono">
+                                      <span className="font-semibold text-text text-xs block">Topology Tiers</span>
                                       <div className="flex items-center gap-2 text-text-2">
                                         {/* Floating Minimal Legend (Compact Bottom Pill) */}
-                                        <div className="absolute bottom-3 left-3 bg-surface/90 backdrop-blur-md border border-border shadow-xs rounded px-2.5 py-1 z-20 text-[10px] flex items-center gap-2.5 font-mono">
+                                        <div className="absolute bottom-3 left-3 bg-surface/90 backdrop-blur-md border border-border shadow-xs rounded px-2.5 py-1 z-20 text-xs flex items-center gap-2.5 font-mono">
                                           <div className="flex items-center gap-1.5 text-text-2">
                                             <span className="w-2 h-2 rounded-full bg-critical border border-critical inline-block" />
                                             <span>Tier 1 Hold (&gt;85% Risk)</span>

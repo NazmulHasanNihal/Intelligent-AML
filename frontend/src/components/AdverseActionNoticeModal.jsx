@@ -135,7 +135,7 @@ Authorized Dealer Correspondent Banking Network`;
                 <h3 className="font-semibold text-text text-sm">Adverse Action & Customer Appeal Notice</h3>
                 <Badge variant="cleared" size="sm">CFPB / FCRA § 615(a) Compliant</Badge>
               </div>
-              <p className="text-[11px] text-text-muted mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Transparent statutory notice explaining transaction holds with customer appeal and dispute instructions.
               </p>
             </div>
@@ -151,27 +151,27 @@ Authorized Dealer Correspondent Banking Network`;
         {/* Content Preview */}
         <div className="p-5 space-y-4 overflow-y-auto max-h-[70vh]">
           {/* Metadata Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px] bg-bg p-3 rounded-lg border border-borderSubtle">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-xs bg-bg p-3 rounded-lg border border-borderSubtle">
             <div>
-              <span className="text-text-muted block text-[10px]">DOCKET REF</span>
+              <span className="text-text-muted block text-xs">DOCKET REF</span>
               <span className="font-bold text-accent">{referenceCode}</span>
             </div>
             <div>
-              <span className="text-text-muted block text-[10px]">AFFECTED AMOUNT</span>
+              <span className="text-text-muted block text-xs">AFFECTED AMOUNT</span>
               <span className="font-bold text-text">${Number(subject.amount || 48500).toLocaleString()} USD</span>
             </div>
             <div>
-              <span className="text-text-muted block text-[10px]">APPEAL WINDOW</span>
+              <span className="text-text-muted block text-xs">APPEAL WINDOW</span>
               <span className="font-bold text-review">30 Business Days</span>
             </div>
             <div>
-              <span className="text-text-muted block text-[10px]">TIPPING-OFF STATUS</span>
+              <span className="text-text-muted block text-xs">TIPPING-OFF STATUS</span>
               <span className="font-bold text-cleared">Safe-Harbor Verified</span>
             </div>
           </div>
 
           {/* Letter Body Preview (Parchment Styled Card) */}
-          <div className="p-5 rounded-lg bg-surfaceRaised border border-border font-mono text-[11px] leading-relaxed whitespace-pre-wrap select-text text-text">
+          <div className="p-5 rounded-lg bg-surfaceRaised border border-border font-mono text-xs leading-relaxed whitespace-pre-wrap select-text text-text">
             {letterText}
           </div>
 

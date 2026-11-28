@@ -182,22 +182,22 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
               <span className="font-bold text-[var(--text-primary)] text-xs sm:text-sm block truncate">
                 Spectral Forensic Graph Studio
               </span>
-              <span className="quantum-badge-cyan text-[9px] font-mono px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+              <span className="quantum-badge-cyan text-xs font-mono px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
                 <Sparkles className="w-2.5 h-2.5" />
                 <span>Prism Spectral Graph Engine</span>
               </span>
-              <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 shadow-inner">
+              <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 shadow-inner">
                 Inspecting: {selectedNode.id.substring(0, 16)}...
               </span>
             </div>
-            <p className="text-[var(--text-secondary)] text-[10px] sm:text-[11px] truncate mt-0.5">
+            <p className="text-[var(--text-secondary)] text-xs sm:text-xs truncate mt-0.5">
               High-resolution topology with anti-camouflage noise gating (Threshold: {(camouflageThreshold * 100).toFixed(0)}%) & audit-ready forensic subgraphs (FRE 902(11)).
             </p>
           </div>
         </div>
 
         {/* View Mode Toggle: 3D Force-Directed vs 2D Planar Canvas */}
-        <div className="flex items-center gap-1.5 font-mono text-[10px] shrink-0 bg-[#070D1E] p-1 rounded-xl border border-cyan-500/30">
+        <div className="flex items-center gap-1.5 font-mono text-xs shrink-0 bg-[#070D1E] p-1 rounded-xl border border-cyan-500/30">
           <button
             onClick={() => setGraphMode('2D')}
             className={`px-3 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
@@ -226,14 +226,14 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
       </div>
 
       {/* Controls Bar: Pruning, Cycle Highlighting, Search & Camouflage Threshold */}
-      <div className="p-2 sm:p-2.5 rounded-xl quantum-prism-card flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono border-cyan-500/30">
+      <div className="p-2 sm:p-2.5 rounded-xl quantum-prism-card flex flex-wrap items-center justify-between gap-2 text-xs font-mono border-cyan-500/30">
         <div className="flex flex-wrap items-center gap-2">
           <Sliders className="w-3.5 h-3.5 text-cyan-400" />
           <span className="font-bold text-cyan-300">STUDIO FILTERS:</span>
           
           <button
             onClick={() => setCourtPruningActive(prev => !prev)}
-            className={`px-2.5 py-1 rounded-lg font-bold text-[10px] transition-all cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-all cursor-pointer ${
               courtPruningActive 
                 ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 text-white shadow-[0_0_14px_rgba(6,182,212,0.4)]' 
                 : 'bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-white'
@@ -244,7 +244,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
 
           <button
             onClick={() => setHighlightCycle(prev => !prev)}
-            className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               highlightCycle 
                 ? 'bg-gradient-to-r from-rose-500 to-fuchsia-600 text-white shadow-[0_0_14px_rgba(236,72,153,0.4)]' 
                 : 'bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-white'
@@ -255,7 +255,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
 
           <button
             onClick={handleExportPNG}
-            className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#0B152B] border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all flex items-center gap-1 cursor-pointer"
+            className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0B152B] border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all flex items-center gap-1 cursor-pointer"
             title="Download high-resolution image for court / FinCEN filing"
           >
             <Download className="w-3 h-3" />
@@ -272,7 +272,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
               value={searchNodeQuery}
               onChange={(e) => setSearchNodeQuery(e.target.value)}
               placeholder="Jump to Account ID..."
-              className="pl-7 pr-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-cyan-500/30 text-[10px] text-white placeholder-slate-400 shadow-inner outline-none w-36 sm:w-44 font-mono focus:border-cyan-400 focus:shadow-[0_0_12px_rgba(6,182,212,0.3)] transition-all"
+              className="pl-7 pr-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-cyan-500/30 text-xs text-white placeholder-slate-400 shadow-inner outline-none w-36 sm:w-44 font-mono focus:border-cyan-400 focus:shadow-[0_0_12px_rgba(6,182,212,0.3)] transition-all"
             />
           </form>
 
@@ -280,7 +280,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
             <button
               type="button"
               onClick={() => setCourtPruningActive(prev => !prev)}
-              className="flex items-center gap-1.5 cursor-pointer text-[10px] font-mono font-bold"
+              className="flex items-center gap-1.5 cursor-pointer text-xs font-mono font-bold"
               title="Toggle learnable edge-trust gating (Eq. 3.13): filters synthetic camouflage chaff"
             >
               <Shield className={`w-3 h-3 ${courtPruningActive ? 'text-cyan-400' : 'text-slate-500'}`} />
@@ -288,7 +288,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
                 Edge Gate:
               </span>
             </button>
-            <span className="text-[10px] text-slate-300 font-mono">
+            <span className="text-xs text-slate-300 font-mono">
               ĝᵢⱼ &lt; <b className="text-amber-400">{camouflageThreshold.toFixed(2)}</b>
             </span>
             <input 
@@ -301,7 +301,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
               className="w-16 sm:w-24 accent-cyan-400 cursor-pointer"
               title="Calibrated safety floor delta_floor = 0.10: prunes 65.9% of adversarial chaff connections"
             />
-            <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono font-bold">
+            <span className="text-xs px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono font-bold">
               {courtPruningActive ? '65.9% Pruned' : 'Bypass'}
             </span>
           </div>
@@ -309,7 +309,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
       </div>
 
       {/* Interactive Timeline Scrubber & Path Finding Strip */}
-      <div className="p-2 sm:p-2.5 rounded-xl bg-[#070D1E] border border-cyan-500/25 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono shadow-inner">
+      <div className="p-2 sm:p-2.5 rounded-xl bg-[#070D1E] border border-cyan-500/25 flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-inner">
         {/* Timeline Scrubber */}
         <div className="flex items-center gap-2.5 flex-1 min-w-[280px]">
           <button
@@ -322,7 +322,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
           
           <div className="flex items-center gap-2 flex-1">
             <Clock className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-            <span className="text-[10px] text-slate-400 shrink-0">TIMELINE SCRUBBER:</span>
+            <span className="text-xs text-slate-400 shrink-0">TIMELINE SCRUBBER:</span>
             <input
               type="range"
               min="0"
@@ -332,7 +332,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
               onChange={(e) => setTimelineMinute(Number(e.target.value))}
               className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
             />
-            <span className="text-[11px] font-bold text-cyan-300 font-mono shrink-0">
+            <span className="text-xs font-bold text-cyan-300 font-mono shrink-0">
               08:{String(timelineMinute).padStart(2, '0')} UTC
             </span>
           </div>
@@ -341,10 +341,10 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
         {/* Path-Finding Tool */}
         <div className="flex items-center gap-1.5">
           <Route className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-          <span className="text-[10px] text-slate-400">PATH-FINDER:</span>
+          <span className="text-xs text-slate-400">PATH-FINDER:</span>
           <button
             onClick={handleRunPathFinding}
-            className="px-2 py-0.5 rounded-md bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 hover:text-white font-bold text-[10px] cursor-pointer"
+            className="px-2 py-0.5 rounded-md bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 hover:text-white font-bold text-xs cursor-pointer"
           >
             Find Shortest Loop
           </button>
@@ -353,7 +353,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
 
       {/* Dynamic Feedback Banner */}
       {(pathFeedback || feedbackNote) && (
-        <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[11px] font-mono flex items-center gap-2 animate-fadeIn">
+        <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono flex items-center gap-2 animate-fadeIn">
           <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
           <span>{pathFeedback || feedbackNote}</span>
         </div>
@@ -367,17 +367,17 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
           
           {/* Top Left HUD Telemetry Overlay */}
           <div className="absolute top-3 left-3 z-10 pointer-events-none flex items-center gap-2">
-            <div className="px-2.5 py-1 rounded-lg bg-[#050816]/90 backdrop-blur-md border border-cyan-500/40 text-[9px] font-mono text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.25)] flex items-center gap-1.5">
+            <div className="px-2.5 py-1 rounded-lg bg-[#050816]/90 backdrop-blur-md border border-cyan-500/40 text-xs font-mono text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.25)] flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
               <span>{graphMode === '2D' ? '2D PLANAR FORENSIC VIEW' : '3D SPECTRAL DISPERSION ACTIVE'}</span>
             </div>
-            <div className="hidden sm:flex px-2 py-1 rounded-lg bg-[#050816]/80 backdrop-blur-md border border-indigo-500/30 text-[9px] font-mono text-slate-300">
+            <div className="hidden sm:flex px-2 py-1 rounded-lg bg-[#050816]/80 backdrop-blur-md border border-indigo-500/30 text-xs font-mono text-slate-300">
               {graphMode === '2D' ? 'SVG Canvas • 60 FPS • High Clarity' : 'WebGL 3D Engine • 120 FPS'}
             </div>
           </div>
 
           {/* Bottom Left Prismatic Legend Overlay */}
-          <div className="absolute bottom-3 left-3 z-10 pointer-events-none hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#050816]/90 backdrop-blur-md border border-cyan-500/30 text-[9px] font-mono shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+          <div className="absolute bottom-3 left-3 z-10 pointer-events-none hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#050816]/90 backdrop-blur-md border border-cyan-500/30 text-xs font-mono shadow-[0_0_15px_rgba(6,182,212,0.2)]">
             <span className="flex items-center gap-1 text-cyan-300"><span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_6px_#00f2fe]" /> Originator</span>
             <span className="text-slate-600">•</span>
             <span className="flex items-center gap-1 text-rose-300"><span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_6px_#ff0055]" /> Conduit Mules</span>
@@ -417,14 +417,14 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
           {/* Inspected Node Card */}
           <div className="quantum-prism-card p-3 sm:p-3.5 space-y-2.5 font-sans border-cyan-500/30">
             <div className="flex items-center justify-between pb-2 border-b border-cyan-500/20">
-              <span className="text-[11px] sm:text-xs font-bold text-cyan-300 font-mono uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs sm:text-xs font-bold text-cyan-300 font-mono flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-cyan-400" />
                 <span>Inspected Entity Dossier</span>
               </span>
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => handleTogglePin(selectedNode.id)}
-                  className={`p-1 rounded-md text-[10px] transition-colors cursor-pointer ${
+                  className={`p-1 rounded-md text-xs transition-colors cursor-pointer ${
                     pinnedNodes.has(selectedNode.id)
                       ? 'text-amber-400 bg-amber-500/20 border border-amber-500/40'
                       : 'text-slate-400 hover:text-white'
@@ -433,7 +433,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
                 >
                   <Pin className="w-3 h-3 fill-current" />
                 </button>
-                <span className={`text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded-full font-bold border ${
+                <span className={`text-xs sm:text-xs font-mono px-2 py-0.5 rounded-full font-bold border ${
                   selectedNode.risk >= 0.85 
                     ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-[0_0_10px_rgba(244,63,94,0.3)]' 
                     : selectedNode.risk >= 0.30 
@@ -445,32 +445,32 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
               </div>
             </div>
 
-            <div className="space-y-2 text-[11px]">
+            <div className="space-y-2 text-xs">
               <div>
-                <span className="text-[9px] text-[var(--text-muted)] font-mono block">ENTITY IDENTIFIER</span>
-                <span className="font-mono text-cyan-300 font-bold text-[11px] sm:text-xs break-all">{selectedNode.id}</span>
+                <span className="text-xs text-[var(--text-muted)] font-mono block">ENTITY IDENTIFIER</span>
+                <span className="font-mono text-cyan-300 font-bold text-xs sm:text-xs break-all">{selectedNode.id}</span>
               </div>
               <div>
-                <span className="text-[9px] text-[var(--text-muted)] font-mono block">ENTITY LABEL / OWNER</span>
+                <span className="text-xs text-[var(--text-muted)] font-mono block">ENTITY LABEL / OWNER</span>
                 <span className="text-[var(--text-primary)] font-semibold">{selectedNode.name}</span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-[9px] text-[var(--text-muted)] font-mono block">BANKING RAIL</span>
-                  <span className="text-[var(--text-secondary)] text-[10px] sm:text-[11px] truncate block">{selectedNode.bank}</span>
+                  <span className="text-xs text-[var(--text-muted)] font-mono block">BANKING RAIL</span>
+                  <span className="text-[var(--text-secondary)] text-xs sm:text-xs truncate block">{selectedNode.bank}</span>
                 </div>
                 <div>
-                  <span className="text-[9px] text-[var(--text-muted)] font-mono block">LEDGER BALANCE</span>
-                  <span className="text-cyan-300 font-mono font-bold text-[10px] sm:text-[11px]">{selectedNode.balance}</span>
+                  <span className="text-xs text-[var(--text-muted)] font-mono block">LEDGER BALANCE</span>
+                  <span className="text-cyan-300 font-mono font-bold text-xs sm:text-xs">{selectedNode.balance}</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2 p-2 rounded-xl quantum-prism-well font-mono text-center">
                 <div>
-                  <span className="text-[8px] text-[var(--text-muted)] block uppercase">IN-DEGREE</span>
+                  <span className="text-xs text-[var(--text-muted)] block ">IN-DEGREE</span>
                   <span className="text-xs font-bold text-white">{selectedNode.inDegree} Conduits</span>
                 </div>
                 <div>
-                  <span className="text-[8px] text-[var(--text-muted)] block uppercase">OUT-DEGREE</span>
+                  <span className="text-xs text-[var(--text-muted)] block ">OUT-DEGREE</span>
                   <span className="text-xs font-bold text-cyan-400">{selectedNode.outDegree} Dispersals</span>
                 </div>
               </div>
@@ -488,7 +488,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
               {onOpenAccountProfile && (
                 <button
                   onClick={() => onOpenAccountProfile(selectedNode)}
-                  className="w-full flex items-center justify-center gap-1.5 py-1.5 sm:py-2 rounded-xl bg-[var(--bg-base)] border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 text-[11px] font-semibold transition-all cursor-pointer shadow-sm"
+                  className="w-full flex items-center justify-center gap-1.5 py-1.5 sm:py-2 rounded-xl bg-[var(--bg-base)] border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 text-xs font-semibold transition-all cursor-pointer shadow-sm"
                 >
                   <UserCheck className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Open Full KYC Ledger</span>
@@ -499,12 +499,12 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
 
           {/* Module 2 Anti-Camouflage Technical Guide */}
           <div className="quantum-prism-card p-3 sm:p-3.5 space-y-2 text-xs border-cyan-500/30">
-            <span className="text-[11px] sm:text-xs font-bold text-cyan-300 font-mono uppercase tracking-wider flex items-center gap-1.5 pb-2 border-b border-cyan-500/20">
+            <span className="text-xs sm:text-xs font-bold text-cyan-300 font-mono flex items-center gap-1.5 pb-2 border-b border-cyan-500/20">
               <Sparkles className="w-3.5 h-3.5 text-fuchsia-400" />
               <span>Anti-Camouflage Defense (Noise Suppression)</span>
             </span>
             <div className="space-y-1.5">
-              <div className="flex justify-between text-[10px] font-mono">
+              <div className="flex justify-between text-xs font-mono">
                 <span className="text-slate-400">Merchant Camouflage Suppression:</span>
                 <span className="text-cyan-300 font-bold">65.9% Filtered</span>
               </div>
@@ -512,7 +512,7 @@ export const ForensicGraphStudio = ({ activeCase, onNavigateToSAR, onOpenAccount
                 <div className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-fuchsia-500 rounded-full w-[65.9%] animate-pulse" />
               </div>
             </div>
-            <p className="text-[var(--text-secondary)] text-[11px] leading-relaxed pt-1">
+            <p className="text-[var(--text-secondary)] text-xs leading-relaxed pt-1">
               Adversarial money launderers deliberately create connections to high-degree commercial merchants to dilute their graph anomaly signatures. C-STGB's learnable MLP edge-trust filter suppresses up to <strong className="text-cyan-300 font-semibold">65.9%</strong> of camouflage noise.
             </p>
           </div>

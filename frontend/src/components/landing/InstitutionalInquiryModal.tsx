@@ -180,7 +180,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
             </div>
 
             {/* Formatted Code Block */}
-            <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] font-mono text-[10px] text-slate-300 max-h-48 overflow-y-auto whitespace-pre leading-relaxed">
+            <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] font-mono text-xs text-slate-300 max-h-48 overflow-y-auto whitespace-pre leading-relaxed">
               {architectureBrief}
             </div>
 
@@ -224,7 +224,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                   onChange={(e) => setFormData({ ...formData, officerName: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 />
-                {errors.officerName && <p className="text-[10px] text-rose-400 mt-0.5 font-mono">{errors.officerName}</p>}
+                {errors.officerName && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.officerName}</p>}
               </div>
               <div>
                 <label className="block text-xs font-mono text-slate-400 mb-1">Institutional Email *</label>
@@ -235,7 +235,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                   onChange={(e) => setFormData({ ...formData, workEmail: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 />
-                {errors.workEmail && <p className="text-[10px] text-rose-400 mt-0.5 font-mono">{errors.workEmail}</p>}
+                {errors.workEmail && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.workEmail}</p>}
               </div>
             </div>
 
@@ -249,7 +249,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                   onChange={(e) => setFormData({ ...formData, institutionName: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 />
-                {errors.institutionName && <p className="text-[10px] text-rose-400 mt-0.5 font-mono">{errors.institutionName}</p>}
+                {errors.institutionName && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.institutionName}</p>}
               </div>
               <div>
                 <label className="block text-xs font-mono text-slate-400 mb-1">Role / Signatory Title *</label>
@@ -260,7 +260,7 @@ Daily Ingestion SLA: ${formData.dailyVolume}
                   onChange={(e) => setFormData({ ...formData, roleTitle: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"
                 />
-                {errors.roleTitle && <p className="text-[10px] text-rose-400 mt-0.5 font-mono">{errors.roleTitle}</p>}
+                {errors.roleTitle && <p className="text-xs text-rose-400 mt-0.5 font-mono">{errors.roleTitle}</p>}
               </div>
             </div>
 

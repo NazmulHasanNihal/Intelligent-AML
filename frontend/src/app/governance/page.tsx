@@ -439,7 +439,7 @@ export default function ModelGovernancePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-mono">
               <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">SWIFT MT / Documentary Credits</span>
+                <span className="text-xs text-slate-500 block font-bold">SWIFT MT / Documentary Credits</span>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Macro F1:</span>
                   <span className="font-bold text-emerald-400">96.5%</span>
@@ -455,7 +455,7 @@ export default function ModelGovernancePage() {
               </div>
 
               <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">ISO 20022 pacs.008 RTGS</span>
+                <span className="text-xs text-slate-500 block font-bold">ISO 20022 pacs.008 RTGS</span>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Macro F1:</span>
                   <span className="font-bold text-emerald-400">95.2%</span>
@@ -471,7 +471,7 @@ export default function ModelGovernancePage() {
               </div>
 
               <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">BEFTN Electronic Clearing</span>
+                <span className="text-xs text-slate-500 block font-bold">BEFTN Electronic Clearing</span>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Macro F1:</span>
                   <span className="font-bold text-emerald-400">94.1%</span>
@@ -487,7 +487,7 @@ export default function ModelGovernancePage() {
               </div>
 
               <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-2">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">MFS (bKash, Nagad, Rocket)</span>
+                <span className="text-xs text-slate-500 block font-bold">MFS (bKash, Nagad, Rocket)</span>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Macro F1:</span>
                   <span className="font-bold text-emerald-400">94.8%</span>
@@ -518,11 +518,11 @@ export default function ModelGovernancePage() {
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-300 flex items-center gap-1.5">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-300 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   Coverage: 99.04% (Empirical)
                 </span>
-                <span className="px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-[11px] font-mono text-sky-300">
+                <span className="px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-xs font-mono text-sky-300">
                   Target: &ge; 99.0% (&alpha; = 0.01)
                 </span>
               </div>
@@ -531,27 +531,27 @@ export default function ModelGovernancePage() {
             {/* 4 Telemetry Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
               <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">Calibration Set Size</span>
+                <span className="text-xs text-slate-500 block font-bold">Calibration Set Size</span>
                 <div className="text-base font-bold text-slate-100">n = 10,000</div>
-                <div className="text-[10px] text-slate-400">Held-out empirical run ID: MASTER_14_DATASET_EVAL_20260904</div>
+                <div className="text-xs text-slate-400">Held-out empirical run ID: MASTER_14_DATASET_EVAL_20260904</div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">Empirical Coverage</span>
+                <span className="text-xs text-slate-500 block font-bold">Empirical Coverage</span>
                 <div className="text-base font-bold text-emerald-400">99.04%</div>
-                <div className="text-[10px] text-emerald-400/80">Exceeds 99.00% nominal floor (+0.04%)</div>
+                <div className="text-xs text-emerald-400/80">Exceeds 99.00% nominal floor (+0.04%)</div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">Nonconformity Quantile</span>
+                <span className="text-xs text-slate-500 block font-bold">Nonconformity Quantile</span>
                 <div className="text-base font-bold text-cyan-300">&qcirc; = 0.8542</div>
-                <div className="text-[10px] text-slate-400">Finite-sample quantile at &lceil;(n+1)(1-&alpha;)&rceil;/n</div>
+                <div className="text-xs text-slate-400">Finite-sample quantile at &lceil;(n+1)(1-&alpha;)&rceil;/n</div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1">
-                <span className="text-[10px] text-slate-500 uppercase block font-bold">Active Champion Model</span>
+                <span className="text-xs text-slate-500 block font-bold">Active Champion Model</span>
                 <div className="text-base font-bold text-amber-300 truncate">cstgb-champion-v3.2</div>
-                <div className="text-[10px] text-slate-400 font-mono truncate" title="SHA-256: 8f3b21c4708eb19a4b3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b">
+                <div className="text-xs text-slate-400 font-mono truncate" title="SHA-256: 8f3b21c4708eb19a4b3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b">
                   Hash: 8f3b21c4...4e3f2a1b
                 </div>
               </div>
@@ -563,11 +563,11 @@ export default function ModelGovernancePage() {
                 <Info className="w-4 h-4 text-cyan-400 shrink-0" />
                 <span>Exchangeability &amp; Temporal Distribution Shift Principle</span>
               </div>
-              <p className="text-slate-400 leading-relaxed font-sans text-[11px]">
+              <p className="text-slate-400 leading-relaxed font-sans text-xs">
                 Under strict exchangeability ((Z_1, ..., Z_(n+1)) ~ D), split-conformal prediction provides an exact non-asymptotic finite-sample guarantee: P(Y_(n+1) &isin; C(X_(n+1))) &ge; 1 - &alpha;.
                 In dynamic financial crime surveillance networks, temporal drift, emerging typology evasions (e.g. cross-border trade smurfing), and sudden macro-volatility surges can introduce covariate and concept shift, violating strict exchangeability.
               </p>
-              <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] flex items-center justify-between text-[11px] font-mono">
+              <div className="p-2.5 bg-[#0B0F17] rounded-lg border border-[#1E293B] flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400">Drift Safeguard: Kolmogorov-Smirnov Sentinel</span>
                 <span className="text-emerald-400 font-semibold">KS &le; 0.038 (Clean Baseline) &bull; Threshold: 0.050</span>
               </div>
@@ -586,7 +586,7 @@ export default function ModelGovernancePage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     Active Production Champion Retained
                   </span>
@@ -597,11 +597,11 @@ export default function ModelGovernancePage() {
                 {/* Champion */}
                 <div className="p-4 rounded-xl bg-[#0B0F17] border border-cyan-500/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] uppercase font-bold text-cyan-400">Production Champion</span>
-                    <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 text-[10px]">v3.2.0-Production</span>
+                    <span className="text-xs font-bold text-cyan-400">Production Champion</span>
+                    <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 text-xs">v3.2.0-Production</span>
                   </div>
                   <div className="text-sm font-bold text-slate-100">cstgb-champion-v3.2</div>
-                  <div className="space-y-1.5 pt-1 text-[11px]">
+                  <div className="space-y-1.5 pt-1 text-xs">
                     <div className="flex justify-between text-slate-400">
                       <span>Macro F1 Score:</span>
                       <span className="font-bold text-emerald-400">94.5% (0.9450)</span>
@@ -624,11 +624,11 @@ export default function ModelGovernancePage() {
                 {/* Challenger */}
                 <div className="p-4 rounded-xl bg-[#0B0F17] border border-slate-800 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] uppercase font-bold text-slate-400">Shadow Challenger</span>
-                    <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px]">v2.1.0-Evaluation</span>
+                    <span className="text-xs font-bold text-slate-400">Shadow Challenger</span>
+                    <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-xs">v2.1.0-Evaluation</span>
                   </div>
                   <div className="text-sm font-bold text-slate-300">lightgbm-baseline-v2.1</div>
-                  <div className="space-y-1.5 pt-1 text-[11px]">
+                  <div className="space-y-1.5 pt-1 text-xs">
                     <div className="flex justify-between text-slate-400">
                       <span>Macro F1 Score:</span>
                       <span className="font-bold text-amber-400">88.7% (0.8870)</span>
@@ -652,15 +652,15 @@ export default function ModelGovernancePage() {
               {/* Shadow Impact Summary */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] text-xs font-mono">
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase block">Triage Disagreements</span>
+                  <span className="text-xs text-slate-500 block">Triage Disagreements</span>
                   <span className="font-bold text-slate-200">142 / 2,500 (5.68%)</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase block">Noise Reduction vs. Challenger</span>
+                  <span className="text-xs text-slate-500 block">Noise Reduction vs. Challenger</span>
                   <span className="font-bold text-emerald-400">-84.2% False Positives</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase block">Replay Hash Seal</span>
+                  <span className="text-xs text-slate-500 block">Replay Hash Seal</span>
                   <span className="font-bold text-slate-300 font-mono truncate" title="SHA-256: ddefa59a01c33192a0b6001f...">
                     ddefa59a...001f
                   </span>
@@ -680,14 +680,14 @@ export default function ModelGovernancePage() {
                     Evaluated under EEOC Four-Fifths (80%) Rule across customer segments and Bangladesh geographic divisions.
                   </p>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 font-semibold">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-400 font-semibold">
                   STATUS: COMPLIANT (NON-DISCRIMINATORY)
                 </span>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono text-slate-300">
-                  <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-[10px] uppercase text-slate-400">
+                  <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs text-slate-400">
                     <tr>
                       <th className="px-4 py-2.5">Entity Segment</th>
                       <th className="px-4 py-2.5">Sample Size</th>
@@ -766,7 +766,7 @@ export default function ModelGovernancePage() {
           <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-mono uppercase text-slate-400">
+                <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs font-mono text-slate-400">
                   <tr>
                     <th className="px-4 py-3">ID</th>
                     <th className="px-4 py-3">Statutory Framework &amp; Section</th>
@@ -792,16 +792,16 @@ export default function ModelGovernancePage() {
                             <ExternalLink className="w-3 h-3 ml-0.5" />
                           </a>
                         </div>
-                        <span className="text-[11px] font-mono text-slate-400 block mt-0.5">{m.officialRef}</span>
+                        <span className="text-xs font-mono text-slate-400 block mt-0.5">{m.officialRef}</span>
                       </td>
                       <td className="px-4 py-3 font-mono text-emerald-400">{m.appModule}</td>
                       <td className="px-4 py-3 text-slate-300 max-w-[280px] leading-relaxed">{m.operationalRequirements}</td>
-                      <td className="px-4 py-3 text-slate-400 font-mono text-[11px] max-w-[280px] leading-relaxed">
+                      <td className="px-4 py-3 text-slate-400 font-mono text-xs max-w-[280px] leading-relaxed">
                         {m.technicalImplementation}
                       </td>
                       <td className="px-4 py-3 text-center">
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${m.verificationStatus === 'CERTIFIED_STATUTE'
+                          className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${m.verificationStatus === 'CERTIFIED_STATUTE'
                             ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                             : m.verificationStatus === 'OFFICIAL_GUIDELINE'
                               ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40'
@@ -839,22 +839,22 @@ export default function ModelGovernancePage() {
             {/* Policy Card 1: Statutory Record Retention */}
             <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs font-mono font-bold text-slate-200 flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-emerald-400" />
                   Statutory Record Retention Policy
                 </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                   {REGULATORY_CONFIG.retentionPolicy.statutoryYears} Years Mandatory
                 </span>
               </div>
 
               <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Statutory Mandate:</span>
+                  <span className="text-slate-500 text-xs block">Statutory Mandate:</span>
                   <span className="text-slate-200">{REGULATORY_CONFIG.retentionPolicy.statutoryBasis}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Scope of Coverage:</span>
+                  <span className="text-slate-500 text-xs block">Scope of Coverage:</span>
                   <span className="text-slate-300 font-sans text-xs">{REGULATORY_CONFIG.retentionPolicy.scope}</span>
                 </div>
               </div>
@@ -868,22 +868,22 @@ export default function ModelGovernancePage() {
             {/* Policy Card 2: Sovereign Data Residency */}
             <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs font-mono font-bold text-slate-200 flex items-center gap-1.5">
                   <Database className="w-4 h-4 text-cyan-400" />
                   Sovereign In-Country Data Residency
                 </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
                   Air-Gap Confinement
                 </span>
               </div>
 
               <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Central Bank Standard:</span>
+                  <span className="text-slate-500 text-xs block">Central Bank Standard:</span>
                   <span className="text-slate-200">{REGULATORY_CONFIG.dataResidencyPolicy.primaryMandate}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Custody Requirement:</span>
+                  <span className="text-slate-500 text-xs block">Custody Requirement:</span>
                   <span className="text-slate-300 font-sans text-xs">{REGULATORY_CONFIG.dataResidencyPolicy.cloudPolicy}</span>
                 </div>
               </div>
@@ -897,22 +897,22 @@ export default function ModelGovernancePage() {
             {/* Policy Card 3: Domestic PII Secrecy */}
             <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs font-mono font-bold text-slate-200 flex items-center gap-1.5">
                   <FileKey className="w-4 h-4 text-sky-400" />
                   Banking Duty of Secrecy &amp; PII Masking
                 </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40">
+                <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40">
                   BCA 1991 § 46
                 </span>
               </div>
 
               <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Governing Standard:</span>
+                  <span className="text-slate-500 text-xs block">Governing Standard:</span>
                   <span className="text-slate-200">{REGULATORY_CONFIG.piiPrivacyPolicy.bangladeshStandard}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Technical Pseudonymization:</span>
+                  <span className="text-slate-500 text-xs block">Technical Pseudonymization:</span>
                   <span className="text-slate-300 font-sans text-xs">
                     Client-side SHA-256 masking on accounts and national IDs via PiiText component before render or logging.
                   </span>
@@ -928,26 +928,26 @@ export default function ModelGovernancePage() {
             {/* Policy Card 4: EU GDPR Research Prototype Notes (ETH Zurich Context) */}
             <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs font-mono font-bold text-slate-200 flex items-center gap-1.5">
                   <Globe2 className="w-4 h-4 text-purple-400" />
                   EU GDPR Research Prototype Alignment
                 </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
                   ETH Zurich Evaluation
                 </span>
               </div>
 
               <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-1.5 text-xs font-mono">
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Statutory Processing Basis:</span>
+                  <span className="text-slate-500 text-xs block">Statutory Processing Basis:</span>
                   <span className="text-slate-200">{REGULATORY_CONFIG.piiPrivacyPolicy.gdprResearchNotes.complianceBasis}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Crime Prevention Exception:</span>
+                  <span className="text-slate-500 text-xs block">Crime Prevention Exception:</span>
                   <span className="text-slate-300 text-xs font-sans">{REGULATORY_CONFIG.piiPrivacyPolicy.gdprResearchNotes.crimePreventionExemption}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 text-[10px] block">Scientific Research Safeguards:</span>
+                  <span className="text-slate-500 text-xs block">Scientific Research Safeguards:</span>
                   <span className="text-slate-300 text-xs font-sans">{REGULATORY_CONFIG.piiPrivacyPolicy.gdprResearchNotes.researchExemption}</span>
                 </div>
               </div>
@@ -976,7 +976,7 @@ export default function ModelGovernancePage() {
 
             <div className="space-y-3 text-xs font-sans">
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Action Hook Target</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Action Hook Target</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setSelectedWebhook('DEBIT_HOLD')}
@@ -986,7 +986,7 @@ export default function ModelGovernancePage() {
                       }`}
                   >
                     <div>/debit-hold</div>
-                    <div className="text-[10px] font-normal text-slate-400 mt-0.5">Temporary Wire Quarantine</div>
+                    <div className="text-xs font-normal text-slate-400 mt-0.5">Temporary Wire Quarantine</div>
                   </button>
 
                   <button
@@ -997,13 +997,13 @@ export default function ModelGovernancePage() {
                       }`}
                   >
                     <div>/account-freeze</div>
-                    <div className="text-[10px] font-normal text-slate-400 mt-0.5">Statutory Full Account Lock</div>
+                    <div className="text-xs font-normal text-slate-400 mt-0.5">Statutory Full Account Lock</div>
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 font-mono uppercase text-[10px]">Target Account Number</label>
+                <label className="text-slate-400 block mb-1 font-mono text-xs">Target Account Number</label>
                 <input
                   type="text"
                   value={targetAccount}
@@ -1029,11 +1029,11 @@ export default function ModelGovernancePage() {
           <div className="lg:col-span-7 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-4">
             <div>
               <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
-                <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono flex items-center gap-2">
+                <h3 className="text-xs font-bold text-slate-200 font-mono flex items-center gap-2">
                   <Terminal className="w-4 h-4 text-emerald-400" />
                   Core Banking API Telemetry Log
                 </h3>
-                <span className="text-[10px] font-mono text-slate-400">HMAC-SHA256 Signed</span>
+                <span className="text-xs font-mono text-slate-400">HMAC-SHA256 Signed</span>
               </div>
 
               <div className="mt-3 p-4 bg-[#090D14] border border-[#1E293B] rounded-xl font-mono text-xs text-emerald-400 h-80 overflow-y-auto">
@@ -1110,7 +1110,7 @@ export default function ModelGovernancePage() {
                 Evidence Standard: <strong>Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B &amp; 73A (Officer Certificate)</strong> &amp; FRE 902(11)
               </span>
             </div>
-            <div className="flex items-center gap-3 text-slate-400 text-[11px]">
+            <div className="flex items-center gap-3 text-slate-400 text-xs">
               <span className="px-2 py-0.5 rounded bg-[#1E293B] text-cyan-300 font-bold">
                 Ed25519 Checkpoints (RFC 8032)
               </span>
@@ -1124,7 +1124,7 @@ export default function ModelGovernancePage() {
           <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-[11px] font-mono uppercase text-slate-400">
+                <thead className="bg-[#0B0F17] border-b border-[#1E293B] text-xs font-mono text-slate-400">
                   <tr>
                     <th className="px-4 py-3">Block #</th>
                     <th className="px-4 py-3">Action</th>
@@ -1145,14 +1145,14 @@ export default function ModelGovernancePage() {
                     >
                       <td className="px-4 py-3 font-mono font-bold text-cyan-400">#{block.sequence || block.blockHeight}</td>
                       <td className="px-4 py-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#1E293B] text-slate-200">
+                        <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#1E293B] text-slate-200">
                           {block.action}
                         </span>
                       </td>
                       <td className="px-4 py-3 font-mono text-slate-200">{block.targetAccount}</td>
                       <td className="px-4 py-3 text-slate-300 max-w-[360px] truncate">{block.details}</td>
                       <td className="px-4 py-3 text-slate-400 font-mono">{block.actorName}</td>
-                      <td className="px-4 py-3 font-mono text-[10px] text-sky-400 truncate max-w-[220px]">
+                      <td className="px-4 py-3 font-mono text-xs text-sky-400 truncate max-w-[220px]">
                         {block.currentHash || block.merkleHash}
                       </td>
                     </tr>

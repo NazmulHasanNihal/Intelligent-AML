@@ -76,7 +76,7 @@ export const CoreBankingModal = () => {
                 <h3 className="font-semibold text-text text-sm">Core Banking Ledger Integration</h3>
                 <Badge variant="critical" size="sm">Live Webhook Dispatch</Badge>
               </div>
-              <p className="text-[11px] text-text-muted mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Execute direct debit restriction or restitution commands on connected core banking ledgers.
               </p>
             </div>
@@ -97,7 +97,7 @@ export const CoreBankingModal = () => {
                 <CheckCircle2 className="w-5 h-5" />
                 <span>Core Ledger Webhook Acknowledged (HTTP 200 OK)</span>
               </div>
-              <div className="space-y-1 font-mono text-[11px] bg-bg p-3 rounded border border-borderSubtle">
+              <div className="space-y-1 font-mono text-xs bg-bg p-3 rounded border border-borderSubtle">
                 <div className="flex justify-between">
                   <span className="text-text-muted">Target Account:</span>
                   <span className="text-text font-bold">{subject.account}</span>
@@ -115,14 +115,14 @@ export const CoreBankingModal = () => {
                   <span className="text-cleared font-bold">POST /api/v2/core-ledger/holds SUCCESS</span>
                 </div>
               </div>
-              <p className="text-text-2 text-[11px]">
+              <p className="text-text-2 text-xs">
                 The transaction instruction and account debit privileges have been restricted on the core host. All corresponding clearing queues (RTGS, BEFTN, SWIFT) will reject debit settlement.
               </p>
             </div>
           ) : (
             <>
               {/* Target Entity Overview */}
-              <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle font-mono text-[11px] space-y-1.5">
+              <div className="p-3.5 bg-bg rounded-lg border border-borderSubtle font-mono text-xs space-y-1.5">
                 <div className="flex justify-between">
                   <span className="text-text-muted">Target Accountholder:</span>
                   <span className="font-semibold text-text">{subject.entityName}</span>
@@ -146,7 +146,7 @@ export const CoreBankingModal = () => {
                 <label className="text-text font-semibold text-xs block">
                   Select Ledger Command:
                 </label>
-                <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
+                <div className="grid grid-cols-2 gap-2 font-mono text-xs">
                   <button
                     type="button"
                     onClick={() => setActionType('TEMPORARY_DEBIT_HOLD')}
@@ -157,7 +157,7 @@ export const CoreBankingModal = () => {
                     }`}
                   >
                     <span className="block font-sans font-semibold text-xs mb-0.5">Temporary Debit Hold</span>
-                    <span className="text-[10px] text-text-muted block font-mono">Locks outgoing debits, credits permitted</span>
+                    <span className="text-xs text-text-muted block font-mono">Locks outgoing debits, credits permitted</span>
                   </button>
 
                   <button
@@ -170,7 +170,7 @@ export const CoreBankingModal = () => {
                     }`}
                   >
                     <span className="block font-sans font-semibold text-xs mb-0.5">Total Account Freeze</span>
-                    <span className="text-[10px] text-text-muted block font-mono">BFIU Section 15 total statutory block</span>
+                    <span className="text-xs text-text-muted block font-mono">BFIU Section 15 total statutory block</span>
                   </button>
                 </div>
               </div>
@@ -196,7 +196,7 @@ export const CoreBankingModal = () => {
               </div>
 
               {/* Warning Notice */}
-              <div className="p-3 rounded-lg bg-surfaceRaised border border-border flex items-start gap-2.5 text-[11px] text-text-2 leading-relaxed">
+              <div className="p-3 rounded-lg bg-surfaceRaised border border-border flex items-start gap-2.5 text-xs text-text-2 leading-relaxed">
                 <AlertTriangle className="w-4 h-4 text-review shrink-0 mt-0.5" />
                 <div>
                   <strong>Live System Warning:</strong> Triggering this action dispatches an authenticated JSON webhook to the Core Banking host gateway. It immediately blocks clearing settlement on the core ledger.

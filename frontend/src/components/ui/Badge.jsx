@@ -10,7 +10,7 @@ export const Badge = ({
   const base = "inline-flex items-center font-medium font-mono select-none rounded-full";
 
   const sizeStyles = {
-    sm: "text-[10px] px-2 py-0.5 gap-1 leading-none",
+    sm: "text-xs px-2 py-0.5 gap-1 leading-none",
     md: "text-xs px-2.5 py-0.5 gap-1.5 leading-tight"
   };
 

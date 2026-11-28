@@ -263,6 +263,7 @@ export default function TradeFinanceTbmlPage() {
                     {Math.abs(divergencePct) >= 25 ? 'FLAGGED BY CUSTOMS INTELLIGENCE' : 'CUSTOMS BASELINE MATCHED'}
                   </span>
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
                   <div className="p-2.5 bg-[#0B0F17] rounded-lg">
                     <span className="text-slate-500 text-xs block">Bill of Entry No</span>
                     <span className="font-bold text-white">{preset.billOfEntry}</span>

@@ -288,7 +288,6 @@ export default function RuleStudioPage() {
               <p className="text-xs text-slate-500">
                 Accounts with inflow ≈ outflow within this ratio are flagged as transit conduits.
               </p>
-              </p>
             </div>
 
             <div className="p-4 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-3">
@@ -308,7 +307,6 @@ export default function RuleStudioPage() {
               <p className="text-xs text-slate-500">
                 Surges above customer 90-day moving average volume escalate to Tier 2 review.
               </p>
-              </p>
             </div>
 
             <div className="p-4 bg-[#0B0F17] rounded-xl border border-[#1E293B] space-y-3">
@@ -327,7 +325,6 @@ export default function RuleStudioPage() {
               />
               <p className="text-xs text-slate-500">
                 Rolling aggregation window for multi-agent deposits below ৳1,000,000 BDT statutory ceiling (MLPA 2012 § 2(z) &amp; BFIU Circular 26).
-              </p>
               </p>
             </div>
           </div>

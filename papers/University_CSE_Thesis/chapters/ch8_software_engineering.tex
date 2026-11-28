@@ -6,7 +6,7 @@
   \item \textbf{Asynchronous Serving Tier:} FastAPI / Uvicorn asynchronous streaming endpoints supporting ISO 20022 webhooks with sub-millisecond response SLAs.
   \item \textbf{Cloud-Native Orchestration:} Multi-stage Docker containerization and Kubernetes manifests with Horizontal Pod Autoscaling (HPA) from 4 to 32 worker replicas.
   \item \textbf{Production Telemetry:} Prometheus metrics tracking P50/P90/P99 latency, conformal triage distributions, edge-pruning ratios, and streaming drift statistics.
-  \item \textbf{Verification Suite:} 175 automated unit, integration, and regression tests achieving 100\% pass verification across 30 dedicated test modules.
+  \item \textbf{Verification Suite:} 291 automated unit, integration, and regression tests (219 Python \texttt{pytest} + 72 TypeScript Vitest suites) plus Playwright E2E workflows achieving 100\% pass verification across 47 test modules.
 \end{itemize}
 \end{takeawaybox}
 
@@ -40,11 +40,11 @@ Table~\ref{tab:fastapi_endpoints} formalizes the primary RESTful and streaming W
 \toprule
 \textbf{Method} & \textbf{Endpoint Path} & \textbf{SLA} & \textbf{Core Function} \\
 \midrule
-\texttt{POST} & \texttt{/api/v1/transactions/ingest} & $<1.5\,\text{ms}$ & Ingest event; update causal graph. \\
-\texttt{POST} & \texttt{/api/v1/inference/score} & $<2.5\,\text{ms}$ & C-STGB scoring; conformal triage $\Gamma(u)$. \\
-\texttt{POST} & \texttt{/api/v1/compliance/sar/generate} & $<500\,\text{ms}$ & Dispatch swarm; compile FinCEN XML. \\
-\texttt{GET} & \texttt{/api/v1/audit/receipt/\{case\_id\}} & $<1.0\,\text{ms}$ & Query SHA-256 Merkle receipt (SR 11-7 / SR 21-8). \\
-\texttt{WS} & \texttt{/ws/v1/live-triage-feed} & Real-Time & Stream live Tier-1/Tier-2 triage feed. \\
+\texttt{POST} & \texttt{/api/v1/stream/tick} & $<1.5\,\text{ms}$ & Ingest event; update causal graph. \\
+\texttt{POST} & \texttt{/api/v1/score} (\texttt{/inference/score}) & $<2.5\,\text{ms}$ & C-STGB scoring; conformal triage $\Gamma(u)$. \\
+\texttt{POST} & \texttt{/api/v1/agents/investigate} & $<500\,\text{ms}$ & Dispatch swarm; compile FinCEN/goAML XML. \\
+\texttt{GET} & \texttt{/api/v1/audit/verify} & $<1.0\,\text{ms}$ & Verify SHA-256 WORM chain \& Ed25519 seals. \\
+\texttt{WS} & \texttt{/ws/stream} & Real-Time & Stream live Tier-1/Tier-2 triage feed. \\
 \bottomrule
 \end{tabular}%
 }
@@ -128,8 +128,8 @@ The microservice exposes Prometheus \texttt{/metrics} telemetry for real-time op
     \item \texttt{cstgb\_streaming\_drift\_pvalue}: Gauge recording two-sample Kolmogorov-Smirnov statistics on streaming non-conformity scores.
 \end{itemize}
 
-\subsection{Automated Test Verification Suite (175 Tests across 30 Modules)}
-The repository incorporates 175 automated unit, integration, and regression tests across 30 dedicated test modules, achieving \textbf{100\% pass verification} across:
+\subsection{Automated Test Verification Suite (291 Tests across 47 Modules)}
+The repository incorporates 291 automated unit, integration, and regression tests across 47 dedicated test modules (36 Python \texttt{pytest} modules with 219 tests and 11 TypeScript Vitest suites with 72 tests, complemented by Playwright end-to-end tests), achieving \textbf{100\% pass verification} across:
 \begin{itemize}
     \item Continuous Tri-Band harmonic attention \& Hawkes point process intensity calculations.
     \item Latent GraphSMOTE minority oversampling and bilinear link prediction heads.
@@ -150,4 +150,4 @@ The software platform enforces enterprise-grade security controls:
 
 \FloatBarrier
 \section{Chapter Summary}
-This chapter detailed the enterprise software engineering architecture of Intelligent-AML, presenting asynchronous FastAPI endpoints, zero-copy Arrow memory management, containerization specifications, the 175-test (30-module) verification suite, and security governance protocols. The next chapter synthesizes research conclusions, limitations, and future research directions.
+This chapter detailed the enterprise software engineering architecture of Intelligent-AML, presenting asynchronous FastAPI endpoints paired with a Next.js 16 Hybrid BFF web platform, zero-copy Arrow memory management, containerization specifications, the 291-test (47-module) verification suite, and security governance protocols aligned with MLPA 2012 \S\S~6, 25 and Evidence Act (Amended 2022) \S\S~65A--65B. The next chapter synthesizes research conclusions, limitations, and future research directions.

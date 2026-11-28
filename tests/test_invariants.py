@@ -108,7 +108,7 @@ def test_cryptographic_audit_chain_verification():
     receipt = test_db.verify_audit_chain()
 
     assert receipt["is_valid"] is True
-    assert receipt["status"] == "CRYPTOGRAPHICALLY_VERIFIED"
+    assert receipt["status"] in {"TAMPER_EVIDENT_VERIFIED", "CRYPTOGRAPHICALLY_VERIFIED"}
     assert receipt["total_blocks"] >= 3
     assert len(receipt["root_hash"]) == 64
     assert len(receipt["head_hash"]) == 64

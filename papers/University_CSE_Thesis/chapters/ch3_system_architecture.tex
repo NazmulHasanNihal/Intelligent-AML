@@ -330,7 +330,7 @@ where $\boldsymbol{\mu}_k$ represents the cluster centroid and $\tau_{\text{sim}
 \mathbf{h}_{\text{syn}} = (1 - \rho) \mathbf{h}_u + \rho \mathbf{h}_v, \quad \rho \sim \mathcal{U}(0, 1), \quad u, v \in C_k \subseteq \mathcal{V}_{\text{train}}
 \end{equation}
 
-\subsection{Localized $O(K_{\text{cand}} \cdot d)$ Bilinear Link Reconstruction Head}
+\subsection{\texorpdfstring{Localized $O(K_{\text{cand}} \cdot d)$ Bilinear Link Reconstruction Head}{Localized O(K\_cand * d) Bilinear Link Reconstruction Head}}
 To avoid the global $O(|\mathcal{V}_{\text{syn}}| \cdot |\mathcal{V}_{\text{train}}| \cdot d)$ Cartesian evaluation bottleneck, candidate target nodes $\mathcal{C}_{\text{cand}}(\mathbf{h}_{\text{syn}})$ are restricted to: (1) 2-hop topological receptive fields $\mathcal{N}_2(u) \cup \mathcal{N}_2(v)$ of parent seed nodes; and (2) top-$K_{\text{cand}}$ ($K_{\text{cand}} = 50$) nearest neighbors indexed via Hierarchical Navigable Small World (HNSW) search in latent space. Bilinear links are predicted via:
 \begin{equation}
 \label{eq:bilinear_link}

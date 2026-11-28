@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Generate high-entropy cryptographic nonce using standard Web Crypto and Web Base64
   const nonce = btoa(crypto.randomUUID());
   
@@ -79,8 +79,8 @@ export function middleware(request: NextRequest) {
   return response;
 }
 
-// Next.js 16 dual export compatibility
-export const proxy = middleware;
+// Legacy compatibility alias for automated tests
+export { proxy as middleware };
 
 export const config = {
   matcher: [

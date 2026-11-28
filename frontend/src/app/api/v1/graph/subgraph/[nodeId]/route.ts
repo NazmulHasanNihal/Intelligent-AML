@@ -26,6 +26,8 @@ interface SubgraphEdge {
   isCamouflage: boolean;
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ nodeId: string }> }
@@ -188,7 +190,7 @@ export async function GET(
   });
 
   const result = await fetchFastApiWithFallback(
-    `/api/v1/subgraph/${encodeURIComponent(nodeId)}`,
+    `/api/v1/graph/subgraph/${encodeURIComponent(nodeId)}`,
     { method: 'GET' },
     localCompute,
     { timeoutMs: 2500 }

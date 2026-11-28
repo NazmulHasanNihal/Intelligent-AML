@@ -69,8 +69,8 @@ export default function CustomerDirectoryPage() {
             <Users className="w-5 h-5 text-emerald-400" />
             Customer 360° KYC/EDD Institutional Profiles
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Enhanced Due Diligence (EDD) registry, Ultimate Beneficial Ownership (UBO) structures, and turnover variance tracking.
+          <p className="text-xs text-slate-400 mt-0.5">
+            EDD dossiers, Ultimate Beneficial Ownership (UBO), and expected turnover variance.
           </p>
         </div>
 
@@ -187,8 +187,8 @@ export default function CustomerDirectoryPage() {
                       {selectedCustomer.name}
                     </h2>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Account: <strong className="text-slate-200 font-mono">{selectedCustomer.accountNumber}</strong> • Onboarded: <strong className="text-slate-200 font-mono">{selectedCustomer.onboardedDate}</strong> • Next Review: <strong className="text-slate-200 font-mono">{selectedCustomer.nextReviewDate}</strong>
+                  <p className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-x-1.5">
+                    <span>Account:</span> <PiiText value={selectedCustomer.accountNumber} type="account" className="text-slate-200 font-mono font-bold" /> <span>• Onboarded: <strong className="text-slate-200 font-mono">{selectedCustomer.onboardedDate}</strong></span> <span>• Next Review: <strong className="text-slate-200 font-mono">{selectedCustomer.nextReviewDate}</strong></span>
                   </p>
                 </div>
 

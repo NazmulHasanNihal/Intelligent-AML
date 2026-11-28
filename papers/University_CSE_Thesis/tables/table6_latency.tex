@@ -8,10 +8,10 @@
 \textbf{Operational Dimension} & \textbf{Before Upgrade} & \textbf{After C-STGB Upgrade} \\
 \midrule
 Batch Inference Latency & 41.70 ms (Hub Spikes) & \textbf{3.30 ms (Top-$K$ Capped)} \\
-Streaming Single-Tx Latency & 18.20 ms & \textbf{0.123 ms (LRU Cache)} \\
+Streaming Single-Tx Latency & 18.20 ms & \textbf{0.45 ms Fast-Path (0.82 ms P99)} \\
 Long-Dwell Hibernation Defense & 0.0\% Signal (Vanished) & \textbf{100.0\% (Tri-Band Bank)} \\
 Camouflage Noise Suppression & 0.0\% (Over-smoothed) & \textbf{65.9\% Denoised} \\
-Analyst Review Queue Saturation & 18.5\% of Total Volume & \textbf{0.19\% (CRC Triaged)} \\
+Analyst Review Queue Saturation & 18.5\% of Total Volume & \textbf{0.49\% Exemplar / 0.57\% Mean (CRC)} \\
 Streaming Memory Complexity & $O(N)$ Unbounded Linear & \textbf{$O(1)$ Sliding Buffer} \\
 \bottomrule
 \end{tabular}%

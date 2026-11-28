@@ -88,25 +88,20 @@ export const ConformalLivePreviewWidget: React.FC = () => {
   const scenario = SCENARIOS.find((s) => s.id === activeScenarioId)!;
 
   return (
-    <div className="w-full max-w-5xl mx-auto rounded-2xl bg-[#0B0F17] border border-[#1E293B] shadow-2xl overflow-hidden text-slate-100">
+    <div className="w-full rounded-xl bg-[#0D121A] border border-[#1E2734] overflow-hidden text-slate-100">
       {/* Widget Header */}
-      <div className="px-5 py-3.5 bg-[#0F172A] border-b border-[#1E293B] flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
-            <Activity className="w-3.5 h-3.5 text-cyan-400" />
-          </div>
-          <div>
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
-              Live C-STGB v3.2 Conformal Inference Engine
-            </span>
-            <p className="text-[10px] font-mono text-slate-400">
-              Split Conformal Calibration under Nominal 1 - α = 99.00% Coverage Guarantee
-            </p>
-          </div>
+      <div className="px-5 py-3.5 bg-[#090D14] border-b border-[#1E2734] flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-200 block">
+            Conformal Risk Classifier
+          </span>
+          <p className="text-[11px] font-mono text-slate-400">
+            Nominal 1 - α = 99.00% coverage · Select a transaction profile
+          </p>
         </div>
 
         {/* 3 Scenario Switcher Tabs */}
-        <div className="flex items-center bg-[#070B12] p-1 rounded-xl border border-[#334155] text-xs font-mono">
+        <div className="flex items-center bg-[#0D121A] p-1 rounded-lg border border-[#1E2734] text-xs font-mono">
           {SCENARIOS.map((sc) => {
             const isSelected = sc.id === activeScenarioId;
             return (
@@ -114,23 +109,23 @@ export const ConformalLivePreviewWidget: React.FC = () => {
                 key={sc.id}
                 type="button"
                 onClick={() => setActiveScenarioId(sc.id)}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1 rounded-md font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
                   isSelected
                     ? sc.tierColor === 'rose'
-                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                      ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
                       : sc.tierColor === 'amber'
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                      : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                    : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                      : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                    : 'text-slate-400 hover:text-slate-200 border border-transparent'
                 }`}
               >
                 <span
-                  className={`w-2 h-2 rounded-full ${
+                  className={`w-1.5 h-1.5 rounded-full ${
                     sc.tierColor === 'rose'
-                      ? 'bg-rose-500'
+                      ? 'bg-rose-400'
                       : sc.tierColor === 'amber'
-                      ? 'bg-amber-500'
-                      : 'bg-emerald-500'
+                      ? 'bg-amber-400'
+                      : 'bg-emerald-400'
                   }`}
                 />
                 <span>{sc.tierLabel}</span>

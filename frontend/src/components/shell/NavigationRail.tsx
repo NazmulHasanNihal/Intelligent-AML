@@ -41,17 +41,17 @@ export const NavigationRail: React.FC = () => {
   const openCases = cases.filter(c => c.status === 'INVESTIGATION_OPEN').length;
 
   const NAV_ITEMS: NavItem[] = [
-    { href: '/app', label: '1. Executive Surveillance', shortLabel: 'Overview', icon: LayoutDashboard, shortcut: '1' },
-    { href: '/app/triage', label: '2. Alert Triage', shortLabel: 'Triage', icon: ShieldAlert, badge: tier1Count, badgeColor: 'crimson', shortcut: '2' },
-    { href: '/app/screening', label: '3. Sanctions & PEP', shortLabel: 'Screening', icon: UserCheck, badge: pendingScreening, badgeColor: 'crimson', shortcut: '3' },
-    { href: '/app/customers', label: '4. Customer 360° KYC', shortLabel: 'Customers', icon: Building2, shortcut: '4' },
-    { href: '/app/cases', label: '5. Institutional Cases', shortLabel: 'Cases', icon: Briefcase, badge: openCases, badgeColor: 'amber', shortcut: '5' },
-    { href: '/app/graph', label: '6. Forensic Cash Flow', shortLabel: 'Graph', icon: GitBranch, shortcut: '6' },
-    { href: '/app/tbml', label: '7. Trade Finance TBML', shortLabel: 'TBML', icon: FileSpreadsheet, badge: '1', badgeColor: 'amber', shortcut: '7' },
-    { href: '/app/sar', label: '8. SAR & CTR Workbench', shortLabel: 'SAR/CTR', icon: FileCheck2, badge: '2', badgeColor: 'crimson', shortcut: '8' },
-    { href: '/app/rfi', label: '9. Compliance RFI Hub', shortLabel: 'RFI', icon: Mail, badge: '3', badgeColor: 'neutral', shortcut: '9' },
-    { href: '/app/rules', label: '10. Rule Studio & Recourse', shortLabel: 'Rules', icon: Sliders, shortcut: '0' },
-    { href: '/app/governance', label: '11. Model Ops & WORM', shortLabel: 'Governance', icon: Scale, shortcut: 'G' },
+    { href: '/app', label: 'Overview', shortLabel: 'Overview', icon: LayoutDashboard, shortcut: '1' },
+    { href: '/app/triage', label: 'Alert Triage', shortLabel: 'Triage', icon: ShieldAlert, badge: tier1Count, badgeColor: 'crimson', shortcut: '2' },
+    { href: '/app/screening', label: 'Sanctions & PEP', shortLabel: 'Screening', icon: UserCheck, badge: pendingScreening, badgeColor: 'crimson', shortcut: '3' },
+    { href: '/app/customers', label: 'Customers (KYC)', shortLabel: 'Customers', icon: Building2, shortcut: '4' },
+    { href: '/app/cases', label: 'Cases', shortLabel: 'Cases', icon: Briefcase, badge: openCases, badgeColor: 'amber', shortcut: '5' },
+    { href: '/app/graph', label: 'Flow Graph', shortLabel: 'Graph', icon: GitBranch, shortcut: '6' },
+    { href: '/app/tbml', label: 'Trade Finance', shortLabel: 'TBML', icon: FileSpreadsheet, shortcut: '7' },
+    { href: '/app/sar', label: 'SAR & CTR', shortLabel: 'SAR/CTR', icon: FileCheck2, shortcut: '8' },
+    { href: '/app/rfi', label: 'RFI Hub', shortLabel: 'RFI', icon: Mail, shortcut: '9' },
+    { href: '/app/rules', label: 'Rule Studio', shortLabel: 'Rules', icon: Sliders, shortcut: '0' },
+    { href: '/app/governance', label: 'Governance', shortLabel: 'Governance', icon: Scale, shortcut: 'G' },
   ];
 
   return (
@@ -66,8 +66,8 @@ export const NavigationRail: React.FC = () => {
         <div className="overflow-y-auto">
           <div className="h-10 px-3 flex items-center justify-between border-b border-[#1E293B]">
             {!isCollapsed && (
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                11 Active Modules
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
+                Compliance Desk
               </span>
             )}
             <button
@@ -101,26 +101,21 @@ export const NavigationRail: React.FC = () => {
                 >
                   <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-400' : 'text-slate-500 group-hover:text-slate-200'}`} />
                   {!isCollapsed && (
-                    <div className="flex-1 flex items-center justify-between overflow-hidden">
+                  <div className="flex-1 flex items-center justify-between overflow-hidden">
                       <span className="truncate">{item.label}</span>
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        {item.badge !== undefined && item.badge !== 0 && (
-                          <span
-                            className={`px-1.5 py-0.2 rounded text-[10px] font-bold tabular-nums ${
-                              item.badgeColor === 'crimson'
-                                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                                : item.badgeColor === 'amber'
-                                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                                : 'bg-slate-700/40 text-slate-300 border border-slate-600/40'
-                            }`}
-                          >
-                            {typeof item.badge === 'number' ? item.badge.toLocaleString() : item.badge}
-                          </span>
-                        )}
-                        <kbd className="hidden lg:inline-block px-1 py-0.2 text-[9px] font-mono text-slate-500 bg-[#0B0F17] rounded border border-[#334155]">
-                          {item.shortcut}
-                        </kbd>
-                      </div>
+                      {item.badge !== undefined && item.badge !== 0 && (
+                        <span
+                          className={`px-1.5 py-0.2 rounded text-[10px] font-bold tabular-nums shrink-0 ${
+                            item.badgeColor === 'crimson'
+                              ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                              : item.badgeColor === 'amber'
+                              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                              : 'bg-slate-700/40 text-slate-300 border border-slate-600/40'
+                          }`}
+                        >
+                          {typeof item.badge === 'number' ? item.badge.toLocaleString() : item.badge}
+                        </span>
+                      )}
                     </div>
                   )}
                 </Link>

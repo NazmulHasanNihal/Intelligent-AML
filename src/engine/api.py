@@ -294,10 +294,9 @@ def health_check():
     return {
         "status": "HEALTHY",
         "service": "Intelligent-AML C-STGB Engine",
-        "version": "1.0.0",
+        "version": "3.2.0",
         "timestamp": time.time(),
         "cached_nodes_count": len(subgraph_cache._cache),
-        "tests_passed": "175/175 (100%)",
         "rate_limiting": "ACTIVE",
         "cryptographic_ledger": "VERIFIED"
     }
@@ -427,11 +426,13 @@ def list_model_checkpoints(dataset: Optional[str] = None, user: UserProfile = De
 def refresh_sanctions_lists(user: UserProfile = Depends(require_roles(UserRole.ADMIN, UserRole.COMPLIANCE_OFFICER))):
     """Reloads and updates active OFAC / UN / EU / BFIU sanctions registries."""
     API_METRICS["total_requests"] += 1
+    feeds = watchlist_registry.get_feeds()
+    total_loaded = sum(f.get("total_records", 0) for f in feeds) if isinstance(feeds, list) else len(watchlist_registry.feeds)
     return {
         "status": "UPDATED",
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "total_entities_loaded": 1850,
-        "registries_synchronized": ["OFAC_SDN", "UN_CONSOLIDATED", "EU_FINANCIAL_SANCTIONS", "BFIU_WATCHLIST"],
+        "total_entities_loaded": total_loaded,
+        "registries_synchronized": [f.get("list_id", "WATCHLIST") for f in feeds] if isinstance(feeds, list) else ["OFAC_SDN", "UN_CONSOLIDATED", "EU_CONSOLIDATED", "UK_HMT", "BFIU_DOMESTIC"],
         "updated_by": user.username
     }
 
@@ -444,32 +445,31 @@ def score_transaction(req: TransactionScoreRequest):
     """
     t0 = time.perf_counter()
 
-    # 1. Ingestion & Invariant Feature Extraction
+    # 1. Ingestion & Deterministic Invariant Feature Extraction
     t_ingest_start = time.perf_counter()
-    structuring_boost = 0.38 if (7500.0 <= req.amount <= 9999.0) else 0.05
+    structuring_boost = 0.38 if (7500.0 <= req.amount <= 9999.0) else (0.12 if req.amount >= 10000.0 else 0.04)
     burst_boost = 0.32 if req.burst_velocity_spikes else 0.02
     cross_boost = 0.18 if req.cross_border else 0.02
-    rail_boost = 0.15 if req.payment_rail in ["Wire Transfer", "Crypto Settlement"] else 0.01
+    rail_boost = 0.15 if req.payment_rail in ["Wire Transfer", "Crypto Settlement", "SWIFT MT700 (LC)", "SWIFT MT103"] else 0.01
 
-    raw_signal = min(0.999, structuring_boost + burst_boost + cross_boost + rail_boost + np.random.uniform(0.01, 0.04))
+    raw_signal = min(0.999, structuring_boost + burst_boost + cross_boost + rail_boost + 0.02)
     t_ingest_end = time.perf_counter()
 
     # 2. Subgraph Cache Retrieval (Top-K Degree Capped)
     t_cache_start = time.perf_counter()
-    # Cache node lookup simulation
     subgraph_cache.get_node(req.src_id)
     t_cache_end = time.perf_counter()
 
-    # 3. Model Forward Passes (Tabular + Temporal GNN)
+    # 3. Deterministic Model Forward Fusion (Tabular + Temporal GNN)
     t_model_start = time.perf_counter()
     if req.fast_path_mode:
-        p_tabular = float(np.clip(raw_signal * 0.96 + np.random.normal(0, 0.015), 0.0, 1.0))
-        p_gnn = float(np.clip(raw_signal * 1.02 + np.random.normal(0, 0.015), 0.0, 1.0))
+        p_tabular = float(np.clip(raw_signal * 0.96, 0.0, 1.0))
+        p_gnn = float(np.clip(raw_signal * 1.02, 0.0, 1.0))
         p_fused = float(np.clip((p_tabular + p_gnn) / 2.0, 0.0, 1.0))
         p_final = p_fused
     else:
-        p_tabular = float(np.clip(raw_signal * 0.95 + np.random.normal(0, 0.02), 0.0, 1.0))
-        p_gnn = float(np.clip(raw_signal * 1.05 + np.random.normal(0, 0.02), 0.0, 1.0))
+        p_tabular = float(np.clip(raw_signal * 0.95, 0.0, 1.0))
+        p_gnn = float(np.clip(raw_signal * 1.05, 0.0, 1.0))
         p_fused = float(np.clip((p_tabular + p_gnn) / 2.0 + 0.03, 0.0, 1.0))
         p_final = float(np.clip(0.40 * p_fused + 0.35 * p_gnn + 0.25 * p_tabular, 0.0, 1.0))
     t_model_end = time.perf_counter()
@@ -1070,7 +1070,7 @@ def list_alerts(
         "total": total,
         "page": page,
         "limit": limit,
-        "alerts": [a.dict() if hasattr(a, "dict") else dict(a) for a in paginated]
+        "alerts": [a.model_dump() if hasattr(a, "model_dump") else dict(a) for a in paginated]
     }
 
 
@@ -1253,12 +1253,16 @@ def sign_off_case_endpoint(
 
 
 @app.post("/api/v1/cases/{case_id}/dual-signoff", tags=["Case Management & Four-Eyes"])
-def dual_signoff_case_alias_endpoint(case_id: str, req: CaseSignOffRequest):
+def dual_signoff_case_alias_endpoint(
+    case_id: str,
+    req: CaseSignOffRequest,
+    current_user: UserProfile = Depends(get_current_user)
+):
     """
     Four-Eyes Dual Control Sign-off canonical route (OCC 2011-12 / FINRA Rule 3110).
     Enforces independent dual authorization; returns 403 Forbidden on maker-checker identity collision.
     """
-    return sign_off_case_endpoint(case_id=case_id, req=req)
+    return sign_off_case_endpoint(case_id=case_id, req=req, current_user=current_user)
 
 
 @app.put("/api/v1/cases/{case_id}/status", tags=["Case Management"])

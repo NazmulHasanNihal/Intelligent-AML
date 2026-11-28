@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SEEDED_CASES } from '@/lib/seedData';
+import { INITIAL_CASES } from '@/lib/data/commercialSeed';
 import { fetchFastApiWithFallback } from '@/lib/apiAdapter';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const statusFilter = searchParams.get('status');
 
   const localCompute = () => {
-    let cases = [...SEEDED_CASES];
+    let cases = [...INITIAL_CASES];
     if (statusFilter && statusFilter !== 'ALL') {
       cases = cases.filter(c => c.status === statusFilter);
     }
@@ -18,13 +20,24 @@ export async function GET(req: NextRequest) {
     };
   };
 
-  const endpoint = statusFilter ? `/api/v1/cases?status=${encodeURIComponent(statusFilter)}` : '/api/v1/cases';
+  const endpoint = statusFilter && statusFilter !== 'ALL'
+    ? `/api/v1/cases?status=${encodeURIComponent(statusFilter)}`
+    : '/api/v1/cases';
+
   const result = await fetchFastApiWithFallback(
     endpoint,
     { method: 'GET' },
     localCompute,
     { timeoutMs: 2500 }
   );
+
+  if (Array.isArray(result)) {
+    return NextResponse.json({
+      cases: result,
+      total: result.length,
+      timestamp: new Date().toISOString()
+    });
+  }
 
   return NextResponse.json(result);
 }

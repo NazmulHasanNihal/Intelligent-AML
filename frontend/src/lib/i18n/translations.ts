@@ -79,7 +79,7 @@ export const TRANSLATIONS = {
 
     // Security & Compliance
     security_title: 'Institutional Security & Regulatory Soundness',
-    security_badge: 'OWASP ASVS LEVEL 2 COMPLIANT',
+    security_badge: 'OWASP ASVS LEVEL 2 ALIGNED',
     security_point1: 'Ed25519-Signed Tamper-Evident WORM Ledger',
     security_point2: 'Mandatory Server-Side Dual Control (Maker-Checker)',
     security_point3: 'Server-Side PII Masking with Audited 60s Reveal Gate',
@@ -94,7 +94,7 @@ export const TRANSLATIONS = {
     // Print Dossier
     dossier_confidential: 'CONFIDENTIAL // LAW ENFORCEMENT & REGULATORY SUBMISSION',
     dossier_subtitle: 'OFFICIAL INVESTIGATION DOSSIER — BANGLADESH FINANCIAL INTELLIGENCE UNIT (BFIU)',
-    dossier_statutory_cert: 'Certified under Section 65B of the Evidence Act 1872 (Amended 2022). Extracted from tamper-evident append-only ledger.'
+    dossier_statutory_cert: 'Admissibility-ready under Sections 65A–65B & 73A of the Evidence Act 1872 (Amended 2022) with responsible officer certificate.'
   },
   bn: {
     // Navigation Modules

@@ -13,6 +13,8 @@ const SignOffSchema = z.object({
   evidenceDossierHash: z.string()
 });
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ caseId: string }> }

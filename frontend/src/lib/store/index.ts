@@ -144,7 +144,7 @@ export interface UnifiedBankingState {
   addCaseNote: (caseId: string, note: string) => void;
   updateCaseMilestone: (caseId: string, milestoneIndex: number, status: 'COMPLETE' | 'IN_PROGRESS' | 'PENDING') => void;
   dispositionScreening: (recordId: string, disposition: WatchlistScreeningRecord['disposition'], reason?: string) => void;
-  addScreeningSearch: (name: string, account?: string, country?: string, dob?: string, nationalId?: string) => WatchlistScreeningRecord;
+  addScreeningSearch: (name: string, account?: string, country?: string, dob?: string, nationalId?: string, config?: { autoFreezeThreshold?: number; quarantineThreshold?: number }) => WatchlistScreeningRecord;
   updateCustomerRiskRating: (customerId: string, newRating: CommercialCustomer['riskRating'], reason: string) => void;
   triggerEddRefresh: (customerId: string) => void;
 
@@ -684,9 +684,9 @@ export const useAppStore = create<UnifiedBankingState>()(
         get().addToast('Screening Disposition Saved', `Watchlist record ${recordId} set to ${disposition}`, 'info');
       },
 
-      addScreeningSearch: (name, account = 'ADHOC_SEARCH', country, dob, nationalId) => {
+      addScreeningSearch: (name, account = 'ADHOC_SEARCH', country, dob, nationalId, config) => {
         const id = `SCR-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-        const hits = screenWatchlistCandidate(name, { country, dob, nationalId });
+        const hits = screenWatchlistCandidate(name, { country, dob, nationalId, config });
         const topHit = hits[0];
 
         let record: WatchlistScreeningRecord;

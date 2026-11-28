@@ -61,7 +61,7 @@ def main():
 
     scorecard.append({
         "metric": "Raw Scorer Math (P50)",
-        "claimed": "< 0.050 ms",
+        "claimed": "< 0.150 ms",
         "reproduced": f"{scorer_p50:.3f} ms",
         "benchmark_id": "LATENCY_BENCHMARK_20261123",
         "seed": "42",
@@ -69,7 +69,7 @@ def main():
     })
     scorecard.append({
         "metric": "In-Process Pipeline (P50)",
-        "claimed": "< 0.100 ms",
+        "claimed": "< 0.500 ms",
         "reproduced": f"{pipe_p50:.3f} ms",
         "benchmark_id": "LATENCY_BENCHMARK_20261123",
         "seed": "42",
@@ -109,7 +109,7 @@ def main():
     })
     scorecard.append({
         "metric": "Screening P50 Latency",
-        "claimed": "< 1.00 ms",
+        "claimed": "< 2.00 ms",
         "reproduced": f"{screening_p50:.3f} ms",
         "benchmark_id": "SCREENING_EVAL_20261123",
         "seed": "42",

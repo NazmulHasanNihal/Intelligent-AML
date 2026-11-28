@@ -93,7 +93,7 @@ describe('Role-Matrix Security & OWASP ASVS Level 2 Verification', () => {
     expect(headersMap.get('X-Frame-Options')).toBe('DENY');
 
     // 5. Referrer-Policy
-    expect(headersMap.get('Referrer-Policy')).toBe('strict-origin-when-cross-origin');
+    expect(headersMap.get('Referrer-Policy')).toBe('no-referrer');
 
     // 6. Permissions-Policy
     expect(headersMap.has('Permissions-Policy')).toBe(true);

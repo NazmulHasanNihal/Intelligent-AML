@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { fetchFastApiWithFallback } from '@/lib/apiAdapter';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const localCompute = () => {
     return {

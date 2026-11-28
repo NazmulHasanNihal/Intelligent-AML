@@ -28,6 +28,7 @@ const nextConfig: NextConfig = {
       { source: '/app/screening', destination: '/screening' },
       { source: '/app/customers', destination: '/customers' },
       { source: '/app/cases', destination: '/cases' },
+      { source: '/app/cases/:path*', destination: '/cases/:path*' },
       { source: '/app/graph', destination: '/graph' },
       { source: '/app/tbml', destination: '/tbml' },
       { source: '/app/sar', destination: '/sar' },
@@ -91,7 +92,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
+            value: 'no-referrer'
           },
           {
             key: 'Permissions-Policy',

@@ -91,7 +91,7 @@ export const InstitutionalInquiryModal: React.FC<InstitutionalInquiryModalProps>
   };
 
   const architectureBrief = `================================================================================
-INTELLIGENT-AML ENTERPRISE ARCHITECTURE BRIEF & POc SPECIFICATION
+INTELLIGENT-AML ENTERPRISE ARCHITECTURE BRIEF & PoC SPECIFICATION
 ================================================================================
 Generated For:       ${formData.institutionName || 'Institutional Client'}
 Authorized Officer:  ${formData.officerName || 'Officer'} (${formData.roleTitle || 'Compliance Officer'})

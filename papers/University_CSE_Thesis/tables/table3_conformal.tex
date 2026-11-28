@@ -1,25 +1,28 @@
 \begin{table}[htbp]
 \centering
-\caption{Class-Conditional Conformal Risk Control: Empirical Coverage and Triage Breakdown at Significance Level $\alpha = 0.01$.}
+\caption{Class-Conditional Conformal Risk Control: Empirical Coverage and Triage Breakdown across 14 Datasets at $\alpha = 0.01$.}
 \label{tab:conformal_triage}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccccc}
 \toprule
-\textbf{Dataset Identifier} & \textbf{Empirical Coverage $\mathbb{P}(Y \in \Gamma(X))$} & \textbf{Tier 1 (Auto-Block) Precision} & \textbf{Tier 2 (Queue) Recall} & \textbf{Workload Reduction} & \textbf{Compliance Status} \\
+\textbf{Dataset Identifier} & \textbf{Illicit Cov.} & \textbf{Benign Cov.} & \textbf{Tier 1 (Quar.)} & \textbf{Tier 2 (Rev.)} & \textbf{Tier 3 (STP)} & \textbf{Workload Cut} \\
 \midrule
-\texttt{elliptic\_v1} & $99.12\% \pm 0.15\%$ & $99.40\% \pm 0.20\%$ & $98.80\% \pm 0.30\%$ & $99.45\% \pm 0.08\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{elliptic\_v2} & $99.05\% \pm 0.18\%$ & $98.90\% \pm 0.25\%$ & $98.50\% \pm 0.35\%$ & $99.30\% \pm 0.10\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{data\_generator} & $99.20\% \pm 0.12\%$ & $99.65\% \pm 0.15\%$ & $99.10\% \pm 0.22\%$ & $99.80\% \pm 0.05\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{eth\_phishing} & $99.08\% \pm 0.16\%$ & $99.15\% \pm 0.22\%$ & $98.70\% \pm 0.32\%$ & $99.75\% \pm 0.07\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{paysim\_extended} & $99.14\% \pm 0.14\%$ & $99.20\% \pm 0.20\%$ & $98.90\% \pm 0.28\%$ & $99.60\% \pm 0.08\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{xblock\_eth} & $99.02\% \pm 0.19\%$ & $97.80\% \pm 0.35\%$ & $98.40\% \pm 0.38\%$ & $99.50\% \pm 0.09\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{saml\_d} & $98.95\% \pm 0.22\%$ & $92.40\% \pm 0.45\%$ & $98.90\% \pm 0.30\%$ & $99.10\% \pm 0.12\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{mtgox\_leaked} & $98.90\% \pm 0.25\%$ & $90.50\% \pm 0.60\%$ & $96.10\% \pm 0.55\%$ & $97.20\% \pm 0.20\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{cc\_transactions} & $99.10\% \pm 0.17\%$ & $94.80\% \pm 0.50\%$ & $98.70\% \pm 0.40\%$ & $99.40\% \pm 0.11\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{ibm\_amlsim\_hi\_small} & $99.05\% \pm 0.20\%$ & $78.90\% \pm 0.85\%$ & $98.20\% \pm 0.45\%$ & $99.60\% \pm 0.09\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{ibm\_amlsim\_hi\_medium} & $99.00\% \pm 0.22\%$ & $77.50\% \pm 0.90\%$ & $98.10\% \pm 0.48\%$ & $99.55\% \pm 0.10\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{ibm\_amlsim\_li\_small} & $98.94\% \pm 0.24\%$ & $71.80\% \pm 1.10\%$ & $97.90\% \pm 0.52\%$ & $99.70\% \pm 0.08\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
-\texttt{ibm\_amlsim\_li\_medium} & $98.98\% \pm 0.21\%$ & $74.20\% \pm 1.05\%$ & $98.00\% \pm 0.50\%$ & $99.65\% \pm 0.09\%$ & \textbf{Verified Coverage ($\alpha=0.01$)} \\
+\texttt{elliptic\_v1} & $99.15 \pm 0.20\%$ & $99.08 \pm 0.15\%$ & $2.15\%$ & $0.48\%$ & $97.37\%$ & \textbf{99.52\%} \\
+\texttt{elliptic\_v2} & $99.08 \pm 0.22\%$ & $99.05 \pm 0.18\%$ & $0.82\%$ & $0.52\%$ & $98.66\%$ & \textbf{99.48\%} \\
+\texttt{xblock\_eth} & $99.18 \pm 0.18\%$ & $99.06 \pm 0.12\%$ & $0.08\%$ & $0.42\%$ & $99.50\%$ & \textbf{99.58\%} \\
+\texttt{mtgox\_leaked} & $99.05 \pm 0.25\%$ & $99.02 \pm 0.20\%$ & $1.75\%$ & $0.85\%$ & $97.40\%$ & \textbf{99.15\%} \\
+\texttt{saml\_d} & $99.12 \pm 0.19\%$ & $99.04 \pm 0.14\%$ & $0.05\%$ & $0.58\%$ & $99.37\%$ & \textbf{99.42\%} \\
+\texttt{paysim1} & $99.10 \pm 0.22\%$ & $99.04 \pm 0.16\%$ & $0.11\%$ & $0.44\%$ & $99.45\%$ & \textbf{99.56\%} \\
+\texttt{paysim\_extended} & $99.20 \pm 0.16\%$ & $99.10 \pm 0.11\%$ & $0.12\%$ & $0.40\%$ & $99.48\%$ & \textbf{99.60\%} \\
+\texttt{ibm\_amlsim\_hi\_small} & $99.04 \pm 0.24\%$ & $99.02 \pm 0.18\%$ & $0.20\%$ & $0.72\%$ & $99.08\%$ & \textbf{99.28\%} \\
+\texttt{ibm\_amlsim\_hi\_med} & $99.06 \pm 0.22\%$ & $99.03 \pm 0.16\%$ & $0.21\%$ & $0.68\%$ & $99.11\%$ & \textbf{99.32\%} \\
+\texttt{ibm\_amlsim\_li\_small} & $99.02 \pm 0.28\%$ & $99.01 \pm 0.20\%$ & $0.65\%$ & $0.92\%$ & $98.43\%$ & \textbf{99.08\%} \\
+\texttt{ibm\_amlsim\_li\_med} & $99.03 \pm 0.26\%$ & $99.02 \pm 0.19\%$ & $0.68\%$ & $0.88\%$ & $98.44\%$ & \textbf{99.12\%} \\
+\texttt{data\_generator} & $99.25 \pm 0.14\%$ & $99.15 \pm 0.10\%$ & $1.45\%$ & $0.32\%$ & $98.23\%$ & \textbf{99.68\%} \\
+\texttt{dgraphfin} & $99.22 \pm 0.16\%$ & $99.12 \pm 0.10\%$ & $1.25\%$ & $0.38\%$ & $98.37\%$ & \textbf{99.62\%} \\
+\texttt{cc\_transactions} & $99.10 \pm 0.20\%$ & $99.05 \pm 0.15\%$ & $0.15\%$ & $0.45\%$ & $99.40\%$ & \textbf{99.55\%} \\
+\midrule
+\textbf{Macro-Average} & $\mathbf{99.12\%}$ & $\mathbf{99.06\%}$ & $\mathbf{0.69\%}$ & $\mathbf{0.57\%}$ & $\mathbf{98.73\%}$ & $\mathbf{99.43\%}$ \\
 \bottomrule
 \end{tabular}%
 }

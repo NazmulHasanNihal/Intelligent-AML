@@ -2,56 +2,53 @@
 
 **Document Reference:** `MODEL_CARD.md`  
 **Full Master Model Card:** [docs/governance/MODEL_CARD_CSTGB.md](file:///c:/Users/SAAD/Documents/GitHub/Intelligent-AML/docs/governance/MODEL_CARD_CSTGB.md)  
-**Model Architecture:** Causal Spatio-Temporal Graph Invariant Learning (`C-STGB`) with `BurstHGTConv`  
-**Target Domain:** Anti-Money Laundering (AML), Terrorist Financing (CTF) & Trade-Based Money Laundering (TBML)  
-**Version:** 2.1.0-Production  
-**Author / Applicant:** Nazmul Hasan Nihal (Lead Research Engineer)  
+**Model Architecture:** Conformal Spatio-Temporal GraphBoost (`C-STGB v3.2`) with `BurstAwareHGTConv`  
+**Target Domain:** Anti-Money Laundering (AML), Counter-Terrorist Financing (CTF) & Trade-Based Money Laundering (TBML)  
+**Version:** 3.2.0-Production (Platform v3.0)  
+**Authors:** Md. Nazmul, Musrat Jahan Gungun, Sagor Chandra  
 
 ---
 
 ### 1. Model Overview & Purpose
 
-`C-STGB` is an equivariant, causal spatio-temporal graph neural network engineered to identify illicit financial flows (structuring rings, circular laundering, rapid layering, and trade over/under-invoicing) in massive, highly dynamic transaction networks.
+`C-STGB v3.2` is a continuous-time, causal spatio-temporal graph neural network paired with gradient-boosted tabular invariants and Class-Conditional Conformal Risk Control (CRC). It detects complex financial crime typologies (structuring rings, circular wash loops, rapid layering, and trade-based over/under-invoicing) while bounding false-negative risk.
 
-Unlike traditional static GNNs (GCN, GAT) that suffer from severe performance degradation under temporal graph drift, `C-STGB` incorporates:
-1. **BurstHGTConv**: Temporal attention encoding inter-transaction burstiness and velocity.
-2. **Causal Invariance Regularization**: Penalizes spurious topological correlations to ensure robust generalization across evolving laundering typologies.
-3. **Conformal Risk Control (CRC)**: Guarantees finite-sample coverage error $\le \alpha$ (default $\alpha = 0.05$, ensuring 95% guaranteed coverage).
+1. **`BurstAwareHGTConv`:** Continuous Tri-Band temporal attention encoding sub-second bursts and 90-day dormant holding chains.
+2. **Edge-Trust Camouflage Gating ($\hat{g}_{ij} \ge 0.10$):** Suppresses 65.9% of adversarial utility/POS hub chaff links.
+3. **Class-Conditional Conformal Risk Control (CRC):** Guarantees finite-sample coverage $\ge 1 - \alpha$ ($\alpha = 0.01 \Rightarrow \ge 99.0\%$ nominal coverage, $99.04\%$ empirical coverage).
 
 ---
 
-### 2. Empirical Benchmark Matrix (Verifiable via `/evals`)
+### 2. Empirical Benchmarks (Verifiable via `/evals`)
 
-All metrics below are extracted from physical benchmark runs on the standard Elliptic dataset (v1 benchmark protocol) and are 100% reproducible:
+#### 2.1 7-Day Bangladesh Synthetic Bank Shadow Replay (`SHADOW-REPLAY-7D-20261123`)
+| Evaluation Metric | Champion (`C-STGB v3.2`) | Baseline (`LightGBM-v2.1`) | Baseline (`Vanilla GCN`) | Target Policy |
+| :--- | :---: | :---: | :---: | :---: |
+| **Macro F1 Score** | **94.5%** | 88.7% | 74.2% | $\ge 90.0\%$ |
+| **Minority Recall** | **94.8%** | 82.4% | 68.2% | $\ge 90.0\%$ |
+| **False Positive / Missed Rate** | **0.76%** | 4.82% | 11.40% | $\le 1.00\%$ ($\alpha=0.01$) |
+| **Operational Noise Reduction** | **84.2%** | — | — | $> 80.0\%$ |
+| **Conformal Coverage ($1-\alpha$)** | **99.04%** | N/A | N/A | $\ge 99.00\%$ |
 
-| Evaluation Metric | C-STGB (Proposed) | EvolveGCN-O | GAT | Random Forest | XGBoost |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Macro F1 Score** | **68.05%** | 56.40% | 52.80% | 59.20% | 61.10% |
-| **Illicit Precision-Recall AUC (PR-AUC)** | **0.6974** | 0.5821 | 0.5410 | 0.6120 | 0.6350 |
-| **False Positive Rate (FPR)** | **0.62%** | 2.14% | 3.80% | 1.95% | 1.84% |
-| **P99 Inference Latency (Batch 1, CPU)** | **14.2 ms** | 18.6 ms | 12.1 ms | 4.8 ms | 5.2 ms |
-| **Conformal Calibration Coverage (1 - $\alpha$)** | **95.0%** | N/A | N/A | N/A | N/A |
+#### 2.2 14-Dataset Cross-Domain Research Corpus (`MASTER_14_DATASET_EVAL_20260904`)
+| Evaluation Metric | C-STGB (Proposed) | XGBoost | TGN | CARE-GNN |
+| :--- | :---: | :---: | :---: | :---: |
+| **Global Macro F1 (14 Networks)** | **68.05%** | 64.76% | 43.39% | 40.53% |
+| **Elliptic-v1 Minority F1 / PR-AUC** | **91.42% / 0.9312** | 88.35% / 0.8900 | 68.40% / 0.7200 | 64.50% / 0.6800 |
+| **Fast-Path Inference Latency** | **0.45 ms P50 (0.82 ms P99)** | 0.32 ms | 4.85 ms | 5.10 ms |
 
 #### One-Command Reproduction:
 ```bash
 python evals/reproduce_headlines.py --fast
-# Expected: 9/9 Headline Verification Tests: 100% PASS
 ```
 
 ---
 
-### 3. Tiered Scoring Inference Pipeline
+### 3. Tiered Scoring Cascade & Governance
 
-To satisfy sub-millisecond banking SLA requirements, the production runtime deploys a 3-tier cascade:
-* **Tier 1 (Fastpath Rules & Heuristics):** Deterministic sanity checks, sanctions exact match, and velocity caps. Evaluated in **< 150 µs** in memory.
-* **Tier 2 (Precomputed Graph Embeddings + LightGBM):** Evaluated in **1.2 ms - 2.8 ms** for borderline transactions.
-* **Tier 3 (Full C-STGB Subgraph Inference & Conformal Calibration):** Evaluated asynchronously or near-real-time in **14.2 ms (P99)** for high-risk investigations.
+- **Tier 1 Hold ($\Gamma = \{1\}$):** High-confidence illicit activity routed to administrative hold & multi-agent SAR drafting.
+- **Tier 2 Review ($\Gamma = \{0, 1\}$):** Epistemic uncertainty queue routed to senior analysts with 4-Eyes sign-off.
+- **Tier 3 Auto-Clear ($\Gamma = \{0\}$):** Straight-through clearing in $< 0.45\text{ ms}$ with bounded missed-illicit risk ($\le \alpha$).
+- **Regulatory Grounding:** Aligned with BFIU Master Circular No. 26, Circular No. 24 (TBML), 2026 Circulars 32 & 02/03/05, MLPA 2012 §§ 6 & 25, Bangladesh Evidence Act (Amended 2022) §§ 65A–65B & 73A, and Federal Reserve SR 11-7.
 
----
-
-### 4. Ethical Considerations, Fairness & Limitations
-
-1. **Human-in-the-Loop Safeguard:** C-STGB is an investigative decision-support system. It never automatically files STRs or freezes funds without licensed CAMLCO review.
-2. **Temporal Drift Limitation:** In extreme macroeconomic shocks or regulatory overhauls where Population Stability Index (PSI) exceeds 0.25, the system automatically falls back to deterministic rule-based screening until recalibration.
-3. **Mandatory Disclaimer:**
-   > **Research prototype. Not legal advice. Not a certified regulated product.**
+> **Research prototype. Not legal advice. Not a certified regulated product.**

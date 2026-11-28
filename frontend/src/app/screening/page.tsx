@@ -60,6 +60,35 @@ export default function SanctionsScreeningPage() {
   const [quarantineThreshold, setQuarantineThreshold] = useState(65);
   const [showThresholdConfig, setShowThresholdConfig] = useState(false);
 
+  // Pairwise Name Scorer Drawer (POST /api/v1/screening/score)
+  const [showPairComparator, setShowPairComparator] = useState(false);
+  const [pairQueryName, setPairQueryName] = useState('Md. Tariqul Islam');
+  const [pairTargetName, setPairTargetName] = useState('Tariq Islam Trading FZE');
+  const [pairResult, setPairResult] = useState<any>(null);
+  const [isPairScoring, setIsPairScoring] = useState(false);
+
+  const handlePairwiseCompare = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pairQueryName.trim() || !pairTargetName.trim()) return;
+    setIsPairScoring(true);
+    try {
+      const res = await fetch('/api/v1/screening/score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          queryName: pairQueryName.trim(),
+          targetName: pairTargetName.trim(),
+          config: { autoFreezeThreshold, quarantineThreshold }
+        })
+      });
+      if (res.ok) {
+        setPairResult(await res.json());
+      }
+    } finally {
+      setIsPairScoring(false);
+    }
+  };
+
   const feedsList = useMemo(() => Object.values(OFFICIAL_WATCHLIST_FEEDS), []);
 
   const filteredRecords = useMemo(() => {
@@ -85,22 +114,53 @@ export default function SanctionsScreeningPage() {
     return screeningRecords.find((r) => r.id === selectedRecordId) || screeningRecords[0];
   }, [screeningRecords, selectedRecordId]);
 
-  const handleAdHocScreen = (e: React.FormEvent) => {
+  const [isScreeningQuery, setIsScreeningQuery] = useState(false);
+
+  const handleAdHocScreen = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!queryName.trim()) return;
+    if (!queryName.trim() || isScreeningQuery) return;
 
-    const newRec = addScreeningSearch(
-      queryName.trim(),
-      'ADHOC_BENEFICIARY_QUERY',
-      queryCountry,
-      queryDob.trim() || undefined,
-      queryId.trim() || undefined
-    );
+    setIsScreeningQuery(true);
+    const trimmedName = queryName.trim();
+    const trimmedDob = queryDob.trim() || undefined;
+    const trimmedId = queryId.trim() || undefined;
 
-    setSelectedRecordId(newRec.id);
-    setQueryName('');
-    setQueryDob('');
-    setQueryId('');
+    try {
+      // Execute live API search (with configured threshold parameters)
+      await fetch('/api/v1/screening/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: trimmedName,
+          country: queryCountry,
+          dob: trimmedDob,
+          nationalId: trimmedId,
+          config: {
+            autoFreezeThreshold,
+            quarantineThreshold
+          }
+        })
+      }).catch(() => null);
+
+      const newRec = addScreeningSearch(
+        trimmedName,
+        'ADHOC_BENEFICIARY_QUERY',
+        queryCountry,
+        trimmedDob,
+        trimmedId,
+        {
+          autoFreezeThreshold,
+          quarantineThreshold
+        }
+      );
+
+      setSelectedRecordId(newRec.id);
+      setQueryName('');
+      setQueryDob('');
+      setQueryId('');
+    } finally {
+      setIsScreeningQuery(false);
+    }
   };
 
   return (
@@ -112,8 +172,8 @@ export default function SanctionsScreeningPage() {
             <Globe className="w-5 h-5 text-sky-400" />
             Sanctions, PEP &amp; Pre-Settlement Screening Interdiction
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Real-time entity resolution against OFAC SDN, UN Consolidated, EU Financial Sanctions, UK HMT, and National BFIU Watchlists.
+          <p className="text-xs text-slate-400 mt-0.5">
+            Entity resolution across OFAC SDN, UN Consolidated, EU, UK HMT, and BFIU Domestic lists.
           </p>
         </div>
 
@@ -128,6 +188,14 @@ export default function SanctionsScreeningPage() {
           </button>
 
           <button
+            onClick={() => setShowPairComparator(!showPairComparator)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300 hover:border-emerald-500 cursor-pointer transition-colors"
+          >
+            <Layers className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Compare Two Names</span>
+          </button>
+
+          <button
             onClick={() => setShowThresholdConfig(!showThresholdConfig)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-300 hover:border-cyan-500 cursor-pointer transition-colors"
           >
@@ -136,6 +204,69 @@ export default function SanctionsScreeningPage() {
           </button>
         </div>
       </div>
+
+      {/* Pairwise Entity Resolution Comparator Drawer */}
+      {showPairComparator && (
+        <div className="p-4 rounded-xl bg-[#0F172A] border border-emerald-500/30 space-y-3">
+          <div className="flex items-center justify-between text-xs font-mono">
+            <span className="font-semibold text-emerald-300">Pairwise Multi-Algorithm Name Comparator (POST /api/v1/screening/score)</span>
+            <button onClick={() => setShowPairComparator(false)} className="text-slate-400 hover:text-slate-200 cursor-pointer">Close</button>
+          </div>
+          <form onSubmit={handlePairwiseCompare} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+            <div className="md:col-span-5">
+              <label className="text-[10px] font-mono text-slate-400 uppercase block mb-1">Query Name (Wire / Customer)</label>
+              <input
+                type="text"
+                value={pairQueryName}
+                onChange={(e) => setPairQueryName(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100"
+              />
+            </div>
+            <div className="md:col-span-5">
+              <label className="text-[10px] font-mono text-slate-400 uppercase block mb-1">Target Watchlist / Alias Variant</label>
+              <input
+                type="text"
+                value={pairTargetName}
+                onChange={(e) => setPairTargetName(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg bg-[#0B0F17] border border-[#334155] text-xs text-slate-100"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <button
+                type="submit"
+                disabled={isPairScoring}
+                className="w-full py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold cursor-pointer"
+              >
+                {isPairScoring ? 'Scoring...' : 'Compute Match'}
+              </button>
+            </div>
+          </form>
+          {pairResult && (
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 p-3 rounded-lg bg-[#0B0F17] border border-[#1E293B] text-xs font-mono">
+              <div>
+                <span className="text-[10px] text-slate-500 block">Composite Score</span>
+                <strong className="text-emerald-400 text-sm">{pairResult.matchScore}%</strong>
+              </div>
+              <div>
+                <span className="text-[10px] text-slate-500 block">Jaro-Winkler (40%)</span>
+                <strong className="text-slate-200">{pairResult.algorithmBreakdown?.jaroWinklerScore}%</strong>
+              </div>
+              <div>
+                <span className="text-[10px] text-slate-500 block">Token-Set (40%)</span>
+                <strong className="text-slate-200">{pairResult.algorithmBreakdown?.tokenSetScore}%</strong>
+              </div>
+              <div>
+                <span className="text-[10px] text-slate-500 block">Soundex (20%)</span>
+                <strong className="text-slate-200">{pairResult.algorithmBreakdown?.phoneticScore}%</strong>
+              </div>
+              <div>
+                <span className="text-[10px] text-slate-500 block">Disposition</span>
+                <strong className="text-amber-300">{pairResult.disposition}</strong>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Official Watchlist Ingestion Feeds Registry Panel */}
       {showFeedsPanel && (
@@ -189,7 +320,7 @@ export default function SanctionsScreeningPage() {
               <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
               Configurable Scoring Weights &amp; Statutory Interdiction Thresholds
             </span>
-            <span className="text-slate-400 text-[10px]">OCC 2011-12 / BFIU Circular 28 Aligned</span>
+            <span className="text-slate-400 text-[10px]">OCC 2011-12 / BFIU Circular 26 &amp; 32 (2026) Aligned</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-sans">

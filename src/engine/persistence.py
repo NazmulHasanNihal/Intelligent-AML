@@ -154,7 +154,7 @@ class IntelligentAMLDatabase:
         self.cases: Dict[str, CaseRecord] = {}
         self.alerts: Dict[str, AlertRecord] = {}
         self.rfi_requests: Dict[str, RFIRecord] = {}
-        self.checkpointer: AuditCheckpointer = audit_checkpointer
+        self.checkpointer: AuditCheckpointer = AuditCheckpointer()
         self._init_sqlite_schema()
         self._init_genesis_block()
         self._seed_initial_data()
@@ -840,7 +840,7 @@ class IntelligentAMLDatabase:
             status="ISSUED",
             urgency="HIGH",
             jurisdiction="Bangladesh Bank BFIU Circular 26 / MLPA 2012",
-            statutory_warning="CONFIDENTIAL CDD REQUEST: Do not disclose SAR investigations or AML detection thresholds to target entity (31 U.S.C. § 5318(g)(2) & BFIU MLPA 2012 Section 16).",
+            statutory_warning="CONFIDENTIAL CDD REQUEST: Do not disclose SAR investigations or AML detection thresholds to target entity (31 U.S.C. § 5318(g)(2) & MLPA 2012 § 6).",
             due_date="2026-10-06",
             requested_by="Sarah Jenkins"
         )

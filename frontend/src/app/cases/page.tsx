@@ -97,7 +97,7 @@ export default function CasesPage() {
             Institutional Case Management Docket
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            WORM-audited multi-stage investigation dossiers with cryptographic evidence preservation complying with FRE 902(11) &amp; BFIU reporting guidelines.
+            Tamper-evident investigation dockets complying with Evidence Act §§ 65A–65B &amp; 73A, FRE 902(11), and BFIU reporting.
           </p>
         </div>
 

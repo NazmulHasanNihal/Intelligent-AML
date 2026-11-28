@@ -1,3 +1,4 @@
+\RequirePackage{fix-cm}
 \documentclass[12pt,a4paper,oneside]{report}
 
 % Page Geometry & Binding Margins (1.5" Left Margin for National University)
@@ -200,7 +201,9 @@
 % -----------------------------------------------------------------------------
 % Front Matter (Roman Numerals)
 % -----------------------------------------------------------------------------
+\hypersetup{pageanchor=false}
 \input{frontmatter/cover_page}
+\hypersetup{pageanchor=true}
 \pagenumbering{roman}
 \pagestyle{plain}
 \input{frontmatter/certificate}

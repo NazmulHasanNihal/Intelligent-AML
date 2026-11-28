@@ -67,8 +67,46 @@ export default function ModelGovernancePage() {
     auditLedger,
     simulateTamperTest,
     restoreValidChain,
+    currentBanker,
     addToast
   } = useBankingStore();
+
+  const handleExportEvidenceCertificate = () => {
+    const headBlock = auditLedger[auditLedger.length - 1];
+    const rootBlock = auditLedger[0];
+    const certText = [
+      '================================================================================',
+      'ELECTRONIC RECORD ADMISSIBILITY CERTIFICATE',
+      'Bangladesh Evidence Act, 1872 (Amended 2022) Sections 65A, 65B & 73A',
+      'Comparable International Standard: U.S. Federal Rule of Evidence 902(11)',
+      '================================================================================',
+      `Issued Timestamp (UTC): ${new Date().toISOString()}`,
+      `Certifying Officer:     ${currentBanker.name} (${currentBanker.role})`,
+      `Institution:            ${currentBanker.institution}`,
+      `Total Chained Blocks:   ${auditLedger.length}`,
+      `Genesis Root Hash:      ${rootBlock?.currentHash || rootBlock?.merkleHash || 'N/A'}`,
+      `Head Seal Hash:         ${headBlock?.currentHash || headBlock?.merkleHash || 'N/A'}`,
+      `Chain Integrity Status: ${isTampered ? 'TAMPER_DETECTED (INVALID)' : 'VERIFIED_TAMPER_EVIDENT'}`,
+      '--------------------------------------------------------------------------------',
+      'Certification Statement:',
+      'I certify that the electronic audit ledger entries and compliance records referenced',
+      'above were generated during ordinary institutional AML/CFT monitoring operations on',
+      'a deterministic hash-chained system (RFC 8785 Canonical JSON + Ed25519 Checkpoints),',
+      'and have remained unaltered since creation.',
+      '',
+      `Signature / Seal: ___________________________   Officer ID: ${currentBanker.id}`,
+      '================================================================================'
+    ].join('\n');
+
+    const blob = new Blob([certText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Evidence-Act-65B-Officer-Certificate-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    addToast('Officer Certificate Exported', 'Generated Evidence Act §§ 65A–65B & 73A admissibility certificate.', 'success');
+  };
 
   const [activeTab, setActiveTab] = useState<
     'MODEL_HEALTH' | 'BFIU_MAPPING' | 'POLICIES' | 'WEBHOOK_HUB' | 'WORM_LEDGER'
@@ -116,23 +154,33 @@ export default function ModelGovernancePage() {
     );
   }, [mappingSearch]);
 
-  // Handle Real Client WebCrypto Tamper-Evident Verification
+  // Handle Real Client WebCrypto + Server BFF Tamper-Evident Verification
   const handleRunAuditVerification = async () => {
     setIsVerifying(true);
     try {
-      const res = await verifyAuditChain(auditLedger);
-      setVerificationResult(res);
-      if (res.isValid) {
+      const [res, apiRes] = await Promise.all([
+        verifyAuditChain(auditLedger),
+        fetch('/api/v1/audit/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chain: auditLedger })
+        })
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null)
+      ]);
+      const merged = apiRes && typeof apiRes.isValid === 'boolean' && !apiRes.isValid ? apiRes : res;
+      setVerificationResult(merged);
+      if (merged.isValid) {
         addToast(
           'Cryptographic Integrity Verified',
-          `All ${res.totalEntries} blocks chained with verified SHA-256 hashes and Ed25519 checkpoint seal.`,
+          `All ${merged.totalEntries} blocks chained with verified SHA-256 hashes and Ed25519 checkpoint seal.`,
           'success'
         );
       } else {
-        const brokenRow = res.firstBrokenRow !== undefined ? res.firstBrokenRow : (res.brokenSequence || 1);
+        const brokenRow = merged.firstBrokenRow !== undefined ? merged.firstBrokenRow : (merged.brokenSequence || 1);
         addToast(
           'Tamper Detected!',
-          `Row #${brokenRow} (Block #${res.brokenSequence || 1}) hash mismatch. Cryptographic seal broken!`,
+          `Row #${brokenRow} (Block #${merged.brokenSequence || 1}) hash mismatch. Cryptographic seal broken!`,
           'critical'
         );
       }
@@ -226,7 +274,7 @@ export default function ModelGovernancePage() {
       cryptographicAuditIntegrity: {
         totalLedgerBlocks: auditLedger.length,
         status: isTampered ? 'CORRUPTED' : 'VERIFIED_CHAIN_VALID',
-        legalStandard: 'Bangladesh Evidence Act (Amended 2022) § 65B Certified Electronic Records',
+        legalStandard: 'Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B & 73A (Officer Certificate) & FRE 902(11)',
         headHash: auditLedger[auditLedger.length - 1]?.currentHash || ''
       }
     };
@@ -250,8 +298,8 @@ export default function ModelGovernancePage() {
             <Scale className="w-5 h-5 text-cyan-400" />
             Model Governance, BFIU Compliance Mapping &amp; WORM Ledger
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Model risk governance (aligned with SR 11-7 practice), BFIU statutory guidance mapping, and Evidence Act § 65B WORM cryptographic audit ledger.
+          <p className="text-xs text-slate-400 mt-0.5">
+            SR 11-7 model risk health, BFIU 2026 guidance mapping, and Evidence Act §§ 65A–65B &amp; 73A tamper-evident audit ledger.
           </p>
         </div>
 
@@ -1027,6 +1075,14 @@ export default function ModelGovernancePage() {
                 <ShieldAlert className="w-4 h-4" />
                 <span>{isTampered ? 'Restore Chain Integrity' : 'Simulate Auditor Tamper Test'}</span>
               </button>
+
+              <button
+                onClick={handleExportEvidenceCertificate}
+                className="px-4 py-2 rounded-xl bg-[#0B0F17] hover:bg-[#1E293B] border border-[#334155] text-slate-200 font-semibold text-xs transition-colors flex items-center gap-2 cursor-pointer"
+              >
+                <Download className="w-4 h-4 text-emerald-400" />
+                <span>Export § 65B Certificate</span>
+              </button>
             </div>
 
             {verificationResult && (
@@ -1051,7 +1107,7 @@ export default function ModelGovernancePage() {
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>
-                Evidence Standard: <strong>Bangladesh Evidence Act (Amended 2022) § 65B</strong> &amp; FRE 902(11) Certified Electronic Record
+                Evidence Standard: <strong>Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B &amp; 73A (Officer Certificate)</strong> &amp; FRE 902(11)
               </span>
             </div>
             <div className="flex items-center gap-3 text-slate-400 text-[11px]">

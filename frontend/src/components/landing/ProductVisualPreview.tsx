@@ -2,187 +2,258 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import {
-  ShieldAlert,
-  ArrowRight,
-  GitBranch,
-  Layers,
-  Activity,
-  CheckCircle2,
-  Lock,
-  ChevronRight,
-  Maximize2
-} from 'lucide-react';
+import { ArrowRight, ExternalLink, ShieldAlert, CheckCircle2, AlertTriangle } from 'lucide-react';
+
+const SAMPLE_QUEUE = [
+  {
+    id: 'ALT-994821',
+    entity: 'Meghna Industrial & Agro Ltd',
+    rail: 'SWIFT MT700',
+    amountUsd: '$945,000.00',
+    amountBdt: '৳11,34,00,000',
+    setLabel: 'Γ = {1}',
+    tier: 'Tier 1 Hold',
+    tierStyle: 'text-rose-400 bg-rose-500/10 border-rose-500/30',
+    action: 'Settlement Hold',
+    href: '/triage?alertId=ALT-994821&inspect=true'
+  },
+  {
+    id: 'ALT-884012',
+    entity: 'Tanvir MFS Merchant Hub',
+    rail: 'bKash / Nagad Agent',
+    amountUsd: '$7,950.00',
+    amountBdt: '৳9,54,000',
+    setLabel: 'Γ = {0, 1}',
+    tier: 'Tier 2 Review',
+    tierStyle: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
+    action: 'Analyst Queue',
+    href: '/triage?tier=tier2'
+  },
+  {
+    id: 'ALT-771204',
+    entity: 'Apex Footwear Corporate Payroll',
+    rail: 'ISO 20022 RTGS',
+    amountUsd: '$218,400.00',
+    amountBdt: '৳2,62,08,000',
+    setLabel: 'Γ = {0}',
+    tier: 'Tier 3 Clear',
+    tierStyle: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
+    action: 'Auto-Cleared',
+    href: '/triage?tier=tier3'
+  }
+];
 
 export const ProductVisualPreview: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'GRAPH' | 'TRIAGE'>('GRAPH');
+  const [activeTab, setActiveTab] = useState<'TRIAGE' | 'GRAPH'>('TRIAGE');
+  const [selectedNode, setSelectedNode] = useState<'MEGHNA' | 'CUSTOMS' | 'GULFSTAR'>('MEGHNA');
+
+  const nodeDetails = {
+    MEGHNA: {
+      title: 'Meghna Industrial & Agro Ltd (Applicant)',
+      bic: 'EBLBBDDH — Eastern Bank PLC',
+      metric: 'Pass-through Φ = 0.992 · Risk 0.942',
+      summary: '94% of LC drawdown funds dispersed offshore within 15 minutes across 3 intermediaries.'
+    },
+    CUSTOMS: {
+      title: 'Chittagong Custom House (ASYCUDA #C-1882910)',
+      bic: 'HS 5205.12.00 · Combed Cotton Yarn',
+      metric: 'Valuation Delta +333.7% ($9.45 vs $2.18/kg)',
+      summary: 'Declared commercial invoice exceeds 90-day ASYCUDA tariff benchmark by $727,000 USD.'
+    },
+    GULFSTAR: {
+      title: 'Gulf Star Commodities FZE (Beneficiary)',
+      bic: 'EBILAEAD — JAFZA Free Zone, Dubai',
+      metric: 'Edge Gate ĝ_ij = 0.91 · 2-Hop Sink',
+      summary: 'AIS vessel telemetry shows port diversion to Jebel Ali without Port Klang discharge.'
+    }
+  }[selectedNode];
 
   return (
-    <div className="w-full max-w-6xl mx-auto rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-2xl overflow-hidden text-slate-100">
-      {/* Chrome Window Header */}
-      <div className="px-4 py-3 bg-[#0B0F17] border-b border-[#1E293B] flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-          <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-          <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-          <span className="ml-2 text-xs font-mono text-slate-400 hidden sm:inline">
-            intelligent-aml-banking-os // production-preview
+    <div className="w-full rounded-xl bg-[#0D121A] border border-[#1E2734] overflow-hidden text-slate-200">
+      {/* Window Header */}
+      <div className="px-4 py-2.5 bg-[#090D14] border-b border-[#1E2734] flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-mono text-slate-400">
+            intelligent-aml.workspace
           </span>
-        </div>
-
-        {/* Tab Switcher */}
-        <div className="flex items-center bg-[#070B12] p-0.5 rounded-lg border border-[#334155] text-[11px] font-mono">
-          <button
-            type="button"
-            onClick={() => setActiveTab('GRAPH')}
-            className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
-              activeTab === 'GRAPH' ? 'bg-[#1E293B] text-emerald-400 font-bold' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Forensic Graph Studio
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('TRIAGE')}
-            className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
-              activeTab === 'TRIAGE' ? 'bg-[#1E293B] text-emerald-400 font-bold' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Virtualized Triage Desk
-          </button>
+          <div className="flex items-center bg-[#0D121A] p-0.5 rounded-md border border-[#1E2734] text-[11px] font-mono">
+            <button
+              type="button"
+              onClick={() => setActiveTab('TRIAGE')}
+              className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
+                activeTab === 'TRIAGE' ? 'bg-[#192231] text-slate-100 font-semibold' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Alert Queue
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('GRAPH')}
+              className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
+                activeTab === 'GRAPH' ? 'bg-[#192231] text-slate-100 font-semibold' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Flow Topology
+            </button>
+          </div>
         </div>
 
         <Link
           href="/app"
-          className="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all flex items-center gap-1.5 cursor-pointer"
+          className="text-[11px] font-mono font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1"
         >
-          <span>Launch Live OS</span>
+          <span>Open Live Console</span>
           <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
 
-      {/* Screen Frame */}
-      {activeTab === 'GRAPH' ? (
-        <div className="relative p-6 sm:p-8 bg-gradient-to-b from-[#0B0F17] to-[#070B12] min-h-[380px] flex flex-col justify-between overflow-hidden">
-          {/* Subtle Grid Watermark */}
-          <div className="absolute inset-0 bg-[radial-gradient(#1E293B_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none" />
-
-          {/* Top Bar inside Preview */}
-          <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
-                SCENARIO: TBML OVER-INVOICING
-              </span>
-              <span className="text-slate-400">Root Node: BD22-EBLB-4829-1092-8823</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded bg-[#1E293B] text-slate-300 border border-[#334155]">
-                24 Causal Nodes
-              </span>
-              <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
-                ĝ_ij Edge Gating &gt; 0.10
-              </span>
-            </div>
+      {activeTab === 'TRIAGE' ? (
+        <div className="p-4 sm:p-5 space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pb-2 border-b border-[#1E2734]">
+            <span>24h Sample Feed · Split Conformal Threshold α = 0.01</span>
+            <span className="text-emerald-400">84.2% benign volume cleared automatically</span>
           </div>
 
-          {/* Center Graphic Representation */}
-          <div className="relative z-10 my-8 flex items-center justify-center">
-            <div className="relative w-full max-w-lg h-44 flex items-center justify-center">
-              {/* Outer Ring */}
-              <div className="absolute inset-0 rounded-full border border-dashed border-[#334155]/60 animate-spin [animation-duration:40s]" />
-              
-              {/* Connecting Edges */}
-              <div className="absolute w-48 h-0.5 bg-gradient-to-r from-rose-500 via-amber-500 to-cyan-500 rotate-45" />
-              <div className="absolute w-48 h-0.5 bg-gradient-to-r from-emerald-500 via-cyan-500 to-indigo-500 -rotate-45" />
-
-              {/* Central Target Node */}
-              <div className="relative z-20 w-16 h-16 rounded-2xl bg-rose-950/80 border-2 border-rose-500 text-rose-300 flex flex-col items-center justify-center shadow-lg shadow-rose-950/50">
-                <ShieldAlert className="w-6 h-6 animate-pulse" />
-                <span className="text-[9px] font-mono font-bold mt-0.5">TARGET</span>
-              </div>
-
-              {/* Surrounding Nodes */}
-              <div className="absolute -top-3 left-12 p-2 rounded-xl bg-[#0F172A] border border-[#334155] text-[10px] font-mono text-slate-300 shadow-md">
-                Meghna Industrial (BD)
-              </div>
-              <div className="absolute -bottom-3 right-8 p-2 rounded-xl bg-[#0F172A] border border-[#334155] text-[10px] font-mono text-slate-300 shadow-md">
-                Gulf Star FZE (Dubai)
-              </div>
-              <div className="absolute top-1/2 -right-4 -translate-y-1/2 p-2 rounded-xl bg-[#0F172A] border border-[#334155] text-[10px] font-mono text-slate-300 shadow-md">
-                JAFZA Free Zone
-              </div>
+          <div className="divide-y divide-[#1E2734] border border-[#1E2734] rounded-lg overflow-hidden bg-[#090D14]">
+            <div className="grid grid-cols-12 gap-2 px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-slate-500 bg-[#0D121A]">
+              <span className="col-span-2">Alert</span>
+              <span className="col-span-4">Entity &amp; Rail</span>
+              <span className="col-span-2 text-right">Exposure</span>
+              <span className="col-span-2 text-center">Set</span>
+              <span className="col-span-2 text-right">Disposition</span>
             </div>
-          </div>
 
-          {/* Bottom Bar inside Preview */}
-          <div className="relative z-10 pt-4 border-t border-[#1E293B] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-slate-400">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span>Barnes-Hut Repulsion Active</span>
-            </div>
-            <div className="flex items-center gap-4 text-[11px]">
-              <span>Temporal Horizon: Δt = 72h</span>
-              <span className="text-emerald-400 font-bold">12-D Invariant Attributions Computed</span>
-            </div>
+            {SAMPLE_QUEUE.map((row) => (
+              <Link
+                key={row.id}
+                href={row.href}
+                className="grid grid-cols-12 gap-2 items-center px-3 py-2.5 text-xs hover:bg-[#111824] transition-colors group"
+              >
+                <span className="col-span-2 font-mono font-semibold text-slate-200 group-hover:text-emerald-400 transition-colors">
+                  {row.id}
+                </span>
+                <div className="col-span-4 min-w-0">
+                  <div className="text-slate-100 font-medium truncate">{row.entity}</div>
+                  <div className="text-[10px] font-mono text-slate-500 truncate">{row.rail}</div>
+                </div>
+                <div className="col-span-2 text-right font-mono tabular-nums">
+                  <div className="text-slate-200">{row.amountUsd}</div>
+                  <div className="text-[10px] text-slate-500">{row.amountBdt}</div>
+                </div>
+                <div className="col-span-2 text-center">
+                  <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono border ${row.tierStyle}`}>
+                    {row.setLabel}
+                  </span>
+                </div>
+                <div className="col-span-2 text-right flex items-center justify-end gap-1.5 text-[11px] font-mono text-slate-300">
+                  <span className="hidden sm:inline">{row.action}</span>
+                  <ExternalLink className="w-3 h-3 text-slate-500 group-hover:text-slate-200" />
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       ) : (
-        /* Virtualized Triage Desk Preview */
-        <div className="p-4 sm:p-6 bg-[#0B0F17] space-y-3 font-mono text-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
-            <span className="text-slate-300 font-bold">
-              Queue Status: 2,028 Transactions Filtered
-            </span>
-            <span className="text-emerald-400 text-[11px]">
-              84.2% Benign Noise Stripped Autonomously
-            </span>
+        <div className="p-4 sm:p-5 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400">
+            <span>Case Investigation Subgraph: CASE-2026-0881 (LC-CTG-2026-9921)</span>
+            <span>Click a node to inspect telemetry</span>
           </div>
 
-          {/* Table Header */}
-          <div className="grid grid-cols-12 gap-2 text-[10px] text-slate-500 uppercase px-3 py-1 bg-[#0F172A] rounded-lg">
-            <span className="col-span-2">Alert ID</span>
-            <span className="col-span-3">Target Entity</span>
-            <span className="col-span-2 text-right">Amount (USD)</span>
-            <span className="col-span-2 text-center">Conformal Set</span>
-            <span className="col-span-3 text-right">Autonomous Action</span>
-          </div>
+          <div className="rounded-lg border border-[#1E2734] bg-[#090D14] p-4">
+            <svg viewBox="0 0 680 180" className="w-full h-44" role="img" aria-label="Directional TBML transaction flow graph">
+              <defs>
+                <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
+                </marker>
+                <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b" />
+                </marker>
+              </defs>
 
-          {/* Mock Rows */}
-          <div className="space-y-1.5">
-            <div className="grid grid-cols-12 gap-2 items-center px-3 py-2 rounded-lg bg-rose-950/20 border border-rose-800/40 text-slate-200">
-              <span className="col-span-2 font-bold text-rose-400">ALT-001</span>
-              <span className="col-span-3 truncate">Meghna Industrial & Agro</span>
-              <span className="col-span-2 text-right font-bold text-rose-300">$945,000.00</span>
-              <span className="col-span-2 text-center">
-                <span className="px-1.5 py-0.5 rounded text-[10px] bg-rose-500/20 text-rose-300 border border-rose-500/40">
-                  Γ = &#123;1&#125; HOLD
-                </span>
-              </span>
-              <span className="col-span-3 text-right text-rose-400 text-[11px]">Settlement Frozen</span>
-            </div>
+              {/* Edges */}
+              <path d="M 185 90 C 235 90, 245 55, 290 55" stroke="#f59e0b" strokeWidth="2" fill="none" markerEnd="url(#arrow-amber)" />
+              <path d="M 415 55 C 460 55, 470 90, 515 90" stroke="#f43f5e" strokeWidth="2" strokeDasharray="4 3" fill="none" markerEnd="url(#arrow-red)" />
+              <path d="M 185 98 L 515 98" stroke="#f43f5e" strokeWidth="2.5" fill="none" markerEnd="url(#arrow-red)" />
 
-            <div className="grid grid-cols-12 gap-2 items-center px-3 py-2 rounded-lg bg-amber-950/20 border border-amber-800/40 text-slate-200">
-              <span className="col-span-2 font-bold text-amber-400">ALT-002</span>
-              <span className="col-span-3 truncate">Tanvir MFS Merchant Hub</span>
-              <span className="col-span-2 text-right font-bold text-amber-300">$7,950.00</span>
-              <span className="col-span-2 text-center">
-                <span className="px-1.5 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                  Γ = &#123;0, 1&#125; REVIEW
-                </span>
-              </span>
-              <span className="col-span-3 text-right text-amber-400 text-[11px]">Analyst Docket</span>
-            </div>
+              {/* Edge Labels */}
+              <text x="345" y="122" textAnchor="middle" fill="#fda4af" fontSize="10" fontFamily="monospace">
+                MT700 Wire · $945,000 USD (ĝ=0.91)
+              </text>
+              <text x="235" y="60" textAnchor="middle" fill="#fcd34d" fontSize="9" fontFamily="monospace">
+                BoE #C-1882910
+              </text>
 
-            <div className="grid grid-cols-12 gap-2 items-center px-3 py-2 rounded-lg bg-emerald-950/20 border border-emerald-800/40 text-slate-200">
-              <span className="col-span-2 font-bold text-emerald-400">ALT-003</span>
-              <span className="col-span-3 truncate">Apex Footwear Payroll</span>
-              <span className="col-span-2 text-right font-bold text-emerald-300">$218,400.00</span>
-              <span className="col-span-2 text-center">
-                <span className="px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  Γ = &#123;0&#125; CLEAR
-                </span>
-              </span>
-              <span className="col-span-3 text-right text-emerald-400 text-[11px]">Instant STP Clearance</span>
+              {/* Node 1: Meghna */}
+              <g onClick={() => setSelectedNode('MEGHNA')} className="cursor-pointer">
+                <rect
+                  x="20"
+                  y="62"
+                  width="165"
+                  height="56"
+                  rx="8"
+                  fill={selectedNode === 'MEGHNA' ? '#192231' : '#0D121A'}
+                  stroke={selectedNode === 'MEGHNA' ? '#f43f5e' : '#263244'}
+                  strokeWidth="1.5"
+                />
+                <text x="32" y="84" fill="#f8fafc" fontSize="11" fontWeight="bold" fontFamily="sans-serif">
+                  Meghna Industrial (BD)
+                </text>
+                <text x="32" y="102" fill="#94a3b8" fontSize="9.5" fontFamily="monospace">
+                  EBLBBDDH · Score 0.942
+                </text>
+              </g>
+
+              {/* Node 2: Customs */}
+              <g onClick={() => setSelectedNode('CUSTOMS')} className="cursor-pointer">
+                <rect
+                  x="295"
+                  y="24"
+                  width="120"
+                  height="52"
+                  rx="8"
+                  fill={selectedNode === 'CUSTOMS' ? '#192231' : '#0D121A'}
+                  stroke={selectedNode === 'CUSTOMS' ? '#f59e0b' : '#263244'}
+                  strokeWidth="1.5"
+                />
+                <text x="307" y="45" fill="#f8fafc" fontSize="10.5" fontWeight="bold" fontFamily="sans-serif">
+                  ASYCUDA Customs
+                </text>
+                <text x="307" y="61" fill="#fbbf24" fontSize="9.5" fontFamily="monospace">
+                  +333.7% Over-Inv
+                </text>
+              </g>
+
+              {/* Node 3: Gulf Star */}
+              <g onClick={() => setSelectedNode('GULFSTAR')} className="cursor-pointer">
+                <rect
+                  x="520"
+                  y="62"
+                  width="145"
+                  height="56"
+                  rx="8"
+                  fill={selectedNode === 'GULFSTAR' ? '#192231' : '#0D121A'}
+                  stroke={selectedNode === 'GULFSTAR' ? '#f43f5e' : '#263244'}
+                  strokeWidth="1.5"
+                />
+                <text x="532" y="84" fill="#f8fafc" fontSize="11" fontWeight="bold" fontFamily="sans-serif">
+                  Gulf Star FZE (AE)
+                </text>
+                <text x="532" y="102" fill="#94a3b8" fontSize="9.5" fontFamily="monospace">
+                  EBILAEAD · JAFZA
+                </text>
+              </g>
+            </svg>
+
+            <div className="mt-3 pt-3 border-t border-[#1E2734] flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div>
+                <div className="font-semibold text-slate-100">{nodeDetails.title}</div>
+                <div className="text-slate-400 text-[11px] mt-0.5">{nodeDetails.summary}</div>
+              </div>
+              <div className="text-right font-mono text-[11px]">
+                <div className="text-emerald-400">{nodeDetails.metric}</div>
+                <div className="text-slate-500">{nodeDetails.bic}</div>
+              </div>
             </div>
           </div>
         </div>

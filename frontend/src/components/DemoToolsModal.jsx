@@ -35,11 +35,11 @@ export const DemoToolsModal = () => {
   const SCENARIOS = [
     {
       id: 'structuring',
-      title: 'TBML Trade Structuring (Near-CTR Limits)',
-      typology: 'Trade Over-Invoicing / CTR Structuring',
+      title: 'TBML LC Splitting & ASYCUDA Divergence',
+      typology: 'Trade Over-Invoicing / Cross-Border Split',
       severity: 'Critical Tier 1',
-      description: 'Simulates 3 burst LC remittances ($9,450, $9,600, $9,800) beneath the $10k (৳1,000,000 BDT BFIU CTR threshold) from Meghna Industrial to Gulf Star Dubai.',
-      forensicProfile: 'Identifies structured export documentary remittances just beneath BFIU Circular 26 CTR statutory limit ($10k / ৳1,000,000 BDT) accompanied by extreme ASYCUDA customs price over-invoicing (+333.7%). Triggers automated Tier 1 quarantine.',
+      description: 'Simulates 3 burst LC remittances ($9,450, $9,600, $9,800) split beneath $10,000 USD correspondent review limits plus +333.7% ASYCUDA unit-price divergence from Meghna Industrial to Gulf Star Dubai (distinct from domestic ৳954,000 BDT cash structuring beneath the ৳1,000,000 BFIU CTR limit).',
+      forensicProfile: 'Identifies structured export documentary remittances split below $10,000 USD correspondent limits paired with +333.7% ASYCUDA customs over-invoicing under BFIU Circular 24 & 26. Triggers automated Tier 1 quarantine.',
       txCount: 3,
       totalExposure: '$28,850 (৳3.46M BDT)'
     },

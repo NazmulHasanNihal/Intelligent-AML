@@ -5,6 +5,8 @@ interface RouteContext {
   params: Promise<{ id: string }>;
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request, context: RouteContext) {
   const { id } = await context.params;
 
@@ -68,7 +70,7 @@ export async function GET(request: Request, context: RouteContext) {
         }
       ],
       counterfactual_recourse:
-        'If counterparty dispersion (15-min outflow) were extended beyond 48 hours and structuring proximity was reduced below ৳800,000, calibrated risk score would decline from 0.942 to 0.142 (-80.0%), moving disposition from Tier 1 to Tier 3 Straight-Through Clearance.',
+        'Internal sensitivity baseline: extending counterparty dispersion beyond 48h and holding structuring proximity below ৳800,000 shifts calibrated risk from 0.942 to 0.142 (-80.0%), within Tier 3 bounds.',
       statutory_citations: [
         'Bangladesh Money Laundering Prevention Act 2012 § 25(1)(d)',
         'BFIU Master Circular No. 26 (Suspicious Transaction Reporting Guidelines)',

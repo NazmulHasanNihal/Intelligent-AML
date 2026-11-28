@@ -4,41 +4,35 @@
 
 To facilitate cross-disciplinary clarity across academic examiners, quantitative researchers, and banking compliance officers, Table~\ref{app_tab:glossary} defines foundational terms across financial crime surveillance, graph machine learning, and conformal risk theory.
 
-{\small
-\begin{longtable}{>{\RaggedRight\bfseries}p{4.0cm} >{\RaggedRight}p{9.5cm}}
+\begin{table}[H]
+\centering
 \caption[Cross-Disciplinary Financial Crime and Graph ML Glossary]{Comprehensive Cross-Disciplinary Glossary of Financial Crime, Graph ML, and Conformal Risk Terminology.}
-\label{app_tab:glossary} \\
+\label{app_tab:glossary}
+\footnotesize\singlespacing
+\renewcommand{\arraystretch}{1.0}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash\bfseries}p{3.55cm} >{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Terminology} & \textbf{Formal Operational Definition in Financial Surveillance} \\
 \midrule
-\endfirsthead
-\multicolumn{2}{c}%
-{{\bfseries Table \thetable\ continued from previous page}} \\
-\toprule
-\textbf{Terminology} & \textbf{Formal Operational Definition in Financial Surveillance} \\
-\midrule
-\endhead
+Smurfing / Structuring & The illegal practice of breaking a large illicit transaction into multiple micro-transfers below statutory reporting thresholds (e.g., $\$9,900$ to evade the $\$10,000$ CTR limit). \\
+Peeling Chain & A sequence of rapid crypto or fiat transfers where a source address sends funds through intermediary nodes, ``peeling'' off a small amount at each hop while forwarding the remainder. \\
+Mule Account & An account utilized as a pass-through conduit to receive and immediately disburse illicit funds, obscuring the beneficial ownership trail ($\Phi_{\text{flow}} \approx 1.0$). \\
+Camouflage Chaff & The strategic injection of benign, high-degree merchant or utility payments to induce graph over-smoothing and disguise illicit relationships. \\
+Hawkes Intensity & A continuous-time self-exciting point process $\lambda(t)$ modeling transactional arrival rates where past events momentarily elevate future arrival probabilities. \\
+Personalized PageRank & A random-walk algorithm with restart probability $\alpha_{\text{PPR}}$ measuring topological proximity and forward/backward taint exposure to confirmed illicit seeds. \\
+Dirichlet Energy & A spectral measure $\mathcal{E}(\mathbf{H})$ of graph smoothness; exponential decay to zero indicates complete feature over-smoothing and anomaly signal loss. \\
+GraphSMOTE & An algorithmic framework synthesizing synthetic minority nodes in latent GNN representation space paired with localized edge-generator reconstruction. \\
+Conformal Risk Control & A distribution-free statistical framework providing finite-sample risk coverage guarantees $\mathbb{P}(Y \in \Gamma(X)) \ge 1 - \alpha$ under within-class exchangeability. \\
+Adaptive Conformal Inference & An online conformal calibration technique dynamically updating the significance level $\alpha_t$ via martingale convergence under temporal concept drift. \\
+Selective Abstention & The routing of ambiguous model predictions ($\Gamma(u) = \{0, 1\}$ or $\emptyset$) to human compliance analysts while clearing decisive instances automatically. \\
+Fast-Path Inference & Sub-millisecond single-event transaction scoring ($0.45\,\text{ms}$) utilizing in-memory LRU caches and vectorized DuckDB/Arrow analytical tables. \\
+FinCEN Form 111 & The statutory Suspicious Activity Report (SAR) XML specification mandated by the United States Treasury for documenting suspicious financial transactions. \\
+AST Grammar Compiler & A deterministic parser enforcing Extended Backus-Naur Form ($\mathcal{G}_{\text{SAR}}$) syntactic and semantic validity over LLM narrative outputs. \\
+Merkle Audit Tree & A cryptographic hash tree anchoring forensic dossiers into an immutable, tamper-evident audit ledger compliant with Federal Reserve SR 11-7. \\
 \bottomrule
-\endfoot
-\bottomrule
-\endlastfoot
-\textbf{Smurfing / Structuring} & The illegal practice of breaking a large illicit transaction into multiple micro-transfers below statutory reporting thresholds (e.g., $\$9,900$ to evade the $\$10,000$ CTR limit). \\
-\textbf{Peeling Chain} & A sequence of rapid crypto or fiat transfers where a source address sends funds through intermediary nodes, ``peeling'' off a small amount at each hop while forwarding the remainder. \\
-\textbf{Mule Account} & An account utilized as a pass-through conduit to receive and immediately disburse illicit funds, obscuring the beneficial ownership trail ($\Phi_{\text{flow}} \approx 1.0$). \\
-\textbf{Camouflage Chaff} & The strategic injection of benign, high-degree merchant or utility payments to induce graph over-smoothing and disguise illicit relationships. \\
-\textbf{Hawkes Intensity} & A continuous-time self-exciting point process $\lambda(t)$ modeling transactional arrival rates where past events momentarily elevate future arrival probabilities. \\
-\textbf{Personalized PageRank} & A random-walk algorithm with restart probability $\alpha_{\text{PPR}}$ measuring topological proximity and forward/backward taint exposure to confirmed illicit seeds. \\
-\textbf{Dirichlet Energy} & A spectral measure $\mathcal{E}(\mathbf{H})$ of graph smoothness; exponential decay to zero indicates complete feature over-smoothing and anomaly signal loss. \\
-\textbf{GraphSMOTE} & An algorithmic framework synthesizing synthetic minority nodes in latent GNN representation space paired with localized edge-generator reconstruction. \\
-\textbf{Conformal Risk Control} & A distribution-free statistical framework providing finite-sample risk coverage guarantees $\mathbb{P}(Y \in \Gamma(X)) \ge 1 - \alpha$ under within-class exchangeability. \\
-\textbf{Adaptive Conformal Inference} & An online conformal calibration technique dynamically updating the significance level $\alpha_t$ via martingale convergence under temporal concept drift. \\
-\textbf{Selective Abstention} & The routing of ambiguous model predictions ($\Gamma(u) = \{0, 1\}$ or $\emptyset$) to human compliance analysts while clearing decisive instances automatically. \\
-\textbf{Fast-Path Inference} & Sub-millisecond single-event transaction scoring ($0.45\,\text{ms}$) utilizing in-memory LRU caches and vectorized DuckDB/Arrow analytical tables. \\
-\textbf{FinCEN Form 111} & The statutory Suspicious Activity Report (SAR) XML specification mandated by the United States Treasury for documenting suspicious financial transactions. \\
-\textbf{AST Grammar Compiler} & A deterministic parser enforcing Extended Backus-Naur Form ($\mathcal{G}_{\text{SAR}}$) syntactic and semantic validity over LLM narrative outputs. \\
-\textbf{Merkle Audit Tree} & A cryptographic hash tree anchoring forensic dossiers into an immutable, tamper-evident audit ledger compliant with Federal Reserve SR 11-7. \\
-\end{longtable}
-}
+\end{tabularx}
+\end{table}
 
 \chapter{Extended Mathematical Proofs \& Derivations}
 \label{app:proofs}
@@ -61,7 +55,7 @@ Let $F_{\text{test}}^{(y)}(s) = \mathbb{P}_{\text{test}}(S(X, y) \le s \mid Y=y)
 \begin{equation}
 \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| \le \sup_{s \in \mathbb{R}} \left| F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s) \right| + \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right|
 \end{equation}
-By maximal coupling of total variation distance on conditional measures, $\sup_{s \in \mathbb{R}} |F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s)| \le d_{\mathrm{TV}}(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$.
+By maximal coupling of total variation distance on conditional measures, we obtain the uniform bound $\sup_{s \in \mathbb{R}} |F_{\text{test}}^{(y)}(s) - F_{\text{cal}}^{(y)}(s)| \le d_{\mathrm{TV}}\allowbreak(\mathcal{P}_{\text{test}}^{(y)}, \mathcal{P}_{\text{cal}}^{(y)})$.
 By the classical Dvoretzky-Kiefer-Wolfowitz (DKW) inequality with optimal Massart constant~\cite{massart1990tight} applied to exchangeable sample $\mathcal{D}_{\text{cal}}^{(y)}$:
 \begin{equation}
 \mathbb{P}\left( \sup_{s \in \mathbb{R}} \left| F_{\text{cal}}^{(y)}(s) - \hat{F}_{\text{cal}}^{(y)}(s) \right| > \sqrt{\frac{\ln(2/\delta)}{2 n(y)}} \right) \le \delta
@@ -240,7 +234,7 @@ Software Stack Versions & Disclosed & Python 3.10+, PyTorch 2.4, PyG 2.5, DuckDB
 Locked Random Seeds & Disclosed & Five locked seeds: $\{42, 101, 2024, 7, 999\}$ for all runs \\
 Data Chronological Splits & Disclosed & Zero-leakage chronological 60/10/10/20\% protocol in Section~\ref{sec:ch7_splits} \\
 Hyperparameter Grid & Disclosed & Complete search spaces and optimal configurations in Table~\ref{app_tab:hyperparam_grid} \\
-Automated Test Suites & Disclosed & 175 automated unit, integration, and regression tests across 30 modules passing with exit code 0 \\
+Automated Test Suites & Disclosed & 291 automated unit, integration, and regression tests across 47 modules (219 Python + 72 Vitest) passing with exit code 0 \\
 \bottomrule
 \end{tabular}%
 }
@@ -329,9 +323,9 @@ Table~\ref{app_tab:master_baseline_results} reports the full multi-baseline benc
 \label{app:operator_manual}
 
 \section{System Overview \& Software Stack}
-To bridge the gap between theoretical machine learning formulations and Tier-1 banking operations, \textbf{Intelligent-AML (C-STGB)} is realized as an enterprise-grade financial surveillance platform. The front-end is engineered using React 18, Vite, and hardware-accelerated WebGL (Three.js and 3D Force-Directed Graph engines) paired with Apache ECharts telemetry canvases. The back-end comprises an asynchronous FastAPI microservice layer communicating with DuckDB zero-copy Apache Arrow tables and PyTorch Geometric tensor workers.
+To bridge the gap between theoretical machine learning formulations and Tier-1 banking operations, \textbf{Intelligent-AML (C-STGB)} is realized as an enterprise-grade financial surveillance platform. The front-end is engineered using Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, Zustand, TanStack Virtual, and hardware-accelerated WebGL (Cytoscape.js and 3D Force-Directed Graph / Three.js engines) paired with Recharts telemetry canvases. The back-end comprises an asynchronous FastAPI microservice layer communicating with DuckDB zero-copy Apache Arrow tables, Polars, and PyTorch Geometric tensor workers behind a unified Hybrid Backend-for-Frontend (BFF) layer.
 
-The platform provides dual-mode operational resilience: (i) an asynchronous production streaming mode connected to live banking webhooks, and (ii) a standalone in-memory simulation engine verified across 175 automated unit, integration, and regression test suites across 30 modules.
+The platform provides dual-mode operational resilience: (i) an on-premises production streaming mode (\texttt{APP\_MODE=onprem}) connected to live banking webhooks and Postgres/Object-Lock storage, and (ii) a standalone deterministic evaluation engine verified across 291 automated unit, integration, and regression tests across 47 modules (plus Playwright E2E workflows).
 
 \section{Specialized Operational Consoles}
 The user interface is structured into dedicated operational desks and governance consoles, designed around role-based access control (Level-1 Compliance Analyst, Level-2 Senior Investigator, Chief Compliance Officer, and Model Risk Officer):
@@ -346,59 +340,59 @@ The user interface is structured into dedicated operational desks and governance
     \end{itemize}
     Includes a drag-and-drop batch CSV ingestion gateway supporting Elliptic Bitcoin UTXO, SAML-D inter-bank clearing, and corporate ACH payroll schemas.
     \item \textbf{3D Multi-Hop Counterparty Forensic Graph Studio:} Renders court-admissible directed causal subgraphs. Incorporates learnable edge-trust gating ($g_{ij} \ge \delta_{\text{floor}}$) to filter up to $65.9\%$ of adversarial camouflage chaff while isolating 3-hop and 4-hop wash trading rings and smurfing dispersal trees.
-    \item \textbf{Multi-Agent SAR \& Notice Workbench:} Orchestrates a 4-agent autonomous swarm (Lead Forensic Coordinator, Subgraph Topology Specialist, Legal SAR Drafter, and Compliance Rule Verifier) to synthesize multi-jurisdictional filings within 28 seconds:
+    \item \textbf{Multi-Agent SAR \& Compliance Workbench:} Orchestrates a multi-stage forensic workflow and maker-checker four-eyes sign-off to synthesize multi-jurisdictional filings within 28 seconds:
     \begin{itemize}
         \item \textit{FinCEN Form 111 XML} (United States 31 CFR \S\ 1010.311).
-        \item \textit{UN goAML v4.0 XML} (United Nations Office on Drugs and Crime standard).
-        \item \textit{BFIU Form FR-2 STR XML} (Bangladesh Bank MLPA 2012 \S\ 25(1)(c)).
-        \item \textit{FCRA Adverse Action Customer Notices} providing statutory transparency.
+        \item \textit{UNODC goAML v4.2 XML} (United Nations Office on Drugs and Crime / Bangladesh BFIU STR standard).
+        \item \textit{BFIU Statutory STR Compliance} (Bangladesh Bank MLPA 2012 \S\ 25, Master Circular No.~26, Circular No.~24 TBML, and 2026 Circulars 32 \& 02/03/05).
+        \item \textit{Statutory Anti-Tipping-Off RFI Gate} blocking prohibited SAR/AML disclosure phrases under 31 U.S.C.\ \S\ 5318(g)(2) and MLPA 2012 \S\ 6.
     \end{itemize}
-    \item \textbf{Algorithmic Recourse \& Customer Remediation Sandbox:} Solves counterfactual feature perturbations to determine the minimal, cost-optimal modifications required for falsely flagged customers to achieve legitimate clearance, guaranteeing statutory compliance with CFPB and FCRA fair lending mandates.
+    \item \textbf{Internal Analyst Sensitivity \& Whitelisting Studio:} Enables authorized compliance analysts to calibrate internal false-positive thresholds and shadow-mode Champion vs.\ Challenger parameters (strictly non-customer-facing per statutory anti-tipping-off laws).
     \item \textbf{Model Governance \& Benchmark Hub (SR 11-7 / SR 21-8):} Hosts immutable SHA-256 Merkle audit receipts, monitors streaming non-conformity Kolmogorov-Smirnov drift statistics, and displays comprehensive comparative benchmarks across all 14 financial networks.
-    \item \textbf{Tamper-Evident Cryptographic WORM Audit Vault:} Provides an immutable Merkle tree ledger and verification console for digital evidence records conforming to Federal Rules of Evidence FRE 902(11) and SEC Rule 17a-4.
-    \item \textbf{Operator Explainability \& Plain-English Glossary Portals:} Features a plain-English translation interface and an interactive Jargon Buster dictionary to demystify spatio-temporal graph neural signals for front-line compliance analysts and non-technical examiners.
+    \item \textbf{Tamper-Evident Cryptographic WORM Audit Vault:} Provides an append-only hash-chained ledger with Ed25519 signed checkpoints, admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) \S\S\ 65A--65B \& 73A (with responsible officer certificate), Federal Rules of Evidence FRE 902(11), and SEC Rule 17a-4.
+    \item \textbf{Virtualized Triage \& Pairwise Sanctions Screening:} Provides 60\,FPS virtualized alert triage across 2,028 prioritized items plus multi-algorithm watchlist resolution (Jaro-Winkler, Token-Set, and Soundex phonetic matching across OFAC, UN, EU, UK HMT, and BFIU domestic feeds).
 \end{enumerate}
 
 \subsection{Operational Dashboard UI Visualizations}
-Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_explainability_portals} (Figures~E.1--E.8) illustrate the real-time production interface desks operating on live transaction feeds, captured across a continuous 24-hour live burst window on production banking and blockchain rails with a 98.6\% Straight-Through Processing (STP) rate.
+Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_explainability_portals} illustrate the deployed Next.js~16 Platform~v3.0 compliance workspaces operating across simulated institutional streams ($148,312$ 24-hour transactions, $98.6\%$ Straight-Through Processing rate, and $84.2\%$ shadow-replay false-positive noise reduction).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/01_surveillance_desk.png}
-\caption[Real-Time Surveillance Desk and Live Alert Triage Queue Console]{Real-Time Surveillance Desk and Alert Triage Queue, displaying streaming ingestion telemetry, non-conformity drift distribution, and class-conditional conformal triage tiers ($\Gamma(u)$).}
+\caption[Executive Surveillance Overview and Live Scoring Sandbox]{Executive Surveillance Overview (\texttt{/app}), displaying 24-hour KPIs ($98.6\%$ STP), the Tier~1 Urgent Interdiction Queue, SIU analyst workload SLAs, and the real-time C-STGB transaction scoring sandbox.}
 \label{fig:app_surveillance_desk}
 \vspace{0.3cm}
 \includegraphics[width=0.98\textwidth]{figures/02_network_topology.png}
-\caption[3D Multi-Hop Counterparty Forensic Graph Studio Console]{3D Multi-Hop Counterparty Forensic Graph Studio (Three.js WebGL rendering) visualizing directed laundering conduits with real-time edge-trust camouflage filtering ($\hat{g}_{ij} \ge 0.10$).}
+\caption[Multi-Hop Counterparty Forensic Cash Flow Studio]{Forensic Cash Flow Studio (\texttt{/graph}), visualizing directed TBML and layering conduits in interactive 2D Cytoscape and 3D WebGL views with real-time edge-trust camouflage gating ($\hat{g}_{ij} \ge \delta_{\text{floor}}$) and chronological Hawkes playback.}
 \label{fig:app_graph_studio}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/03_case_management.png}
-\caption[Case Management \& Regulatory SLA Docket Console]{Case Management \& Regulatory SLA Docket: tracking prioritized forensic review queues, regulatory filing SLA deadlines, case assignment dockets, and supervisory triage workflows.}
+\caption[Institutional Case Management \& Regulatory SLA Docket]{Institutional Case Management Docket (\texttt{/cases}), tracking multi-stage forensic investigations, statutory BFIU SLA deadlines, and cryptographic evidence bundles.}
 \label{fig:app_case_management}
 \vspace{0.3cm}
 \includegraphics[width=0.98\textwidth]{figures/04_case_detail_four_eyes.png}
-\caption[Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console]{Tier-2 Epistemic Uncertainty Four-Eyes Adjudication Console: displaying dual-investigator concurrence workflows, calibrated non-conformity scores, and counterfactual recourse action paths.}
+\caption[Four-Eyes Case Detail and Dual-Signoff Adjudication Console]{Institutional Case Detail (\texttt{/cases/CASE-2026-0881}), displaying the 6-milestone audit tracker, SHA-256 evidence locker, and server-enforced Maker-Checker ratification workflow.}
 \label{fig:app_case_detail_four_eyes}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/05_multi_agent_sar.png}
-\caption[Multi-Agent SAR Narrative Generation Console]{Multi-Agent SAR Narrative Generation Console: displaying real-time collaborative draft synthesis across the 4-agent swarm, FinCEN Form 111 XML validation, and Grounds of Suspicion breakdown.}
+\caption[BFIU STR/SAR Workbench \& UNODC goAML v4.2 XML Compiler]{BFIU STR/SAR \& CTR Workbench (\texttt{/sar}), showing the statutory anti-tipping-off banner (MLPA 2012 \S~6), live officer edit diff view, attachment checksum gate, and schema-validated UNODC goAML v4.2 XML export.}
 \label{fig:app_multi_agent_sar}
 \vspace{0.3cm}
 \includegraphics[width=0.98\textwidth]{figures/06_model_governance_drift.png}
-\caption[Model Governance and Drift Monitoring Console]{Model Governance and Drift Monitoring Console: real-time streaming DKW Kolmogorov-Smirnov drift tracking, non-conformity quantile shift heatmaps, and WORM-compliant SHA-256 Merkle tree verification ledger under SR 11-7 / SR 21-8.}
+\caption[SR 11-7 Model Governance and Champion/Challenger Telemetry]{Model Governance Hub (\texttt{/governance}), presenting the dual-axis drift \& latency monitor, conformal finite-sample coverage telemetry ($99.04\%$ empirical), Champion vs.\ Challenger replay comparison, and EEOC 4/5ths fairness audit.}
 \label{fig:app_model_governance_drift}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/07_audit_vault.png}
-\caption[Tamper-Evident Cryptographic WORM Audit Vault Console]{Tamper-Evident Cryptographic WORM Audit Vault: immutable SHA-256 Merkle tree audit receipt ledger, satisfying Federal Rules of Evidence FRE 902(11) self-authenticating digital records and SEC Rule 17a-4 regulatory compliance.}
+\caption[Tamper-Evident Cryptographic WORM Audit Ledger Console]{Tamper-Evident Audit Ledger (\texttt{/governance}), displaying RFC~8785 canonical JSON SHA-256 block chaining, RFC~8032 Ed25519 checkpoint seals, live tamper detection, and Evidence Act \S\S~65A--65B \& 73A officer certificate export.}
 \label{fig:app_audit_vault}
 \end{figure}
 
@@ -406,13 +400,13 @@ Figures~\ref{fig:app_surveillance_desk}--\ref{fig:app_explainability_portals} (F
 \centering
 \begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=\textwidth]{figures/08_plain_english_guide.png}
+\includegraphics[width=\textwidth]{figures/08_triage_queue.png}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=\textwidth]{figures/09_jargon_buster_dictionary.png}
+\includegraphics[width=\textwidth]{figures/09_sanctions_screening.png}
 \end{minipage}
-\caption[Operator Explainability and Accessibility Portals]{Operator Explainability and Accessibility Portals: (Left) Plain-English Operational Guide translating topological GNN risk signals into actionable compliance narratives; (Right) Jargon Buster Dictionary providing standardized definitions for statutory AML and graph neural network terminology.}
+\caption[Virtualized Alert Triage \& Sanctions Entity Resolution Desks]{Virtualized Triage \& Watchlist Screening Desks: (Left) 2,028-row virtualized alert triage queue (\texttt{/triage}) with conformal tier filtering and 12-invariant inspection; (Right) Multi-algorithm Sanctions, PEP, and Pairwise Entity Resolution workspace (\texttt{/screening}).}
 \label{fig:app_explainability_portals}
 \end{figure}
 
@@ -423,7 +417,7 @@ Figure~\ref{app_fig:workflow_lifecycle} formalizes the complete operator lifecyc
 \centering
 \fcolorbox{black!20}{black!2}{%
 \begin{minipage}{0.95\textwidth}
-\small
+\small\raggedright
 \vspace{0.2cm}
 \textbf{\large Operational Surveillance \& Enforcement Pipeline}
 \vspace{0.3cm}
@@ -461,7 +455,7 @@ The complete inference state, model weights hash, and decision tree are hashed i
 \label{app_sec:production_code}
 This section compiles the production implementation artifacts, validation schemas, and containerization specifications referenced across Chapters~6 and~8.
 
-\subsection{Pydantic Runtime Strict Validation Schema ($\mathcal{S}_{\text{AML}}$)}
+\subsection{\texorpdfstring{Pydantic Runtime Strict Validation Schema ($\mathcal{S}_{\text{AML}}$)}{Pydantic Runtime Strict Validation Schema (S\_AML)}}
 Listing~\ref{app_lst:pydantic_schema} details the runtime schema validator enforcing deterministic anti-hallucination guarantees (Proposition~6.1).
 
 \begin{lstlisting}[language=Python, caption={Pydantic Runtime Strict Validation Schema ($\mathcal{S}_{\text{AML}}$).}, label={app_lst:pydantic_schema}]
@@ -576,6 +570,7 @@ Listing~\ref{app_lst:fincen_xml_sample} provides the finalized, schema-validated
 Listing~\ref{app_lst:fastapi_code} formalizes the asynchronous scoring endpoint implementation.
 
 \begin{lstlisting}[language=Python, caption={FastAPI Asynchronous Transaction Scoring Endpoint.}, label={app_lst:fastapi_code}]
+@router.post("/api/v1/score", response_model=TriageResponse)
 @router.post("/api/v1/inference/score", response_model=TriageResponse)
 async def score_transaction(
     tx: TransactionPayload,

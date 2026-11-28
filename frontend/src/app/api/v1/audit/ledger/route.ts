@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAuditChain } from '@/lib/audit/hashChain';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const chain = getAuditChain();
   return NextResponse.json({

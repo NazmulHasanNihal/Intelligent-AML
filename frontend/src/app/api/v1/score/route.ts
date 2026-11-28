@@ -21,6 +21,8 @@ const ScoreRequestSchema = z.object({
   }).optional()
 });
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -62,19 +64,16 @@ export async function POST(req: NextRequest) {
       let actionRecommendation: string;
 
       if (s1 <= CONFORMAL_CALIBRATION.q1 && s0 > CONFORMAL_CALIBRATION.q0) {
-        // Confidently Illicit
         conformalSet = 'Γ = {1}';
         tierCode = 1;
         tierLabel = 'Tier 1 Hold';
         actionRecommendation = 'IMMEDIATE_QUARANTINE_AND_CASE_OPENING';
       } else if (s0 <= CONFORMAL_CALIBRATION.q0 && s1 > CONFORMAL_CALIBRATION.q1) {
-        // Confidently Licit
         conformalSet = 'Γ = {0}';
         tierCode = 3;
         tierLabel = 'Tier 3 Clear';
         actionRecommendation = 'AUTO_CLEARED_STP';
       } else {
-        // Ambiguous / High Uncertainty (both or neither)
         conformalSet = 'Γ = {0, 1}';
         tierCode = 2;
         tierLabel = 'Tier 2 Review';
@@ -101,22 +100,63 @@ export async function POST(req: NextRequest) {
           guaranteedCoverage: '≥ 99.0%',
           alphaIllicit: 0.01,
           q1Threshold: CONFORMAL_CALIBRATION.q1
-        }
+        },
+        modelVersion: '3.2.0',
+        modelArtifactHash: '8f3b21c4a9e527d94f2910b875e6d2a13c9071fe39b56da497042a5cb812de40'
       };
     };
 
-    // Hybrid BFF invocation: forwards to FastAPI if available, otherwise executes local engine
-    const result = await fetchFastApiWithFallback(
+    // Translate Next.js payload to FastAPI TransactionScoreRequest schema cleanly
+    const fastApiPayload = {
+      tx_id: tx.id || `TX-${Date.now()}`,
+      src_id: tx.sourceAccount,
+      dst_id: tx.targetAccount,
+      amount: tx.amount,
+      payment_rail: tx.rail,
+      cross_border: tx.crossBorder ?? (tx.rail.includes('SWIFT') || !tx.targetAccount.startsWith('BD')),
+      burst_velocity_spikes: Boolean(tx.burst),
+      fast_path_mode: false,
+      conformal_alpha: 0.01
+    };
+
+    const upstreamResult: any = await fetchFastApiWithFallback(
       '/api/v1/score',
       {
         method: 'POST',
-        body: JSON.stringify(tx)
+        body: JSON.stringify(fastApiPayload)
       },
       localCompute,
       { timeoutMs: 2500 }
     );
 
-    return NextResponse.json(result);
+    // Normalize upstream FastAPI response if returned directly from Python engine
+    if (upstreamResult && 'ensemble_posterior_prob' in upstreamResult && !('rawProbability' in upstreamResult)) {
+      const localInvariants = localCompute().invariants;
+      const tierStr = String(upstreamResult.decision_tier || '');
+      const tierCode = tierStr.includes('1') ? 1 : tierStr.includes('3') ? 3 : 2;
+      const conformalSet = tierCode === 1 ? 'Γ = {1}' : tierCode === 3 ? 'Γ = {0}' : 'Γ = {0, 1}';
+      const tierLabel = tierCode === 1 ? 'Tier 1 Hold' : tierCode === 3 ? 'Tier 3 Clear' : 'Tier 2 Review';
+
+      return NextResponse.json({
+        scoreId: upstreamResult.tx_id || `SCR-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        rawProbability: upstreamResult.ensemble_posterior_prob,
+        conformalSet,
+        tierCode,
+        tierLabel,
+        actionRecommendation: upstreamResult.rule_engine_action || 'SCORED',
+        invariants: localInvariants,
+        calibration: {
+          guaranteedCoverage: `≥ ${upstreamResult.conformal_coverage_pct || 99.0}%`,
+          alphaIllicit: upstreamResult.conformal_alpha || 0.01,
+          q1Threshold: CONFORMAL_CALIBRATION.q1
+        },
+        modelVersion: upstreamResult.model_version || '3.2.0',
+        modelArtifactHash: upstreamResult.model_artifact_hash
+      });
+    }
+
+    return NextResponse.json(upstreamResult);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Internal Server Error';
     return NextResponse.json({ error: message }, { status: 500 });

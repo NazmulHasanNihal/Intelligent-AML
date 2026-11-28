@@ -22,15 +22,72 @@ import { useBankingStore } from '@/lib/store';
 import { computeFileSha256 } from '@/lib/audit/hashChain';
 import { formatCurrencyByJurisdiction } from '@/lib/compliance/jurisdictions';
 
+const TBML_LC_PRESETS = [
+  {
+    lcNumber: 'LC-CTG-2026-9921',
+    applicant: 'Meghna Industrial & Agro Ltd',
+    beneficiary: 'Gulf Star Commodities FZE (JAFZA)',
+    goods: 'Combed Cotton Yarn 30/1',
+    hsCode: '5205.12.00',
+    quantity: 100000,
+    unitPrice: 9.45,
+    benchmarkPrice: 2.18,
+    billOfEntry: 'C-1882910'
+  },
+  {
+    lcNumber: 'LC-DHK-2026-4410',
+    applicant: 'Padma Textile Mills PLC',
+    beneficiary: 'Sino-Apex Fiber Trading (HK)',
+    goods: 'Polyester Filament Yarn DTY',
+    hsCode: '5402.33.00',
+    quantity: 80000,
+    unitPrice: 4.90,
+    benchmarkPrice: 1.65,
+    billOfEntry: 'C-1904112'
+  },
+  {
+    lcNumber: 'LC-BEN-2026-7102',
+    applicant: 'Karnaphuli Heavy Eng. Ltd',
+    beneficiary: 'Emirates Alloy Brokers LLC',
+    goods: 'Cold-Rolled Steel Coils',
+    hsCode: '7209.16.00',
+    quantity: 250000,
+    unitPrice: 1.85,
+    benchmarkPrice: 0.78,
+    billOfEntry: 'C-1910544'
+  }
+];
+
 export default function TradeFinanceTbmlPage() {
   const { jurisdiction, setFourEyesModalOpen, addAuditEntry } = useBankingStore();
 
   const [activeTab, setActiveTab] = useState<'PACKET_VIEW' | 'PRICE_BENCHMARK' | 'VESSEL_TRACKING'>('PACKET_VIEW');
+  const [selectedPresetIdx, setSelectedPresetIdx] = useState(0);
+  const preset = TBML_LC_PRESETS[selectedPresetIdx] ?? TBML_LC_PRESETS[0]!;
+  const [declaredUnitPrice, setDeclaredUnitPrice] = useState<number>(preset.unitPrice);
+  const [asycudaUnitPrice, setAsycudaUnitPrice] = useState<number>(preset.benchmarkPrice);
+  const [declaredQuantityKg, setDeclaredQuantityKg] = useState<number>(preset.quantity);
+  const [verifiedCount, setVerifiedCount] = useState<number>(4);
+
   const [uploadedFileHash, setUploadedFileHash] = useState<string | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const [isHashing, setIsHashing] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const [copiedHash, setCopiedHash] = useState(false);
+
+  const declaredTotal = declaredUnitPrice * declaredQuantityKg;
+  const asycudaTotal = asycudaUnitPrice * declaredQuantityKg;
+  const illicitCapitalGap = declaredTotal - asycudaTotal;
+  const divergencePct = asycudaUnitPrice > 0 ? ((declaredUnitPrice - asycudaUnitPrice) / asycudaUnitPrice) * 100 : 0;
+
+  const handleSelectPreset = (idx: number) => {
+    const p = TBML_LC_PRESETS[idx];
+    if (!p) return;
+    setSelectedPresetIdx(idx);
+    setDeclaredUnitPrice(p.unitPrice);
+    setAsycudaUnitPrice(p.benchmarkPrice);
+    setDeclaredQuantityKg(p.quantity);
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,12 +97,29 @@ export default function TradeFinanceTbmlPage() {
     setUploadedFileName(file.name);
     try {
       const buffer = await file.arrayBuffer();
-      const hash = await computeFileSha256(buffer);
-      setUploadedFileHash(hash);
+      const clientHash = await computeFileSha256(buffer);
+      let verifiedHash = clientHash;
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('rfiId', `TBML-${preset.lcNumber}`);
+        formData.append('clientSha256', clientHash);
+        const res = await fetch('/api/v1/rfi/upload', { method: 'POST', body: formData });
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.sha256) verifiedHash = data.sha256;
+        }
+      } catch {
+        // Retain client WebCrypto digest fallback
+      }
+
+      setUploadedFileHash(verifiedHash);
+      setVerifiedCount((c) => c + 1);
       addAuditEntry({
         eventType: 'DOCUMENT_UPLOADED',
-        entityId: 'TBML-PKG-2026-0881',
-        details: `Uploaded trade document ${file.name} with verified SHA-256 digest: ${hash}`,
+        entityId: `TBML-${preset.lcNumber}`,
+        details: `Uploaded trade document ${file.name} with verified SHA-256 digest: ${verifiedHash}`,
         actionBy: 'Amina Rahman, CFE (Lead Investigator)'
       });
     } catch (err) {
@@ -60,7 +134,7 @@ export default function TradeFinanceTbmlPage() {
     addAuditEntry({
       eventType: 'CASE_ESCALATED',
       entityId: 'CASE-2026-0881',
-      details: 'Trade-Based Money Laundering (TBML) Over-Invoicing Dossier pinned to active institutional case and regulatory SAR draft.',
+      details: `TBML variance dossier (${preset.lcNumber}, +${divergencePct.toFixed(1)}% divergence) pinned to active institutional case.`,
       actionBy: 'Amina Rahman, CFE (Lead Investigator)'
     });
   };
@@ -74,12 +148,24 @@ export default function TradeFinanceTbmlPage() {
             <Ship className="w-5 h-5 text-sky-400" />
             Trade Finance &amp; TBML Document Cross-Check
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Automated multi-document reconciliation: SWIFT MT700 Documentary Credit vs Commercial Invoice vs ASYCUDA World Customs Bill of Entry.
+          <p className="text-xs text-slate-400 mt-0.5">
+            SWIFT MT700 vs Commercial Invoice vs ASYCUDA World Customs Bill of Entry.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <select
+            aria-label="Select LC Shipment"
+            value={selectedPresetIdx}
+            onChange={(e) => handleSelectPreset(Number(e.target.value))}
+            className="px-3 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-xs font-mono text-slate-200 focus:outline-none focus:border-sky-500"
+          >
+            {TBML_LC_PRESETS.map((p, i) => (
+              <option key={p.lcNumber} value={i}>
+                {p.lcNumber} — {p.goods}
+              </option>
+            ))}
+          </select>
           <Link
             href="/cases/CASE-2026-0881"
             className="px-3 py-1.5 rounded-lg bg-[#0F172A] hover:bg-[#1E293B] border border-[#334155] text-xs font-semibold text-slate-200 transition-colors flex items-center gap-1.5"
@@ -139,12 +225,12 @@ export default function TradeFinanceTbmlPage() {
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">ISSUED</span>
                   </div>
                   <div className="space-y-1.5 text-xs font-mono text-slate-300">
-                    <div>:20: Doc Credit Number: <strong className="text-white">LC-CTG-2026-9921</strong></div>
+                    <div>:20: Doc Credit Number: <strong className="text-white">{preset.lcNumber}</strong></div>
                     <div>:31D: Date of Expiry: <span className="text-slate-400">2026-10-31</span></div>
-                    <div>:32A: Amount: <strong className="text-emerald-400">$945,000.00 USD</strong></div>
-                    <div>:50: Applicant: <span className="text-slate-200">Meghna Industrial &amp; Agro Ltd</span></div>
-                    <div>:59: Beneficiary: <span className="text-slate-200">Gulf Star Commodities FZE (JAFZA)</span></div>
-                    <div>:45A: Goods Description: <span className="text-slate-300">100,000 KG Combed Cotton Yarn 30/1</span></div>
+                    <div>:32A: Amount: <strong className="text-emerald-400">${declaredTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</strong></div>
+                    <div>:50: Applicant: <span className="text-slate-200">{preset.applicant}</span></div>
+                    <div>:59: Beneficiary: <span className="text-slate-200">{preset.beneficiary}</span></div>
+                    <div>:45A: Goods Description: <span className="text-slate-300">{declaredQuantityKg.toLocaleString()} KG {preset.goods}</span></div>
                   </div>
                 </div>
 
@@ -152,13 +238,15 @@ export default function TradeFinanceTbmlPage() {
                 <div className="p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] space-y-3">
                   <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
                     <span className="font-mono text-xs font-bold text-amber-400">2. Commercial Invoice #INV-8812</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">PRICE DISCREPANCY</span>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${Math.abs(divergencePct) >= 25 ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
+                      {Math.abs(divergencePct) >= 25 ? 'PRICE DISCREPANCY' : 'WITHIN TOLERANCE'}
+                    </span>
                   </div>
                   <div className="space-y-1.5 text-xs font-mono text-slate-300">
                     <div>Invoice Date: <span className="text-slate-400">2026-09-01</span></div>
-                    <div>Quantity: <strong className="text-white">100,000 KG</strong></div>
-                    <div>Invoiced Unit Price: <strong className="text-rose-400">$9.45 / KG</strong></div>
-                    <div>Total Invoiced Value: <strong className="text-rose-400">$945,000.00 USD</strong></div>
+                    <div>Quantity: <strong className="text-white">{declaredQuantityKg.toLocaleString()} KG</strong></div>
+                    <div>Invoiced Unit Price: <strong className={divergencePct >= 25 ? 'text-rose-400' : 'text-emerald-400'}>${declaredUnitPrice.toFixed(2)} / KG</strong></div>
+                    <div>Total Invoiced Value: <strong className={divergencePct >= 25 ? 'text-rose-400' : 'text-emerald-400'}>${declaredTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</strong></div>
                     <div>Terms: <span className="text-slate-300">CIF Chittagong Port</span></div>
                     <div>Country of Origin: <span className="text-slate-300">United Arab Emirates</span></div>
                   </div>
@@ -172,21 +260,21 @@ export default function TradeFinanceTbmlPage() {
                     3. ASYCUDA World Customs Declaration (Chittagong Custom House)
                   </span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
-                    FLAGGED BY CUSTOMS INTELLIGENCE
+                    {Math.abs(divergencePct) >= 25 ? 'FLAGGED BY CUSTOMS INTELLIGENCE' : 'CUSTOMS BASELINE MATCHED'}
                   </span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
                   <div className="p-2.5 bg-[#0B0F17] rounded-lg">
                     <span className="text-slate-500 text-[10px] block">Bill of Entry No</span>
-                    <span className="font-bold text-white">C-1882910</span>
+                    <span className="font-bold text-white">{preset.billOfEntry}</span>
                   </div>
                   <div className="p-2.5 bg-[#0B0F17] rounded-lg">
                     <span className="text-slate-500 text-[10px] block">HS Tariff Code</span>
-                    <span className="font-bold text-white">5205.12.00 (Single Cotton Yarn)</span>
+                    <span className="font-bold text-white">{preset.hsCode} ({preset.goods})</span>
                   </div>
                   <div className="p-2.5 bg-[#0B0F17] rounded-lg">
                     <span className="text-slate-500 text-[10px] block">Official Assessment Value</span>
-                    <span className="font-bold text-amber-400">$218,000.00 USD</span>
+                    <span className="font-bold text-amber-400">${asycudaTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                   </div>
                 </div>
               </div>
@@ -199,30 +287,70 @@ export default function TradeFinanceTbmlPage() {
               <div>
                 <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono">
                   <AlertTriangle className="w-4 h-4 text-rose-500" />
-                  ASYCUDA World Global Trade Tariff Divergence Analysis
+                  ASYCUDA World Global Trade Tariff Divergence Calculator
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Comparing declared LC unit price against historical 90-day moving average from National Customs Database (ASYCUDA World).
+                  Adjust declared invoice unit price, shipment weight, or ASYCUDA reference benchmark to test capital flight divergence in real time.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
+                <label className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1 block">
+                  <span className="text-[10px] text-slate-400 uppercase block">Declared Unit Price ($/KG)</span>
+                  <input
+                    type="number"
+                    step="0.05"
+                    min="0.01"
+                    value={declaredUnitPrice}
+                    onChange={(e) => setDeclaredUnitPrice(Math.max(0.01, parseFloat(e.target.value) || 0.01))}
+                    className="w-full bg-[#0F172A] border border-[#334155] rounded-lg px-2.5 py-1.5 text-rose-300 font-bold focus:outline-none focus:border-sky-500"
+                  />
+                </label>
+                <label className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1 block">
+                  <span className="text-[10px] text-slate-400 uppercase block">ASYCUDA Benchmark ($/KG)</span>
+                  <input
+                    type="number"
+                    step="0.05"
+                    min="0.01"
+                    value={asycudaUnitPrice}
+                    onChange={(e) => setAsycudaUnitPrice(Math.max(0.01, parseFloat(e.target.value) || 0.01))}
+                    className="w-full bg-[#0F172A] border border-[#334155] rounded-lg px-2.5 py-1.5 text-emerald-300 font-bold focus:outline-none focus:border-sky-500"
+                  />
+                </label>
+                <label className="p-3 rounded-xl bg-[#0B0F17] border border-[#1E293B] space-y-1 block">
+                  <span className="text-[10px] text-slate-400 uppercase block">Quantity (KG)</span>
+                  <input
+                    type="number"
+                    step="1000"
+                    min="100"
+                    value={declaredQuantityKg}
+                    onChange={(e) => setDeclaredQuantityKg(Math.max(100, parseInt(e.target.value, 10) || 100))}
+                    className="w-full bg-[#0F172A] border border-[#334155] rounded-lg px-2.5 py-1.5 text-slate-100 font-bold focus:outline-none focus:border-sky-500"
+                  />
+                </label>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
                 <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-center">
                   <span className="text-[10px] font-mono uppercase text-slate-500 block">Declared LC Invoice Price</span>
-                  <span className="text-2xl font-mono font-bold text-rose-400 mt-1 block">$9.45 / KG</span>
-                  <span className="text-xs text-slate-400">Total: $945,000.00 USD</span>
+                  <span className="text-2xl font-mono font-bold text-rose-400 mt-1 block">${declaredUnitPrice.toFixed(2)} / KG</span>
+                  <span className="text-xs text-slate-400">Total: ${declaredTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                 </div>
 
                 <div className="p-4 rounded-xl bg-[#0B0F17] border border-[#1E293B] text-center">
                   <span className="text-[10px] font-mono uppercase text-slate-500 block">ASYCUDA Market Fair Value</span>
-                  <span className="text-2xl font-mono font-bold text-emerald-400 mt-1 block">$2.18 / KG</span>
-                  <span className="text-xs text-slate-400">Total: $218,000.00 USD</span>
+                  <span className="text-2xl font-mono font-bold text-emerald-400 mt-1 block">${asycudaUnitPrice.toFixed(2)} / KG</span>
+                  <span className="text-xs text-slate-400">Total: ${asycudaTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#0B0F17] border border-rose-500/40 text-center">
+                <div className={`p-4 rounded-xl bg-[#0B0F17] border text-center ${Math.abs(divergencePct) >= 25 ? 'border-rose-500/40' : 'border-emerald-500/40'}`}>
                   <span className="text-[10px] font-mono uppercase text-slate-500 block">Capital Outflow Divergence</span>
-                  <span className="text-2xl font-mono font-bold text-rose-500 mt-1 block">+333.7%</span>
-                  <span className="text-xs text-rose-300 font-semibold font-mono">+$727,000.00 Illicit Flight</span>
+                  <span className={`text-2xl font-mono font-bold mt-1 block ${Math.abs(divergencePct) >= 25 ? 'text-rose-500' : 'text-emerald-400'}`}>
+                    {divergencePct >= 0 ? '+' : ''}{divergencePct.toFixed(1)}%
+                  </span>
+                  <span className={`text-xs font-semibold font-mono ${Math.abs(divergencePct) >= 25 ? 'text-rose-300' : 'text-emerald-300'}`}>
+                    {illicitCapitalGap >= 0 ? '+' : ''}${illicitCapitalGap.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Delta
+                  </span>
                 </div>
               </div>
 
@@ -330,11 +458,11 @@ export default function TradeFinanceTbmlPage() {
             <div className="space-y-2 text-xs">
               <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] flex items-center justify-between">
                 <span className="text-slate-400">Verified Evidence Count:</span>
-                <strong className="font-mono text-emerald-400">4 Items Anchored</strong>
+                <strong className="font-mono text-emerald-400">{verifiedCount} Items Anchored</strong>
               </div>
               <div className="p-3 bg-[#0B0F17] rounded-xl border border-[#1E293B] flex items-center justify-between">
-                <span className="text-slate-400">FRE 902(11) Self-Authentication:</span>
-                <strong className="font-mono text-emerald-400">COMPLIANT</strong>
+                <span className="text-slate-400">Admissibility Standard:</span>
+                <strong className="font-mono text-emerald-400 text-right">Evidence Act §§ 65A–65B &amp; 73A / FRE 902(11)</strong>
               </div>
             </div>
           </div>

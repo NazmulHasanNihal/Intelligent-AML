@@ -265,13 +265,13 @@ export const WhatIfRecourseModal = () => {
             </div>
           </div>
 
-          {/* Prescriptive Guidance Recommendation */}
+          {/* Internal Analyst Sensitivity Note */}
           <div className="p-3 rounded-lg bg-surfaceRaised border border-border flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-cleared shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <span className="font-semibold text-text text-xs">Prescriptive Remediation Action:</span>
+              <span className="font-semibold text-text text-xs">Internal Sensitivity Driver (MLPA 2012 § 6 Confidential):</span>
               <p className="text-[11px] text-text-2 leading-relaxed">
-                To eliminate automated Tier-1 holds under Section 15 of MLPA 2012, customer must submit authenticated ASYCUDA customs declarations and maintain account dwell times of &gt;24 hours between interbank wire settlements.
+                Non-customer-facing threshold audit: verified ASYCUDA documentation and dwell times &gt;24h pull calibrated exposure down into Tier 3 bounds. Never share threshold cutoffs externally.
               </p>
             </div>
           </div>
@@ -289,7 +289,7 @@ export const WhatIfRecourseModal = () => {
               setDocumentCompleteness(100);
             }}
           >
-            Apply Ideal Benign Preset
+            Load Low-Risk Baseline
           </Button>
 
           <div className="flex items-center gap-2">
@@ -305,7 +305,7 @@ export const WhatIfRecourseModal = () => {
               size="sm"
               onClick={handleApplyRecoursePlan}
             >
-              Save Recourse Guidance
+              Log Sensitivity Simulation
             </Button>
           </div>
         </div>

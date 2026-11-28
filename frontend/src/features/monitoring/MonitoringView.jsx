@@ -777,7 +777,7 @@ export const MonitoringView = () => {
             </div>
 
             <p className="text-[11px] text-text-muted mt-4 pt-3 border-t border-borderSubtle font-mono">
-              * Compliant with Federal Reserve SR 11-7 and BFIU Circular 28 pre-clearing statutory obligations.
+              * Compliant with Federal Reserve SR 11-7 and BFIU Circular 26 & 32 (2026) pre-clearing obligations.
             </p>
           </Card>
         </div>

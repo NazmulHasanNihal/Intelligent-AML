@@ -1,9 +1,19 @@
 'use client';
 
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { useSearchParams, useRouter } from 'next/navigation';
 import cytoscape from 'cytoscape';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+
+const ForceGraph3DCanvas = dynamic(() => import('@/components/graph/ForceGraph3DCanvas'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center text-xs font-mono text-slate-400">
+      Initializing WebGL 3D Engine...
+    </div>
+  )
+});
 import {
   GitFork,
   SlidersHorizontal,
@@ -119,23 +129,41 @@ function ForensicGraphStudioContent() {
     }
   };
 
+  // Chronological Temporal Playback Timer (Hawkes Δt)
+  useEffect(() => {
+    if (!isPlaying) return;
+    const timer = setInterval(() => {
+      setTemporalStep((prev) => (prev >= 100 ? 10 : Math.min(100, prev + 10)));
+    }, 350);
+    return () => clearInterval(timer);
+  }, [isPlaying]);
+
+  const { filteredNodes, visibleEdges, prunedCount } = useMemo(() => {
+    const allEdges = subgraphData?.edges || [];
+    const trustFiltered = allEdges.filter((e: any) => e.edgeTrustDelta >= deltaFloor);
+    const stepLimit = Math.max(1, Math.ceil((trustFiltered.length * temporalStep) / 100));
+    const stepEdges = temporalStep >= 100 ? trustFiltered : trustFiltered.slice(0, stepLimit);
+
+    const activeIds = new Set<string>();
+    stepEdges.forEach((e: any) => {
+      activeIds.add(e.source);
+      activeIds.add(e.target);
+    });
+
+    const nodes = (subgraphData?.nodes || [])
+      .filter((n: any) => activeIds.has(n.id) || n.id === initialNode)
+      .slice(0, maxNodes);
+
+    return {
+      filteredNodes: nodes,
+      visibleEdges: stepEdges,
+      prunedCount: Math.max(0, allEdges.length - trustFiltered.length)
+    };
+  }, [subgraphData, deltaFloor, temporalStep, maxNodes, initialNode]);
+
   // Initialize and update Cytoscape instance
   useEffect(() => {
     if (!subgraphData || !cyContainerRef.current || viewMode !== '2D') return;
-
-    const visibleEdges = (subgraphData.edges || []).filter(
-      (e: any) => e.edgeTrustDelta >= deltaFloor
-    );
-
-    const activeNodeIds = new Set<string>();
-    visibleEdges.forEach((e: any) => {
-      activeNodeIds.add(e.source);
-      activeNodeIds.add(e.target);
-    });
-
-    const filteredNodes = (subgraphData.nodes || []).filter(
-      (n: any) => activeNodeIds.has(n.id) || n.id === initialNode
-    ).slice(0, maxNodes);
 
     const elements: cytoscape.ElementDefinition[] = [
       ...filteredNodes.map((n: any) => ({
@@ -274,7 +302,7 @@ function ForensicGraphStudioContent() {
     return () => {
       cy.destroy();
     };
-  }, [subgraphData, deltaFloor, viewMode, egoHops, maxNodes, initialNode]);
+  }, [subgraphData, filteredNodes, visibleEdges, viewMode]);
 
   return (
     <div ref={containerRef} className="p-4 sm:p-5 lg:p-6 max-w-[1750px] mx-auto space-y-4">
@@ -384,7 +412,7 @@ function ForensicGraphStudioContent() {
               <input
                 type="range"
                 min="0.00"
-                max="0.50"
+                max="0.95"
                 step="0.02"
                 value={deltaFloor}
                 onChange={(e) => setDeltaFloor(Number(e.target.value))}
@@ -404,7 +432,7 @@ function ForensicGraphStudioContent() {
             {/* Invariant Stats & Camera Controls */}
             <div className="flex items-center gap-2 sm:gap-3 text-[11px] font-mono">
               <span className="hidden sm:inline text-slate-400">
-                Pruned: <strong className="text-rose-400">{subgraphData?.camouflagePrunedCount || 1} camouflage edges</strong>
+                Pruned: <strong className="text-rose-400">{prunedCount} camouflage edges</strong>
               </span>
 
               <button
@@ -433,19 +461,12 @@ function ForensicGraphStudioContent() {
               {viewMode === '2D' ? (
                 <div ref={cyContainerRef} className="w-full h-full" />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 space-y-3 p-4">
-                  <Box className="w-12 h-12 text-purple-400 animate-bounce" />
-                  <div className="text-center max-w-sm">
-                    <h3 className="font-semibold text-slate-200 text-sm font-sans">Hardware-Accelerated 3D Force Graph</h3>
-                    <p className="text-xs text-slate-500 mt-1">WebGL dynamic force simulation active. Click nodes to orbit and inspect ego-sphere.</p>
-                  </div>
-                  <button
-                    onClick={() => setViewMode('2D')}
-                    className="px-3 py-1.5 bg-[#1E293B] hover:bg-[#334155] text-slate-200 rounded-lg text-xs font-mono border border-[#334155] transition-colors cursor-pointer"
-                  >
-                    Switch to 2D Planar Canvas (WebGL Fallback)
-                  </button>
-                </div>
+                <ForceGraph3DCanvas
+                  nodes={filteredNodes}
+                  edges={visibleEdges}
+                  onSelectNode={(node) => setSelectedNode(node)}
+                  onFallbackTo2D={() => setViewMode('2D')}
+                />
               )}
             </ErrorBoundary>
 

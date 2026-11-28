@@ -106,7 +106,7 @@ class TestEnterpriseGaps(unittest.TestCase):
         # Test cryptographic ledger integrity
         chain_verify = db.verify_audit_chain()
         self.assertTrue(chain_verify["is_valid"])
-        self.assertEqual(chain_verify["status"], "CRYPTOGRAPHICALLY_VERIFIED")
+        self.assertIn(chain_verify["status"], {"TAMPER_EVIDENT_VERIFIED", "CRYPTOGRAPHICALLY_VERIFIED"})
 
     def test_03_four_eyes_dual_control_enforcement(self):
         """Validates OCC 2011-12 / FINRA Rule 3110 / SR 11-7 Four-Eyes Dual Control Maker-Checker."""

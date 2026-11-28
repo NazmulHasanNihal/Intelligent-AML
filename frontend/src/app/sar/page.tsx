@@ -784,8 +784,16 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
               ) : (
                 <div className="w-full p-4 bg-[#0B0F17] border border-[#334155] rounded-xl text-xs font-mono max-h-[320px] overflow-y-auto space-y-1">
                   <div className="text-[10px] text-slate-500 mb-2 border-b border-[#1E293B] pb-1">
-                    Red = Original Draft Lines Removed • Green = Officer Edit Additions
+                    Red (-) = Original Draft Lines Removed • Green (+) = Officer Edit Additions
                   </div>
+                  {initialNarrative
+                    .split('\n')
+                    .filter((origLine) => !narrativeText.split('\n').includes(origLine))
+                    .map((removedLine, rIdx) => (
+                      <div key={`rm-${rIdx}`} className="p-1 rounded bg-rose-950/40 text-rose-300 border-l-2 border-rose-500 line-through">
+                        - {removedLine}
+                      </div>
+                    ))}
                   {narrativeText.split('\n').map((line, idx) => {
                     const originalLines = initialNarrative.split('\n');
                     const isNew = !originalLines.includes(line);
@@ -798,7 +806,7 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                             : 'text-slate-300'
                         }`}
                       >
-                        {line || <span className="opacity-30">&nbsp;</span>}
+                        {isNew ? `+ ${line}` : (line || <span className="opacity-30">&nbsp;</span>)}
                       </div>
                     );
                   })}
@@ -816,7 +824,7 @@ Pursuant to Section 6 of MLPA 2012, no disclosure of this filing has been or wil
                   BFIU Filing Dossier &amp; Merkle Seal
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Cryptographically binds narrative, decision rationale, and supporting documents satisfying § 65B of Bangladesh Evidence Act (Amended 2022).
+                  Admissibility-ready under Bangladesh Evidence Act, 1872 (Amended 2022) §§ 65A–65B &amp; 73A (Officer Certificate) &amp; FRE 902(11).
                 </p>
               </div>
 

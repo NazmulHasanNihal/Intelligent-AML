@@ -59,4 +59,15 @@ describe('Authoritative API Contract & On-Prem Compliance Suite', () => {
     expect(mockCalibration.empirical_coverage).toBeGreaterThanOrEqual(mockCalibration.target_coverage);
     expect(mockCalibration.exchangeability_drift_note).toContain('exchangeability');
   });
+
+  it('routes fallback backend-bridge calls to deterministic serverless-demo mode', async () => {
+    const { fetchBackendWithMode, engineModeHeaders } = await import('@/lib/backend-bridge');
+    const prevUrl = process.env.FASTAPI_BACKEND_URL;
+    delete process.env.FASTAPI_BACKEND_URL;
+    const res = await fetchBackendWithMode('/api/v1/health', { method: 'GET' }, () => ({ ok: true }));
+    expect(res.mode).toBe('serverless-demo');
+    expect(res.data).toEqual({ ok: true });
+    expect(engineModeHeaders(res.mode)).toEqual({ 'X-AML-Engine-Mode': 'serverless-demo' });
+    if (prevUrl) process.env.FASTAPI_BACKEND_URL = prevUrl;
+  });
 });

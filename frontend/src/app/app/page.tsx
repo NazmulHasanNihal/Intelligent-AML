@@ -34,15 +34,10 @@ import { useBankingStore } from '@/lib/store';
 import { JURISDICTIONS, formatCurrencyByJurisdiction } from '@/lib/compliance/jurisdictions';
 import { PiiText } from '@/components/ui/PiiText';
 import { CommercialAlert } from '@/lib/data/commercialSeed';
-import { IS_ONPREM_MODE } from '@/lib/config/env';
 
 export default function SurveillanceOverviewPage() {
   const router = useRouter();
   const {
-    isLiveStreamActive,
-    toggleLiveStream,
-    streamSpeed,
-    setStreamSpeed,
     activeJurisdiction,
     setFourEyesModalOpen,
     alerts,
@@ -66,6 +61,7 @@ export default function SurveillanceOverviewPage() {
   const handleRunSandboxScore = async () => {
     setIsScoring(true);
     try {
+      const declaredUnitValuation = Number((9.8 * (1 + Math.max(0, testPriceDev) / 100)).toFixed(2));
       const res = await fetch('/api/v1/score', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -75,8 +71,9 @@ export default function SurveillanceOverviewPage() {
           targetAccount: 'AE-EBIL-4412-8819-3301',
           rail: testRail,
           burst: testBurst,
+          crossBorder: testCountry !== 'United States',
           tbmlData: {
-            declaredUnitValuation: 42.50,
+            declaredUnitValuation,
             benchmarkValuation: 9.80,
             hsCode: 'HS 5201.00'
           }
@@ -140,67 +137,28 @@ export default function SurveillanceOverviewPage() {
 
   return (
     <div className="p-4 sm:p-5 lg:p-6 max-w-[1700px] mx-auto space-y-5 sm:space-y-6">
-      {/* Air-Gap Intranet Telemetry Watermark & Live Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 bg-[#0F172A] border border-[#1E293B] rounded-xl text-xs text-slate-300">
-        <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shrink-0">
-            <Activity className="w-4 h-4 animate-pulse" />
-          </div>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span className="font-semibold text-slate-100 uppercase tracking-wide truncate text-xs font-sans">
-                {IS_ONPREM_MODE ? 'On-Prem Secure Node' : 'Cloud Evaluation Sandbox (Air-Gap Ready)'}
-              </span>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
-                {IS_ONPREM_MODE ? 'EGRESS CONFINED' : 'SYNTHETIC WORKLOAD DATA'}
-              </span>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30 shrink-0">
-                BFF: {IS_ONPREM_MODE ? 'LIVE FASTAPI BACKEND' : 'DETERMINISTIC DEMO ENGINE'}
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400 mt-0.5 break-words font-mono">
-              Statutory Regime: <strong className="text-slate-200">{jur.name}</strong> ({jur.statutoryAct}) | Cash CTR: <strong className="text-emerald-400">{jur.currencySymbol}{jur.ctrThresholdNative.toLocaleString()} {jur.currency}</strong>
-            </p>
-          </div>
+      {/* Concise Operations Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-lg font-semibold text-slate-100">Surveillance Overview</h1>
+          <p className="text-xs font-mono text-slate-400">
+            {jur.name} · {jur.statutoryAct} · Cash CTR {jur.currencySymbol}{jur.ctrThresholdNative.toLocaleString()} {jur.currency}
+          </p>
         </div>
 
-        {/* Live Ingestion Stream Controls */}
-        <div className="flex items-center gap-2 sm:gap-3 bg-[#0B0F17] px-3 py-1.5 rounded-lg border border-[#334155] shrink-0 self-start sm:self-auto font-mono">
-          <span className="text-[11px] font-medium text-slate-400">Feed:</span>
-          <button
-            onClick={toggleLiveStream}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${isLiveStreamActive
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
-              : 'bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30'
-              }`}
+        <div className="flex items-center gap-2 text-xs font-mono">
+          <Link
+            href="/triage"
+            className="px-3 py-1.5 rounded-md bg-[#0D121A] hover:bg-[#141C27] border border-[#1E2734] text-slate-200 transition-colors"
           >
-            {isLiveStreamActive ? (
-              <>
-                <Pause className="w-3.5 h-3.5" />
-                <span>SIMULATED STREAM</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-3.5 h-3.5" />
-                <span>PAUSED</span>
-              </>
-            )}
-          </button>
-
-          <div className="flex items-center border-l border-[#334155] pl-2 gap-1 text-[11px]">
-            {([1, 2, 5] as const).map((spd) => (
-              <button
-                key={spd}
-                onClick={() => setStreamSpeed(spd)}
-                className={`px-1.5 py-0.5 rounded cursor-pointer ${streamSpeed === spd
-                  ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
-                  }`}
-              >
-                {spd}x
-              </button>
-            ))}
-          </div>
+            Open Triage Queue
+          </Link>
+          <Link
+            href="/sar"
+            className="px-3 py-1.5 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-colors"
+          >
+            New STR / SAR
+          </Link>
         </div>
       </div>
 
@@ -422,9 +380,9 @@ export default function SurveillanceOverviewPage() {
 
             <div className="space-y-3 pt-3">
               {[
-                { name: 'Amina Rahman, CFE (Demo Lead)', role: 'Lead Investigator', activeCases: 4, openAlerts: 18, ahtMin: 14.2, status: 'NORMAL' },
-                { name: 'Tanvir Ahmed (Demo Analyst)', role: 'Senior Triage Analyst', activeCases: 3, openAlerts: 24, ahtMin: 18.5, status: 'ELEVATED' },
-                { name: 'Nadia Hossain (Demo Specialist)', role: 'Trade Compliance Specialist', activeCases: 1, openAlerts: 42, ahtMin: 9.4, status: 'NORMAL' },
+                { name: 'Amina Rahman, CFE', role: 'Lead Investigator', activeCases: 4, openAlerts: 18, ahtMin: 14.2, status: 'NORMAL' },
+                { name: 'Tanvir Ahmed', role: 'Senior Triage Analyst', activeCases: 3, openAlerts: 24, ahtMin: 18.5, status: 'ELEVATED' },
+                { name: 'Nadia Hossain', role: 'Trade Compliance Specialist', activeCases: 1, openAlerts: 42, ahtMin: 9.4, status: 'NORMAL' },
                 { name: 'Unassigned Escalation Pool', role: 'System Queue', activeCases: 2, openAlerts: 112, ahtMin: 0, status: 'PENDING_DISPATCH' }
               ].map((member, idx) => (
                 <div key={idx} className="p-3 bg-[#0B0F17] rounded-lg border border-[#1E293B] text-xs">
